@@ -29,7 +29,7 @@ It makes using this method very hard.
 
 Each developer I was discussing CMYK problem thinks, that CMYK is just a colorspace for printing, so it doesn't really matter when processing photos you don't want to print. And that's the main reason why this stuff is not implemented in any Free Software application.
 
-= LAB =
+= LAB Colorspace =
 
 LAB colorspace separates luminance from color. It's very powerful colorspace. It's available in Gimp only as a decompose/recompose option. You can work with LAB layers same way as with CMYK layers - without seeing how the final image looks.
 
