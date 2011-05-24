@@ -20,11 +20,13 @@ Limitations of Gimp:
 Limitations of RT:
   * no layers
   * no RGB curves, no CMYK at all
+  * no lockable samplers
 
 Limitations of GMIC:
-  * no GUI, limited GUI as Gimp plugin
-  * using as Gimp plugin means 8-bit on input, 8-bit on output
   * no layers, only one effect at once
+  * using as Gimp plugin means 8-bit on input, 8-bit on output
+  * no GUI, limited GUI as Gimp plugin
+  * no samplers at all
 
 
 = Skin Tone =
