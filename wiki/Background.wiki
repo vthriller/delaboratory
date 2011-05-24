@@ -1,0 +1,13 @@
+#summary using Free Software to process photos
+
+= Applications =
+
+  * Gimp
+  * RawTherapee
+  * gmic
+  * elsamuko scripts
+  * geeqie
+
+
+= Workflow =
+
