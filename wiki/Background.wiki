@@ -2,14 +2,14 @@
 
 = Applications =
 
-  * Gimp
-  * RawTherapee
-  * gmic
-  * elsamuko scripts
-  * geeqie
+  * Gimp - http://www.gimp.org/
+  * RawTherapee - http://www.rawtherapee.com/
+  * gmic - http://gmic.sourceforge.net/
+  * elsamuko scripts - http://sites.google.com/site/elsamuko/gimp
+  * geeqie - http://geeqie.sourceforge.net/
 
 
-= Workflow =
+= Limitations =
 
 Limitations of Gimp:
   * 8-bit per channel
