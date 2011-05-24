@@ -34,3 +34,13 @@ Each developer I was discussing CMYK problem thinks, that CMYK is just a colorsp
 LAB colorspace separates luminance from color. It's very powerful colorspace. It's available in Gimp only as a decompose/recompose option. You can work with LAB layers same way as with CMYK layers - without seeing how the final image looks.
 
 RawTherapee has LAB curves, lots of internal stuff works in LAB and there are LAB values in navigator (sampler) window.
+
+= 8-bit =
+
+8-bit per channels means that each color component can have only 256 values, which means 256*256*256 --> 16 million of RGB colors. 
+
+You may think that this is not real problem if you want just to create photos to publish on Internet. The truth is that depth of output image doesn't really matter. We all watch 8-bit JPEGs. The real problem is depth of processing.
+
+Any visual effect, like brightness/contrast/curves/mixer/etc in 8-bit will transform 256 values into another 256 values. If you map only 256 values into 256 values you will notice that some values are duplicated, for instance if you increase contrast the value 0 and value 1 and value 2 may change to 0 from the one side and value 255 and value 254 and value 253 may change to 255 on the other side. If you decrease contrast you will notice that for instance values 127, 128 and 129 will change to 128. In both cases you will lose some data and there is no way to make it back.
+
+The more effects you will use, the more you damage your image. That's the main reason 8-bit per channel is evil.
