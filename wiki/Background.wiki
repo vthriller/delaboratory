@@ -44,3 +44,5 @@ You may think that this is not real problem if you want just to create photos to
 Any visual effect, like brightness/contrast/curves/mixer/etc in 8-bit will transform 256 values into another 256 values. If you map only 256 values into 256 values you will notice that some values are duplicated, for instance if you increase contrast the value 0 and value 1 and value 2 may change to 0 from the one side and value 255 and value 254 and value 253 may change to 255 on the other side. If you decrease contrast you will notice that for instance values 127, 128 and 129 will change to 128. In both cases you will lose some data and there is no way to make it back.
 
 The more effects you will use, the more you damage your image. That's the main reason 8-bit per channel is evil.
+
+It doesn't really matter what is the depth of your result, it may be 8-bit JPEG in grayscale. But if you use 8-bit for processing you will notice banding.
