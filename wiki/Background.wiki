@@ -17,6 +17,15 @@ Limitations of Gimp:
   * only RGB preview
   * no lockable samplers
 
+Limitations of RT:
+  * no layers
+  * no RGB curves, no CMYK at all
+
+Limitations of GMIC:
+  * no GUI, limited GUI as Gimp plugin
+  * using as Gimp plugin means 8-bit on input, 8-bit on output
+
+
 = Skin Tone =
 
 Typical color correction problem is how to achieve good skin tone.
