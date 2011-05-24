@@ -11,3 +11,7 @@
 
 = Workflow =
 
+Limitations of Gimp:
+  * 8-bit per channel
+  * no adjustment layers
+  * only RGB preview
