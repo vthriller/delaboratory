@@ -15,6 +15,7 @@ Limitations of Gimp:
   * 8-bit per channel
   * no adjustment layers
   * only RGB preview
+  * no lockable samplers
 
 = Skin Tone =
 
@@ -46,3 +47,9 @@ Any visual effect, like brightness/contrast/curves/mixer/etc in 8-bit will trans
 The more effects you will use, the more you damage your image. That's the main reason 8-bit per channel is evil.
 
 It doesn't really matter what is the depth of your result, it may be 8-bit JPEG in grayscale. But if you use 8-bit for processing you will notice banding.
+
+= Adjustment layers and samplers =
+
+Without adjustment layers each change is pernament, yes you can make undo or you can create millions of layers, but if you want to change something you did 5 layers ago it's a real problem and you will probably start over.
+
+The serious limitation of Gimp is that you can't really do much at the time you edit curves or mixer. You have to click OK and then you can't go back, you must open curve window again and draw it again (or load it if you saved it). 
