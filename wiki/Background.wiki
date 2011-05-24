@@ -15,3 +15,22 @@ Limitations of Gimp:
   * 8-bit per channel
   * no adjustment layers
   * only RGB preview
+
+= Skin Tone =
+
+Typical color correction problem is how to achieve good skin tone.
+Popular method is called "skin color by numbers" and is described by Dan Margulis.
+One should use curves tool to find good balance between Magenta, Yellow, Cyan and Black values.
+This method requires CMYK sampler and curves tool.
+
+Sampler in Gimp works in RGB, HSV and CMYK modes, but CMYK mode is broken.
+It is possible to decompose image to CMYK layers but it's not possible to see how they look together, until will be recomposed again into RGB image.
+It makes using this method very hard.
+
+Each developer I was discussing CMYK problem thinks, that CMYK is just a colorspace for printing, so it doesn't really matter when processing photos you don't want to print. And that's the main reason why this stuff is not implemented in any Free Software application.
+
+= LAB =
+
+LAB colorspace separates luminance from color. It's very powerful colorspace. It's available in Gimp only as a decompose/recompose option. You can work with LAB layers same way as with CMYK layers - without seeing how the final image looks.
+
+RawTherapee has LAB curves, lots of internal stuff works in LAB and there are LAB values in navigator (sampler) window.
