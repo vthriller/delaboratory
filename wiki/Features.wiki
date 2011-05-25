@@ -1,5 +1,7 @@
 #summary delaboratory features
 
+delaboratory is NOT a RAW processor and is NOT a per-pixel editor, this is a color correction tool
+
 delaboratory features:
 
   * floating point precision - it means that internal code uses not 8-bit (like Gimp), not 16-bit (like many apps), but float for each color component, input and output will use 16-bit tiffs or 8-bit jpgs
