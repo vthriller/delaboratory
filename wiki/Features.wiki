@@ -20,6 +20,7 @@ plans for near future:
    * blur (per channel)
    * rendering of simple shapes for ND-filter-like stuff (vignette, etc)
    * not sure what to do with sharpening, it should be last step of processing, but delaboratory should be just part of workflow so sharpening is probably pointless
+   * load multiple images to use as masks (blending)
 
 delaboratory won't support in near future:
 
