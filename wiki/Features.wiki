@@ -10,6 +10,8 @@ delaboratory features:
 
   * adjustment layers - it's not possible to "flatten" like in Gimp, so each operation is available for edit, the more layers you create the more complex the project will be, it's possible to change the "source" layer of each layer and colorspace, supported layer types: conversion, mixer, curves, blend
 
+  * realtime - premature optimization is root of all evil so I am not going to do strange stuff while the project is far from complete, but it should be possible to use delaboratory on modern desktop computer in realtime, without waiting for anything, when you move slider you should see how preview changes, there is a danger that usage of many layers will eat memory, but that's OK, the real problem is not to slow-down operations and calculate only these previews which are really needed at given time
+
   * curves (work in progress)
 
   * mixer - from each colorspace to each colorspace, for instance one can mix RGB colorspace to achieve BW (black and white) image, but it's also possible to mix from RGB to LAB or CMYK if you want (there are no limitations at all), natural usage is of course mix RGB to RGB or LAB to LAB
