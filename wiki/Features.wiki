@@ -1,0 +1,21 @@
+#summary delaboratory features
+
+delaboratory features:
+
+  * floating point precision - it means that internal code uses not 8-bit (like Gimp), not 16-bit (like many apps), but float for each color component, input and output will use 16-bit tiffs or 8-bit jpgs
+
+  * native support for RGB/BW, CMY/CMYK, XYZ/LAB, HSV/HSL colorspaces - each colorspace is equal, can be displayed, can be edited same way, the only limitation is the conversion between two colorspaces, sometimes it will require two steps (CMYK to RGB then RGB to HSV, instead CMYK to HSV), because it's boring to create lots of similar conversion functions :)
+
+  * curves (work in progress)
+
+  * mixer - from each colorspace to each colorspace, for instance one can mix RGB colorspace to achieve BW (black and white) image, but it's also possible to mix from RGB to LAB or CMYK if you want (there are no limitations at all), natural usage is of course mix RGB to RGB or LAB to LAB
+
+  * blend - it's possible to blend all channels (it's not yet clear what to do when number of channel differs) or single channel, or blend single channel to all channels, supported blend modes: normal, multiply, screen, overlay
+
+  * lockable samplers - it's possible to lock multiple samplers on given places and watch color values (any colorspace) in this place during the edit
+
+delaboratory won't support in near future:
+
+   * drawing, brushes, per-pixel operations
+   * RAW file processing
+   * crop, resize, rotate
