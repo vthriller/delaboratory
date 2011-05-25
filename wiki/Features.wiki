@@ -6,6 +6,8 @@ delaboratory features:
 
   * native support for RGB/BW, CMY/CMYK, XYZ/LAB, HSV/HSL colorspaces - each colorspace is equal, can be displayed, can be edited same way, the only limitation is the conversion between two colorspaces, sometimes it will require two steps (CMYK to RGB then RGB to HSV, instead CMYK to HSV), because it's boring to create lots of similar conversion functions :)
 
+  * adjustment layers - it's not possible to "flatten" like in Gimp, so each operation is available for edit, the more layers you create the more complex the project will be, it's possible to change the "source" layer of each layer and colorspace, supported layer types: conversion, mixer, curves, blend
+
   * curves (work in progress)
 
   * mixer - from each colorspace to each colorspace, for instance one can mix RGB colorspace to achieve BW (black and white) image, but it's also possible to mix from RGB to LAB or CMYK if you want (there are no limitations at all), natural usage is of course mix RGB to RGB or LAB to LAB
@@ -14,8 +16,13 @@ delaboratory features:
 
   * lockable samplers - it's possible to lock multiple samplers on given places and watch color values (any colorspace) in this place during the edit
 
+plans for near future:
+   * blur (per channel)
+   * rendering of simple shapes for ND-filter-like stuff (vignette, etc)
+   * not sure what to do with sharpening, it should be last step of processing, but delaboratory should be just part of workflow so sharpening is probably pointless
+
 delaboratory won't support in near future:
 
-   * drawing, brushes, per-pixel operations
+   * drawing, brushes, per-pixel operations (clone/healing)
    * RAW file processing
    * crop, resize, rotate
