@@ -1,12 +1,13 @@
 #summary using Free Software to process photos
 
-= Applications =
+= Essential links = 
 
   * Gimp - http://www.gimp.org/
   * RawTherapee - http://www.rawtherapee.com/
   * gmic - http://gmic.sourceforge.net/
   * elsamuko scripts - http://sites.google.com/site/elsamuko/gimp
   * geeqie - http://geeqie.sourceforge.net/
+  * http://en.wikipedia.org/wiki/Dan_Margulis
 
 
 = Limitations =
@@ -65,3 +66,9 @@ It doesn't really matter what is the depth of your result, it may be 8-bit JPEG 
 Without adjustment layers each change is pernament, yes you can make undo or you can create millions of layers, but if you want to change something you did 5 layers ago it's a real problem and you will probably start over.
 
 The serious limitation of Gimp is that you can't really do much at the time you edit curves or mixer. You have to click OK and then you can't go back, you must open curve window again and draw it again (or load it if you saved it). 
+
+= Curves and Mixer vs "user friendly sliders" =
+
+I am fan of Dan Margulis methods of color correction. Most of the stuff can be achieved by using curves, color mixer and blending. Sliders like "brightness" or "contrast" or "levels" are just interfaces to curves, it's good for newbie but you shouldn't use "contrast" slider to increase contrast on your photo if you don't want to clip your highlights and shadows, curve gives you full control.
+
+
