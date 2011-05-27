@@ -12,7 +12,7 @@ delaboratory features:
 
   * realtime - premature optimization is root of all evil so I am not going to do strange stuff while the project is far from complete, but it should be possible to use delaboratory on modern desktop computer in realtime, without waiting for anything, when you move slider you should see how preview changes, there is a danger that usage of many layers will eat memory, but that's OK, the real problem is not to slow-down operations and calculate only these previews which are really needed at given time
 
-  * curves (work in progress)
+  * curves - each channel in each colorspace can be processed by curve, currently curves implementation is VERY SIMPLIFIED (no spline/bezier, just straight lines)
 
   * mixer - from each colorspace to each colorspace, for instance one can mix RGB colorspace to achieve BW (black and white) image, but it's also possible to mix from RGB to LAB or CMYK if you want (there are no limitations at all), natural usage is of course mix RGB to RGB or LAB to LAB
 
