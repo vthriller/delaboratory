@@ -1,12 +1,23 @@
 #summary using Free Software to process photos
 
-= Essential links = 
+= Essential stuff = 
+
+In my opinion two most important Free Software applications for photographer are GIMP and RawTherapee. GIMP is alive for more than 15 years and it's quite mature. RawTherapee has been open sourced in 2010.
 
   * Gimp - http://www.gimp.org/
   * RawTherapee - http://www.rawtherapee.com/
+
+GREYC's Magic Image Converter is very interesting utility which can be used in GIMP (or without it). 
   * gmic - http://gmic.sourceforge.net/
+
+elsamuko GIMP scripts shows how to achieve different colors by using (mostly) curves
   * elsamuko scripts - http://sites.google.com/site/elsamuko/gimp
+
+I used Digikam for a few years, got many problems with it, finally in 2011 I decided to drop it and use something simpler, currently the best viewer/manager for RAWs I found is geeqie (it's a fork of gqview)
   * geeqie - http://geeqie.sourceforge.net/
+
+Dan Margulis is Photoshop expert, but the stuff he described is not photoshop-specific, you can achieve that in many tools, and I tried to follow his steps in GIMP, RT, gmic and delaboratory should support it all.
+
   * http://en.wikipedia.org/wiki/Dan_Margulis
 
 
@@ -70,5 +81,3 @@ The serious limitation of Gimp is that you can't really do much at the time you 
 = Curves and Mixer vs "user friendly sliders" =
 
 I am fan of Dan Margulis methods of color correction. Most of the stuff can be achieved by using curves, color mixer and blending. Sliders like "brightness" or "contrast" or "levels" are just interfaces to curves, it's good for newbie but you shouldn't use "contrast" slider to increase contrast on your photo if you don't want to clip your highlights and shadows, curve gives you full control.
-
-
