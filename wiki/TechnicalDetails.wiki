@@ -16,8 +16,19 @@ the main requirement for delaboratory is to be functional - to really process ph
 
 = details = 
 
-there are multiple colorspaces defined, each dePreview contains number of deChannels, for BW colorspace it will be 1 channel, for RGB/LAB colorspaces there will be 3 channels and for CMYK there will be 4
+each operation is adjustment layer and is stored as deLayer:
+  * deSourceImageLayer
+  * deConversionLayer
+  * deMixerLayer
+  * deCurvesLayer
+  * deBlendLayer
+
+each deLayer has its dePreview, which is just an image in given colorspace
+
+each dePreview contains number of deChannels, for BW colorspace it will be 1 channel, for RGB/LAB colorspaces there will be 3 channels and for CMYK there will be 4
 
 each deChannel is an array of deValue, deValue is defined as float but can be redefined easily, I don't see why would anyone need double instead float but it should work
+
+== more info ==
 
 I develop code on Arch Linux
