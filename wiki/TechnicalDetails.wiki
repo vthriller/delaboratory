@@ -16,7 +16,7 @@ the main requirement for delaboratory is to be functional - to really process ph
 
 = details = 
 
-each operation is adjustment layer and is stored as deLayer:
+each operation is an adjustment layer and is stored as deLayer:
   * deSourceImageLayer
   * deConversionLayer
   * deMixerLayer
@@ -28,6 +28,13 @@ each deLayer has its dePreview, which is just an image in given colorspace
 each dePreview contains number of deChannels, for BW colorspace it will be 1 channel, for RGB/LAB colorspaces there will be 3 channels and for CMYK there will be 4
 
 each deChannel is an array of deValue, deValue is defined as float but can be redefined easily, I don't see why would anyone need double instead float but it should work
+
+conversion between colorspaces is performed only in two cases:
+  * when rendering image on screen (conversion to RGB)
+  * when using deConversionLayer
+
+other layers can change the colorspaces but without conversion, for instance it's legal to mix RGB image into BW image, but it's also perfectly legal to mix CMYK into LAB (but don't expect it to look good) :)
+
 
 == more info ==
 
