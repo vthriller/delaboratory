@@ -10,7 +10,7 @@ In my opinion two most important Free Software applications for photographer are
 GREYC's Magic Image Converter is very interesting utility which can be used in GIMP (or without it). 
   * gmic - http://gmic.sourceforge.net/
 
-elsamuko GIMP scripts shows how to achieve different colors by using (mostly) curves
+elsamuko GIMP scripts shows how to achieve different colors by using mix of curves, layers, blending, etc. Most scripts leave their edits on extra layers to reconstruct the work flow (Press ctrl-L to view the layers.)
   * elsamuko scripts - http://sites.google.com/site/elsamuko/gimp
 
 I used Digikam for a few years, got many problems with it, finally in 2011 I decided to drop it and use something simpler, currently the best viewer/manager for RAWs I found is geeqie (it's a fork of gqview)
