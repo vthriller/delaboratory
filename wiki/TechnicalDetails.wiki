@@ -1,13 +1,23 @@
 #summary Technical Details
 
+= language and toolkit =
+
 delaboratory is written in C++ and uses wxWidgets for GUI
 
 wxWidgets if mature, complete and uses GTK (at least on my system), and opposing to GTK it's written in C++ not C, so it fits great, the only problem with wxWidgets is lack of support for 16-bit images, so I needed to use libtiff for accessing 16-bit tiffs, but libtiff is already requirement in your system so don't worry about it
 
+= design rules =
+
 delaboratory should follow KISS principle - keep it simple
 
-premature optimization is root of all evil, I know how to optimize things, I wrote software texture+bump renderer for demoscene intro64 in pure assembler when I was 16, but I know how dumb optimization can destroy software project, the project should work in realtime, when you move slider or point on curve you should see result on screen, when it's too slow - optimization may be needed, when it's OK - optimization shouldn't be done
+premature optimization is the root of all evil, I know how to optimize things, I wrote software texture+bump renderer for demoscene intro64 in pure assembler when I was 16, but I know how dumb optimization can destroy software project, the code should work in realtime, when you move slider or point on curve you should see result on screen, when it's too slow - optimization may be needed, when it's OK - optimization shouldn't be done
 
 the main requirement for delaboratory is to be functional - to really process photos, if you use the application it will be alive, if the software is not really helping you with anything - it will die
+
+= details = 
+
+there are multiple colorspaces defined, each dePreview contains number of deChannels, for BW colorspace it will be 1 channel, for RGB/LAB colorspaces there will be 3 channels and for CMYK there will be 4
+
+each deChannel is an array of deValue, deValue is defined as float but can be redefined easily, I don't see why would anyone need double instead float but it should work
 
 I develop code on Arch Linux
