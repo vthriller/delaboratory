@@ -1,0 +1,8 @@
+#summary Known issues
+
+  * curves are *very simplified*, instead beautiful bezier or splines you will see straight lines between points
+  * *no blend masking* yet
+  * only 4 blend modes are implemented, it's easy to add more
+  * no direct conversions between some colorspacies, so - for instance - you can't 
+sample CMYK values when using HSV layer 
+  * displayed values in sampler are not scaled, they are always between 0.0 and 1.0, the goal is to scale them so A and B in LAB will be also negative, etc...
