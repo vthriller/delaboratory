@@ -10,4 +10,4 @@ premature optimization is root of all evil, I know how to optimize things, I wro
 
 the main requirement for delaboratory is to be functional - to really process photos, if you use the application it will be alive, if the software is not really helping you with anything - it will die
 
-
+I develop code on Arch Linux
