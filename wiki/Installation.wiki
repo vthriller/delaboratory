@@ -1,0 +1,21 @@
+#summary Installation
+
+= Introduction =
+
+project has just started and is not ready for end users, there are no binary packages, you have to compile it yourself
+
+= Requirements =
+
+You need wxWidgets. 
+I use version 2.8.12.
+To check your version please type:
+
+wx-config --version
+
+If there is no wx-config then you need to install wxWidgets first or delaboratory won't compile.
+
+= Compilation =
+
+Please extract sources and type:
+
+make
