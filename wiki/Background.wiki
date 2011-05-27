@@ -16,7 +16,7 @@ elsamuko GIMP scripts shows how to achieve different colors by using (mostly) cu
 I used Digikam for a few years, got many problems with it, finally in 2011 I decided to drop it and use something simpler, currently the best viewer/manager for RAWs I found is geeqie (it's a fork of gqview)
   * geeqie - http://geeqie.sourceforge.net/
 
-Dan Margulis is Photoshop expert, but the stuff he described is not photoshop-specific, you can achieve that in many tools, and I tried to follow his steps in GIMP, RT, gmic and delaboratory should support it all.
+Dan Margulis is Photoshop expert, but the stuff he described is not photoshop-specific, you can achieve that in many tools, and I tried to follow his steps in GIMP, RT, gmic. The goal of delaboratory is to support everything Dan Margulis described.
 
   * http://en.wikipedia.org/wiki/Dan_Margulis
 
