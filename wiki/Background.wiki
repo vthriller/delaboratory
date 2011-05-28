@@ -36,6 +36,7 @@ Limitations of RT:
   * no layers
   * no RGB curves, no CMYK at all
   * no lockable samplers
+  * can't "pick color" on curves (like in GIMP)
 
 Limitations of GMIC:
   * using as Gimp plugin means 8-bit on input, 8-bit on output
