@@ -60,6 +60,8 @@ LAB colorspace separates luminance from color. It's very powerful colorspace. It
 
 RawTherapee has LAB curves, lots of internal stuff works in LAB and there are LAB values in navigator (sampler) window.
 
+GMIC has support for both LAB and CMYK.
+
 = 8-bit =
 
 8-bit per channels means that each color component can have only 256 values, which means 256*256*256 --> 16 million of RGB colors. 
@@ -72,11 +74,15 @@ The more effects you will use, the more you damage your image. That's the main r
 
 It doesn't really matter what is the depth of your result, it may be 8-bit JPEG in grayscale. But if you use 8-bit for processing you will notice banding.
 
+GIMP is limited to 8-bit, so the work you do in GIMP (like clone, healing brush or crop) should be performed AFTER you correct color/contrast.
+
 = Adjustment layers and samplers =
 
 Without adjustment layers each change is pernament, yes you can make undo or you can create millions of layers, but if you want to change something you did 5 layers ago it's a real problem and you will probably start over.
 
-The serious limitation of Gimp is that you can't really do much at the time you edit curves or mixer. You have to click OK and then you can't go back, you must open curve window again and draw it again (or load it if you saved it). 
+The serious limitation of GIMP is that you can't really do much at the time you edit curves or mixer. You have to click OK and then you can't go back, you must open curve window again and draw it again (or load it if you saved it). 
+
+RT by design works as a set of predefined adjustment layers - you can change everything again and again, but you can't redefine order of effects.
 
 = Curves and Mixer vs "user friendly sliders" =
 
