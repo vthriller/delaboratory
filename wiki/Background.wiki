@@ -35,8 +35,8 @@ Limitations of RT:
   * no lockable samplers
 
 Limitations of GMIC:
-  * no layers, only one effect at once
   * using as Gimp plugin means 8-bit on input, 8-bit on output
+  * there are layer effects but they use Gimp layers, so see previous point
   * no GUI, limited GUI as Gimp plugin
   * no samplers at all
 
