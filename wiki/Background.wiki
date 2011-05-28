@@ -84,6 +84,8 @@ The serious limitation of GIMP is that you can't really do much at the time you 
 
 RT by design works as a set of predefined adjustment layers - you can change everything again and again, but you can't redefine order of effects.
 
+There is one sampler in RT, but you need to move mouse cursor over the image to sample, so when you are working with curves or mixer or anything else - you can't really read how values change, you need to trust your eyes and histogram.
+
 = Curves and Mixer vs "user friendly sliders" =
 
 I am fan of Dan Margulis methods of color correction. Most of the stuff can be achieved by using curves, color mixer and blending. Sliders like "brightness" or "contrast" or "levels" are just interfaces to curves, it's good for newbie but you shouldn't use "contrast" slider to increase contrast on your photo if you don't want to clip your highlights and shadows, curve gives you full control.
