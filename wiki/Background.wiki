@@ -80,7 +80,7 @@ GIMP is limited to 8-bit, so the work you do in GIMP (like clone, healing brush 
 
 Without adjustment layers each change is pernament, yes you can make undo or you can create millions of layers, but if you want to change something you did 5 layers ago it's a real problem and you will probably start over.
 
-The serious limitation of GIMP is that you can't really do much at the time you edit curves or mixer. You have to click OK and then you can't go back, you must open curve window again and draw it again (or load it if you saved it). 
+The serious limitation of GIMP is that you can't really do much at the time you edit curves or mixer. You have to click OK and then you can't go back, you must open curve window again and draw it again (or load it if you saved it).  
 
 RT by design works as a set of predefined adjustment layers - you can change everything again and again, but you can't redefine order of effects.
 
@@ -88,4 +88,6 @@ There is one sampler in RT, but you need to move mouse cursor over the image to 
 
 = Curves and Mixer vs "user friendly sliders" =
 
-I am fan of Dan Margulis methods of color correction. Most of the stuff can be achieved by using curves, color mixer and blending. Sliders like "brightness" or "contrast" or "levels" are just interfaces to curves, it's good for newbie but you shouldn't use "contrast" slider to increase contrast on your photo if you don't want to clip your highlights and shadows, curve gives you full control.
+I am fan of Dan Margulis methods of color correction. Most of the stuff can be achieved by using curves, color mixer and blending. Sliders like "brightness" or "contrast" or "levels" are just interfaces to curves, it's good for newbie but you shouldn't use "contrast" slider to increase contrast on your photo if you don't want to clip your highlights and shadows, curve give you full control.
+
+The truth is that with mix of curves, mixers and blending you can achieve very interesting effects, and they will look much better than when drawing with brushes on your photo.
