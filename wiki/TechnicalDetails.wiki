@@ -10,7 +10,7 @@ wxWidgets if mature, complete and uses GTK (at least on my system), and opposing
 
 delaboratory should follow KISS principle - keep it simple
 
-premature optimization is the root of all evil, I know how to optimize things, I wrote software texture+bump renderer for demoscene intro64 in pure assembler when I was 16, but I know how dumb optimization can destroy software project, the code should work in realtime, when you move slider or point on curve you should see result on screen, when it's too slow - optimization may be needed, when it's OK - optimization shouldn't be done
+do not sacrifice code clarity for speed, don't waste time on optimization when it's not needed
 
 the main requirement for delaboratory is to be functional - to really process photos, if you use the application it will be alive, if the software is not really helping you with anything - it will die
 
@@ -38,4 +38,4 @@ other layers can change the colorspaces but without conversion, for instance it'
 
 == more info ==
 
-I develop code on Arch Linux
+I develop code on Arch Linux, I use wxWidgets 2.8.12 and gcc 4.6.0
