@@ -43,3 +43,21 @@ This is the most common problem with portrait postprocessing. How to achieve goo
 (you don't have to convert to RGB, it will be performed automagicaly)
 
 When playing with CMYK curves - try to set *yellow* a little larger than *magenta* and much larger than *cyan* (please google for skin color by numbers for details).
+
+= change colors in LAB =
+
+LAB separates color from contrast, so you can play with colors without danger of destroying contrast of your photo.
+
+  * *open* your image in delaboratory (File, Open)
+  * add *conversion layer*
+  * double click on conversion layer and *change colorspace to LAB*
+  * add *blend layer*
+  * double click on blend layer and *set blend options*
+  * change blending mode to *overlay* and set *alpha*
+  * add *curves layer*
+  * double click on curves layer and *set curves*
+  * add *mixer layer*
+  * double click on mixer layer and *set mixer*
+  * *send* image to GIMP 
+
+Try different channels in blend layer, try mixing A and B channels. You can change settings all over again and when finish when you will be happy with the result.
