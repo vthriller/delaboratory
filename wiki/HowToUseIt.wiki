@@ -1,0 +1,16 @@
+#summary How to use it
+
+= simple RGB operations =
+
+Let's say that you have RAW from RawTherapee or Ufraw and you want to perform some simple operations on your photo: curves and mixer. You can do it in GIMP, but it will be limited to 8-bit color, so you will decrease quality of your photo. It's better to do it in delaboratory then send image to GIMP for further postprocessing.
+
+  * *open* your image in delaboratory (File, Open)
+  * add *curves layer*
+  * double click on curves layer and *set curves*
+  * add *mixer layer*
+  * double click on mixer layer and *set mixer*
+  * if you want you can edit curves or mixer again and again
+  * *send* image to GIMP
+
+
+
