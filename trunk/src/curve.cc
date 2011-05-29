@@ -1,0 +1,184 @@
+/*
+    delaboratory - color correction utility
+    Copyright (C) 2011 Jacek Poplawski
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "curve.h"
+#include "channel.h"
+#include <cmath>
+#include <iostream>
+
+deCurve::deCurve(int size)
+:shape(size)
+{
+    reset();
+}
+
+deCurve::~deCurve()
+{
+}
+
+void deCurve::reset()
+{
+    points.push_back(deCurvePoint(0,0));
+    points.push_back(deCurvePoint(1,1));
+    shape.build(points);
+}
+
+void deCurve::process(const deBaseChannel& source, deBaseChannel& destination)
+{
+    int i;
+    int n = source.getSize().getN();
+    for (i = 0; i < n; i++)
+    {
+        deValue value = source.getValue(i);
+        deValue result = shape.calc(value);
+        destination.setValue(i, result);
+    }
+}
+
+int deCurve::findPoint(deValue x, deValue y) const
+{
+    deCurvePoints::const_iterator j;
+    int i = 0;
+
+    for (j = points.begin(); j != points.end(); j++)
+    {
+        const deCurvePoint& point = *j;
+        deValue xx = x - point.getX();
+        float yy = y - point.getY();
+        // FIXME constant
+        if (sqrt (xx * xx + yy * yy) < 0.05)
+        {
+            return i;
+        }
+        i++;
+    }
+
+    return -1;
+}
+
+int deCurve::addPoint(deValue x, deValue y)
+{
+    if ((x <= 0) || (x >= 1))
+    {
+        return -1;
+    }
+    if ((y < 0) || (y > 1))
+    {
+        return -1;
+    }
+
+    points.push_back(deCurvePoint(x,y));
+
+    shape.build(points);
+
+    return points.size() - 1;
+}
+
+void deCurve::deletePoint(int p)
+{
+    deCurvePoints::iterator i = points.begin();
+    while (p > 0)
+    {
+        i++;
+        p--;
+    }
+
+    deValue xx = (*i).getX();
+
+    points.erase(i);
+
+    if (xx == 0)
+    {
+        points.push_back(deCurvePoint(0,0));
+    }
+    if (xx == 1)
+    {
+        points.push_back(deCurvePoint(1,1));
+    }
+
+    shape.build(points);
+}
+
+void deCurve::movePoint(int p, deValue x, deValue y)
+{
+    if ((x < 0) || (x > 1))
+    {
+        return;
+    }
+    if ((y < 0) || (y > 1))
+    {
+        return;
+    }
+
+    deCurvePoints::iterator i = points.begin();
+    while (p > 0)
+    {
+        i++;
+        p--;
+    }
+
+    deValue xx = (*i).getX();
+
+    if (xx == 0)
+    {
+        x = 0;
+    }
+    else
+    {
+        if (x == 0)
+        {
+            return;
+        }
+    }
+
+    if (xx == 1)
+    {
+        x = 1;
+    }
+    else
+    {
+        if (x == 1)
+        {
+            return;
+        }
+    }
+
+    (*i).move(x, y);
+    shape.build(points);
+}
+
+const deCurvePoints& deCurve::getPoints() const
+{
+    return points;
+}
+
+const deCurvePoint& deCurve::getPoint(int n) const
+{
+    deCurvePoints::const_iterator i = points.begin();
+    while (n > 0)
+    {
+        i++;
+        n--;
+    }
+    return *i;
+}
+
+void deCurve::getShapePoints(deCurvePoints& points) const
+{
+    shape.getShapePoints(points);
+}
