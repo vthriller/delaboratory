@@ -10,6 +10,7 @@ TODO:
   * no GCR settings for CMYK conversion
   * only 4 blend modes are implemented, it's easy to add more
   * no direct conversions between some colorspacies, so - for instance - you can't sample CMYK values when using HSV layer 
+  * number of samplers is fixed to 3, this is not limitation of engine but problem with GUI - I need to find good way to display many samplers and make it readable
   * displayed values in sampler are not scaled, they are always between 0.0 and 1.0, the goal is to scale them so A and B in LAB will be also negative, etc...
   * no different colors (on histogram/curves graphs) for channels other than RGB, I need to decide what colors should be used for colorspaces like XYZ or HSL :)
   * input/output support in early stages, it's possible to load 16-bit tiff or 8-bit jpeg, and I am not even sure will every tiff work (I tested it on tiff produced by RT), I will need to improve it
