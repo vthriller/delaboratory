@@ -12,5 +12,34 @@ Let's say that you have RAW from RawTherapee or Ufraw and you want to perform so
   * if you want you can edit curves or mixer again and again
   * *send* image to GIMP
 
+= convert image to Black and White =
 
+There are many ways to convert your photo to BW, the most common way is to use mixer. 
 
+  * *open* your image in delaboratory (File, Open)
+  * add *mixer layer*
+  * double click on mixer layer and *change colorspace to BW*
+  * click *apply*
+  * double click on mixer layer and *set mixer*
+  * *send* image to GIMP
+
+Of course more advanced methods will also work. You could:
+
+  * blend RGB channels in overlay mode by using *blend layers*
+  * convert image to LAB or CMYK and use L or K channels
+
+= correct skin color =
+
+This is the most common problem with portrait postprocessing. How to achieve good skin tone?
+
+  * *open* your image in delaboratory (File, Open)
+  * add *conversion layer*
+  * double click on conversion layer and *change colorspace to CMYK*
+  * click on image and add some *samplers* on skin
+  * change colorspace of samplers to *CMYK*
+  * add *curves layer*
+  * double click on curves layer and *set curves*
+  * *send* image to GIMP 
+(you don't have to convert to RGB, it will be performed automagicaly)
+
+When playing with CMYK curves - try to set *yellow* a little larger than *magenta* and much larger than *cyan* (please google for skin color by numbers for details).
