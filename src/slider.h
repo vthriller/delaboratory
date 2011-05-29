@@ -1,0 +1,54 @@
+/*
+    delaboratory - color correction utility
+    Copyright (C) 2011 Jacek Poplawski
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef _DE_SLIDER_H
+#define _DE_SLIDER_H
+
+#include <wx/wx.h>
+#include "value.h"
+
+class deSlider:public wxPanel
+{
+    private:
+        wxSizer* sizer;
+        wxStaticText* label;
+        wxSlider* slider;
+        wxTextCtrl* edit;
+        int sliderRange;
+        deValue valueMin;
+        deValue valueMax;
+
+        void moveSlider(wxCommandEvent &event);
+        void finishMoveSlider(wxCommandEvent &event);
+        void textEnter(wxCommandEvent &event);
+
+        void updateValueFromSlider();
+
+        void setEdit(deValue v);
+        void setSlider(deValue v);
+
+    public:
+        deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax);
+        virtual ~deSlider();
+
+        void setValue(deValue v);
+
+        virtual void onValueChange(deValue value) = 0;
+};        
+
+#endif
