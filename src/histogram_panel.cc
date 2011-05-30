@@ -64,7 +64,7 @@ void deHistogramPanel::render(wxDC& dc)
         updateHistograms();
     }
 
-    wxStartTimer();
+    wxStopWatch sw;
 
     const dePreview* preview = project->getVisiblePreview();
     if (!preview)
@@ -81,7 +81,7 @@ void deHistogramPanel::render(wxDC& dc)
         renderHistogram(histogram, dc, max);
     }
 
-    long t = wxGetElapsedTime();
+    long t = sw.Time();
 
     std::ostringstream oss;
     oss << "rh: " << t << std::endl;
@@ -113,7 +113,7 @@ void deHistogramPanel::renderHistogram(deHistogram* histogram, wxDC& dc, int max
 
 void deHistogramPanel::updateHistograms()
 {
-    wxStartTimer();
+    wxStopWatch sw;
 
     destroyHistograms();    
 
@@ -142,7 +142,7 @@ void deHistogramPanel::updateHistograms()
     const deBaseChannel* channel = preview->getChannel(histogramMode);
     histogram->calc(channel, n);
 
-    long t = wxGetElapsedTime();
+    long t = sw.Time();
 
     std::ostringstream oss;
     oss << "ch: " << t << std::endl;

@@ -84,7 +84,7 @@ void dePreviewStack::setProject(deProject* _project)
 void dePreviewStack::realUpdatePreviews()
 {
     nowUpdating = true;
-    wxStartTimer();
+    wxStopWatch sw;
 
     int min = -1;
     std::set<int>::iterator j;
@@ -127,7 +127,7 @@ void dePreviewStack::realUpdatePreviews()
     dirty.clear();
     nowUpdating = false;
 
-    long t = wxGetElapsedTime();
+    long t = sw.Time();
     std::ostringstream oss;
     oss << "up: " << t << std::endl;
     project->getGUI().setInfo(0, oss.str());

@@ -44,7 +44,7 @@ deRenderer::~deRenderer()
 void deRenderer::render(wxDC& dc)
 {
 
-    wxStartTimer();
+    wxStopWatch sw;
 
     const dePreview* preview = project->getVisiblePreview();
 
@@ -80,7 +80,7 @@ void deRenderer::render(wxDC& dc)
 
     wxBitmap bitmap(*image);
     dc.DrawBitmap(bitmap, 0, 0, false);
-    long t = wxGetElapsedTime();
+    long t = sw.Time();
 
     std::ostringstream oss;
     oss << "r: " << t << std::endl;
