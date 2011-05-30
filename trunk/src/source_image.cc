@@ -75,14 +75,31 @@ void deSourceImage::loadTIFF(const std::string& fileName)
         int x;
         for (x = 0; x < w; x++)
         {
-            uint16* bb = (uint16*)(buf);
-            uint16 u1 = bb[3*x+0];
-            uint16 u2 = bb[3*x+1];
-            uint16 u3 = bb[3*x+2];
-            deValue d = 255 * 255;
-            deValue r = u1 / d;
-            deValue g = u2 / d;
-            deValue b = u3 / d;
+            deValue r;
+            deValue g;
+            deValue b;
+            if (bps == 16)
+            {
+                uint16* bb = (uint16*)(buf);
+                uint16 u1 = bb[3*x+0];
+                uint16 u2 = bb[3*x+1];
+                uint16 u3 = bb[3*x+2];
+                deValue d = 255 * 255;
+                r = u1 / d;
+                g = u2 / d;
+                b = u3 / d;
+            }         
+            else
+            {
+                uint8* bb = (uint8*)(buf);
+                uint8 u1 = bb[3*x+0];
+                uint8 u2 = bb[3*x+1];
+                uint8 u3 = bb[3*x+2];
+                deValue d = 255;
+                r = u1 / d;
+                g = u2 / d;
+                b = u3 / d;
+            }
             channelR->setValue(pos, r );
             channelG->setValue(pos, g );
             channelB->setValue(pos, b );
