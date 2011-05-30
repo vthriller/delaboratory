@@ -27,7 +27,8 @@ CXXFLAGS=`wx-config --cxxflags`
 #CXXFLAGS+=-g -Wall -pedantic 
 
 # release stuff
-CXXFLAGS+=-O2 -march=i686
+#CXXFLAGS+=-O2 -march=i686
+CXXFLAGS+=-O2 
 
 # warnings from wxWidgets
 CXXFLAGS+=-Wno-long-long -Wno-variadic-macros 
