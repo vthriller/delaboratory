@@ -30,7 +30,7 @@ CXXFLAGS=`wx-config --cxxflags`
 CXXFLAGS+=-O2 -march=i686
 
 # warnings from wxWidgets
-CXXFLAGS+=-Wno-long-long -Wno-variadic-macros -Wno-deprecated-declarations
+CXXFLAGS+=-Wno-long-long -Wno-variadic-macros 
 
 ${APP}: ${OBJECTS}
 	${CXX} -o ${APP} ${OBJECTS} ${LDFLAGS}
