@@ -76,8 +76,8 @@ void deHistogramPanel::render(wxDC& dc)
     deColorSpace colorSpace = preview->getColorSpace();
     {
         wxColour colour = getChannelwxColour(colorSpace, i);
-        wxPen* pen = new wxPen(colour);
-        dc.SetPen(*pen);
+        wxPen pen(colour);
+        dc.SetPen(pen);
         renderHistogram(histogram, dc, max);
     }
 

@@ -135,8 +135,8 @@ void deImagePanel::drawSamplers(wxDC& dc)
 
     deSamplers& samplers = samplerList.getSamplers();
 
-    wxPen* penBLACK = new wxPen(*wxBLACK);
-    wxPen* penGREEN = new wxPen(*wxGREEN);
+    wxPen penBLACK(*wxBLACK);
+    wxPen penGREEN(*wxGREEN);
 
     deSamplers::const_iterator j;
     int n = 0;
@@ -147,11 +147,11 @@ void deImagePanel::drawSamplers(wxDC& dc)
         {
             if (n == selected)
             {
-                dc.SetPen(*penGREEN);
+                dc.SetPen(penGREEN);
             }
             else
             {
-                dc.SetPen(*penBLACK);
+                dc.SetPen(penBLACK);
             }
             float x = sampler->getX();
             float y = sampler->getY();
@@ -159,5 +159,5 @@ void deImagePanel::drawSamplers(wxDC& dc)
         }
         n++;
     }
-    dc.SetPen(*penBLACK);
+    dc.SetPen(penBLACK);
 }
