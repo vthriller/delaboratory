@@ -1,0 +1,10 @@
+you need wxGTK package
+to compile just type:
+
+make
+
+if you want to install in /usr/local/bin, type (from root):
+
+make install
+
+that's all for now
