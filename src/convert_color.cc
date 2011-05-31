@@ -314,55 +314,55 @@ void rgb2hsl(deValue* values)
     deValue delta = maxVal - minVal;
     deValue sum = minVal + maxVal;
 
-    deValue L = sum / 2.0;
-    deValue H;
-    deValue S;
+    deValue l = sum / 2.0;
+    deValue h;
+    deValue s;
 
     if (delta == 0)
     {
-       H = 0;
-       S = 0;
+       h = 0;
+       s = 0;
     }
     else                                   
     {
-        if ( L < 0.5 )
+        if ( l < 0.5 )
         {
-            S = delta / sum;
+            s = delta / sum;
         }
         else
         {
-            S = delta / ( 2.0 - sum );
+            s = delta / ( 2.0 - sum );
         }            
 
-        deValue delR = ( ( ( maxVal - r ) / 6 ) + ( delta / 2 ) ) / delta;
-        deValue delG = ( ( ( maxVal - g ) / 6 ) + ( delta / 2 ) ) / delta;
-        deValue delB = ( ( ( maxVal - b ) / 6 ) + ( delta / 2 ) ) / delta;
+        deValue deltaR = ( ( ( maxVal - r ) / 6 ) + ( delta / 2 ) ) / delta;
+        deValue deltaG = ( ( ( maxVal - g ) / 6 ) + ( delta / 2 ) ) / delta;
+        deValue deltaB = ( ( ( maxVal - b ) / 6 ) + ( delta / 2 ) ) / delta;
 
         if ( r == maxVal )
         {
-            H = delB - delG;
+            h = deltaB - deltaG;
         }            
         else if ( g == maxVal )
         {
-            H = ( 1.0 / 3.0 ) + delR - delB;
+            h = ( 1.0 / 3.0 ) + deltaR - deltaB;
         }            
         else if ( b == maxVal )
         {
-            H = ( 2.0 / 3.0 ) + delG - delR;
+            h = ( 2.0 / 3.0 ) + deltaG - deltaR;
         }            
 
-        if ( H < 0 )
-            H += 1;
-        if ( H > 1 )
-            H -= 1;
+        if ( h < 0 )
+            h += 1;
+        if ( h > 1 )
+            h -= 1;
     }
 
-    values[4] = H;        
-    values[5] = S;        
-    values[6] = L;        
+    values[4] = h;        
+    values[5] = s;        
+    values[6] = l;        
 }
 
-deValue Hue_2_RGB( deValue v1, deValue v2, deValue vH ) 
+deValue hue2rgb( deValue v1, deValue v2, deValue vH ) 
 {
    if ( vH < 0 )
         vH += 1;
@@ -379,39 +379,39 @@ deValue Hue_2_RGB( deValue v1, deValue v2, deValue vH )
 
 void hsl2rgb(deValue* values)
 {
-    deValue H = values[0];
-    deValue S = values[1];
-    deValue L = values[2];
+    deValue h = values[0];
+    deValue s = values[1];
+    deValue l = values[2];
 
     deValue r;
     deValue g;
     deValue b;
 
-    if ( S == 0 )                       
+    if ( s == 0 )                       
     {
-        r = L;
-        g = L;
-        b = L;
+        r = l;
+        g = l;
+        b = l;
     }
     else
     {
         deValue v1;
         deValue v2;
 
-        if ( L < 0.5 )
+        if ( l < 0.5 )
         {
-            v2 = L * ( 1 + S );
+            v2 = l * ( 1 + s );
         }            
         else
         {
-            v2 = ( L + S ) - ( S * L );
+            v2 = ( l + s ) - ( s * l );
         }                
 
-        v1 = 2.0 * L - v2;
+        v1 = 2.0 * l - v2;
 
-        r = Hue_2_RGB( v1, v2, H + ( 1.0 / 3.0 ) );
-        g = Hue_2_RGB( v1, v2, H );
-        b = Hue_2_RGB( v1, v2, H - ( 1.0 / 3.0 ) );
+        r = hue2rgb( v1, v2, h + ( 1.0 / 3.0 ) );
+        g = hue2rgb( v1, v2, h );
+        b = hue2rgb( v1, v2, h - ( 1.0 / 3.0 ) );
     }
     values[4] = r;        
     values[5] = g;        
@@ -424,70 +424,70 @@ void rgb2hsv(deValue* values)
     deValue g = values[1];
     deValue b = values[2];
 
-    deValue minVal = min( r, g, b );
-    deValue maxVal = max( r, g, b );
-    deValue delta = maxVal - minVal;
+    deValue v = max( r, g, b );
 
-    deValue V = maxVal;
-    deValue H;
-    deValue S;
+    deValue minVal = min( r, g, b );
+    deValue delta = v - minVal;
+
+    deValue h;
+    deValue s;
 
     if (delta == 0)
     {
-       H = 0;
-       S = 0;
+       h = 0;
+       s = 0;
     }
     else                                   
     {
-        S = delta / maxVal;
+        s = delta / v;
 
-        deValue delR = ( ( ( maxVal - r ) / 6 ) + ( delta / 2 ) ) / delta;
-        deValue delG = ( ( ( maxVal - g ) / 6 ) + ( delta / 2 ) ) / delta;
-        deValue delB = ( ( ( maxVal - b ) / 6 ) + ( delta / 2 ) ) / delta;
+        deValue deltaR = ( ( ( v - r ) / 6.0 ) + ( delta / 2.0 ) ) / delta;
+        deValue deltaG = ( ( ( v - g ) / 6.0 ) + ( delta / 2.0 ) ) / delta;
+        deValue deltaB = ( ( ( v - b ) / 6.0 ) + ( delta / 2.0 ) ) / delta;
 
-        if ( r == maxVal )
+        if ( r == v )
         {
-            H = delB - delG;
+            h = deltaB - deltaG;
         }            
-        else if ( g == maxVal )
+        else if ( g == v )
         {
-            H = ( 1.0 / 3.0 ) + delR - delB;
+            h = ( 1.0 / 3.0 ) + deltaR - deltaB;
         }            
-        else if ( b == maxVal )
+        else if ( b == v )
         {
-            H = ( 2.0 / 3.0 ) + delG - delR;
+            h = ( 2.0 / 3.0 ) + deltaG - deltaR;
         }            
 
-        if ( H < 0 )
-            H += 1;
-        if ( H > 1 )
-            H -= 1;
+        if ( h < 0 )
+            h += 1.0;
+        if ( h > 1 )
+            h -= 1.0;
     }
 
-    values[4] = H;        
-    values[5] = S;        
-    values[6] = V;        
+    values[4] = h;        
+    values[5] = s;        
+    values[6] = v;        
 }
 
 void hsv2rgb(deValue* values)
 {
-    deValue H = values[0];
-    deValue S = values[1];
-    deValue V = values[2];
+    deValue h = values[0];
+    deValue s = values[1];
+    deValue v = values[2];
 
     deValue r;
     deValue g;
     deValue b;
 
-    if ( S == 0 )
+    if ( s == 0 )
     {
-       r = V;
-       g = V;
-       b = V;
+       r = v;
+       g = v;
+       b = v;
     }
     else
     {
-        deValue var_h = H * 6.0;
+        deValue var_h = h * 6.0;
     
         if ( var_h == 6.0 )
         {
@@ -495,43 +495,43 @@ void hsv2rgb(deValue* values)
         }
 
         deValue var_i = int( var_h);
-        deValue var_1 = V * ( 1.0 - S );
-        deValue var_2 = V * ( 1.0 - S * ( var_h - var_i ) );
-        deValue var_3 = V * ( 1 - S * ( 1 - ( var_h - var_i ) ) );
+        deValue var_1 = v * ( 1.0 - s );
+        deValue var_2 = v * ( 1.0 - s * ( var_h - var_i ) );
+        deValue var_3 = v * ( 1.0 - s * ( 1.0 - ( var_h - var_i ) ) );
 
         if ( var_i == 0 ) 
         { 
-            r = V;
+            r = v;
             g = var_3;
             b = var_1;
         }
         else if ( var_i == 1 ) 
         { 
             r = var_2;
-            g = V;
+            g = v;
             b = var_1;
         }
         else if ( var_i == 2 )
         {
             r = var_1;
-            g = V;
+            g = v;
             b = var_3;
         }
         else if ( var_i == 3 )
         {
             r = var_1;
             g = var_2;
-            b = V;
+            b = v;
         }
         else if ( var_i == 4 )
         {
             r = var_3;
             g = var_1;
-            b = V;
+            b = v;
         }
         else
         {
-            r = V;
+            r = v;
             g = var_1;
             b = var_2;
         }
