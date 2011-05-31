@@ -68,7 +68,7 @@ GMIC has support for both LAB and CMYK.
 
 = 8-bit =
 
-8-bit per channels means that each color component can have only 256 values, which means 256*256*256 --> 16 million of RGB colors. 
+8-bit per channel means that each color component can have only 256 values, which means 256*256*256 --> 16 million of RGB colors. Your monitor probably is not able to show more.
 
 You may think that this is not real problem if you want just to create photos to publish on Internet. The truth is that depth of output image doesn't really matter. We all watch 8-bit JPEGs. The real problem is depth of processing.
 
