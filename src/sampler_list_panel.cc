@@ -74,8 +74,8 @@ void deSamplerListPanel::destroyList()
     while (panels.size() > 0)
     {
         i = panels.begin();
-        panels.erase(i);
         sizer->Detach(*i);
+        panels.erase(i);
         delete *i;
     }
 }    

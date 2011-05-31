@@ -32,6 +32,7 @@ deHistogramPanel::deHistogramPanel(wxWindow* parent, deProject* _project)
 {
     SetBackgroundColour(*wxBLACK);
     project->getGUI().setHistogramPanel(this);
+    histogram = NULL;
 }
 
 deHistogramPanel::~deHistogramPanel()
