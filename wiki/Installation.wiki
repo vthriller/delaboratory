@@ -12,7 +12,9 @@ To check your version please type:
 
 `wx-config --version`
 
-If there is no wx-config then you need to install wxWidgets first or delaboratory won't compile.
+If there is no wx-config then you need to install wxWidgets first or delaboratory won't compile. 
+
+In Arch Linux there is just wxGTK package, but I know that for instance in Ubuntu there is wxBase and wxGTK - you need *wxGTK*.
 
 = Compilation =
 
