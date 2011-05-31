@@ -58,4 +58,5 @@ deHistogramModePanel::~deHistogramModePanel()
 void deHistogramModePanel::updateButtons(deColorSpace colorSpace)
 {
     createChannelButtons(colorSpace, buttons, channels, this, sizer, true);
+    gui.setHistogramMode(-1);
 }
