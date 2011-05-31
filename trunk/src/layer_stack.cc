@@ -29,6 +29,10 @@ deLayerStack::deLayerStack()
 
 deLayerStack::~deLayerStack()
 {
+    while (layers.size() > 0)
+    {
+        removeTopLayer();
+    }
 }
 
 deLayer* deLayerStack::getLayer(int id) const

@@ -60,6 +60,8 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler* _sampler, deGUI& _gu
     bigSizer->Add(insidePanel, 1, wxEXPAND | wxALL, 10);
     SetSizer(bigSizer);
 
+    delete [] colorSpaceStrings;
+
     colorSpaceChoice->SetSelection(selectedColorSpace);
 
     cells = new wxStaticText * [2*4];
