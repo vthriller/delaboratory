@@ -159,8 +159,8 @@ void deCurvesPanel::render(wxDC& dc_orig)
     drawLines(dc);
 
     wxColour colour = getChannelwxColour(layer.getColorSpace(), channel);
-    wxPen* pen = new wxPen(colour);
-    dc.SetPen(*pen);
+    wxPen pen(colour);
+    dc.SetPen(pen);
 
     drawCurve(dc);
 }
