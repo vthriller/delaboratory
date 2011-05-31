@@ -17,4 +17,4 @@ TODO:
   * no different colors (on histogram/curves graphs) for channels other than RGB, I need to decide what colors should be used for colorspaces like XYZ or HSL :)
   * input/output support in early stages, it's possible to load 8-bit and 16-bit TIFF and 8-bit JPEG, it's possible to save 16-bit TIFF or 8-bit JPEG
   * GUI can be improved in many ways
-  * saving project (layer stack) is not implemented (of it is possible to save the image! you just can't save "configuration")
+  * saving project (layer stack) is not implemented (of course it is possible to save the image! you just can't save "configuration")
