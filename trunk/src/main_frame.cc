@@ -40,7 +40,7 @@ EVT_MENU(ID_About, deMainFrame::OnAbout)
 END_EVENT_TABLE()
 
 deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
-: wxFrame((wxFrame *)NULL, wxID_ANY, _T("delaboratory (c) 2011 Jacek Poplawski"), wxDefaultPosition, size) , project(_project)
+: wxFrame((wxFrame *)NULL, wxID_ANY, _T("delaboratory 0.1 (c) 2011 Jacek Poplawski"), wxDefaultPosition, size) , project(_project)
 {
         wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
