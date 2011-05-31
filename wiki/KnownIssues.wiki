@@ -6,7 +6,7 @@ BUGS:
 TODO:
   * zooming is not implemented yet (but you can change size of window!)
   * curves are *very simplified*, instead beautiful bezier or splines you will see straight lines between points
-  * *no blend masking* yet
+  * *no blend masking* yet  
   * no color profiles, there is just "RGB" 
   * no GCR settings for CMYK conversion (not sure if there is any point for them)
   * only 4 blend modes are implemented, it's easy to add more
@@ -17,3 +17,4 @@ TODO:
   * no different colors (on histogram/curves graphs) for channels other than RGB, I need to decide what colors should be used for colorspaces like XYZ or HSL :)
   * input/output support in early stages, it's possible to load 8-bit and 16-bit TIFF and 8-bit JPEG, it's possible to save 16-bit TIFF or 8-bit JPEG
   * GUI can be improved in many ways
+  * saving project (layer stack) is not implemented (of it is possible to save the image! you just can't save "configuration")
