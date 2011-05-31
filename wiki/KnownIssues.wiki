@@ -4,6 +4,7 @@ BUGS:
   * after change colorspace of source of curves - the curves layer still thinks the old colorspace is used
 
 TODO:
+  * zooming is not implemented yet (but you can change size of window!)
   * curves are *very simplified*, instead beautiful bezier or splines you will see straight lines between points
   * *no blend masking* yet
   * no color profiles, there is just "RGB" 
