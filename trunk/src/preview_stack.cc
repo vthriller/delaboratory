@@ -34,6 +34,10 @@ dePreviewStack::dePreviewStack()
 
 dePreviewStack::~dePreviewStack()
 {
+    while (previews.size() > 0)
+    {
+        removeTopPreview();
+    }
 }
 
 dePreview* dePreviewStack::getPreview(int id) 
