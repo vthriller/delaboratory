@@ -1,11 +1,12 @@
 #summary Known issues
 
 BUGS:
-  * name of the output file sent to GIMP is always delaboratory.tiff, so the original name is lost
   * after change colorspace of source of curves - the curves layer still thinks the old colorspace is used
 
 BUGS fixed on SVN:
   * incorrect read of 4-channel tiff image 
+  * name of the output file sent to GIMP is always delaboratory.tiff, so the original name is lost
+
 
 TODO:
   * zooming is not implemented yet (but you can change size of window!)
