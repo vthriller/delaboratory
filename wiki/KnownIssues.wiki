@@ -1,6 +1,7 @@
 #summary Known issues
 
 BUGS:
+  * name of the output file sent to GIMP is always delaboratory.tiff, so the original name is lost
   * after change colorspace of source of curves - the curves layer still thinks the old colorspace is used
 
 BUGS fixed on SVN:
