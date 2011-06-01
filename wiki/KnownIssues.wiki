@@ -11,7 +11,7 @@ TODO:
   * no color profiles, there is just "RGB" 
   * no GCR settings for CMYK conversion (not sure if there is any point for them)
   * only 4 blend modes are implemented, it's easy to add more
-  * no direct conversions between some colorspacies, so - for instance - you can't sample CMYK values when using HSV layer 
+  * no direct conversions between some colorspacies, so - for instance - you can't sample CMYK values when using HSV layer - some kind of message should be displayed in that case because people don't know why it doesn't work
   * rendering of LAB mode is slower than other modes, because it uses pow() for calculations, RGB mode works fastests because there is no conversion
   * number of samplers is fixed to 4, this is not limitation of engine but problem with GUI - I need to find good way to display many samplers and make it readable
   * displayed values in sampler are not scaled, they are always between 0.0 and 1.0, the goal is to scale them so A and B in LAB will be also negative, etc...
