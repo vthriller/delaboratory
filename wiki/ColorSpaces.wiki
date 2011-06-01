@@ -42,6 +42,7 @@ Wikipedia has nice comparision of the third channel.
 
 = original image =
 http://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Fire_breathing_2_Luc_Viatour.jpg/800px-Fire_breathing_2_Luc_Viatour.jpg
+(source: http://www.lucnix.be/main.php)
 
 = L channel from LAB =
 http://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Fire-breather_CIELAB_L%2A.jpg/800px-Fire-breather_CIELAB_L%2A.jpg
