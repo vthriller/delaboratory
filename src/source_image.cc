@@ -52,9 +52,11 @@ void deSourceImage::loadTIFF(const std::string& fileName)
     int w;
     int h;
     uint16 bps;
+    uint16 spp;
     TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
     TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
     TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bps);
+    TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &spp);
     size = deSize(w,h);
 
     createChannels(size);
@@ -81,10 +83,10 @@ void deSourceImage::loadTIFF(const std::string& fileName)
             if (bps == 16)
             {
                 uint16* bb = (uint16*)(buf);
-                uint16 u1 = bb[3*x+0];
-                uint16 u2 = bb[3*x+1];
-                uint16 u3 = bb[3*x+2];
-                deValue d = 255 * 255;
+                uint16 u1 = bb[spp*x+0];
+                uint16 u2 = bb[spp*x+1];
+                uint16 u3 = bb[spp*x+2];
+                deValue d = (256 * 256) - 1;
                 r = u1 / d;
                 g = u2 / d;
                 b = u3 / d;
@@ -92,10 +94,10 @@ void deSourceImage::loadTIFF(const std::string& fileName)
             else
             {
                 uint8* bb = (uint8*)(buf);
-                uint8 u1 = bb[3*x+0];
-                uint8 u2 = bb[3*x+1];
-                uint8 u3 = bb[3*x+2];
-                deValue d = 255;
+                uint8 u1 = bb[spp*x+0];
+                uint8 u2 = bb[spp*x+1];
+                uint8 u3 = bb[spp*x+2];
+                deValue d = 256 - 1;
                 r = u1 / d;
                 g = u2 / d;
                 b = u3 / d;
