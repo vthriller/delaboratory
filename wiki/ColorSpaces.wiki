@@ -8,6 +8,14 @@ RGB color space is the one which is most popular. Every application supports it,
 
 This is *worst colorspace for correcting color with curves*. It's good for special effects (like cross processing http://www.gimpforphotos.com/tutorial-intermediate/cross-processing.html) but it's very difficult to fix some color problems with RGB curves.
 
+= BW = 
+
+http://en.wikipedia.org/wiki/Grayscale
+
+BW colorspace has only one channel: grayscale. 
+
+There are long (really long) articles, tutorials even books about converting photo to Black and White, there are many methods for that. Even if you are going to produce color photo you still should know how to use BW image to blend it or to create masks.
+
 = CMYK = 
 
 http://en.wikipedia.org/wiki/Cmyk
