@@ -28,6 +28,7 @@
 deProject::deProject()
 :sourceImageSize(0,0)
 {
+    sourceFileName = "";
     view = -1;
     previewStack.setProject(this);
     samplerList.setProject(this);
@@ -179,6 +180,19 @@ deSamplerList& deProject::getSamplerList()
 
 void deProject::loadSourceImage(const std::string& fileName)
 {
+    size_t posDot = fileName.rfind(".");
+    size_t posSlash = fileName.rfind("/");
+    int posStart;
+    if (posSlash > fileName.size())
+    {
+        posStart= 0;
+    }
+    else
+    {
+        posStart = posSlash + 1;
+    }
+    sourceFileName = fileName.substr(posStart, posDot - posStart );
+
     sourceImage.load(fileName);
     setSourceImageSize(sourceImage.getSize());
     gui.updateCenterPanel();
@@ -189,4 +203,9 @@ void deProject::loadSourceImage(const std::string& fileName)
 deGUI& deProject::getGUI()
 {
     return gui;
+}
+
+const std::string deProject::getSourceFileName() const
+{
+    return sourceFileName;
 }

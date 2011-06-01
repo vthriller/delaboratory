@@ -39,6 +39,7 @@ class deProject
         int view;
         deSourceImage sourceImage;
         deGUI gui;
+        std::string sourceFileName;
 
     public:
         deProject();
@@ -63,7 +64,6 @@ class deProject
 
         int getVisibleLayerID() const;
 
-        //void saveFinalImage(const std::string& fileName);
         deFinalImage* generateFinalImage();
 
         void setView(int v);
@@ -75,6 +75,8 @@ class deProject
         void loadSourceImage(const std::string& fileName);
 
         deGUI& getGUI();
+
+        const std::string getSourceFileName() const;
 
 };
 
