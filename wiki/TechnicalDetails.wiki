@@ -29,12 +29,15 @@ each dePreview contains number of deChannels, for BW colorspace it will be 1 cha
 
 each deChannel is an array of deValue, deValue is defined as float but can be redefined easily, I don't see why would anyone need double instead float but it should work
 
+float means that each value is stored in 32 bits, it means that one RGB pixel is stored in 96bits and one CMYK pixel is stored in 128bits
+
 conversion between colorspaces is performed only in two cases:
   * when rendering image on screen (conversion to RGB)
   * when using deConversionLayer
 
 other layers can change the colorspaces but without conversion, for instance it's legal to mix RGB image into BW image, but it's also perfectly legal to mix CMYK into LAB (but don't expect it to look good) :)
 
+you can't change colorSpace in curves layer because I don't see any point for that
 
 == more info ==
 
