@@ -7,6 +7,7 @@ TODO:
   * zooming is not implemented yet (but you can change size of window!)
   * curves are *very simplified*, instead beautiful bezier or splines you will see straight lines between points
   * *no blend masking* yet  
+  * memory consumption is *huge*, every value is float, so it takes 4 bytes, but the image is made from 3 or 4 channels, so if you take 10 megapixel image and create some layers it will be 10*4*4 megabytes per layer, it's not really so big problem when working with small preview, but it's a problem when saving final image (I needed to add swap once)
   * no color profiles, there is just "RGB" 
   * no GCR settings for CMYK conversion (not sure if there is any point for them)
   * only 4 blend modes are implemented, it's easy to add more
