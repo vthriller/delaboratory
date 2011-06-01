@@ -1,0 +1,40 @@
+#summary ColorSpaces
+
+= RGB =
+
+http://en.wikipedia.org/wiki/Rgb
+
+RGB color space is the one which is most popular. Every application supports it, because computers and digital cameras work in RGB. 
+
+This is *worst colorspace for correcting color with curves*. It's good for special effects (like cross processing http://www.gimpforphotos.com/tutorial-intermediate/cross-processing.html) but it's very difficult to fix some color problems with RGB curves.
+
+= CMYK = 
+
+http://en.wikipedia.org/wiki/Cmyk
+
+CMYK is different than other color spaces because it has 4 channels. CMY colorspace is just reversed RGB, but CMYK adds new channel: *key*. Working with 4 channels instead 3 gives more possibilities in retouching.
+
+The most common reason for using CMYK colorspace is to prepare images for printing. But the true reason why CMYK is interesting for photos is that it's *very good colorspace for correcting skin tones*. So if you have photos with people on them - it's worth trying.
+
+= LAB = 
+
+http://en.wikipedia.org/wiki/Lab_color_space
+
+LAB colorspace separates color from contrast. Channel *L* is for *lightness*, channel *A* is for *green-magenta* colors and channel *B* is for *blue-yellow* colors. 
+
+This is *best colorspace for correcting color casts*. It's also very good in creating *masks*, for instance if you want to separate some objects. It's very easy to *boost colors* by increasing contrast of A and B channels, so one can put life into dull photos.
+
+= HSV/HSL = 
+
+http://en.wikipedia.org/wiki/HSL_and_HSV
+
+HSV and HSL colorspaces have *hue* and *saturation* values in their channels. Wikipedia has nice comparision of the third channel:
+
+http://en.wikipedia.org/wiki/File:Fire_breathing_2_Luc_Viatour.jpg
+http://en.wikipedia.org/wiki/File:Fire-breather_CIELAB_L*.jpg
+http://en.wikipedia.org/wiki/File:Fire-breather_HSV_V.jpg
+http://en.wikipedia.org/wiki/File:Fire-breather_HSL_L.jpg
+
+
+
+
