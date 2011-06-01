@@ -105,7 +105,7 @@ void deFinalImage::saveTIFF(const std::string& fileName)
         int x;
         for (x = 0; x < w; x++)
         {
-            deValue d = 255 * 255;
+            deValue d = 256 * 256 - 1 ;;
             deValue r = d * channelR->getValue(pos);
             deValue g = d * channelG->getValue(pos);
             deValue b = d * channelB->getValue(pos);
