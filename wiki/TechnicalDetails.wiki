@@ -31,6 +31,11 @@ each deChannel is an array of deValue, deValue is defined as float but can be re
 
 float means that each value is stored in 32 bits, it means that one RGB pixel is stored in 96bits and one CMYK pixel is stored in 128bits
 
+||     || GIMP || most apps || delaboratory ||
+|| processing || 8 bit || 16 bit || 32 bit ||
+|| input || 8/16 bit || 8/16 bit || 8/16 bit ||
+|| output || 8 bit || 8/16 bit || 8/16 bit ||
+
 conversion between colorspaces is performed only in two cases:
   * when rendering image on screen (conversion to RGB)
   * when using deConversionLayer
