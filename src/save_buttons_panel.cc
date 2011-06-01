@@ -66,7 +66,14 @@ void deSaveButtonsPanel::saveTIFF(wxCommandEvent &event)
 
 void deSaveButtonsPanel::send(wxCommandEvent &event)
 {
-    const std::string fileName = "/tmp/delaboratory.tiff";
+    const std::string sourceFileName = project->getSourceFileName();
+
+    if (sourceFileName.size() < 1)
+    {
+        return;
+    }
+
+    const std::string fileName = "/tmp/" + sourceFileName + ".tiff";
 
     deFinalImage* finalImage = project->generateFinalImage();
     if (finalImage)
