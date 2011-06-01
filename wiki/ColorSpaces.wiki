@@ -30,11 +30,10 @@ http://en.wikipedia.org/wiki/HSL_and_HSV
 
 HSV and HSL colorspaces have *hue* and *saturation* values in their channels. Wikipedia has nice comparision of the third channel:
 
-http://en.wikipedia.org/wiki/File:Fire_breathing_2_Luc_Viatour.jpg
-http://en.wikipedia.org/wiki/File:Fire-breather_CIELAB_L*.jpg
-http://en.wikipedia.org/wiki/File:Fire-breather_HSV_V.jpg
-http://en.wikipedia.org/wiki/File:Fire-breather_HSL_L.jpg
+http://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Fire_breathing_2_Luc_Viatour.jpg/800px-Fire_breathing_2_Luc_Viatour.jpg
 
+http://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Fire-breather_CIELAB_L%2A.jpg/800px-Fire-breather_CIELAB_L%2A.jpg
 
+http://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Fire-breather_HSV_V.jpg/800px-Fire-breather_HSV_V.jpg
 
-
+http://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Fire-breather_HSL_L.jpg/800px-Fire-breather_HSL_L.jpg
