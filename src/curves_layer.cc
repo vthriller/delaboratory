@@ -58,27 +58,9 @@ void deCurvesLayer::deleteCurves()
     }
 }
 
-void deCurvesLayer::changeSourceLayer(int id, const deLayerStack& layerStack)
+void deCurvesLayer::onChangeSourceLayer(const deLayerStack& layerStack)
 {
-    sourceLayer = id;
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    if (source)
-    {
-        if (source->getColorSpace() != colorSpace)
-        {
-            colorSpace = source->getColorSpace();
-            resetCurves();
-        }
-    }        
-}
-
-void deCurvesLayer::changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack)
-{
-    if (colorSpace != _colorSpace)
-    {
-        colorSpace = _colorSpace;
-        resetCurves();
-    }        
+    resetCurves();
 }
 
 dePreview* deCurvesLayer::createPreview(dePreviewStack& previewStack)
@@ -96,13 +78,6 @@ dePreview* deCurvesLayer::createPreview(dePreviewStack& previewStack)
 
     processCurves(*sourcePreview, *preview);
     return preview;
-}
-
-wxDialog* deCurvesLayer::createDialog(wxWindow* parent, int layerNumber, deProject* project)
-{
-    deLayerDialog* dialog = new deLayerDialog(parent, *this, layerNumber, project, "set curves");
-    dialog->addSourceChoice();
-    return dialog;
 }
 
 deActionFrame* deCurvesLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)

@@ -32,15 +32,17 @@ class deRenderer
         deProject* project;
         wxImage* image;
         deSize size;
-        int renders;
         deViewMode viewMode;
         int viewChannel;
+#ifdef DE_PROFILER        
+        int renders;
+#endif        
 
     public:
         deRenderer(deProject* _project);
         virtual ~deRenderer();
 
-        void render(wxDC& dc);
+        bool render(wxDC& dc);
         void setViewMode(const deViewMode& mode, int channel);
 };
 

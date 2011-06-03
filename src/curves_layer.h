@@ -28,7 +28,6 @@ class deCurvesLayer:public deLayer
 {
     private:
         deCurves curves;
-//        void recreateCurves(const deLayerStack& layerStack);
 
         void resetCurves();
         void processCurves(const dePreview& source, dePreview& destination);
@@ -38,11 +37,11 @@ class deCurvesLayer:public deLayer
         deCurvesLayer(const std::string& _name);
         virtual ~deCurvesLayer();
 
-        virtual void changeSourceLayer(int id, const deLayerStack& layerStack);
-        virtual void changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack);
+        virtual bool canChangeSourceLayer() const {return true;};
+
+        virtual void onChangeSourceLayer(const deLayerStack& layerStack);
         virtual dePreview* createPreview(dePreviewStack& previewStack);
 
-        virtual wxDialog* createDialog(wxWindow* parent, int layerNumber, deProject* project);
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
         deCurves& getCurves() {return curves;};

@@ -31,16 +31,14 @@ class deConversionLayer:public deLayer
         deConversionLayer(const std::string& _name);
         virtual ~deConversionLayer();
 
-//        virtual void generatePreview();
-        virtual dePreview* createPreview(dePreviewStack& previewStack);
-        virtual void changeSourceLayer(int id, const deLayerStack& layerStack);
+        virtual bool canChangeSourceLayer() const {return true;};
+        virtual bool canChangeColorSpace() const {return true;};
 
-        virtual wxDialog* createDialog(wxWindow* parent, int layerNumber, deProject* project);
+        virtual dePreview* createPreview(dePreviewStack& previewStack);
+
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
-        int getSourceLayer() const {return sourceLayer;};
-        
-        virtual void changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack);
+//        int getSourceLayer() const {return sourceLayer;};
 };
 
 #endif

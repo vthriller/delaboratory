@@ -35,29 +35,6 @@ deConversionLayer::~deConversionLayer()
 {
 }
 
-void deConversionLayer::changeSourceLayer(int id, const deLayerStack& layerStack)
-{
-    sourceLayer = id;
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    if (source)
-    {
-        colorSpace = source->getColorSpace();
-    }        
-}
-
-void deConversionLayer::changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack)
-{
-    colorSpace = _colorSpace;
-}
-
-wxDialog* deConversionLayer::createDialog(wxWindow* parent, int layerNumber, deProject* project)
-{
-    deLayerDialog* dialog = new deLayerDialog(parent, *this, layerNumber, project, "");
-    dialog->addColorSpaceChoice();
-    dialog->addSourceChoice();
-    return dialog;
-}
-
 deActionFrame* deConversionLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
     return NULL;
@@ -79,7 +56,14 @@ dePreview* deConversionLayer::createPreview(dePreviewStack& previewStack)
     deConverter converter;
     converter.setSource(sourcePreview);
     converter.setDestination(preview);
-    converter.convert();
+    bool result = converter.convert();
+
+    if (!result)
+    {
+        previewStack.setError("direct conversion from " + getColorSpaceName(sourcePreview->getColorSpace()) + " to " + getColorSpaceName(colorSpace) + " not supported");
+        delete preview;
+        preview = NULL;
+    }        
 
     return preview;
 }

@@ -46,7 +46,7 @@ void deSamplerListPanel::updateSamplers()
     std::list<deSamplerPanel*>::iterator i;
     for (i = panels.begin(); i != panels.end(); i++)
     {
-        (*i)->setLabels();
+        (*i)->setLabels(project);
     }
 }
 

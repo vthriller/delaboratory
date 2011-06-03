@@ -33,7 +33,9 @@ deRenderer::deRenderer(deProject* _project)
 {
     project->getGUI().setRenderer(this);
     image = new wxImage(0,0);
+#ifdef DE_PROFILER
     renders = 0;
+#endif    
 }
 
 deRenderer::~deRenderer()
@@ -41,16 +43,17 @@ deRenderer::~deRenderer()
     delete image;
 }
 
-void deRenderer::render(wxDC& dc)
+bool deRenderer::render(wxDC& dc)
 {
-
+#ifdef DE_PROFILER
     wxStopWatch sw;
+#endif
 
     const dePreview* preview = project->getVisiblePreview();
 
     if (!preview)
     {
-        return;
+        return false;
     }
     const deSize& s = preview->getSize();
 
@@ -80,9 +83,10 @@ void deRenderer::render(wxDC& dc)
 
     wxBitmap bitmap(*image);
     dc.DrawBitmap(bitmap, 0, 0, false);
-    long t = sw.Time();
 
 #ifdef DE_PROFILER
+    long t = sw.Time();
+
     std::ostringstream oss;
     oss << "r: " << t << std::endl;
     project->getGUI().setInfo(1, oss.str());
@@ -93,6 +97,7 @@ void deRenderer::render(wxDC& dc)
     project->getGUI().setInfo(3, oss.str());
 #endif
 
+    return true;
 }
 
 void deRenderer::setViewMode(const deViewMode& mode, int channel)

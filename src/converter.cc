@@ -115,7 +115,7 @@ void deConverter::storeAllChannels()
     }        
 }
 
-void deConverter::convert()
+bool deConverter::convert()
 {
     const deBaseChannel* channel0 = source->getChannel(0);
     const deBaseChannel* channel1 = source->getChannel(1);
@@ -129,7 +129,7 @@ void deConverter::convert()
 
     if (!setConversionFunction())
     {
-        return;
+        return false;
     }
 
     int index;
@@ -147,6 +147,8 @@ void deConverter::convert()
         channelD2->setValue(index, values[6]);
         channelD3->setValue(index, values[7]);
     }
+
+    return true;
 }
 
 void deConverter::storeRGB()

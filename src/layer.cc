@@ -22,6 +22,7 @@
 #include "preview.h"
 #include <iostream>
 #include "action_frame.h"
+#include "layer_dialog.h"
 
 deLayer::deLayer(const std::string& _name)
 :name(_name)
@@ -60,4 +61,46 @@ void deLayer::setActionFrame(deActionFrame* frame)
 deActionFrame* deLayer::getActionFrame()
 {
     return actionFrame;
+}
+
+wxDialog* deLayer::createDialog(wxWindow* parent, int layerNumber, deProject* project)
+{
+    deLayerDialog* dialog = new deLayerDialog(parent, *this, layerNumber, project, "options");
+    if (canChangeColorSpace())
+    {
+        dialog->addColorSpaceChoice();
+    }        
+    if (canChangeSourceLayer())
+    {
+        dialog->addSourceChoice();
+    }        
+    if (canChangeOverlayLayer())
+    {
+        dialog->addOverlayChoice();
+    }
+    return dialog;
+}
+
+void deLayer::changeSourceLayer(int id, const deLayerStack& layerStack)
+{
+    sourceLayer = id;
+    overlayLayer = id;
+    deLayer* source = layerStack.getLayer(sourceLayer);
+    if (source)
+    {
+        colorSpace = source->getColorSpace();
+    }        
+    onChangeSourceLayer(layerStack);
+}
+
+void deLayer::changeOverlayLayer(int id, const deLayerStack& layerStack)
+{
+    overlayLayer = id;
+    onChangeOverlayLayer(layerStack);
+}
+
+void deLayer::changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack)
+{
+    colorSpace = _colorSpace;
+    onChangeColorSpace(layerStack);
 }

@@ -43,3 +43,31 @@ void getSupportedBlendModes(std::vector<deBlendMode>& result)
     result.push_back(deBlendOverlay);
 }
 
+deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode)
+{
+    switch (mode)
+    {
+        case deBlendNormal:
+            return v2;
+            break;
+        case deBlendMultiply:                    
+            return src*v2;
+            break;
+        case deBlendScreen:
+            return 1 - (1-src)*(1-v2);
+            break;
+        case deBlendOverlay:                    
+            if (src > 0.5)
+            {
+                return 1 - (1 - 2 * ( src - 0.5)) * (1 - v2);
+            }
+            else
+            {
+                return 2 * src * v2;
+            }
+            break;
+        default:
+            return 0;
+    }                    
+}        
+

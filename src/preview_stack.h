@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <set>
+#include <string>
 
 class dePreview;
 class deProject;
@@ -32,7 +33,11 @@ class dePreviewStack
         std::set<int> dirty;
         deProject* project;
         bool nowUpdating;
+#ifdef DE_PROFILER    
         int previewsCalculated;
+#endif        
+
+        std::string error;
 
         void realUpdatePreviews();
         
@@ -51,6 +56,9 @@ class dePreviewStack
         void setProject(deProject* _project);
 
         void refreshView();
+
+        void setError(const std::string& _error);
+        std::string getError();
 };
 
 #endif

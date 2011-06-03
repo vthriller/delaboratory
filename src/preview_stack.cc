@@ -29,7 +29,9 @@ dePreviewStack::dePreviewStack()
 {
     project = NULL;
     nowUpdating = false;
+#ifdef DE_PROFILER    
     previewsCalculated = 0;
+#endif    
 }
 
 dePreviewStack::~dePreviewStack()
@@ -88,7 +90,9 @@ void dePreviewStack::setProject(deProject* _project)
 void dePreviewStack::realUpdatePreviews()
 {
     nowUpdating = true;
+#ifdef DE_PROFILER    
     wxStopWatch sw;
+#endif    
 
     int min = -1;
     std::set<int>::iterator j;
@@ -133,15 +137,17 @@ void dePreviewStack::realUpdatePreviews()
             nowUpdating = false;
             return;
         }
+#ifdef DE_PROFILER    
         previewsCalculated++;
+#endif    
     }
 
     dirty.clear();
     nowUpdating = false;
 
+#ifdef DE_PROFILER    
     long t = sw.Time();
 
-#ifdef DE_PROFILER    
     std::ostringstream oss;
     oss << "up: " << t << std::endl;
     project->getGUI().setInfo(0, oss.str());
@@ -156,3 +162,13 @@ void dePreviewStack::refreshView()
 {
     project->getGUI().refreshView();
 }    
+
+void dePreviewStack::setError(const std::string& _error)
+{
+    error = _error;
+}
+
+std::string dePreviewStack::getError()
+{
+    return error;
+}
