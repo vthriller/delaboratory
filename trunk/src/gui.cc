@@ -36,6 +36,7 @@ deGUI::deGUI()
     viewModePanel = NULL;
     renderer = NULL;
     histogramModePanel = NULL;
+    layerListPanel = NULL;
 }
 
 deGUI::~deGUI()

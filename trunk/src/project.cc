@@ -183,6 +183,8 @@ void deProject::setView(int v)
 
     const deColorSpace colorSpace = layer->getColorSpace();
     gui.updateAfterSetView(colorSpace);
+
+    logMessage("set view done");
 }
 
 deSamplerList& deProject::getSamplerList() 
