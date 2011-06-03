@@ -33,11 +33,14 @@ class deMixerLayer:public deLayer
         deMixerLayer(const std::string& _name);
         virtual ~deMixerLayer();
 
-        virtual void changeSourceLayer(int id, const deLayerStack& layerStack);
-        virtual void changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack);
+        virtual bool canChangeSourceLayer() const {return true;};
+        virtual bool canChangeColorSpace() const {return true;};
+
+        virtual void onChangeColorSpace(const deLayerStack& layerStack);
+        virtual void onChangeSourceLayer(const deLayerStack& layerStack);
+
         virtual dePreview* createPreview(dePreviewStack& previewStack);
 
-        virtual wxDialog* createDialog(wxWindow* parent, int layerNumber, deProject* project);
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
         deMixer* getMixer() {return mixer;};

@@ -36,13 +36,17 @@ deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewS
 {
     marker = -1;
 
-    curve = NULL;
+    //curve = NULL;
     selectedPoint = -1;
+    channel = 0;
+    curve = (layer.getCurves()[channel]);
 
     SetBackgroundColour(*wxBLACK);
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deCurvesPanel::click));
     Connect(wxEVT_LEFT_UP, wxMouseEventHandler(deCurvesPanel::release));
     Connect(wxEVT_MOTION, wxMouseEventHandler(deCurvesPanel::move));
+
+
 }
 
 deCurvesPanel::~deCurvesPanel()
@@ -52,7 +56,7 @@ deCurvesPanel::~deCurvesPanel()
 void deCurvesPanel::changeChannel(int _channel)
 {
     channel = _channel;
-    marker = -1;
+    updateMarker();
     curve = (layer.getCurves()[channel]);
     paint();
 }
@@ -260,10 +264,28 @@ void deCurvesPanel::move(wxMouseEvent &event)
     }
 }
 
-void deCurvesPanel::traceSampler(deSampler* sampler)
+void deCurvesPanel::traceSampler(deSampler* _sampler)
 {
+    if (!_sampler)
+    {
+        return;
+    }
+
+    sampler = *_sampler;
+    updateMarker();
+}
+
+void deCurvesPanel::updateMarker()
+{
+    int source = layer.getSourceLayerID();
+    dePreview* preview = stack.getPreview(source);
+    if (!preview)
+    {
+        return;
+    }
+
     deValue values[4];
-    bool result = sampler->getPixel(values[0], values[1], values[2], values[3], layer.getColorSpace());
+    bool result = sampler.getPixel(values[0], values[1], values[2], values[3], layer.getColorSpace(), *preview);
     if (!result)
     {
         marker = -1;

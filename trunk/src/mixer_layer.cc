@@ -38,14 +38,6 @@ deMixerLayer::~deMixerLayer()
     }        
 }
 
-wxDialog* deMixerLayer::createDialog(wxWindow* parent, int layerNumber, deProject* project)
-{
-    deLayerDialog* dialog = new deLayerDialog(parent, *this, layerNumber, project, "set mixer");
-    dialog->addColorSpaceChoice();
-    dialog->addSourceChoice();
-    return dialog;
-}
-
 deActionFrame* deMixerLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
     return new deMixerFrame(parent, *this, project->getPreviewStack(), layerNumber);
@@ -69,23 +61,15 @@ void deMixerLayer::recreateMixer(const deLayerStack& layerStack)
     mixer = new deMixer(source->getColorSpace(), colorSpace);
 }
 
-void deMixerLayer::changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack)
+void deMixerLayer::onChangeColorSpace(const deLayerStack& layerStack)
 {
-    colorSpace = _colorSpace;
     recreateMixer(layerStack);
 }
 
-void deMixerLayer::changeSourceLayer(int id, const deLayerStack& layerStack)
+void deMixerLayer::onChangeSourceLayer(const deLayerStack& layerStack)
 {
-    sourceLayer = id;
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    if (source)
-    {
-        colorSpace = source->getColorSpace();
-    }        
     recreateMixer(layerStack);
 }
-
 
 dePreview* deMixerLayer::createPreview(dePreviewStack& previewStack)
 {

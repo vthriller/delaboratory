@@ -19,7 +19,6 @@
 #ifndef _DE_LAYER_H
 #define _DE_LAYER_H
 
-
 #include <string>
 #include "color_space.h"
 class dePreview;
@@ -49,16 +48,24 @@ class deLayer
 
         virtual dePreview* createPreview(dePreviewStack& previewStack) = 0;
 
-        virtual void changeSourceLayer(int id, const deLayerStack& layerStack) = 0;
-        virtual void changeOverlayLayer(int id, const deLayerStack& layerStack) {};
+        virtual bool canChangeSourceLayer() const {return false;};
+        virtual bool canChangeOverlayLayer() const {return false;};
+        virtual bool canChangeColorSpace() const {return false;};
 
-        virtual void changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack) = 0;
+        void changeSourceLayer(int id, const deLayerStack& layerStack);
+        void changeOverlayLayer(int id, const deLayerStack& layerStack);
+        void changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack);
+
+        virtual void onChangeColorSpace(const deLayerStack& layerStack) {};
+        virtual void onChangeSourceLayer(const deLayerStack& layerStack) {};
+        virtual void onChangeOverlayLayer(const deLayerStack& layerStack) {};
+
         const deColorSpace& getColorSpace() const {return colorSpace;};
 
         void setName(const std::string& _name);
         const std::string& getName() const {return name;};
 
-        virtual wxDialog* createDialog(wxWindow* parent, int layerNumber, deProject* project) = 0;
+        wxDialog* createDialog(wxWindow* parent, int layerNumber, deProject* project);
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project) = 0;
         void closeActionFrame();
         void setActionFrame(deActionFrame* frame);

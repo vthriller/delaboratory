@@ -89,6 +89,7 @@ deImagePanel::deImagePanel(wxWindow* parent, deProject* _project)
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deImagePanel::click));
     Connect(wxEVT_LEFT_UP, wxMouseEventHandler(deImagePanel::release));
     Connect(wxEVT_MOTION, wxMouseEventHandler(deImagePanel::move));
+
 }
 
 deImagePanel::~deImagePanel()
@@ -130,7 +131,6 @@ void deImagePanel::paint()
 void deImagePanel::render(wxDC& dc)
 {
     renderer.render(dc);
-
     drawSamplers(dc);
 }
 

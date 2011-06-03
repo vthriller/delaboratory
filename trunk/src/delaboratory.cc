@@ -48,7 +48,7 @@ bool deLaboratory::OnInit()
     wxInitAllImageHandlers();
 
 	int width = 1024;
-	int height = 800;
+	int height = 850;
 
     project.logMessage("creating main frame on init...");
 

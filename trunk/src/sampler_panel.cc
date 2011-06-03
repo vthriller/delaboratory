@@ -22,12 +22,12 @@
 #include <iostream>
 #include "gui.h"
 #include <wx/sizer.h>
+#include "project.h"
 
 void deSamplerPanel::click(wxCommandEvent &event)
 {
     int c = colorSpaceChoice->GetCurrentSelection();
     colorSpace = colorSpaces[c];
-    //sampler->setColorSpace(colorSpace);
 
     gui.updateSamplers();
 }
@@ -39,7 +39,6 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler* _sampler, deGUI& _gu
     colorSpace = deColorSpaceRGB;
 
     getSupportedColorSpaces(colorSpaces);
-    //deColorSpace currentColorSpace = sampler->getColorSpace();
 
     wxString* colorSpaceStrings = new wxString [colorSpaces.size()];
     unsigned int i;
@@ -47,7 +46,6 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler* _sampler, deGUI& _gu
     for (i = 0; i < colorSpaces.size(); i++)
     {
         colorSpaceStrings[i] = wxString::FromAscii(getColorSpaceName(colorSpaces[i]).c_str());
-        //if (currentColorSpace == colorSpaces[i])
         if (colorSpace == colorSpaces[i])
         {
             selectedColorSpace = i;
@@ -67,7 +65,6 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler* _sampler, deGUI& _gu
 
     cells = new wxStaticText * [2*4];
 
-    //wxSizer* sizer = new wxGridSizer(2, 4, 0, 0);
     wxSizer* sizer = new wxGridSizer(4, 2, 0, 0);
     insidePanel->SetSizer(sizer);
 
@@ -80,13 +77,12 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler* _sampler, deGUI& _gu
     cells[0 + 2 * 3] = new wxStaticText(insidePanel, wxID_ANY, _T("k:") );
     cells[1 + 2 * 3] = new wxStaticText(insidePanel, wxID_ANY, _T("k") );
 
-    //int i;
     for (i = 0; i < 2*4; i++)
     {
         sizer->Add(cells[i], 1, wxEXPAND);
     }
 
-    setLabels();
+    setLabels(NULL);
 
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deSamplerPanel::click));
 }
@@ -95,18 +91,36 @@ deSamplerPanel::~deSamplerPanel()
 {
 }
 
-void deSamplerPanel::setLabels()
+void deSamplerPanel::setLabels(deProject* project)
 {
     std::ostringstream oss;
 
     oss.setf(std::ios_base::fixed);
 
-    //deColorSpace colorSpace = sampler->getColorSpace();
     int n = getColorSpaceSize(colorSpace);
 
     deValue values[4];
-    bool result = sampler->getPixel(values[0], values[1], values[2], values[3], colorSpace);
-    if (!result)
+
+    bool conversion = true;
+
+    if ((sampler->isEnabled()) && (project))
+    {
+        int source = project->getVisibleLayerID();
+        dePreview* preview = project->getPreviewStack().getPreview(source);
+        if (preview)
+        {
+            conversion = sampler->getPixel(values[0], values[1], values[2], values[3], colorSpace, *preview);
+            if (!conversion)
+            {
+                n = 0;
+            }
+        }            
+        else
+        {
+            n = 0;
+        }
+    }        
+    else
     {
         n = 0;
     }
@@ -129,4 +143,14 @@ void deSamplerPanel::setLabels()
         cells[0 + 2 * i]->Hide();
         cells[1 + 2 * i]->Hide();
     }
+
+    if (!conversion)
+    {
+        cells[0]->SetLabel(_T("conversion"));
+        cells[0]->Show();
+        cells[2]->SetLabel(_T("not"));
+        cells[2]->Show();
+        cells[4]->SetLabel(_T("supported"));
+        cells[4]->Show();
+    }        
 }

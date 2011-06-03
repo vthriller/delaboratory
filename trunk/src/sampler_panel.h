@@ -24,6 +24,7 @@
 #include "color_space.h"
 class deSampler;
 class deGUI;
+class deProject;
 
 class deSamplerPanel:public wxPanel
 {
@@ -43,7 +44,7 @@ class deSamplerPanel:public wxPanel
         deSamplerPanel(wxWindow* parent, deSampler* _sampler, deGUI& _gui);
         virtual ~deSamplerPanel();
 
-        void setLabels();
+        void setLabels(deProject* project);
 };
 
 #endif

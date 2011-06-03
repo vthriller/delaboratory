@@ -58,7 +58,7 @@ deCurvesFrame::deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePr
     SetSizer(sizer);
     Fit();
 
-    curvesPanel->changeChannel(0);
+//    curvesPanel->changeChannel(0);
 
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deCurvesFrame::choose));
 }

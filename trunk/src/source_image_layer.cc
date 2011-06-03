@@ -41,20 +41,6 @@ void deSourceImageLayer::setPreviewSize(const deSize& size)
     previewSize = size;
 }
 
-
-void deSourceImageLayer::changeSourceLayer(int id, const deLayerStack& layerStack)
-{
-}
-
-void deSourceImageLayer::changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack)
-{
-}
-
-wxDialog* deSourceImageLayer::createDialog(wxWindow* parent, int layerNumber, deProject* project)
-{
-    return new deLayerDialog(parent, *this, layerNumber, project, "");
-}
-
 deActionFrame* deSourceImageLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
     return NULL;

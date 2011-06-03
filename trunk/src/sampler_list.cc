@@ -43,10 +43,11 @@ void deSamplerList::setProject(deProject* _project)
 {
     assert(!project);
     project = _project;
-    samplers.push_back(new deSampler(project));
-    samplers.push_back(new deSampler(project));
-    samplers.push_back(new deSampler(project));
-    samplers.push_back(new deSampler(project));
+    samplers.push_back(new deSampler());
+    samplers.push_back(new deSampler());
+    samplers.push_back(new deSampler());
+    samplers.push_back(new deSampler());
+    samplers.push_back(new deSampler());
 }
 
 void deSamplerList::click(float x, float y)

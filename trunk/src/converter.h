@@ -57,7 +57,7 @@ class deConverter
 
         bool setConversionFunction();
 
-        void convert();
+        bool convert();
 };
 
 #endif

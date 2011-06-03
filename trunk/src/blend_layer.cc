@@ -43,39 +43,10 @@ deBlendLayer::~deBlendLayer()
 {
 }
 
-void deBlendLayer::changeSourceLayer(int id, const deLayerStack& layerStack)
-{
-    sourceLayer = id;
-    overlayLayer = id;
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    if (source)
-    {
-        colorSpace = source->getColorSpace();
-    }        
-}
-
-void deBlendLayer::changeOverlayLayer(int id, const deLayerStack& layerStack)
-{
-    overlayLayer = id;
-}
 
 void deBlendLayer::changeAlpha(deValue _alpha)
 {
     alpha = _alpha;
-}
-
-void deBlendLayer::changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack)
-{
-    colorSpace = _colorSpace;
-}
-
-wxDialog* deBlendLayer::createDialog(wxWindow* parent, int layerNumber, deProject* project)
-{
-    deLayerDialog* dialog = new deLayerDialog(parent, *this, layerNumber, project, "blend options");
-    dialog->addColorSpaceChoice();
-    dialog->addSourceChoice();
-    dialog->addOverlayChoice();
-    return dialog;
 }
 
 deActionFrame* deBlendLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)

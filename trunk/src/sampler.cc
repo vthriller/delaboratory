@@ -19,7 +19,6 @@
 #include "sampler.h"
 #include "layer.h"
 #include "preview.h"
-#include "project.h"
 #include "color_space.h"
 #include "channels.h"
 #include "channel.h"
@@ -29,12 +28,18 @@
 #include "converter.h"
 #include <iostream>
 
-deSampler::deSampler(deProject* _project)
-:project(_project)
+deSampler::deSampler()
 {
     x = -1;
     y = -1;
     disable();
+}
+
+deSampler::deSampler(const deSampler& sampler)
+{
+    x = sampler.x;
+    y = sampler.y;
+    enabled = sampler.enabled;
 }
 
 deSampler::~deSampler()
@@ -57,7 +62,7 @@ float deSampler::getY() const
     return y;
 }
 
-bool deSampler::getPixel(float &v0, float &v1, float &v2, float &v3, deColorSpace mode) const
+bool deSampler::getPixel(float &v0, float &v1, float &v2, float &v3, deColorSpace mode, dePreview& preview) const
 {
     if (!enabled)
     {
@@ -68,13 +73,7 @@ bool deSampler::getPixel(float &v0, float &v1, float &v2, float &v3, deColorSpac
     assert(x < 1);
     assert(y < 1);
 
-    dePreview* preview = project->getVisiblePreview();
-    if (!preview)
-    {
-        return false;
-    }
-
-    const deSize& s = preview->getSize();
+    const deSize& s = preview.getSize();
 
     int w = s.getW();
     int h = s.getH();
@@ -85,7 +84,7 @@ bool deSampler::getPixel(float &v0, float &v1, float &v2, float &v3, deColorSpac
     int pos = yyy * w + xxx;
 
     deConverter converter;
-    converter.setSource(preview);
+    converter.setSource(&preview);
 
     bool result = converter.getPixel(pos, mode, v0, v1, v2, v3);
     return result;

@@ -35,29 +35,30 @@ class deBlendLayer:public deLayer
         deBlendLayer(const std::string& _name);
         virtual ~deBlendLayer();
 
+        virtual bool canChangeSourceLayer() const {return true;};
+        virtual bool canChangeOverlayLayer() const {return true;};
+        virtual bool canChangeColorSpace() const {return true;};
+
         void setOverlayChannel(int _channel);
         int getOverlayChannel() const;
+
         void setSingleOverlayChannel(bool _singleChannel);
         bool isSingleOverlayChannel() const;
+
         void setDestinationChannel(int _channel);
         int getDestinationChannel() const;
+
         void setSingleDestinationChannel(bool _singleChannel);
         bool isSingleDestinationChannel() const;
+
         deBlendMode getBlendMode() const;
         void setBlendMode(deBlendMode mode);
 
-//        virtual void generatePreview();
-        virtual dePreview* createPreview(dePreviewStack& previewStack);
-
-        virtual void changeSourceLayer(int id, const deLayerStack& layerStack);
-        //void changeOverlayLayer(int id);
-        virtual void changeOverlayLayer(int id, const deLayerStack& layerStack);
         void changeAlpha(deValue _alpha);
-        virtual void changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack);
-
         deValue getAlpha() const {return alpha;};
 
-        virtual wxDialog* createDialog(wxWindow* parent, int layerNumber, deProject* project);
+        virtual dePreview* createPreview(dePreviewStack& previewStack);
+
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
 };

@@ -23,6 +23,22 @@
 #include "color_space.h"
 #include "channel.h"
 
+void blend(const deBaseChannel& sourceChannel, const deBaseChannel& overlayChannel, deBaseChannel& resultChannel, deValue alpha, deBlendMode mode)
+{
+    int n = sourceChannel.getSize().getN();
+    int j;
+    for (j = 0; j < n; j++)
+    {
+        deValue src = sourceChannel.getValue(j);
+        deValue v2 = overlayChannel.getValue(j);
+
+        deValue dst = calcBlendResult(src, v2, mode);
+
+        deValue r = (1 - alpha) * src + alpha * dst;
+        resultChannel.setValue(j, r);
+    }
+}        
+
 void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& resultPreview, int overlayChannelID, int destinationChannelID, deBlendMode mode)
 {
     deColorSpace rc = resultPreview.getColorSpace();
@@ -66,41 +82,6 @@ void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deVa
         }            
         deBaseChannel* resultChannel = resultPreview.getChannel(i);
 
-        int j;
-        for (j = 0; j < n; j++)
-        {
-            deValue src = sourceChannel->getValue(j);
-            deValue v2 = overlayChannel->getValue(j);
-
-            deValue dst;
-            switch (mode)
-            {
-                case deBlendNormal:
-                    dst = v2;
-                    break;
-                case deBlendMultiply:                    
-                    dst = src*v2;
-                    break;
-                case deBlendScreen:
-                    dst = 1 - (1-src)*(1-v2);
-                    break;
-                case deBlendOverlay:                    
-                    if (src > 0.5)
-                    {
-                        dst = 1 - (1 - 2 * ( src - 0.5)) * (1 - v2);
-                    }
-                    else
-                    {
-                        dst = 2 * src * v2;
-                    }
-                    break;
-                default:
-                    dst = 0;
-            }                    
-//            deValue dst = 1 - (1-src)*(1-v2)
-
-            deValue r = (1 - alpha) * src + alpha * dst;
-            resultChannel->setValue(j, r);
-        }
+        blend(*sourceChannel, *overlayChannel, *resultChannel, alpha, mode);
     }
 }

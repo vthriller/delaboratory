@@ -21,10 +21,10 @@
 
 #include "wx/wx.h"
 #include "value.h"
+#include "sampler.h"
 class deCurve;
 class deCurvesLayer;
 class dePreviewStack;
-class deSampler;
 
 class deCurvesPanel:public wxPanel
 {
@@ -55,6 +55,10 @@ private:
     void update();
 
     deValue marker;
+
+    deSampler sampler;
+
+    void updateMarker();
 
 public:
 	deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewStack& _stack, int _layerNumber);
