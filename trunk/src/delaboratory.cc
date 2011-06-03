@@ -43,11 +43,14 @@ IMPLEMENT_APP(deLaboratory)
 
 bool deLaboratory::OnInit()
 {
+    project.logMessage("on init...");
 
     wxInitAllImageHandlers();
 
 	int width = 1024;
 	int height = 800;
+
+    project.logMessage("creating main frame on init...");
 
 	deMainFrame *frame = new deMainFrame( wxSize(width,height), &project);
     project.getGUI().start();
