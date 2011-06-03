@@ -16,56 +16,35 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "wx/wx.h"
-#include "project.h"
-#include "main_frame.h"
 #include "logger.h"
 
-class deLaboratory: public wxApp
-{	
-    public:
-        deLaboratory()
-        :wxApp()
-        {
-        }
-
-        ~deLaboratory()
-        {
-        }
-
-    private:
-    	virtual bool OnInit();
-        deProject project;
-};
-
-
-IMPLEMENT_APP(deLaboratory)
-
-bool deLaboratory::OnInit()
+deLogger::deLogger()
 {
+    f = NULL;
+}
 
-    wxInitAllImageHandlers();
-
-	int width = 1024;
-	int height = 800;
-
-	deMainFrame *frame = new deMainFrame( wxSize(width,height), &project);
-    project.getGUI().start();
-
-    if (argc > 1)
+deLogger::~deLogger()
+{
+    if (f)
     {
-        wxString arg = argv[1];
-        char cstring[1024];
-        strncpy(cstring, (const char*)arg.mb_str(wxConvUTF8), 1023);
-        project.loadSourceImage(cstring);
+        f->close();
+    }
+}
 
+void deLogger::setFile(const std::string& fileName)
+{
+    if (f)
+    {
+        f->close();
     }
 
-	frame->Show(TRUE);
-	SetTopWindow(frame);
+    f = new std::ofstream(fileName.c_str());
+}
 
-	return TRUE;
-} 
-
-
-	
+void deLogger::log(const std::string message)
+{
+    if (f)
+    {
+        (*f) << message << std::endl;
+    }
+}

@@ -114,10 +114,18 @@ void dePreviewStack::realUpdatePreviews()
         dePreview* preview = previews[i];
         if (preview)
         {
+            if (project)
+            {
+                project->logMessage("destroy preview...");
+            }
             delete preview;
         }
         try
         {
+            if (project)
+            {
+                 project->logMessage("create preview...");
+            }                 
             previews[i] = layerStack.getLayer(i)->createPreview(*this);
         }
         catch (deException& e)
@@ -132,6 +140,8 @@ void dePreviewStack::realUpdatePreviews()
     nowUpdating = false;
 
     long t = sw.Time();
+
+#ifdef DE_PROFILER    
     std::ostringstream oss;
     oss << "up: " << t << std::endl;
     project->getGUI().setInfo(0, oss.str());
@@ -139,6 +149,7 @@ void dePreviewStack::realUpdatePreviews()
     oss.str("");
     oss << previewsCalculated << " pc" << std::endl;
     project->getGUI().setInfo(2, oss.str());
+#endif    
 }
 
 void dePreviewStack::refreshView()

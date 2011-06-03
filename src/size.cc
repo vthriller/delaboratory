@@ -17,6 +17,7 @@
 */
 
 #include "size.h"
+#include <sstream>
 
 deSize::deSize(int _w, int _h)
 {
@@ -55,4 +56,11 @@ deSize fitInside(const deSize& area, const deSize& rect)
     }
 
     return deSize(w,h);
+}
+
+std::string deSize::str() const
+{
+    std::ostringstream oss;
+    oss << "[w: " << w << " h: " << h << "]";
+    return oss.str();
 }

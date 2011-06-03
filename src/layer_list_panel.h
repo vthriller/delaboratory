@@ -20,6 +20,7 @@
 #define _DE_LAYER_LIST_PANEL_H
 
 #include <wx/wx.h>
+#include <wx/listctrl.h>
 #include <vector>
 
 class deProject;
@@ -33,8 +34,6 @@ class deLayerListPanel:public wxPanel
         wxButton* buttonAdd;
         wxButton* buttonRemove;
         wxButton* buttonView;
-//        deCommand* command;
-//        wxPanel* panel;
         deProject* project;
 
         std::vector<std::string> items;

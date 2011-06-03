@@ -16,26 +16,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_SOURCE_IMAGE_H
-#define _DE_SOURCE_IMAGE_H
+#ifndef _DE_LOGGER_H
+#define _DE_LOGGER_H
 
 #include <string>
-#include "preview.h"
-//#include "tiffio.h"
+#include <fstream>
 
-class deSourceImage:public dePreview
+class deLogger
 {
     private:
-//        void loadTIFF(TIFF* tif);
+        std::ofstream* f;
 
     public:
-        deSourceImage();
-        virtual ~deSourceImage();
+        deLogger();
+        virtual ~deLogger();
 
-        void loadJPEG( const std::string& fileName);
-        void loadTIFF( const std::string& fileName);
-        void load(const std::string& fileName);
+        void setFile(const std::string& fileName);
 
+        void log(const std::string message);
 };
 
 #endif

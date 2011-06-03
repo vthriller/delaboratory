@@ -44,10 +44,12 @@ deInfoBarPanel::~deInfoBarPanel()
 
 void deInfoBarPanel::setInfo(int index, const std::string s)
 {
+#ifdef DE_PROFILER
     if ((index < 0) || (index > 5))
     {
         return;
     }
     labels[index]->SetLabel(wxString::FromAscii(s.c_str()));
+#endif    
 }
 

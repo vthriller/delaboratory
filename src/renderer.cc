@@ -82,6 +82,7 @@ void deRenderer::render(wxDC& dc)
     dc.DrawBitmap(bitmap, 0, 0, false);
     long t = sw.Time();
 
+#ifdef DE_PROFILER
     std::ostringstream oss;
     oss << "r: " << t << std::endl;
     project->getGUI().setInfo(1, oss.str());
@@ -90,6 +91,7 @@ void deRenderer::render(wxDC& dc)
     oss.str("");
     oss << renders << " pr" << std::endl;
     project->getGUI().setInfo(3, oss.str());
+#endif
 
 }
 

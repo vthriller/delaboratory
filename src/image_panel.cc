@@ -80,6 +80,10 @@ void deImagePanel::move(wxMouseEvent &event)
 deImagePanel::deImagePanel(wxWindow* parent, deProject* _project)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), project(_project), renderer(project)
 {
+    if (project)
+    {
+        project->logMessage("creating deImagePanel");
+    }        
     project->getGUI().setImagePanel(this);
 
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deImagePanel::click));
@@ -93,6 +97,10 @@ deImagePanel::~deImagePanel()
 
 void deImagePanel::paintEvent(wxPaintEvent & evt)
 {
+    if (project)
+    {
+        project->logMessage("deImagePanel::paintEvent");
+    }        
     try
     {
         wxPaintDC dc(this);
@@ -105,6 +113,10 @@ void deImagePanel::paintEvent(wxPaintEvent & evt)
 
 void deImagePanel::paint()
 {
+    if (project)
+    {
+        project->logMessage("deImagePanel::paint");
+    }        
     try
     {
         wxClientDC dc(this);

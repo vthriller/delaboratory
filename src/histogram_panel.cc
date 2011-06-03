@@ -84,9 +84,11 @@ void deHistogramPanel::render(wxDC& dc)
 
     long t = sw.Time();
 
+#ifdef DE_PROFILER
     std::ostringstream oss;
     oss << "rh: " << t << std::endl;
     project->getGUI().setInfo(5, oss.str());
+#endif    
 }
 
 void deHistogramPanel::renderHistogram(deHistogram* histogram, wxDC& dc, int max)

@@ -19,6 +19,8 @@
 #ifndef _DE_SIZE_H
 #define _DE_SIZE_H
 
+#include <string>
+
 class deSize
 {
     private:
@@ -35,6 +37,8 @@ class deSize
         int getN() const {return w*h;};
 
         float getAspect() const {return (float) w / h;};
+
+        std::string str() const;
 };
 
 bool operator ==(const deSize& a, const deSize& b);

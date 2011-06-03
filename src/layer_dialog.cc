@@ -23,6 +23,7 @@
 #include "color_space_choice.h"
 #include "layer_choice.h"
 #include "action_frame.h"
+#include <wx/sizer.h>
 
 void deLayerDialog::clickApply(wxCommandEvent &event)
 {
@@ -106,7 +107,8 @@ deLayerDialog::deLayerDialog(wxWindow *_parent, deLayer& _layer, int _layerNumbe
 
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
-    gridSizer = new wxGridSizer(2, 0);
+    //gridSizer = new wxGridSizer(2, 0, 0, 0);
+    gridSizer = new wxGridSizer(0, 2, 0, 0);
 
     wxStaticText* labelId = new wxStaticText(this, wxID_ANY, _T("layer id:") );
     gridSizer->Add(labelId);
