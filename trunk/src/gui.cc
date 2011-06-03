@@ -122,10 +122,12 @@ void deGUI::setInfoBarPanel(deInfoBarPanel* panel)
 
 void deGUI::setInfo(int index, const std::string& s)
 {
+#ifdef DE_PROFILER
     if (infoBarPanel)
     {
         infoBarPanel->setInfo(index, s);
     }
+#endif    
 }
 
 void deGUI::setLayerListPanel(deLayerListPanel* _panel)

@@ -22,7 +22,7 @@
 #include "channels.h"
 #include "channel.h"
 #include "converter.h"
-#include "tiffio.h"
+#include <tiffio.h>
 #include <iostream>
 
 deFinalImage::deFinalImage(const dePreview& preview)

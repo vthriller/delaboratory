@@ -24,10 +24,15 @@
 #include "sampler_list_panel.h"
 #include "info_bar_panel.h"
 #include "source_image.h"
+#include "logger.h"
 
 deProject::deProject()
 :sourceImageSize(0,0)
 {
+#ifdef DE_LOGGER
+    logger.setFile("delaboratory.log");
+    logMessage("starting project...");
+#endif    
     sourceFileName = "";
     view = -1;
     previewStack.setProject(this);
@@ -51,6 +56,7 @@ const deSize& deProject::getSourceImageSize() const
 
 void deProject::setPreviewSize(const deSize& size)
 {
+    logMessage("set preview size " + size.str() + "...");
 
     deLayer* layer = layerStack.getLayer(0);
     deSourceImageLayer* sourceImageLayer = dynamic_cast<deSourceImageLayer*>(layer);
@@ -66,6 +72,7 @@ void deProject::setPreviewSize(const deSize& size)
 
 void deProject::addLayer(deLayer* layer)
 {
+    logMessage("add new layer...");
     try
     {
         layerStack.addLayer(layer);
@@ -81,6 +88,7 @@ void deProject::addLayer(deLayer* layer)
 
 void deProject::removeTopLayer()
 {
+    logMessage("remove top layer...");
     layerStack.removeTopLayer();
     if (view > layerStack.getSize() - 1)
     {
@@ -138,6 +146,8 @@ dePreviewStack& deProject::getPreviewStack()
 
 deFinalImage* deProject::generateFinalImage()
 {
+    logMessage("generate final image...");
+
     const dePreview* preview = getVisiblePreview();
     if (!preview)
     {
@@ -159,6 +169,8 @@ deFinalImage* deProject::generateFinalImage()
 
 void deProject::setView(int v)
 {
+    logMessage("set view...");
+
     int old = view;
     view = v;
     previewStack.updatePreviews(old + 1);
@@ -180,6 +192,8 @@ deSamplerList& deProject::getSamplerList()
 
 void deProject::loadSourceImage(const std::string& fileName)
 {
+    logMessage("loading source image " + fileName + "...");
+
     size_t posDot = fileName.rfind(".");
     size_t posSlash = fileName.rfind("/");
     int posStart;
@@ -208,4 +222,12 @@ deGUI& deProject::getGUI()
 const std::string deProject::getSourceFileName() const
 {
     return sourceFileName;
+}
+
+void deProject::logMessage(const std::string& message)
+{
+    // FIXME it should be implemented differently, there should be LOG macro instead function
+#ifdef DE_LOGGER
+    logger.log(message);
+#endif    
 }

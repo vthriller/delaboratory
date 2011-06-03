@@ -26,6 +26,7 @@
 #include "source_image.h"
 #include <string>
 #include "gui.h"
+#include "logger.h"
 
 class deFinalImage;
 
@@ -40,6 +41,7 @@ class deProject
         deSourceImage sourceImage;
         deGUI gui;
         std::string sourceFileName;
+        deLogger logger;
 
     public:
         deProject();
@@ -77,6 +79,8 @@ class deProject
         deGUI& getGUI();
 
         const std::string getSourceFileName() const;
+
+        void logMessage(const std::string& message);
 
 };
 

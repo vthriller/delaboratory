@@ -21,6 +21,7 @@
 #include "sampler.h"
 #include <iostream>
 #include "gui.h"
+#include <wx/sizer.h>
 
 void deSamplerPanel::click(wxCommandEvent &event)
 {
@@ -66,7 +67,8 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler* _sampler, deGUI& _gu
 
     cells = new wxStaticText * [2*4];
 
-    wxSizer* sizer = new wxGridSizer(2, 4);
+    //wxSizer* sizer = new wxGridSizer(2, 4, 0, 0);
+    wxSizer* sizer = new wxGridSizer(4, 2, 0, 0);
     insidePanel->SetSizer(sizer);
 
     cells[0 + 2 * 0] = new wxStaticText(insidePanel, wxID_ANY, _T("c:") );

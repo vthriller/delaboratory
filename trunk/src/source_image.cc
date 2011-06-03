@@ -21,6 +21,7 @@
 #include "channel.h"
 #include "channels.h"
 #include "color_space.h"
+#include <tiffio.h>
 
 deSourceImage::deSourceImage()
 :dePreview(deColorSpaceRGB)
