@@ -84,6 +84,7 @@ void deProject::addLayer(deLayer* layer)
     catch (deException& e)
     {
     }
+    logMessage("add new layer done");
 }
 
 void deProject::removeTopLayer()

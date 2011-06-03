@@ -42,42 +42,46 @@ END_EVENT_TABLE()
 deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
 : wxFrame((wxFrame *)NULL, wxID_ANY, _T("delaboratory 0.1 (c) 2011 Jacek Poplawski"), wxDefaultPosition, size) , project(_project)
 {
-        wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    project->logMessage("create main frame...");
 
-        wxPanel* topPanel = new deTopPanel(this, project->getGUI());
-        mainSizer->Add(topPanel, 0, wxEXPAND);
+    wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-        wxSizer* middleSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxPanel* topPanel = new deTopPanel(this, project->getGUI());
+    mainSizer->Add(topPanel, 0, wxEXPAND);
 
-        wxPanel* leftPanel = new deLeftPanel(this, project);
-        middleSizer->Add(leftPanel, 0, wxEXPAND);
+    wxSizer* middleSizer = new wxBoxSizer(wxHORIZONTAL);
 
-        wxPanel* centerPanel = new deCenterPanel(this, project);
-        middleSizer->Add(centerPanel, 1, wxEXPAND);
+    wxPanel* leftPanel = new deLeftPanel(this, project);
+    middleSizer->Add(leftPanel, 0, wxEXPAND);
 
-        wxPanel* rightPanel = new deRightPanel(this, project);
-        middleSizer->Add(rightPanel, 0, wxEXPAND);
+    wxPanel* centerPanel = new deCenterPanel(this, project);
+    middleSizer->Add(centerPanel, 1, wxEXPAND);
 
-        mainSizer->Add(middleSizer, 1, wxEXPAND);
+    wxPanel* rightPanel = new deRightPanel(this, project);
+    middleSizer->Add(rightPanel, 0, wxEXPAND);
 
-        wxPanel* bottomPanel = new deBottomPanel(this, project);
-        mainSizer->Add(bottomPanel, 0, wxEXPAND);
+    mainSizer->Add(middleSizer, 1, wxEXPAND);
 
-        SetSizer(mainSizer);
+    wxPanel* bottomPanel = new deBottomPanel(this, project);
+    mainSizer->Add(bottomPanel, 0, wxEXPAND);
 
-        mainSizer->Layout();
+    SetSizer(mainSizer);
 
-        wxMenu *menuFile = new wxMenu;
+    mainSizer->Layout();
 
-        menuFile->Append( ID_Open, _("&Open source image") );
-        menuFile->Append( ID_About, _("&About") );
-        menuFile->AppendSeparator();
-        menuFile->Append( ID_Quit, _("E&xit") );
+    wxMenu *menuFile = new wxMenu;
 
-        wxMenuBar *menuBar = new wxMenuBar;
-        menuBar->Append( menuFile, _("&File") );
+    menuFile->Append( ID_Open, _("&Open source image") );
+    menuFile->Append( ID_About, _("&About") );
+    menuFile->AppendSeparator();
+    menuFile->Append( ID_Quit, _("E&xit") );
 
-        SetMenuBar( menuBar );
+    wxMenuBar *menuBar = new wxMenuBar;
+    menuBar->Append( menuFile, _("&File") );
+
+    SetMenuBar( menuBar );
+
+    project->logMessage("create main frame done");
 
 }
 
