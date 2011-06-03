@@ -14,14 +14,12 @@ This is probably best book ever written about retouching.
 
 It's not a Photoshop manual, it's a complete description of techniques and rules.
 And the way he teach is different than people usually work.
-No selections, no drawing on masks, no drawing on picture. Just operation on channels.
+No selections, no drawing on masks, no drawing on picture. Just operations on channels.
 
 When I started to read it I realized this is the way I want to process my photos. 
 First I tried that in GIMP, and later with RawTherapee and GMIC.
 
-This book is the main reason why I started delaboratory. I just need Free application which will support every technique from this book. And if you read it you know how close I am.
-
-I am just not sure what to do with sharpening (chapter 6), color profiles and printing (some parts of chapters 12, 13, 15). Will see.
+This book is the main reason why I started delaboratory. I just need Free application which will support every technique from this book. And if you read it you know what I want to achieve and why delaboratory works the way it works. I am just not sure what to do with sharpening (chapter 6), color profiles and printing (some parts of chapters 12, 13, 15). Will see.
 
 = Lee Varis =
 
