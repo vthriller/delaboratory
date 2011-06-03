@@ -1,5 +1,11 @@
 #summary Books
 
+= intro =
+
+There are many good books about photography, I am not going to write here about them. What I show you is list of books about retouching, describing techniques you could use in delaboratory.
+
+Most people use other techniques. For instance there is a common way of portrait retouching - blur everything and draw on mask to "soften skin". I don't like it - and I don't like the result. In my opinion it's better to use methods described in following books - and as a last step - use clone tool and healing brush (for instance in GIMP). 
+
 = Dan Margulis =
 
 *Professional Photoshop: The Classic Guide to Color Correction*
@@ -29,6 +35,10 @@ I am just not sure what to do with sharpening (chapter 6), color profiles and pr
 
 *Advanced Digital Black & White Photography*
 
+Lots of stuff about curves, blending and mixers. 
+
 = Michael Freeman =
 
 *The Complete Guide to Black & White Digital Photography*
+
+Similar scope as previous book. Using mostly mixer of 6 channels (reds, yellows, greens, cyans, blues, magentas). I am thinking about implementing Zone System, at least as view mode.
