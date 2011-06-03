@@ -137,6 +137,8 @@ deLayerListPanel::~deLayerListPanel()
 
 void deLayerListPanel::update()
 {
+    project->logMessage("update layer list panel...");
+
     listbox->ClearAll();
 
     const deLayerStack& layerStack = project->getLayerStack();
@@ -206,4 +208,6 @@ void deLayerListPanel::update()
     {
         buttonRemove->Enable();
     }
+
+    project->logMessage("update layer list panel done");
 }
