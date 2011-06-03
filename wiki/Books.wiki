@@ -21,9 +21,9 @@ I am just not sure what to do with sharpening (chapter 6), color profiles and pr
 
 *Skin: The Complete Guide to Digitally Lighting, Photographing, and Retouching Faces and Bodies*
 
-Chapter 4 - skin color
-Chapter 5 - contrast, BW
-Chapter 7 - special effects - Blur Layer will be created to support stuff from this chapter (this technique works great in GIMP, will work even better in delaboratory because float precision and color spaces)
+  * Chapter 4 - skin color
+  * Chapter 5 - contrast, BW
+  * Chapter 7 - special effects - Blur Layer will be created to support stuff from this chapter (this technique works great in GIMP, will work even better in delaboratory because float precision and color spaces)
 
 = John Beardsworth =
 
