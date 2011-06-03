@@ -40,9 +40,20 @@ EVT_MENU(ID_About, deMainFrame::OnAbout)
 END_EVENT_TABLE()
 
 deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
-: wxFrame((wxFrame *)NULL, wxID_ANY, _T("delaboratory 0.1 (c) 2011 Jacek Poplawski"), wxDefaultPosition, size) , project(_project)
+: wxFrame() , project(_project)
 {
     project->logMessage("create main frame...");
+
+    bool created = Create((wxFrame *)NULL, wxID_ANY, _T("delaboratory 0.1 (c) 2011 Jacek Poplawski"), wxDefaultPosition, size);
+
+    if (created)
+    {
+        project->logMessage("Create called");
+    }
+    else
+    {
+        project->logMessage("Create called but failed");
+    }
 
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 

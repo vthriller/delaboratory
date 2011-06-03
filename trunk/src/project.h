@@ -43,6 +43,8 @@ class deProject
         std::string sourceFileName;
         deLogger logger;
 
+        deProject(const deProject& project);
+
     public:
         deProject();
         virtual ~deProject();
