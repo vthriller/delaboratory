@@ -256,8 +256,8 @@ void deCurvesPanel::move(wxMouseEvent &event)
         }
 
         curve->movePoint(selectedPoint, x, y);
+        update();
     }
-    update();
 }
 
 void deCurvesPanel::traceSampler(deSampler* sampler)
