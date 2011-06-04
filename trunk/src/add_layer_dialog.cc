@@ -21,6 +21,7 @@
 #include "mixer_layer.h"
 #include "blend_layer.h"
 #include "curves_layer.h"
+#include "blur_layer.h"
 #include "project.h"
 #include "exception.h"
 #include "preview.h"
@@ -56,6 +57,11 @@ void deAddLayerFrame::click(wxCommandEvent &event)
         if (id == blendButton->GetId())
         {
             layer = new deBlendLayer("blend");
+        }
+
+        if (id == blurButton->GetId())
+        {
+            layer = new deBlurLayer("blur");
         }
 
         if (layer)
@@ -94,6 +100,8 @@ deAddLayerFrame::deAddLayerFrame(deLayerListPanel* _panel, deProject* _project)
     sizer->Add(convertButton, 1, wxEXPAND);
     blendButton = new wxButton(this, wxID_ANY, _T("blend"), wxDefaultPosition, wxSize(-1, 50));
     sizer->Add(blendButton, 1, wxEXPAND);
+    blurButton = new wxButton(this, wxID_ANY, _T("blur"), wxDefaultPosition, wxSize(-1, 50));
+    sizer->Add(blurButton, 1, wxEXPAND);
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deAddLayerFrame::click));
 

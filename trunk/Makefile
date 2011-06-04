@@ -9,7 +9,7 @@ clean:
 	rm -f ./.depend
 	rm -f *.o ${APP}
 
-FILES = delaboratory main_frame layer_list_panel right_panel left_panel top_panel bottom_panel histogram_panel size value channel preview source_image color_space exception project layer source_image_layer layer_stack image_panel add_layer_dialog mixer_layer mixer mixer_frame save_buttons_panel final_image sampler sampler_list_panel sampler_panel sampler_list conversion_layer convert_color renderer converter histogram layer_dialog blend_layer blend slider mixer_slider blend_frame preview_stack info_bar_panel base_channel empty_channel histogram_mode_panel channel_buttons blend_mode channel_choice blend_mode_choice color_space_choice layer_choice curve_point curve curves curves_layer curves_frame curves_panel curve_shape action_frame gui view_mode_panel center_panel logger
+FILES = delaboratory main_frame layer_list_panel right_panel left_panel top_panel bottom_panel histogram_panel size value channel preview source_image color_space exception project layer source_image_layer layer_stack image_panel add_layer_dialog mixer_layer mixer mixer_frame save_buttons_panel final_image sampler sampler_list_panel sampler_panel sampler_list conversion_layer convert_color renderer converter histogram layer_dialog blend_layer blend slider mixer_slider blend_frame preview_stack info_bar_panel base_channel empty_channel histogram_mode_panel channel_buttons blend_mode channel_choice blend_mode_choice color_space_choice layer_choice curve_point curve curves curves_layer curves_frame curves_panel curve_shape action_frame gui view_mode_panel center_panel logger blur_layer
 
 OBJECTS = ${addsuffix .o, ${FILES}}
 
