@@ -16,39 +16,45 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "blur_layer.h"
 #include "blur.h"
-#include "preview_stack.h"
 #include "preview.h"
+#include "channel.h"
 
-deBlurLayer::deBlurLayer(const std::string& _name)
-:deLayer(_name)
+void blur(const deBaseChannel* source, deBaseChannel* destination)
 {
-}
-
-deBlurLayer::~deBlurLayer()
-{
-}
-
-dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
-{
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer);
-
-    if (!sourcePreview)
+    deChannel* d = dynamic_cast<deChannel*>(destination);
+    if (!d)
     {
-        return NULL;
+        return;
+    }
+    
+    const deChannel* s = dynamic_cast<const deChannel*>(source);
+    if (!s)
+    {
+        return;
     }
 
-    const deSize& sourceSize = sourcePreview->getSize();
-
-    dePreview* preview = new dePreview(colorSpace, sourceSize);
-
-    blur(*sourcePreview, *preview);
-
-    return preview;
+    d->copy(s);
 }
 
-deActionFrame* deBlurLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
+
+void blur(const dePreview& sourcePreview, dePreview& destinationPreview)
 {
-    return NULL;
+    deColorSpace sc = sourcePreview.getColorSpace();
+    deColorSpace dc = destinationPreview.getColorSpace();
+
+    int sn = getColorSpaceSize(sc);
+    int dn = getColorSpaceSize(dc);
+
+    int n = sn;
+    if (dn < n)
+    {
+        n = dn;
+    }
+
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        blur(sourcePreview.getChannel(i), destinationPreview.getChannel(i));
+    }
 }

@@ -19,8 +19,6 @@
 #ifndef _DE_CHANNEL_H
 #define _DE_CHANNEL_H
 
-//#include "size.h"
-//#include "value.h"
 #include "base_channel.h"
 
 class deChannel:public deBaseChannel
@@ -29,9 +27,6 @@ class deChannel:public deBaseChannel
         deValue* pixels;
         deValue min;
         deValue max;
-
-//        deChannel(const deChannel& channel);
-//        deChannel operator=(const deChannel& channel);
 
     public:
         deChannel(const deSize& _size, deValue _min, deValue _max);
