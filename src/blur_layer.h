@@ -20,10 +20,12 @@
 #define _DE_BLUR_LAYER_H
 
 #include "layer.h"
+#include "blur.h"
 
 class deBlurLayer:public deLayer
 {
     private:
+        deBlurDirection direction;
 
     public:
         deBlurLayer(const std::string& _name);
