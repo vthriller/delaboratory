@@ -16,31 +16,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_ADD_LAYER_FRAME_H
-#define _DE_ADD_LAYER_FRAME_H
+#ifndef _DE_BLUR_LAYER_H
+#define _DE_BLUR_LAYER_H
 
-#include <wx/wx.h>
-class deLayerListPanel;
-class deProject;
-#include <map>
-#include "color_space.h"
+#include "layer.h"
 
-class deAddLayerFrame:public wxFrame
+class deBlurLayer:public deLayer
 {
     private:
-        deLayerListPanel* panel;
-        deProject* project;
 
-        wxButton* curvesButton;
-        wxButton* mixerButton;
-        wxButton* convertButton;
-        wxButton* blendButton;
-        wxButton* blurButton;
-
-        void click(wxCommandEvent &event);
     public:
-        deAddLayerFrame(deLayerListPanel* _panel, deProject* _project);
-        virtual ~deAddLayerFrame();
+        deBlurLayer(const std::string& _name);
+        virtual ~deBlurLayer();
+
+        virtual bool canChangeSourceLayer() const {return true;};
+
+        virtual dePreview* createPreview(dePreviewStack& previewStack);
+
+        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
 };
 
