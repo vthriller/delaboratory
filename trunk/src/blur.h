@@ -16,39 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "blur_layer.h"
-#include "blur.h"
-#include "preview_stack.h"
-#include "preview.h"
+#ifndef _DE_BLUR_H
+#define _DE_BLUR_H
 
-deBlurLayer::deBlurLayer(const std::string& _name)
-:deLayer(_name)
-{
-}
+class dePreview;
 
-deBlurLayer::~deBlurLayer()
-{
-}
+void blur(const dePreview& sourcePreview, dePreview& destinationPreview);
 
-dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
-{
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer);
-
-    if (!sourcePreview)
-    {
-        return NULL;
-    }
-
-    const deSize& sourceSize = sourcePreview->getSize();
-
-    dePreview* preview = new dePreview(colorSpace, sourceSize);
-
-    blur(*sourcePreview, *preview);
-
-    return preview;
-}
-
-deActionFrame* deBlurLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
-{
-    return NULL;
-}
+#endif    
