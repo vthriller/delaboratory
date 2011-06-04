@@ -20,7 +20,36 @@
 #include "preview.h"
 #include "channel.h"
 
-void blur(const deBaseChannel* source, deBaseChannel* destination)
+void blurVertical(const deChannel& source, deChannel& destination, int col)
+{
+    const deSize& size = source.getSize();
+    int w = size.getW();
+    int h = size.getH();
+
+    int i;
+    for (i = 0; i < h; i++)
+    {
+        int pos = i * w + col;
+        deValue v = source.getValue(pos);
+        destination.setValue(pos, v);
+    }
+}
+
+void blurHorizontal(const deChannel& source, deChannel& destination, int row)
+{
+    const deSize& size = source.getSize();
+    int w = size.getW();
+
+    int i;
+    for (i = 0; i < w; i++)
+    {
+        int pos = row * w + i;
+        deValue v = source.getValue(pos);
+        destination.setValue(pos, v);
+    }
+}
+
+void blur(const deBaseChannel* source, deBaseChannel* destination, deBlurDirection direction)
 {
     deChannel* d = dynamic_cast<deChannel*>(destination);
     if (!d)
@@ -34,11 +63,31 @@ void blur(const deBaseChannel* source, deBaseChannel* destination)
         return;
     }
 
-    d->copy(s);
+    const deSize& size = s->getSize();
+
+    int w = size.getW();
+    int h = size.getH();
+
+    int i;
+
+    if (direction == deBlurHorizontal)
+    {
+        for (i = 0; i < h; i++)
+        {
+            blurHorizontal(*s, *d, i);
+        }
+    }
+    else
+    {
+        for (i = 0; i < w; i++)
+        {
+            blurVertical(*s, *d, i);
+        }
+    }        
 }
 
 
-void blur(const dePreview& sourcePreview, dePreview& destinationPreview)
+void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction)
 {
     deColorSpace sc = sourcePreview.getColorSpace();
     deColorSpace dc = destinationPreview.getColorSpace();
@@ -55,6 +104,6 @@ void blur(const dePreview& sourcePreview, dePreview& destinationPreview)
     int i;
     for (i = 0; i < n; i++)
     {
-        blur(sourcePreview.getChannel(i), destinationPreview.getChannel(i));
+        blur(sourcePreview.getChannel(i), destinationPreview.getChannel(i), direction);
     }
 }
