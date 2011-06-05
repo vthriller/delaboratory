@@ -19,6 +19,8 @@
 #ifndef _DE_BLUR_H
 #define _DE_BLUR_H
 
+#include "value.h"
+
 enum deBlurDirection
 {
     deBlurHorizontal,
@@ -27,6 +29,6 @@ enum deBlurDirection
 
 class dePreview;
 
-void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction);
+void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius);
 
 #endif    

@@ -26,6 +26,7 @@ class deBlurLayer:public deLayer
 {
     private:
         deBlurDirection direction;
+        deValue radius;
 
     public:
         deBlurLayer(const std::string& _name);

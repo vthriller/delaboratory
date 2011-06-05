@@ -25,6 +25,7 @@ deBlurLayer::deBlurLayer(const std::string& _name)
 :deLayer(_name)
 {
     direction = deBlurHorizontal;
+    radius = 0.1;
 }
 
 deBlurLayer::~deBlurLayer()
@@ -44,7 +45,7 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
 
     dePreview* preview = new dePreview(colorSpace, sourceSize);
 
-    blur(*sourcePreview, *preview, direction);
+    blur(*sourcePreview, *preview, direction, radius);
 
     return preview;
 }

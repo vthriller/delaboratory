@@ -20,7 +20,8 @@
 #include "preview.h"
 #include "channel.h"
 
-void blurVertical(const deChannel& source, deChannel& destination, int col)
+
+void blurVertical(const deChannel& source, deChannel& destination, int col, int blurSize)
 {
     const deSize& size = source.getSize();
     int w = size.getW();
@@ -29,27 +30,77 @@ void blurVertical(const deChannel& source, deChannel& destination, int col)
     int i;
     for (i = 0; i < h; i++)
     {
+        deValue result = 0.0;
+        deValue sum = 0.0;
+
+        int n1 = i - blurSize;
+        int n2 = i + blurSize;
+        if (n1 < 0)
+        {
+            n1 = 0;
+        }
+
+        if (n2 >= h)
+        {
+            n2 = h - 1;
+        }
+        
+        int j;
+        for (j = n1; j <= n2; j++)
+        {
+            int pos2 = j * w + col;
+            deValue v = source.getValue(pos2);
+            deValue weight = 1.0;
+            result += weight * v;
+            sum += weight;
+        }
+        result /= sum;
         int pos = i * w + col;
-        deValue v = source.getValue(pos);
-        destination.setValue(pos, v);
+        destination.setValue(pos, result);
     }
 }
 
-void blurHorizontal(const deChannel& source, deChannel& destination, int row)
+void blurHorizontal(const deChannel& source, deChannel& destination, int row, int blurSize)
 {
     const deSize& size = source.getSize();
     int w = size.getW();
 
+    int p = row * w;
+
     int i;
     for (i = 0; i < w; i++)
     {
-        int pos = row * w + i;
-        deValue v = source.getValue(pos);
-        destination.setValue(pos, v);
+        deValue result = 0.0;
+        deValue sum = 0.0;
+
+        int n1 = i - blurSize;
+        int n2 = i + blurSize;
+        if (n1 < 0)
+        {
+            n1 = 0;
+        }
+
+        if (n2 >= w)
+        {
+            n2 = w - 1;
+        }
+        
+        int j;
+        for (j = n1; j <= n2; j++)
+        {
+            int pos2 = p + j;
+            deValue v = source.getValue(pos2);
+            deValue weight = 1.0;
+            result += weight * v;
+            sum += weight;
+        }
+        result /= sum;
+        int pos = p + i;
+        destination.setValue(pos, result);
     }
 }
 
-void blur(const deBaseChannel* source, deBaseChannel* destination, deBlurDirection direction)
+void blur(const deBaseChannel* source, deBaseChannel* destination, deBlurDirection direction, deValue radius)
 {
     deChannel* d = dynamic_cast<deChannel*>(destination);
     if (!d)
@@ -72,22 +123,24 @@ void blur(const deBaseChannel* source, deBaseChannel* destination, deBlurDirecti
 
     if (direction == deBlurHorizontal)
     {
+        int blurSize = w * radius;
         for (i = 0; i < h; i++)
         {
-            blurHorizontal(*s, *d, i);
+            blurHorizontal(*s, *d, i, blurSize);
         }
     }
     else
     {
+        int blurSize = h * radius;
         for (i = 0; i < w; i++)
         {
-            blurVertical(*s, *d, i);
+            blurVertical(*s, *d, i, blurSize);
         }
     }        
 }
 
 
-void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction)
+void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius)
 {
     deColorSpace sc = sourcePreview.getColorSpace();
     deColorSpace dc = destinationPreview.getColorSpace();
@@ -104,6 +157,6 @@ void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurD
     int i;
     for (i = 0; i < n; i++)
     {
-        blur(sourcePreview.getChannel(i), destinationPreview.getChannel(i), direction);
+        blur(sourcePreview.getChannel(i), destinationPreview.getChannel(i), direction, radius);
     }
 }
