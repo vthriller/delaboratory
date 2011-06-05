@@ -2,4 +2,10 @@
 
 = Dan Margulis =
 
+== Lab Color ==
+
 <wiki:video url="http://www.youtube.com/watch?v=KhfRynutmQM" width=1024 height=800/>
+
+== Color vs. Contrast ==
+
+<wiki:video url="http://www.youtube.com/watch?v=MYMY1NHZhVs" width=1024 height=800/>
