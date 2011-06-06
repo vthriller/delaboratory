@@ -16,15 +16,34 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLEND_H
-#define _DE_BLEND_H
+#ifndef _DE_ND_FRAME_H
+#define _DE_ND_FRAME_H
 
-class dePreview;
-class deND;
-#include "value.h"
-#include "blend_mode.h"
+#include "action_frame.h"
+#include <vector>
+#include "nd_type.h"
+class deNDLayer;
+class dePreviewStack;
+class deSlider;
 
-void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& result, int oc, int dc, deBlendMode mode);
-void blend(const dePreview& sourcePreview, const deND& nd, dePreview& result, deBlendMode mode);
+class deNDFrame:public deActionFrame
+{
+    private:
+        deNDLayer& layer;
+        dePreviewStack& stack;
+        int layerNumber;
+        deSlider* xCenterSlider;
+        deSlider* yCenterSlider;
+        deSlider* powerSlider;
 
-#endif    
+        wxChoice* ndTypeChoice;
+        std::vector<deNDType> ndTypes;
+
+        void choose(wxCommandEvent &event);
+
+    public:
+        deNDFrame(wxWindow* parent, deNDLayer& _layer, dePreviewStack& _stack, int layerNumber);
+        virtual ~deNDFrame();
+};
+
+#endif

@@ -16,15 +16,36 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLEND_H
-#define _DE_BLEND_H
+#ifndef _DE_ND_H
+#define _DE_ND_H
 
-class dePreview;
-class deND;
 #include "value.h"
-#include "blend_mode.h"
+#include "nd_type.h"
 
-void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& result, int oc, int dc, deBlendMode mode);
-void blend(const dePreview& sourcePreview, const deND& nd, dePreview& result, deBlendMode mode);
+class deND
+{
+    private:
+        deNDType type;
+        deValue xCenter;
+        deValue yCenter;
+        deValue power;
+        bool inverted;
 
-#endif    
+    public:
+        deND();
+        virtual ~deND();
+
+        deValue getValue(deValue x, deValue y) const;
+
+        deValue getXCenter() const;
+        deValue getYCenter() const;
+        deValue getPower() const;
+        deNDType getType() const;
+        void setXCenter(deValue& v);
+        void setYCenter(deValue& v);
+        void setPower(deValue& v);
+        void setType(deNDType _type);
+
+};
+
+#endif

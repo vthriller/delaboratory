@@ -22,21 +22,58 @@
 #include "preview.h"
 #include "color_space.h"
 #include "channel.h"
+#include "nd.h"
 
 void blend(const deBaseChannel& sourceChannel, const deBaseChannel& overlayChannel, deBaseChannel& resultChannel, deValue alpha, deBlendMode mode)
 {
-    int n = sourceChannel.getSize().getN();
-    int j;
-    for (j = 0; j < n; j++)
+    int w = sourceChannel.getSize().getW();
+    int h = sourceChannel.getSize().getH();
+    int pos = 0;
+    int y;
+    for (y = 0; y < h; y++)
     {
-        deValue src = sourceChannel.getValue(j);
-        deValue v2 = overlayChannel.getValue(j);
+        int x;
+        for (x = 0; x < w; x++)
+        {
+            deValue src = sourceChannel.getValue(pos);
+            deValue v2 = overlayChannel.getValue(pos);
 
-        deValue dst = calcBlendResult(src, v2, mode);
+            deValue dst = calcBlendResult(src, v2, mode);
 
-        deValue r = (1 - alpha) * src + alpha * dst;
-        resultChannel.setValue(j, r);
-    }
+            deValue r = (1 - alpha) * src + alpha * dst;
+            resultChannel.setValue(pos, r);
+            pos ++;
+        }
+    }        
+}        
+
+void blend(const deBaseChannel& sourceChannel, const deND& nd, deBaseChannel& resultChannel, deValue alpha, deBlendMode mode)
+{
+    int w = sourceChannel.getSize().getW();
+    int h = sourceChannel.getSize().getH();
+    deValue stepX = 1.0 / w;
+    deValue stepY = 1.0 / h;
+    int pos = 0;
+    int y;
+    deValue yy = -0.5;
+    for (y = 0; y < h; y++)
+    {
+        int x;
+        deValue xx = -0.5;
+        for (x = 0; x < w; x++)
+        {
+            deValue src = sourceChannel.getValue(pos);
+            deValue v2 = nd.getValue(xx, yy);
+
+            deValue dst = calcBlendResult(src, v2, mode);
+
+            deValue r = (1 - alpha) * src + alpha * dst;
+            resultChannel.setValue(pos, r);
+            pos ++;
+            xx += stepX;
+        }
+        yy += stepY;
+    }        
 }        
 
 void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& resultPreview, int overlayChannelID, int destinationChannelID, deBlendMode mode)
@@ -45,7 +82,6 @@ void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deVa
 
     const deSize& size = resultPreview.getSize();
 
-    int n = size.getN();
     int nc = getColorSpaceSize(rc);
 
     int first = 0;
@@ -83,5 +119,23 @@ void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deVa
         deBaseChannel* resultChannel = resultPreview.getChannel(i);
 
         blend(*sourceChannel, *overlayChannel, *resultChannel, alpha, mode);
+    }
+}
+
+void blend(const dePreview& sourcePreview, const deND& nd, dePreview& resultPreview, deBlendMode mode)
+{
+    deColorSpace rc = resultPreview.getColorSpace();
+    const deSize& size = resultPreview.getSize();
+    int nc = getColorSpaceSize(rc);
+
+    deValue alpha = 1.0;
+
+    int i;
+    for (i = 0; i < nc; i++)
+    {
+        const deBaseChannel* sourceChannel = sourcePreview.getChannel(i);
+        deBaseChannel* resultChannel = resultPreview.getChannel(i);
+
+        blend(*sourceChannel, nd, *resultChannel, alpha, mode);
     }
 }
