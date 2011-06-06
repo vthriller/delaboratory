@@ -16,15 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLEND_H
-#define _DE_BLEND_H
+#include "nd_type_choice.h"
 
-class dePreview;
-class deND;
-#include "value.h"
-#include "blend_mode.h"
+wxChoice* makeNDTypeChoice(wxWindow* parent, std::vector<deNDType>& ndTypes, deNDType currentNDType)
+{
+    getSupportedNDTypes(ndTypes);
 
-void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& result, int oc, int dc, deBlendMode mode);
-void blend(const dePreview& sourcePreview, const deND& nd, dePreview& result, deBlendMode mode);
+    wxString* ndTypeStrings = new wxString [ndTypes.size()];
+    unsigned int i;
+    int selectedNDType;
+    for (i = 0; i < ndTypes.size(); i++)
+    {
+        ndTypeStrings[i] = wxString::FromAscii(getNDTypeName(ndTypes[i]).c_str());
+        if (currentNDType == ndTypes[i])
+        {
+            selectedNDType = i;
+        }
+    }        
 
-#endif    
+    wxChoice* choice =  new wxChoice(parent, wxID_ANY, wxDefaultPosition, wxSize(200, -1), ndTypes.size(),ndTypeStrings);
+    choice->SetSelection(selectedNDType);
+
+    delete [] ndTypeStrings;
+
+    return choice;
+}
+

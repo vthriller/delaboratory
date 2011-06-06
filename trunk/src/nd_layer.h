@@ -16,15 +16,31 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLEND_H
-#define _DE_BLEND_H
+#ifndef _DE_ND_LAYER_H
+#define _DE_ND_LAYER_H
 
-class dePreview;
-class deND;
-#include "value.h"
+#include "layer.h"
+#include "nd.h"
 #include "blend_mode.h"
 
-void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& result, int oc, int dc, deBlendMode mode);
-void blend(const dePreview& sourcePreview, const deND& nd, dePreview& result, deBlendMode mode);
+class deNDLayer:public deLayer
+{
+    private:
+        deND nd;
+        deBlendMode mode;
 
-#endif    
+    public:
+        deNDLayer(const std::string& _name);
+        virtual ~deNDLayer();
+
+        virtual bool canChangeSourceLayer() const {return true;};
+
+        virtual dePreview* createPreview(dePreviewStack& previewStack);
+
+        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
+
+        deND& getND() {return nd;};
+
+};
+
+#endif

@@ -16,15 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLEND_H
-#define _DE_BLEND_H
 
-class dePreview;
-class deND;
-#include "value.h"
-#include "blend_mode.h"
+#ifndef _DE_ND_TYPE_CHOICE_H
+#define _DE_ND_TYPE_CHOICE_H
 
-void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& result, int oc, int dc, deBlendMode mode);
-void blend(const dePreview& sourcePreview, const deND& nd, dePreview& result, deBlendMode mode);
+#include <wx/wx.h>
+#include <vector>
+#include "nd_type.h"
 
-#endif    
+wxChoice* makeNDTypeChoice(wxWindow* parent, std::vector<deNDType>& ndTypes, deNDType currentNDType);
+
+#endif

@@ -16,15 +16,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLEND_H
-#define _DE_BLEND_H
+#ifndef _DE_ND_TYPE_H
+#define _DE_ND_TYPE_H
 
-class dePreview;
-class deND;
-#include "value.h"
-#include "blend_mode.h"
+#include <string>
+#include <vector>
 
-void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& result, int oc, int dc, deBlendMode mode);
-void blend(const dePreview& sourcePreview, const deND& nd, dePreview& result, deBlendMode mode);
+enum deNDType
+{
+    deNDHorizontal,
+    deNDVertical,
+    deNDVignette,
+    deNDFlat
+};
 
-#endif    
+std::string getNDTypeName(deNDType type);
+void getSupportedNDTypes(std::vector<deNDType>& result);
+
+#endif

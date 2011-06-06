@@ -22,6 +22,7 @@
 #include "blend_layer.h"
 #include "curves_layer.h"
 #include "blur_layer.h"
+#include "nd_layer.h"
 #include "project.h"
 #include "exception.h"
 #include "preview.h"
@@ -64,6 +65,11 @@ void deAddLayerFrame::click(wxCommandEvent &event)
             layer = new deBlurLayer("blur");
         }
 
+        if (id == ndButton->GetId())
+        {
+            layer = new deNDLayer("nd");
+        }
+
         if (layer)
         {
             layer->changeSourceLayer(project->getVisibleLayerID(), stack);
@@ -92,6 +98,7 @@ deAddLayerFrame::deAddLayerFrame(deLayerListPanel* _panel, deProject* _project)
 
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
+    // FIXME build layer factory
     curvesButton = new wxButton(this, wxID_ANY, _T("curves"), wxDefaultPosition, wxSize(-1, 50));
     sizer->Add(curvesButton, 1, wxEXPAND);
     mixerButton = new wxButton(this, wxID_ANY, _T("mixer"), wxDefaultPosition, wxSize(-1, 50));
@@ -102,6 +109,8 @@ deAddLayerFrame::deAddLayerFrame(deLayerListPanel* _panel, deProject* _project)
     sizer->Add(blendButton, 1, wxEXPAND);
     blurButton = new wxButton(this, wxID_ANY, _T("blur"), wxDefaultPosition, wxSize(-1, 50));
     sizer->Add(blurButton, 1, wxEXPAND);
+    ndButton = new wxButton(this, wxID_ANY, _T("nd"), wxDefaultPosition, wxSize(-1, 50));
+    sizer->Add(ndButton, 1, wxEXPAND);
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deAddLayerFrame::click));
 
