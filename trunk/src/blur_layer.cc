@@ -18,14 +18,16 @@
 
 #include "blur_layer.h"
 #include "blur.h"
+#include "blur_frame.h"
 #include "preview_stack.h"
 #include "preview.h"
+#include "project.h"
 
 deBlurLayer::deBlurLayer(const std::string& _name)
 :deLayer(_name)
 {
     direction = deBlurHorizontal;
-    radius = 0.1;
+    radius = 0.01;
 }
 
 deBlurLayer::~deBlurLayer()
@@ -52,5 +54,25 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
 
 deActionFrame* deBlurLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
-    return NULL;
+    return new deBlurFrame(parent, *this, project->getPreviewStack(), layerNumber);
+}
+
+deBlurDirection deBlurLayer::getBlurDirection() const
+{
+    return direction;
+}
+
+deValue deBlurLayer::getBlurRadius() const
+{
+    return radius;
+}
+
+void deBlurLayer::setBlurRadius(deValue _radius)
+{
+    radius = _radius;
+}
+
+void deBlurLayer::setBlurDirection(deBlurDirection _direction)
+{
+    direction = _direction;
 }
