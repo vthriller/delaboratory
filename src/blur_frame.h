@@ -16,33 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLUR_LAYER_H
-#define _DE_BLUR_LAYER_H
+#ifndef _DE_BLUR_FRAME_H
+#define _DE_BLUR_FRAME_H
 
-#include "layer.h"
-#include "blur.h"
+#include "action_frame.h"
+#include <vector>
+class deBlurLayer;
+class dePreviewStack;
+class deSlider;
 
-class deBlurLayer:public deLayer
+class deBlurFrame:public deActionFrame
 {
     private:
-        deBlurDirection direction;
-        deValue radius;
+        deBlurLayer& layer;
+        dePreviewStack& stack;
+        int layerNumber;
+        wxChoice* blurDirectionChoice;
+        deSlider* blurSlider;
+
+        void choose(wxCommandEvent &event);
 
     public:
-        deBlurLayer(const std::string& _name);
-        virtual ~deBlurLayer();
-
-        virtual bool canChangeSourceLayer() const {return true;};
-
-        virtual dePreview* createPreview(dePreviewStack& previewStack);
-
-        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
-
-        deBlurDirection getBlurDirection() const;
-        deValue getBlurRadius() const;
-        void setBlurRadius(deValue _radius);
-        void setBlurDirection(deBlurDirection _direction);
-
+        deBlurFrame(wxWindow* parent, deBlurLayer& _layer, dePreviewStack& _stack, int layerNumber);
+        virtual ~deBlurFrame();
 };
 
 #endif
