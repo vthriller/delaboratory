@@ -94,7 +94,7 @@ deNDFrame::deNDFrame(wxWindow* parent, deNDLayer& _layer, dePreviewStack& _stack
     sizer->Add(xCenterSlider, 0);
     yCenterSlider = new deNDSlider(this, "y center", sliderRange, min, max, layer.getND(), stack, layerNumber, true, false);
     sizer->Add(yCenterSlider, 0);
-    powerSlider = new deNDSlider(this, "power", sliderRange, min, 3*max, layer.getND(), stack, layerNumber, false, true);
+    powerSlider = new deNDSlider(this, "power", sliderRange, 2*min, 2*max, layer.getND(), stack, layerNumber, false, true);
     sizer->Add(powerSlider, 0);
 
     SetSizer(sizer);

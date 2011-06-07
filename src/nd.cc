@@ -21,7 +21,6 @@
 
 deND::deND()
 {
-    //type = deNDHorizontal;
     type = deNDVignette;
     xCenter = 0.0;
     yCenter = 0.0;
@@ -36,8 +35,8 @@ deND::~deND()
 deValue deND::getValue(deValue x, deValue y) const
 {
     deValue result = 0.0;
-    x+= xCenter;
-    y+= yCenter;
+    x-= xCenter;
+    y-= yCenter;
     switch (type)
     {
         case deNDHorizontal:
