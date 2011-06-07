@@ -28,6 +28,7 @@ deBlurLayer::deBlurLayer(const std::string& _name)
 {
     direction = deBlurHorizontal;
     radius = 0.01;
+    clearEnabledChannels();
 }
 
 deBlurLayer::~deBlurLayer()
@@ -46,14 +47,6 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
     const deSize& sourceSize = sourcePreview->getSize();
 
     dePreview* preview = new dePreview(colorSpace, sourceSize);
-
-    enabledChannels.clear();
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        enabledChannels.insert(i);
-    }
 
     blur(*sourcePreview, *preview, direction, radius, enabledChannels);
 
@@ -83,4 +76,14 @@ void deBlurLayer::setBlurRadius(deValue _radius)
 void deBlurLayer::setBlurDirection(deBlurDirection _direction)
 {
     direction = _direction;
+}
+
+void deBlurLayer::enableChannel(int c)
+{
+    enabledChannels.insert(c);
+}
+
+void deBlurLayer::clearEnabledChannels()
+{
+    enabledChannels.clear();
 }

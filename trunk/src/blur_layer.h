@@ -45,6 +45,9 @@ class deBlurLayer:public deLayer
         void setBlurRadius(deValue _radius);
         void setBlurDirection(deBlurDirection _direction);
 
+        void clearEnabledChannels();
+        void enableChannel(int c);
+
 };
 
 #endif

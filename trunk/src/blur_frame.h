@@ -34,7 +34,10 @@ class deBlurFrame:public deActionFrame
         wxChoice* blurDirectionChoice;
         deSlider* blurSlider;
 
+        std::vector<wxCheckBox*> channels;
+
         void choose(wxCommandEvent &event);
+        void check(wxCommandEvent &event);
 
     public:
         deBlurFrame(wxWindow* parent, deBlurLayer& _layer, dePreviewStack& _stack, int layerNumber);
