@@ -47,7 +47,15 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
 
     dePreview* preview = new dePreview(colorSpace, sourceSize);
 
-    blur(*sourcePreview, *preview, direction, radius);
+    enabledChannels.clear();
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        enabledChannels.insert(i);
+    }
+
+    blur(*sourcePreview, *preview, direction, radius, enabledChannels);
 
     return preview;
 }

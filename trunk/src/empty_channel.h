@@ -31,6 +31,7 @@ class deEmptyChannel:public deBaseChannel
 
         virtual deValue getValue(int pos) const;
         virtual void setValue(int pos, deValue value);
+        virtual bool copy(const deBaseChannel* channel);
 };
 
 #endif

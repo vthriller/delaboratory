@@ -140,7 +140,7 @@ void blur(const deBaseChannel* source, deBaseChannel* destination, deBlurDirecti
 }
 
 
-void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius)
+void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius, std::set<int>& enabledChannels)
 {
     deColorSpace sc = sourcePreview.getColorSpace();
     deColorSpace dc = destinationPreview.getColorSpace();
@@ -157,6 +157,13 @@ void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurD
     int i;
     for (i = 0; i < n; i++)
     {
-        blur(sourcePreview.getChannel(i), destinationPreview.getChannel(i), direction, radius);
+        if (enabledChannels.count(i) == 1)
+        {
+            blur(sourcePreview.getChannel(i), destinationPreview.getChannel(i), direction, radius);
+        }
+        else
+        {
+            destinationPreview.getChannel(i)->copy(sourcePreview.getChannel(i));
+        }
     }
 }

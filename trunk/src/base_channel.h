@@ -37,6 +37,7 @@ class deBaseChannel
 
         virtual deValue getValue(int pos) const = 0;
         virtual void setValue(int pos, deValue value) = 0;
+        virtual bool copy(const deBaseChannel* channel) = 0;
 
         const deSize getSize() const {return size;}; 
 };

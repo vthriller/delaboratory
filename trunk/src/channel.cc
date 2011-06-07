@@ -48,21 +48,28 @@ void deChannel::setValue(int pos, deValue value)
     pixels[pos] = value;
 }
 
-bool deChannel::copy(const deChannel* channel)
+bool deChannel::copy(const deBaseChannel* channel)
 {
     if (!channel)        
     {
         return false;
     }
-    if (size != channel->size)
+    if (size != channel->getSize())
     {
         return false;
     }
+
+    const deChannel* c = dynamic_cast<const deChannel*>(channel);
+    if (!c)
+    {
+        return false;
+    }
+
     int i;
     int n = size.getN();
     for (i = 0; i < n; i++)
     {
-        pixels[i] = channel->pixels[i];
+        pixels[i] = c->pixels[i];
     }
     return true;
 }
