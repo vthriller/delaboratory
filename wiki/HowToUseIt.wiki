@@ -1,5 +1,13 @@
 #summary How to use it
 
+= blur hints (new in 0.2) = 
+
+  * blur is *not for skin smoothing* - you can't draw on mask so it won't work this way (however you could achieve something like that if you blend *key* channel from original CMYK on blured layer)
+  * Use it with *blend* layer for best effect (set blured layer as overlay and original as source)
+  * experiment with different channels in different colorspaces (in *LAB* blur only A and B channels)
+  * you must choose horizontal or vertical direction, if you need both just use two layers one after another
+  * if you select big radius it will be slow, it may be a good idea to type the radius in the text field instead using slider
+
 = simple RGB operations =
 
 Let's say that you have RAW from RawTherapee or Ufraw and you want to perform some simple operations on your photo: curves and mixer. You can do it in GIMP, but it will be limited to 8-bit color, so you will decrease quality of your photo. It's better to do it in delaboratory then send image to GIMP for further postprocessing.
