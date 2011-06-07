@@ -79,9 +79,21 @@ deBlurFrame::deBlurFrame(wxWindow* parent, deBlurLayer& _layer, dePreviewStack& 
 
     sizer->Add(blurDirectionChoice, 0);
 
+    deColorSpace colorSpace = layer.getColorSpace();
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    channels.reserve(n);
+    for (i = 0; i < n; i++)
+    {
+        wxCheckBox* cb = new wxCheckBox(this, wxID_ANY, wxString::FromAscii(getChannelName(colorSpace, i).c_str()));
+        sizer->Add(cb, 0);
+        channels[i] = cb;
+    }
+
     SetSizer(sizer);
 
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deBlurFrame::choose));
+    Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deBlurFrame::check));
 }
 
 deBlurFrame::~deBlurFrame()
@@ -103,4 +115,22 @@ void deBlurFrame::choose(wxCommandEvent &event)
     layer.setBlurDirection(direction);
     stack.updatePreviews(layerNumber);
     stack.refreshView();
+}
+
+void deBlurFrame::check(wxCommandEvent &event)
+{
+    layer.clearEnabledChannels();
+    deColorSpace colorSpace = layer.getColorSpace();
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        if (channels[i]->IsChecked())
+        {
+            layer.enableChannel(i);
+        }
+    }
+    stack.updatePreviews(layerNumber);
+    stack.refreshView();
+
 }
