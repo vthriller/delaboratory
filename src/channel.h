@@ -32,7 +32,7 @@ class deChannel:public deBaseChannel
         deChannel(const deSize& _size, deValue _min, deValue _max);
         virtual ~deChannel();
 
-        bool copy(const deChannel* channel);
+        virtual bool copy(const deBaseChannel* channel);
         bool scale(const deChannel* channel);
 
         virtual deValue getValue(int pos) const;

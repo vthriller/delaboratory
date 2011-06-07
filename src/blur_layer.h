@@ -21,12 +21,14 @@
 
 #include "layer.h"
 #include "blur.h"
+#include <set>
 
 class deBlurLayer:public deLayer
 {
     private:
         deBlurDirection direction;
         deValue radius;
+        std::set<int> enabledChannels;
 
     public:
         deBlurLayer(const std::string& _name);

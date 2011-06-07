@@ -20,6 +20,7 @@
 #define _DE_BLUR_H
 
 #include "value.h"
+#include <set>
 
 enum deBlurDirection
 {
@@ -29,6 +30,6 @@ enum deBlurDirection
 
 class dePreview;
 
-void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius);
+void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius, std::set<int>& enabledChannels);
 
 #endif    

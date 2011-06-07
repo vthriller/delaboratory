@@ -36,3 +36,7 @@ deValue deEmptyChannel::getValue(int pos) const
 void deEmptyChannel::setValue(int pos, deValue value)
 {
 }
+
+bool deEmptyChannel::copy(const deBaseChannel* channel)
+{
+}
