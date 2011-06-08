@@ -87,3 +87,13 @@ void deBlurLayer::clearEnabledChannels()
 {
     enabledChannels.clear();
 }
+
+bool deBlurLayer::isChannelEnabled(int c) const
+{
+    return (enabledChannels.count(c) == 1);
+}
+
+void deBlurLayer::onChangeColorSpace(const deLayerStack& layerStack)
+{
+    clearEnabledChannels();
+}

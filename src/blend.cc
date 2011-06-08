@@ -80,8 +80,6 @@ void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deVa
 {
     deColorSpace rc = resultPreview.getColorSpace();
 
-    const deSize& size = resultPreview.getSize();
-
     int nc = getColorSpaceSize(rc);
 
     int first = 0;
@@ -125,7 +123,6 @@ void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deVa
 void blend(const dePreview& sourcePreview, const deND& nd, dePreview& resultPreview, deBlendMode mode)
 {
     deColorSpace rc = resultPreview.getColorSpace();
-    const deSize& size = resultPreview.getSize();
     int nc = getColorSpaceSize(rc);
 
     deValue alpha = 1.0;

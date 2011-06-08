@@ -85,11 +85,7 @@ void deLayer::changeSourceLayer(int id, const deLayerStack& layerStack)
 {
     sourceLayer = id;
     overlayLayer = id;
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    if (source)
-    {
-        colorSpace = source->getColorSpace();
-    }        
+    updateColorSpace(layerStack);
     onChangeSourceLayer(layerStack);
 }
 
@@ -104,3 +100,20 @@ void deLayer::changeColorSpace(deColorSpace _colorSpace, const deLayerStack& lay
     colorSpace = _colorSpace;
     onChangeColorSpace(layerStack);
 }
+
+void deLayer::updateColorSpace(const deLayerStack& layerStack)
+{
+    if ((colorSpace != deColorSpaceInvalid) && (canChangeColorSpace()))
+    {
+        return;
+    }
+    deLayer* source = layerStack.getLayer(sourceLayer);
+    if (source)
+    {
+        deColorSpace c = source->getColorSpace();
+        if (c != colorSpace)
+        {
+            changeColorSpace(c, layerStack);
+        }
+    }        
+}   

@@ -86,6 +86,7 @@ deBlurFrame::deBlurFrame(wxWindow* parent, deBlurLayer& _layer, dePreviewStack& 
     for (i = 0; i < n; i++)
     {
         wxCheckBox* cb = new wxCheckBox(this, wxID_ANY, wxString::FromAscii(getChannelName(colorSpace, i).c_str()));
+        cb->SetValue(layer.isChannelEnabled(i));
         sizer->Add(cb, 0);
         channels[i] = cb;
     }

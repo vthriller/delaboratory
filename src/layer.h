@@ -60,6 +60,8 @@ class deLayer
         virtual void onChangeSourceLayer(const deLayerStack& layerStack) {};
         virtual void onChangeOverlayLayer(const deLayerStack& layerStack) {};
 
+        void updateColorSpace(const deLayerStack& layerStack);
+
         const deColorSpace& getColorSpace() const {return colorSpace;};
 
         void setName(const std::string& _name);

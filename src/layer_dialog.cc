@@ -64,6 +64,7 @@ void deLayerDialog::clickApply(wxCommandEvent &event)
             }
     }
 
+    project->getLayerStack().updateColorSpaces();
     project->getPreviewStack().updatePreviews(layerNumber);
 
     deLayer* layer = project->getVisibleLayer();
