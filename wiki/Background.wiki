@@ -44,6 +44,9 @@ Limitations of GMIC:
   * no GUI, limited GUI as Gimp plugin
   * no samplers at all
 
+= color spaces = 
+
+*ColorSpaces* - why RGB is not enough
 
 = Skin Tone =
 
