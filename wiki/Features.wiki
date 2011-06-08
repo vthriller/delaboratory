@@ -41,6 +41,11 @@ plans for next releases:
   * there are few more interesting colorspaces to add, like Munsell
   * better structure of layer properties (design)
   * multiple source images
+  * memory consumption is huge, there is a room for improvement
+  * direct conversion between each two colorspaces - even if slow - may be useful for samplers, etc..
+  * number of samplers should not be fixed like it is now
+  * numbers in samplers are not scaled, it's always between 0.0 and 1.0, it should work different for instance in LAB 
+  * different colors for GUI (curves, histograms, etc)
   * quick preview of multiple channels (like R/G/B, C/M/Y/K, L/A/B in one window)
   * reverse engineering tools for processed images - take the source image, take final image and let the algorithm guess curves/mixer/otherstuff which generated it (see elsamuko Get Curves plugin for the idea)
   * reset button for each layer
@@ -62,7 +67,5 @@ not sure about:
   * blend with color (like ND but not gray, so it won't work per-channel), not sure how to do it in different colorspaces, but some kind of color-filler must be implemented
   * sharpening - should be done in per-pixel editor like GIMP, but from the other side - it could be nice to have USM if blur is already here and it will be possible to sharpen only some channels, like K in CMYK or L in LAB
   * some kind of Zone System support, however I am not yet sure how it can be useful except as view type
-
-
 
 
