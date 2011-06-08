@@ -20,6 +20,7 @@
 #include "blur_layer.h"
 #include "slider.h"
 #include "preview_stack.h"
+#include "channel_check_boxes.h"
 
 class deBlurSlider:public deSlider
 {
@@ -80,16 +81,8 @@ deBlurFrame::deBlurFrame(wxWindow* parent, deBlurLayer& _layer, dePreviewStack& 
     sizer->Add(blurDirectionChoice, 0);
 
     deColorSpace colorSpace = layer.getColorSpace();
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-    channels.reserve(n);
-    for (i = 0; i < n; i++)
-    {
-        wxCheckBox* cb = new wxCheckBox(this, wxID_ANY, wxString::FromAscii(getChannelName(colorSpace, i).c_str()));
-        cb->SetValue(layer.isChannelEnabled(i));
-        sizer->Add(cb, 0);
-        channels[i] = cb;
-    }
+    const std::set<int>& enabledChannels = layer.getEnabledChannels();
+    createChannelCheckBoxes(this, colorSpace, sizer, channels, enabledChannels);
 
     SetSizer(sizer);
 
