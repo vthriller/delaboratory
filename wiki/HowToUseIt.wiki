@@ -1,5 +1,9 @@
 #summary How to use it
 
+= intro =
+
+delaboratory should be used in the middle of the workflow - after RAW processing, before final retouch, I use it between RawTherapee and GIMP
+
 = external materials = 
 
 *[Books]* - books with techniques to use in delaboratory
