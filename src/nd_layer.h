@@ -22,24 +22,32 @@
 #include "layer.h"
 #include "nd.h"
 #include "blend_mode.h"
+#include <set>
 
 class deNDLayer:public deLayer
 {
     private:
         deND nd;
         deBlendMode mode;
+        std::set<int> enabledChannels;
 
     public:
         deNDLayer(const std::string& _name);
         virtual ~deNDLayer();
 
         virtual bool canChangeSourceLayer() const {return true;};
+        virtual void onChangeColorSpace(const deLayerStack& layerStack);
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
 
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
         deND& getND() {return nd;};
+
+        void clearEnabledChannels();
+        void enableChannel(int c);
+
+        const std::set<int>& getEnabledChannels() const;
 
 };
 

@@ -120,7 +120,7 @@ void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deVa
     }
 }
 
-void blend(const dePreview& sourcePreview, const deND& nd, dePreview& resultPreview, deBlendMode mode)
+void blend(const dePreview& sourcePreview, const deND& nd, dePreview& resultPreview, deBlendMode mode, const std::set<int>& enabledChannels)
 {
     deColorSpace rc = resultPreview.getColorSpace();
     int nc = getColorSpaceSize(rc);
@@ -132,7 +132,14 @@ void blend(const dePreview& sourcePreview, const deND& nd, dePreview& resultPrev
     {
         const deBaseChannel* sourceChannel = sourcePreview.getChannel(i);
         deBaseChannel* resultChannel = resultPreview.getChannel(i);
+        if (enabledChannels.count(i) == 1)
+        {
+            blend(*sourceChannel, nd, *resultChannel, alpha, mode);
+        }
+        else
+        {
+            resultChannel->copy(sourceChannel);
+        }
 
-        blend(*sourceChannel, nd, *resultChannel, alpha, mode);
     }
 }

@@ -21,6 +21,7 @@
 #include "slider.h"
 #include "preview_stack.h"
 #include "nd_type_choice.h"
+#include "channel_check_boxes.h"
 
 class deNDSlider:public deSlider
 {
@@ -77,7 +78,7 @@ class deNDSlider:public deSlider
 
 
 deNDFrame::deNDFrame(wxWindow* parent, deNDLayer& _layer, dePreviewStack& _stack, int _layerNumber)
-:deActionFrame(parent, _layer, _T("blur")),
+:deActionFrame(parent, _layer, _T("ND")),
  layer(_layer), stack(_stack), layerNumber(_layerNumber)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -97,9 +98,14 @@ deNDFrame::deNDFrame(wxWindow* parent, deNDLayer& _layer, dePreviewStack& _stack
     powerSlider = new deNDSlider(this, "power", sliderRange, 2*min, 2*max, layer.getND(), stack, layerNumber, false, true);
     sizer->Add(powerSlider, 0);
 
+    deColorSpace colorSpace = layer.getColorSpace();
+    const std::set<int>& enabledChannels = layer.getEnabledChannels();
+    createChannelCheckBoxes(this, colorSpace, sizer, channels, enabledChannels);
+
     SetSizer(sizer);
 
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deNDFrame::choose));
+    Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deNDFrame::check));
 
 }
 
@@ -113,4 +119,22 @@ void deNDFrame::choose(wxCommandEvent &event)
     layer.getND().setType(ndTypes[t]);
     stack.updatePreviews(layerNumber);
     stack.refreshView();
+}
+
+void deNDFrame::check(wxCommandEvent &event)
+{
+    layer.clearEnabledChannels();
+    deColorSpace colorSpace = layer.getColorSpace();
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        if (channels[i]->IsChecked())
+        {
+            layer.enableChannel(i);
+        }
+    }
+    stack.updatePreviews(layerNumber);
+    stack.refreshView();
+
 }
