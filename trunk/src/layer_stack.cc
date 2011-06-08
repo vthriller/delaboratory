@@ -40,7 +40,7 @@ deLayer* deLayerStack::getLayer(int id) const
     unsigned int i = id;
     if ((i >= layers.size()) || (id < 0))
     {
-        throw deException("request for layer with unknown index");
+        return NULL;
     }
     return layers[i];
 }
@@ -76,4 +76,13 @@ void deLayerStack::traceSampler(deSampler* sampler)
             frame->traceSampler(sampler);
         }
     }
+}
+
+void deLayerStack::updateColorSpaces()
+{
+    std::vector<deLayer*>::iterator i;
+    for (i = layers.begin(); i != layers.end(); i++)
+    {
+        (*i)->updateColorSpace(*this);
+    }        
 }

@@ -42,6 +42,7 @@ class deLayerStack
         int getSize() const;
 
         void traceSampler(deSampler* sampler);
+        void updateColorSpaces();
 
 //        void setProject(deProject* _project);
 };

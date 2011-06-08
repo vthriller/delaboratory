@@ -39,6 +39,7 @@ class deBlurLayer:public deLayer
         virtual dePreview* createPreview(dePreviewStack& previewStack);
 
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
+        virtual void onChangeColorSpace(const deLayerStack& layerStack);
 
         deBlurDirection getBlurDirection() const;
         deValue getBlurRadius() const;
@@ -47,6 +48,7 @@ class deBlurLayer:public deLayer
 
         void clearEnabledChannels();
         void enableChannel(int c);
+        bool isChannelEnabled(int c) const;
 
 };
 

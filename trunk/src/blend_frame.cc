@@ -71,6 +71,7 @@ deBlendFrame::deBlendFrame(wxWindow* parent, deBlendLayer& _layer, dePreviewStac
     sizer->Add(blendModeChoice, 0);
 
     singleOverlayChannelCheckBox = new wxCheckBox(this, wxID_ANY, _T("single overlay channel"));
+    singleOverlayChannelCheckBox->SetValue(layer.isSingleOverlayChannel());
     sizer->Add(singleOverlayChannelCheckBox, 0);
 
     dePreview* overlayPreview = stack.getPreview(layer.getOverlayLayerID());
@@ -81,6 +82,7 @@ deBlendFrame::deBlendFrame(wxWindow* parent, deBlendLayer& _layer, dePreviewStac
     sizer->Add(overlayChannelChoice, 0);
 
     singleDestinationChannelCheckBox = new wxCheckBox(this, wxID_ANY, _T("single destination channel"));
+    singleDestinationChannelCheckBox->SetValue(layer.isSingleDestinationChannel());
     sizer->Add(singleDestinationChannelCheckBox, 0);
 
     destinationChannelChoice = makeChannelChoice(this, layerColorSpace);
