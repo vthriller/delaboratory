@@ -8,6 +8,12 @@
   * you must choose horizontal or vertical direction, if you need both just use two layers one after another
   * if you select big radius it will be slow, it may be a good idea to type the radius in the text field instead using slider
 
+= ND hints (new in 0.2) =
+
+  * try it in LAB on A and B channels, you will be really surprised
+  * you can use multiple ND layers to create more complex shapes
+  * negative power works, just only in some special cases
+
 = simple RGB operations =
 
 Let's say that you have RAW from RawTherapee or Ufraw and you want to perform some simple operations on your photo: curves and mixer. You can do it in GIMP, but it will be limited to 8-bit color, so you will decrease quality of your photo. It's better to do it in delaboratory then send image to GIMP for further postprocessing.
