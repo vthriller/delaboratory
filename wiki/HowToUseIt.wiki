@@ -1,5 +1,11 @@
 #summary How to use it
 
+= external materials = 
+
+*[Books]* - books with techniques to use in delaboratory
+
+*VideoTutorials* - tutorials (performed in photoshop) with techniques to use in delaboratory 
+
 = blur hints (new in 0.2) = 
 
   * blur is *not for skin smoothing* - you can't draw on mask so it won't work this way (however you could achieve something like that if you blend *key* channel from original CMYK on blured layer)
