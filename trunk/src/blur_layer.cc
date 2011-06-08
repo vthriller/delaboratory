@@ -78,6 +78,11 @@ void deBlurLayer::setBlurDirection(deBlurDirection _direction)
     direction = _direction;
 }
 
+void deBlurLayer::onChangeColorSpace(const deLayerStack& layerStack)
+{
+    clearEnabledChannels();
+}
+
 void deBlurLayer::enableChannel(int c)
 {
     enabledChannels.insert(c);
@@ -86,16 +91,6 @@ void deBlurLayer::enableChannel(int c)
 void deBlurLayer::clearEnabledChannels()
 {
     enabledChannels.clear();
-}
-
-bool deBlurLayer::isChannelEnabled(int c) const
-{
-    return (enabledChannels.count(c) == 1);
-}
-
-void deBlurLayer::onChangeColorSpace(const deLayerStack& layerStack)
-{
-    clearEnabledChannels();
 }
 
 const std::set<int>& deBlurLayer::getEnabledChannels() const

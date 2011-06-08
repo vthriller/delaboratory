@@ -28,6 +28,7 @@ deNDLayer::deNDLayer(const std::string& _name)
 :deLayer(_name)
 {
     mode = deBlendMultiply;
+    clearEnabledChannels();
 }
 
 deNDLayer::~deNDLayer()
@@ -47,7 +48,7 @@ dePreview* deNDLayer::createPreview(dePreviewStack& previewStack)
 
     dePreview* preview = new dePreview(colorSpace, sourceSize);
 
-    blend(*sourcePreview, nd, *preview, mode);
+    blend(*sourcePreview, nd, *preview, mode, enabledChannels);
 
     return preview;
 }
@@ -55,4 +56,24 @@ dePreview* deNDLayer::createPreview(dePreviewStack& previewStack)
 deActionFrame* deNDLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
     return new deNDFrame(parent, *this, project->getPreviewStack(), layerNumber);
+}
+
+void deNDLayer::onChangeColorSpace(const deLayerStack& layerStack)
+{
+    clearEnabledChannels();
+}
+
+void deNDLayer::enableChannel(int c)
+{
+    enabledChannels.insert(c);
+}
+
+void deNDLayer::clearEnabledChannels()
+{
+    enabledChannels.clear();
+}
+
+const std::set<int>& deNDLayer::getEnabledChannels() const
+{
+    return enabledChannels;
 }

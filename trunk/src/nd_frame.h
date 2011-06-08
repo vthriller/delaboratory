@@ -36,10 +36,13 @@ class deNDFrame:public deActionFrame
         deSlider* yCenterSlider;
         deSlider* powerSlider;
 
+        std::vector<wxCheckBox*> channels;
+
         wxChoice* ndTypeChoice;
         std::vector<deNDType> ndTypes;
 
         void choose(wxCommandEvent &event);
+        void check(wxCommandEvent &event);
 
     public:
         deNDFrame(wxWindow* parent, deNDLayer& _layer, dePreviewStack& _stack, int layerNumber);

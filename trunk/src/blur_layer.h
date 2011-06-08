@@ -48,7 +48,6 @@ class deBlurLayer:public deLayer
 
         void clearEnabledChannels();
         void enableChannel(int c);
-        bool isChannelEnabled(int c) const;
 
         const std::set<int>& getEnabledChannels() const;
 
