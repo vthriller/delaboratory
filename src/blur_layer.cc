@@ -97,3 +97,8 @@ void deBlurLayer::onChangeColorSpace(const deLayerStack& layerStack)
 {
     clearEnabledChannels();
 }
+
+const std::set<int>& deBlurLayer::getEnabledChannels() const
+{
+    return enabledChannels;
+}
