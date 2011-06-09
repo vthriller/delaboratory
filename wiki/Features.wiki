@@ -59,6 +59,7 @@ don't expect (may change in future):
   * healing brush, clone tool
   * dodge/burn
   * RAW support
+  * DAM (thumbnails browsing, ratings stars, copy and delete files, etc...)
 
 not sure about:
 
@@ -67,5 +68,3 @@ not sure about:
   * blend with color (like ND but not gray, so it won't work per-channel), not sure how to do it in different colorspaces, but some kind of color-filler must be implemented
   * sharpening - should be done in per-pixel editor like GIMP, but from the other side - it could be nice to have USM if blur is already here and it will be possible to sharpen only some channels, like K in CMYK or L in LAB
   * some kind of Zone System support, however I am not yet sure how it can be useful except as view type
-
-
