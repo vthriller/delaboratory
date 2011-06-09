@@ -101,3 +101,8 @@ bool deChannel::scale(const deChannel* channel)
     }
     return true;
 }
+
+const deValue* deChannel::getPixels() const
+{
+    return pixels;
+}

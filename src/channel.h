@@ -38,6 +38,8 @@ class deChannel:public deBaseChannel
         virtual deValue getValue(int pos) const;
         virtual void setValue(int pos, deValue value);
 
+        const deValue* getPixels() const;
+
 
 };
 

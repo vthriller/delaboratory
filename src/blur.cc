@@ -27,6 +27,8 @@ void blurVertical(const deChannel& source, deChannel& destination, int col, int 
     int w = size.getW();
     int h = size.getH();
 
+    const deValue* pixels = source.getPixels();
+
     int i;
     for (i = 0; i < h; i++)
     {
@@ -48,11 +50,8 @@ void blurVertical(const deChannel& source, deChannel& destination, int col, int 
         int j;
         for (j = n1; j <= n2; j++)
         {
-            int pos2 = j * w + col;
-            deValue v = source.getValue(pos2);
-            deValue weight = 1.0;
-            result += weight * v;
-            sum += weight;
+            result += pixels[j * w + col];
+            sum += 1.0;
         }
         result /= sum;
         int pos = i * w + col;
@@ -64,6 +63,8 @@ void blurHorizontal(const deChannel& source, deChannel& destination, int row, in
 {
     const deSize& size = source.getSize();
     int w = size.getW();
+
+    const deValue* pixels = source.getPixels();
 
     int p = row * w;
 
@@ -86,13 +87,10 @@ void blurHorizontal(const deChannel& source, deChannel& destination, int row, in
         }
         
         int j;
-        for (j = n1; j <= n2; j++)
+        for (j = n1; j <= n2; j = j + 2)
         {
-            int pos2 = p + j;
-            deValue v = source.getValue(pos2);
-            deValue weight = 1.0;
-            result += weight * v;
-            sum += weight;
+            result += pixels[p + j];
+            sum += 1.0;
         }
         result /= sum;
         int pos = p + i;
@@ -166,4 +164,5 @@ void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurD
             destinationPreview.getChannel(i)->copy(sourcePreview.getChannel(i));
         }
     }
+
 }
