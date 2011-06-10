@@ -18,15 +18,35 @@
 
 #include "curve_shape.h"
 #include <iostream>
+#include "curve_function_linear.h"
 
 deCurveShape::deCurveShape(int _size)
 :size(_size)
 {
-    values.reserve(size);
+    functions.reserve(size);
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        functions[i] = NULL;
+    }
 }
 
 deCurveShape::~deCurveShape()
 {
+    clearFunctions();
+}
+
+void deCurveShape::clearFunctions()
+{
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        if (functions[i] != NULL)
+        {
+            functions[i] = NULL;
+        }            
+        delete functions[i];
+    }
 }
 
 void deCurveShape::storeValues(deValue x1, deValue y1, deValue x2, deValue y2)
@@ -34,17 +54,10 @@ void deCurveShape::storeValues(deValue x1, deValue y1, deValue x2, deValue y2)
     int p1 = x1 * (size - 1);
     int p2 = x2 * (size - 1);
 
-    deValue a = 0;
-    if ( x2 > x1) 
-    {
-        a = (y2 - y1) / (x2 - x1);
-    }        
     int i;
-    deValue pp = x1;
     for (i = p1; i <= p2; i++)
     {
-        values[i] = y1 + a * (pp - x1);
-        pp += 1.0 / (size - 1);
+        functions[i] = new deCurveFunctionLinear(x1, y1, x2, y2);
     }
 
 }
@@ -54,19 +67,13 @@ deValue deCurveShape::calc(deValue value)
     deValue s = size - 1;
     int p = s * value;
 
-    deValue r = value - p / s;
-    deValue v1 = values[p] * (1 - r);
-    deValue v2 = 0;
-    if (r > 0)
-    {
-        v2 = values[p+1] * r;
-    }
-    return v1 + v2;
+    return functions[p]->calc(value);
 }
 
 void deCurveShape::build(const deCurvePoints& points)
 {
     nodes.clear();
+    clearFunctions();
     deCurvePoints::const_iterator j;
 
     for (j = points.begin(); j != points.end(); j++)
