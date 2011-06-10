@@ -178,7 +178,12 @@ const deCurvePoint& deCurve::getPoint(int n) const
     return *i;
 }
 
-void deCurve::getShapePoints(deCurvePoints& points) const
+void deCurve::getControlPoints(deCurvePoints& points) const
 {
-    shape.getShapePoints(points);
+    shape.getControlPoints(points);
+}
+
+void deCurve::getCurvePoints(deCurvePoints& points) const
+{
+    shape.getCurvePoints(points);
 }

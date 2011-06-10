@@ -131,25 +131,37 @@ void deCurvesPanel::drawCurve(wxDC& dc)
     {
         return;
     }
-    deCurvePoints points;
-    curve->getShapePoints(points);
+
     deCurvePoints::const_iterator i;
+
+    deCurvePoints curvePoints;
+    curve->getCurvePoints(curvePoints);
 
     deValue xp = -1;
     deValue yp = -1;
 
-    for (i = points.begin(); i != points.end(); i++)
+    for (i = curvePoints.begin(); i != curvePoints.end(); i++)
     {
         const deCurvePoint& point = *i;
         deValue x = point.getX();
         deValue y = point.getY();
-        drawPoint(dc, x, y);
         if (xp >= 0)
         {
             drawLine(dc, xp, yp, x, y);
         }
         xp = x;
         yp = y;
+    }
+
+    deCurvePoints controlPoints;
+    curve->getControlPoints(controlPoints);
+
+    for (i = controlPoints.begin(); i != controlPoints.end(); i++)
+    {
+        const deCurvePoint& point = *i;
+        deValue x = point.getX();
+        deValue y = point.getY();
+        drawPoint(dc, x, y);
     }
 }
 
