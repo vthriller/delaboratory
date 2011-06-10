@@ -16,36 +16,38 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_CURVE_SHAPE_H
-#define _DE_CURVE_SHAPE_H
+#include "curve_function_spline.h"
+#include <iostream>
+#include <cassert>
 
-#include <map>
-#include "value.h"
-#include "curve_point.h"
-#include <vector>
-
-typedef std::map<deValue, deValue> deNodes;
-class deCurveFunction;
-
-class deCurveShape
+deCurveFunctionSpline::deCurveFunctionSpline(deValue _xa_lo, deValue _ya_lo, deValue _y2a_lo, deValue _xa_hi, deValue _ya_hi, deValue _y2a_hi)
+:xa_lo(_xa_lo),
+ ya_lo(_ya_lo),
+ y2a_lo(_y2a_lo),
+ xa_hi(_xa_hi),
+ ya_hi(_ya_hi),
+ y2a_hi(_y2a_hi)
 {
-    private:
-        deNodes nodes;
-        std::vector<deCurveFunction*> functions;
-        int size;
+}
 
-        void storeValues(deValue x1, deValue y1, deValue x2, deValue y2);
-        void clearFunctions();
-        void generateSpline();
-    public:
-        deCurveShape(int _size);
-        ~deCurveShape();
+deCurveFunctionSpline::~deCurveFunctionSpline()
+{
+}
 
-        void build(const deCurvePoints& points);
-        void getControlPoints(deCurvePoints& points) const;
-        void getCurvePoints(deCurvePoints& points) const;
 
-        deValue calc(deValue value);
-};
+deValue deCurveFunctionSpline::calc(deValue value) const
+{
+    if (xa_hi == xa_lo)
+    {
+        return ya_lo;
+    }
 
-#endif
+    assert(xa_hi > xa_lo);
+
+    deValue h = xa_hi - xa_lo;
+    deValue a = ( xa_hi - value ) / h;
+    deValue b = ( value - xa_lo ) / h;
+
+    return a * ya_lo + b * ya_hi + ( (a*a*a-a) * y2a_lo + (b*b*b-b)*y2a_hi ) * (h*h) / 6.0;
+}    
+

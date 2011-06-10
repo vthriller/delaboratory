@@ -45,7 +45,8 @@ class deCurve
         void process(const deBaseChannel& source, deBaseChannel& destination);
 
         const deCurvePoints& getPoints() const;
-        void getShapePoints(deCurvePoints& points) const;
+        void getControlPoints(deCurvePoints& points) const;
+        void getCurvePoints(deCurvePoints& points) const;
         const deCurvePoint& getPoint(int n) const;
 };
 

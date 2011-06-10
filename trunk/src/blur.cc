@@ -87,7 +87,7 @@ void blurHorizontal(const deChannel& source, deChannel& destination, int row, in
         }
         
         int j;
-        for (j = n1; j <= n2; j = j + 2)
+        for (j = n1; j <= n2; j++)
         {
             result += pixels[p + j];
             sum += 1.0;
