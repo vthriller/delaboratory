@@ -17,7 +17,7 @@ delaboratory should be used in the middle of the workflow - after RAW processing
   * experiment with different channels in different colorspaces (in *LAB* blur only A and B channels)
   * you must choose horizontal or vertical direction, if you need both just use two layers one after another
   * if you select big radius it will be slow, it may be a good idea to type the radius in the text field instead using slider
-  * blur can be really slow, if you set it to 0.1 it means 10% width of image per pixel, it means that for image of width 4000 pixels there will be 4000 * 400 = 1 600 000 calculations per single line of image, so you will need to wait minutes for calculations of final image, solution: use smaller values 
+  * blur can be really slow, if you set it to 0.1 it means 10% width of image per pixel, it means that for image of width 4000 pixels there will be 1 600 000 calculations per single line of image, so you will need to wait minutes for calculations of final image, solution: use smaller values 
 
 = ND hints (new in 0.2) =
 
