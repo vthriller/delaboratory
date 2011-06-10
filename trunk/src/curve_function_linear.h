@@ -16,34 +16,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_CURVE_SHAPE_H
-#define _DE_CURVE_SHAPE_H
+#ifndef _DE_CURVE_FUNCTION_LINEAR_H
+#define _DE_CURVE_FUNCTION_LINEAR_H
 
-#include <map>
-#include "value.h"
-#include "curve_point.h"
-#include <vector>
+#include "curve_function.h"
 
-typedef std::map<deValue, deValue> deNodes;
-class deCurveFunction;
-
-class deCurveShape
+class deCurveFunctionLinear:public deCurveFunction
 {
     private:
-        deNodes nodes;
-        std::vector<deCurveFunction*> functions;
-        int size;
-
-        void storeValues(deValue x1, deValue y1, deValue x2, deValue y2);
-        void clearFunctions();
+        deValue a;
+        deValue b;
     public:
-        deCurveShape(int _size);
-        ~deCurveShape();
+        deCurveFunctionLinear(deValue x1, deValue y1, deValue x2, deValue y2);
+        virtual ~deCurveFunctionLinear();
 
-        void build(const deCurvePoints& points);
-        void getShapePoints(deCurvePoints& points) const;
-
-        deValue calc(deValue value);
+        virtual deValue calc(deValue value) const;
 };
 
 #endif
