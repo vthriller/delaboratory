@@ -34,6 +34,7 @@ class deLayer
         deLayer(const deLayer& layer);
         deLayer& operator = (const deLayer& layer);
         deActionFrame* actionFrame;
+        deLayerStack& stack;
 
     protected:
         std::string name;
@@ -42,7 +43,7 @@ class deLayer
         int overlayLayer;
 
     public:
-        deLayer(const std::string& _name);
+        deLayer(deLayerStack& _stack, const std::string& _name);
         virtual ~deLayer();
 
         virtual dePreview* createPreview(dePreviewStack& previewStack) = 0;

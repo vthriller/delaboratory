@@ -26,8 +26,8 @@
 #include "converter.h"
 #include "layer_dialog.h"
 
-deConversionLayer::deConversionLayer(const std::string& _name)
-:deLayer(_name)
+deConversionLayer::deConversionLayer(deLayerStack& _stack, const std::string& _name)
+:deLayer(_stack, _name)
 {
 }
 

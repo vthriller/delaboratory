@@ -27,8 +27,8 @@
 #include "project.h"
 #include "layer_dialog.h"
 
-deBlendLayer::deBlendLayer(const std::string& _name)
-:deLayer(_name)
+deBlendLayer::deBlendLayer(deLayerStack& _stack, const std::string& _name)
+:deLayer(_stack, _name)
 {
     overlayLayer = -1;
     alpha = 0.5;

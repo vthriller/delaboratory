@@ -32,7 +32,7 @@ class deNDLayer:public deLayer
         std::set<int> enabledChannels;
 
     public:
-        deNDLayer(const std::string& _name);
+        deNDLayer(deLayerStack& _stack, const std::string& _name);
         virtual ~deNDLayer();
 
         virtual bool canChangeSourceLayer() const {return true;};

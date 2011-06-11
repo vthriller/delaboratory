@@ -31,7 +31,7 @@ class deBlurLayer:public deLayer
         std::set<int> enabledChannels;
 
     public:
-        deBlurLayer(const std::string& _name);
+        deBlurLayer(deLayerStack& _stack, const std::string& _name);
         virtual ~deBlurLayer();
 
         virtual bool canChangeSourceLayer() const {return true;};

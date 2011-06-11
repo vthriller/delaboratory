@@ -32,7 +32,7 @@ class deBlendLayer:public deLayer
         bool singleDestinationChannel;
         deBlendMode blendMode;
     public:
-        deBlendLayer(const std::string& _name);
+        deBlendLayer(deLayerStack& _stack, const std::string& _name);
         virtual ~deBlendLayer();
 
         virtual bool canChangeSourceLayer() const {return true;};
