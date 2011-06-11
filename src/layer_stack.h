@@ -23,13 +23,11 @@
 
 class deLayer;
 class deSampler;
-//class deProject;
 
 class deLayerStack
 {
     private:
         std::vector<deLayer*> layers;
-//        deProject* project;
         
     public:
         deLayerStack();
@@ -44,7 +42,6 @@ class deLayerStack
         void traceSampler(deSampler* sampler);
         void updateColorSpaces();
 
-//        void setProject(deProject* _project);
 };
 
 #endif
