@@ -58,7 +58,7 @@ void deCurvesLayer::deleteCurves()
     }
 }
 
-void deCurvesLayer::onChangeSourceLayer(const deLayerStack& layerStack)
+void deCurvesLayer::onChangeColorSpace()
 {
     resetCurves();
 }

@@ -34,9 +34,9 @@ class deLayer
         deLayer(const deLayer& layer);
         deLayer& operator = (const deLayer& layer);
         deActionFrame* actionFrame;
-        deLayerStack& stack;
 
     protected:
+        deLayerStack& stack;
         std::string name;
         deColorSpace colorSpace;
         int sourceLayer;
@@ -56,9 +56,9 @@ class deLayer
         void changeOverlayLayer(int id);
         void changeColorSpace(deColorSpace _colorSpace);
 
-        virtual void onChangeColorSpace(const deLayerStack& layerStack) {};
-        virtual void onChangeSourceLayer(const deLayerStack& layerStack) {};
-        virtual void onChangeOverlayLayer(const deLayerStack& layerStack) {};
+        virtual void onChangeColorSpace() {};
+        virtual void onChangeSourceLayer() {};
+        virtual void onChangeOverlayLayer() {};
 
         void updateColorSpace();
 

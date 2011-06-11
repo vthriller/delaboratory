@@ -36,7 +36,7 @@ class deNDLayer:public deLayer
         virtual ~deNDLayer();
 
         virtual bool canChangeSourceLayer() const {return true;};
-        virtual void onChangeColorSpace(const deLayerStack& layerStack);
+        virtual void onChangeColorSpace();
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
 

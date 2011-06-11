@@ -27,7 +27,7 @@ class deMixerLayer:public deLayer
 {
     private:
         deMixer* mixer;
-        void recreateMixer(const deLayerStack& layerStack);
+        void recreateMixer();
 
     public:
         deMixerLayer(deLayerStack& _stack, const std::string& _name);
@@ -36,8 +36,8 @@ class deMixerLayer:public deLayer
         virtual bool canChangeSourceLayer() const {return true;};
         virtual bool canChangeColorSpace() const {return true;};
 
-        virtual void onChangeColorSpace(const deLayerStack& layerStack);
-        virtual void onChangeSourceLayer(const deLayerStack& layerStack);
+        virtual void onChangeColorSpace();
+        virtual void onChangeSourceLayer();
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
 
