@@ -39,7 +39,7 @@ class deCurvesLayer:public deLayer
 
         virtual bool canChangeSourceLayer() const {return true;};
 
-        virtual void onChangeSourceLayer(const deLayerStack& layerStack);
+        virtual void onChangeColorSpace();
         virtual dePreview* createPreview(dePreviewStack& previewStack);
 
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);

@@ -86,19 +86,19 @@ void deLayer::changeSourceLayer(int id)
     sourceLayer = id;
     overlayLayer = id;
     updateColorSpace();
-    onChangeSourceLayer(stack);
+    onChangeSourceLayer();
 }
 
 void deLayer::changeOverlayLayer(int id)
 {
     overlayLayer = id;
-    onChangeOverlayLayer(stack);
+    onChangeOverlayLayer();
 }
 
 void deLayer::changeColorSpace(deColorSpace _colorSpace)
 {
     colorSpace = _colorSpace;
-    onChangeColorSpace(stack);
+    onChangeColorSpace();
 }
 
 void deLayer::updateColorSpace()

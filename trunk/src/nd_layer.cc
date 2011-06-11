@@ -58,7 +58,7 @@ deActionFrame* deNDLayer::createActionFrame(wxWindow* parent, int layerNumber, d
     return new deNDFrame(parent, *this, project->getPreviewStack(), layerNumber);
 }
 
-void deNDLayer::onChangeColorSpace(const deLayerStack& layerStack)
+void deNDLayer::onChangeColorSpace()
 {
     clearEnabledChannels();
 }

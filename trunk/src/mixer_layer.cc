@@ -43,13 +43,13 @@ deActionFrame* deMixerLayer::createActionFrame(wxWindow* parent, int layerNumber
     return new deMixerFrame(parent, *this, project->getPreviewStack(), layerNumber);
 }
 
-void deMixerLayer::recreateMixer(const deLayerStack& layerStack)
+void deMixerLayer::recreateMixer()
 {
     if (colorSpace == deColorSpaceInvalid)
     {
         return;
     }
-    const deLayer* source = layerStack.getLayer(sourceLayer);
+    const deLayer* source = stack.getLayer(sourceLayer);
     if (!source)
     {
         return;
@@ -61,14 +61,14 @@ void deMixerLayer::recreateMixer(const deLayerStack& layerStack)
     mixer = new deMixer(source->getColorSpace(), colorSpace);
 }
 
-void deMixerLayer::onChangeColorSpace(const deLayerStack& layerStack)
+void deMixerLayer::onChangeColorSpace()
 {
-    recreateMixer(layerStack);
+    recreateMixer();
 }
 
-void deMixerLayer::onChangeSourceLayer(const deLayerStack& layerStack)
+void deMixerLayer::onChangeSourceLayer()
 {
-    recreateMixer(layerStack);
+    recreateMixer();
 }
 
 dePreview* deMixerLayer::createPreview(dePreviewStack& previewStack)

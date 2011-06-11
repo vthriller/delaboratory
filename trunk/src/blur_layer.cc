@@ -78,7 +78,7 @@ void deBlurLayer::setBlurDirection(deBlurDirection _direction)
     direction = _direction;
 }
 
-void deBlurLayer::onChangeColorSpace(const deLayerStack& layerStack)
+void deBlurLayer::onChangeColorSpace()
 {
     clearEnabledChannels();
 }
