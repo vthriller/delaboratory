@@ -39,7 +39,7 @@ void deLayerDialog::clickApply(wxCommandEvent &event)
             int currentSource = layer.getSourceLayerID();
             if (source != currentSource)
             {
-                layer.changeSourceLayer(source, project->getLayerStack());
+                layer.changeSourceLayer(source);
             }
     }
 
@@ -50,7 +50,7 @@ void deLayerDialog::clickApply(wxCommandEvent &event)
             deColorSpace colorSpace = colorSpaces[c];
             if (colorSpace != currentColorSpace)
             {
-                layer.changeColorSpace(colorSpace, project->getLayerStack());
+                layer.changeColorSpace(colorSpace);
             }
     }
 
@@ -60,7 +60,7 @@ void deLayerDialog::clickApply(wxCommandEvent &event)
             int currentOverlay = layer.getOverlayLayerID();
             if (overlay != currentOverlay)
             {
-                layer.changeOverlayLayer(overlay, project->getLayerStack());
+                layer.changeOverlayLayer(overlay);
             }
     }
 

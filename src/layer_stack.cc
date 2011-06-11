@@ -83,6 +83,6 @@ void deLayerStack::updateColorSpaces()
     std::vector<deLayer*>::iterator i;
     for (i = layers.begin(); i != layers.end(); i++)
     {
-        (*i)->updateColorSpace(*this);
+        (*i)->updateColorSpace();
     }        
 }

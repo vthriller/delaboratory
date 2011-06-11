@@ -81,39 +81,39 @@ wxDialog* deLayer::createDialog(wxWindow* parent, int layerNumber, deProject* pr
     return dialog;
 }
 
-void deLayer::changeSourceLayer(int id, const deLayerStack& layerStack)
+void deLayer::changeSourceLayer(int id)
 {
     sourceLayer = id;
     overlayLayer = id;
-    updateColorSpace(layerStack);
-    onChangeSourceLayer(layerStack);
+    updateColorSpace();
+    onChangeSourceLayer(stack);
 }
 
-void deLayer::changeOverlayLayer(int id, const deLayerStack& layerStack)
+void deLayer::changeOverlayLayer(int id)
 {
     overlayLayer = id;
-    onChangeOverlayLayer(layerStack);
+    onChangeOverlayLayer(stack);
 }
 
-void deLayer::changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack)
+void deLayer::changeColorSpace(deColorSpace _colorSpace)
 {
     colorSpace = _colorSpace;
-    onChangeColorSpace(layerStack);
+    onChangeColorSpace(stack);
 }
 
-void deLayer::updateColorSpace(const deLayerStack& layerStack)
+void deLayer::updateColorSpace()
 {
     if ((colorSpace != deColorSpaceInvalid) && (canChangeColorSpace()))
     {
         return;
     }
-    deLayer* source = layerStack.getLayer(sourceLayer);
+    deLayer* source = stack.getLayer(sourceLayer);
     if (source)
     {
         deColorSpace c = source->getColorSpace();
         if (c != colorSpace)
         {
-            changeColorSpace(c, layerStack);
+            changeColorSpace(c);
         }
     }        
 }   
