@@ -52,15 +52,15 @@ class deLayer
         virtual bool canChangeOverlayLayer() const {return false;};
         virtual bool canChangeColorSpace() const {return false;};
 
-        void changeSourceLayer(int id, const deLayerStack& layerStack);
-        void changeOverlayLayer(int id, const deLayerStack& layerStack);
-        void changeColorSpace(deColorSpace _colorSpace, const deLayerStack& layerStack);
+        void changeSourceLayer(int id);
+        void changeOverlayLayer(int id);
+        void changeColorSpace(deColorSpace _colorSpace);
 
         virtual void onChangeColorSpace(const deLayerStack& layerStack) {};
         virtual void onChangeSourceLayer(const deLayerStack& layerStack) {};
         virtual void onChangeOverlayLayer(const deLayerStack& layerStack) {};
 
-        void updateColorSpace(const deLayerStack& layerStack);
+        void updateColorSpace();
 
         const deColorSpace& getColorSpace() const {return colorSpace;};
 

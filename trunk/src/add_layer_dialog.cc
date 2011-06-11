@@ -72,7 +72,7 @@ void deAddLayerFrame::click(wxCommandEvent &event)
 
         if (layer)
         {
-            layer->changeSourceLayer(project->getVisibleLayerID(), stack);
+            layer->changeSourceLayer(project->getVisibleLayerID());
             project->addLayer(layer);
         }         
 
