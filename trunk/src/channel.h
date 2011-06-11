@@ -39,8 +39,6 @@ class deChannel:public deBaseChannel
         virtual void setValue(int pos, deValue value);
 
         const deValue* getPixels() const;
-
-
 };
 
 #endif

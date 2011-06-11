@@ -24,7 +24,6 @@
 class dePreview;
 class deLayerStack;
 class dePreviewStack;
-class wxFrame;
 class wxWindow;
 class deProject;
 class deActionFrame;

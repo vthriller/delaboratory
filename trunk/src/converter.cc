@@ -157,11 +157,11 @@ void deConverter::storeRGB()
     deValue gg = 255 * values[5];
     deValue bb = 255 * values[6];
 
-    if ( rr > 255)
+    if ( rr >= 255)
     {
         data[dataPosition] = 255;
     }
-    else if (rr < 0)
+    else if (rr <= 0)
     {
         data[dataPosition] = 0;
     }
@@ -171,11 +171,11 @@ void deConverter::storeRGB()
     }
     dataPosition++;
 
-    if ( gg > 255)
+    if ( gg >= 255)
     {
         data[dataPosition] = 255;
     }
-    else if (gg < 0)
+    else if (gg <= 0)
     {
         data[dataPosition] = 0;
     }
@@ -185,11 +185,11 @@ void deConverter::storeRGB()
     }
     dataPosition++;
 
-    if ( bb > 255)
+    if ( bb >= 255)
     {
         data[dataPosition] = 255;
     }
-    else if (bb < 0)
+    else if (bb <= 0)
     {
         data[dataPosition] = 0;
     }
