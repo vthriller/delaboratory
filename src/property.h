@@ -16,27 +16,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_CONVERSION_LAYER_H
-#define _DE_CONVERSION_LAYER_H
+#ifndef _DE_PROPERTY_H
+#define _DE_PROPERTY_H
 
-#include "layer.h"
-#include "mixer.h"
-#include "color_space.h"
+class deLayer;
 
-class deConversionLayer:public deLayer
+class deProperty
 {
     private:
+        deLayer& parent;
 
     public:
-        deConversionLayer(const std::string& _name);
-        virtual ~deConversionLayer();
-
-        virtual bool canChangeSourceLayer() const {return true;};
-        virtual bool canChangeColorSpace() const {return true;};
-
-        virtual dePreview* createPreview(dePreviewStack& previewStack);
-
-        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
+        deProperty(deLayer& _parent);
+        virtual ~deProperty();
 
 };
 

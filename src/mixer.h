@@ -30,15 +30,11 @@ class deMixer
         deColorSpace sourceColorSpace;
         deColorSpace destinationColorSpace;
 
-//        int sourceChannels;
-//        int destinationChannels;
-
         deValue* values;
 
         deValue range;
 
     public:
-        //deMixer(int _sourceChannels, int _destinationChannels);
         deMixer(deColorSpace _sourceColorSpace, deColorSpace _destinationColorSpace);
         virtual ~deMixer();
 
@@ -55,7 +51,6 @@ class deMixer
         deValue getRangeMin() const;
         deValue getRangeMax() const;
     
-//        void changeDestinationColorSpace(deColorSpace _colorSpace);
 };
 
 #endif
