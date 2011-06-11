@@ -30,6 +30,6 @@ if you want to install it, su root and:
 
 = Windows = 
 
-As far as I know there are no problems with compiling delaboratory on Linux (don't know if anyone tried on BSD).
+As far as I know there are no problems with delaboratory on Linux (don't know if anyone tried on BSD).
 
-I am aware of two people who were trying to compile delaboratory on Windows, but they both compiled the code but had problems with their wxWidgets installation. So if you are able to compile anything using wxWidgets on Windows - please try to compile delaboratory and let me know, your experiences may be useful for others :)
+I am aware of two people who were trying to compile delaboratory on Windows, they both compiled the code but had problems with their wxWidgets installation. So if you are able to compile anything using wxWidgets on Windows - please try to compile delaboratory and let me know, your experiences may be useful for others :)
