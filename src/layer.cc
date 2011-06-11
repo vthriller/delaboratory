@@ -24,8 +24,8 @@
 #include "action_frame.h"
 #include "layer_dialog.h"
 
-deLayer::deLayer(const std::string& _name)
-:name(_name)
+deLayer::deLayer(deLayerStack& _stack, const std::string& _name)
+:stack(_stack), name(_name)
 {
     sourceLayer = -1;
     overlayLayer = -1;

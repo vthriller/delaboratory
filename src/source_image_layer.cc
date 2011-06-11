@@ -26,8 +26,8 @@
 #include <wx/wx.h>
 #include "layer_dialog.h"
 
-deSourceImageLayer::deSourceImageLayer(const deSourceImage& _sourceImage, const std::string& _name)
-:deLayer(_name), sourceImage(_sourceImage), previewSize(0,0)
+deSourceImageLayer::deSourceImageLayer(deLayerStack& _stack, const deSourceImage& _sourceImage, const std::string& _name)
+:deLayer(_stack, _name), sourceImage(_sourceImage), previewSize(0,0)
 {
     colorSpace =deColorSpaceRGB;
 }

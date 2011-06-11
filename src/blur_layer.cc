@@ -23,8 +23,8 @@
 #include "preview.h"
 #include "project.h"
 
-deBlurLayer::deBlurLayer(const std::string& _name)
-:deLayer(_name)
+deBlurLayer::deBlurLayer(deLayerStack& _stack, const std::string& _name)
+:deLayer(_stack, _name)
 {
     direction = deBlurHorizontal;
     radius = 0.01;

@@ -42,32 +42,32 @@ void deAddLayerFrame::click(wxCommandEvent &event)
 
         if (id == curvesButton->GetId())
         {
-            layer = new deCurvesLayer("curves");
+            layer = new deCurvesLayer(stack, "curves");
         }
 
         if (id == mixerButton->GetId())
         {
-            layer = new deMixerLayer("mixer");
+            layer = new deMixerLayer(stack, "mixer");
         }
 
         if (id == convertButton->GetId())
         {
-            layer = new deConversionLayer("conversion");
+            layer = new deConversionLayer(stack, "conversion");
         }
 
         if (id == blendButton->GetId())
         {
-            layer = new deBlendLayer("blend");
+            layer = new deBlendLayer(stack, "blend");
         }
 
         if (id == blurButton->GetId())
         {
-            layer = new deBlurLayer("blur");
+            layer = new deBlurLayer(stack, "blur");
         }
 
         if (id == ndButton->GetId())
         {
-            layer = new deNDLayer("nd");
+            layer = new deNDLayer(stack, "nd");
         }
 
         if (layer)

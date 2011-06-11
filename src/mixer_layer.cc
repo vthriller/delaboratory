@@ -24,8 +24,8 @@
 #include "project.h"
 #include "layer_dialog.h"
 
-deMixerLayer::deMixerLayer(const std::string& _name)
-:deLayer(_name)
+deMixerLayer::deMixerLayer(deLayerStack& _stack, const std::string& _name)
+:deLayer(_stack, _name)
 {
     mixer = NULL;
 }

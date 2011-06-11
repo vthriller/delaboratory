@@ -24,8 +24,8 @@
 #include "preview.h"
 #include "project.h"
 
-deNDLayer::deNDLayer(const std::string& _name)
-:deLayer(_name)
+deNDLayer::deNDLayer(deLayerStack& _stack, const std::string& _name)
+:deLayer(_stack, _name)
 {
     mode = deBlendMultiply;
     clearEnabledChannels();
