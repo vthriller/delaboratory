@@ -158,18 +158,8 @@ void deCurveShape::generateSpline()
     deValue *u = new deValue[n];
     deValue *y2 = new deValue[n + 1];
 
-    deValue yp1 = 1.0;
-
-    if (yp1 > 0.99e30)
-    {
-        y2[1] = 0.0;
-        u[1] = 0.0;
-    }        
-    else 
-    {
-        y2[1] = -0.5;
-        u[1] = ( 3.0 / ( x[2] - x[1] ) ) * ( ( y[2] - y[1] ) / ( x[2] - x[1] ) - yp1);
-    }
+    y2[1] = 0.0;
+    u[1] = 0.0;
 
     int i;
     for (i = 2 ; i <= n-1 ; i++)
@@ -181,23 +171,7 @@ void deCurveShape::generateSpline()
         u[i] = ( 6.0 * u[i] / (x[i+1] - x[i-1]) - sig * u[i-1]) / p;
     }
 
-    deValue qn;
-    deValue un;
-
-    deValue ypn = 1.0;
-
-    if (ypn > 0.99e30)
-    {
-        qn = 0.0;
-        un = 0.0;
-    }        
-    else 
-    {
-        qn = 0.5;
-        un = ( 3.0 / ( x[n] - x[n-1] ) ) * ( ypn - ( y[n] - y[n-1] )/( x[n] - x[n-1] ));
-    }
-
-    y2 [n] = (un - qn * u[n-1] ) / (qn * y2[n-1] + 1.0);
+    y2 [n] = 0.0;
 
     int k;
     for (k = n-1 ; k >=1 ; k--)
@@ -247,6 +221,5 @@ void deCurveShape::generateSpline()
     delete [] x;
     delete [] y;
     delete [] u;
-
     delete [] y2;
 }
