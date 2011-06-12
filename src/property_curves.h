@@ -16,34 +16,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_CURVES_LAYER_H
-#define _DE_CURVES_LAYER_H
+#ifndef _DE_PROPERTY_CURVES_H
+#define _DE_PROPERTY_CURVES_H
 
-#include "layer.h"
-#include "property_curves.h"
+#include "property.h"
+#include "curves.h"
 #include "color_space.h"
-class dePreview;
 
-class deCurvesLayer:public deLayer
+class dePropertyCurves:public deProperty
 {
     private:
-        dePropertyCurves curves;
+        deCurves curves;
+        int panelSize;
 
-        void resetCurves();
-        void processCurves(const dePreview& source, dePreview& destination);
-
+        void deleteCurves();
     public:
-        deCurvesLayer(deLayerStack& _stack, const std::string& _name);
-        virtual ~deCurvesLayer();
+        dePropertyCurves(deLayer& _parent, int _panelSize);
+        virtual ~dePropertyCurves();
 
-        virtual bool canChangeSourceLayer() const {return true;};
-
-        virtual void onChangeColorSpace();
-        virtual dePreview* createPreview(dePreviewStack& previewStack);
-
-        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
-
-        deCurves& getCurves() {return curves.getCurves();};
+        deCurves& getCurves() {return curves;};
+        void resetCurves(deColorSpace colorSpace);
+        deCurve* getCurve(int index);
 
 };
 

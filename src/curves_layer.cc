@@ -28,34 +28,17 @@
 #define CURVES_PANEL_SIZE 500
 
 deCurvesLayer::deCurvesLayer(deLayerStack& _stack, const std::string& _name)
-:deLayer(_stack, _name)
+:deLayer(_stack, _name), curves(*this, CURVES_PANEL_SIZE)
 {
 }
 
 deCurvesLayer::~deCurvesLayer()
 {
-    deleteCurves();
 }
 
 void deCurvesLayer::resetCurves()
 {
-    int n = getColorSpaceSize(colorSpace);
-    deleteCurves();
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        curves.push_back(new deCurve(CURVES_PANEL_SIZE));
-    }
-}
-
-void deCurvesLayer::deleteCurves()
-{
-    while (curves.size() > 0)
-    {
-        deCurves::iterator i = curves.begin();
-        delete (*i);
-        curves.erase(i);
-    }
+    curves.resetCurves(colorSpace);
 }
 
 void deCurvesLayer::onChangeColorSpace()
@@ -91,10 +74,13 @@ void deCurvesLayer::processCurves(const dePreview& source, dePreview& destinatio
     int i;
     for (i = 0; i < n; i++)
     {
-        deCurve& curve = *(curves.at(i));
-        const deBaseChannel* sourceChannel = source.getChannel(i);
-        deBaseChannel* destinationChannel = destination.getChannel(i);
-        curve.process(*sourceChannel, *destinationChannel);
+        deCurve* curve = curves.getCurve(i);
+        if (curve)
+        {
+            const deBaseChannel* sourceChannel = source.getChannel(i);
+            deBaseChannel* destinationChannel = destination.getChannel(i);
+            curve->process(*sourceChannel, *destinationChannel);
+        }            
     }
 
 }
