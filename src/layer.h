@@ -21,12 +21,14 @@
 
 #include <string>
 #include "color_space.h"
+#include "property_name.h"
 class dePreview;
 class deLayerStack;
 class dePreviewStack;
 class wxWindow;
 class deProject;
 class deActionFrame;
+
 
 class deLayer
 {
@@ -37,7 +39,7 @@ class deLayer
 
     protected:
         deLayerStack& stack;
-        std::string name;
+        dePropertyName name;
         deColorSpace colorSpace;
         int sourceLayer;
         int overlayLayer;
@@ -65,7 +67,7 @@ class deLayer
         const deColorSpace& getColorSpace() const {return colorSpace;};
 
         void setName(const std::string& _name);
-        const std::string& getName() const {return name;};
+        const std::string& getName() const {return name.getName();};
 
         wxDialog* createDialog(wxWindow* parent, int layerNumber, deProject* project);
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project) = 0;
