@@ -16,34 +16,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_MIXER_LAYER_H
-#define _DE_MIXER_LAYER_H
+#ifndef _DE_PROPERTY_MIXER_H
+#define _DE_PROPERTY_MIXER_H
 
-#include "layer.h"
+#include "property.h"
 #include "color_space.h"
-#include "property_mixer.h"
+class deMixer;
 
-class deMixerLayer:public deLayer
+class dePropertyMixer:public deProperty
 {
     private:
-        dePropertyMixer mixer;
-        void recreateMixer();
+        deMixer* mixer;
 
     public:
-        deMixerLayer(deLayerStack& _stack, const std::string& _name);
-        virtual ~deMixerLayer();
+        dePropertyMixer(deLayer& _parent);
+        virtual ~dePropertyMixer();
 
-        virtual bool canChangeSourceLayer() const {return true;};
-        virtual bool canChangeColorSpace() const {return true;};
+        deMixer* getMixer() {return mixer;};
 
-        virtual void onChangeColorSpace();
-        virtual void onChangeSourceLayer();
-
-        virtual dePreview* createPreview(dePreviewStack& previewStack);
-
-        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
-
-        deMixer* getMixer() {return mixer.getMixer();};
+        void recreateMixer(deColorSpace sc, deColorSpace dc);
 
 };
 
