@@ -20,14 +20,14 @@
 #define _DE_ND_LAYER_H
 
 #include "layer.h"
-#include "nd.h"
+#include "property_nd.h"
 #include "blend_mode.h"
 #include <set>
 
 class deNDLayer:public deLayer
 {
     private:
-        deND nd;
+        dePropertyND nd;
         deBlendMode mode;
         std::set<int> enabledChannels;
 
@@ -42,7 +42,7 @@ class deNDLayer:public deLayer
 
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
-        deND& getND() {return nd;};
+        deND& getND() {return nd.getND();};
 
         void clearEnabledChannels();
         void enableChannel(int c);
