@@ -42,7 +42,7 @@ deActionFrame* deConversionLayer::createActionFrame(wxWindow* parent, int layerN
 
 dePreview* deConversionLayer::createPreview(dePreviewStack& previewStack)
 {
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer);
+    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
 
     if (!sourcePreview)
     {

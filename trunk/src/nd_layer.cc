@@ -37,7 +37,7 @@ deNDLayer::~deNDLayer()
 
 dePreview* deNDLayer::createPreview(dePreviewStack& previewStack)
 {
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer);
+    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
 
     if (!sourcePreview)
     {

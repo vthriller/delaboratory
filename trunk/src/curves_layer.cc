@@ -48,7 +48,7 @@ void deCurvesLayer::onChangeColorSpace()
 
 dePreview* deCurvesLayer::createPreview(dePreviewStack& previewStack)
 {
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer);
+    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
 
     if (!sourcePreview)
     {
