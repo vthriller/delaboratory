@@ -24,10 +24,10 @@
 #include "project.h"
 
 deBlurLayer::deBlurLayer(deLayerStack& _stack, const std::string& _name)
-:deLayer(_stack, _name)
+:deLayer(_stack, _name), radius(*this)
 {
     direction = deBlurHorizontal;
-    radius = 0.01;
+    radius.setValue(0.01);
     clearEnabledChannels();
 }
 
@@ -48,7 +48,7 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
 
     dePreview* preview = new dePreview(colorSpace, sourceSize);
 
-    blur(*sourcePreview, *preview, direction, radius, enabledChannels);
+    blur(*sourcePreview, *preview, direction, radius.getValue(), enabledChannels);
 
     return preview;
 }
@@ -65,12 +65,12 @@ deBlurDirection deBlurLayer::getBlurDirection() const
 
 deValue deBlurLayer::getBlurRadius() const
 {
-    return radius;
+    return radius.getValue();
 }
 
 void deBlurLayer::setBlurRadius(deValue _radius)
 {
-    radius = _radius;
+    radius.setValue(_radius);
 }
 
 void deBlurLayer::setBlurDirection(deBlurDirection _direction)
