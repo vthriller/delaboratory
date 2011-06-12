@@ -23,19 +23,15 @@
 #include "preview_stack.h"
 #include "project.h"
 #include "layer_dialog.h"
+#include "mixer.h"
 
 deMixerLayer::deMixerLayer(deLayerStack& _stack, const std::string& _name)
-:deLayer(_stack, _name)
+:deLayer(_stack, _name), mixer(*this)
 {
-    mixer = NULL;
 }
 
 deMixerLayer::~deMixerLayer()
 {
-    if (mixer)
-    {
-        delete mixer;
-    }        
 }
 
 deActionFrame* deMixerLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
@@ -54,11 +50,7 @@ void deMixerLayer::recreateMixer()
     {
         return;
     }
-    if (mixer)
-    {
-        delete mixer;
-    }
-    mixer = new deMixer(source->getColorSpace(), colorSpace);
+    mixer.recreateMixer(source->getColorSpace(), colorSpace);
 }
 
 void deMixerLayer::onChangeColorSpace()
@@ -84,9 +76,9 @@ dePreview* deMixerLayer::createPreview(dePreviewStack& previewStack)
 
     dePreview* preview = new dePreview(colorSpace, sourceSize);
 
-    if (mixer)
+    if (mixer.getMixer())
     {
-        mixer->calc(*sourcePreview, *preview);
+        mixer.getMixer()->calc(*sourcePreview, *preview);
     }        
 
     return preview;
