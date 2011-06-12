@@ -25,8 +25,9 @@
 #include "layer_dialog.h"
 
 deLayer::deLayer(deLayerStack& _stack, const std::string& _name)
-:stack(_stack), name(_name)
+:stack(_stack), name(*this)
 {
+    name.setName(_name);
     sourceLayer = -1;
     overlayLayer = -1;
     colorSpace = deColorSpaceInvalid;
@@ -44,7 +45,7 @@ deLayer::~deLayer()
 
 void deLayer::setName(const std::string& _name)
 {
-    name = _name;
+    name.setName(_name);
 }
 
 void deLayer::closeActionFrame()
