@@ -51,7 +51,7 @@ dePreview* deConversionLayer::createPreview(dePreviewStack& previewStack)
 
     const deSize& sourceSize = sourcePreview->getSize();
 
-    dePreview* preview = new dePreview(colorSpace, sourceSize);
+    dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
     deConverter converter;
     converter.setSource(sourcePreview);
@@ -60,7 +60,7 @@ dePreview* deConversionLayer::createPreview(dePreviewStack& previewStack)
 
     if (!result)
     {
-        previewStack.setError("direct conversion from " + getColorSpaceName(sourcePreview->getColorSpace()) + " to " + getColorSpaceName(colorSpace) + " not supported");
+        previewStack.setError("direct conversion from " + getColorSpaceName(sourcePreview->getColorSpace()) + " to " + getColorSpaceName(colorSpace.getColorSpace()) + " not supported");
         delete preview;
         preview = NULL;
     }        

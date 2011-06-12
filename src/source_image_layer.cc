@@ -29,7 +29,7 @@
 deSourceImageLayer::deSourceImageLayer(deLayerStack& _stack, const deSourceImage& _sourceImage, const std::string& _name)
 :deLayer(_stack, _name), sourceImage(_sourceImage), previewSize(0,0)
 {
-    colorSpace =deColorSpaceRGB;
+    colorSpace.setColorSpace(deColorSpaceRGB);
 }
 
 deSourceImageLayer::~deSourceImageLayer()
