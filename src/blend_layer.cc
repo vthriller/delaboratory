@@ -30,7 +30,6 @@
 deBlendLayer::deBlendLayer(deLayerStack& _stack, const std::string& _name)
 :deLayer(_stack, _name)
 {
-    overlayLayer = -1;
     alpha = 0.5;
     overlayChannel = -1;
     destinationChannel = -1;
@@ -57,7 +56,7 @@ deActionFrame* deBlendLayer::createActionFrame(wxWindow* parent, int layerNumber
 
 dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
 {
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer);
+    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
 
     if (!sourcePreview)
     {
@@ -68,7 +67,7 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
 
     dePreview* preview = new dePreview(colorSpace, sourceSize);
 
-    const dePreview* overlayPreview = previewStack.getPreview(overlayLayer);
+    const dePreview* overlayPreview = previewStack.getPreview(overlayLayer.getIndex());
     if (!overlayPreview)
     {
         throw deException("no overlayPreview in blend layer");

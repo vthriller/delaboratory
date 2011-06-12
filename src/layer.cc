@@ -25,11 +25,9 @@
 #include "layer_dialog.h"
 
 deLayer::deLayer(deLayerStack& _stack, const std::string& _name)
-:stack(_stack), name(*this)
+:stack(_stack), name(*this), sourceLayer(*this), overlayLayer(*this)
 {
     name.setName(_name);
-    sourceLayer = -1;
-    overlayLayer = -1;
     colorSpace = deColorSpaceInvalid;
     actionFrame = NULL;
 }
@@ -84,15 +82,15 @@ wxDialog* deLayer::createDialog(wxWindow* parent, int layerNumber, deProject* pr
 
 void deLayer::changeSourceLayer(int id)
 {
-    sourceLayer = id;
-    overlayLayer = id;
+    sourceLayer.setIndex(id);
+    overlayLayer.setIndex(id);
     updateColorSpace();
     onChangeSourceLayer();
 }
 
 void deLayer::changeOverlayLayer(int id)
 {
-    overlayLayer = id;
+    overlayLayer.setIndex(id);
     onChangeOverlayLayer();
 }
 
@@ -108,7 +106,7 @@ void deLayer::updateColorSpace()
     {
         return;
     }
-    deLayer* source = stack.getLayer(sourceLayer);
+    deLayer* source = stack.getLayer(sourceLayer.getIndex());
     if (source)
     {
         deColorSpace c = source->getColorSpace();

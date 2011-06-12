@@ -22,6 +22,7 @@
 #include <string>
 #include "color_space.h"
 #include "property_name.h"
+#include "property_layer_index.h"
 class dePreview;
 class deLayerStack;
 class dePreviewStack;
@@ -41,8 +42,8 @@ class deLayer
         deLayerStack& stack;
         dePropertyName name;
         deColorSpace colorSpace;
-        int sourceLayer;
-        int overlayLayer;
+        dePropertyLayerIndex sourceLayer;
+        dePropertyLayerIndex overlayLayer;
 
     public:
         deLayer(deLayerStack& _stack, const std::string& _name);
@@ -77,8 +78,8 @@ class deLayer
 
         virtual const std::string getDescription() const {return "base layer";};
 
-        int getSourceLayerID() const {return sourceLayer;};
-        int getOverlayLayerID() const {return overlayLayer;};
+        int getSourceLayerID() const {return sourceLayer.getIndex();};
+        int getOverlayLayerID() const {return overlayLayer.getIndex();};
 
 };
 
