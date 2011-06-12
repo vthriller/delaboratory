@@ -65,7 +65,7 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
 
     const deSize& sourceSize = sourcePreview->getSize();
 
-    dePreview* preview = new dePreview(colorSpace, sourceSize);
+    dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
     const dePreview* overlayPreview = previewStack.getPreview(overlayLayer.getIndex());
     if (!overlayPreview)

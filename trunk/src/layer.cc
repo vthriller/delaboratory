@@ -25,10 +25,9 @@
 #include "layer_dialog.h"
 
 deLayer::deLayer(deLayerStack& _stack, const std::string& _name)
-:stack(_stack), name(*this), sourceLayer(*this), overlayLayer(*this)
+:stack(_stack), name(*this), sourceLayer(*this), overlayLayer(*this), colorSpace(*this)
 {
     name.setName(_name);
-    colorSpace = deColorSpaceInvalid;
     actionFrame = NULL;
 }
 
@@ -96,13 +95,13 @@ void deLayer::changeOverlayLayer(int id)
 
 void deLayer::changeColorSpace(deColorSpace _colorSpace)
 {
-    colorSpace = _colorSpace;
+    colorSpace.setColorSpace(_colorSpace);
     onChangeColorSpace();
 }
 
 void deLayer::updateColorSpace()
 {
-    if ((colorSpace != deColorSpaceInvalid) && (canChangeColorSpace()))
+    if ((colorSpace.getColorSpace() != deColorSpaceInvalid) && (canChangeColorSpace()))
     {
         return;
     }
@@ -110,7 +109,7 @@ void deLayer::updateColorSpace()
     if (source)
     {
         deColorSpace c = source->getColorSpace();
-        if (c != colorSpace)
+        if (c != colorSpace.getColorSpace())
         {
             changeColorSpace(c);
         }

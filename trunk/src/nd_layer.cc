@@ -46,7 +46,7 @@ dePreview* deNDLayer::createPreview(dePreviewStack& previewStack)
 
     const deSize& sourceSize = sourcePreview->getSize();
 
-    dePreview* preview = new dePreview(colorSpace, sourceSize);
+    dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
     blend(*sourcePreview, nd.getND(), *preview, mode, enabledChannels);
 

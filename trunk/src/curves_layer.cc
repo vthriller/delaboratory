@@ -38,7 +38,7 @@ deCurvesLayer::~deCurvesLayer()
 
 void deCurvesLayer::resetCurves()
 {
-    curves.resetCurves(colorSpace);
+    curves.resetCurves(colorSpace.getColorSpace());
 }
 
 void deCurvesLayer::onChangeColorSpace()
@@ -57,7 +57,7 @@ dePreview* deCurvesLayer::createPreview(dePreviewStack& previewStack)
 
     const deSize& sourceSize = sourcePreview->getSize();
 
-    dePreview* preview = new dePreview(colorSpace, sourceSize);
+    dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
     processCurves(*sourcePreview, *preview);
     return preview;
@@ -70,7 +70,7 @@ deActionFrame* deCurvesLayer::createActionFrame(wxWindow* parent, int layerNumbe
 
 void deCurvesLayer::processCurves(const dePreview& source, dePreview& destination)
 {
-    int n = getColorSpaceSize(colorSpace);
+    int n = getColorSpaceSize(colorSpace.getColorSpace());
     int i;
     for (i = 0; i < n; i++)
     {
