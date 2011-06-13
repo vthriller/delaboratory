@@ -21,18 +21,19 @@
 
 #include "layer.h"
 #include "property_nd.h"
-#include "blend_mode.h"
+#include "property_channels.h"
+#include "property_blend_mode.h"
 #include <set>
 
 class deNDLayer:public deLayer
 {
     private:
         dePropertyND nd;
-        deBlendMode mode;
-        std::set<int> enabledChannels;
+        dePropertyBlendMode blendMode;
+        dePropertyChannels channels;
 
     public:
-        deNDLayer(deLayerStack& _stack, const std::string& _name);
+        deNDLayer(deLayerStack& _stack, int _index, const std::string& _name);
         virtual ~deNDLayer();
 
         virtual bool canChangeSourceLayer() const {return true;};
@@ -47,7 +48,7 @@ class deNDLayer:public deLayer
         void clearEnabledChannels();
         void enableChannel(int c);
 
-        const std::set<int>& getEnabledChannels() const;
+        const deChannels& getEnabledChannels() const;
 
 };
 

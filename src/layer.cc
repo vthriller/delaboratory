@@ -18,14 +18,16 @@
 
 #include "layer.h"
 #include "layer_stack.h"
+#include "layer_frame.h"
 #include "size.h"
 #include "preview.h"
 #include <iostream>
 #include "action_frame.h"
 #include "layer_dialog.h"
+#include "project.h"
 
-deLayer::deLayer(deLayerStack& _stack, const std::string& _name)
-:stack(_stack), name(*this), sourceLayer(*this), overlayLayer(*this), colorSpace(*this)
+deLayer::deLayer(deLayerStack& _stack, int _index, const std::string& _name)
+:stack(_stack), index(_index), name(*this), sourceLayer(*this), overlayLayer(*this), colorSpace(*this)
 {
     name.setName(_name);
     actionFrame = NULL;
@@ -115,3 +117,22 @@ void deLayer::updateColorSpace()
         }
     }        
 }   
+
+void deLayer::registerProperty(deProperty& property)
+{
+    properties.push_back(&property);
+}
+
+deActionFrame* deLayer::createLayerFrame(wxWindow* parent, int layerNumber, deProject* project)
+{
+    deLayerFrame* frame = new deLayerFrame(parent, *this, project->getPreviewStack());
+    deProperties::iterator i;
+    for (i = properties.begin(); i != properties.end(); i++)
+    {
+        frame->addProperty(*i);
+    }
+
+    frame->Fit();
+
+    return frame;
+}

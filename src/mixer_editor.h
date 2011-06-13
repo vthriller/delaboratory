@@ -16,37 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "property_mixer.h"
-#include "mixer_editor.h"
-#include "mixer.h"
-#include "mixer_layer.h"
+#ifndef _DE_MIXER_FRAME_H
+#define _DE_MIXER_FRAME_H
 
-dePropertyMixer::dePropertyMixer(deLayer& _parent)
-:deProperty(_parent)
-{
-    mixer = NULL;
-}
+#include <wx/wx.h>
+#include <vector>
+class deMixerLayer;
+class dePreviewStack;
+class deMixerSlider;
 
-dePropertyMixer::~dePropertyMixer()
+class deMixerEditor:public wxPanel
 {
-    if (mixer)
-    {
-        delete mixer;
-    }        
-}
+    private:
+        deMixerLayer& mixerLayer;
+        std::vector<deMixerSlider*> sliders;
 
-void dePropertyMixer::recreateMixer(deColorSpace sc, deColorSpace dc)
-{
-    if (mixer)
-    {
-        delete mixer;
-    }
-    mixer = new deMixer(sc, dc);
-}
+        int number;
+        int sliderRange;
 
-void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
-{
-    deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(parent);
-    wxPanel* mixerEditor = new deMixerEditor(panel, mixerLayer, stack, parent.getIndex());
-    sizer->Add(mixerEditor);
-}    
+    public:
+        deMixerEditor(wxWindow *parent, deMixerLayer& _mixerLayer, dePreviewStack& _stack, int layerNumber);
+        virtual ~deMixerEditor();
+
+};
+
+
+#endif

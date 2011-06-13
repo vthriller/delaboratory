@@ -16,37 +16,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "property_mixer.h"
-#include "mixer_editor.h"
-#include "mixer.h"
-#include "mixer_layer.h"
+#ifndef _DE_CURVES_FRAME_H
+#define _DE_CURVES_FRAME_H
 
-dePropertyMixer::dePropertyMixer(deLayer& _parent)
-:deProperty(_parent)
-{
-    mixer = NULL;
-}
+#include <vector>
+#include <wx/wx.h>
+class deCurvesLayer;
+class dePreviewStack;
+class deCurvesPanel;
 
-dePropertyMixer::~dePropertyMixer()
+class deCurvesEditor:public wxPanel
 {
-    if (mixer)
-    {
-        delete mixer;
-    }        
-}
+    private:
+        wxChoice* channelChoice;
+        deCurvesPanel* curvesPanel;
 
-void dePropertyMixer::recreateMixer(deColorSpace sc, deColorSpace dc)
-{
-    if (mixer)
-    {
-        delete mixer;
-    }
-    mixer = new deMixer(sc, dc);
-}
+        void choose(wxCommandEvent &event);
 
-void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
-{
-    deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(parent);
-    wxPanel* mixerEditor = new deMixerEditor(panel, mixerLayer, stack, parent.getIndex());
-    sizer->Add(mixerEditor);
-}    
+    public:
+        deCurvesEditor(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, int layerNumber);
+        virtual ~deCurvesEditor();
+
+};
+
+
+#endif

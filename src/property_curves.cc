@@ -17,6 +17,10 @@
 */
 
 #include "property_curves.h"
+//#include "curves_panel.h"
+#include "curves_editor.h"
+#include "curves_layer.h"
+#include "layer.h"
 
 dePropertyCurves::dePropertyCurves(deLayer& _parent, int _panelSize)
 :deProperty(_parent), panelSize(_panelSize)
@@ -54,3 +58,10 @@ deCurve* dePropertyCurves::getCurve(int index)
     deCurve* curve = curves.at(index);
     return curve;
 }        
+
+void dePropertyCurves::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+{
+    deCurvesLayer& curvesLayer = dynamic_cast<deCurvesLayer&>(parent);
+    wxPanel* curvesEditor = new deCurvesEditor(panel, curvesLayer, stack, parent.getIndex());
+    sizer->Add(curvesEditor);
+}    

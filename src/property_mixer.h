@@ -35,6 +35,7 @@ class dePropertyMixer:public deProperty
         deMixer* getMixer() {return mixer;};
 
         void recreateMixer(deColorSpace sc, deColorSpace dc);
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
 
 };
 

@@ -23,10 +23,9 @@
 #include "preview.h"
 #include "project.h"
 
-deBlurLayer::deBlurLayer(deLayerStack& _stack, const std::string& _name)
-:deLayer(_stack, _name), radius(*this)
+deBlurLayer::deBlurLayer(deLayerStack& _stack, int _index, const std::string& _name)
+:deLayer(_stack, _index, _name), radius(*this), channels(*this), direction(*this)
 {
-    direction = deBlurHorizontal;
     radius.setValue(0.01);
     clearEnabledChannels();
 }
@@ -48,7 +47,7 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
 
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
-    blur(*sourcePreview, *preview, direction, radius.getValue(), enabledChannels);
+    blur(*sourcePreview, *preview, direction.getDirection(), radius.getValue(), channels.getChannels());
 
     return preview;
 }
@@ -60,7 +59,7 @@ deActionFrame* deBlurLayer::createActionFrame(wxWindow* parent, int layerNumber,
 
 deBlurDirection deBlurLayer::getBlurDirection() const
 {
-    return direction;
+    return direction.getDirection();
 }
 
 deValue deBlurLayer::getBlurRadius() const
@@ -75,7 +74,7 @@ void deBlurLayer::setBlurRadius(deValue _radius)
 
 void deBlurLayer::setBlurDirection(deBlurDirection _direction)
 {
-    direction = _direction;
+    direction.setDirection(_direction);
 }
 
 void deBlurLayer::onChangeColorSpace()
@@ -85,15 +84,15 @@ void deBlurLayer::onChangeColorSpace()
 
 void deBlurLayer::enableChannel(int c)
 {
-    enabledChannels.insert(c);
+    channels.insert(c);
 }
 
 void deBlurLayer::clearEnabledChannels()
 {
-    enabledChannels.clear();
+    channels.clear();
 }
 
 const std::set<int>& deBlurLayer::getEnabledChannels() const
 {
-    return enabledChannels;
+    return channels.getChannels();
 }

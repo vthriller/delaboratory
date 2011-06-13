@@ -22,17 +22,19 @@
 #include "layer.h"
 #include "blur.h"
 #include "property_value.h"
+#include "property_blur_direction.h"
+#include "property_channels.h"
 #include <set>
 
 class deBlurLayer:public deLayer
 {
     private:
-        deBlurDirection direction;
+        dePropertyBlurDirection direction;
         dePropertyValue radius;
-        std::set<int> enabledChannels;
+        dePropertyChannels channels;
 
     public:
-        deBlurLayer(deLayerStack& _stack, const std::string& _name);
+        deBlurLayer(deLayerStack& _stack, int _index, const std::string& _name);
         virtual ~deBlurLayer();
 
         virtual bool canChangeSourceLayer() const {return true;};

@@ -23,9 +23,10 @@ class dePreview;
 class deND;
 #include "value.h"
 #include "blend_mode.h"
+#include "property_channels.h"
 #include <set>
 
-void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& result, int oc, int dc, deBlendMode mode);
-void blend(const dePreview& sourcePreview, const deND& nd, dePreview& resultPreview, deBlendMode mode, const std::set<int>& enabledChannels);
+void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& resultPreview, int overlayChannelID, const deChannels& enabledChannels, deBlendMode mode);
+void blend(const dePreview& sourcePreview, const deND& nd, dePreview& resultPreview, deBlendMode mode, const deChannels& enabledChannels);
 
 #endif    

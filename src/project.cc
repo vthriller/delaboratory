@@ -37,7 +37,7 @@ deProject::deProject()
     view = -1;
     previewStack.setProject(this);
     samplerList.setProject(this);
-    addLayer(new deSourceImageLayer(layerStack, sourceImage, "source image"));
+    addLayer(new deSourceImageLayer(layerStack, 0, sourceImage, "source image"));
 }
 
 deProject::~deProject()

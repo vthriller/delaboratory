@@ -76,8 +76,10 @@ void blend(const deBaseChannel& sourceChannel, const deND& nd, deBaseChannel& re
     }        
 }        
 
-void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& resultPreview, int overlayChannelID, int destinationChannelID, deBlendMode mode)
+void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& resultPreview, int overlayChannelID, const deChannels& enabledChannels, deBlendMode mode)
 {
+
+/*
     deColorSpace rc = resultPreview.getColorSpace();
 
     int nc = getColorSpaceSize(rc);
@@ -117,10 +119,44 @@ void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deVa
         deBaseChannel* resultChannel = resultPreview.getChannel(i);
 
         blend(*sourceChannel, *overlayChannel, *resultChannel, alpha, mode);
+    }*/
+
+
+
+    deColorSpace rc = resultPreview.getColorSpace();
+    int nc = getColorSpaceSize(rc);
+
+    //deValue alpha = 1.0;
+
+    int i;
+    for (i = 0; i < nc; i++)
+    {
+        const deBaseChannel* sourceChannel = sourcePreview.getChannel(i);
+
+        const deBaseChannel* overlayChannel;
+        if (overlayChannelID < 0)
+        {
+            overlayChannel = overlayPreview.getChannel(i);
+        }
+        else
+        {
+            overlayChannel = overlayPreview.getChannel(overlayChannelID);
+        }            
+
+        deBaseChannel* resultChannel = resultPreview.getChannel(i);
+        if (enabledChannels.count(i) == 1)
+        {
+            blend(*sourceChannel, *overlayChannel, *resultChannel, alpha, mode);
+        }
+        else
+        {
+            resultChannel->copy(sourceChannel);
+        }
+
     }
 }
 
-void blend(const dePreview& sourcePreview, const deND& nd, dePreview& resultPreview, deBlendMode mode, const std::set<int>& enabledChannels)
+void blend(const dePreview& sourcePreview, const deND& nd, dePreview& resultPreview, deBlendMode mode, const deChannels& enabledChannels)
 {
     deColorSpace rc = resultPreview.getColorSpace();
     int nc = getColorSpaceSize(rc);

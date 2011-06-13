@@ -16,37 +16,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "property_mixer.h"
-#include "mixer_editor.h"
-#include "mixer.h"
-#include "mixer_layer.h"
+#ifndef _DE_LAYER_FRAME_H
+#define _DE_LAYER_FRAME_H
 
-dePropertyMixer::dePropertyMixer(deLayer& _parent)
-:deProperty(_parent)
-{
-    mixer = NULL;
-}
+#include "action_frame.h"
+#include "property.h"
+class dePreviewStack;
 
-dePropertyMixer::~dePropertyMixer()
+class deLayerFrame:public deActionFrame
 {
-    if (mixer)
-    {
-        delete mixer;
-    }        
-}
+    private:
+        wxSizer* sizer;
+        dePreviewStack& stack;
+    public:
+        deLayerFrame(wxWindow *parent, deLayer& _layer, dePreviewStack& _stack);
 
-void dePropertyMixer::recreateMixer(deColorSpace sc, deColorSpace dc)
-{
-    if (mixer)
-    {
-        delete mixer;
-    }
-    mixer = new deMixer(sc, dc);
-}
+        virtual ~deLayerFrame();
 
-void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
-{
-    deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(parent);
-    wxPanel* mixerEditor = new deMixerEditor(panel, mixerLayer, stack, parent.getIndex());
-    sizer->Add(mixerEditor);
-}    
+        void addProperty(deProperty* property);
+
+};
+
+#endif

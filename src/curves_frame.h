@@ -19,7 +19,6 @@
 #ifndef _DE_CURVES_FRAME_H
 #define _DE_CURVES_FRAME_H
 
-//#include <wx/wx.h>
 #include <vector>
 #include "action_frame.h"
 class deCurvesLayer;
@@ -34,8 +33,6 @@ class deCurvesFrame:public deActionFrame
         deCurvesPanel* curvesPanel;
 
         void choose(wxCommandEvent &event);
-
-//        void onClose(wxCommandEvent &event);
 
     public:
         deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, int layerNumber);

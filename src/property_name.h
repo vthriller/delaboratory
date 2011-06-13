@@ -22,10 +22,14 @@
 #include "property.h"
 #include <string>
 
+class wxTextCtrl;
+class wxCommandEvent;
+
 class dePropertyName:public deProperty
 {
     private:
         std::string name;
+        wxTextCtrl* editName;
 
     public:
         dePropertyName(deLayer& _parent);
@@ -33,6 +37,9 @@ class dePropertyName:public deProperty
 
         const std::string& getName() const {return name;};
         void setName(const std::string& _name);
+
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
+        void textEnter(wxCommandEvent &event);
 
 };
 

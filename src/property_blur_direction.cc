@@ -16,37 +16,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "property_mixer.h"
-#include "mixer_editor.h"
-#include "mixer.h"
-#include "mixer_layer.h"
+#include "property_blur_direction.h"
 
-dePropertyMixer::dePropertyMixer(deLayer& _parent)
+dePropertyBlurDirection::dePropertyBlurDirection(deLayer& _parent)
 :deProperty(_parent)
 {
-    mixer = NULL;
+    direction = deBlurHorizontal;
 }
 
-dePropertyMixer::~dePropertyMixer()
+dePropertyBlurDirection::~dePropertyBlurDirection()
 {
-    if (mixer)
-    {
-        delete mixer;
-    }        
 }
 
-void dePropertyMixer::recreateMixer(deColorSpace sc, deColorSpace dc)
+void dePropertyBlurDirection::setDirection(deBlurDirection _direction)
 {
-    if (mixer)
-    {
-        delete mixer;
-    }
-    mixer = new deMixer(sc, dc);
+    direction = _direction;
 }
-
-void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
-{
-    deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(parent);
-    wxPanel* mixerEditor = new deMixerEditor(panel, mixerLayer, stack, parent.getIndex());
-    sizer->Add(mixerEditor);
-}    
