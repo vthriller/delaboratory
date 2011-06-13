@@ -28,7 +28,7 @@ class deConversionLayer:public deLayer
     private:
 
     public:
-        deConversionLayer(deLayerStack& _stack, const std::string& _name);
+        deConversionLayer(deLayerStack& _stack, int _index, const std::string& _name);
         virtual ~deConversionLayer();
 
         virtual bool canChangeSourceLayer() const {return true;};

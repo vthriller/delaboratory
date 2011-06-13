@@ -16,37 +16,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "property_mixer.h"
-#include "mixer_editor.h"
-#include "mixer.h"
-#include "mixer_layer.h"
+#ifndef _DE_PROPERTY_CHANNELS_H
+#define _DE_PROPERTY_CHANNELS_H
 
-dePropertyMixer::dePropertyMixer(deLayer& _parent)
-:deProperty(_parent)
-{
-    mixer = NULL;
-}
+#include "property.h"
+#include <set>
 
-dePropertyMixer::~dePropertyMixer()
-{
-    if (mixer)
-    {
-        delete mixer;
-    }        
-}
+typedef std::set<int> deChannels;
 
-void dePropertyMixer::recreateMixer(deColorSpace sc, deColorSpace dc)
+class dePropertyChannels:public deProperty
 {
-    if (mixer)
-    {
-        delete mixer;
-    }
-    mixer = new deMixer(sc, dc);
-}
+    private:
+        deChannels channels;
 
-void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
-{
-    deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(parent);
-    wxPanel* mixerEditor = new deMixerEditor(panel, mixerLayer, stack, parent.getIndex());
-    sizer->Add(mixerEditor);
-}    
+    public:
+        dePropertyChannels(deLayer& _parent);
+        virtual ~dePropertyChannels();
+
+        const deChannels& getChannels() const {return channels;};
+
+        void clear();
+        void insert(int c);
+
+};
+
+#endif

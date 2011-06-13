@@ -20,15 +20,22 @@
 #define _DE_PROPERTY_H
 
 class deLayer;
+class wxPanel;
+class wxWindow;
+class wxSizer;
+class dePreviewStack;
 
 class deProperty
 {
-    private:
+    protected:
         deLayer& parent;
 
     public:
         deProperty(deLayer& _parent);
         virtual ~deProperty();
+
+        virtual wxPanel* getPanel(wxWindow* parent, dePreviewStack& stack);
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
 
 };
 

@@ -27,8 +27,8 @@
 
 #define CURVES_PANEL_SIZE 500
 
-deCurvesLayer::deCurvesLayer(deLayerStack& _stack, const std::string& _name)
-:deLayer(_stack, _name), curves(*this, CURVES_PANEL_SIZE)
+deCurvesLayer::deCurvesLayer(deLayerStack& _stack, int _index, const std::string& _name)
+:deLayer(_stack, _index, _name), curves(*this, CURVES_PANEL_SIZE)
 {
 }
 

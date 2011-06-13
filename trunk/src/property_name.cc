@@ -17,6 +17,7 @@
 */
 
 #include "property_name.h"
+#include <wx/wx.h>
 
 dePropertyName::dePropertyName(deLayer& _parent)
 :deProperty(_parent)
@@ -31,4 +32,25 @@ dePropertyName::~dePropertyName()
 void dePropertyName::setName(const std::string& _name)
 {
     name = _name;
+}
+
+void dePropertyName::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+{
+    // FIXME name editor
+    /*
+    wxStaticText* labelName = new wxStaticText(panel, wxID_ANY, _T("layer name:") );
+    sizer->Add(labelName);
+    editName =  new wxTextCtrl(panel, wxID_ANY, wxString::FromAscii(name.c_str()), wxDefaultPosition, wxSize(200, -1));
+    sizer->Add(editName);
+
+    panel->Connect(wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler(dePropertyName::textEnter));
+    */
+}    
+
+void dePropertyName::textEnter(wxCommandEvent &event)
+{
+/*
+    wxString valueStr = editName->GetValue();
+    name = valueStr.mb_str();
+*/
 }

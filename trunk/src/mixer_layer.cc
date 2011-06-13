@@ -25,8 +25,8 @@
 #include "layer_dialog.h"
 #include "mixer.h"
 
-deMixerLayer::deMixerLayer(deLayerStack& _stack, const std::string& _name)
-:deLayer(_stack, _name), mixer(*this)
+deMixerLayer::deMixerLayer(deLayerStack& _stack, int _index, const std::string& _name)
+:deLayer(_stack, _index, _name), mixer(*this)
 {
 }
 

@@ -21,18 +21,20 @@
 
 #include "layer.h"
 #include "blend_mode.h"
+#include "property_value.h"
+#include "property_channels.h"
+#include "property_blend_mode.h"
 
 class deBlendLayer:public deLayer
 {
     private:
-        deValue alpha;
+        dePropertyValue alpha;
         int overlayChannel;
-        int destinationChannel;
         bool singleOverlayChannel;
-        bool singleDestinationChannel;
-        deBlendMode blendMode;
+        dePropertyBlendMode blendMode;
+        dePropertyChannels channels;
     public:
-        deBlendLayer(deLayerStack& _stack, const std::string& _name);
+        deBlendLayer(deLayerStack& _stack, int _index, const std::string& _name);
         virtual ~deBlendLayer();
 
         virtual bool canChangeSourceLayer() const {return true;};
@@ -55,7 +57,7 @@ class deBlendLayer:public deLayer
         void setBlendMode(deBlendMode mode);
 
         void changeAlpha(deValue _alpha);
-        deValue getAlpha() const {return alpha;};
+        deValue getAlpha() const {return alpha.getValue();};
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
 

@@ -17,12 +17,32 @@
 */
 
 #include "property.h"
+#include "layer.h"
 
 deProperty::deProperty(deLayer& _parent)
 :parent(_parent)
 {
+    parent.registerProperty(*this);
 }
 
 deProperty::~deProperty()
 {
+}
+
+wxPanel* deProperty::getPanel(wxWindow* parent, dePreviewStack& stack)
+{
+    wxPanel* panel = new wxPanel(parent);
+    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+
+    addPanelContent(panel, sizer, stack);
+
+    panel->SetSizer(sizer);
+
+    return panel;
+}
+
+void deProperty::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+{
+    wxStaticText* label = new wxStaticText(panel, wxID_ANY, _T("unsupported property") );
+    sizer->Add(label, 0);
 }

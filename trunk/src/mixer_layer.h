@@ -30,7 +30,7 @@ class deMixerLayer:public deLayer
         void recreateMixer();
 
     public:
-        deMixerLayer(deLayerStack& _stack, const std::string& _name);
+        deMixerLayer(deLayerStack& _stack, int _index, const std::string& _name);
         virtual ~deMixerLayer();
 
         virtual bool canChangeSourceLayer() const {return true;};

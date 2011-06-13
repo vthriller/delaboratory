@@ -22,6 +22,9 @@
 #include "add_layer_dialog.h"
 #include <sstream>
 #include "exception.h"
+#include "action_frame.h"
+
+#define UNIFIED_PROPERTIES 0 
 
 void deLayerListPanel::select(wxCommandEvent &event)
 {
@@ -44,12 +47,22 @@ void deLayerListPanel::activate(wxCommandEvent &event)
     int i = listbox->GetItemCount() - e.GetIndex() - 1;
 
     const deLayerStack& layerStack = project->getLayerStack();
+
+#if UNIFIED_PROPERTIES
+    deActionFrame* frame = layerStack.getLayer(i)->createLayerFrame(this, i, project);
+    if (frame)
+    {
+        frame->Show();
+    }        
+#else    
     wxDialog* layerDialog = layerStack.getLayer(i)->createDialog(this, i, project);
     if (!layerDialog)
     {
         throw deException("failed creating layer dialog");
     }
     layerDialog->ShowModal();
+#endif    
+
 
 }
 

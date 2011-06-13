@@ -16,37 +16,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "property_mixer.h"
-#include "mixer_editor.h"
-#include "mixer.h"
-#include "mixer_layer.h"
+#include "property_blend_mode.h"
 
-dePropertyMixer::dePropertyMixer(deLayer& _parent)
+dePropertyBlendMode::dePropertyBlendMode(deLayer& _parent)
 :deProperty(_parent)
 {
-    mixer = NULL;
+    mode = deBlendModeInvalid;
 }
 
-dePropertyMixer::~dePropertyMixer()
+dePropertyBlendMode::~dePropertyBlendMode()
 {
-    if (mixer)
-    {
-        delete mixer;
-    }        
 }
 
-void dePropertyMixer::recreateMixer(deColorSpace sc, deColorSpace dc)
+void dePropertyBlendMode::setMode(deBlendMode _mode)
 {
-    if (mixer)
-    {
-        delete mixer;
-    }
-    mixer = new deMixer(sc, dc);
+    mode = _mode;
 }
-
-void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
-{
-    deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(parent);
-    wxPanel* mixerEditor = new deMixerEditor(panel, mixerLayer, stack, parent.getIndex());
-    sizer->Add(mixerEditor);
-}    

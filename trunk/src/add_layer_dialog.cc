@@ -36,44 +36,47 @@ void deAddLayerFrame::click(wxCommandEvent &event)
 
         deLayerStack& stack = project->getLayerStack();
 
+        int index = stack.getSize();
+
         int id = event.GetId();
 
         deLayer* layer = NULL;
 
         if (id == curvesButton->GetId())
         {
-            layer = new deCurvesLayer(stack, "curves");
+            layer = new deCurvesLayer(stack, index, "curves");
         }
 
         if (id == mixerButton->GetId())
         {
-            layer = new deMixerLayer(stack, "mixer");
+            layer = new deMixerLayer(stack, index, "mixer");
         }
 
         if (id == convertButton->GetId())
         {
-            layer = new deConversionLayer(stack, "conversion");
+            layer = new deConversionLayer(stack, index, "conversion");
         }
 
         if (id == blendButton->GetId())
         {
-            layer = new deBlendLayer(stack, "blend");
+            layer = new deBlendLayer(stack, index, "blend");
         }
 
         if (id == blurButton->GetId())
         {
-            layer = new deBlurLayer(stack, "blur");
+            layer = new deBlurLayer(stack, index, "blur");
         }
 
         if (id == ndButton->GetId())
         {
-            layer = new deNDLayer(stack, "nd");
+            layer = new deNDLayer(stack, index,  "nd");
         }
 
         if (layer)
         {
             layer->changeSourceLayer(project->getVisibleLayerID());
             project->addLayer(layer);
+
         }         
 
     }

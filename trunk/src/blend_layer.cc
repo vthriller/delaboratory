@@ -27,15 +27,19 @@
 #include "project.h"
 #include "layer_dialog.h"
 
-deBlendLayer::deBlendLayer(deLayerStack& _stack, const std::string& _name)
-:deLayer(_stack, _name)
+deBlendLayer::deBlendLayer(deLayerStack& _stack, int _index, const std::string& _name)
+:deLayer(_stack, _index, _name), alpha(*this), blendMode(*this), channels(*this)
 {
-    alpha = 0.5;
+    alpha.setValue(0.5);
     overlayChannel = -1;
-    destinationChannel = -1;
+    //destinationChannel = -1;
     singleOverlayChannel = false;
-    singleDestinationChannel = false;
-    blendMode = deBlendNormal;
+    //singleDestinationChannel = false;
+    blendMode.setMode(deBlendNormal);
+    channels.clear();
+    channels.insert(0);
+    channels.insert(1);
+    channels.insert(2);
 }
 
 deBlendLayer::~deBlendLayer()
@@ -45,7 +49,7 @@ deBlendLayer::~deBlendLayer()
 
 void deBlendLayer::changeAlpha(deValue _alpha)
 {
-    alpha = _alpha;
+    alpha.setValue(_alpha);
 }
 
 deActionFrame* deBlendLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
@@ -83,6 +87,7 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
     {
         oc = -1;
     }
+    /*
     int dc;
     if (singleDestinationChannel)
     {
@@ -91,9 +96,9 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
     else
     {
         dc = -1;
-    }
+    }*/
 
-    blend(*sourcePreview, *overlayPreview, alpha, *preview, oc, dc, blendMode);
+    blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, oc, channels.getChannels(), blendMode.getMode());
 
     return preview;
 }
@@ -120,30 +125,30 @@ bool deBlendLayer::isSingleOverlayChannel() const
 
 void deBlendLayer::setDestinationChannel(int _channel)
 {
-    destinationChannel = _channel;
+    //destinationChannel = _channel;
 }
 
 int deBlendLayer::getDestinationChannel() const
 {
-    return destinationChannel;
+    //return destinationChannel;
 }
 
 void deBlendLayer::setSingleDestinationChannel(bool _singleChannel)
 {
-    singleDestinationChannel = _singleChannel;
+    //singleDestinationChannel = _singleChannel;
 }
 
 bool deBlendLayer::isSingleDestinationChannel() const
 {
-    return singleDestinationChannel;
+    //return singleDestinationChannel;
 }
 
 deBlendMode deBlendLayer::getBlendMode() const
 {
-    return blendMode;
+    return blendMode.getMode();
 }
 
 void deBlendLayer::setBlendMode(deBlendMode mode)
 {
-    blendMode = mode;
+    blendMode.setMode(mode);
 }

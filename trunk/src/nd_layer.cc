@@ -24,10 +24,10 @@
 #include "preview.h"
 #include "project.h"
 
-deNDLayer::deNDLayer(deLayerStack& _stack, const std::string& _name)
-:deLayer(_stack, _name), nd(*this)
+deNDLayer::deNDLayer(deLayerStack& _stack, int _index, const std::string& _name)
+:deLayer(_stack, _index, _name), nd(*this), blendMode(*this), channels(*this)
 {
-    mode = deBlendMultiply;
+    blendMode.setMode(deBlendMultiply);
     clearEnabledChannels();
 }
 
@@ -48,7 +48,7 @@ dePreview* deNDLayer::createPreview(dePreviewStack& previewStack)
 
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
-    blend(*sourcePreview, nd.getND(), *preview, mode, enabledChannels);
+    blend(*sourcePreview, nd.getND(), *preview, blendMode.getMode(), channels.getChannels());
 
     return preview;
 }
@@ -65,15 +65,15 @@ void deNDLayer::onChangeColorSpace()
 
 void deNDLayer::enableChannel(int c)
 {
-    enabledChannels.insert(c);
+    channels.insert(c);
 }
 
 void deNDLayer::clearEnabledChannels()
 {
-    enabledChannels.clear();
+    channels.clear();
 }
 
-const std::set<int>& deNDLayer::getEnabledChannels() const
+const deChannels& deNDLayer::getEnabledChannels() const
 {
-    return enabledChannels;
+    return channels.getChannels();
 }

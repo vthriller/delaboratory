@@ -33,7 +33,7 @@ class deCurvesLayer:public deLayer
         void processCurves(const dePreview& source, dePreview& destination);
 
     public:
-        deCurvesLayer(deLayerStack& _stack, const std::string& _name);
+        deCurvesLayer(deLayerStack& _stack, int _index, const std::string& _name);
         virtual ~deCurvesLayer();
 
         virtual bool canChangeSourceLayer() const {return true;};
