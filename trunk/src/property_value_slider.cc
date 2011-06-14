@@ -16,27 +16,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_LAYER_INDEX_H
-#define _DE_PROPERTY_LAYER_INDEX_H
+#include "property_value_slider.h"
+#include "property_value.h"
 
-#include "property.h"
-#include <string>
-
-class dePropertyLayerIndex:public deProperty
+dePropertyValueSlider::dePropertyValueSlider(wxWindow *parent, dePropertyValue& _property, int range)
+:deSlider(parent, _property.getLabel(), range, _property.getMin(), _property.getMax()), property(_property)
 {
-    private:
-        int index;
-        std::string label;
+}
 
-    public:
-        dePropertyLayerIndex(deLayer& _parent, const std::string& _label);
-        virtual ~dePropertyLayerIndex();
+dePropertyValueSlider::~dePropertyValueSlider()
+{
+}
 
-        int getIndex() const {return index;};
-        void setIndex(int _index);
-
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
-
-};
-
-#endif
+void dePropertyValueSlider::onValueChange(deValue value)
+{
+    property.setValue(value);
+}

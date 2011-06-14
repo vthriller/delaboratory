@@ -21,18 +21,29 @@
 
 #include "property.h"
 #include "value.h"
+#include <string>
 
 class dePropertyValue:public deProperty
 {
     private:
         deValue value;
+        deValue min;
+        deValue max;
+        std::string label;
 
     public:
-        dePropertyValue(deLayer& _parent);
+        dePropertyValue(deLayer& _parent, const std::string& label, deValue _min, deValue _max);
         virtual ~dePropertyValue();
 
         deValue getValue() const {return value;};
         void setValue(deValue _value);
+
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
+
+        const std::string getLabel() const {return label;};
+
+        deValue getMin() const {return min;};
+        deValue getMax() const {return max;};
 
 };
 

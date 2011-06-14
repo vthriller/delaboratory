@@ -16,27 +16,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_LAYER_INDEX_H
-#define _DE_PROPERTY_LAYER_INDEX_H
+#ifndef _DE_LAYER_SELECTOR_H
+#define _DE_LAYER_SELECTOR_H
 
-#include "property.h"
-#include <string>
+#include <wx/wx.h>
+#include <vector>
+#include "color_space.h"
+class dePropertyLayerIndex;
 
-class dePropertyLayerIndex:public deProperty
+class deLayerSelector:public wxPanel
 {
     private:
-        int index;
-        std::string label;
+        dePropertyLayerIndex& property;
+        wxChoice* layerChoice;
 
+        void choose(wxCommandEvent &event);
     public:
-        dePropertyLayerIndex(deLayer& _parent, const std::string& _label);
-        virtual ~dePropertyLayerIndex();
-
-        int getIndex() const {return index;};
-        void setIndex(int _index);
-
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
-
+        deLayerSelector(wxPanel* parent, dePropertyLayerIndex& _property, const std::string& s);
+        virtual ~deLayerSelector();
 };
 
 #endif

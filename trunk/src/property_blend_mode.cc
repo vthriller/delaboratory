@@ -17,6 +17,7 @@
 */
 
 #include "property_blend_mode.h"
+#include "blend_mode_selector.h"
 
 dePropertyBlendMode::dePropertyBlendMode(deLayer& _parent)
 :deProperty(_parent)
@@ -28,7 +29,13 @@ dePropertyBlendMode::~dePropertyBlendMode()
 {
 }
 
-void dePropertyBlendMode::setMode(deBlendMode _mode)
+void dePropertyBlendMode::setBlendMode(deBlendMode _mode)
 {
     mode = _mode;
 }
+
+void dePropertyBlendMode::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+{
+    wxPanel* selector = new deBlendModeSelector(panel, *this);
+    sizer->Add(selector);
+}    

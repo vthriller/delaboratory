@@ -28,14 +28,12 @@
 #include "layer_dialog.h"
 
 deBlendLayer::deBlendLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), alpha(*this), blendMode(*this), channels(*this)
+:deLayer(_stack, _index, _name), alpha(*this, "alpha", 0.0, 1.0), blendMode(*this), channels(*this)
 {
     alpha.setValue(0.5);
     overlayChannel = -1;
-    //destinationChannel = -1;
     singleOverlayChannel = false;
-    //singleDestinationChannel = false;
-    blendMode.setMode(deBlendNormal);
+    blendMode.setBlendMode(deBlendNormal);
     channels.clear();
     channels.insert(0);
     channels.insert(1);
@@ -98,7 +96,7 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
         dc = -1;
     }*/
 
-    blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, oc, channels.getChannels(), blendMode.getMode());
+    blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, oc, channels.getChannels(), blendMode.getBlendMode());
 
     return preview;
 }
@@ -145,10 +143,10 @@ bool deBlendLayer::isSingleDestinationChannel() const
 
 deBlendMode deBlendLayer::getBlendMode() const
 {
-    return blendMode.getMode();
+    return blendMode.getBlendMode();
 }
 
 void deBlendLayer::setBlendMode(deBlendMode mode)
 {
-    blendMode.setMode(mode);
+    blendMode.setBlendMode(mode);
 }

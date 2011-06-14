@@ -31,8 +31,9 @@ class dePropertyBlendMode:public deProperty
         dePropertyBlendMode(deLayer& _parent);
         virtual ~dePropertyBlendMode();
 
-        deBlendMode getMode() const {return mode;};
-        void setMode(deBlendMode _mode);
+        deBlendMode getBlendMode() const {return mode;};
+        void setBlendMode(deBlendMode _mode);
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
 
 };
 
