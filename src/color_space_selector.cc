@@ -16,25 +16,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_COLOR_SPACE_H
-#define _DE_PROPERTY_COLOR_SPACE_H
+#include "color_space_selector.h"
+#include "property_color_space.h"
+#include "color_space_choice.h"
 
-#include "property.h"
-#include "color_space.h"
-
-class dePropertyColorSpace:public deProperty
+deColorSpaceSelector::deColorSpaceSelector(wxPanel* parent, dePropertyColorSpace& _property)
+:wxPanel(parent), property(_property)
 {
-    private:
-        deColorSpace colorSpace;
+    colorSpaceChoice = makeColorSpaceChoice(this, colorSpaces, property.getColorSpace());
+    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deColorSpaceSelector::choose));
+}
 
-    public:
-        dePropertyColorSpace(deLayer& _parent);
-        virtual ~dePropertyColorSpace();
+deColorSpaceSelector::~deColorSpaceSelector()
+{
+}
 
-        deColorSpace getColorSpace() const {return colorSpace;};
-        void setColorSpace(deColorSpace _colorSpace);
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
-
-};
-
-#endif
+void deColorSpaceSelector::choose(wxCommandEvent &event)
+{
+    int c = colorSpaceChoice->GetCurrentSelection();
+    property.setColorSpace(colorSpaces[c]);
+}
