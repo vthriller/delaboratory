@@ -17,6 +17,7 @@
 */
 
 #include "property_color_space.h"
+#include "color_space_selector.h"
 
 dePropertyColorSpace::dePropertyColorSpace(deLayer& _parent)
 :deProperty(_parent)
@@ -32,3 +33,10 @@ void dePropertyColorSpace::setColorSpace(deColorSpace _colorSpace)
 {
     colorSpace = _colorSpace;
 }
+
+void dePropertyColorSpace::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+{
+    wxPanel* selector = new deColorSpaceSelector(panel, *this);
+    sizer->Add(selector);
+}    
+
