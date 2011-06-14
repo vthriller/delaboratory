@@ -38,6 +38,8 @@ class dePropertyChannels:public deProperty
         void clear();
         void insert(int c);
 
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
+
 };
 
 #endif

@@ -17,6 +17,7 @@
 */
 
 #include "property_channels.h"
+#include "channels_selector.h"
 
 dePropertyChannels::dePropertyChannels(deLayer& _parent)
 :deProperty(_parent)
@@ -36,3 +37,9 @@ void dePropertyChannels::insert(int c)
 {
     channels.insert(c);
 }
+
+void dePropertyChannels::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+{
+    wxPanel* selector = new deChannelsSelector(panel, *this);
+    sizer->Add(selector);
+}    

@@ -27,7 +27,7 @@
 #include "project.h"
 
 deLayer::deLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:stack(_stack), index(_index), name(*this), sourceLayer(*this), overlayLayer(*this), colorSpace(*this)
+:stack(_stack), index(_index), name(*this), sourceLayer(*this, "source"), overlayLayer(*this, "overlay"), colorSpace(*this)
 {
     name.setName(_name);
     actionFrame = NULL;

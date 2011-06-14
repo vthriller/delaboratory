@@ -17,9 +17,10 @@
 */
 
 #include "property_value.h"
+#include "property_value_slider.h"
 
-dePropertyValue::dePropertyValue(deLayer& _parent)
-:deProperty(_parent)
+dePropertyValue::dePropertyValue(deLayer& _parent, const std::string& _label, deValue _min, deValue _max)
+:deProperty(_parent), label(_label), min(_min), max(_max)
 {
 }
 
@@ -31,3 +32,9 @@ void dePropertyValue::setValue(deValue _value)
 {
     value = _value;
 }
+
+void dePropertyValue::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+{
+    dePropertyValueSlider* slider = new dePropertyValueSlider(panel, *this, 100);
+    sizer->Add(slider);
+}    

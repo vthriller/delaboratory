@@ -16,26 +16,33 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "property_layer_index.h"
 #include "layer_selector.h"
+#include "property_layer_index.h"
+#include "layer_choice.h"
+#include "layer.h"
 
-dePropertyLayerIndex::dePropertyLayerIndex(deLayer& _parent, const std::string& _label)
-:deProperty(_parent), label(_label)
+deLayerSelector::deLayerSelector(wxPanel* parent, dePropertyLayerIndex& _property, const std::string& s)
+:wxPanel(parent), property(_property)
 {
-    index = -1;
+    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+
+    wxStaticText* label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(s.c_str()) );
+    sizer->Add(label);
+
+    layerChoice = makeLayerChoice(this, property.getParent().getIndex(), property.getIndex());
+    sizer->Add(layerChoice);
+
+    SetSizer(sizer);
+
+    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deLayerSelector::choose));
 }
 
-dePropertyLayerIndex::~dePropertyLayerIndex()
+deLayerSelector::~deLayerSelector()
 {
 }
 
-void dePropertyLayerIndex::setIndex(int _index)
+void deLayerSelector::choose(wxCommandEvent &event)
 {
-    index = _index;
+    property.setIndex( layerChoice->GetCurrentSelection() );
 }
 
-void dePropertyLayerIndex::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
-{
-    wxPanel* selector = new deLayerSelector(panel, *this, label);
-    sizer->Add(selector);
-}    

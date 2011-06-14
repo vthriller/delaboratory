@@ -24,7 +24,7 @@
 #include "project.h"
 
 deBlurLayer::deBlurLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), radius(*this), channels(*this), direction(*this)
+:deLayer(_stack, _index, _name), radius(*this, "radius", 0.0, 0.05), channels(*this), direction(*this)
 {
     radius.setValue(0.01);
     clearEnabledChannels();

@@ -16,27 +16,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_LAYER_INDEX_H
-#define _DE_PROPERTY_LAYER_INDEX_H
+#include "blend_mode_selector.h"
+#include "property_blend_mode.h"
+#include "blend_mode_choice.h"
 
-#include "property.h"
-#include <string>
-
-class dePropertyLayerIndex:public deProperty
+deBlendModeSelector::deBlendModeSelector(wxPanel* parent, dePropertyBlendMode& _property)
+:wxPanel(parent), property(_property)
 {
-    private:
-        int index;
-        std::string label;
+    blendModeChoice = makeBlendModeChoice(this, blendModes, property.getBlendMode());
+    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deBlendModeSelector::choose));
+}
 
-    public:
-        dePropertyLayerIndex(deLayer& _parent, const std::string& _label);
-        virtual ~dePropertyLayerIndex();
+deBlendModeSelector::~deBlendModeSelector()
+{
+}
 
-        int getIndex() const {return index;};
-        void setIndex(int _index);
-
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
-
-};
-
-#endif
+void deBlendModeSelector::choose(wxCommandEvent &event)
+{
+    int c = blendModeChoice->GetCurrentSelection();
+    property.setBlendMode(blendModes[c]);
+}

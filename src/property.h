@@ -37,6 +37,8 @@ class deProperty
         virtual wxPanel* getPanel(wxWindow* parent, dePreviewStack& stack);
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
 
+        const deLayer& getParent() const {return parent;};
+
 };
 
 #endif
