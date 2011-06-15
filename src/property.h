@@ -29,17 +29,20 @@ class deProperty
 {
     protected:
         deLayer& parent;
+        dePreviewStack* stack;
 
-        void onUpdate();
 
     public:
         deProperty(deLayer& _parent);
         virtual ~deProperty();
 
         virtual wxPanel* getPanel(wxWindow* parent, dePreviewStack& stack);
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack);
 
         const deLayer& getParent() const {return parent;};
+
+        void onUpdate();
+        void setStack(dePreviewStack& _stack);
 
 };
 

@@ -18,11 +18,12 @@
 
 #include "property.h"
 #include "layer.h"
-#include <iostream>
+#include "preview_stack.h"
 
 deProperty::deProperty(deLayer& _parent)
 :parent(_parent)
 {
+    stack = NULL;
     parent.registerProperty(*this);
 }
 
@@ -42,13 +43,23 @@ wxPanel* deProperty::getPanel(wxWindow* parent, dePreviewStack& stack)
     return panel;
 }
 
-void deProperty::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+void deProperty::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
 {
+    stack = &_stack;
     wxStaticText* label = new wxStaticText(panel, wxID_ANY, _T("unsupported property") );
     sizer->Add(label, 0);
 }
 
 void deProperty::onUpdate()
 {
-//    std::cout << "update" << std::endl;
+    if (stack)
+    {
+        stack->updatePreviews(parent.getIndex());
+        stack->refreshView();
+    }
+}
+
+void deProperty::setStack(dePreviewStack& _stack)
+{
+    stack = &_stack;
 }

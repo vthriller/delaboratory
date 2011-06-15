@@ -44,8 +44,6 @@ deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewS
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deCurvesPanel::click));
     Connect(wxEVT_LEFT_UP, wxMouseEventHandler(deCurvesPanel::release));
     Connect(wxEVT_MOTION, wxMouseEventHandler(deCurvesPanel::move));
-
-
 }
 
 deCurvesPanel::~deCurvesPanel()
@@ -208,13 +206,12 @@ void deCurvesPanel::click(wxMouseEvent &event)
     grabX = point.getX() - x;
     grabY = point.getY() - y;
 
+    property.onUpdate();
     update();
 }
 
 void deCurvesPanel::update()
 {
-    stack.updatePreviews(layerNumber);
-    stack.refreshView();
     paint();
 }
 
@@ -271,6 +268,7 @@ void deCurvesPanel::move(wxMouseEvent &event)
         }
 
         curve->movePoint(selectedPoint, x, y);
+        property.onUpdate();
         update();
     }
 }
