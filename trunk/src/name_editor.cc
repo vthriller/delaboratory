@@ -16,28 +16,32 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "property_name.h"
 #include "name_editor.h"
-#include <wx/wx.h>
+#include "property_name.h"
 
-dePropertyName::dePropertyName(deLayer& _parent)
-:deProperty(_parent)
+deNameEditor::deNameEditor(wxPanel* parent, dePropertyName& _property)
+:wxPanel(parent), property(_property)
 {
-    name = "";
-}
+    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
-dePropertyName::~dePropertyName()
-{
-}
+    wxStaticText* labelName = new wxStaticText(this, wxID_ANY, _T("layer name:") );
+    sizer->Add(labelName);
+    edit =  new wxTextCtrl(this, wxID_ANY, wxString::FromAscii(property.getName().c_str()), wxDefaultPosition, wxSize(200, -1));
+    sizer->Add(edit);
 
-void dePropertyName::setName(const std::string& _name)
-{
-    name = _name;
-}
+    SetSizer(sizer);
 
-void dePropertyName::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
-{
-    wxPanel* editor = new deNameEditor(panel, *this);
-    sizer->Add(editor);
+    Connect(wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler(deNameEditor::textEnter));
 }    
 
+deNameEditor::~deNameEditor()
+{
+}
+
+
+void deNameEditor::textEnter(wxCommandEvent &event)
+{
+    wxString valueStr = edit->GetValue();
+    std::string name(valueStr.mb_str());
+    property.setName(name);
+}
