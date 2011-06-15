@@ -16,25 +16,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_BLUR_DIRECTION_H
-#define _DE_PROPERTY_BLUR_DIRECTION_H
+#ifndef _DE_BLUR_DIRECTION_SELECTOR_H
+#define _DE_BLUR_DIRECTION_SELECTOR_H
 
-#include "property.h"
+#include <wx/wx.h>
+#include <vector>
 #include "blur.h"
+class dePropertyBlurDirection;
 
-class dePropertyBlurDirection:public deProperty
+class deBlurDirectionSelector:public wxPanel
 {
     private:
-        deBlurDirection direction;
+        dePropertyBlurDirection& property;
+        wxChoice* blurDirectionChoice;
 
+        void choose(wxCommandEvent &event);
     public:
-        dePropertyBlurDirection(deLayer& _parent);
-        virtual ~dePropertyBlurDirection();
-
-        deBlurDirection getDirection() const {return direction;};
-        void setDirection(deBlurDirection _direction);
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
-
+        deBlurDirectionSelector(wxPanel* parent, dePropertyBlurDirection& _property);
+        virtual ~deBlurDirectionSelector();
 };
 
 #endif
