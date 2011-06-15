@@ -25,6 +25,9 @@ deCurvesFrame::deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePr
 :deActionFrame(parent, _curvesLayer, _T("curves")),
  curvesLayer(_curvesLayer), property(_property)
 {
+
+    property.setStack(_stack);
+
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
     deColorSpace colorSpace = curvesLayer.getColorSpace();
@@ -47,18 +50,10 @@ deCurvesFrame::deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePr
 
     wxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
 
-/*
-    wxButton* buttonReset1 = new wxButton(this, wxID_ANY, _T("reset curve"));
-    buttonSizer->Add(buttonReset1, 1, wxEXPAND);
-    wxButton* buttonResetAll = new wxButton(this, wxID_ANY, _T("reset all curves"));
-    buttonSizer->Add(buttonResetAll, 1, wxEXPAND);*/
-
     sizer->Add(buttonSizer, 0);
 
     SetSizer(sizer);
     Fit();
-
-//    curvesPanel->changeChannel(0);
 
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deCurvesFrame::choose));
 }
