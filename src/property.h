@@ -30,6 +30,8 @@ class deProperty
     protected:
         deLayer& parent;
 
+        void onUpdate();
+
     public:
         deProperty(deLayer& _parent);
         virtual ~deProperty();

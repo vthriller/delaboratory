@@ -24,6 +24,7 @@
 class deCurvesLayer;
 class dePreviewStack;
 class deCurvesPanel;
+class dePropertyCurves;
 
 class deCurvesFrame:public deActionFrame
 {
@@ -31,11 +32,12 @@ class deCurvesFrame:public deActionFrame
         deCurvesLayer& curvesLayer;
         wxChoice* channelChoice;
         deCurvesPanel* curvesPanel;
+        dePropertyCurves& property;
 
         void choose(wxCommandEvent &event);
 
     public:
-        deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, int layerNumber);
+        deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, int layerNumber, dePropertyCurves& _property);
         virtual ~deCurvesFrame();
         
         virtual void traceSampler(deSampler* sampler);

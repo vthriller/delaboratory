@@ -43,8 +43,6 @@ class deCurvesLayer:public deLayer
 
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
-        deCurves& getCurves() {return curves.getCurves();};
-
 };
 
 #endif

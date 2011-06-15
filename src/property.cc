@@ -18,6 +18,7 @@
 
 #include "property.h"
 #include "layer.h"
+#include <iostream>
 
 deProperty::deProperty(deLayer& _parent)
 :parent(_parent)
@@ -45,4 +46,9 @@ void deProperty::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack&
 {
     wxStaticText* label = new wxStaticText(panel, wxID_ANY, _T("unsupported property") );
     sizer->Add(label, 0);
+}
+
+void deProperty::onUpdate()
+{
+//    std::cout << "update" << std::endl;
 }
