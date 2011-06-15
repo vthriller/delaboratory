@@ -24,6 +24,7 @@
 class deMixerLayer;
 class dePreviewStack;
 class deMixerSlider;
+class dePropertyMixer;
 
 class deMixerFrame:public deActionFrame
 {
@@ -33,9 +34,10 @@ class deMixerFrame:public deActionFrame
 
         int number;
         int sliderRange;
+        dePropertyMixer& property;
 
     public:
-        deMixerFrame(wxWindow *parent, deMixerLayer& _mixerLayer, dePreviewStack& _stack, int layerNumber);
+        deMixerFrame(wxWindow *parent, deMixerLayer& _mixerLayer, dePreviewStack& _stack, dePropertyMixer& _property);
         virtual ~deMixerFrame();
 
 };

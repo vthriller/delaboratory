@@ -44,9 +44,10 @@ void dePropertyMixer::recreateMixer(deColorSpace sc, deColorSpace dc)
     mixer = new deMixer(sc, dc);
 }
 
-void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
 {
+    stack = &_stack;
     deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(parent);
-    wxPanel* mixerEditor = new deMixerEditor(panel, mixerLayer, stack, parent.getIndex());
+    wxPanel* mixerEditor = new deMixerEditor(panel, mixerLayer, *this);
     sizer->Add(mixerEditor);
 }    

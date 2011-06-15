@@ -22,20 +22,21 @@
 #include <wx/wx.h>
 #include <vector>
 class deMixerLayer;
-class dePreviewStack;
 class deMixerSlider;
+class dePropertyMixer;
 
 class deMixerEditor:public wxPanel
 {
     private:
         deMixerLayer& mixerLayer;
         std::vector<deMixerSlider*> sliders;
+        dePropertyMixer& property;
 
         int number;
         int sliderRange;
 
     public:
-        deMixerEditor(wxWindow *parent, deMixerLayer& _mixerLayer, dePreviewStack& _stack, int layerNumber);
+        deMixerEditor(wxWindow *parent, deMixerLayer& _mixerLayer, dePropertyMixer& _property);
         virtual ~deMixerEditor();
 
 };
