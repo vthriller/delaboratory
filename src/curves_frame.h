@@ -37,7 +37,7 @@ class deCurvesFrame:public deActionFrame
         void choose(wxCommandEvent &event);
 
     public:
-        deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, int layerNumber, dePropertyCurves& _property);
+        deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, dePropertyCurves& _property);
         virtual ~deCurvesFrame();
         
         virtual void traceSampler(deSampler* sampler);

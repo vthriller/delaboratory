@@ -51,7 +51,6 @@ private:
     deValue grabY;
 
     dePreviewStack& stack;
-    int layerNumber;
 
     void update();
 
@@ -64,7 +63,7 @@ private:
     void updateMarker();
 
 public:
-	deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewStack& _stack, int _layerNumber, dePropertyCurves& _property);
+	deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewStack& _stack, dePropertyCurves& _property);
 	virtual ~deCurvesPanel();
 
 	void paintEvent(wxPaintEvent & evt);

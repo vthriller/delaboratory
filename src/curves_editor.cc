@@ -21,7 +21,7 @@
 #include "curves_panel.h"
 #include "channel_choice.h"
 
-deCurvesEditor::deCurvesEditor(wxWindow *parent, deCurvesLayer& curvesLayer, dePreviewStack& _stack, int layerNumber, dePropertyCurves& _property)
+deCurvesEditor::deCurvesEditor(wxWindow *parent, deCurvesLayer& curvesLayer, dePreviewStack& _stack, dePropertyCurves& _property)
 :wxPanel(parent), property(_property)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -40,7 +40,7 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deCurvesLayer& curvesLayer, deP
     wxSizer* bigSizer = new wxBoxSizer(wxHORIZONTAL);
     bigPanel->SetSizer(bigSizer);
 
-    curvesPanel = new deCurvesPanel(bigPanel, curvesLayer, _stack, layerNumber, property);
+    curvesPanel = new deCurvesPanel(bigPanel, curvesLayer, _stack, property);
 
     bigSizer->Add(curvesPanel, 0, wxEXPAND | wxALL, 20);
 

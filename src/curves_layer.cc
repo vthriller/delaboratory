@@ -65,7 +65,7 @@ dePreview* deCurvesLayer::createPreview(dePreviewStack& previewStack)
 
 deActionFrame* deCurvesLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
-    return new deCurvesFrame(parent, *this, project->getPreviewStack(), layerNumber, curves);
+    return new deCurvesFrame(parent, *this, project->getPreviewStack(), curves);
 }
 
 void deCurvesLayer::processCurves(const dePreview& source, dePreview& destination)
