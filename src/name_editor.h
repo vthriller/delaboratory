@@ -16,30 +16,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_NAME_H
-#define _DE_PROPERTY_NAME_H
+#ifndef _DE_NAME_EDITOR_H
+#define _DE_NAME_EDITOR_H
 
-#include "property.h"
-#include <string>
+#include <wx/wx.h>
+class dePropertyName;
 
-class wxTextCtrl;
-class wxCommandEvent;
-
-class dePropertyName:public deProperty
+class deNameEditor:public wxPanel
 {
     private:
-        std::string name;
-        wxTextCtrl* editName;
+        dePropertyName& property;
+        wxTextCtrl* edit;
 
+        void textEnter(wxCommandEvent &event);
     public:
-        dePropertyName(deLayer& _parent);
-        virtual ~dePropertyName();
-
-        const std::string& getName() const {return name;};
-        void setName(const std::string& _name);
-
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
-
+        deNameEditor(wxPanel* parent, dePropertyName& _property);
+        virtual ~deNameEditor();
 };
 
 #endif
