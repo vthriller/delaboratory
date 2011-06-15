@@ -24,17 +24,19 @@
 class deCurvesLayer;
 class dePreviewStack;
 class deCurvesPanel;
+class dePropertyCurves;
 
 class deCurvesEditor:public wxPanel
 {
     private:
         wxChoice* channelChoice;
         deCurvesPanel* curvesPanel;
+        dePropertyCurves& property;
 
         void choose(wxCommandEvent &event);
 
     public:
-        deCurvesEditor(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, int layerNumber);
+        deCurvesEditor(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, int layerNumber, dePropertyCurves& _property);
         virtual ~deCurvesEditor();
 
 };

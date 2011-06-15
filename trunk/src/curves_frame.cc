@@ -21,9 +21,9 @@
 #include "curves_layer.h"
 #include "curves_panel.h"
 
-deCurvesFrame::deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, int layerNumber)
+deCurvesFrame::deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, int layerNumber, dePropertyCurves& _property)
 :deActionFrame(parent, _curvesLayer, _T("curves")),
- curvesLayer(_curvesLayer)
+ curvesLayer(_curvesLayer), property(_property)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
@@ -41,7 +41,7 @@ deCurvesFrame::deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePr
     wxSizer* bigSizer = new wxBoxSizer(wxHORIZONTAL);
     bigPanel->SetSizer(bigSizer);
 
-    curvesPanel = new deCurvesPanel(bigPanel, curvesLayer, _stack, layerNumber);
+    curvesPanel = new deCurvesPanel(bigPanel, curvesLayer, _stack, layerNumber, property);
 
     bigSizer->Add(curvesPanel, 0, wxEXPAND | wxALL, 20);
 

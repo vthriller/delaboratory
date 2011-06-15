@@ -25,6 +25,7 @@
 class deCurve;
 class deCurvesLayer;
 class dePreviewStack;
+class dePropertyCurves;
 
 class deCurvesPanel:public wxPanel
 {
@@ -58,10 +59,12 @@ private:
 
     deSampler sampler;
 
+    dePropertyCurves& property;
+
     void updateMarker();
 
 public:
-	deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewStack& _stack, int _layerNumber);
+	deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewStack& _stack, int _layerNumber, dePropertyCurves& _property);
 	virtual ~deCurvesPanel();
 
 	void paintEvent(wxPaintEvent & evt);

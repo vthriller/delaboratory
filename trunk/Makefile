@@ -45,7 +45,7 @@ ${APP}: ${OBJECTS}
 %.o: src/%.cc
 	${CXX} -c ${CXXFLAGS} $<
 
-.depend: depend
+#.depend: depend
 
 depend: $(SOURCES) ${HEADERS}
 		$(CXX) $(CXXFLAGS) -MM $^>>./.depend;

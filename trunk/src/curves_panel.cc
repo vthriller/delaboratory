@@ -30,16 +30,15 @@ END_EVENT_TABLE()
 
 #define CURVES_PANEL_SIZE 500
 
-deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewStack& _stack, int _layerNumber)
+deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewStack& _stack, int _layerNumber, dePropertyCurves& _property)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE)), layer(_layer), 
- bitmap(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE), stack(_stack), layerNumber(_layerNumber)
+ bitmap(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE), stack(_stack), layerNumber(_layerNumber), property(_property)
 {
     marker = -1;
 
-    //curve = NULL;
     selectedPoint = -1;
     channel = 0;
-    curve = (layer.getCurves()[channel]);
+    curve = (property.getCurves()[channel]);
 
     SetBackgroundColour(*wxBLACK);
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deCurvesPanel::click));
@@ -57,7 +56,7 @@ void deCurvesPanel::changeChannel(int _channel)
 {
     channel = _channel;
     updateMarker();
-    curve = (layer.getCurves()[channel]);
+    curve = (property.getCurves()[channel]);
     paint();
 }
 
