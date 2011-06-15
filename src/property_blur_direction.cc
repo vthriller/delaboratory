@@ -17,6 +17,7 @@
 */
 
 #include "property_blur_direction.h"
+#include "blur_direction_selector.h"
 
 dePropertyBlurDirection::dePropertyBlurDirection(deLayer& _parent)
 :deProperty(_parent)
@@ -32,3 +33,9 @@ void dePropertyBlurDirection::setDirection(deBlurDirection _direction)
 {
     direction = _direction;
 }
+
+void dePropertyBlurDirection::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+{
+    wxPanel* selector = new deBlurDirectionSelector(panel, *this);
+    sizer->Add(selector);
+}    
