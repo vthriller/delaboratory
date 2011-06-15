@@ -17,7 +17,6 @@
 */
 
 #include "property_curves.h"
-//#include "curves_panel.h"
 #include "curves_editor.h"
 #include "curves_layer.h"
 #include "layer.h"

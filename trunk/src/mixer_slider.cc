@@ -19,9 +19,10 @@
 #include "mixer_slider.h"
 #include "mixer.h"
 #include "preview_stack.h"
+#include "property_mixer.h"
 
-deMixerSlider::deMixerSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deMixer& _mixer, int _s, int _d, dePreviewStack& _stack, int _layerNumber)
-:deSlider(parent, labelString, _sliderRange, _valueMin, _valueMax), mixer(_mixer), s(_s), d(_d), stack(_stack), layerNumber(_layerNumber)
+deMixerSlider::deMixerSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deMixer& _mixer, int _s, int _d, dePropertyMixer& _property)
+:deSlider(parent, labelString, _sliderRange, _valueMin, _valueMax), mixer(_mixer), s(_s), d(_d), property(_property)
 {
     deValue v = mixer.getValue(s, d);
     setValue(v);
@@ -34,6 +35,5 @@ deMixerSlider::~deMixerSlider()
 void deMixerSlider::onValueChange(deValue value)
 {
     mixer.setValue(s, d, value);
-    stack.updatePreviews(layerNumber);
-    stack.refreshView();
+    property.onUpdate();
 }

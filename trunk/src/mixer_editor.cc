@@ -25,9 +25,10 @@
 #include "preview.h"
 #include "mixer_slider.h"
 
-deMixerEditor::deMixerEditor(wxWindow *parent, deMixerLayer& _mixerLayer, dePreviewStack& stack, int layerNumber)
+deMixerEditor::deMixerEditor(wxWindow *parent, deMixerLayer& _mixerLayer, dePropertyMixer& _property)
 :wxPanel(parent),
-mixerLayer(_mixerLayer)
+mixerLayer(_mixerLayer),
+property(_property)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     deMixer* mixer = mixerLayer.getMixer();
@@ -58,7 +59,7 @@ mixerLayer(_mixerLayer)
         for (j = 0; j < s; j++)
         {
             std::string sc = getChannelName(sourceColorSpace, j);
-            deMixerSlider* slider = new deMixerSlider(this, sc, sliderRange, mixer->getRangeMin(), mixer->getRangeMax(), *mixer, j, i, stack, layerNumber);
+            deMixerSlider* slider = new deMixerSlider(this, sc, sliderRange, mixer->getRangeMin(), mixer->getRangeMax(), *mixer, j, i, property);
             sliders.push_back(slider);
             destSizer->Add(slider, 1, wxEXPAND);
         }

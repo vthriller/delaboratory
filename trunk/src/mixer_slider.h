@@ -21,7 +21,7 @@
 
 #include "slider.h"
 class deMixer;
-class dePreviewStack;
+class dePropertyMixer;
 
 class deMixerSlider:public deSlider
 {
@@ -29,10 +29,9 @@ class deMixerSlider:public deSlider
         deMixer& mixer;
         int s;
         int d;
-        dePreviewStack& stack;
-        int layerNumber;
+        dePropertyMixer& property;
     public:
-        deMixerSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deMixer& _mixer, int _s, int _d, dePreviewStack& _stack, int _layerNumber);
+        deMixerSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deMixer& _mixer, int _s, int _d, dePropertyMixer& _property);
         virtual ~deMixerSlider();
         
         virtual void onValueChange(deValue value);
