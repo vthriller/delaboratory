@@ -36,7 +36,7 @@ class deCurvesEditor:public wxPanel
         void choose(wxCommandEvent &event);
 
     public:
-        deCurvesEditor(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, int layerNumber, dePropertyCurves& _property);
+        deCurvesEditor(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, dePropertyCurves& _property);
         virtual ~deCurvesEditor();
 
 };

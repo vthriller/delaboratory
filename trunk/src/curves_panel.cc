@@ -30,9 +30,9 @@ END_EVENT_TABLE()
 
 #define CURVES_PANEL_SIZE 500
 
-deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewStack& _stack, int _layerNumber, dePropertyCurves& _property)
+deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewStack& _stack, dePropertyCurves& _property)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE)), layer(_layer), 
- bitmap(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE), stack(_stack), layerNumber(_layerNumber), property(_property)
+ bitmap(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE), stack(_stack), property(_property)
 {
     marker = -1;
 
