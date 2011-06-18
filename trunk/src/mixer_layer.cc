@@ -50,7 +50,8 @@ void deMixerLayer::recreateMixer()
     {
         return;
     }
-    mixer.recreateMixer(source->getColorSpace(), colorSpace.getColorSpace());
+    //mixer.recreateMixer(source->getColorSpace(), colorSpace.getColorSpace());
+    mixer.recreateMixer();
 }
 
 void deMixerLayer::onChangeColorSpace()

@@ -24,12 +24,16 @@ class wxPanel;
 class wxWindow;
 class wxSizer;
 class dePreviewStack;
+class deGUI;
+#include "color_space.h"
 
 class deProperty
 {
     protected:
         deLayer& parent;
         dePreviewStack* stack;
+        deGUI* gui;
+
 
 
     public:
@@ -42,7 +46,10 @@ class deProperty
         const deLayer& getParent() const {return parent;};
 
         void onUpdate();
+        void onListUpdate(deColorSpace colorSpace);
         void setStack(dePreviewStack& _stack);
+
+        virtual void onColorSpaceChange();
 
 };
 

@@ -44,5 +44,6 @@ deLayerSelector::~deLayerSelector()
 void deLayerSelector::choose(wxCommandEvent &event)
 {
     property.setIndex( layerChoice->GetCurrentSelection() );
+    property.onUpdate();
 }
 

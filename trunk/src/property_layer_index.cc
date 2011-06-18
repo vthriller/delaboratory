@@ -34,8 +34,9 @@ void dePropertyLayerIndex::setIndex(int _index)
     index = _index;
 }
 
-void dePropertyLayerIndex::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+void dePropertyLayerIndex::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
 {
+    stack = &_stack;
     wxPanel* selector = new deLayerSelector(panel, *this, label);
     sizer->Add(selector);
 }    

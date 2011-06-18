@@ -69,6 +69,8 @@ class deLayer
         virtual void onChangeSourceLayer() {};
         virtual void onChangeOverlayLayer() {};
 
+        void notifyPropertiesOnColorSpaceChange();
+
         void updateColorSpace();
 
         const deColorSpace getColorSpace() const {return colorSpace.getColorSpace();};
@@ -89,6 +91,8 @@ class deLayer
         int getOverlayLayerID() const {return overlayLayer.getIndex();};
 
         void registerProperty(deProperty& property);
+
+        deLayer* getSourceLayer();
         
         deLayerStack& getStack() {return stack;};
         int getIndex() const {return index;};

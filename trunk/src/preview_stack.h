@@ -54,6 +54,7 @@ class dePreviewStack
         void updatePreviews(int n);
 
         void setProject(deProject* _project);
+        deProject* getProject() {return project;};
 
         void refreshView();
 

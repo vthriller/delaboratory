@@ -31,4 +31,5 @@ dePropertyValueSlider::~dePropertyValueSlider()
 void dePropertyValueSlider::onValueChange(deValue value)
 {
     property.setValue(value);
+    property.onUpdate();
 }

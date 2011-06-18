@@ -35,13 +35,18 @@ dePropertyMixer::~dePropertyMixer()
     }        
 }
 
-void dePropertyMixer::recreateMixer(deColorSpace sc, deColorSpace dc)
-{
+//void dePropertyMixer::recreateMixer(deColorSpace sc, deColorSpace dc)
+void dePropertyMixer::recreateMixer()
+{   
+    deColorSpace s = parent.getSourceLayer()->getColorSpace();
+    deColorSpace d = parent.getColorSpace();
+
     if (mixer)
     {
         delete mixer;
     }
-    mixer = new deMixer(sc, dc);
+    //mixer = new deMixer(sc, dc);
+    mixer = new deMixer(s, d);
 }
 
 void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
@@ -51,3 +56,8 @@ void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewS
     wxPanel* mixerEditor = new deMixerEditor(panel, mixerLayer, *this);
     sizer->Add(mixerEditor);
 }    
+
+void dePropertyMixer::onColorSpaceChange()
+{
+    recreateMixer();
+}

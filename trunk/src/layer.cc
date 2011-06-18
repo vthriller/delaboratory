@@ -101,6 +101,11 @@ void deLayer::changeColorSpace(deColorSpace _colorSpace)
     onChangeColorSpace();
 }
 
+deLayer* deLayer::getSourceLayer()
+{
+    return stack.getLayer(sourceLayer.getIndex());
+}
+
 void deLayer::updateColorSpace()
 {
     if ((colorSpace.getColorSpace() != deColorSpaceInvalid) && (canChangeColorSpace()))
@@ -135,4 +140,13 @@ deActionFrame* deLayer::createLayerFrame(wxWindow* parent, int layerNumber, dePr
     frame->Fit();
 
     return frame;
+}
+
+void deLayer::notifyPropertiesOnColorSpaceChange()
+{
+    deProperties::iterator i;
+    for (i = properties.begin(); i != properties.end(); i++)
+    {
+        (*i)->onColorSpaceChange();
+    }
 }
