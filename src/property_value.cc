@@ -33,8 +33,9 @@ void dePropertyValue::setValue(deValue _value)
     value = _value;
 }
 
-void dePropertyValue::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+void dePropertyValue::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
 {
+    stack = &_stack;
     dePropertyValueSlider* slider = new dePropertyValueSlider(panel, *this, 100);
     sizer->Add(slider);
 }    

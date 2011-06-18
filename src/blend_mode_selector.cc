@@ -35,4 +35,5 @@ void deBlendModeSelector::choose(wxCommandEvent &event)
 {
     int c = blendModeChoice->GetCurrentSelection();
     property.setBlendMode(blendModes[c]);
+    property.onUpdate();
 }

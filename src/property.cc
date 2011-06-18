@@ -19,11 +19,13 @@
 #include "property.h"
 #include "layer.h"
 #include "preview_stack.h"
+#include "gui.h"
 
 deProperty::deProperty(deLayer& _parent)
 :parent(_parent)
 {
     stack = NULL;
+    gui = NULL;
     parent.registerProperty(*this);
 }
 
@@ -59,7 +61,21 @@ void deProperty::onUpdate()
     }
 }
 
+void deProperty::onListUpdate(deColorSpace colorSpace)
+{
+    if (gui)
+    {
+        gui->updateAfterSetView(colorSpace);
+    }        
+    parent.notifyPropertiesOnColorSpaceChange();
+    onUpdate();
+}
+
 void deProperty::setStack(dePreviewStack& _stack)
 {
     stack = &_stack;
+}
+
+void deProperty::onColorSpaceChange()
+{
 }
