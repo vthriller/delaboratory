@@ -25,7 +25,7 @@
 #include "project.h"
 
 deNDLayer::deNDLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), nd(*this), blendMode(*this), channels(*this)
+:deLayer(_stack, _index, _name), ndType(*this), blendMode(*this), channels(*this), xCenter(*this, "x center", -1, 1), yCenter(*this, "y center", -1, 1), power(*this, "power", -1, 1)
 {
     blendMode.setBlendMode(deBlendMultiply);
     clearEnabledChannels();
@@ -48,7 +48,7 @@ dePreview* deNDLayer::createPreview(dePreviewStack& previewStack)
 
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
-    blend(*sourcePreview, nd.getND(), *preview, blendMode.getBlendMode(), channels.getChannels());
+    //blend(*sourcePreview, nd.getND(), *preview, blendMode.getBlendMode(), channels.getChannels());
 
     return preview;
 }
