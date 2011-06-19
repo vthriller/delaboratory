@@ -38,7 +38,6 @@ deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewS
 
     selectedPoint = -1;
     channel = 0;
-    curve = (property.getCurves()[channel]);
 
     SetBackgroundColour(*wxBLACK);
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deCurvesPanel::click));
@@ -54,7 +53,6 @@ void deCurvesPanel::changeChannel(int _channel)
 {
     channel = _channel;
     updateMarker();
-    curve = (property.getCurves()[channel]);
     paint();
 }
 
@@ -124,6 +122,8 @@ void deCurvesPanel::drawLines(wxDC& dc)
 
 void deCurvesPanel::drawCurve(wxDC& dc)
 {
+    deCurve* curve = (property.getCurves()[channel]);
+
     if (!curve)
     {
         return;
@@ -181,6 +181,8 @@ void deCurvesPanel::render(wxDC& dc_orig)
 
 void deCurvesPanel::click(wxMouseEvent &event)
 {
+    deCurve* curve = (property.getCurves()[channel]);
+
     if (!curve)
     {
         return;
@@ -217,6 +219,8 @@ void deCurvesPanel::update()
 
 void deCurvesPanel::release(wxMouseEvent &event)
 {
+    deCurve* curve = (property.getCurves()[channel]);
+
     if (selectedPoint)
     {
         deValue x;
@@ -236,6 +240,8 @@ void deCurvesPanel::release(wxMouseEvent &event)
 
 void deCurvesPanel::move(wxMouseEvent &event)
 {
+    deCurve* curve = (property.getCurves()[channel]);
+
     if (!curve)
     {
         return;
