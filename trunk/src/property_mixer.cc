@@ -35,7 +35,6 @@ dePropertyMixer::~dePropertyMixer()
     }        
 }
 
-//void dePropertyMixer::recreateMixer(deColorSpace sc, deColorSpace dc)
 void dePropertyMixer::recreateMixer()
 {   
     deColorSpace s = parent.getSourceLayer()->getColorSpace();
@@ -45,7 +44,6 @@ void dePropertyMixer::recreateMixer()
     {
         delete mixer;
     }
-    //mixer = new deMixer(sc, dc);
     mixer = new deMixer(s, d);
 }
 
