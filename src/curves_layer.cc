@@ -38,7 +38,7 @@ deCurvesLayer::~deCurvesLayer()
 
 void deCurvesLayer::resetCurves()
 {
-    curves.resetCurves(colorSpace.getColorSpace());
+    curves.resetCurves();
 }
 
 void deCurvesLayer::onChangeColorSpace()

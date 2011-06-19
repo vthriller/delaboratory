@@ -31,8 +31,9 @@ dePropertyCurves::~dePropertyCurves()
     deleteCurves();
 }
 
-void dePropertyCurves::resetCurves(deColorSpace colorSpace)
+void dePropertyCurves::resetCurves()
 {
+    deColorSpace colorSpace = parent.getColorSpace();
     int n = getColorSpaceSize(colorSpace);
     deleteCurves();
     int i;
@@ -65,3 +66,8 @@ void dePropertyCurves::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreview
     wxPanel* curvesEditor = new deCurvesEditor(panel, curvesLayer, _stack, *this);
     sizer->Add(curvesEditor);
 }    
+
+void dePropertyCurves::onColorSpaceChange()
+{
+    resetCurves();
+}

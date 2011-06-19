@@ -35,10 +35,11 @@ class dePropertyCurves:public deProperty
         virtual ~dePropertyCurves();
 
         deCurves& getCurves() {return curves;};
-        void resetCurves(deColorSpace colorSpace);
+        void resetCurves();
         deCurve* getCurve(int index);
 
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
+        virtual void onColorSpaceChange();
 
 };
 
