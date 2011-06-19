@@ -42,7 +42,6 @@ private:
     void getPosition(wxMouseEvent &event, deValue& x, deValue &y);
 
     int selectedPoint;
-    deCurve* curve;
     deCurvesLayer& layer;
     wxBitmap bitmap;
     int channel;
