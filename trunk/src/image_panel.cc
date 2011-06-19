@@ -27,6 +27,7 @@
 #include "sampler_list.h"
 #include "sampler.h"
 #include "exception.h"
+#include <wx/dcbuffer.h>
 
 BEGIN_EVENT_TABLE(deImagePanel, wxPanel)
 EVT_PAINT(deImagePanel::paintEvent)
@@ -80,6 +81,8 @@ void deImagePanel::move(wxMouseEvent &event)
 deImagePanel::deImagePanel(wxWindow* parent, deProject* _project)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), project(_project), renderer(project)
 {
+
+    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
     if (project)
     {
         project->logMessage("creating deImagePanel");
@@ -104,7 +107,8 @@ void deImagePanel::paintEvent(wxPaintEvent & evt)
     }        
     try
     {
-        wxPaintDC dc(this);
+        //wxPaintDC dc(this);
+        wxBufferedPaintDC dc(this);
         render(dc);
     }
     catch (deException& e)
@@ -121,7 +125,8 @@ void deImagePanel::paint()
     try
     {
         wxClientDC dc(this);
-        render(dc);
+        wxBufferedDC bufferedDC(&dc);
+        render(bufferedDC);
     }
     catch (deException& e)
     {
