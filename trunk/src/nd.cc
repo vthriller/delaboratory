@@ -19,20 +19,7 @@
 #include "nd.h"
 #include <cmath>
 
-deND::deND()
-{
-    type = deNDVignette;
-    xCenter = 0.0;
-    yCenter = 0.0;
-    power = 1.0;
-    inverted = false;
-}
-
-deND::~deND()
-{
-}
-
-deValue deND::getValue(deValue x, deValue y) const
+deValue getNDValue(deNDType type, deValue xCenter, deValue yCenter, deValue power, bool inverted, deValue x, deValue y) 
 {
     deValue result = 0.0;
     x-= xCenter;
@@ -68,6 +55,24 @@ deValue deND::getValue(deValue x, deValue y) const
         result = 1.0 - result;
     }
     return result;
+}
+
+deND::deND()
+{
+    type = deNDVignette;
+    xCenter = 0.0;
+    yCenter = 0.0;
+    power = 1.0;
+    inverted = false;
+}
+
+deND::~deND()
+{
+}
+
+deValue deND::getValue(deValue x, deValue y) const
+{
+    return getNDValue(type, xCenter, yCenter, power, inverted, x, y);
 }
 
 deValue deND::getXCenter() const
