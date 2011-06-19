@@ -23,6 +23,7 @@
 #include "nd_type_choice.h"
 #include "channel_check_boxes.h"
 
+/*
 class deNDSlider:public deSlider
 {
     private:
@@ -75,12 +76,13 @@ class deNDSlider:public deSlider
             stack.refreshView();
         }            
 };
-
+*/
 
 deNDFrame::deNDFrame(wxWindow* parent, deNDLayer& _layer, dePreviewStack& _stack, int _layerNumber)
 :deActionFrame(parent, _layer, _T("ND")),
  layer(_layer), stack(_stack), layerNumber(_layerNumber)
 {
+/*
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     int sliderRange = 200;
 
@@ -106,7 +108,7 @@ deNDFrame::deNDFrame(wxWindow* parent, deNDLayer& _layer, dePreviewStack& _stack
 
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deNDFrame::choose));
     Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deNDFrame::check));
-
+*/
 }
 
 deNDFrame::~deNDFrame()
@@ -115,14 +117,17 @@ deNDFrame::~deNDFrame()
 
 void deNDFrame::choose(wxCommandEvent &event)
 {
+/*
     int t = ndTypeChoice->GetCurrentSelection();
     layer.getND().setType(ndTypes[t]);
     stack.updatePreviews(layerNumber);
     stack.refreshView();
+    */
 }
 
 void deNDFrame::check(wxCommandEvent &event)
 {
+/*
     layer.clearEnabledChannels();
     deColorSpace colorSpace = layer.getColorSpace();
     int n = getColorSpaceSize(colorSpace);
@@ -136,5 +141,5 @@ void deNDFrame::check(wxCommandEvent &event)
     }
     stack.updatePreviews(layerNumber);
     stack.refreshView();
-
+*/
 }

@@ -20,7 +20,8 @@
 #define _DE_ND_LAYER_H
 
 #include "layer.h"
-#include "property_nd.h"
+#include "property_nd_type.h"
+#include "property_value.h"
 #include "property_channels.h"
 #include "property_blend_mode.h"
 #include <set>
@@ -28,7 +29,10 @@
 class deNDLayer:public deLayer
 {
     private:
-        dePropertyND nd;
+        dePropertyNDType ndType;
+        dePropertyValue xCenter;
+        dePropertyValue yCenter;
+        dePropertyValue power;
         dePropertyBlendMode blendMode;
         dePropertyChannels channels;
 
@@ -43,7 +47,7 @@ class deNDLayer:public deLayer
 
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
-        deND& getND() {return nd.getND();};
+        //deND& getND() {return nd.getND();};
 
         void clearEnabledChannels();
         void enableChannel(int c);
