@@ -107,8 +107,8 @@ void deImagePanel::paintEvent(wxPaintEvent & evt)
     }        
     try
     {
-        //wxPaintDC dc(this);
         wxBufferedPaintDC dc(this);
+        dc.Clear();
         render(dc);
     }
     catch (deException& e)
@@ -126,6 +126,7 @@ void deImagePanel::paint()
     {
         wxClientDC dc(this);
         wxBufferedDC bufferedDC(&dc);
+        dc.Clear();
         render(bufferedDC);
     }
     catch (deException& e)
