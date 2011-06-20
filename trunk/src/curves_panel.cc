@@ -30,8 +30,8 @@ END_EVENT_TABLE()
 
 #define CURVES_PANEL_SIZE 500
 
-deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewStack& _stack, dePropertyCurves& _property)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE)), layer(_layer), 
+deCurvesPanel::deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE)), 
  bitmap(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE), stack(_stack), property(_property)
 {
     marker = -1;
@@ -171,7 +171,7 @@ void deCurvesPanel::render(wxDC& dc_orig)
 
     drawLines(dc);
 
-    wxColour colour = getChannelwxColour(layer.getColorSpace(), channel);
+    wxColour colour = getChannelwxColour(property.getParent().getColorSpace(), channel);
     wxPen pen(colour);
     dc.SetPen(pen);
 
@@ -292,7 +292,7 @@ void deCurvesPanel::traceSampler(deSampler* _sampler)
 
 void deCurvesPanel::updateMarker()
 {
-    int source = layer.getSourceLayerID();
+    int source = property.getParent().getSourceLayerID();
     dePreview* preview = stack.getPreview(source);
     if (!preview)
     {
@@ -300,7 +300,7 @@ void deCurvesPanel::updateMarker()
     }
 
     deValue values[4];
-    bool result = sampler.getPixel(values[0], values[1], values[2], values[3], layer.getColorSpace(), *preview);
+    bool result = sampler.getPixel(values[0], values[1], values[2], values[3], property.getParent().getColorSpace(), *preview);
     if (!result)
     {
         marker = -1;

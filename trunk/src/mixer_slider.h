@@ -20,18 +20,16 @@
 #define _DE_MIXER_SLIDER_H
 
 #include "slider.h"
-class deMixer;
 class dePropertyMixer;
 
 class deMixerSlider:public deSlider
 {
     private:
-        deMixer& mixer;
         int s;
         int d;
         dePropertyMixer& property;
     public:
-        deMixerSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deMixer& _mixer, int _s, int _d, dePropertyMixer& _property);
+        deMixerSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, int _s, int _d, dePropertyMixer& _property);
         virtual ~deMixerSlider();
         
         virtual void onValueChange(deValue value);

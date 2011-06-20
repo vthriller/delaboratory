@@ -20,34 +20,47 @@
 #include "channel_check_boxes.h"
 #include "property_channels.h"
 #include "layer.h"
-/*
-#include "property_blend_mode.h"
-#include "blend_mode_choice.h"
+#include <iostream>
 
-deBlendModeSelector::deBlendModeSelector(wxPanel* parent, dePropertyBlendMode& _property)
-:wxPanel(parent), property(_property)
-{
-    blendModeChoice = makeBlendModeChoice(this, blendModes, property.getBlendMode());
-    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deBlendModeSelector::choose));
-}
-
-deBlendModeSelector::~deBlendModeSelector()
-{
-}
-
-void deBlendModeSelector::choose(wxCommandEvent &event)
-{
-    int c = blendModeChoice->GetCurrentSelection();
-    property.setBlendMode(blendModes[c]);
-}*/
 deChannelsSelector::deChannelsSelector(wxPanel* parent, dePropertyChannels& _property)
 :wxPanel(parent), property(_property)
 {
-    wxSizer* sizer = new wxBoxSizer(wxVERTICAL); 
-    createChannelCheckBoxes(this, property.getParent().getColorSpace(), sizer, channels, property.getChannels());
+    sizer = new wxBoxSizer(wxVERTICAL); 
     SetSizer(sizer);
+    rebuild();
+    Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deChannelsSelector::check));
 }
 
 deChannelsSelector::~deChannelsSelector()
 {
+}
+
+void deChannelsSelector::rebuild()
+{
+    while (channels.size() > 0)
+    {
+        std::vector<wxCheckBox*>::iterator i = channels.begin();
+        sizer->Detach(*i);
+        delete *i;
+        channels.erase(i);
+    }
+    createChannelCheckBoxes(this, property.getParent().getColorSpace(), sizer, channels, property.getChannels());
+    Fit();
+}
+
+void deChannelsSelector::check(wxCommandEvent &event)
+{
+    property.clear();
+    deColorSpace colorSpace = property.getParent().getColorSpace();
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        if (channels[i]->IsChecked())
+        {
+            property.insert(i);
+        }
+    }
+    property.onUpdate();
+
 }

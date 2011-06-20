@@ -22,12 +22,15 @@
 #include "property.h"
 #include "curves.h"
 #include "color_space.h"
+class deCurvesEditor;
 
 class dePropertyCurves:public deProperty
 {
     private:
         deCurves curves;
         int panelSize;
+
+        deCurvesEditor* curvesEditor;
 
         void deleteCurves();
     public:

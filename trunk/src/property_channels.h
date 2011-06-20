@@ -21,6 +21,7 @@
 
 #include "property.h"
 #include <set>
+class deChannelsSelector;
 
 typedef std::set<int> deChannels;
 
@@ -28,6 +29,7 @@ class dePropertyChannels:public deProperty
 {
     private:
         deChannels channels;
+        deChannelsSelector* selector;
 
     public:
         dePropertyChannels(deLayer& _parent);
@@ -39,6 +41,8 @@ class dePropertyChannels:public deProperty
         void insert(int c);
 
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
+
+        virtual void onColorSpaceChange();
 
 };
 

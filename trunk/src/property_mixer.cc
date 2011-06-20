@@ -25,6 +25,7 @@ dePropertyMixer::dePropertyMixer(deLayer& _parent)
 :deProperty(_parent)
 {
     mixer = NULL;
+    mixerEditor = NULL;
 }
 
 dePropertyMixer::~dePropertyMixer()
@@ -45,13 +46,16 @@ void dePropertyMixer::recreateMixer()
         delete mixer;
     }
     mixer = new deMixer(s, d);
+    if (mixerEditor)
+    {
+        mixerEditor->rebuild();
+    }        
 }
 
 void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
 {
     stack = &_stack;
-    deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(parent);
-    wxPanel* mixerEditor = new deMixerEditor(panel, mixerLayer, *this);
+    mixerEditor = new deMixerEditor(panel, *this);
     sizer->Add(mixerEditor);
 }    
 

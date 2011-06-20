@@ -24,6 +24,7 @@
 dePropertyCurves::dePropertyCurves(deLayer& _parent, int _panelSize)
 :deProperty(_parent), panelSize(_panelSize)
 {
+    curvesEditor = NULL;
 }
 
 dePropertyCurves::~dePropertyCurves()
@@ -40,6 +41,11 @@ void dePropertyCurves::resetCurves()
     for (i = 0; i < n; i++)
     {
         curves.push_back(new deCurve(panelSize));
+    }
+
+    if (curvesEditor)
+    {
+        curvesEditor->rebuild();
     }
 }    
 
@@ -63,7 +69,7 @@ void dePropertyCurves::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreview
 {
     stack = &_stack;
     deCurvesLayer& curvesLayer = dynamic_cast<deCurvesLayer&>(parent);
-    wxPanel* curvesEditor = new deCurvesEditor(panel, curvesLayer, _stack, *this);
+    curvesEditor = new deCurvesEditor(panel, _stack, *this);
     sizer->Add(curvesEditor);
 }    
 

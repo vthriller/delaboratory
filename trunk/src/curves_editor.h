@@ -29,15 +29,20 @@ class dePropertyCurves;
 class deCurvesEditor:public wxPanel
 {
     private:
+        wxSizer* sizer;
         wxChoice* channelChoice;
         deCurvesPanel* curvesPanel;
         dePropertyCurves& property;
+        dePreviewStack& stack;
+        wxPanel* bigPanel;
 
         void choose(wxCommandEvent &event);
 
     public:
-        deCurvesEditor(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, dePropertyCurves& _property);
+        deCurvesEditor(wxWindow *parent, dePreviewStack& _stack, dePropertyCurves& _property);
         virtual ~deCurvesEditor();
+
+        void rebuild();
 
 };
 

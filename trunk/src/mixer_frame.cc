@@ -60,7 +60,7 @@ mixerLayer(_mixerLayer), property(_property)
         for (j = 0; j < s; j++)
         {
             std::string sc = getChannelName(sourceColorSpace, j);
-            deMixerSlider* slider = new deMixerSlider(this, sc, sliderRange, mixer->getRangeMin(), mixer->getRangeMax(), *mixer, j, i, property);
+            deMixerSlider* slider = new deMixerSlider(this, sc, sliderRange, mixer->getRangeMin(), mixer->getRangeMax(), j, i, property);
             sliders.push_back(slider);
             destSizer->Add(slider, 1, wxEXPAND);
         }
