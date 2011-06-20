@@ -21,16 +21,16 @@
 #include "curves_layer.h"
 #include "curves_panel.h"
 
-deCurvesFrame::deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePreviewStack& _stack, dePropertyCurves& _property)
-:deActionFrame(parent, _curvesLayer, _T("curves")),
- curvesLayer(_curvesLayer), property(_property)
+deCurvesFrame::deCurvesFrame(wxWindow *parent, deCurvesLayer& layer, dePreviewStack& _stack, dePropertyCurves& _property)
+:deActionFrame(parent, layer, _T("curves")),
+ property(_property)
 {
 
     property.setStack(_stack);
 
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
-    deColorSpace colorSpace = curvesLayer.getColorSpace();
+    deColorSpace colorSpace = property.getParent().getColorSpace();
 
     channelChoice = makeChannelChoice(this, colorSpace);
 
@@ -44,7 +44,7 @@ deCurvesFrame::deCurvesFrame(wxWindow *parent, deCurvesLayer& _curvesLayer, dePr
     wxSizer* bigSizer = new wxBoxSizer(wxHORIZONTAL);
     bigPanel->SetSizer(bigSizer);
 
-    curvesPanel = new deCurvesPanel(bigPanel, curvesLayer, _stack, property);
+    curvesPanel = new deCurvesPanel(bigPanel, _stack, property);
 
     bigSizer->Add(curvesPanel, 0, wxEXPAND | wxALL, 20);
 

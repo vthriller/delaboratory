@@ -42,7 +42,6 @@ private:
     void getPosition(wxMouseEvent &event, deValue& x, deValue &y);
 
     int selectedPoint;
-    deCurvesLayer& layer;
     wxBitmap bitmap;
     int channel;
 
@@ -62,7 +61,7 @@ private:
     void updateMarker();
 
 public:
-	deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, dePreviewStack& _stack, dePropertyCurves& _property);
+	deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property);
 	virtual ~deCurvesPanel();
 
 	void paintEvent(wxPaintEvent & evt);

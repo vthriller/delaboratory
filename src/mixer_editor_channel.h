@@ -16,26 +16,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_CHANNEL_SET_SELECTOR_H
-#define _DE_CHANNEL_SET_SELECTOR_H
+#ifndef _DE_MIXER_EDITOR_CHANNEL_H
+#define _DE_MIXER_EDITOR_CHANNEL_H
 
 #include <wx/wx.h>
+class dePropertyMixer;
+class deMixerSlider;
 #include <vector>
-class dePropertyChannels;
 
-class deChannelsSelector:public wxPanel
+class deMixerEditorChannel:public wxPanel
 {
     private:
-        dePropertyChannels& property;
-        std::vector<wxCheckBox*> channels;
-        void check(wxCommandEvent &event);
-
+        int sliderRange;
+        int channel;
+        dePropertyMixer& property;
         wxSizer* sizer;
-    public:
-        deChannelsSelector(wxPanel* parent, dePropertyChannels& _property);
-        virtual ~deChannelsSelector();
+        std::vector<deMixerSlider*> sliders;
 
-        void rebuild();
+    public:
+        deMixerEditorChannel(wxWindow *parent, dePropertyMixer& _property, int _channel);
+        virtual ~deMixerEditorChannel();
+
 };
+
 
 #endif

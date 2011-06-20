@@ -38,8 +38,15 @@ void dePropertyChannels::insert(int c)
     channels.insert(c);
 }
 
-void dePropertyChannels::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+void dePropertyChannels::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
 {
-    wxPanel* selector = new deChannelsSelector(panel, *this);
+    stack = &_stack;
+    selector = new deChannelsSelector(panel, *this);
     sizer->Add(selector);
 }    
+
+void dePropertyChannels::onColorSpaceChange()
+{
+    clear();
+    selector->rebuild();
+}

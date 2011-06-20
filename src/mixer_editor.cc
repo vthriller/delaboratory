@@ -24,61 +24,59 @@
 #include "layer_stack.h"
 #include "preview.h"
 #include "mixer_slider.h"
+#include "mixer_editor_channel.h"
 
-deMixerEditor::deMixerEditor(wxWindow *parent, deMixerLayer& _mixerLayer, dePropertyMixer& _property)
-:wxPanel(parent),
-mixerLayer(_mixerLayer),
+deMixerEditor::deMixerEditor(wxWindow *_parent, dePropertyMixer& _property)
+:wxPanel(_parent),
+parent(_parent),
 property(_property)
 {
-    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    deMixer* mixer = mixerLayer.getMixer();
+    sizer = new wxBoxSizer(wxVERTICAL);
+    build();
+    SetSizer(sizer);
+    Fit();
+}    
+
+void deMixerEditor::rebuild()
+{
+    destroy();
+    build();
+    Layout();
+}
+
+void deMixerEditor::build()
+{
+    deMixer* mixer = property.getMixer();
     if (!mixer)
     {
         return;
     }
 
-    int s = getColorSpaceSize(mixer->getSourceColorSpace());
     int d = getColorSpaceSize(mixer->getDestinationColorSpace());
-
-    // FIXME constant
-    sliderRange = 300;
-
-    deColorSpace sourceColorSpace = mixer->getSourceColorSpace();
-    deColorSpace colorSpace = mixerLayer.getColorSpace();
 
     int i;
     for (i = 0; i < d; i++)
     {
-        wxSizer* destSizer = new wxBoxSizer(wxVERTICAL);
-        
-        std::string dc = getChannelName(colorSpace, i);
-        wxStaticText* destLabel = new wxStaticText(this, wxID_ANY, wxString::FromAscii(dc.c_str()), wxDefaultPosition, wxSize(100, -1));
-        destSizer->Add(destLabel, 1, wxEXPAND);
-
-        int j;
-        for (j = 0; j < s; j++)
-        {
-            std::string sc = getChannelName(sourceColorSpace, j);
-            deMixerSlider* slider = new deMixerSlider(this, sc, sliderRange, mixer->getRangeMin(), mixer->getRangeMax(), *mixer, j, i, property);
-            sliders.push_back(slider);
-            destSizer->Add(slider, 1, wxEXPAND);
-        }
-        
-        sizer->Add(destSizer, 1, wxEXPAND);
+        deMixerEditorChannel* editorChannel = new deMixerEditorChannel(this, property, i);
+        panels.push_back(editorChannel);
+        sizer->Add(editorChannel, 1, wxEXPAND);
     }
-
-    SetSizer(sizer);
-
-    Fit();
 }
 
 deMixerEditor::~deMixerEditor()
 {
-    while (sliders.size() > 0)
+    destroy();
+}
+
+void deMixerEditor::destroy()
+{
+    while (panels.size() > 0)
     {
-        std::vector<deMixerSlider*>::iterator i = sliders.begin();
-        delete *i;
-        sliders.erase(i);
+        std::list<wxPanel*>::iterator i = panels.begin();
+        wxPanel* panel = *i;
+        sizer->Detach(panel);
+        panels.erase(i);
+        delete panel;
     }
 }
 

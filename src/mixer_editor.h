@@ -16,11 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_MIXER_FRAME_H
-#define _DE_MIXER_FRAME_H
+#ifndef _DE_MIXER_EDITOR_H
+#define _DE_MIXER_EDITOR_H
 
 #include <wx/wx.h>
 #include <vector>
+#include <list>
 class deMixerLayer;
 class deMixerSlider;
 class dePropertyMixer;
@@ -28,16 +29,21 @@ class dePropertyMixer;
 class deMixerEditor:public wxPanel
 {
     private:
-        deMixerLayer& mixerLayer;
-        std::vector<deMixerSlider*> sliders;
         dePropertyMixer& property;
 
-        int number;
-        int sliderRange;
+        wxSizer* sizer;
+        wxWindow* parent;
+
+        std::list<wxPanel*> panels;
+
+        void build();
+        void destroy();
 
     public:
-        deMixerEditor(wxWindow *parent, deMixerLayer& _mixerLayer, dePropertyMixer& _property);
+        deMixerEditor(wxWindow *parent, dePropertyMixer& _property);
         virtual ~deMixerEditor();
+
+        void rebuild();
 
 };
 

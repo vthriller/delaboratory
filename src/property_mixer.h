@@ -21,12 +21,14 @@
 
 #include "property.h"
 #include "color_space.h"
+class deMixerEditor;
 class deMixer;
 
 class dePropertyMixer:public deProperty
 {
     private:
         deMixer* mixer;
+        deMixerEditor* mixerEditor;
 
     public:
         dePropertyMixer(deLayer& _parent);

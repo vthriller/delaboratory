@@ -17,6 +17,7 @@
 */
 
 #include "channel_check_boxes.h"
+#include <iostream>
 
 void createChannelCheckBoxes(wxWindow* parent, deColorSpace colorSpace, wxSizer* sizer, std::vector<wxCheckBox*>& channels, const std::set<int>& enabledChannels)
 {
@@ -28,7 +29,7 @@ void createChannelCheckBoxes(wxWindow* parent, deColorSpace colorSpace, wxSizer*
         wxCheckBox* cb = new wxCheckBox(parent, wxID_ANY, wxString::FromAscii(getChannelName(colorSpace, i).c_str()));
         cb->SetValue(enabledChannels.count(i) == 1);
         sizer->Add(cb, 0);
-        channels[i] = cb;
+        channels.push_back(cb);
     }
 }
 

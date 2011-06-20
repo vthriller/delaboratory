@@ -127,6 +127,17 @@ deValue deMixer::getValue(int s, int d) const
 void deMixer::setValue(int s, int d, deValue value)
 {
     int sourceChannels = getColorSpaceSize(sourceColorSpace);
+    int destinationChannels = getColorSpaceSize(destinationColorSpace);
+
+    if ((s < 0) || (s >= sourceChannels))
+    {
+        return;
+    }
+
+    if ((d < 0) || (d >= destinationChannels))
+    {
+        return;
+    }
 
     int n = d * sourceChannels + s;
     values[n] = value;

@@ -21,32 +21,50 @@
 #include "curves_panel.h"
 #include "channel_choice.h"
 
-deCurvesEditor::deCurvesEditor(wxWindow *parent, deCurvesLayer& curvesLayer, dePreviewStack& _stack, dePropertyCurves& _property)
-:wxPanel(parent), property(_property)
+deCurvesEditor::deCurvesEditor(wxWindow *parent, dePreviewStack& _stack, dePropertyCurves& _property)
+:wxPanel(parent), property(_property), stack(_stack)
 {
-    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    sizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(sizer);
 
-    deColorSpace colorSpace = curvesLayer.getColorSpace();
+    channelChoice = NULL;
+    bigPanel = NULL;
 
+    rebuild();
+
+    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deCurvesEditor::choose));
+}
+
+void deCurvesEditor::rebuild()
+{
+    deColorSpace colorSpace = property.getParent().getColorSpace();
+
+    if (channelChoice)
+    {
+        sizer->Detach(channelChoice);
+        delete channelChoice;
+    }
     channelChoice = makeChannelChoice(this, colorSpace);
-
     sizer->Add(channelChoice, 0);
 
-    wxPanel* bigPanel = new wxPanel(this);
-    bigPanel->SetBackgroundColour(*wxBLACK);
+    if (bigPanel)
+    {
+        sizer->Detach(bigPanel);
+        delete bigPanel;
+    }
 
+    bigPanel = new wxPanel(this);
+    bigPanel->SetBackgroundColour(*wxBLACK);
     sizer->Add(bigPanel, 0);
+
 
     wxSizer* bigSizer = new wxBoxSizer(wxHORIZONTAL);
     bigPanel->SetSizer(bigSizer);
-
-    curvesPanel = new deCurvesPanel(bigPanel, curvesLayer, _stack, property);
-
+    curvesPanel = new deCurvesPanel(bigPanel,  stack, property);
     bigSizer->Add(curvesPanel, 0, wxEXPAND | wxALL, 20);
 
-    SetSizer(sizer);
+    Fit();
 
-    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deCurvesEditor::choose));
 }
 
 deCurvesEditor::~deCurvesEditor()
