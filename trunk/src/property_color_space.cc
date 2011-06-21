@@ -36,10 +36,8 @@ void dePropertyColorSpace::setColorSpace(deColorSpace _colorSpace)
     colorSpace = _colorSpace;
 }
 
-void dePropertyColorSpace::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
+void dePropertyColorSpace::addPanelContent(wxPanel* panel, wxSizer* sizer)
 {
-    stack = &_stack;
-    gui = &(stack->getProject()->getGUI());
     wxPanel* selector = new deColorSpaceSelector(panel, *this);
     sizer->Add(selector);
 }    

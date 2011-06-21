@@ -20,12 +20,12 @@
 #include "layer.h"
 #include "preview_stack.h"
 #include "gui.h"
+#include "project.h"
 
 deProperty::deProperty(deLayer& _parent)
 :parent(_parent)
 {
     stack = NULL;
-    gui = NULL;
     parent.registerProperty(*this);
 }
 
@@ -33,24 +33,27 @@ deProperty::~deProperty()
 {
 }
 
-wxPanel* deProperty::getPanel(wxWindow* parent, dePreviewStack& stack)
+wxPanel* deProperty::getPanel(wxWindow* parent, dePreviewStack& _stack)
 {
+    stack = &_stack;
+
     wxPanel* panel = new wxPanel(parent);
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
-    addPanelContent(panel, sizer, stack);
+    addPanelContent(panel, sizer);
 
     panel->SetSizer(sizer);
 
     return panel;
 }
 
+/*
 void deProperty::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
 {
-    stack = &_stack;
     wxStaticText* label = new wxStaticText(panel, wxID_ANY, _T("unsupported property") );
     sizer->Add(label, 0);
 }
+*/
 
 void deProperty::onUpdate()
 {
@@ -61,12 +64,14 @@ void deProperty::onUpdate()
     }
 }
 
-void deProperty::onListUpdate(deColorSpace colorSpace)
+void deProperty::onListUpdate()
 {
+    deColorSpace colorSpace = parent.getColorSpace();
+    deGUI* gui = &(stack->getProject()->getGUI());
     if (gui)
     {
         gui->updateAfterSetView(colorSpace);
-    }        
+    } 
     parent.notifyPropertiesOnColorSpaceChange();
     onUpdate();
 }

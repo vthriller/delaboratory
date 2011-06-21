@@ -34,9 +34,8 @@ void dePropertyBlendMode::setBlendMode(deBlendMode _mode)
     mode = _mode;
 }
 
-void dePropertyBlendMode::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
+void dePropertyBlendMode::addPanelContent(wxPanel* panel, wxSizer* sizer)
 {
-    stack = &_stack;
     wxPanel* selector = new deBlendModeSelector(panel, *this);
     sizer->Add(selector);
 }    

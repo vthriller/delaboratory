@@ -18,6 +18,8 @@
 
 #include "property_name.h"
 #include "name_editor.h"
+#include "preview_stack.h"
+#include "project.h"
 #include <wx/wx.h>
 
 dePropertyName::dePropertyName(deLayer& _parent)
@@ -35,7 +37,7 @@ void dePropertyName::setName(const std::string& _name)
     name = _name;
 }
 
-void dePropertyName::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+void dePropertyName::addPanelContent(wxPanel* panel, wxSizer* sizer)
 {
     wxPanel* editor = new deNameEditor(panel, *this);
     sizer->Add(editor);

@@ -35,5 +35,5 @@ void deColorSpaceSelector::choose(wxCommandEvent &event)
 {
     int c = colorSpaceChoice->GetCurrentSelection();
     property.setColorSpace(colorSpaces[c]);
-    property.onListUpdate(colorSpaces[c]);
+    property.onListUpdate();
 }

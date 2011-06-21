@@ -23,6 +23,7 @@
 #include "size.h"
 #include "preview.h"
 #include "project.h"
+#include "nd.h"
 
 deNDLayer::deNDLayer(deLayerStack& _stack, int _index, const std::string& _name)
 :deLayer(_stack, _index, _name), ndType(*this), blendMode(*this), channels(*this), xCenter(*this, "x center", -1, 1), yCenter(*this, "y center", -1, 1), power(*this, "power", -1, 1)
@@ -48,7 +49,13 @@ dePreview* deNDLayer::createPreview(dePreviewStack& previewStack)
 
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
-    //blend(*sourcePreview, nd.getND(), *preview, blendMode.getBlendMode(), channels.getChannels());
+    deND nd;
+    nd.setType(ndType.getNDType());
+    nd.setXCenter(xCenter.getValue());
+    nd.setYCenter(yCenter.getValue());
+    nd.setPower(power.getValue());
+
+    blend(*sourcePreview, nd, *preview, blendMode.getBlendMode(), channels.getChannels());
 
     return preview;
 }

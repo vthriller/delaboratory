@@ -34,7 +34,7 @@ void dePropertyBlurDirection::setDirection(deBlurDirection _direction)
     direction = _direction;
 }
 
-void dePropertyBlurDirection::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack)
+void dePropertyBlurDirection::addPanelContent(wxPanel* panel, wxSizer* sizer)
 {
     wxPanel* selector = new deBlurDirectionSelector(panel, *this);
     sizer->Add(selector);
