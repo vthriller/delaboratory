@@ -22,6 +22,11 @@
 dePropertyValue::dePropertyValue(deLayer& _parent, const std::string& _label, deValue _min, deValue _max)
 :deProperty(_parent), label(_label), min(_min), max(_max)
 {
+    value = 0;
+    if ((value < min) || (value > max))
+    {
+        value = (min + max) / 2.0;
+    }
 }
 
 dePropertyValue::~dePropertyValue()
@@ -33,9 +38,8 @@ void dePropertyValue::setValue(deValue _value)
     value = _value;
 }
 
-void dePropertyValue::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
+void dePropertyValue::addPanelContent(wxPanel* panel, wxSizer* sizer)
 {
-    stack = &_stack;
     dePropertyValueSlider* slider = new dePropertyValueSlider(panel, *this, 100);
     sizer->Add(slider);
 }    

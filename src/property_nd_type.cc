@@ -34,9 +34,8 @@ void dePropertyNDType::setNDType(deNDType _type)
     type = _type;
 }
 
-void dePropertyNDType::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
+void dePropertyNDType::addPanelContent(wxPanel* panel, wxSizer* sizer)
 {
-    stack = &_stack;
     wxPanel* selector = new deNDTypeSelector(panel, *this);
     sizer->Add(selector);
 }    

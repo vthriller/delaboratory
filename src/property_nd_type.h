@@ -33,7 +33,7 @@ class dePropertyNDType:public deProperty
 
         deNDType getNDType() const {return type;};
         void setNDType(deNDType _type);
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
 
 };
 

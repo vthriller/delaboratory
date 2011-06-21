@@ -90,17 +90,17 @@ deValue deND::getPower() const
     return power;
 }
 
-void deND::setXCenter(deValue& v)
+void deND::setXCenter(deValue v)
 {
     xCenter = v;
 }
 
-void deND::setYCenter(deValue& v)
+void deND::setYCenter(deValue v)
 {
     yCenter = v;
 }
 
-void deND::setPower(deValue& v)
+void deND::setPower(deValue v)
 {
     power = v;
 }

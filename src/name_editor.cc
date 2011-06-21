@@ -18,6 +18,7 @@
 
 #include "name_editor.h"
 #include "property_name.h"
+#include <iostream>
 
 deNameEditor::deNameEditor(wxPanel* parent, dePropertyName& _property)
 :wxPanel(parent), property(_property)
@@ -26,7 +27,7 @@ deNameEditor::deNameEditor(wxPanel* parent, dePropertyName& _property)
 
     wxStaticText* labelName = new wxStaticText(this, wxID_ANY, _T("layer name:") );
     sizer->Add(labelName);
-    edit =  new wxTextCtrl(this, wxID_ANY, wxString::FromAscii(property.getName().c_str()), wxDefaultPosition, wxSize(200, -1));
+    edit =  new wxTextCtrl(this, wxID_ANY, wxString::FromAscii(property.getName().c_str()), wxDefaultPosition, wxSize(200, -1), wxTE_PROCESS_ENTER);
     sizer->Add(edit);
 
     SetSizer(sizer);
@@ -44,4 +45,5 @@ void deNameEditor::textEnter(wxCommandEvent &event)
     wxString valueStr = edit->GetValue();
     std::string name(valueStr.mb_str());
     property.setName(name);
+    property.onListUpdate();
 }

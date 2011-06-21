@@ -33,7 +33,7 @@ class dePropertyColorSpace:public deProperty
 
         deColorSpace getColorSpace() const {return colorSpace;};
         void setColorSpace(deColorSpace _colorSpace);
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
 
 };
 

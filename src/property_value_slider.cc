@@ -22,6 +22,7 @@
 dePropertyValueSlider::dePropertyValueSlider(wxWindow *parent, dePropertyValue& _property, int range)
 :deSlider(parent, _property.getLabel(), range, _property.getMin(), _property.getMax()), property(_property)
 {
+    setValue(property.getValue());
 }
 
 dePropertyValueSlider::~dePropertyValueSlider()

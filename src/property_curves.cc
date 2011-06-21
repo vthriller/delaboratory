@@ -65,11 +65,10 @@ deCurve* dePropertyCurves::getCurve(int index)
     return curve;
 }        
 
-void dePropertyCurves::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
+void dePropertyCurves::addPanelContent(wxPanel* panel, wxSizer* sizer)
 {
-    stack = &_stack;
     deCurvesLayer& curvesLayer = dynamic_cast<deCurvesLayer&>(parent);
-    curvesEditor = new deCurvesEditor(panel, _stack, *this);
+    curvesEditor = new deCurvesEditor(panel, *stack, *this);
     sizer->Add(curvesEditor);
 }    
 

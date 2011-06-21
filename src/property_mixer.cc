@@ -52,9 +52,8 @@ void dePropertyMixer::recreateMixer()
     }        
 }
 
-void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
+void dePropertyMixer::addPanelContent(wxPanel* panel, wxSizer* sizer)
 {
-    stack = &_stack;
     mixerEditor = new deMixerEditor(panel, *this);
     sizer->Add(mixerEditor);
 }    

@@ -38,7 +38,7 @@ class dePropertyValue:public deProperty
         deValue getValue() const {return value;};
         void setValue(deValue _value);
 
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
 
         const std::string getLabel() const {return label;};
 

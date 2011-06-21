@@ -33,7 +33,7 @@ class dePropertyBlurDirection:public deProperty
 
         deBlurDirection getDirection() const {return direction;};
         void setDirection(deBlurDirection _direction);
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
 
 };
 

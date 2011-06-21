@@ -41,9 +41,9 @@ class deND
         deValue getYCenter() const;
         deValue getPower() const;
         deNDType getType() const;
-        void setXCenter(deValue& v);
-        void setYCenter(deValue& v);
-        void setPower(deValue& v);
+        void setXCenter(deValue v);
+        void setYCenter(deValue v);
+        void setPower(deValue v);
         void setType(deNDType _type);
 
 };

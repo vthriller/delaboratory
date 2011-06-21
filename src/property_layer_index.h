@@ -35,7 +35,7 @@ class dePropertyLayerIndex:public deProperty
         int getIndex() const {return index;};
         void setIndex(int _index);
 
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& stack);
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
 
 };
 

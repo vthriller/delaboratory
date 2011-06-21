@@ -32,21 +32,18 @@ class deProperty
     protected:
         deLayer& parent;
         dePreviewStack* stack;
-        deGUI* gui;
-
-
 
     public:
         deProperty(deLayer& _parent);
         virtual ~deProperty();
 
         virtual wxPanel* getPanel(wxWindow* parent, dePreviewStack& stack);
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack);
+        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer) = 0;
 
         const deLayer& getParent() const {return parent;};
 
         void onUpdate();
-        void onListUpdate(deColorSpace colorSpace);
+        void onListUpdate();
         void setStack(dePreviewStack& _stack);
 
         virtual void onColorSpaceChange();
