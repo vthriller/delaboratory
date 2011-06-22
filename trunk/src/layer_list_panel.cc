@@ -24,7 +24,7 @@
 #include "exception.h"
 #include "action_frame.h"
 
-#define UNIFIED_PROPERTIES 0 
+#define UNIFIED_PROPERTIES 1 
 
 void deLayerListPanel::select(wxCommandEvent &event)
 {
