@@ -25,3 +25,7 @@
 == You are interested in graphics processing and want to experiment ==
 
 *YES* Enjoy!
+
+== You need dodge/burn and other painting effects ==
+
+*NO* delaboratory doesn't support painting at all. So you can't dodge or burn, you can't paint on layer mask you can clone or heal. It may change in the future but for now you need per-pixel editor like GIMP for this task.
