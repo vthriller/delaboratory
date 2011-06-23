@@ -18,20 +18,18 @@
 
 #include "add_layer_dialog.h"
 #include "layer_list_panel.h"
-#include "mixer_layer.h"
-#include "blend_layer.h"
-#include "curves_layer.h"
-#include "blur_layer.h"
-#include "nd_layer.h"
+#include "layer.h"
 #include "project.h"
 #include "exception.h"
 #include "preview.h"
-#include "conversion_layer.h"
+#include "layer_factory.h"
 
 void deAddLayerFrame::click(wxCommandEvent &event)
 {
     try
     {
+        deLayerFactory& factory = project->getLayerFactory();
+
         Close();
 
         deLayerStack& stack = project->getLayerStack();
@@ -40,37 +38,43 @@ void deAddLayerFrame::click(wxCommandEvent &event)
 
         int id = event.GetId();
 
-        deLayer* layer = NULL;
+        std::string type = "";
+
+        // FIXME get layer types from factory
 
         if (id == curvesButton->GetId())
         {
-            layer = new deCurvesLayer(stack, index, "curves");
+           type = "curves";
         }
 
         if (id == mixerButton->GetId())
         {
-            layer = new deMixerLayer(stack, index, "mixer");
+           type = "mixer";
         }
 
         if (id == convertButton->GetId())
         {
-            layer = new deConversionLayer(stack, index, "conversion");
+           type = "conversion";
         }
 
         if (id == blendButton->GetId())
         {
-            layer = new deBlendLayer(stack, index, "blend");
+           type = "blend";
         }
 
         if (id == blurButton->GetId())
         {
-            layer = new deBlurLayer(stack, index, "blur");
+           type = "blur";
         }
 
         if (id == ndButton->GetId())
         {
-            layer = new deNDLayer(stack, index,  "nd");
+           type = "nd";
         }
+
+        std::string name = type;
+
+        deLayer* layer = factory.createLayer(type, stack, index, name);
 
         if (layer)
         {
@@ -101,7 +105,7 @@ deAddLayerFrame::deAddLayerFrame(deLayerListPanel* _panel, deProject* _project)
 
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
-    // FIXME build layer factory
+    // FIXME get layer types from factory
     curvesButton = new wxButton(this, wxID_ANY, _T("curves"), wxDefaultPosition, wxSize(-1, 50));
     sizer->Add(curvesButton, 1, wxEXPAND);
     mixerButton = new wxButton(this, wxID_ANY, _T("mixer"), wxDefaultPosition, wxSize(-1, 50));

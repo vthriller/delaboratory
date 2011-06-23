@@ -27,6 +27,7 @@
 #include <string>
 #include "gui.h"
 #include "logger.h"
+#include "layer_factory.h"
 
 class deFinalImage;
 
@@ -42,6 +43,7 @@ class deProject
         deGUI gui;
         std::string sourceFileName;
         deLogger logger;
+        deLayerFactory layerFactory;
 
         deProject(const deProject& project);
 
@@ -83,6 +85,8 @@ class deProject
         const std::string getSourceFileName() const;
 
         void logMessage(const std::string& message);
+
+        deLayerFactory& getLayerFactory() {return layerFactory;};
 
 };
 
