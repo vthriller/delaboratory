@@ -1,5 +1,8 @@
 #summary Tutorials
 
+Curves tutorial:
+http://www.cambridgeincolour.com/tutorials/photoshop-curves.htm
+
 Many types of curves:
 http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves.htm
 
