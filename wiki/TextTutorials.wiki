@@ -3,6 +3,9 @@
 Many types of curves:
 http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves.htm
 
+Lots of tutorials about curves from same site: 
+http://www.curvemeister.com/tutorials/index.htm
+
 "These pages explain the Lab colour space and how to use it in your post-processing - it can be much more effective than using RGB":
 http://www.broadhurst-family.co.uk/lefteye/MainPages/Lab.htm
 
