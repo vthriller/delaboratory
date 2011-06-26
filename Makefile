@@ -21,8 +21,8 @@ HEADERS_TMP = ${addsuffix .h, ${FILES}}
 HEADERS = ${addprefix src/, ${HEADERS_TMP}}
 
 CXX=g++
-LDFLAGS=`wx-config --libs` -ltiff
-CXXFLAGS=`wx-config --cxxflags`
+LDFLAGS=`wx-config --libs` `xml2-config --libs` -ltiff
+CXXFLAGS=`wx-config --cxxflags` `xml2-config --cflags`
 
 # profler
 #CXXFLAGS+= -DDE_PROFILER

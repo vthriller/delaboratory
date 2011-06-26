@@ -29,13 +29,17 @@
 enum
 {
     ID_Quit = 1,
-    ID_Open,
+    ID_OpenImage,
+    ID_OpenProject,
+    ID_SaveProject,
     ID_About
 };
 
 BEGIN_EVENT_TABLE(deMainFrame, wxFrame)
 EVT_MENU(ID_Quit, deMainFrame::OnQuit)
-EVT_MENU(ID_Open, deMainFrame::OnOpen)
+EVT_MENU(ID_OpenImage, deMainFrame::OnOpenImage)
+EVT_MENU(ID_OpenProject, deMainFrame::OnOpenProject)
+EVT_MENU(ID_SaveProject, deMainFrame::OnSaveProject)
 EVT_MENU(ID_About, deMainFrame::OnAbout)
 END_EVENT_TABLE()
 
@@ -82,7 +86,9 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
 
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append( ID_Open, _("&Open source image") );
+    menuFile->Append( ID_OpenImage, _("&Open source image") );
+    menuFile->Append( ID_OpenProject, _("Open project") );
+    menuFile->Append( ID_SaveProject, _("Save project") );
     menuFile->Append( ID_About, _("&About") );
     menuFile->AppendSeparator();
     menuFile->Append( ID_Quit, _("E&xit") );
@@ -105,7 +111,17 @@ void deMainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void deMainFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
+void deMainFrame::OnOpenProject(wxCommandEvent& WXUNUSED(event))
+{
+    project->open("default.xml");
+}
+
+void deMainFrame::OnSaveProject(wxCommandEvent& WXUNUSED(event))
+{
+    project->save("default.xml");
+}
+
+void deMainFrame::OnOpenImage(wxCommandEvent& WXUNUSED(event))
 {
 
     wxString type = _T("JPEG/TIFF files (*.jpg;*.jpeg;*.tiff;*.tif)|*.jpg;*.jpeg;*.tiff;*.tif");

@@ -30,7 +30,9 @@ private:
 public:
 	deMainFrame(const wxSize& size, deProject* _project);
 	void OnQuit(wxCommandEvent& event);
-	void OnOpen(wxCommandEvent& event);
+	void OnOpenImage(wxCommandEvent& event);
+	void OnOpenProject(wxCommandEvent& event);
+	void OnSaveProject(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
 
 	DECLARE_EVENT_TABLE()

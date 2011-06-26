@@ -20,6 +20,7 @@
 #define _DE_LAYER_STACK_H
 
 #include <vector>
+#include <libxml/parser.h>
 
 class deLayer;
 class deSampler;
@@ -41,6 +42,9 @@ class deLayerStack
 
         void traceSampler(deSampler* sampler);
         void updateColorSpaces();
+
+        void save(xmlNodePtr node);
+        void load(xmlNodePtr node);
 
 };
 
