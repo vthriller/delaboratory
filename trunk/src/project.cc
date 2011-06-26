@@ -26,6 +26,8 @@
 #include "source_image.h"
 #include "logger.h"
 
+#include <libxml/parser.h>
+
 deProject::deProject()
 :sourceImageSize(0,0)
 {
@@ -233,4 +235,35 @@ void deProject::logMessage(const std::string& message)
 #ifdef DE_LOGGER
     logger.log(message);
 #endif    
+}
+
+void deProject::open(const std::string& fileName)
+{
+    xmlDocPtr doc = xmlParseFile(fileName.c_str());
+
+    if (!doc)
+    {
+        return;
+    }
+
+    xmlNodePtr root = xmlDocGetRootElement(doc);
+
+    if (!root)
+    {
+        return;
+    }
+
+
+}
+
+void deProject::save(const std::string& fileName)
+{
+    xmlDocPtr doc = xmlNewDoc(xmlCharStrdup("1.0"));
+
+    xmlNodePtr root = xmlNewNode(NULL, xmlCharStrdup("layer_stack"));
+    xmlDocSetRootElement(doc, root);
+
+    layerStack.save(root);
+
+    xmlSaveFormatFile (fileName.c_str(), doc, 1); 
 }

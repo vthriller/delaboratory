@@ -86,3 +86,16 @@ void deLayerStack::updateColorSpaces()
         (*i)->updateColorSpace();
     }        
 }
+
+void deLayerStack::save(xmlNodePtr node)
+{
+    std::vector<deLayer*>::iterator i;
+    for (i = layers.begin(); i != layers.end(); i++)
+    {
+        xmlNewChild(node, NULL, xmlCharStrdup("layer"), NULL);
+    }
+}
+
+void deLayerStack::load(xmlNodePtr node)
+{
+}
