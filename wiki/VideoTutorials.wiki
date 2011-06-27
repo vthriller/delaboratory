@@ -9,3 +9,9 @@
 == Color vs. Contrast ==
 
 <wiki:video url="http://www.youtube.com/watch?v=MYMY1NHZhVs" width=1024 height=800/>
+
+= other =
+
+== Curves in LAB, bird example ==
+
+<wiki:video url="http://www.youtube.com/watch?v=ME3SSHO1CMI" width=1024 height=800/>
