@@ -47,14 +47,6 @@ wxPanel* deProperty::getPanel(wxWindow* parent, dePreviewStack& _stack)
     return panel;
 }
 
-/*
-void deProperty::addPanelContent(wxPanel* panel, wxSizer* sizer, dePreviewStack& _stack)
-{
-    wxStaticText* label = new wxStaticText(panel, wxID_ANY, _T("unsupported property") );
-    sizer->Add(label, 0);
-}
-*/
-
 void deProperty::onUpdate()
 {
     if (stack)
@@ -82,5 +74,15 @@ void deProperty::setStack(dePreviewStack& _stack)
 }
 
 void deProperty::onColorSpaceChange()
+{
+}
+
+void deProperty::save(xmlNodePtr node, const std::string& name)
+{
+    xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup(name.c_str()), NULL);
+    saveContent(child);
+}
+
+void deProperty::load(xmlNodePtr node)
 {
 }

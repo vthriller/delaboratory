@@ -21,6 +21,7 @@
 
 #include "color_space.h"
 #include "value.h"
+#include <libxml/parser.h>
 
 class dePreview;
 
@@ -50,6 +51,8 @@ class deMixer
 
         deValue getRangeMin() const;
         deValue getRangeMax() const;
+
+        void save(xmlNodePtr node);
     
 };
 

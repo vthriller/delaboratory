@@ -84,3 +84,8 @@ void deCurvesLayer::processCurves(const dePreview& source, dePreview& destinatio
     }
 
 }
+
+void deCurvesLayer::saveSpecific(xmlNodePtr node)
+{
+    curves.save(node, "curves");
+}

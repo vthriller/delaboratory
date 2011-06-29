@@ -36,6 +36,7 @@ class dePropertyLayerIndex:public deProperty
         void setIndex(int _index);
 
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
+        virtual void saveContent(xmlNodePtr node);
 
 };
 

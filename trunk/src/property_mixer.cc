@@ -62,3 +62,11 @@ void dePropertyMixer::onColorSpaceChange()
 {
     recreateMixer();
 }
+
+void dePropertyMixer::saveContent(xmlNodePtr node)
+{
+    if (mixer)
+    {
+        mixer->save(node);
+    }        
+}

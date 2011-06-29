@@ -19,6 +19,7 @@
 #ifndef _DE_LAYER_H
 #define _DE_LAYER_H
 
+#include <libxml/parser.h>
 #include <string>
 #include <list>
 #include "color_space.h"
@@ -96,6 +97,13 @@ class deLayer
         
         deLayerStack& getStack() {return stack;};
         int getIndex() const {return index;};
+
+        virtual std::string getType() const = 0;
+
+        void save(xmlNodePtr node);
+        void load(xmlNodePtr node);
+        
+        virtual void saveSpecific(xmlNodePtr node) {};
 
 };
 

@@ -18,6 +18,7 @@
 
 #include "property_layer_index.h"
 #include "layer_selector.h"
+#include <sstream>
 
 dePropertyLayerIndex::dePropertyLayerIndex(deLayer& _parent, const std::string& _label)
 :deProperty(_parent), label(_label)
@@ -39,3 +40,10 @@ void dePropertyLayerIndex::addPanelContent(wxPanel* panel, wxSizer* sizer)
     wxPanel* selector = new deLayerSelector(panel, *this, label);
     sizer->Add(selector);
 }    
+
+void dePropertyLayerIndex::saveContent(xmlNodePtr node)
+{
+    std::ostringstream oss;
+    oss << index;
+    xmlNodeSetContent(node, xmlCharStrdup(oss.str().c_str()));
+}

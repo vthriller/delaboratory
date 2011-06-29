@@ -40,6 +40,8 @@ class dePropertyName:public deProperty
 
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
 
+        virtual void saveContent(xmlNodePtr node);
+
 };
 
 #endif

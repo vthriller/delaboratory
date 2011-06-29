@@ -39,6 +39,8 @@ class deSourceImageLayer:public deLayer
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
         virtual const std::string getDescription() const {return "source image";};
+
+        virtual std::string getType() const {return "source_image";};
 };
 
 #endif

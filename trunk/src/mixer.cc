@@ -20,6 +20,7 @@
 #include "preview.h"
 #include "channel.h"
 #include <iostream>
+#include <sstream>
 
 deMixer::deMixer(deColorSpace _sourceColorSpace, deColorSpace _destinationColorSpace)
 :sourceColorSpace(_sourceColorSpace), destinationColorSpace(_destinationColorSpace)
@@ -162,4 +163,22 @@ deColorSpace deMixer::getSourceColorSpace() const
 deColorSpace deMixer::getDestinationColorSpace() const
 {
     return destinationColorSpace;
+}
+
+void deMixer::save(xmlNodePtr node)
+{
+    int sourceChannels = getColorSpaceSize(sourceColorSpace);
+    int destinationChannels = getColorSpaceSize(destinationColorSpace);
+    int n = sourceChannels * destinationChannels;
+
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("value"), NULL);
+
+        std::ostringstream oss; 
+        oss << values[i];
+
+        xmlNodeSetContent(child, xmlCharStrdup(oss.str().c_str()));
+    }        
 }

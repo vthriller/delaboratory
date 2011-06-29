@@ -43,6 +43,9 @@ class deCurvesLayer:public deLayer
 
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
+        virtual std::string getType() const {return "curves";};
+        virtual void saveSpecific(xmlNodePtr node);
+
 };
 
 #endif

@@ -53,6 +53,8 @@ class deBlurLayer:public deLayer
         void enableChannel(int c);
 
         const std::set<int>& getEnabledChannels() const;
+        virtual std::string getType() const {return "blur";};
+
 
 };
 

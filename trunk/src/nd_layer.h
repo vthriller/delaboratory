@@ -47,12 +47,12 @@ class deNDLayer:public deLayer
 
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
-        //deND& getND() {return nd.getND();};
-
         void clearEnabledChannels();
         void enableChannel(int c);
 
         const deChannels& getEnabledChannels() const;
+
+        virtual std::string getType() const {return "nd";};
 
 };
 

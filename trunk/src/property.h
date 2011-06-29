@@ -19,6 +19,7 @@
 #ifndef _DE_PROPERTY_H
 #define _DE_PROPERTY_H
 
+#include <libxml/parser.h>
 class deLayer;
 class wxPanel;
 class wxWindow;
@@ -47,6 +48,10 @@ class deProperty
         void setStack(dePreviewStack& _stack);
 
         virtual void onColorSpaceChange();
+
+        void save(xmlNodePtr node, const std::string& name);
+        virtual void saveContent(xmlNodePtr node) {};
+        void load(xmlNodePtr node);
 
 };
 
