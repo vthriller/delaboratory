@@ -92,7 +92,8 @@ void deLayerStack::save(xmlNodePtr node)
     std::vector<deLayer*>::iterator i;
     for (i = layers.begin(); i != layers.end(); i++)
     {
-        xmlNewChild(node, NULL, xmlCharStrdup("layer"), NULL);
+        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("layer"), NULL);
+        (*i)->save(child);
     }
 }
 

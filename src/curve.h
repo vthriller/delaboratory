@@ -19,6 +19,7 @@
 #ifndef _DE_CURVE_H
 #define _DE_CURVE_H
 
+#include <libxml/parser.h>
 #include "curve_point.h"
 #include "curve_shape.h"
 #include <list>
@@ -48,6 +49,8 @@ class deCurve
         void getControlPoints(deCurvePoints& points) const;
         void getCurvePoints(deCurvePoints& points) const;
         const deCurvePoint& getPoint(int n) const;
+
+        void save(xmlNodePtr node) const;
 };
 
 #endif

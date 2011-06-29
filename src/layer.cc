@@ -150,3 +150,20 @@ void deLayer::notifyPropertiesOnColorSpaceChange()
         (*i)->onColorSpaceChange();
     }
 }
+
+void deLayer::save(xmlNodePtr node)
+{
+    xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("type"), NULL);
+    xmlNodeSetContent(child, xmlCharStrdup(getType().c_str()));
+
+    name.save(node, "name");
+    colorSpace.save(node, "color_space");
+    sourceLayer.save(node, "source_layer");
+    overlayLayer.save(node, "overlay_layer");
+
+    saveSpecific(node);
+}
+
+void deLayer::load(xmlNodePtr node)
+{
+}

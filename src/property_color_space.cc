@@ -42,3 +42,7 @@ void dePropertyColorSpace::addPanelContent(wxPanel* panel, wxSizer* sizer)
     sizer->Add(selector);
 }    
 
+void dePropertyColorSpace::saveContent(xmlNodePtr node)
+{
+    xmlNodeSetContent(node, xmlCharStrdup(getColorSpaceName(colorSpace).c_str()));
+}

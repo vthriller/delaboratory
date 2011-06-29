@@ -20,6 +20,7 @@
 #include "channel.h"
 #include <cmath>
 #include <iostream>
+#include <sstream>
 
 deCurve::deCurve(int size)
 :shape(size)
@@ -186,4 +187,31 @@ void deCurve::getControlPoints(deCurvePoints& points) const
 void deCurve::getCurvePoints(deCurvePoints& points) const
 {
     shape.getCurvePoints(points);
+}
+
+void deCurve::save(xmlNodePtr node) const
+{
+    deCurvePoints::const_iterator i;
+    
+    for (i = points.begin(); i != points.end(); i++)
+    {
+        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("point"), NULL);
+        const deCurvePoint& point = *i;
+        
+        {
+            xmlNodePtr x = xmlNewChild(child, NULL, xmlCharStrdup("x"), NULL);
+            std::ostringstream oss; 
+            oss << point.getX();
+            xmlNodeSetContent(x, xmlCharStrdup(oss.str().c_str()));
+        }
+        {
+            xmlNodePtr y = xmlNewChild(child, NULL, xmlCharStrdup("y"), NULL);
+            std::ostringstream oss; 
+            oss << point.getY();
+            xmlNodeSetContent(y, xmlCharStrdup(oss.str().c_str()));
+        }
+
+
+
+    }        
 }

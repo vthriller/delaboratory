@@ -43,3 +43,7 @@ void dePropertyName::addPanelContent(wxPanel* panel, wxSizer* sizer)
     sizer->Add(editor);
 }    
 
+void dePropertyName::saveContent(xmlNodePtr node)
+{
+    xmlNodeSetContent(node, xmlCharStrdup(name.c_str()));
+}

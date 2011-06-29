@@ -76,3 +76,17 @@ void dePropertyCurves::onColorSpaceChange()
 {
     resetCurves();
 }
+
+void dePropertyCurves::saveContent(xmlNodePtr node)
+{
+    deCurves::const_iterator i;
+    for (i = curves.begin(); i != curves.end(); i++)
+    {
+        const deCurve* curve = *i;
+        if (curve)
+        {
+            xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("curve"), NULL);
+            curve->save(child);
+        }
+    }
+}

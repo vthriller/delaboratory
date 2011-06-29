@@ -44,6 +44,8 @@ class dePropertyCurves:public deProperty
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
         virtual void onColorSpaceChange();
 
+        virtual void saveContent(xmlNodePtr node);
+
 };
 
 #endif

@@ -84,3 +84,8 @@ dePreview* deMixerLayer::createPreview(dePreviewStack& previewStack)
 
     return preview;
 }
+
+void deMixerLayer::saveSpecific(xmlNodePtr node)
+{
+    mixer.save(node, "mixer");
+}

@@ -38,6 +38,8 @@ class deConversionLayer:public deLayer
 
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
+        virtual std::string getType() const {return "conversion";};
+
 };
 
 #endif

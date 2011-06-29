@@ -35,6 +35,8 @@ class dePropertyColorSpace:public deProperty
         void setColorSpace(deColorSpace _colorSpace);
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
 
+        virtual void saveContent(xmlNodePtr node);
+
 };
 
 #endif
