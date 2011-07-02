@@ -26,11 +26,13 @@ class deSourceImage;
 class deSourceImageLayer:public deLayer
 {
     private:
-        const deSourceImage& sourceImage;
+        const deSourceImage* sourceImage;
         deSize previewSize;
     public:
-        deSourceImageLayer(deLayerStack& _stack, int _index, const deSourceImage& _sourceimage, const std::string& _name);
+        deSourceImageLayer(deLayerStack& _stack, int _index, const std::string& _name);
         virtual ~deSourceImageLayer();
+
+        void setSourceImage(deSourceImage* _sourceImage);
 
         void setPreviewSize(const deSize& size);
         

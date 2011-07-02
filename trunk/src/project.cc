@@ -39,11 +39,20 @@ deProject::deProject()
     view = -1;
     previewStack.setProject(this);
     samplerList.setProject(this);
-    addLayer(new deSourceImageLayer(layerStack, 0, sourceImage, "source image"));
+    resetLayerStack();
 }
 
 deProject::~deProject()
 {
+}
+
+void deProject::resetLayerStack()
+{
+    layerStack.clear();
+    previewStack.clear();
+    deSourceImageLayer* layer = new deSourceImageLayer(layerStack, 0, "source image");
+    layer->setSourceImage(&sourceImage);
+    addLayer(layer);
 }
 
 void deProject::setSourceImageSize(const deSize& size)
@@ -239,6 +248,10 @@ void deProject::logMessage(const std::string& message)
 
 void deProject::open(const std::string& fileName)
 {
+
+    layerStack.clear();
+    previewStack.clear();
+
     xmlDocPtr doc = xmlParseFile(fileName.c_str());
 
     if (!doc)
@@ -252,6 +265,23 @@ void deProject::open(const std::string& fileName)
     {
         return;
     }
+
+    layerStack.load(root, layerFactory);
+
+    deSourceImageLayer* layer = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
+    if (layer)
+    {
+        layer->setSourceImage(&sourceImage);
+    }
+
+    int n = layerStack.getSize();
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        previewStack.addPreview();
+    }
+
+    setView (layerStack.getSize() - 1);
 
 
 }

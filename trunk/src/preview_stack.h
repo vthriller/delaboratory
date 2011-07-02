@@ -60,6 +60,8 @@ class dePreviewStack
 
         void setError(const std::string& _error);
         std::string getError();
+
+        void clear();
 };
 
 #endif

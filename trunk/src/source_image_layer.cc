@@ -26,14 +26,20 @@
 #include <wx/wx.h>
 #include "layer_dialog.h"
 
-deSourceImageLayer::deSourceImageLayer(deLayerStack& _stack, int _index, const deSourceImage& _sourceImage, const std::string& _name)
-:deLayer(_stack, _index, _name), sourceImage(_sourceImage), previewSize(0,0)
+deSourceImageLayer::deSourceImageLayer(deLayerStack& _stack, int _index, const std::string& _name)
+:deLayer(_stack, _index, _name), previewSize(0,0)
 {
+    sourceImage = NULL;
     colorSpace.setColorSpace(deColorSpaceRGB);
 }
 
 deSourceImageLayer::~deSourceImageLayer()
 {
+}
+
+void deSourceImageLayer::setSourceImage(deSourceImage* _sourceImage)
+{
+    sourceImage = _sourceImage;
 }
 
 void deSourceImageLayer::setPreviewSize(const deSize& size)
@@ -48,22 +54,27 @@ deActionFrame* deSourceImageLayer::createActionFrame(wxWindow* parent, int layer
 
 dePreview* deSourceImageLayer::createPreview(dePreviewStack& previewStack)
 {
-    int n = getColorSpaceSize(sourceImage.getColorSpace());
+    if (!sourceImage)
+    {
+        return NULL;
+    }
+
+    int n = getColorSpaceSize(sourceImage->getColorSpace());
     int i;
     for (i = 0; i < n; i++)
     {
-        const deBaseChannel* channel = sourceImage.getChannel(i);
+        const deBaseChannel* channel = sourceImage->getChannel(i);
         if (!channel)
         {
             return NULL;
         }
     }
 
-    dePreview* preview = new dePreview(sourceImage.getColorSpace(), previewSize);
+    dePreview* preview = new dePreview(sourceImage->getColorSpace(), previewSize);
 
     for (i = 0; i < n; i++)
     {
-        const deChannel* sourceChannel = dynamic_cast<const deChannel*>(sourceImage.getChannel(i));
+        const deChannel* sourceChannel = dynamic_cast<const deChannel*>(sourceImage->getChannel(i));
         if (!sourceChannel)
         {
             throw deException("no sourceChannel in deSourceImageLayer::generatePreview");

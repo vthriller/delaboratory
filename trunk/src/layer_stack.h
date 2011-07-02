@@ -24,6 +24,7 @@
 
 class deLayer;
 class deSampler;
+class deLayerFactory;
 
 class deLayerStack
 {
@@ -44,7 +45,10 @@ class deLayerStack
         void updateColorSpaces();
 
         void save(xmlNodePtr node);
-        void load(xmlNodePtr node);
+        void load(xmlNodePtr node, deLayerFactory& factory);
+        void loadLayer(xmlNodePtr node, deLayerFactory& factory);
+
+        void clear();
 
 };
 

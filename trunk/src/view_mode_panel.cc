@@ -20,6 +20,7 @@
 #include "gui.h"
 #include "layer.h"
 #include "channel_buttons.h"
+#include <iostream>
 
 void deViewModePanel::select(wxCommandEvent &event)
 {

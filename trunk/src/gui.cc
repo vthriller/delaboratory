@@ -25,6 +25,7 @@
 #include "layer_list_panel.h"
 #include "view_mode_panel.h"
 #include "center_panel.h"
+#include <iostream>
 
 deGUI::deGUI()
 {

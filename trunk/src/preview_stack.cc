@@ -36,6 +36,11 @@ dePreviewStack::dePreviewStack()
 
 dePreviewStack::~dePreviewStack()
 {
+    clear();
+}
+
+void dePreviewStack::clear()
+{
     while (previews.size() > 0)
     {
         removeTopPreview();
@@ -47,7 +52,7 @@ dePreview* dePreviewStack::getPreview(int id)
     unsigned int i = id;
     if ((i >= previews.size()) || (id < 0))
     {
-        throw deException("request for preview with unknown index");
+        return NULL;
     }
     if (!nowUpdating)
     {
@@ -112,6 +117,12 @@ void dePreviewStack::realUpdatePreviews()
 
     deLayerStack& layerStack = project->getLayerStack();
     int last = project->getVisibleLayerID();
+
+    while (previews.size() < last)
+    {
+        addPreview();
+    }
+
     int i;
     for (i = min; i <= last; i++)
     {
