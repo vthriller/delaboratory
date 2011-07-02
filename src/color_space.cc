@@ -79,7 +79,16 @@ std::string getColorSpaceName(deColorSpace colorSpace)
         default:
             return "unknown";
     }
+}
 
+deColorSpace colorSpaceFromString(const std::string& name)
+{
+    if (name == "RGB")
+    {
+        return deColorSpaceRGB;
+    }
+
+    return deColorSpaceInvalid;
 }
 
 std::string getChannelName(deColorSpace colorSpace, int channel)
