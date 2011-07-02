@@ -189,27 +189,36 @@ void deLayerListPanel::update()
     {
         int index = n - i - 1;
 
-        const std::string layerName = layerStack.getLayer(index)->getName();
-        const std::string colorSpaceName = getColorSpaceName(layerStack.getLayer(index)->getColorSpace());
+        deLayer* layer = layerStack.getLayer(index);
 
-        wxListItem item;
-        item.SetId(i);
-
-        listbox->InsertItem(item);
-
-        std::ostringstream oss;
-        oss << index;
-
-        listbox->SetItem(i, 0, wxString::FromAscii(oss.str().c_str()));
-        listbox->SetItem(i, 1, wxString::FromAscii(layerName.c_str()));
-        listbox->SetItem(i, 2, wxString::FromAscii(colorSpaceName.c_str()));
-        if (project->getVisibleLayerID() == index)
+        if (layer)
         {
-            listbox->SetItem(i, 3, _T("*"));
+            const std::string layerName = layer->getName();
+            const std::string colorSpaceName = getColorSpaceName(layer->getColorSpace());
+
+            wxListItem item;
+            item.SetId(i);
+
+            listbox->InsertItem(item);
+
+            std::ostringstream oss;
+            oss << index;
+
+            listbox->SetItem(i, 0, wxString::FromAscii(oss.str().c_str()));
+            listbox->SetItem(i, 1, wxString::FromAscii(layerName.c_str()));
+            listbox->SetItem(i, 2, wxString::FromAscii(colorSpaceName.c_str()));
+            if (project->getVisibleLayerID() == index)
+            {
+                listbox->SetItem(i, 3, _T("*"));
+            }
+            else
+            {
+                listbox->SetItem(i, 3, _T(" "));
+            }
         }
         else
         {
-            listbox->SetItem(i, 3, _T(" "));
+            std::cout << "NO LAYER " << index << std::endl;
         }
     }
 

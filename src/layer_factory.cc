@@ -17,6 +17,7 @@
 */
 
 #include "layer_factory.h"
+#include "source_image_layer.h"
 #include "mixer_layer.h"
 #include "blend_layer.h"
 #include "curves_layer.h"
@@ -34,6 +35,11 @@ deLayerFactory::~deLayerFactory()
 
 deLayer* deLayerFactory::createLayer(const std::string& type, deLayerStack& stack, int index, const std::string& name)
 {
+    if (type == "source_image")
+    {
+        return new deSourceImageLayer(stack, index, name);
+    }
+
     if (type == "curves")
     {
         return new deCurvesLayer(stack, index, name);

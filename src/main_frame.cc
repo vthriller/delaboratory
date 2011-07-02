@@ -30,6 +30,7 @@ enum
 {
     ID_Quit = 1,
     ID_OpenImage,
+    ID_NewProject,
     ID_OpenProject,
     ID_SaveProject,
     ID_About
@@ -38,6 +39,7 @@ enum
 BEGIN_EVENT_TABLE(deMainFrame, wxFrame)
 EVT_MENU(ID_Quit, deMainFrame::OnQuit)
 EVT_MENU(ID_OpenImage, deMainFrame::OnOpenImage)
+EVT_MENU(ID_NewProject, deMainFrame::OnNewProject)
 EVT_MENU(ID_OpenProject, deMainFrame::OnOpenProject)
 EVT_MENU(ID_SaveProject, deMainFrame::OnSaveProject)
 EVT_MENU(ID_About, deMainFrame::OnAbout)
@@ -87,6 +89,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
     wxMenu *menuFile = new wxMenu;
 
     menuFile->Append( ID_OpenImage, _("&Open source image") );
+    menuFile->Append( ID_NewProject, _("New project") );
     menuFile->Append( ID_OpenProject, _("Open project") );
     menuFile->Append( ID_SaveProject, _("Save project") );
     menuFile->Append( ID_About, _("&About") );
@@ -109,6 +112,11 @@ void deMainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void deMainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
+}
+
+void deMainFrame::OnNewProject(wxCommandEvent& WXUNUSED(event))
+{
+    project->resetLayerStack();
 }
 
 void deMainFrame::OnOpenProject(wxCommandEvent& WXUNUSED(event))

@@ -122,7 +122,15 @@ void deCurvesPanel::drawLines(wxDC& dc)
 
 void deCurvesPanel::drawCurve(wxDC& dc)
 {
-    deCurve* curve = (property.getCurves()[channel]);
+    deCurves curves = property.getCurves();
+
+    if (channel >= curves.size())
+    {
+        return;
+    }
+
+
+    deCurve* curve = curves[channel];
 
     if (!curve)
     {
@@ -181,7 +189,14 @@ void deCurvesPanel::render(wxDC& dc_orig)
 
 void deCurvesPanel::click(wxMouseEvent &event)
 {
-    deCurve* curve = (property.getCurves()[channel]);
+    deCurves curves = property.getCurves();
+
+    if (channel >= curves.size())
+    {
+        return;
+    }
+
+    deCurve* curve = curves[channel];
 
     if (!curve)
     {
@@ -219,7 +234,19 @@ void deCurvesPanel::update()
 
 void deCurvesPanel::release(wxMouseEvent &event)
 {
-    deCurve* curve = (property.getCurves()[channel]);
+    deCurves curves = property.getCurves();
+
+    if (channel >= curves.size())
+    {
+        return;
+    }
+
+    deCurve* curve = curves[channel];
+
+    if (!curve)
+    {
+        return;
+    }
 
     if (selectedPoint)
     {
@@ -240,7 +267,14 @@ void deCurvesPanel::release(wxMouseEvent &event)
 
 void deCurvesPanel::move(wxMouseEvent &event)
 {
-    deCurve* curve = (property.getCurves()[channel]);
+    deCurves curves = property.getCurves();
+
+    if (channel >= curves.size())
+    {
+        return;
+    }
+
+    deCurve* curve = curves[channel];
 
     if (!curve)
     {

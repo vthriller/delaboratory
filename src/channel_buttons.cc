@@ -40,7 +40,6 @@ void createChannelButtons(deColorSpace colorSpace, std::vector<wxRadioButton*>& 
     buttons.clear();
     channels.clear();
 
-
     int s = getColorSpaceSize(colorSpace);
     int j;
 

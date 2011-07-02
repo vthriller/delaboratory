@@ -21,13 +21,18 @@
 #include "exception.h"
 #include <iostream>
 #include "action_frame.h"
-
+#include "layer_factory.h"
 
 deLayerStack::deLayerStack()
 {
 }
 
 deLayerStack::~deLayerStack()
+{
+    clear();
+}
+
+void deLayerStack::clear()
 {
     while (layers.size() > 0)
     {
@@ -97,6 +102,51 @@ void deLayerStack::save(xmlNodePtr node)
     }
 }
 
-void deLayerStack::load(xmlNodePtr node)
+void deLayerStack::loadLayer(xmlNodePtr node, deLayerFactory& factory)
 {
+    xmlNodePtr child = node->xmlChildrenNode;
+    std::string type = "";
+    std::string name = "";
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("type")))) 
+        {
+            xmlChar* s = xmlNodeGetContent(child);            
+            type = (char*)(s);
+            xmlFree(s);
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("name")))) 
+        {
+            xmlChar* s = xmlNodeGetContent(child);            
+            name = (char*)(s);
+            xmlFree(s);
+        }
+
+        child = child->next;
+    }
+
+    if (type.size() > 0)
+    {
+        int index = layers.size();
+
+        deLayer* layer = factory.createLayer(type, *this, index, name);
+
+        layer->load(node);
+
+        addLayer(layer);
+    }
+    
+}
+
+void deLayerStack::load(xmlNodePtr node, deLayerFactory& factory)
+{
+    xmlNodePtr child = node->xmlChildrenNode;
+
+    while (child)
+    {
+        loadLayer(child, factory);
+        child = child->next;
+    }
 }

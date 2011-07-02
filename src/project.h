@@ -91,6 +91,8 @@ class deProject
         void open(const std::string& fileName);
         void save(const std::string& fileName);
 
+        void resetLayerStack();
+
 };
 
 #endif

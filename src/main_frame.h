@@ -31,6 +31,7 @@ public:
 	deMainFrame(const wxSize& size, deProject* _project);
 	void OnQuit(wxCommandEvent& event);
 	void OnOpenImage(wxCommandEvent& event);
+	void OnNewProject(wxCommandEvent& event);
 	void OnOpenProject(wxCommandEvent& event);
 	void OnSaveProject(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);

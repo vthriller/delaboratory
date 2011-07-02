@@ -43,7 +43,8 @@ int getColorSpaceSize(const deColorSpace& colorSpace)
         case deColorSpaceCMYK:
             return 4;
         default:
-            throw deException("unsupported ColorSpace " + getColorSpaceName(colorSpace) + " in getColorSpaceSize");
+            return 0;
+//            throw deException("unsupported ColorSpace " + getColorSpaceName(colorSpace) + " in getColorSpaceSize");
     }
 }
 
