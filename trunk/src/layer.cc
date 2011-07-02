@@ -25,6 +25,7 @@
 #include "action_frame.h"
 #include "layer_dialog.h"
 #include "project.h"
+#include <sstream>
 
 deLayer::deLayer(deLayerStack& _stack, int _index, const std::string& _name)
 :stack(_stack), index(_index), name(*this), sourceLayer(*this, "source"), overlayLayer(*this, "overlay"), colorSpace(*this)
@@ -166,4 +167,35 @@ void deLayer::save(xmlNodePtr node)
 
 void deLayer::load(xmlNodePtr node)
 {
+    xmlNodePtr child = node->xmlChildrenNode;
+
+    std::string colorSpaceString = "";
+    std::string sourceLayerString = "";
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("color_space")))) 
+        {
+            xmlChar* s = xmlNodeGetContent(child);            
+            colorSpaceString = (char*)(s);
+            xmlFree(s);
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("source_layer")))) 
+        {
+            xmlChar* s = xmlNodeGetContent(child);            
+            sourceLayerString = (char*)(s);
+            xmlFree(s);
+        }
+
+        child = child->next;
+    }
+
+    changeColorSpace(colorSpaceFromString(colorSpaceString));
+
+    std::istringstream iss(sourceLayerString);
+    int s;
+    iss >> s;
+
+    changeSourceLayer(s);
 }

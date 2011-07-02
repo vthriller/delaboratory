@@ -41,6 +41,7 @@ int getColorSpaceSize(const deColorSpace& colorSpace);
 void getColorSpaceChannelRanges(const deColorSpace& colorSpace, int index, deValue& min, deValue& max);
 std::string getColorSpaceName(deColorSpace colorSpace);
 std::string getChannelName(deColorSpace colorSpace, int channel);
+deColorSpace colorSpaceFromString(const std::string& name);
 
 void getSupportedColorSpaces(std::vector<deColorSpace>& result);
 void getSupportedConversions(const deColorSpace& colorSpace, std::vector<deColorSpace>& result);
