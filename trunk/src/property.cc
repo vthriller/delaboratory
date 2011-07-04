@@ -64,7 +64,6 @@ void deProperty::onListUpdate()
     {
         gui->updateAfterSetView(colorSpace);
     } 
-    parent.notifyPropertiesOnColorSpaceChange();
     onUpdate();
 }
 

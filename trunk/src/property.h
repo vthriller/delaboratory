@@ -42,6 +42,7 @@ class deProperty
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer) = 0;
 
         const deLayer& getParent() const {return parent;};
+        deLayer& getParent() {return parent;};
 
         void onUpdate();
         void onListUpdate();

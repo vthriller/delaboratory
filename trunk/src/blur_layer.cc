@@ -96,3 +96,23 @@ const std::set<int>& deBlurLayer::getEnabledChannels() const
 {
     return channels.getChannels();
 }
+
+void deBlurLayer::saveSpecific(xmlNodePtr node)
+{
+    radius.save(node, "radius");
+}
+
+void deBlurLayer::loadSpecific(xmlNodePtr node)
+{
+    xmlNodePtr child = node->xmlChildrenNode;
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("radius")))) 
+        {
+            radius.load(child);
+        }
+
+        child = child->next;
+    }
+}
