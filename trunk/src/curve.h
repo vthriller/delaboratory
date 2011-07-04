@@ -34,6 +34,7 @@ class deCurve
         deCurveShape shape;
 
         void reset();
+        void loadPoint(xmlNodePtr node);
     public:    
         deCurve(int size);
         virtual ~deCurve();
@@ -51,6 +52,7 @@ class deCurve
         const deCurvePoint& getPoint(int n) const;
 
         void save(xmlNodePtr node) const;
+        void load(xmlNodePtr node);
 };
 
 #endif

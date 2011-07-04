@@ -89,3 +89,18 @@ void deCurvesLayer::saveSpecific(xmlNodePtr node)
 {
     curves.save(node, "curves");
 }
+
+void deCurvesLayer::loadSpecific(xmlNodePtr node)
+{
+    xmlNodePtr child = node->xmlChildrenNode;
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("curves")))) 
+        {
+            curves.load(child);
+        }
+
+        child = child->next;
+    }
+}
