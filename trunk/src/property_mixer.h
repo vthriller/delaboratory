@@ -42,6 +42,7 @@ class dePropertyMixer:public deProperty
         virtual void onColorSpaceChange();
 
         virtual void saveContent(xmlNodePtr node);
+        virtual void load(xmlNodePtr node);
 
 };
 

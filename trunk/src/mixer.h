@@ -53,6 +53,7 @@ class deMixer
         deValue getRangeMax() const;
 
         void save(xmlNodePtr node);
+        void load(xmlNodePtr node);
     
 };
 

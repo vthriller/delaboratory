@@ -83,6 +83,3 @@ void deProperty::save(xmlNodePtr node, const std::string& name)
     saveContent(child);
 }
 
-void deProperty::load(xmlNodePtr node)
-{
-}

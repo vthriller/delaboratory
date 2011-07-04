@@ -104,6 +104,7 @@ class deLayer
         void load(xmlNodePtr node);
         
         virtual void saveSpecific(xmlNodePtr node) {};
+        virtual void loadSpecific(xmlNodePtr node) {};
 
 };
 

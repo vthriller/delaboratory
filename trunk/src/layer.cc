@@ -198,4 +198,6 @@ void deLayer::load(xmlNodePtr node)
     iss >> s;
 
     changeSourceLayer(s);
+
+    loadSpecific(node);
 }

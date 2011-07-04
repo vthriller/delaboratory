@@ -46,7 +46,9 @@ class deMixerLayer:public deLayer
         deMixer* getMixer() {return mixer.getMixer();};
 
         virtual std::string getType() const {return "mixer";};
+
         virtual void saveSpecific(xmlNodePtr node);
+        virtual void loadSpecific(xmlNodePtr node);
 
 };
 

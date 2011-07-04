@@ -51,7 +51,7 @@ class deProperty
 
         void save(xmlNodePtr node, const std::string& name);
         virtual void saveContent(xmlNodePtr node) {};
-        void load(xmlNodePtr node);
+        virtual void load(xmlNodePtr node) {};
 
 };
 

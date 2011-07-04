@@ -78,3 +78,12 @@ void dePropertyMixer::saveContent(xmlNodePtr node)
         mixer->save(node);
     }        
 }
+
+void dePropertyMixer::load(xmlNodePtr node)
+{
+    if (mixer)
+    {
+        mixer->load(node);
+    }
+}
+
