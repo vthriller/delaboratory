@@ -182,3 +182,33 @@ void deMixer::save(xmlNodePtr node)
         xmlNodeSetContent(child, xmlCharStrdup(oss.str().c_str()));
     }        
 }
+
+void deMixer::load(xmlNodePtr node)
+{
+    int sourceChannels = getColorSpaceSize(sourceColorSpace);
+    int destinationChannels = getColorSpaceSize(destinationColorSpace);
+    int n = sourceChannels * destinationChannels;
+
+    int i = 0;
+
+    xmlNodePtr child = node->xmlChildrenNode;
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("value")))) 
+        {
+            if (i < n)
+            {
+                xmlChar* s = xmlNodeGetContent(child);            
+                std::string valueStr = (char*)(s);
+                xmlFree(s);
+
+                std::istringstream iss(valueStr);
+                iss >> values[i];
+            }            
+            i++;
+        }            
+
+        child = child->next;
+    }
+}

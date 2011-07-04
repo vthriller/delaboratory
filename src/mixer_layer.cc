@@ -88,3 +88,18 @@ void deMixerLayer::saveSpecific(xmlNodePtr node)
 {
     mixer.save(node, "mixer");
 }
+
+void deMixerLayer::loadSpecific(xmlNodePtr node)
+{
+    xmlNodePtr child = node->xmlChildrenNode;
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("mixer")))) 
+        {
+            mixer.load(child);
+        }
+
+        child = child->next;
+    }
+}
