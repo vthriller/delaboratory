@@ -55,6 +55,9 @@ class deBlurLayer:public deLayer
         const std::set<int>& getEnabledChannels() const;
         virtual std::string getType() const {return "blur";};
 
+        virtual void saveSpecific(xmlNodePtr node);
+        virtual void loadSpecific(xmlNodePtr node);
+
 
 };
 

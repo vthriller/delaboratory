@@ -171,6 +171,7 @@ void deLayer::load(xmlNodePtr node)
 
     std::string colorSpaceString = "";
     std::string sourceLayerString = "";
+    std::string overlayLayerString = "";
 
     while (child)
     {
@@ -188,16 +189,33 @@ void deLayer::load(xmlNodePtr node)
             xmlFree(s);
         }
 
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("overlay_layer")))) 
+        {
+            xmlChar* s = xmlNodeGetContent(child);            
+            overlayLayerString = (char*)(s);
+            xmlFree(s);
+        }
+
         child = child->next;
     }
 
     changeColorSpace(colorSpaceFromString(colorSpaceString));
 
-    std::istringstream iss(sourceLayerString);
-    int s;
-    iss >> s;
+    {
+        std::istringstream iss(sourceLayerString);
+        int s;
+        iss >> s;
 
-    changeSourceLayer(s);
+        changeSourceLayer(s);
+    }        
+
+    {
+        std::istringstream iss(overlayLayerString);
+        int s;
+        iss >> s;
+
+        changeOverlayLayer(s);
+    }        
 
     loadSpecific(node);
 }

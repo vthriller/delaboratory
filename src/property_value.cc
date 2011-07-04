@@ -18,6 +18,7 @@
 
 #include "property_value.h"
 #include "property_value_slider.h"
+#include <sstream>
 
 dePropertyValue::dePropertyValue(deLayer& _parent, const std::string& _label, deValue _min, deValue _max)
 :deProperty(_parent), label(_label), min(_min), max(_max)
@@ -43,3 +44,21 @@ void dePropertyValue::addPanelContent(wxPanel* panel, wxSizer* sizer)
     dePropertyValueSlider* slider = new dePropertyValueSlider(panel, *this, 100);
     sizer->Add(slider);
 }    
+
+void dePropertyValue::saveContent(xmlNodePtr node)
+{
+    std::ostringstream oss;
+    oss << value;
+    xmlNodeSetContent(node, xmlCharStrdup(oss.str().c_str()));
+}
+
+void dePropertyValue::load(xmlNodePtr node)
+{
+    xmlChar* s = xmlNodeGetContent(node);            
+    std::string valueStr = (char*)(s);
+    xmlFree(s);
+
+    std::istringstream iss(valueStr);
+    iss >> value;
+}
+

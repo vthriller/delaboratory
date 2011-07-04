@@ -19,6 +19,7 @@
 #include "color_space_selector.h"
 #include "property_color_space.h"
 #include "color_space_choice.h"
+#include "layer.h"
 
 deColorSpaceSelector::deColorSpaceSelector(wxPanel* parent, dePropertyColorSpace& _property)
 :wxPanel(parent), property(_property)
@@ -36,4 +37,5 @@ void deColorSpaceSelector::choose(wxCommandEvent &event)
     int c = colorSpaceChoice->GetCurrentSelection();
     property.setColorSpace(colorSpaces[c]);
     property.onListUpdate();
+    property.getParent().notifyPropertiesOnColorSpaceChange();
 }

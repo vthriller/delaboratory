@@ -150,3 +150,24 @@ void deBlendLayer::setBlendMode(deBlendMode mode)
 {
     blendMode.setBlendMode(mode);
 }
+
+void deBlendLayer::saveSpecific(xmlNodePtr node)
+{
+    alpha.save(node, "alpha");
+    blendMode.save(node, "blend_mode");
+}
+
+void deBlendLayer::loadSpecific(xmlNodePtr node)
+{
+    xmlNodePtr child = node->xmlChildrenNode;
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("alpha")))) 
+        {
+            alpha.load(child);
+        }
+
+        child = child->next;
+    }
+}

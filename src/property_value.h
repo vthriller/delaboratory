@@ -45,6 +45,9 @@ class dePropertyValue:public deProperty
         deValue getMin() const {return min;};
         deValue getMax() const {return max;};
 
+        virtual void saveContent(xmlNodePtr node);
+        virtual void load(xmlNodePtr node);
+
 };
 
 #endif

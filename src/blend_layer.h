@@ -65,6 +65,9 @@ class deBlendLayer:public deLayer
 
         virtual std::string getType() const {return "blend";};
 
+        virtual void saveSpecific(xmlNodePtr node);
+        virtual void loadSpecific(xmlNodePtr node);
+
 };
 
 #endif
