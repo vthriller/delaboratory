@@ -35,6 +35,32 @@ std::string getBlendModeName(deBlendMode mode)
     }
 }
 
+deBlendMode blendModeFromString(const std::string& s)
+{
+    if (s == "normal")
+    {
+        return deBlendNormal;
+    }
+
+    if (s == "multiply")
+    {
+        return deBlendMultiply;
+    }
+
+    if (s == "screen")
+    {
+        return deBlendScreen;
+    }
+
+    if (s == "overlay")
+    {
+        return deBlendOverlay;
+    }
+    
+    return deBlendInvalid;
+
+}
+
 void getSupportedBlendModes(std::vector<deBlendMode>& result)
 {
     result.push_back(deBlendNormal);

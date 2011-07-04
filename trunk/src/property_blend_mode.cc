@@ -22,7 +22,7 @@
 dePropertyBlendMode::dePropertyBlendMode(deLayer& _parent)
 :deProperty(_parent)
 {
-    mode = deBlendModeInvalid;
+    mode = deBlendInvalid;
 }
 
 dePropertyBlendMode::~dePropertyBlendMode()
@@ -39,3 +39,18 @@ void dePropertyBlendMode::addPanelContent(wxPanel* panel, wxSizer* sizer)
     wxPanel* selector = new deBlendModeSelector(panel, *this);
     sizer->Add(selector);
 }    
+
+void dePropertyBlendMode::saveContent(xmlNodePtr node)
+{
+    xmlNodeSetContent(node, xmlCharStrdup(getBlendModeName(mode).c_str()));
+}
+
+void dePropertyBlendMode::load(xmlNodePtr node)
+{
+    xmlChar* s = xmlNodeGetContent(node);            
+    std::string valueStr = (char*)(s);
+    xmlFree(s);
+
+    mode = blendModeFromString(valueStr);
+}
+
