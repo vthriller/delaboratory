@@ -168,6 +168,11 @@ void deBlendLayer::loadSpecific(xmlNodePtr node)
             alpha.load(child);
         }
 
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("blend_mode")))) 
+        {
+            blendMode.load(child);
+        }
+
         child = child->next;
     }
 }

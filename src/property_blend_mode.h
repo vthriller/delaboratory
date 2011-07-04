@@ -35,6 +35,9 @@ class dePropertyBlendMode:public deProperty
         void setBlendMode(deBlendMode _mode);
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
 
+        virtual void saveContent(xmlNodePtr node);
+        virtual void load(xmlNodePtr node);
+
 };
 
 #endif
