@@ -87,6 +87,14 @@ deColorSpace colorSpaceFromString(const std::string& name)
     {
         return deColorSpaceRGB;
     }
+    if (name == "LAB")
+    {
+        return deColorSpaceLAB;
+    }
+    if (name == "CMYK")
+    {
+        return deColorSpaceCMYK;
+    }
 
     return deColorSpaceInvalid;
 }
