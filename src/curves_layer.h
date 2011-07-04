@@ -45,6 +45,7 @@ class deCurvesLayer:public deLayer
 
         virtual std::string getType() const {return "curves";};
         virtual void saveSpecific(xmlNodePtr node);
+        virtual void loadSpecific(xmlNodePtr node);
 
 };
 

@@ -34,6 +34,7 @@ deCurve::~deCurve()
 
 void deCurve::reset()
 {
+    points.clear();
     points.push_back(deCurvePoint(0,0));
     points.push_back(deCurvePoint(1,1));
     shape.build(points);
@@ -211,7 +212,66 @@ void deCurve::save(xmlNodePtr node) const
             xmlNodeSetContent(y, xmlCharStrdup(oss.str().c_str()));
         }
 
-
-
     }        
+}
+
+void deCurve::loadPoint(xmlNodePtr node) 
+{
+    xmlNodePtr child = node->xmlChildrenNode;
+
+    std::string xStr = "";
+    std::string yStr = "";
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("x")))) 
+        {
+            xmlChar* s = xmlNodeGetContent(child);            
+            xStr = (char*)(s);
+            xmlFree(s);
+        }            
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("y")))) 
+        {
+            xmlChar* s = xmlNodeGetContent(child);            
+            yStr = (char*)(s);
+            xmlFree(s);
+        }            
+
+        child = child->next;
+    }
+
+    deValue x = 0;
+    deValue y = 0;
+
+    {
+        std::istringstream iss(xStr);
+        iss >> x;
+    }
+
+    {
+        std::istringstream iss(yStr);
+        iss >> y;
+    }
+
+    points.push_back(deCurvePoint(x,y));
+}
+
+void deCurve::load(xmlNodePtr node) 
+{
+    points.clear();
+
+    xmlNodePtr child = node->xmlChildrenNode;
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("point")))) 
+        {
+            loadPoint(child);
+        }            
+
+        child = child->next;
+    }
+
+    shape.build(points);
 }

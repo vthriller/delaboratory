@@ -90,3 +90,22 @@ void dePropertyCurves::saveContent(xmlNodePtr node)
         }
     }
 }
+
+void dePropertyCurves::load(xmlNodePtr node)
+{
+    xmlNodePtr child = node->xmlChildrenNode;
+    deCurves::iterator i = curves.begin();
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("curve")))) 
+        {
+            deCurve* curve = *i;
+            curve->load(child);
+            i++;
+        }            
+
+        child = child->next;
+    }
+
+}
