@@ -54,6 +54,9 @@ class deNDLayer:public deLayer
 
         virtual std::string getType() const {return "nd";};
 
+        virtual void saveSpecific(xmlNodePtr node);
+        virtual void loadSpecific(xmlNodePtr node);
+
 };
 
 #endif

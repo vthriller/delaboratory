@@ -84,3 +84,41 @@ const deChannels& deNDLayer::getEnabledChannels() const
 {
     return channels.getChannels();
 }
+
+void deNDLayer::saveSpecific(xmlNodePtr node)
+{
+    channels.save(node, "channels");
+    xCenter.save(node, "x_center");
+    yCenter.save(node, "y_center");
+    power.save(node, "power");
+}
+
+void deNDLayer::loadSpecific(xmlNodePtr node)
+{
+    xmlNodePtr child = node->xmlChildrenNode;
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("channels")))) 
+        {
+            channels.load(child);
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("x_center")))) 
+        {
+            xCenter.load(child);
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("y_center")))) 
+        {
+            yCenter.load(child);
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("power")))) 
+        {
+            power.load(child);
+        }
+
+        child = child->next;
+    }
+}
