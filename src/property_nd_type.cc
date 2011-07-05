@@ -39,3 +39,17 @@ void dePropertyNDType::addPanelContent(wxPanel* panel, wxSizer* sizer)
     wxPanel* selector = new deNDTypeSelector(panel, *this);
     sizer->Add(selector);
 }    
+
+void dePropertyNDType::saveContent(xmlNodePtr node)
+{
+    xmlNodeSetContent(node, xmlCharStrdup(getNDTypeName(type).c_str()));
+}
+
+void dePropertyNDType::load(xmlNodePtr node)
+{
+    xmlChar* s = xmlNodeGetContent(node);            
+    std::string valueStr = (char*)(s);
+    xmlFree(s);
+
+    type = ndTypeFromString(valueStr);
+}
