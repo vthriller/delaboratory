@@ -24,9 +24,10 @@
 #include "project.h"
 
 deBlurLayer::deBlurLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), radius(*this, "radius", 0.0, 0.05), channels(*this), direction(*this)
+:deLayer(_stack, _index, _name), radiusX(*this, "radius x", 0.0, 0.05), radiusY(*this, "radius y", 0.0, 0.05), channels(*this)
 {
-    radius.setValue(0.01);
+    radiusX.setValue(0.01);
+    radiusY.setValue(0.01);
     clearEnabledChannels();
 }
 
@@ -45,36 +46,21 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
 
     const deSize& sourceSize = sourcePreview->getSize();
 
+    dePreview* tmp = new dePreview(colorSpace.getColorSpace(), sourceSize);
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
-    blur(*sourcePreview, *preview, direction.getDirection(), radius.getValue(), channels.getChannels());
+    blur(*sourcePreview, *tmp, deBlurHorizontal, radiusX.getValue(), channels.getChannels());
+    blur(*tmp, *preview, deBlurVertical, radiusY.getValue(), channels.getChannels());
+
+    delete tmp;
 
     return preview;
 }
 
 deActionFrame* deBlurLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
-    return new deBlurFrame(parent, *this, project->getPreviewStack(), layerNumber);
-}
-
-deBlurDirection deBlurLayer::getBlurDirection() const
-{
-    return direction.getDirection();
-}
-
-deValue deBlurLayer::getBlurRadius() const
-{
-    return radius.getValue();
-}
-
-void deBlurLayer::setBlurRadius(deValue _radius)
-{
-    radius.setValue(_radius);
-}
-
-void deBlurLayer::setBlurDirection(deBlurDirection _direction)
-{
-    direction.setDirection(_direction);
+    //return new deBlurFrame(parent, *this, project->getPreviewStack(), layerNumber);
+    return NULL;
 }
 
 void deBlurLayer::onChangeColorSpace()
@@ -99,7 +85,8 @@ const std::set<int>& deBlurLayer::getEnabledChannels() const
 
 void deBlurLayer::saveSpecific(xmlNodePtr node)
 {
-    radius.save(node, "radius");
+    radiusX.save(node, "radius_x");
+    radiusY.save(node, "radius_y");
     channels.save(node, "channels");
 }
 
@@ -109,9 +96,14 @@ void deBlurLayer::loadSpecific(xmlNodePtr node)
 
     while (child)
     {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("radius")))) 
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("radius_x")))) 
         {
-            radius.load(child);
+            radiusX.load(child);
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("radius_y")))) 
+        {
+            radiusY.load(child);
         }
 
         if ((!xmlStrcmp(child->name, xmlCharStrdup("channels")))) 
