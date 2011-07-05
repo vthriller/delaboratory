@@ -18,6 +18,7 @@
 
 #include "property_channels.h"
 #include "channels_selector.h"
+#include <sstream>
 
 dePropertyChannels::dePropertyChannels(deLayer& _parent)
 :deProperty(_parent)
@@ -48,4 +49,43 @@ void dePropertyChannels::onColorSpaceChange()
 {
     clear();
     selector->rebuild();
+}
+
+void dePropertyChannels::saveContent(xmlNodePtr node)
+{
+    deChannels::const_iterator i;
+    for (i = channels.begin(); i != channels.end() ; i++)
+    {
+        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("channel"), NULL);
+
+        std::ostringstream oss; 
+        oss << (*i);
+
+        xmlNodeSetContent(child, xmlCharStrdup(oss.str().c_str()));
+    }        
+}
+
+void dePropertyChannels::load(xmlNodePtr node)
+{
+    clear();
+
+    xmlNodePtr child = node->xmlChildrenNode;
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("channel")))) 
+        {
+            xmlChar* s = xmlNodeGetContent(child);            
+            std::string valueStr = (char*)(s);
+            xmlFree(s);
+
+            std::istringstream iss(valueStr);
+            int channel;
+            iss >> channel;
+
+            insert(channel);
+        }            
+
+        child = child->next;
+    }
 }

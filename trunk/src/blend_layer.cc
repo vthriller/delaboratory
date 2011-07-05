@@ -155,6 +155,7 @@ void deBlendLayer::saveSpecific(xmlNodePtr node)
 {
     alpha.save(node, "alpha");
     blendMode.save(node, "blend_mode");
+    channels.save(node, "channels");
 }
 
 void deBlendLayer::loadSpecific(xmlNodePtr node)
@@ -171,6 +172,11 @@ void deBlendLayer::loadSpecific(xmlNodePtr node)
         if ((!xmlStrcmp(child->name, xmlCharStrdup("blend_mode")))) 
         {
             blendMode.load(child);
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("channels")))) 
+        {
+            channels.load(child);
         }
 
         child = child->next;
