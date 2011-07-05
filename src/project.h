@@ -45,6 +45,8 @@ class deProject
         deLogger logger;
         deLayerFactory layerFactory;
 
+        std::string sourceImageFileName;
+
         deProject(const deProject& project);
 
     public:

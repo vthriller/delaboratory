@@ -19,6 +19,7 @@
 #ifndef _DE_BLUR_FRAME_H
 #define _DE_BLUR_FRAME_H
 
+/*
 #include "action_frame.h"
 #include <vector>
 class deBlurLayer;
@@ -42,6 +43,6 @@ class deBlurFrame:public deActionFrame
     public:
         deBlurFrame(wxWindow* parent, deBlurLayer& _layer, dePreviewStack& _stack, int layerNumber);
         virtual ~deBlurFrame();
-};
+};*/
 
 #endif

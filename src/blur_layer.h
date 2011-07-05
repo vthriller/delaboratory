@@ -29,8 +29,8 @@
 class deBlurLayer:public deLayer
 {
     private:
-        dePropertyBlurDirection direction;
-        dePropertyValue radius;
+        dePropertyValue radiusX;
+        dePropertyValue radiusY;
         dePropertyChannels channels;
 
     public:
@@ -44,11 +44,6 @@ class deBlurLayer:public deLayer
         virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
         virtual void onChangeColorSpace();
 
-        deBlurDirection getBlurDirection() const;
-        deValue getBlurRadius() const;
-        void setBlurRadius(deValue _radius);
-        void setBlurDirection(deBlurDirection _direction);
-
         void clearEnabledChannels();
         void enableChannel(int c);
 
@@ -57,7 +52,6 @@ class deBlurLayer:public deLayer
 
         virtual void saveSpecific(xmlNodePtr node);
         virtual void loadSpecific(xmlNodePtr node);
-
 
 };
 

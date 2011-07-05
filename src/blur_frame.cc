@@ -22,6 +22,7 @@
 #include "preview_stack.h"
 #include "channel_check_boxes.h"
 
+/*
 class deBlurSlider:public deSlider
 {
     private:
@@ -128,3 +129,4 @@ void deBlurFrame::check(wxCommandEvent &event)
     stack.refreshView();
 
 }
+*/

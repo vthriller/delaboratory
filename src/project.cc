@@ -249,6 +249,8 @@ void deProject::logMessage(const std::string& message)
 void deProject::open(const std::string& fileName)
 {
 
+    sourceImageFileName = fileName;
+
     layerStack.clear();
     previewStack.clear();
 
