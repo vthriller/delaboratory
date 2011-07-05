@@ -36,6 +36,31 @@ std::string getNDTypeName(deNDType type)
     }
 }
 
+deNDType ndTypeFromString(const std::string& s)
+{
+    if (s == "horizontal")
+    {
+        return deNDHorizontal;
+    }
+
+    if (s == "vertical")
+    {
+        return deNDVertical;
+    }
+
+    if (s == "vignette")
+    {
+        return deNDVignette;
+    }
+
+    if (s == "flat")
+    {
+        return deNDFlat;
+    }
+
+    return deNDInvalid;
+}
+
 void getSupportedNDTypes(std::vector<deNDType>& result)
 {
     result.push_back(deNDHorizontal);

@@ -35,6 +35,9 @@ class dePropertyNDType:public deProperty
         void setNDType(deNDType _type);
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
 
+        virtual void saveContent(xmlNodePtr node);
+        virtual void load(xmlNodePtr node);
+
 };
 
 #endif

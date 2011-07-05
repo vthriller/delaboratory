@@ -24,6 +24,7 @@
 
 enum deNDType
 {
+    deNDInvalid,
     deNDHorizontal,
     deNDVertical,
     deNDVignette,
@@ -31,6 +32,7 @@ enum deNDType
 };
 
 std::string getNDTypeName(deNDType type);
+deNDType ndTypeFromString(const std::string& s);
 void getSupportedNDTypes(std::vector<deNDType>& result);
 
 #endif

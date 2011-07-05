@@ -92,6 +92,7 @@ void deNDLayer::saveSpecific(xmlNodePtr node)
     yCenter.save(node, "y_center");
     power.save(node, "power");
     blendMode.save(node, "blend_mode");
+    ndType.save(node, "nd_type");
 }
 
 void deNDLayer::loadSpecific(xmlNodePtr node)
@@ -123,6 +124,11 @@ void deNDLayer::loadSpecific(xmlNodePtr node)
         if ((!xmlStrcmp(child->name, xmlCharStrdup("blend_mode")))) 
         {
             blendMode.load(child);
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("nd_type")))) 
+        {
+            ndType.load(child);
         }
 
         child = child->next;
