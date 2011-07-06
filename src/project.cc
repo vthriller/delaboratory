@@ -28,6 +28,8 @@
 
 #include <libxml/parser.h>
 
+#include <wx/progdlg.h>
+
 deProject::deProject()
 :sourceImageSize(0,0)
 {
@@ -160,6 +162,8 @@ deFinalImage* deProject::generateFinalImage()
 {
     logMessage("generate final image...");
 
+    wxProgressDialog* progressDialog = new wxProgressDialog(_T("generate final image"), _T("generate final image"), 100, NULL, wxPD_CAN_ABORT);
+
     const dePreview* preview = getVisiblePreview();
     if (!preview)
     {
@@ -168,13 +172,18 @@ deFinalImage* deProject::generateFinalImage()
     deSize previousSize = preview->getSize();
 
     setPreviewSize(sourceImageSize);
-    previewStack.updatePreviews(0);
 
-    const dePreview* finalPreview = getVisiblePreview();
-    deFinalImage* finalImage = new deFinalImage(*finalPreview);
+    const dePreview* finalPreview = previewStack.generateFinalPreview(progressDialog, view);
+    deFinalImage* finalImage = NULL;
+
+    if (finalPreview)
+    {
+        finalImage = new deFinalImage(*finalPreview);
+    }        
 
     setPreviewSize(previousSize);
     previewStack.updatePreviews(0);
+    delete progressDialog;
 
     return finalImage;
 }
@@ -207,6 +216,7 @@ deSamplerList& deProject::getSamplerList()
 void deProject::loadSourceImage(const std::string& fileName)
 {
     logMessage("loading source image " + fileName + "...");
+    sourceImageFileName = fileName;
 
     size_t posDot = fileName.rfind(".");
     size_t posSlash = fileName.rfind("/");
@@ -249,7 +259,6 @@ void deProject::logMessage(const std::string& message)
 void deProject::open(const std::string& fileName)
 {
 
-    sourceImageFileName = fileName;
 
     layerStack.clear();
     previewStack.clear();
@@ -268,7 +277,24 @@ void deProject::open(const std::string& fileName)
         return;
     }
 
-    layerStack.load(root, layerFactory);
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("layer_stack")))) 
+        {
+            layerStack.load(child, layerFactory);
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("source_image_file_name")))) 
+        {
+            xmlChar* s = xmlNodeGetContent(child);            
+            sourceImageFileName = (char*)(s);
+            xmlFree(s);
+        }
+
+        child = child->next;
+    }
 
     deSourceImageLayer* layer = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
     if (layer)
@@ -285,6 +311,7 @@ void deProject::open(const std::string& fileName)
 
     setView (layerStack.getSize() - 1);
 
+    loadSourceImage(sourceImageFileName);
 
 }
 
@@ -292,10 +319,18 @@ void deProject::save(const std::string& fileName)
 {
     xmlDocPtr doc = xmlNewDoc(xmlCharStrdup("1.0"));
 
-    xmlNodePtr root = xmlNewNode(NULL, xmlCharStrdup("layer_stack"));
+    xmlNodePtr root = xmlNewNode(NULL, xmlCharStrdup("project"));
     xmlDocSetRootElement(doc, root);
 
-    layerStack.save(root);
+    {
+        xmlNodePtr node = xmlNewChild(root, NULL, xmlCharStrdup("source_image_file_name"), NULL);
+        xmlNodeSetContent(node, xmlCharStrdup(sourceImageFileName.c_str()));
+    }
+
+    {
+        xmlNodePtr child = xmlNewChild(root, NULL, xmlCharStrdup("layer_stack"), NULL);
+        layerStack.save(child);
+    }
 
     xmlSaveFormatFile (fileName.c_str(), doc, 1); 
 }

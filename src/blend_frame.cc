@@ -25,6 +25,7 @@
 #include "blend_mode_choice.h"
 #include "channel_choice.h"
 
+/*
 class deAlphaSlider:public deSlider
 {
     private:
@@ -146,3 +147,4 @@ void deBlendFrame::update()
         destinationChannelChoice->Disable();
     }
 }
+*/

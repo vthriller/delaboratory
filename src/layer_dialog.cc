@@ -25,6 +25,8 @@
 #include "action_frame.h"
 #include <wx/sizer.h>
 
+/*
+
 void deLayerDialog::clickApply(wxCommandEvent &event)
 {
     Close(TRUE);
@@ -192,3 +194,4 @@ void deLayerDialog::addOverlayChoice()
 
     Fit();
 }
+*/

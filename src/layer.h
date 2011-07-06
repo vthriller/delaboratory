@@ -50,7 +50,6 @@ class deLayer
         dePropertyName name;
         dePropertyColorSpace colorSpace;
         dePropertyLayerIndex sourceLayer;
-        dePropertyLayerIndex overlayLayer;
 
     public:
         deLayer(deLayerStack& _stack, int _index, const std::string& _name);
@@ -63,7 +62,7 @@ class deLayer
         virtual bool canChangeColorSpace() const {return false;};
 
         void changeSourceLayer(int id);
-        void changeOverlayLayer(int id);
+//        void changeOverlayLayer(int id);
         void changeColorSpace(deColorSpace _colorSpace);
 
         virtual void onChangeColorSpace() {};
@@ -89,7 +88,7 @@ class deLayer
         virtual const std::string getDescription() const {return "base layer";};
 
         int getSourceLayerID() const {return sourceLayer.getIndex();};
-        int getOverlayLayerID() const {return overlayLayer.getIndex();};
+        //int getOverlayLayerID() const {return overlayLayer.getIndex();};
 
         void registerProperty(deProperty& property);
 

@@ -28,7 +28,7 @@
 #include <sstream>
 
 deLayer::deLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:stack(_stack), index(_index), name(*this), sourceLayer(*this, "source"), overlayLayer(*this, "overlay"), colorSpace(*this)
+:stack(_stack), index(_index), name(*this), sourceLayer(*this, "source"), /*overlayLayer(*this, "overlay"),*/ colorSpace(*this)
 {
     name.setName(_name);
     actionFrame = NULL;
@@ -66,6 +66,7 @@ deActionFrame* deLayer::getActionFrame()
 
 wxDialog* deLayer::createDialog(wxWindow* parent, int layerNumber, deProject* project)
 {
+/*
     deLayerDialog* dialog = new deLayerDialog(parent, *this, layerNumber, project, "options");
     if (canChangeColorSpace())
     {
@@ -79,22 +80,25 @@ wxDialog* deLayer::createDialog(wxWindow* parent, int layerNumber, deProject* pr
     {
         dialog->addOverlayChoice();
     }
-    return dialog;
+    return dialog;*/
+    return NULL;
 }
 
 void deLayer::changeSourceLayer(int id)
 {
     sourceLayer.setIndex(id);
-    overlayLayer.setIndex(id);
+    //overlayLayer.setIndex(id);
     updateColorSpace();
     onChangeSourceLayer();
 }
 
+/*
 void deLayer::changeOverlayLayer(int id)
 {
     overlayLayer.setIndex(id);
     onChangeOverlayLayer();
 }
+*/
 
 void deLayer::changeColorSpace(deColorSpace _colorSpace)
 {
@@ -160,7 +164,6 @@ void deLayer::save(xmlNodePtr node)
     name.save(node, "name");
     colorSpace.save(node, "color_space");
     sourceLayer.save(node, "source_layer");
-    overlayLayer.save(node, "overlay_layer");
 
     saveSpecific(node);
 }
@@ -189,12 +192,6 @@ void deLayer::load(xmlNodePtr node)
             xmlFree(s);
         }
 
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("overlay_layer")))) 
-        {
-            xmlChar* s = xmlNodeGetContent(child);            
-            overlayLayerString = (char*)(s);
-            xmlFree(s);
-        }
 
         child = child->next;
     }
@@ -207,14 +204,6 @@ void deLayer::load(xmlNodePtr node)
         iss >> s;
 
         changeSourceLayer(s);
-    }        
-
-    {
-        std::istringstream iss(overlayLayerString);
-        int s;
-        iss >> s;
-
-        changeOverlayLayer(s);
     }        
 
     loadSpecific(node);

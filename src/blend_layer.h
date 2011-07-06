@@ -29,10 +29,10 @@ class deBlendLayer:public deLayer
 {
     private:
         dePropertyValue alpha;
-        int overlayChannel;
-        bool singleOverlayChannel;
+//        dePropertyLayerIndex maskLayer;
         dePropertyBlendMode blendMode;
         dePropertyChannels channels;
+        dePropertyLayerIndex overlayLayer;
     public:
         deBlendLayer(deLayerStack& _stack, int _index, const std::string& _name);
         virtual ~deBlendLayer();
@@ -40,18 +40,6 @@ class deBlendLayer:public deLayer
         virtual bool canChangeSourceLayer() const {return true;};
         virtual bool canChangeOverlayLayer() const {return true;};
         virtual bool canChangeColorSpace() const {return true;};
-
-        void setOverlayChannel(int _channel);
-        int getOverlayChannel() const;
-
-        void setSingleOverlayChannel(bool _singleChannel);
-        bool isSingleOverlayChannel() const;
-
-        void setDestinationChannel(int _channel);
-        int getDestinationChannel() const;
-
-        void setSingleDestinationChannel(bool _singleChannel);
-        bool isSingleDestinationChannel() const;
 
         deBlendMode getBlendMode() const;
         void setBlendMode(deBlendMode mode);
@@ -67,6 +55,8 @@ class deBlendLayer:public deLayer
 
         virtual void saveSpecific(xmlNodePtr node);
         virtual void loadSpecific(xmlNodePtr node);
+
+        virtual void onChangeSourceLayer();
 
 };
 
