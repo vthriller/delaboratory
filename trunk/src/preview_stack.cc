@@ -24,6 +24,7 @@
 #include <iostream>
 #include <wx/wx.h>
 #include <sstream>
+#include <wx/progdlg.h>
 
 dePreviewStack::dePreviewStack()
 {
@@ -183,3 +184,36 @@ std::string dePreviewStack::getError()
 {
     return error;
 }
+
+const dePreview* dePreviewStack::generateFinalPreview(wxProgressDialog* dialog, int n)
+{
+    deLayerStack& layerStack = project->getLayerStack();
+    nowUpdating = true;
+    int i;
+    std::cout << "previews.size(): " << previews.size() << std::endl;
+    std::cout << "n: " << n << std::endl;
+    for (i = 0; i <= n; i++)
+    {
+        deLayer* layer = layerStack.getLayer(i);
+        if (!layer)
+        {
+            return NULL;
+        }
+
+        int progress = 100 * i / n;
+        bool notAbort = dialog->Update(progress, wxString::FromAscii(layer->getName().c_str()));
+        if (!notAbort)
+        {
+            return NULL;
+        }
+
+        dePreview* preview = previews[i];
+        if (preview)
+        {
+            delete preview;
+        }
+        previews[i] = layer->createPreview(*this);
+    }
+    nowUpdating = false;
+    return previews[n];
+}    

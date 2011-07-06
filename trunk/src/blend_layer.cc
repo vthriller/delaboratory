@@ -26,18 +26,18 @@
 #include "preview.h"
 #include "project.h"
 #include "layer_dialog.h"
+#include <sstream>
 
 deBlendLayer::deBlendLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), alpha(*this, "alpha", 0.0, 1.0), blendMode(*this), channels(*this)
+:deLayer(_stack, _index, _name), alpha(*this, "alpha", 0.0, 1.0), blendMode(*this), channels(*this), overlayLayer(*this, "overlay")/*, maskLayer(*this, "mask layer")*/
 {
     alpha.setValue(0.5);
-    overlayChannel = -1;
-    singleOverlayChannel = false;
     blendMode.setBlendMode(deBlendNormal);
     channels.clear();
     channels.insert(0);
     channels.insert(1);
     channels.insert(2);
+    overlayLayer.setIndex(-1);
 }
 
 deBlendLayer::~deBlendLayer()
@@ -52,7 +52,8 @@ void deBlendLayer::changeAlpha(deValue _alpha)
 
 deActionFrame* deBlendLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
-    return new deBlendFrame(parent, *this, project->getPreviewStack(), layerNumber);
+//    return new deBlendFrame(parent, *this, project->getPreviewStack(), layerNumber);
+    return NULL;
 }
 
 
@@ -76,6 +77,7 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
         return NULL;
     }
 
+/*
     int oc;
     if (singleOverlayChannel)
     {
@@ -84,7 +86,7 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
     else
     {
         oc = -1;
-    }
+    }*/
     /*
     int dc;
     if (singleDestinationChannel)
@@ -96,11 +98,12 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
         dc = -1;
     }*/
 
-    blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, oc, channels.getChannels(), blendMode.getBlendMode());
+    blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, -1, channels.getChannels(), blendMode.getBlendMode());
 
     return preview;
 }
 
+/*
 void deBlendLayer::setOverlayChannel(int _channel)
 {
     overlayChannel = _channel;
@@ -120,26 +123,7 @@ bool deBlendLayer::isSingleOverlayChannel() const
 {
     return singleOverlayChannel;
 }
-
-void deBlendLayer::setDestinationChannel(int _channel)
-{
-    //destinationChannel = _channel;
-}
-
-int deBlendLayer::getDestinationChannel() const
-{
-    //return destinationChannel;
-}
-
-void deBlendLayer::setSingleDestinationChannel(bool _singleChannel)
-{
-    //singleDestinationChannel = _singleChannel;
-}
-
-bool deBlendLayer::isSingleDestinationChannel() const
-{
-    //return singleDestinationChannel;
-}
+*/
 
 deBlendMode deBlendLayer::getBlendMode() const
 {
@@ -156,11 +140,14 @@ void deBlendLayer::saveSpecific(xmlNodePtr node)
     alpha.save(node, "alpha");
     blendMode.save(node, "blend_mode");
     channels.save(node, "channels");
+    overlayLayer.save(node, "overlay_layer");
 }
 
 void deBlendLayer::loadSpecific(xmlNodePtr node)
 {
     xmlNodePtr child = node->xmlChildrenNode;
+
+    std::string overlayLayerString = "";
 
     while (child)
     {
@@ -179,6 +166,29 @@ void deBlendLayer::loadSpecific(xmlNodePtr node)
             channels.load(child);
         }
 
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("overlay_layer")))) 
+        {
+            xmlChar* s = xmlNodeGetContent(child);            
+            overlayLayerString = (char*)(s);
+            xmlFree(s);
+        }
+
         child = child->next;
+    }
+
+    {
+        std::istringstream iss(overlayLayerString);
+        int s;
+        iss >> s;
+
+        overlayLayer.setIndex(s);
+    }        
+}
+
+void deBlendLayer::onChangeSourceLayer()
+{
+    if (overlayLayer.getIndex() < 0)
+    {
+        overlayLayer.setIndex(sourceLayer.getIndex());
     }
 }

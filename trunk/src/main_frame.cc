@@ -121,17 +121,41 @@ void deMainFrame::OnNewProject(wxCommandEvent& WXUNUSED(event))
 
 void deMainFrame::OnOpenProject(wxCommandEvent& WXUNUSED(event))
 {
-    project->open("default.xml");
+    wxString type = _T("delaboratory files (*.delab;)|*.delab");
+    wxFileDialog openFileDialog(this, _T("Open project"), _T(""), _T(""), type, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+
+    if (openFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        return;
+    }
+
+    wxString fileName = openFileDialog.GetPath();
+    char cstring[1024];
+    strncpy(cstring, (const char*)fileName.mb_str(wxConvUTF8), 1023);
+
+    project->open(cstring);
 }
 
 void deMainFrame::OnSaveProject(wxCommandEvent& WXUNUSED(event))
 {
-    project->save("default.xml");
+    wxString type = _T("delaboratory files (*.delab;)|*.delab");
+    wxFileDialog openFileDialog(this, _T("Save project"), _T(""), _T(""), type, wxFD_SAVE);
+
+    if (openFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        return;
+    }
+
+    wxString fileName = openFileDialog.GetPath();
+    char cstring[1024];
+    strncpy(cstring, (const char*)fileName.mb_str(wxConvUTF8), 1023);
+
+    std::string f = std::string(cstring) + ".delab";
+    project->save(f);
 }
 
 void deMainFrame::OnOpenImage(wxCommandEvent& WXUNUSED(event))
 {
-
     wxString type = _T("JPEG/TIFF files (*.jpg;*.jpeg;*.tiff;*.tif)|*.jpg;*.jpeg;*.tiff;*.tif");
     wxFileDialog openFileDialog(this, _T("Open source image"), _T(""), _T(""), type, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 

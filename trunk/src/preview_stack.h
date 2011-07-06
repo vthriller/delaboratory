@@ -26,6 +26,8 @@
 class dePreview;
 class deProject;
 
+class wxProgressDialog;
+
 class dePreviewStack
 {
     private:
@@ -62,6 +64,7 @@ class dePreviewStack
         std::string getError();
 
         void clear();
+        const dePreview* generateFinalPreview(wxProgressDialog* dialog, int n);
 };
 
 #endif
