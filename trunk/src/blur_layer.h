@@ -23,6 +23,7 @@
 #include "blur.h"
 #include "property_value.h"
 #include "property_blur_direction.h"
+#include "property_integer.h"
 #include "property_channels.h"
 #include <set>
 
@@ -32,6 +33,7 @@ class deBlurLayer:public deLayer
         dePropertyValue radiusX;
         dePropertyValue radiusY;
         dePropertyChannels channels;
+        dePropertyInteger iterations;
 
     public:
         deBlurLayer(deLayerStack& _stack, int _index, const std::string& _name);

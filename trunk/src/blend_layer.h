@@ -57,6 +57,7 @@ class deBlendLayer:public deLayer
         virtual void loadSpecific(xmlNodePtr node);
 
         virtual void onChangeSourceLayer();
+        virtual void onChangeColorSpace();
 
 };
 

@@ -29,7 +29,6 @@ deNDLayer::deNDLayer(deLayerStack& _stack, int _index, const std::string& _name)
 :deLayer(_stack, _index, _name), ndType(*this), blendMode(*this), channels(*this), xCenter(*this, "x center", -1, 1), yCenter(*this, "y center", -1, 1), power(*this, "power", -1, 1)
 {
     blendMode.setBlendMode(deBlendMultiply);
-    clearEnabledChannels();
 }
 
 deNDLayer::~deNDLayer()
@@ -67,7 +66,7 @@ deActionFrame* deNDLayer::createActionFrame(wxWindow* parent, int layerNumber, d
 
 void deNDLayer::onChangeColorSpace()
 {
-    clearEnabledChannels();
+    channels.fill();
 }
 
 void deNDLayer::enableChannel(int c)

@@ -18,6 +18,8 @@
 
 #include "property_channels.h"
 #include "channels_selector.h"
+#include "color_space.h"
+#include "layer.h"
 #include <sstream>
 
 dePropertyChannels::dePropertyChannels(deLayer& _parent)
@@ -47,8 +49,20 @@ void dePropertyChannels::addPanelContent(wxPanel* panel, wxSizer* sizer)
 
 void dePropertyChannels::onColorSpaceChange()
 {
-    clear();
+    fill();
     selector->rebuild();
+}
+
+void dePropertyChannels::fill()
+{
+    clear();
+    deColorSpace c = parent.getColorSpace();
+    int n = getColorSpaceSize(c);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        insert(i);
+    }
 }
 
 void dePropertyChannels::saveContent(xmlNodePtr node)

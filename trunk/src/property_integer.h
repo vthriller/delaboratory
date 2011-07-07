@@ -16,38 +16,37 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_CHANNELS_H
-#define _DE_PROPERTY_CHANNELS_H
+#ifndef _DE_PROPERTY_INTEGER_H
+#define _DE_PROPERTY_INTEGER_H
 
 #include "property.h"
-#include <set>
-class deChannelsSelector;
+#include "value.h"
+#include <string>
 
-typedef std::set<int> deChannels;
-
-class dePropertyChannels:public deProperty
+class dePropertyInteger:public deProperty
 {
     private:
-        deChannels channels;
-        deChannelsSelector* selector;
+        int value;
+        int min;
+        int max;
+        std::string label;
 
     public:
-        dePropertyChannels(deLayer& _parent);
-        virtual ~dePropertyChannels();
+        dePropertyInteger(deLayer& _parent, const std::string& label, int _min, int _max);
+        virtual ~dePropertyInteger();
 
-        const deChannels& getChannels() const {return channels;};
-
-        void clear();
-        void insert(int c);
+        int getValue() const {return value;};
+        void setValue(int _value);
 
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
 
-        virtual void onColorSpaceChange();
+        const std::string getLabel() const {return label;};
+
+        int getMin() const {return min;};
+        int getMax() const {return max;};
 
         virtual void saveContent(xmlNodePtr node);
         virtual void load(xmlNodePtr node);
-
-        void fill();
 
 };
 

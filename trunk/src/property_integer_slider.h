@@ -16,39 +16,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_CHANNELS_H
-#define _DE_PROPERTY_CHANNELS_H
+#ifndef _DE_PROPERTY_VALUE_SLIDER_H
+#define _DE_PROPERTY_VALUE_SLIDER_H
 
-#include "property.h"
-#include <set>
-class deChannelsSelector;
+#include "slider.h"
+class dePropertyInteger;
 
-typedef std::set<int> deChannels;
-
-class dePropertyChannels:public deProperty
+class dePropertyIntegerSlider:public deSlider
 {
     private:
-        deChannels channels;
-        deChannelsSelector* selector;
+        dePropertyInteger& property;
 
     public:
-        dePropertyChannels(deLayer& _parent);
-        virtual ~dePropertyChannels();
+        dePropertyIntegerSlider(wxWindow *parent, dePropertyInteger& _property, int range);
+        virtual ~dePropertyIntegerSlider();
 
-        const deChannels& getChannels() const {return channels;};
-
-        void clear();
-        void insert(int c);
-
-        virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
-
-        virtual void onColorSpaceChange();
-
-        virtual void saveContent(xmlNodePtr node);
-        virtual void load(xmlNodePtr node);
-
-        void fill();
-
-};
+        virtual void onValueChange(deValue integer);
+};        
 
 #endif

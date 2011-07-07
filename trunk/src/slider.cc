@@ -21,7 +21,12 @@
 
 void deSlider::updateValueFromSlider()
 {
-    float v = valueMin + slider->GetValue() * ((valueMax-valueMin) / sliderRange);
+    deValue v = valueMin + slider->GetValue() * ((valueMax-valueMin) / sliderRange);
+    if (integerMode)
+    {
+        int i = v;
+        v = i;
+    }        
     setEdit(v);
     onValueChange(v);
 }
@@ -41,7 +46,7 @@ void deSlider::setEdit(deValue v)
 
 void deSlider::setSlider(deValue v)
 {
-    float sl = (v - valueMin) / ((valueMax-valueMin) / sliderRange);
+    deValue sl = (v - valueMin) / ((valueMax-valueMin) / sliderRange);
 
     slider->SetValue(sl);
 }
@@ -70,6 +75,7 @@ void deSlider::textEnter(wxCommandEvent &event)
 deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax)
 :wxPanel(parent), sliderRange(_sliderRange), valueMin(_valueMin), valueMax(_valueMax)
 {
+    integerMode = false;
     sizer = new wxBoxSizer(wxHORIZONTAL);
     
     label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(labelString.c_str()), wxDefaultPosition, wxSize(80, 30));
@@ -90,4 +96,9 @@ deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _slider
 
 deSlider::~deSlider()
 {
+}
+
+void deSlider::setIntegerMode()
+{
+    integerMode = true;
 }
