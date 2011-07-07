@@ -33,10 +33,6 @@ deBlendLayer::deBlendLayer(deLayerStack& _stack, int _index, const std::string& 
 {
     alpha.setValue(0.5);
     blendMode.setBlendMode(deBlendNormal);
-    channels.clear();
-    channels.insert(0);
-    channels.insert(1);
-    channels.insert(2);
     overlayLayer.setIndex(-1);
 }
 
@@ -192,3 +188,9 @@ void deBlendLayer::onChangeSourceLayer()
         overlayLayer.setIndex(sourceLayer.getIndex());
     }
 }
+
+void deBlendLayer::onChangeColorSpace()
+{
+    channels.fill();
+}
+

@@ -24,11 +24,11 @@
 #include "project.h"
 
 deBlurLayer::deBlurLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), radiusX(*this, "radius x", 0.0, 0.05), radiusY(*this, "radius y", 0.0, 0.05), channels(*this)
+:deLayer(_stack, _index, _name), radiusX(*this, "radius x", 0.0, 0.05), radiusY(*this, "radius y", 0.0, 0.05), channels(*this), iterations(*this, "iterations", 1, 10)
 {
     radiusX.setValue(0.01);
     radiusY.setValue(0.01);
-    clearEnabledChannels();
+    iterations.setValue(1);
 }
 
 deBlurLayer::~deBlurLayer()
@@ -49,8 +49,23 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
     dePreview* tmp = new dePreview(colorSpace.getColorSpace(), sourceSize);
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
-    blur(*sourcePreview, *tmp, deBlurHorizontal, radiusX.getValue(), channels.getChannels());
-    blur(*tmp, *preview, deBlurVertical, radiusY.getValue(), channels.getChannels());
+    int i;
+    int n = iterations.getValue();
+    for (i = 0; i < n; i++)
+    {
+        const dePreview* src;
+        if (i == 0)
+        {
+            src = sourcePreview;
+        }
+        else
+        {
+            src = preview;
+        }
+
+        blur(*src, *tmp, deBlurHorizontal, radiusX.getValue(), channels.getChannels());
+        blur(*tmp, *preview, deBlurVertical, radiusY.getValue(), channels.getChannels());
+    }
 
     delete tmp;
 
@@ -65,7 +80,7 @@ deActionFrame* deBlurLayer::createActionFrame(wxWindow* parent, int layerNumber,
 
 void deBlurLayer::onChangeColorSpace()
 {
-    clearEnabledChannels();
+    channels.fill();
 }
 
 void deBlurLayer::enableChannel(int c)
@@ -88,6 +103,7 @@ void deBlurLayer::saveSpecific(xmlNodePtr node)
     radiusX.save(node, "radius_x");
     radiusY.save(node, "radius_y");
     channels.save(node, "channels");
+    iterations.save(node, "iterations");
 }
 
 void deBlurLayer::loadSpecific(xmlNodePtr node)
@@ -109,6 +125,11 @@ void deBlurLayer::loadSpecific(xmlNodePtr node)
         if ((!xmlStrcmp(child->name, xmlCharStrdup("channels")))) 
         {
             channels.load(child);
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("iterations")))) 
+        {
+            iterations.load(child);
         }
 
         child = child->next;
