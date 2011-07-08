@@ -20,10 +20,13 @@
 #include "curves_layer.h"
 #include "curves_panel.h"
 #include "channel_choice.h"
+#include "preview_stack.h"
+#include "project.h"
 
 deCurvesEditor::deCurvesEditor(wxWindow *parent, dePreviewStack& _stack, dePropertyCurves& _property)
 :wxPanel(parent), property(_property), stack(_stack)
 {
+    stack.getProject()->logMessage("deCurvesEditor::deCurvesEditor");
     sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
 
@@ -37,6 +40,8 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, dePreviewStack& _stack, dePrope
 
 void deCurvesEditor::rebuild()
 {
+    stack.getProject()->logMessage("deCurvesEditor::rebuild");
+
     deColorSpace colorSpace = property.getParent().getColorSpace();
 
     if (channelChoice)

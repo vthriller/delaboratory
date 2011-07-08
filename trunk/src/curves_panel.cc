@@ -23,6 +23,7 @@
 #include <wx/dcbuffer.h>
 #include "preview_stack.h"
 #include "sampler.h"
+#include "project.h"
 
 BEGIN_EVENT_TABLE(deCurvesPanel, wxPanel)
 EVT_PAINT(deCurvesPanel::paintEvent)
@@ -34,6 +35,7 @@ deCurvesPanel::deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropert
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE)), 
  bitmap(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE), stack(_stack), property(_property)
 {
+    stack.getProject()->logMessage("deCurvesPanel::deCurvesPanel");
     marker = -1;
 
     selectedPoint = -1;
@@ -47,6 +49,7 @@ deCurvesPanel::deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropert
 
 deCurvesPanel::~deCurvesPanel()
 {
+    stack.getProject()->logMessage("deCurvesPanel::~deCurvesPanel");
 }
 
 void deCurvesPanel::changeChannel(int _channel)
@@ -58,12 +61,14 @@ void deCurvesPanel::changeChannel(int _channel)
 
 void deCurvesPanel::paintEvent(wxPaintEvent & evt)
 {
+    stack.getProject()->logMessage("deCurvesPanel::paintEvent");
     wxPaintDC dc(this);
     render(dc);
 }
 
 void deCurvesPanel::paint()
 {
+    stack.getProject()->logMessage("deCurvesPanel::paint");
     wxClientDC dc(this);
     render(dc);
 }
@@ -189,6 +194,7 @@ void deCurvesPanel::render(wxDC& dc_orig)
 
 void deCurvesPanel::click(wxMouseEvent &event)
 {
+    stack.getProject()->logMessage("deCurvesPanel::click");
     deCurves curves = property.getCurves();
 
     if (channel >= curves.size())
