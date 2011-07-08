@@ -33,6 +33,10 @@ dePropertyColorSpace::~dePropertyColorSpace()
 
 void dePropertyColorSpace::setColorSpace(deColorSpace _colorSpace)
 {
+    if (stack)
+    {
+        stack->getProject()->logMessage("setColorSpace");
+    }        
     colorSpace = _colorSpace;
 }
 
