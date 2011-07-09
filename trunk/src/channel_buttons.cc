@@ -20,9 +20,10 @@
 #include "color_space.h"
 #include "layer.h"
 
-void addButton(wxPanel* parent, const std::string& label, int c, std::vector<wxRadioButton*>& buttons, std::map<int, int>& channels, wxSizer* sizer)
+void addButton(wxPanel* parent, const std::string& label, int c, std::vector<wxRadioButton*>& buttons, std::map<int, int>& channels, wxSizer* sizer, int style)
 {
-    wxRadioButton* button = new wxRadioButton(parent, wxID_ANY, wxString::FromAscii(label.c_str()), wxDefaultPosition, wxDefaultSize);
+
+    wxRadioButton* button = new wxRadioButton(parent, wxID_ANY, wxString::FromAscii(label.c_str()), wxDefaultPosition, wxDefaultSize, style);
     sizer->Add(button, 0);
     buttons.push_back(button);
 
@@ -52,14 +53,15 @@ void createChannelButtons(deColorSpace colorSpace, std::vector<wxRadioButton*>& 
     {
         name = getColorSpaceName(colorSpace);
     }
-    addButton(parent, name, -1, buttons, channels, sizer);
+
+    addButton(parent, name, -1, buttons, channels, sizer, wxRB_GROUP);
 
     if (s > 1)
     {
             for (j = 0; j < s; j++)
             {
                 std::string channel = getChannelName(colorSpace, j);
-                addButton(parent, channel, j, buttons, channels, sizer);
+                addButton(parent, channel, j, buttons, channels, sizer, 0);
             }
     }
 
