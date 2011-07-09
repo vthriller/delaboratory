@@ -29,6 +29,8 @@ wxChoice* makeChannelChoice(wxWindow* parent, deColorSpace colorSpace)
     }        
 
     wxChoice* choice =  new wxChoice(parent, wxID_ANY, wxDefaultPosition, wxSize(200, -1), n, channelStrings);
+    choice->SetSelection(0);
+
     delete [] channelStrings;
 
     return choice;
