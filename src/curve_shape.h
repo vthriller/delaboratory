@@ -34,7 +34,7 @@ class deCurveShape
         std::vector<deCurveFunction*> functions;
         int size;
 
-        void storeValues(deValue x1, deValue y1, deValue x2, deValue y2);
+//        void storeValues(deValue x1, deValue y1, deValue x2, deValue y2);
         void clearFunctions();
         void generateSpline();
     public:
