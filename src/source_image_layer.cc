@@ -47,10 +47,12 @@ void deSourceImageLayer::setPreviewSize(const deSize& size)
     previewSize = size;
 }
 
+/*
 deActionFrame* deSourceImageLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
     return NULL;
 }
+*/
 
 dePreview* deSourceImageLayer::createPreview(dePreviewStack& previewStack)
 {

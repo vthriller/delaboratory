@@ -36,7 +36,7 @@ class deConversionLayer:public deLayer
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
 
-        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
+//        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
         virtual std::string getType() const {return "conversion";};
 

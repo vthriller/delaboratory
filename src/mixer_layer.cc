@@ -34,10 +34,12 @@ deMixerLayer::~deMixerLayer()
 {
 }
 
+/*
 deActionFrame* deMixerLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
     return new deMixerFrame(parent, *this, project->getPreviewStack(), mixer);
 }
+*/
 
 void deMixerLayer::recreateMixer()
 {

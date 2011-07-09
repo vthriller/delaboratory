@@ -64,26 +64,6 @@ deActionFrame* deLayer::getActionFrame()
     return actionFrame;
 }
 
-wxDialog* deLayer::createDialog(wxWindow* parent, int layerNumber, deProject* project)
-{
-/*
-    deLayerDialog* dialog = new deLayerDialog(parent, *this, layerNumber, project, "options");
-    if (canChangeColorSpace())
-    {
-        dialog->addColorSpaceChoice();
-    }        
-    if (canChangeSourceLayer())
-    {
-        dialog->addSourceChoice();
-    }        
-    if (canChangeOverlayLayer())
-    {
-        dialog->addOverlayChoice();
-    }
-    return dialog;*/
-    return NULL;
-}
-
 void deLayer::changeSourceLayer(int id)
 {
     sourceLayer.setIndex(id);

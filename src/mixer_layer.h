@@ -41,7 +41,7 @@ class deMixerLayer:public deLayer
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
 
-        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
+//        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
         deMixer* getMixer() {return mixer.getMixer();};
 

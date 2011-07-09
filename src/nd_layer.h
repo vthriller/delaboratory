@@ -45,7 +45,7 @@ class deNDLayer:public deLayer
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
 
-        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
+//        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
         void clearEnabledChannels();
         void enableChannel(int c);

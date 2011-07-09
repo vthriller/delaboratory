@@ -46,11 +46,12 @@ void deBlendLayer::changeAlpha(deValue _alpha)
     alpha.setValue(_alpha);
 }
 
+/*
 deActionFrame* deBlendLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
 //    return new deBlendFrame(parent, *this, project->getPreviewStack(), layerNumber);
     return NULL;
-}
+}*/
 
 
 dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
