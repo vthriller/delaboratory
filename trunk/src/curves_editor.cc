@@ -55,6 +55,7 @@ void deCurvesEditor::rebuild()
     channelChoice = makeChannelChoice(this, colorSpace);
     sizer->Add(channelChoice, 0);
 
+
     if (bigPanel)
     {
         wxSizer* bigSizer = bigPanel->GetSizer();
@@ -82,9 +83,6 @@ void deCurvesEditor::rebuild()
     sizer->Layout();
 
     Fit();
-
-    Update();
-    Refresh();
 
 }
 
