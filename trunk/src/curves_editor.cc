@@ -32,6 +32,7 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, dePreviewStack& _stack, dePrope
 
     channelChoice = NULL;
     bigPanel = NULL;
+    curvesPanel = NULL;
 
     rebuild();
 
@@ -54,14 +55,23 @@ void deCurvesEditor::rebuild()
 
     if (bigPanel)
     {
+        wxSizer* bigSizer = bigPanel->GetSizer();
+        if (curvesPanel)
+        {
+            bigSizer->Detach(curvesPanel);
+            delete curvesPanel;
+            curvesPanel = NULL;
+        }
+
         sizer->Detach(bigPanel);
         delete bigPanel;
+        bigPanel = NULL;
     }
+
 
     bigPanel = new wxPanel(this);
     bigPanel->SetBackgroundColour(*wxBLACK);
     sizer->Add(bigPanel, 0);
-
 
     wxSizer* bigSizer = new wxBoxSizer(wxHORIZONTAL);
     bigPanel->SetSizer(bigSizer);
