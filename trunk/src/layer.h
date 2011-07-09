@@ -19,19 +19,14 @@
 #ifndef _DE_LAYER_H
 #define _DE_LAYER_H
 
-#include <libxml/parser.h>
-#include <string>
 #include <list>
-#include "color_space.h"
 #include "property_name.h"
 #include "property_color_space.h"
 #include "property_layer_index.h"
-class dePreview;
 class deLayerStack;
-class dePreviewStack;
-class wxWindow;
-class deProject;
 class deActionFrame;
+class dePreview;
+class deProject;
 
 typedef std::list<deProperty*> deProperties;
 
@@ -62,7 +57,6 @@ class deLayer
         virtual bool canChangeColorSpace() const {return false;};
 
         void changeSourceLayer(int id);
-//        void changeOverlayLayer(int id);
         void changeColorSpace(deColorSpace _colorSpace);
 
         virtual void onChangeColorSpace() {};
@@ -78,9 +72,7 @@ class deLayer
         void setName(const std::string& _name);
         const std::string& getName() const {return name.getName();};
 
-//        wxDialog* createDialog(wxWindow* parent, int layerNumber, deProject* project);
         deActionFrame* createLayerFrame(wxWindow* parent, int layerNumber, deProject* project);
-//        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project) = 0;
         void closeActionFrame();
         void setActionFrame(deActionFrame* frame);
         deActionFrame* getActionFrame();
@@ -88,7 +80,6 @@ class deLayer
         virtual const std::string getDescription() const {return "base layer";};
 
         int getSourceLayerID() const {return sourceLayer.getIndex();};
-        //int getOverlayLayerID() const {return overlayLayer.getIndex();};
 
         void registerProperty(deProperty& property);
 
