@@ -49,7 +49,9 @@ void deCurvesEditor::rebuild()
     {
         sizer->Detach(channelChoice);
         delete channelChoice;
+        channelChoice = NULL;
     }
+
     channelChoice = makeChannelChoice(this, colorSpace);
     sizer->Add(channelChoice, 0);
 
@@ -68,7 +70,6 @@ void deCurvesEditor::rebuild()
         bigPanel = NULL;
     }
 
-
     bigPanel = new wxPanel(this);
     bigPanel->SetBackgroundColour(*wxBLACK);
     sizer->Add(bigPanel, 0);
@@ -77,6 +78,8 @@ void deCurvesEditor::rebuild()
     bigPanel->SetSizer(bigSizer);
     curvesPanel = new deCurvesPanel(bigPanel,  stack, property);
     bigSizer->Add(curvesPanel, 0, wxEXPAND | wxALL, 20);
+
+    sizer->Layout();
 
     Fit();
 
