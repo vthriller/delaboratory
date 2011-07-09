@@ -70,6 +70,9 @@ void deCurvesEditor::rebuild()
 
     Fit();
 
+    Update();
+    Refresh();
+
 }
 
 deCurvesEditor::~deCurvesEditor()
