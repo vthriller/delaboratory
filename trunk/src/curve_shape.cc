@@ -18,7 +18,6 @@
 
 #include "curve_shape.h"
 #include <iostream>
-#include "curve_function_linear.h"
 #include "curve_function_spline.h"
 
 deCurveShape::deCurveShape(int _size)

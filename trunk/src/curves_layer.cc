@@ -17,12 +17,10 @@
 */
 
 #include "curves_layer.h"
-#include "layer_dialog.h"
 #include "preview_stack.h"
 #include "layer_stack.h"
 #include "size.h"
 #include "preview.h"
-#include "curves_frame.h"
 #include "project.h"
 
 #define CURVES_PANEL_SIZE 500

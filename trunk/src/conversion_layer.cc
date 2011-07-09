@@ -24,7 +24,6 @@
 #include <wx/wx.h>
 #include "preview_stack.h"
 #include "converter.h"
-#include "layer_dialog.h"
 
 deConversionLayer::deConversionLayer(deLayerStack& _stack, int _index, const std::string& _name)
 :deLayer(_stack, _index, _name)

@@ -19,10 +19,8 @@
 #include "mixer_layer.h"
 #include "layer_stack.h"
 #include "preview.h"
-#include "mixer_frame.h"
 #include "preview_stack.h"
 #include "project.h"
-#include "layer_dialog.h"
 #include "mixer.h"
 
 deMixerLayer::deMixerLayer(deLayerStack& _stack, int _index, const std::string& _name)
