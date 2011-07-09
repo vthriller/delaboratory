@@ -59,10 +59,10 @@ dePreview* deNDLayer::createPreview(dePreviewStack& previewStack)
     return preview;
 }
 
-deActionFrame* deNDLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
+/*deActionFrame* deNDLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
     return new deNDFrame(parent, *this, project->getPreviewStack(), layerNumber);
-}
+}*/
 
 void deNDLayer::onChangeColorSpace()
 {

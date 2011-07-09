@@ -78,9 +78,9 @@ class deLayer
         void setName(const std::string& _name);
         const std::string& getName() const {return name.getName();};
 
-        wxDialog* createDialog(wxWindow* parent, int layerNumber, deProject* project);
+//        wxDialog* createDialog(wxWindow* parent, int layerNumber, deProject* project);
         deActionFrame* createLayerFrame(wxWindow* parent, int layerNumber, deProject* project);
-        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project) = 0;
+//        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project) = 0;
         void closeActionFrame();
         void setActionFrame(deActionFrame* frame);
         deActionFrame* getActionFrame();

@@ -35,10 +35,12 @@ deConversionLayer::~deConversionLayer()
 {
 }
 
+/*
 deActionFrame* deConversionLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
 {
     return NULL;
 }
+*/
 
 dePreview* deConversionLayer::createPreview(dePreviewStack& previewStack)
 {
