@@ -17,7 +17,6 @@
 */
 
 #include "nd_layer.h"
-#include "nd_frame.h"
 #include "blend.h"
 #include "preview_stack.h"
 #include "size.h"

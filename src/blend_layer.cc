@@ -21,11 +21,9 @@
 #include "layer_stack.h"
 #include "exception.h"
 #include <iostream>
-#include "blend_frame.h"
 #include "preview_stack.h"
 #include "preview.h"
 #include "project.h"
-#include "layer_dialog.h"
 #include <sstream>
 
 deBlendLayer::deBlendLayer(deLayerStack& _stack, int _index, const std::string& _name)

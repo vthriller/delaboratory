@@ -23,7 +23,6 @@
 #include "preview.h"
 #include <iostream>
 #include "action_frame.h"
-#include "layer_dialog.h"
 #include "project.h"
 #include <sstream>
 

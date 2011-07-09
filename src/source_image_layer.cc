@@ -24,7 +24,6 @@
 #include "channel.h"
 #include "exception.h"
 #include <wx/wx.h>
-#include "layer_dialog.h"
 
 deSourceImageLayer::deSourceImageLayer(deLayerStack& _stack, int _index, const std::string& _name)
 :deLayer(_stack, _index, _name), previewSize(0,0)

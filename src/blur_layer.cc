@@ -18,7 +18,6 @@
 
 #include "blur_layer.h"
 #include "blur.h"
-#include "blur_frame.h"
 #include "preview_stack.h"
 #include "preview.h"
 #include "project.h"
