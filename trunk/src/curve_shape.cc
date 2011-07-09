@@ -50,6 +50,7 @@ void deCurveShape::clearFunctions()
     }
 }
 
+/*
 void deCurveShape::storeValues(deValue x1, deValue y1, deValue x2, deValue y2)
 {
     int p1 = x1 * (size - 1);
@@ -62,6 +63,7 @@ void deCurveShape::storeValues(deValue x1, deValue y1, deValue x2, deValue y2)
     }
 
 }
+*/
 
 deValue deCurveShape::calc(deValue value)
 {
