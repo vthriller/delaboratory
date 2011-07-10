@@ -50,7 +50,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
 {
     project->logMessage("create main frame...");
 
-    bool created = Create((wxFrame *)NULL, wxID_ANY, _T("delaboratory 0.2 (c) 2011 Jacek Poplawski"), wxDefaultPosition, size);
+    bool created = Create((wxFrame *)NULL, wxID_ANY, _T("delaboratory 0.3 (c) 2011 Jacek Poplawski"), wxDefaultPosition, size);
 
     if (created)
     {
