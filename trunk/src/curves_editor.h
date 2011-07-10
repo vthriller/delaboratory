@@ -25,6 +25,7 @@ class deCurvesLayer;
 class dePreviewStack;
 class deCurvesPanel;
 class dePropertyCurves;
+class deSampler;
 
 class deCurvesEditor:public wxPanel
 {
@@ -43,6 +44,7 @@ class deCurvesEditor:public wxPanel
         virtual ~deCurvesEditor();
 
         void rebuild();
+        virtual void traceSampler(deSampler* sampler);
 
 };
 

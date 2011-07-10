@@ -31,3 +31,7 @@ deActionFrame::~deActionFrame()
     layer.closeActionFrame();
 }
 
+void deActionFrame::traceSampler(deSampler* sampler)
+{
+    layer.traceSampler(sampler);
+}

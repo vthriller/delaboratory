@@ -96,3 +96,7 @@ void deCurvesEditor::choose(wxCommandEvent &event)
     curvesPanel->changeChannel(b);
 }
 
+void deCurvesEditor::traceSampler(deSampler* sampler)
+{
+    curvesPanel->traceSampler(sampler);
+}
