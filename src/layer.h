@@ -96,6 +96,8 @@ class deLayer
         virtual void saveSpecific(xmlNodePtr node) {};
         virtual void loadSpecific(xmlNodePtr node) {};
 
+        virtual void traceSampler(deSampler* sampler);
+
 };
 
 #endif

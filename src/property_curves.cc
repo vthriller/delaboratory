@@ -109,3 +109,11 @@ void dePropertyCurves::load(xmlNodePtr node)
     }
 
 }
+
+void dePropertyCurves::traceSampler(deSampler* sampler)
+{
+    if (curvesEditor)
+    {
+        curvesEditor->traceSampler(sampler);
+    }
+}

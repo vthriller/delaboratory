@@ -32,7 +32,7 @@ class deActionFrame:public wxFrame
 
         virtual ~deActionFrame();
 
-        virtual void traceSampler(deSampler* sampler) {};
+        void traceSampler(deSampler* sampler);
 
 
 };

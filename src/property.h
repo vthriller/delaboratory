@@ -26,6 +26,7 @@ class wxWindow;
 class wxSizer;
 class dePreviewStack;
 class deGUI;
+class deSampler;
 #include "color_space.h"
 
 class deProperty
@@ -53,6 +54,8 @@ class deProperty
         void save(xmlNodePtr node, const std::string& name);
         virtual void saveContent(xmlNodePtr node) {};
         virtual void load(xmlNodePtr node) {};
+
+        virtual void traceSampler(deSampler* sampler) {};
 
 };
 

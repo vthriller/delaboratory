@@ -187,3 +187,12 @@ void deLayer::load(xmlNodePtr node)
 
     loadSpecific(node);
 }
+
+void deLayer::traceSampler(deSampler* sampler)
+{
+    deProperties::iterator i;
+    for (i = properties.begin(); i != properties.end(); i++)
+    {
+        (*i)->traceSampler(sampler);
+    }
+}

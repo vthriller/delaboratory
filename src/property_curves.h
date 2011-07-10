@@ -23,6 +23,7 @@
 #include "curves.h"
 #include "color_space.h"
 class deCurvesEditor;
+class deSampler;
 
 class dePropertyCurves:public deProperty
 {
@@ -46,6 +47,8 @@ class dePropertyCurves:public deProperty
 
         virtual void saveContent(xmlNodePtr node);
         virtual void load(xmlNodePtr node);
+
+        virtual void traceSampler(deSampler* sampler);
 
 };
 
