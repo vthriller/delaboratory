@@ -190,8 +190,6 @@ const dePreview* dePreviewStack::generateFinalPreview(wxProgressDialog* dialog, 
     deLayerStack& layerStack = project->getLayerStack();
     nowUpdating = true;
     int i;
-    std::cout << "previews.size(): " << previews.size() << std::endl;
-    std::cout << "n: " << n << std::endl;
     for (i = 0; i <= n; i++)
     {
         deLayer* layer = layerStack.getLayer(i);

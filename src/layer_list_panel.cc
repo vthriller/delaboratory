@@ -204,10 +204,6 @@ void deLayerListPanel::update()
                 listbox->SetItem(i, 3, _T(" "));
             }
         }
-        else
-        {
-            std::cout << "NO LAYER " << index << std::endl;
-        }
     }
 
     if (n < 2)
