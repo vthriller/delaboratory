@@ -80,6 +80,7 @@ class deProject
 
         void start();
 
+        void init(const std::string& fileName);
         void loadSourceImage(const std::string& fileName);
 
         deGUI& getGUI();
