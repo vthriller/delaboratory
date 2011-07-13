@@ -25,6 +25,7 @@
 #include "info_bar_panel.h"
 #include "source_image.h"
 #include "logger.h"
+#include "str.h"
 
 #include <libxml/parser.h>
 
@@ -211,6 +212,19 @@ void deProject::setView(int v)
 deSamplerList& deProject::getSamplerList() 
 {
     return samplerList;
+}
+
+void deProject::init(const std::string& fileName)
+{
+    const std::string ext = getExtension(fileName);
+    if (ext == "delab")
+    {
+        open(fileName);
+    }
+    else
+    {
+        loadSourceImage(fileName);
+    }
 }
 
 void deProject::loadSourceImage(const std::string& fileName)

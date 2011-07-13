@@ -60,7 +60,7 @@ bool deLaboratory::OnInit()
         wxString arg = argv[1];
         char cstring[1024];
         strncpy(cstring, (const char*)arg.mb_str(wxConvUTF8), 1023);
-        project.loadSourceImage(cstring);
+        project.init(cstring);
 
     }
 
