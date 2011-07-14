@@ -27,7 +27,7 @@
 #include <sstream>
 
 deBlendLayer::deBlendLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), alpha(*this, "alpha", 0.0, 1.0), blendMode(*this), channels(*this), overlayLayer(*this, "overlay")/*, maskLayer(*this, "mask layer")*/
+:deLayer(_stack, _index, _name), alpha(*this, "alpha", 0.0, 1.0), blendMode(*this), channels(*this), overlayLayer(*this, "overlay"), blendMask(*this, "mask")
 {
     alpha.setValue(0.5);
     blendMode.setBlendMode(deBlendNormal);
@@ -43,14 +43,6 @@ void deBlendLayer::changeAlpha(deValue _alpha)
 {
     alpha.setValue(_alpha);
 }
-
-/*
-deActionFrame* deBlendLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
-{
-//    return new deBlendFrame(parent, *this, project->getPreviewStack(), layerNumber);
-    return NULL;
-}*/
-
 
 dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
 {
