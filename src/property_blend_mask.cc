@@ -16,41 +16,43 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "property_blend_mode.h"
-#include "blend_mode_selector.h"
+#include "property_blend_mask.h"
+#include "mask_selector.h"
+#include <sstream>
 
-dePropertyBlendMode::dePropertyBlendMode(deLayer& _parent)
-:deProperty(_parent)
+dePropertyBlendMask::dePropertyBlendMask(deLayer& _parent, const std::string& _label)
+:deProperty(_parent), label(_label)
 {
-    mode = deBlendInvalid;
+    layerIndex = 0;
+    channel = 0;
 }
 
-dePropertyBlendMode::~dePropertyBlendMode()
+dePropertyBlendMask::~dePropertyBlendMask()
 {
 }
 
-void dePropertyBlendMode::setBlendMode(deBlendMode _mode)
+void dePropertyBlendMask::setLayerIndex(int _index)
 {
-    mode = _mode;
+    layerIndex = _index;
 }
 
-void dePropertyBlendMode::addPanelContent(wxPanel* panel, wxSizer* sizer)
+void dePropertyBlendMask::setChannel(int _channel)
 {
-    wxPanel* selector = new deBlendModeSelector(panel, *this, "blend mode");
+    channel = _channel;
+}
+
+
+void dePropertyBlendMask::addPanelContent(wxPanel* panel, wxSizer* sizer)
+{
+    wxPanel* selector = new deMaskSelector(panel, *this, label);
     sizer->Add(selector);
 }    
 
-void dePropertyBlendMode::saveContent(xmlNodePtr node)
+void dePropertyBlendMask::saveContent(xmlNodePtr node)
 {
-    xmlNodeSetContent(node, xmlCharStrdup(getBlendModeName(mode).c_str()));
+/*
+    std::ostringstream oss;
+    oss << index;
+    xmlNodeSetContent(node, xmlCharStrdup(oss.str().c_str()));
+    */
 }
-
-void dePropertyBlendMode::load(xmlNodePtr node)
-{
-    xmlChar* s = xmlNodeGetContent(node);            
-    std::string valueStr = (char*)(s);
-    xmlFree(s);
-
-    mode = blendModeFromString(valueStr);
-}
-

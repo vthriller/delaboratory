@@ -24,12 +24,13 @@
 #include "property_value.h"
 #include "property_channels.h"
 #include "property_blend_mode.h"
+#include "property_blend_mask.h"
 
 class deBlendLayer:public deLayer
 {
     private:
         dePropertyValue alpha;
-//        dePropertyLayerIndex maskLayer;
+        dePropertyBlendMask blendMask;
         dePropertyBlendMode blendMode;
         dePropertyChannels channels;
         dePropertyLayerIndex overlayLayer;
@@ -48,8 +49,6 @@ class deBlendLayer:public deLayer
         deValue getAlpha() const {return alpha.getValue();};
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
-
-//        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
 
         virtual std::string getType() const {return "blend";};
 

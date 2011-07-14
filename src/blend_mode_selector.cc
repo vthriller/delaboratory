@@ -20,10 +20,19 @@
 #include "property_blend_mode.h"
 #include "blend_mode_choice.h"
 
-deBlendModeSelector::deBlendModeSelector(wxPanel* parent, dePropertyBlendMode& _property)
+deBlendModeSelector::deBlendModeSelector(wxPanel* parent, dePropertyBlendMode& _property, const std::string& s)
 :wxPanel(parent), property(_property)
 {
+    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+
+    wxStaticText* label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(s.c_str()) );
+    sizer->Add(label);
+
     blendModeChoice = makeBlendModeChoice(this, blendModes, property.getBlendMode());
+    sizer->Add(blendModeChoice);
+
+    SetSizer(sizer);
+
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deBlendModeSelector::choose));
 }
 

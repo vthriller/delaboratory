@@ -16,25 +16,30 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLEND_MODE_SELECTOR_H
-#define _DE_BLEND_MODE_SELECTOR_H
+#ifndef _DE_MASK_SELECTOR_H
+#define _DE_MASK_SELECTOR_H
 
 #include <wx/wx.h>
 #include <vector>
-#include "blend_mode.h"
-class dePropertyBlendMode;
+#include "color_space.h"
+class dePropertyBlendMask;
 
-class deBlendModeSelector:public wxPanel
+class deMaskSelector:public wxPanel
 {
     private:
-        dePropertyBlendMode& property;
-        wxChoice* blendModeChoice;
-        std::vector<deBlendMode> blendModes;
+        wxSizer* sizer;
+        dePropertyBlendMask& property;
+        wxCheckBox* enabled;
+        wxChoice* layerChoice;
+        wxChoice* channelChoice;
 
         void choose(wxCommandEvent &event);
+        void check(wxCommandEvent &event);
+        void regenerateChannelChoice();
+        void updateView();
     public:
-        deBlendModeSelector(wxPanel* parent, dePropertyBlendMode& _property, const std::string& s);
-        virtual ~deBlendModeSelector();
+        deMaskSelector(wxPanel* parent, dePropertyBlendMask& _property, const std::string& s);
+        virtual ~deMaskSelector();
 };
 
 #endif
