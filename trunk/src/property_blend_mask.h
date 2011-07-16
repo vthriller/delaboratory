@@ -45,6 +45,7 @@ class dePropertyBlendMask:public deProperty
 
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
         virtual void saveContent(xmlNodePtr node);
+        virtual void load(xmlNodePtr node);
 
 };
 

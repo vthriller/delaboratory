@@ -51,11 +51,24 @@ void dePropertyBlendMask::addPanelContent(wxPanel* panel, wxSizer* sizer)
 
 void dePropertyBlendMask::saveContent(xmlNodePtr node)
 {
-/*
-    std::ostringstream oss;
-    oss << index;
-    xmlNodeSetContent(node, xmlCharStrdup(oss.str().c_str()));
-    */
+    xmlNodePtr childEnabled = xmlNewChild(node, NULL, xmlCharStrdup("enabled"), NULL);
+    xmlNodePtr childLayer = xmlNewChild(node, NULL, xmlCharStrdup("layer"), NULL);
+    xmlNodePtr childChannel = xmlNewChild(node, NULL, xmlCharStrdup("channel"), NULL);
+
+    {
+        std::ostringstream oss;
+        oss << layerIndex;
+        xmlNodeSetContent(childLayer, xmlCharStrdup(oss.str().c_str()));
+    }
+    {
+        std::ostringstream oss;
+        oss << channel;
+        xmlNodeSetContent(childChannel, xmlCharStrdup(oss.str().c_str()));
+    }
+}
+
+void dePropertyBlendMask::load(xmlNodePtr node)
+{
 }
 
 void dePropertyBlendMask::enable()
