@@ -89,11 +89,13 @@ void deMaskSelector::updateView()
     {
         layerChoice->Enable();
         channelChoice->Enable();
+        property.enable();
     }
     else
     {
         layerChoice->Disable();
         channelChoice->Disable();
+        property.disable();
     }
 }
 
