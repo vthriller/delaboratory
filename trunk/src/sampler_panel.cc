@@ -133,7 +133,11 @@ void deSamplerPanel::setLabels(deProject* project)
         cells[0 + 2 * i]->SetLabel(wxString::FromAscii(getChannelName(colorSpace, i).c_str()));
 
         oss.str("");
-        oss << values[i];
+        deValue v = values[i];
+
+        deValue vv = getPresentationValue(colorSpace, i, v);
+
+        oss << vv;
         cells[1 + 2 * i]->SetLabel(wxString::FromAscii(oss.str().c_str()));
         cells[0 + 2 * i]->Show();
         cells[1 + 2 * i]->Show();

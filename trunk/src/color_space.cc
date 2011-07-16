@@ -228,3 +228,18 @@ wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
     }
 }
 
+deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v)
+{
+    if (colorSpace == deColorSpaceLAB)
+    {
+        if (channel == DE_CHANNEL_L)
+        {
+            return 100 * v;
+        }
+        else
+        {
+            return 200 * v - 100.0;
+        }
+    }
+    return v;
+}
