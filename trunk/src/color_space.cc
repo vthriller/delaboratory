@@ -241,5 +241,13 @@ deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v)
             return 200 * v - 100.0;
         }
     }
+    if (colorSpace == deColorSpaceRGB)
+    {
+        return 255 * v;
+    }
+    if (colorSpace == deColorSpaceCMYK)
+    {
+        return 100 * v;
+    }
     return v;
 }
