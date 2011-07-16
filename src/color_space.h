@@ -48,4 +48,6 @@ void getSupportedConversions(const deColorSpace& colorSpace, std::vector<deColor
 
 wxColour getChannelwxColour(deColorSpace colorSpace, int channel);
 
+deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v);
+
 #endif
