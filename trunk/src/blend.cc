@@ -24,26 +24,50 @@
 #include "channel.h"
 #include "nd.h"
 
-void blend(const deBaseChannel& sourceChannel, const deBaseChannel& overlayChannel, deBaseChannel& resultChannel, deValue alpha, deBlendMode mode)
+void blend(const deBaseChannel& sourceChannel, const deBaseChannel& overlayChannel, deBaseChannel& resultChannel, deValue alpha, deBlendMode mode, deBaseChannel* mask)
 {
     int w = sourceChannel.getSize().getW();
     int h = sourceChannel.getSize().getH();
     int pos = 0;
     int y;
-    for (y = 0; y < h; y++)
+    int x;
+
+    if (mask)
     {
-        int x;
-        for (x = 0; x < w; x++)
+        for (y = 0; y < h; y++)
         {
-            deValue src = sourceChannel.getValue(pos);
-            deValue v2 = overlayChannel.getValue(pos);
+            for (x = 0; x < w; x++)
+            {
+                deValue src = sourceChannel.getValue(pos);
+                deValue v2 = overlayChannel.getValue(pos);
+                deValue m = mask->getValue(pos);
 
-            deValue dst = calcBlendResult(src, v2, mode);
+                deValue dst = calcBlendResult(src, v2, mode);
 
-            deValue r = (1 - alpha) * src + alpha * dst;
-            resultChannel.setValue(pos, r);
-            pos ++;
-        }
+                deValue a = alpha * m;
+
+                deValue r = (1 - a) * src + a * dst;
+                resultChannel.setValue(pos, r);
+                pos ++;
+            }
+        }        
+    }
+    else
+    {
+        for (y = 0; y < h; y++)
+        {
+            for (x = 0; x < w; x++)
+            {
+                deValue src = sourceChannel.getValue(pos);
+                deValue v2 = overlayChannel.getValue(pos);
+
+                deValue dst = calcBlendResult(src, v2, mode);
+
+                deValue r = (1 - alpha) * src + alpha * dst;
+                resultChannel.setValue(pos, r);
+                pos ++;
+            }
+        }        
     }        
 }        
 
@@ -76,7 +100,7 @@ void blend(const deBaseChannel& sourceChannel, const deND& nd, deBaseChannel& re
     }        
 }        
 
-void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& resultPreview, int overlayChannelID, const deChannels& enabledChannels, deBlendMode mode)
+void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& resultPreview, int overlayChannelID, const deChannels& enabledChannels, deBlendMode mode, deBaseChannel* mask)
 {
 
 /*
@@ -146,7 +170,7 @@ void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deVa
         deBaseChannel* resultChannel = resultPreview.getChannel(i);
         if (enabledChannels.count(i) == 1)
         {
-            blend(*sourceChannel, *overlayChannel, *resultChannel, alpha, mode);
+            blend(*sourceChannel, *overlayChannel, *resultChannel, alpha, mode, mask);
         }
         else
         {

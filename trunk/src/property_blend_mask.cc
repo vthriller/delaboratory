@@ -25,6 +25,7 @@ dePropertyBlendMask::dePropertyBlendMask(deLayer& _parent, const std::string& _l
 {
     layerIndex = 0;
     channel = 0;
+    disable();
 }
 
 dePropertyBlendMask::~dePropertyBlendMask()
@@ -55,4 +56,14 @@ void dePropertyBlendMask::saveContent(xmlNodePtr node)
     oss << index;
     xmlNodeSetContent(node, xmlCharStrdup(oss.str().c_str()));
     */
+}
+
+void dePropertyBlendMask::enable()
+{
+    enabled = true;
+}
+
+void dePropertyBlendMask::disable()
+{
+    enabled = false;
 }

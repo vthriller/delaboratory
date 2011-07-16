@@ -64,6 +64,17 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
         return NULL;
     }
 
+    deBaseChannel* mask = NULL;
+
+    if (blendMask.isEnabled())
+    {
+        dePreview* maskPreview = previewStack.getPreview(blendMask.getLayerIndex());
+        if (maskPreview)
+        {
+            mask = maskPreview->getChannel(blendMask.getChannel());
+        }
+    }        
+
 /*
     int oc;
     if (singleOverlayChannel)
@@ -85,7 +96,7 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
         dc = -1;
     }*/
 
-    blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, -1, channels.getChannels(), blendMode.getBlendMode());
+    blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, -1, channels.getChannels(), blendMode.getBlendMode(), mask);
 
     return preview;
 }

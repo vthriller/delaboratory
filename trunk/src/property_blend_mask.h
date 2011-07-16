@@ -27,6 +27,7 @@ class dePropertyBlendMask:public deProperty
     private:
         int layerIndex;
         int channel;
+        bool enabled;
         std::string label;
 
     public:
@@ -37,6 +38,10 @@ class dePropertyBlendMask:public deProperty
         void setLayerIndex(int _index);
         int getChannel() const {return channel;};
         void setChannel(int _channel);
+
+        bool isEnabled() const {return enabled;};
+        void enable();
+        void disable();
 
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
         virtual void saveContent(xmlNodePtr node);
