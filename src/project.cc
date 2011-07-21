@@ -219,7 +219,7 @@ void deProject::init(const std::string& fileName)
     const std::string ext = getExtension(fileName);
     if (ext == "delab")
     {
-        open(fileName);
+        open(fileName, true);
     }
     else
     {
@@ -270,7 +270,7 @@ void deProject::logMessage(const std::string& message)
 #endif    
 }
 
-void deProject::open(const std::string& fileName)
+void deProject::open(const std::string& fileName, bool image)
 {
 
 
@@ -325,7 +325,10 @@ void deProject::open(const std::string& fileName)
 
     setView (layerStack.getSize() - 1);
 
-    loadSourceImage(sourceImageFileName);
+    if (image)
+    {
+        loadSourceImage(sourceImageFileName);
+    }        
 
 }
 

@@ -33,8 +33,11 @@ public:
 	void OnOpenImage(wxCommandEvent& event);
 	void OnNewProject(wxCommandEvent& event);
 	void OnOpenProject(wxCommandEvent& event);
+	void OnOpenLayerStack(wxCommandEvent& event);
 	void OnSaveProject(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
+
+	void OnOpen(bool image);
 
 	DECLARE_EVENT_TABLE()
 };
