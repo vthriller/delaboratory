@@ -20,85 +20,35 @@
 #include "preview.h"
 #include "channel.h"
 
-
-void blurVertical(const deChannel& source, deChannel& destination, int col, int blurSize)
+void blur(deValue* source, deValue* destination, int n, int s)
 {
-    const deSize& size = source.getSize();
-    int w = size.getW();
-    int h = size.getH();
-
-    const deValue* pixels = source.getPixels();
-
     int i;
-    for (i = 0; i < h; i++)
+    for (i = 0; i < n; i++)
     {
         deValue result = 0.0;
-        deValue sum = 0.0;
 
-        int n1 = i - blurSize;
-        int n2 = i + blurSize;
+        int n1 = i - s;
+        int n2 = i + s;
         if (n1 < 0)
         {
             n1 = 0;
         }
 
-        if (n2 >= h)
+        if (n2 >= n)
         {
-            n2 = h - 1;
+            n2 = n - 1;
         }
-        
+
         int j;
         for (j = n1; j <= n2; j++)
         {
-            result += pixels[j * w + col];
-            sum += 1.0;
+            result += source[j];
         }
-        result /= sum;
-        int pos = i * w + col;
-        destination.setValue(pos, result);
+        destination[i] = result / (n2 - n1 + 1.0);
     }
 }
 
-void blurHorizontal(const deChannel& source, deChannel& destination, int row, int blurSize)
-{
-    const deSize& size = source.getSize();
-    int w = size.getW();
-
-    const deValue* pixels = source.getPixels();
-
-    int p = row * w;
-
-    int i;
-    for (i = 0; i < w; i++)
-    {
-        deValue result = 0.0;
-        deValue sum = 0.0;
-
-        int n1 = i - blurSize;
-        int n2 = i + blurSize;
-        if (n1 < 0)
-        {
-            n1 = 0;
-        }
-
-        if (n2 >= w)
-        {
-            n2 = w - 1;
-        }
-        
-        int j;
-        for (j = n1; j <= n2; j++)
-        {
-            result += pixels[p + j];
-            sum += 1.0;
-        }
-        result /= sum;
-        int pos = p + i;
-        destination.setValue(pos, result);
-    }
-}
-
-void blur(const deBaseChannel* source, deBaseChannel* destination, deBlurDirection direction, deValue radius)
+void blurFaster(const deBaseChannel* source, deBaseChannel* destination, deBlurDirection direction, deValue radius)
 {
     deChannel* d = dynamic_cast<deChannel*>(destination);
     if (!d)
@@ -117,26 +67,62 @@ void blur(const deBaseChannel* source, deBaseChannel* destination, deBlurDirecti
     int w = size.getW();
     int h = size.getH();
 
-    int i;
+    int n;
 
     if (direction == deBlurHorizontal)
     {
-        int blurSize = w * radius;
+        n = w;
+    }
+    else
+    {
+        n = h;
+    }
+
+    int blurSize = n * radius;
+
+    deValue* sourceBuffer = new deValue[n];
+    deValue* destinationBuffer = new deValue[n];
+
+    int i;
+    int j;
+    const deValue* pixels = s->getPixels();
+
+    if (direction == deBlurHorizontal)
+    {
         for (i = 0; i < h; i++)
         {
-            blurHorizontal(*s, *d, i, blurSize);
+            int p = i * w;
+            for (j = 0; j < n; j++)
+            {
+                sourceBuffer[j] = pixels[p + j]; 
+            }
+            blur(sourceBuffer, destinationBuffer, n, blurSize);
+            for (j = 0; j < n; j++)
+            {
+                d->setValue(p + j, destinationBuffer[j]);
+            }
         }
     }
     else
     {
-        int blurSize = h * radius;
         for (i = 0; i < w; i++)
         {
-            blurVertical(*s, *d, i, blurSize);
+            for (j = 0; j < n; j++)
+            {
+                sourceBuffer[j] = pixels[j * w + i]; 
+            }
+            blur(sourceBuffer, destinationBuffer, n, blurSize);
+            for (j = 0; j < n; j++)
+            {
+                d->setValue(j * w + i, destinationBuffer[j]);
+            }
         }
     }        
-}
 
+    delete [] destinationBuffer;
+    delete [] sourceBuffer;
+
+}
 
 void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius, const deChannels& enabledChannels)
 {
@@ -157,7 +143,7 @@ void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurD
     {
         if (enabledChannels.count(i) == 1)
         {
-            blur(sourcePreview.getChannel(i), destinationPreview.getChannel(i), direction, radius);
+            blurFaster(sourcePreview.getChannel(i), destinationPreview.getChannel(i), direction, radius);
         }
         else
         {
