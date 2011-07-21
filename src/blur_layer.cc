@@ -71,14 +71,6 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
     return preview;
 }
 
-/*
-deActionFrame* deBlurLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
-{
-    //return new deBlurFrame(parent, *this, project->getPreviewStack(), layerNumber);
-    return NULL;
-}
-*/
-
 void deBlurLayer::onChangeColorSpace()
 {
     channels.fill();
