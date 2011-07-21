@@ -32,6 +32,7 @@ enum
     ID_OpenImage,
     ID_NewProject,
     ID_OpenProject,
+    ID_OpenLayerStack,
     ID_SaveProject,
     ID_About
 };
@@ -41,6 +42,7 @@ EVT_MENU(ID_Quit, deMainFrame::OnQuit)
 EVT_MENU(ID_OpenImage, deMainFrame::OnOpenImage)
 EVT_MENU(ID_NewProject, deMainFrame::OnNewProject)
 EVT_MENU(ID_OpenProject, deMainFrame::OnOpenProject)
+EVT_MENU(ID_OpenLayerStack, deMainFrame::OnOpenLayerStack)
 EVT_MENU(ID_SaveProject, deMainFrame::OnSaveProject)
 EVT_MENU(ID_About, deMainFrame::OnAbout)
 END_EVENT_TABLE()
@@ -91,6 +93,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
     menuFile->Append( ID_OpenImage, _("&Open source image") );
     menuFile->Append( ID_NewProject, _("New project") );
     menuFile->Append( ID_OpenProject, _("Open project") );
+    menuFile->Append( ID_OpenLayerStack, _("Open layer stack") );
     menuFile->Append( ID_SaveProject, _("Save project") );
     menuFile->Append( ID_About, _("&About") );
     menuFile->AppendSeparator();
@@ -119,10 +122,10 @@ void deMainFrame::OnNewProject(wxCommandEvent& WXUNUSED(event))
     project->resetLayerStack();
 }
 
-void deMainFrame::OnOpenProject(wxCommandEvent& WXUNUSED(event))
+void deMainFrame::OnOpen(bool image)
 {
     wxString type = _T("delaboratory files (*.delab;)|*.delab");
-    wxFileDialog openFileDialog(this, _T("Open project"), _T(""), _T(""), type, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, _T("Open .delab"), _T(""), _T(""), type, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 
     if (openFileDialog.ShowModal() == wxID_CANCEL)
     {
@@ -133,7 +136,17 @@ void deMainFrame::OnOpenProject(wxCommandEvent& WXUNUSED(event))
     char cstring[1024];
     strncpy(cstring, (const char*)fileName.mb_str(wxConvUTF8), 1023);
 
-    project->open(cstring);
+    project->open(cstring, image);
+}
+
+void deMainFrame::OnOpenProject(wxCommandEvent& WXUNUSED(event))
+{
+    OnOpen(true);
+}
+
+void deMainFrame::OnOpenLayerStack(wxCommandEvent& WXUNUSED(event))
+{
+    OnOpen(false);
 }
 
 void deMainFrame::OnSaveProject(wxCommandEvent& WXUNUSED(event))

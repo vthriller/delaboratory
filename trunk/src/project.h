@@ -91,7 +91,7 @@ class deProject
 
         deLayerFactory& getLayerFactory() {return layerFactory;};
 
-        void open(const std::string& fileName);
+        void open(const std::string& fileName, bool image);
         void save(const std::string& fileName);
 
         void resetLayerStack();
