@@ -17,6 +17,7 @@
 */
 
 #include "blend_mode.h"
+#include <cmath>
 
 std::string getBlendModeName(deBlendMode mode)
 {
@@ -30,6 +31,12 @@ std::string getBlendModeName(deBlendMode mode)
             return "screen";
         case deBlendOverlay:
             return "overlay";
+        case deBlendAdd:
+            return "add";
+        case deBlendSub:
+            return "sub";
+        case deBlendDifference:
+            return "difference";
         default:
             return "unknown";
     }
@@ -56,6 +63,21 @@ deBlendMode blendModeFromString(const std::string& s)
     {
         return deBlendOverlay;
     }
+
+    if (s == "add")
+    {
+        return deBlendAdd;
+    }
+
+    if (s == "sub")
+    {
+        return deBlendSub;
+    }
+
+    if (s == "difference")
+    {
+        return deBlendDifference;
+    }
     
     return deBlendInvalid;
 
@@ -67,6 +89,9 @@ void getSupportedBlendModes(std::vector<deBlendMode>& result)
     result.push_back(deBlendMultiply);
     result.push_back(deBlendScreen);
     result.push_back(deBlendOverlay);
+    result.push_back(deBlendAdd);
+    result.push_back(deBlendSub);
+    result.push_back(deBlendDifference);
 }
 
 deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode)
@@ -91,6 +116,15 @@ deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode)
             {
                 return 2 * src * v2;
             }
+            break;
+        case deBlendAdd:                    
+            return src + v2;
+            break;
+        case deBlendSub:                    
+            return src - v2;
+            break;
+        case deBlendDifference:                    
+            return fabs(src - v2);
             break;
         default:
             return 0;

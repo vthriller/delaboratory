@@ -16,28 +16,42 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLEND_MODES_H
-#define _DE_BLEND_MODES_H
+#include "grain.h"
+#include "preview.h"
+#include "channel.h"
 
-#include <string>
-#include <vector>
-#include "value.h"
-
-enum deBlendMode
+void fillGrain(deBaseChannel* c)
 {
-    deBlendInvalid,
-    deBlendNormal,
-    deBlendMultiply,
-    deBlendScreen,
-    deBlendOverlay,
-    deBlendAdd,
-    deBlendSub,
-    deBlendDifference
-};
+    deChannel* d = dynamic_cast<deChannel*>(c);
+    if (!d)
+    {
+        return;
+    }
 
-std::string getBlendModeName(deBlendMode mode);
-void getSupportedBlendModes(std::vector<deBlendMode>& result);
-deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode);
-deBlendMode blendModeFromString(const std::string& s);
+    int seed = 0;
 
-#endif
+    srand(seed);
+
+    int n = d->getSize().getN();
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        deValue v = (deValue) rand() / RAND_MAX;
+        d->setValue(i, v);
+    }
+}
+
+void fillGrain(dePreview* preview)
+{
+
+    deColorSpace c = preview->getColorSpace();
+
+    int n = getColorSpaceSize(c);
+
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        fillGrain(preview->getChannel(i));
+    }
+}

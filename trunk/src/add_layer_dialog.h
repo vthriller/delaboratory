@@ -37,6 +37,7 @@ class deAddLayerFrame:public wxFrame
         wxButton* blendButton;
         wxButton* blurButton;
         wxButton* ndButton;
+        wxButton* grainButton;
 
         void click(wxCommandEvent &event);
     public:
