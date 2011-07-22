@@ -48,7 +48,145 @@ void blur(deValue* source, deValue* destination, int n, int s)
     }
 }
 
-void blurFaster(const deBaseChannel* source, deBaseChannel* destination, deBlurDirection direction, deValue radius)
+void blur(deValue* source, deValue* destination, int n, int s, deValue* weights)
+{
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        deValue result = 0.0;
+        deValue sum = 0.0;
+        
+        int n1 = i - s + 1;
+        int n2 = i + s - 1;
+        if (n1 < 0)
+        {
+            n1 = 0;
+        }
+
+        if (n2 >= n)
+        {
+            n2 = n - 1;
+        }
+
+        int j;
+        int p;
+
+        j = n1;
+        p = i - n1;
+        while (p >= 0)
+        {
+            deValue v = source[j];
+            deValue w = weights[p];
+            result += w * v;
+            sum += w;
+
+            p--;
+            j++;
+        }
+        p = 1;
+        while (j <= n2)
+        {
+
+            deValue v = source[j];
+            deValue w = weights[p];
+            result += w * v;
+            sum += w;
+
+            p++;
+            j++;
+        }
+
+
+        destination[i] = result / sum;
+    }
+}
+
+void blur(deValue* source, deValue* destination, int n, int s, deValue* weights, deValue t)
+{
+    deValue tt = 1.0 - t;
+
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        deValue result = 0.0;
+        deValue sum = 0.0;
+        
+        deValue reference = source[i];
+
+        int n1 = i - s + 1;
+        int n2 = i + s - 1;
+        if (n1 < 0)
+        {
+            n1 = 0;
+        }
+
+        if (n2 >= n)
+        {
+            n2 = n - 1;
+        }
+
+        int j;
+        int p;
+
+        j = n1;
+        p = i - n1;
+        while (p >= 0)
+        {
+            deValue v = source[j];
+            if (fabs(v - reference) <= tt)
+            {
+                deValue w = weights[p];
+                result += w * v;
+                sum += w;
+            }                
+
+            p--;
+            j++;
+        }
+        p = 1;
+        while (j <= n2)
+        {
+
+            deValue v = source[j];
+            if (fabs(v - reference) <= tt)
+            {
+                deValue w = weights[p];
+                result += w * v;
+                sum += w;
+            }                
+
+            p++;
+            j++;
+        }
+
+
+        destination[i] = result / sum;
+    }
+}
+
+void fillWeightsFlat(deValue* weights, int blurSize)
+{
+    int i;
+    for (i = 0 ; i < blurSize; i++)
+    {
+        weights[i] = 1.0;
+    }
+}    
+
+void fillWeightsGaussian(deValue* weights, int blurSize)
+{
+    int i;
+    deValue radius = blurSize / 3.0;
+    deValue rr2 = 2.0 * radius * radius;
+    for (i = 0 ; i < blurSize; i++)
+    {
+        deValue ii = i * i;
+        deValue ee = exp( - ii / rr2 );
+        weights[i] = 1.0 / sqrt(rr2 * M_PI) * ee;
+    }
+}    
+
+void blurFaster(const deBaseChannel* source, deBaseChannel* destination, deBlurDirection direction, deValue radius, deValue t)
 {
     deChannel* d = dynamic_cast<deChannel*>(destination);
     if (!d)
@@ -82,10 +220,14 @@ void blurFaster(const deBaseChannel* source, deBaseChannel* destination, deBlurD
 
     deValue* sourceBuffer = new deValue[n];
     deValue* destinationBuffer = new deValue[n];
+    deValue* weights = new deValue[blurSize];
 
     int i;
     int j;
     const deValue* pixels = s->getPixels();
+
+    //fillWeightsFlat(weights, blurSize);
+    fillWeightsGaussian(weights, blurSize);
 
     if (direction == deBlurHorizontal)
     {
@@ -96,7 +238,7 @@ void blurFaster(const deBaseChannel* source, deBaseChannel* destination, deBlurD
             {
                 sourceBuffer[j] = pixels[p + j]; 
             }
-            blur(sourceBuffer, destinationBuffer, n, blurSize);
+            blur(sourceBuffer, destinationBuffer, n, blurSize, weights, t);
             for (j = 0; j < n; j++)
             {
                 d->setValue(p + j, destinationBuffer[j]);
@@ -111,7 +253,7 @@ void blurFaster(const deBaseChannel* source, deBaseChannel* destination, deBlurD
             {
                 sourceBuffer[j] = pixels[j * w + i]; 
             }
-            blur(sourceBuffer, destinationBuffer, n, blurSize);
+            blur(sourceBuffer, destinationBuffer, n, blurSize, weights, t);
             for (j = 0; j < n; j++)
             {
                 d->setValue(j * w + i, destinationBuffer[j]);
@@ -119,12 +261,13 @@ void blurFaster(const deBaseChannel* source, deBaseChannel* destination, deBlurD
         }
     }        
 
+    delete [] weights;
     delete [] destinationBuffer;
     delete [] sourceBuffer;
 
 }
 
-void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius, const deChannels& enabledChannels)
+void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius, const deChannels& enabledChannels, deValue t)
 {
     deColorSpace sc = sourcePreview.getColorSpace();
     deColorSpace dc = destinationPreview.getColorSpace();
@@ -143,7 +286,7 @@ void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurD
     {
         if (enabledChannels.count(i) == 1)
         {
-            blurFaster(sourcePreview.getChannel(i), destinationPreview.getChannel(i), direction, radius);
+            blurFaster(sourcePreview.getChannel(i), destinationPreview.getChannel(i), direction, radius, t);
         }
         else
         {

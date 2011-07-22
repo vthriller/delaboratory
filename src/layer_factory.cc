@@ -22,6 +22,7 @@
 #include "blend_layer.h"
 #include "curves_layer.h"
 #include "blur_layer.h"
+#include "grain_layer.h"
 #include "nd_layer.h"
 #include "conversion_layer.h"
 
@@ -68,6 +69,11 @@ deLayer* deLayerFactory::createLayer(const std::string& type, deLayerStack& stac
     if (type == "nd")
     {
         return new deNDLayer(stack, index, name);
+    }
+
+    if (type == "grain")
+    {
+        return new deGrainLayer(stack, index, name);
     }
 
     return NULL;

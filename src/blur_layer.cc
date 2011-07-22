@@ -23,7 +23,7 @@
 #include "project.h"
 
 deBlurLayer::deBlurLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), radiusX(*this, "radius x", 0.0, 0.05), radiusY(*this, "radius y", 0.0, 0.05), channels(*this), iterations(*this, "iterations", 1, 10)
+:deLayer(_stack, _index, _name), radiusX(*this, "radius x", 0.0, 0.05), radiusY(*this, "radius y", 0.0, 0.05), channels(*this), iterations(*this, "iterations", 1, 10), threshold(*this, "threshold", 0.0, 1.0)
 {
     radiusX.setValue(0.01);
     radiusY.setValue(0.01);
@@ -48,6 +48,8 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
     dePreview* tmp = new dePreview(colorSpace.getColorSpace(), sourceSize);
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
+    deValue t = threshold.getValue();
+
     int i;
     int n = iterations.getValue();
     for (i = 0; i < n; i++)
@@ -62,8 +64,8 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
             src = preview;
         }
 
-        blur(*src, *tmp, deBlurHorizontal, radiusX.getValue(), channels.getChannels());
-        blur(*tmp, *preview, deBlurVertical, radiusY.getValue(), channels.getChannels());
+        blur(*src, *tmp, deBlurHorizontal, radiusX.getValue(), channels.getChannels(), t);
+        blur(*tmp, *preview, deBlurVertical, radiusY.getValue(), channels.getChannels(), t);
     }
 
     delete tmp;

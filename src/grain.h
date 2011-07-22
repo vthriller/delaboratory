@@ -16,28 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLEND_MODES_H
-#define _DE_BLEND_MODES_H
+#ifndef _DE_GRAIN_H
+#define _DE_GRAIN_H
 
-#include <string>
-#include <vector>
-#include "value.h"
+class dePreview;
 
-enum deBlendMode
-{
-    deBlendInvalid,
-    deBlendNormal,
-    deBlendMultiply,
-    deBlendScreen,
-    deBlendOverlay,
-    deBlendAdd,
-    deBlendSub,
-    deBlendDifference
-};
-
-std::string getBlendModeName(deBlendMode mode);
-void getSupportedBlendModes(std::vector<deBlendMode>& result);
-deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode);
-deBlendMode blendModeFromString(const std::string& s);
+void fillGrain(dePreview* preview);
 
 #endif

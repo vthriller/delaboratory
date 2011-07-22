@@ -72,6 +72,11 @@ void deAddLayerFrame::click(wxCommandEvent &event)
            type = "nd";
         }
 
+        if (id == grainButton->GetId())
+        {
+           type = "grain";
+        }
+
         std::string name = type;
 
         deLayer* layer = factory.createLayer(type, stack, index, name);
@@ -118,6 +123,8 @@ deAddLayerFrame::deAddLayerFrame(deLayerListPanel* _panel, deProject* _project)
     sizer->Add(blurButton, 1, wxEXPAND);
     ndButton = new wxButton(this, wxID_ANY, _T("nd"), wxDefaultPosition, wxSize(-1, 50));
     sizer->Add(ndButton, 1, wxEXPAND);
+    grainButton = new wxButton(this, wxID_ANY, _T("grain"), wxDefaultPosition, wxSize(-1, 50));
+    sizer->Add(grainButton, 1, wxEXPAND);
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deAddLayerFrame::click));
 

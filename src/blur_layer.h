@@ -34,6 +34,7 @@ class deBlurLayer:public deLayer
         dePropertyValue radiusY;
         dePropertyChannels channels;
         dePropertyInteger iterations;
+        dePropertyValue threshold;
 
     public:
         deBlurLayer(deLayerStack& _stack, int _index, const std::string& _name);

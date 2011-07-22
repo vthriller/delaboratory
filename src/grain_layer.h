@@ -16,28 +16,31 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLEND_MODES_H
-#define _DE_BLEND_MODES_H
+#ifndef _DE_GRAIN_LAYER_H
+#define _DE_GRAIN_LAYER_H
 
-#include <string>
-#include <vector>
-#include "value.h"
+#include "layer.h"
+#include "color_space.h"
 
-enum deBlendMode
+class deGrainLayer:public deLayer
 {
-    deBlendInvalid,
-    deBlendNormal,
-    deBlendMultiply,
-    deBlendScreen,
-    deBlendOverlay,
-    deBlendAdd,
-    deBlendSub,
-    deBlendDifference
-};
+    private:
 
-std::string getBlendModeName(deBlendMode mode);
-void getSupportedBlendModes(std::vector<deBlendMode>& result);
-deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode);
-deBlendMode blendModeFromString(const std::string& s);
+    public:
+        deGrainLayer(deLayerStack& _stack, int _index, const std::string& _name);
+        virtual ~deGrainLayer();
+
+        virtual bool canChangeColorSpace() const {return true;};
+
+        virtual void onChangeColorSpace();
+
+        virtual dePreview* createPreview(dePreviewStack& previewStack);
+
+        virtual std::string getType() const {return "grain";};
+
+        virtual void saveSpecific(xmlNodePtr node);
+        virtual void loadSpecific(xmlNodePtr node);
+
+};
 
 #endif
