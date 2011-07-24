@@ -23,6 +23,7 @@
 #include "blur.h"
 #include "property_value.h"
 #include "property_blur_direction.h"
+#include "property_blur_type.h"
 #include "property_integer.h"
 #include "property_channels.h"
 #include <set>
@@ -30,6 +31,7 @@
 class deBlurLayer:public deLayer
 {
     private:
+        dePropertyBlurType blurType;
         dePropertyValue radiusX;
         dePropertyValue radiusY;
         dePropertyChannels channels;

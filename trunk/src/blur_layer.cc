@@ -23,7 +23,7 @@
 #include "project.h"
 
 deBlurLayer::deBlurLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), radiusX(*this, "radius x", 0.0, 0.05), radiusY(*this, "radius y", 0.0, 0.05), channels(*this), iterations(*this, "iterations", 1, 10), threshold(*this, "threshold", 0.0, 1.0)
+:deLayer(_stack, _index, _name), radiusX(*this, "radius x", 0.0, 0.05), radiusY(*this, "radius y", 0.0, 0.05), channels(*this), iterations(*this, "iterations", 1, 10), threshold(*this, "threshold", 0.0, 1.0), blurType(*this)
 {
     radiusX.setValue(0.01);
     radiusY.setValue(0.01);
