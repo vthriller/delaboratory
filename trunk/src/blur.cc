@@ -20,7 +20,7 @@
 #include "preview.h"
 #include "channel.h"
 
-void blur(deValue* source, deValue* destination, int n, int s)
+void boxBlur(deValue* source, deValue* destination, int n, int s)
 {
     int i;
     for (i = 0; i < n; i++)
@@ -48,7 +48,7 @@ void blur(deValue* source, deValue* destination, int n, int s)
     }
 }
 
-void blur(deValue* source, deValue* destination, int n, int s, deValue* weights)
+void gaussianBlur(deValue* source, deValue* destination, int n, int s, deValue* weights)
 {
     int i;
     for (i = 0; i < n; i++)
@@ -101,7 +101,7 @@ void blur(deValue* source, deValue* destination, int n, int s, deValue* weights)
     }
 }
 
-void blur(deValue* source, deValue* destination, int n, int s, deValue* weights, deValue t)
+void surfaceBlur(deValue* source, deValue* destination, int n, int s, deValue* weights, deValue t)
 {
     deValue tt = 1.0 - t;
 
@@ -186,7 +186,7 @@ void fillWeightsGaussian(deValue* weights, int blurSize)
     }
 }    
 
-void blurFaster(const deBaseChannel* source, deBaseChannel* destination, deBlurDirection direction, deValue radius, deValue t)
+void blurChannel(const deBaseChannel* source, deBaseChannel* destination, deBlurDirection direction, deValue radius, deBlurType type, deValue t)
 {
     deChannel* d = dynamic_cast<deChannel*>(destination);
     if (!d)
@@ -226,8 +226,10 @@ void blurFaster(const deBaseChannel* source, deBaseChannel* destination, deBlurD
     int j;
     const deValue* pixels = s->getPixels();
 
-    //fillWeightsFlat(weights, blurSize);
-    fillWeightsGaussian(weights, blurSize);
+    if (type != deBoxBlur)
+    {
+        fillWeightsGaussian(weights, blurSize);
+    }
 
     if (direction == deBlurHorizontal)
     {
@@ -238,7 +240,18 @@ void blurFaster(const deBaseChannel* source, deBaseChannel* destination, deBlurD
             {
                 sourceBuffer[j] = pixels[p + j]; 
             }
-            blur(sourceBuffer, destinationBuffer, n, blurSize, weights, t);
+            switch (type)
+            {
+                case deBoxBlur:
+                    boxBlur(sourceBuffer, destinationBuffer, n, blurSize);
+                    break;
+                case deGaussianBlur:
+                    gaussianBlur(sourceBuffer, destinationBuffer, n, blurSize, weights);
+                    break;
+                case deSurfaceBlur:
+                    surfaceBlur(sourceBuffer, destinationBuffer, n, blurSize, weights, t);
+                    break;
+            }
             for (j = 0; j < n; j++)
             {
                 d->setValue(p + j, destinationBuffer[j]);
@@ -253,7 +266,18 @@ void blurFaster(const deBaseChannel* source, deBaseChannel* destination, deBlurD
             {
                 sourceBuffer[j] = pixels[j * w + i]; 
             }
-            blur(sourceBuffer, destinationBuffer, n, blurSize, weights, t);
+            switch (type)
+            {
+                case deBoxBlur:
+                    boxBlur(sourceBuffer, destinationBuffer, n, blurSize);
+                    break;
+                case deGaussianBlur:
+                    gaussianBlur(sourceBuffer, destinationBuffer, n, blurSize, weights);
+                    break;
+                case deSurfaceBlur:
+                    surfaceBlur(sourceBuffer, destinationBuffer, n, blurSize, weights, t);
+                    break;
+            }
             for (j = 0; j < n; j++)
             {
                 d->setValue(j * w + i, destinationBuffer[j]);
@@ -286,7 +310,7 @@ void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurD
     {
         if (enabledChannels.count(i) == 1)
         {
-            blurFaster(sourcePreview.getChannel(i), destinationPreview.getChannel(i), direction, radius, t);
+            blurChannel(sourcePreview.getChannel(i), destinationPreview.getChannel(i), direction, radius, type, t);
         }
         else
         {
