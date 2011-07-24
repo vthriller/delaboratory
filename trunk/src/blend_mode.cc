@@ -37,6 +37,10 @@ std::string getBlendModeName(deBlendMode mode)
             return "sub";
         case deBlendDifference:
             return "difference";
+        case deBlendDarken:
+            return "darken";
+        case deBlendLighten:
+            return "lighten";
         default:
             return "unknown";
     }
@@ -78,6 +82,16 @@ deBlendMode blendModeFromString(const std::string& s)
     {
         return deBlendDifference;
     }
+
+    if (s == "darken")
+    {
+        return deBlendDarken;
+    }
+
+    if (s == "lighten")
+    {
+        return deBlendLighten;
+    }
     
     return deBlendInvalid;
 
@@ -92,6 +106,8 @@ void getSupportedBlendModes(std::vector<deBlendMode>& result)
     result.push_back(deBlendAdd);
     result.push_back(deBlendSub);
     result.push_back(deBlendDifference);
+    result.push_back(deBlendDarken);
+    result.push_back(deBlendLighten);
 }
 
 deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode)
@@ -125,6 +141,26 @@ deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode)
             break;
         case deBlendDifference:                    
             return fabs(src - v2);
+            break;
+        case deBlendDarken:                    
+            if (src < v2)
+            {
+                return src;
+            }
+            else
+            {
+                return v2;
+            }                
+            break;
+        case deBlendLighten:                    
+            if (src > v2)
+            {
+                return src;
+            }
+            else
+            {
+                return v2;
+            }                
             break;
         default:
             return 0;

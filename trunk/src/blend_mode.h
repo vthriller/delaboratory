@@ -32,7 +32,9 @@ enum deBlendMode
     deBlendOverlay,
     deBlendAdd,
     deBlendSub,
-    deBlendDifference
+    deBlendDifference,
+    deBlendDarken,
+    deBlendLighten
 };
 
 std::string getBlendModeName(deBlendMode mode);
