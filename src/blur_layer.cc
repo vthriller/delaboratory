@@ -48,6 +48,7 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
     dePreview* tmp = new dePreview(colorSpace.getColorSpace(), sourceSize);
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
+    deBlurType type = blurType.getBlurType();
     deValue t = threshold.getValue();
 
     int i;
@@ -64,8 +65,8 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
             src = preview;
         }
 
-        blur(*src, *tmp, deBlurHorizontal, radiusX.getValue(), channels.getChannels(), t);
-        blur(*tmp, *preview, deBlurVertical, radiusY.getValue(), channels.getChannels(), t);
+        blur(*src, *tmp, deBlurHorizontal, radiusX.getValue(), channels.getChannels(), type, t);
+        blur(*tmp, *preview, deBlurVertical, radiusY.getValue(), channels.getChannels(), type, t);
     }
 
     delete tmp;
