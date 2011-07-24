@@ -22,6 +22,7 @@
 #include "value.h"
 #include <set>
 #include "property_channels.h"
+#include "blur_type.h"
 
 enum deBlurDirection
 {
@@ -31,6 +32,6 @@ enum deBlurDirection
 
 class dePreview;
 
-void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius, const deChannels& enabledChannels, deValue t);
+void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius, const deChannels& enabledChannels, deBlurType type, deValue t);
 
 #endif    

@@ -267,7 +267,7 @@ void blurFaster(const deBaseChannel* source, deBaseChannel* destination, deBlurD
 
 }
 
-void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius, const deChannels& enabledChannels, deValue t)
+void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius, const deChannels& enabledChannels, deBlurType type, deValue t)
 {
     deColorSpace sc = sourcePreview.getColorSpace();
     deColorSpace dc = destinationPreview.getColorSpace();
