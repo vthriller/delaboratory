@@ -95,6 +95,26 @@ deColorSpace colorSpaceFromString(const std::string& name)
     {
         return deColorSpaceCMYK;
     }
+    if (name == "HSL")
+    {
+        return deColorSpaceHSL;
+    }
+    if (name == "HSV")
+    {
+        return deColorSpaceHSV;
+    }
+    if (name == "BW")
+    {
+        return deColorSpaceBW;
+    }
+    if (name == "XYZ")
+    {
+        return deColorSpaceXYZ;
+    }
+    if (name == "CMY")
+    {
+        return deColorSpaceCMY;
+    }
 
     return deColorSpaceInvalid;
 }
