@@ -30,15 +30,23 @@ deSourceImage::deSourceImage()
 
 void deSourceImage::load(const std::string& fileName)
 {
-    size_t pos = fileName.rfind("tif");
-    if ((pos == fileName.size() - 3) || (pos == fileName.size() - 4))
     {
-        loadTIFF(fileName);
-    }        
-    else
+        size_t pos = fileName.rfind("tif");
+        if ((pos == fileName.size() - 3) || (pos == fileName.size() - 4))
+        {
+            loadTIFF(fileName);
+            return;
+        }
+    }
     {
-        loadJPEG(fileName);
-    }        
+        size_t pos = fileName.rfind("TIF");
+        if ((pos == fileName.size() - 3) || (pos == fileName.size() - 4))
+        {
+            loadTIFF(fileName);
+            return;
+        }
+    }
+    loadJPEG(fileName);
 }
 
 void deSourceImage::loadTIFF(const std::string& fileName)
