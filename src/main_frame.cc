@@ -169,7 +169,7 @@ void deMainFrame::OnSaveProject(wxCommandEvent& WXUNUSED(event))
 
 void deMainFrame::OnOpenImage(wxCommandEvent& WXUNUSED(event))
 {
-    wxString type = _T("JPEG/TIFF files (*.jpg;*.jpeg;*.tiff;*.tif)|*.jpg;*.jpeg;*.tiff;*.tif");
+    wxString type = _T("JPEG/TIFF files (*.jpg;*.jpeg;*.tiff;*.tif;*.TIF;*.TIFF)|*.jpg;*.jpeg;*.tiff;*.tif;*.TIF;*.TIFF");
     wxFileDialog openFileDialog(this, _T("Open source image"), _T(""), _T(""), type, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 
     if (openFileDialog.ShowModal() == wxID_CANCEL)
