@@ -133,9 +133,11 @@ void deLayerStack::loadLayer(xmlNodePtr node, deLayerFactory& factory)
 
         deLayer* layer = factory.createLayer(type, *this, index, name);
 
-        layer->load(node);
-
-        addLayer(layer);
+        if (layer)
+        {
+            layer->load(node);
+            addLayer(layer);
+        }
     }
     
 }

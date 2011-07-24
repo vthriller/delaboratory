@@ -100,6 +100,7 @@ void deBlurLayer::saveSpecific(xmlNodePtr node)
     radiusY.save(node, "radius_y");
     channels.save(node, "channels");
     iterations.save(node, "iterations");
+    blurType.save(node, "blur_type");
 }
 
 void deBlurLayer::loadSpecific(xmlNodePtr node)
@@ -126,6 +127,11 @@ void deBlurLayer::loadSpecific(xmlNodePtr node)
         if ((!xmlStrcmp(child->name, xmlCharStrdup("iterations")))) 
         {
             iterations.load(child);
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("blur_type")))) 
+        {
+            blurType.load(child);
         }
 
         child = child->next;
