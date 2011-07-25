@@ -27,7 +27,7 @@ class deBaseChannel;
 #include "property_channels.h"
 #include <set>
 
-void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& resultPreview, int overlayChannelID, const deChannels& enabledChannels, deBlendMode mode, deBaseChannel* mask);
+void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& resultPreview, const deChannels& enabledChannels, deBlendMode mode, deBaseChannel* mask);
 void blend(const dePreview& sourcePreview, const deND& nd, dePreview& resultPreview, deBlendMode mode, const deChannels& enabledChannels);
 
 #endif    

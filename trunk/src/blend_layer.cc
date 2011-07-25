@@ -103,7 +103,7 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
 
 bool deBlendLayer::updatePreview(const dePreview* sourcePreview, const dePreview* overlayPreview, deBaseChannel* mask, dePreview* preview)
 {
-    blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, -1, channels.getChannels(), blendMode.getBlendMode(), mask);
+    blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, channels.getChannels(), blendMode.getBlendMode(), mask);
 }
 
 /*
