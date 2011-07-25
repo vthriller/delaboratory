@@ -100,57 +100,12 @@ void blend(const deBaseChannel& sourceChannel, const deND& nd, deBaseChannel& re
     }        
 }        
 
-void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& resultPreview, int overlayChannelID, const deChannels& enabledChannels, deBlendMode mode, deBaseChannel* mask)
+void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& resultPreview, const deChannels& enabledChannels, deBlendMode mode, deBaseChannel* mask)
 {
 
-/*
-    deColorSpace rc = resultPreview.getColorSpace();
-
-    int nc = getColorSpaceSize(rc);
-
-    int first = 0;
-    int last = nc - 1;
-    if (destinationChannelID >= 0)
-    {
-        first = destinationChannelID;
-        last = destinationChannelID;
-        int i;
-        for (i = 0; i < nc; i++)
-        {
-            if (i != destinationChannelID)
-            {
-                const deChannel* sourceChannel = dynamic_cast<const deChannel*>(sourcePreview.getChannel(i));
-                deChannel* resultChannel = dynamic_cast<deChannel*>(resultPreview.getChannel(i));
-                resultChannel->copy(sourceChannel);
-            }
-        }
-    }
-
-    int i;
-    for (i = first; i <= last; i++)
-    {
-        const deBaseChannel* sourceChannel = sourcePreview.getChannel(i);
-        const deBaseChannel* overlayChannel;
-        
-        if (overlayChannelID < 0)
-        {
-            overlayChannel = overlayPreview.getChannel(i);
-        }
-        else
-        {
-            overlayChannel = overlayPreview.getChannel(overlayChannelID);
-        }            
-        deBaseChannel* resultChannel = resultPreview.getChannel(i);
-
-        blend(*sourceChannel, *overlayChannel, *resultChannel, alpha, mode);
-    }*/
-
-
-
     deColorSpace rc = resultPreview.getColorSpace();
     int nc = getColorSpaceSize(rc);
-
-    //deValue alpha = 1.0;
+    int oc = getColorSpaceSize(overlayPreview.getColorSpace());
 
     int i;
     for (i = 0; i < nc; i++)
@@ -158,13 +113,13 @@ void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deVa
         const deBaseChannel* sourceChannel = sourcePreview.getChannel(i);
 
         const deBaseChannel* overlayChannel;
-        if (overlayChannelID < 0)
+        if (oc == 1)
         {
-            overlayChannel = overlayPreview.getChannel(i);
+            overlayChannel = overlayPreview.getChannel(0);
         }
         else
         {
-            overlayChannel = overlayPreview.getChannel(overlayChannelID);
+            overlayChannel = overlayPreview.getChannel(i);
         }            
 
         deBaseChannel* resultChannel = resultPreview.getChannel(i);
