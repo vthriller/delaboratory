@@ -30,6 +30,8 @@ class deLayerStack
 {
     private:
         std::vector<deLayer*> layers;
+
+        void loadLayer(xmlNodePtr node, deLayerFactory& factory);
         
     public:
         deLayerStack();
@@ -46,7 +48,6 @@ class deLayerStack
 
         void save(xmlNodePtr node);
         void load(xmlNodePtr node, deLayerFactory& factory);
-        void loadLayer(xmlNodePtr node, deLayerFactory& factory);
 
         void clear();
 

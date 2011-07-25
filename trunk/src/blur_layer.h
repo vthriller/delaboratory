@@ -45,8 +45,8 @@ class deBlurLayer:public deLayer
         virtual bool canChangeSourceLayer() const {return true;};
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
+        bool updatePreview(const dePreview* sourcePreview, dePreview* preview);
 
-//        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
         virtual void onChangeColorSpace();
 
         void clearEnabledChannels();

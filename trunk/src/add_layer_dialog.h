@@ -36,6 +36,7 @@ class deAddLayerFrame:public wxFrame
         wxButton* convertButton;
         wxButton* blendButton;
         wxButton* blurButton;
+        wxButton* hpButton;
         wxButton* ndButton;
         wxButton* grainButton;
 

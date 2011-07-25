@@ -72,16 +72,22 @@ dePreview* deMixerLayer::createPreview(dePreviewStack& previewStack)
         return NULL;
     }
 
-    const deSize& sourceSize = sourcePreview->getSize();
+    //const deSize& sourceSize = sourcePreview->getSize();
+    const deSize& sourceSize = previewStack.getPreviewSize();
 
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
+    updatePreview(sourcePreview, preview);
+
+    return preview;
+}
+
+bool deMixerLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
+{
     if (mixer.getMixer())
     {
         mixer.getMixer()->calc(*sourcePreview, *preview);
     }        
-
-    return preview;
 }
 
 void deMixerLayer::saveSpecific(xmlNodePtr node)

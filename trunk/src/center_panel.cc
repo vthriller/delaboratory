@@ -41,13 +41,7 @@ void deCenterPanel::updateSize()
 
     deSize fit = fitInside(ps, ss);
 
-    try
-    {
-        project->setPreviewSize(fit);
-    }
-    catch (deException& e)
-    {
-    }
+    project->setPreviewSize(fit);
 
     imagePanel->SetSize(wxSize(fit.getW(), fit.getH()));
 
@@ -60,8 +54,6 @@ deCenterPanel::deCenterPanel(wxWindow* parent, deProject* _project)
 {
     project->getGUI().setCenterPanel(this);
 
-//    SetBackgroundColour(*wxGREEN);
-    //imagePanel = new deImagePanel(this, project->getPreviewSize(), project);
     imagePanel = new deImagePanel(this, project);
     imagePanel->SetBackgroundColour(*wxBLACK);
 

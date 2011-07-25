@@ -40,8 +40,7 @@ class deMixerLayer:public deLayer
         virtual void onChangeSourceLayer();
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
-
-//        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
+        bool updatePreview(const dePreview* sourcePreview, dePreview* preview);
 
         deMixer* getMixer() {return mixer.getMixer();};
 

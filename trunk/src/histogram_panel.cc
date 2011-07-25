@@ -136,7 +136,8 @@ void deHistogramPanel::updateHistograms()
         return;
     }
 
-    const deSize& size = preview->getSize();
+    //const deSize& size = preview->getSize();
+    const deSize& size = project->getPreviewSize();
     int n = size.getN();
 
     int xx;

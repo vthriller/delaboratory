@@ -35,6 +35,7 @@ class deProject
 {
     private:
         deSize sourceImageSize;
+        deSize previewSize;
         deLayerStack layerStack;
         dePreviewStack previewStack;
         deSamplerList samplerList;
@@ -57,6 +58,7 @@ class deProject
         const deSize& getSourceImageSize() const;
 
         void setPreviewSize(const deSize& size);
+        const deSize& getPreviewSize() const;
 
         void addLayer(deLayer* layer);
         deLayer* getVisibleLayer();

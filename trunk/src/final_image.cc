@@ -26,7 +26,7 @@
 #include <iostream>
 
 deFinalImage::deFinalImage(const dePreview& preview)
-:dePreview(deColorSpaceRGB, preview.getSize())
+:dePreview(deColorSpaceRGB, preview.getChannel(0)->getSize())
 {
     deConverter converter;
     converter.setSource(&preview);

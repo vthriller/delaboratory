@@ -45,8 +45,16 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
 
     const deSize& sourceSize = sourcePreview->getSize();
 
-    dePreview* tmp = new dePreview(colorSpace.getColorSpace(), sourceSize);
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
+
+    updatePreview(sourcePreview, preview);
+
+    return preview;
+}
+
+bool deBlurLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
+{
+    dePreview* tmp = new dePreview(colorSpace.getColorSpace(), preview->getSize());
 
     deBlurType type = blurType.getBlurType();
     deValue t = threshold.getValue();
@@ -70,9 +78,8 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
     }
 
     delete tmp;
-
-    return preview;
 }
+
 
 void deBlurLayer::onChangeColorSpace()
 {

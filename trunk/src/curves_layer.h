@@ -40,8 +40,7 @@ class deCurvesLayer:public deLayer
 
         virtual void onChangeColorSpace();
         virtual dePreview* createPreview(dePreviewStack& previewStack);
-
-//        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
+        bool updatePreview(const dePreview* sourcePreview, dePreview* preview);
 
         virtual std::string getType() const {return "curves";};
         virtual void saveSpecific(xmlNodePtr node);

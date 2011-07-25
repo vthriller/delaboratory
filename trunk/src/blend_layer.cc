@@ -96,9 +96,14 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
         dc = -1;
     }*/
 
-    blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, -1, channels.getChannels(), blendMode.getBlendMode(), mask);
+    updatePreview(sourcePreview, overlayPreview, mask, preview);
 
     return preview;
+}
+
+bool deBlendLayer::updatePreview(const dePreview* sourcePreview, const dePreview* overlayPreview, deBaseChannel* mask, dePreview* preview)
+{
+    blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, -1, channels.getChannels(), blendMode.getBlendMode(), mask);
 }
 
 /*

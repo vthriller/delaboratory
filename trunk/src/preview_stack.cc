@@ -215,3 +215,9 @@ const dePreview* dePreviewStack::generateFinalPreview(wxProgressDialog* dialog, 
     nowUpdating = false;
     return previews[n];
 }    
+
+const deSize& dePreviewStack::getPreviewSize() const
+{
+    assert(project);
+    return project->getPreviewSize();
+}
