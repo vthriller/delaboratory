@@ -25,6 +25,7 @@
 #include "property_channels.h"
 #include "property_blend_mode.h"
 #include "property_blend_mask.h"
+class deBaseChannel;
 
 class deBlendLayer:public deLayer
 {
@@ -49,6 +50,7 @@ class deBlendLayer:public deLayer
         deValue getAlpha() const {return alpha.getValue();};
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
+        bool updatePreview(const dePreview* sourcePreview, const dePreview* overlayPreview, deBaseChannel* mask, dePreview* preview);
 
         virtual std::string getType() const {return "blend";};
 

@@ -88,7 +88,7 @@ void deMixer::calc(const dePreview& source, dePreview& destination) const
     int sourceChannels = getColorSpaceSize(sourceColorSpace);
     int destinationChannels = getColorSpaceSize(destinationColorSpace);
 
-    int s = source.getSize().getN();
+    int s = source.getChannel(0)->getSize().getN();
 
     int p;
     for (p = 0; p < s; p++)

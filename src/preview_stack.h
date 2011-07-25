@@ -25,6 +25,7 @@
 
 class dePreview;
 class deProject;
+class deSize;
 
 class wxProgressDialog;
 
@@ -47,8 +48,8 @@ class dePreviewStack
         dePreviewStack();
         virtual ~dePreviewStack();
 
-        dePreview* getPreview(int id);
         void addPreview();
+        dePreview* getPreview(int id);
         void removeTopPreview();
 
         int getSize() const;
@@ -65,6 +66,8 @@ class dePreviewStack
 
         void clear();
         const dePreview* generateFinalPreview(wxProgressDialog* dialog, int n);
+
+        const deSize& getPreviewSize() const;
 };
 
 #endif

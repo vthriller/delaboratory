@@ -57,16 +57,15 @@ dePreview* deCurvesLayer::createPreview(dePreviewStack& previewStack)
 
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
-    processCurves(*sourcePreview, *preview);
+    updatePreview(sourcePreview, preview);
+
     return preview;
 }
 
-/*
-deActionFrame* deCurvesLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
+bool deCurvesLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
 {
-    return new deCurvesFrame(parent, *this, project->getPreviewStack(), curves);
+    processCurves(*sourcePreview, *preview);
 }
-*/
 
 void deCurvesLayer::processCurves(const dePreview& source, dePreview& destination)
 {

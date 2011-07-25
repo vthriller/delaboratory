@@ -44,8 +44,7 @@ class deNDLayer:public deLayer
         virtual void onChangeColorSpace();
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
-
-//        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
+        bool updatePreview(const dePreview* sourcePreview, dePreview* preview);
 
         void clearEnabledChannels();
         void enableChannel(int c);

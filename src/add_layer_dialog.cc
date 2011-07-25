@@ -67,6 +67,11 @@ void deAddLayerFrame::click(wxCommandEvent &event)
            type = "blur";
         }
 
+        if (id == hpButton->GetId())
+        {
+           type = "high_pass";
+        }
+
         if (id == ndButton->GetId())
         {
            type = "nd";
@@ -121,6 +126,8 @@ deAddLayerFrame::deAddLayerFrame(deLayerListPanel* _panel, deProject* _project)
     sizer->Add(blendButton, 1, wxEXPAND);
     blurButton = new wxButton(this, wxID_ANY, _T("blur"), wxDefaultPosition, wxSize(-1, 50));
     sizer->Add(blurButton, 1, wxEXPAND);
+    hpButton = new wxButton(this, wxID_ANY, _T("high_pass"), wxDefaultPosition, wxSize(-1, 50));
+    sizer->Add(hpButton, 1, wxEXPAND);
     ndButton = new wxButton(this, wxID_ANY, _T("nd"), wxDefaultPosition, wxSize(-1, 50));
     sizer->Add(ndButton, 1, wxEXPAND);
     grainButton = new wxButton(this, wxID_ANY, _T("grain"), wxDefaultPosition, wxSize(-1, 50));

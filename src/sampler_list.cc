@@ -146,6 +146,11 @@ void deSamplerList::addSampler(float x, float y)
         }
         n++;
     }
+
+    j = samplers.begin();
+    deSampler* sampler = *j;
+    sampler->setPosition(x,y);
+    selected = 0;
 }
 
 void deSamplerList::removeSampler()

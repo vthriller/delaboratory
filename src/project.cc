@@ -32,7 +32,7 @@
 #include <wx/progdlg.h>
 
 deProject::deProject()
-:sourceImageSize(0,0)
+:sourceImageSize(0,0), previewSize(0,0)
 {
 #ifdef DE_LOGGER
     logger.setFile("delaboratory.log");
@@ -71,6 +71,8 @@ const deSize& deProject::getSourceImageSize() const
 void deProject::setPreviewSize(const deSize& size)
 {
     logMessage("set preview size " + size.str() + "...");
+
+    previewSize = size;
 
     deLayer* layer = layerStack.getLayer(0);
     deSourceImageLayer* sourceImageLayer = dynamic_cast<deSourceImageLayer*>(layer);
@@ -170,7 +172,8 @@ deFinalImage* deProject::generateFinalImage()
     {
         return NULL;
     }
-    deSize previousSize = preview->getSize();
+    //deSize previousSize = preview->getSize();
+    deSize previousSize = previewSize;
 
     setPreviewSize(sourceImageSize);
 
@@ -350,4 +353,9 @@ void deProject::save(const std::string& fileName)
     }
 
     xmlSaveFormatFile (fileName.c_str(), doc, 1); 
+}
+
+const deSize& deProject::getPreviewSize() const
+{
+    return previewSize;
 }

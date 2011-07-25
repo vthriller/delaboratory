@@ -34,13 +34,6 @@ deConversionLayer::~deConversionLayer()
 {
 }
 
-/*
-deActionFrame* deConversionLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
-{
-    return NULL;
-}
-*/
-
 dePreview* deConversionLayer::createPreview(dePreviewStack& previewStack)
 {
     const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
@@ -50,14 +43,12 @@ dePreview* deConversionLayer::createPreview(dePreviewStack& previewStack)
         return NULL;
     }
 
-    const deSize& sourceSize = sourcePreview->getSize();
+    //const deSize& sourceSize = sourcePreview->getSize();
+    const deSize& sourceSize = previewStack.getPreviewSize();
 
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
-    deConverter converter;
-    converter.setSource(sourcePreview);
-    converter.setDestination(preview);
-    bool result = converter.convert();
+    bool result = updatePreview(sourcePreview, preview);
 
     if (!result)
     {
@@ -67,4 +58,12 @@ dePreview* deConversionLayer::createPreview(dePreviewStack& previewStack)
     }        
 
     return preview;
+}
+
+bool deConversionLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
+{
+    deConverter converter;
+    converter.setSource(sourcePreview);
+    converter.setDestination(preview);
+    return converter.convert();
 }

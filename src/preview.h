@@ -32,7 +32,6 @@ class dePreview
     protected:
         const deColorSpace colorSpace;
         deSize size;
-        bool dirty;
         deBaseChannel* channels[4];
 
         void createChannels(const deSize& _size);
@@ -45,7 +44,6 @@ class dePreview
         ~dePreview();
 
         const deSize& getSize() const {return size;}; 
-        bool isDirty() const {return dirty;};
 
         void setDirty();
         void clearDirty();

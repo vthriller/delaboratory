@@ -47,6 +47,13 @@ dePreview* deNDLayer::createPreview(dePreviewStack& previewStack)
 
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
+    updatePreview(sourcePreview, preview);
+
+    return preview;
+}
+
+bool deNDLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
+{
     deND nd;
     nd.setType(ndType.getNDType());
     nd.setXCenter(xCenter.getValue());
@@ -54,14 +61,7 @@ dePreview* deNDLayer::createPreview(dePreviewStack& previewStack)
     nd.setPower(power.getValue());
 
     blend(*sourcePreview, nd, *preview, blendMode.getBlendMode(), channels.getChannels());
-
-    return preview;
 }
-
-/*deActionFrame* deNDLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
-{
-    return new deNDFrame(parent, *this, project->getPreviewStack(), layerNumber);
-}*/
 
 void deNDLayer::onChangeColorSpace()
 {

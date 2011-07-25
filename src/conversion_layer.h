@@ -35,8 +35,7 @@ class deConversionLayer:public deLayer
         virtual bool canChangeColorSpace() const {return true;};
 
         virtual dePreview* createPreview(dePreviewStack& previewStack);
-
-//        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
+        bool updatePreview(const dePreview* sourcePreview, dePreview* preview);
 
         virtual std::string getType() const {return "conversion";};
 
