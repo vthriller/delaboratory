@@ -55,7 +55,7 @@ bool deRenderer::render(wxDC& dc)
     {
         return false;
     }
-    const deSize& s = preview->getSize();
+    const deSize& s = project->getPreviewSize();
 
     int w = s.getW();
     int h = s.getH();

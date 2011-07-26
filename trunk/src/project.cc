@@ -249,7 +249,7 @@ void deProject::loadSourceImage(const std::string& fileName)
     sourceFileName = fileName.substr(posStart, posDot - posStart );
 
     sourceImage.load(fileName);
-    setSourceImageSize(sourceImage.getSize());
+    setSourceImageSize(sourceImage.getRawSize());
     gui.updateCenterPanel();
     previewStack.updatePreviews(0);
     gui.refreshView();
@@ -337,6 +337,14 @@ void deProject::open(const std::string& fileName, bool image)
 
 void deProject::save(const std::string& fileName)
 {
+    std::string f = fileName;
+
+    size_t pos = f.rfind(".delab");
+    if (pos != f.size() - 6) 
+    {
+        f += ".delab";
+    }
+
     xmlDocPtr doc = xmlNewDoc(xmlCharStrdup("1.0"));
 
     xmlNodePtr root = xmlNewNode(NULL, xmlCharStrdup("project"));
@@ -352,7 +360,7 @@ void deProject::save(const std::string& fileName)
         layerStack.save(child);
     }
 
-    xmlSaveFormatFile (fileName.c_str(), doc, 1); 
+    xmlSaveFormatFile (f.c_str(), doc, 1); 
 }
 
 const deSize& deProject::getPreviewSize() const

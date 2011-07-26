@@ -46,10 +46,6 @@ class deHighPassLayer:public deLayer
 
         virtual void onChangeColorSpace();
 
-        void clearEnabledChannels();
-        void enableChannel(int c);
-
-        const std::set<int>& getEnabledChannels() const;
         virtual std::string getType() const {return "high_pass";};
 
         virtual void saveSpecific(xmlNodePtr node);

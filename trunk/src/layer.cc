@@ -66,18 +66,9 @@ deActionFrame* deLayer::getActionFrame()
 void deLayer::changeSourceLayer(int id)
 {
     sourceLayer.setIndex(id);
-    //overlayLayer.setIndex(id);
     updateColorSpace();
     onChangeSourceLayer();
 }
-
-/*
-void deLayer::changeOverlayLayer(int id)
-{
-    overlayLayer.setIndex(id);
-    onChangeOverlayLayer();
-}
-*/
 
 void deLayer::changeColorSpace(deColorSpace _colorSpace)
 {
@@ -132,6 +123,10 @@ void deLayer::notifyPropertiesOnColorSpaceChange()
     for (i = properties.begin(); i != properties.end(); i++)
     {
         (*i)->onColorSpaceChange();
+    }
+    if (actionFrame)
+    {
+        actionFrame->Layout();
     }
 }
 

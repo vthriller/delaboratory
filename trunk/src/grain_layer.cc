@@ -39,14 +39,7 @@ void deGrainLayer::onChangeColorSpace()
 
 dePreview* deGrainLayer::createPreview(dePreviewStack& previewStack)
 {
-    const dePreview* sourcePreview = previewStack.getPreview(0);
-
-    if (!sourcePreview)
-    {
-        return NULL;
-    }
-
-    const deSize& sourceSize = sourcePreview->getSize();
+    const deSize& sourceSize = previewStack.getPreviewSize();
 
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
