@@ -43,7 +43,8 @@ class dePreview
         dePreview(const deColorSpace& colorSpace, const deSize& _size);
         ~dePreview();
 
-        const deSize& getSize() const {return size;}; 
+        const deSize& getRawSize() const {return size;}; 
+//        const deSize& getSize() const {return size;}; 
 
         void setDirty();
         void clearDirty();

@@ -163,7 +163,7 @@ void deMainFrame::OnSaveProject(wxCommandEvent& WXUNUSED(event))
     char cstring[1024];
     strncpy(cstring, (const char*)fileName.mb_str(wxConvUTF8), 1023);
 
-    std::string f = std::string(cstring) + ".delab";
+    std::string f = std::string(cstring);
     project->save(f);
 }
 

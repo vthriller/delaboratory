@@ -41,7 +41,7 @@ deConverter::~deConverter()
 void deConverter::setSource(const dePreview* _source)
 {
     source = _source;
-    size = source->getSize();
+    size = source->getRawSize();
     n = size.getN();
     sourceColorSpace = source->getColorSpace();
 }

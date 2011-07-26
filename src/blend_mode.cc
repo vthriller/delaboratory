@@ -31,8 +31,12 @@ std::string getBlendModeName(deBlendMode mode)
             return "screen";
         case deBlendOverlay:
             return "overlay";
+        case deBlendOverlayInvert:
+            return "overlay invert";
         case deBlendAdd:
             return "add";
+        case deBlendAddInvert:
+            return "add invert";
         case deBlendSub:
             return "sub";
         case deBlendDifference:
@@ -68,9 +72,19 @@ deBlendMode blendModeFromString(const std::string& s)
         return deBlendOverlay;
     }
 
+    if (s == "overlay invert")
+    {
+        return deBlendOverlayInvert;
+    }
+
     if (s == "add")
     {
         return deBlendAdd;
+    }
+
+    if (s == "add invert")
+    {
+        return deBlendAddInvert;
     }
 
     if (s == "sub")
@@ -103,7 +117,9 @@ void getSupportedBlendModes(std::vector<deBlendMode>& result)
     result.push_back(deBlendMultiply);
     result.push_back(deBlendScreen);
     result.push_back(deBlendOverlay);
+    result.push_back(deBlendOverlayInvert);
     result.push_back(deBlendAdd);
+    result.push_back(deBlendAddInvert);
     result.push_back(deBlendSub);
     result.push_back(deBlendDifference);
     result.push_back(deBlendDarken);
@@ -133,8 +149,21 @@ deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode)
                 return 2 * src * v2;
             }
             break;
+        case deBlendOverlayInvert:                    
+            if (src > 0.5)
+            {
+                return 1 - (1 - 2 * ( src - 0.5)) * v2;
+            }
+            else
+            {
+                return 2 * src * (1 - v2);
+            }
+            break;
         case deBlendAdd:                    
             return src + v2;
+            break;
+        case deBlendAddInvert:                    
+            return 0.5 + src - v2;
             break;
         case deBlendSub:                    
             return src - v2;

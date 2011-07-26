@@ -46,11 +46,6 @@ class deNDLayer:public deLayer
         virtual dePreview* createPreview(dePreviewStack& previewStack);
         bool updatePreview(const dePreview* sourcePreview, dePreview* preview);
 
-        void clearEnabledChannels();
-        void enableChannel(int c);
-
-        const deChannels& getEnabledChannels() const;
-
         virtual std::string getType() const {return "nd";};
 
         virtual void saveSpecific(xmlNodePtr node);

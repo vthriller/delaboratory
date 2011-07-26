@@ -43,7 +43,7 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
         return NULL;
     }
 
-    const deSize& sourceSize = sourcePreview->getSize();
+    const deSize& sourceSize = previewStack.getPreviewSize();
 
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
@@ -54,7 +54,7 @@ dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
 
 bool deBlurLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
 {
-    dePreview* tmp = new dePreview(colorSpace.getColorSpace(), preview->getSize());
+    dePreview* tmp = new dePreview(colorSpace.getColorSpace(), preview->getRawSize());
 
     deBlurType type = blurType.getBlurType();
     deValue t = threshold.getValue();
@@ -84,21 +84,6 @@ bool deBlurLayer::updatePreview(const dePreview* sourcePreview, dePreview* previ
 void deBlurLayer::onChangeColorSpace()
 {
     channels.fill();
-}
-
-void deBlurLayer::enableChannel(int c)
-{
-    channels.insert(c);
-}
-
-void deBlurLayer::clearEnabledChannels()
-{
-    channels.clear();
-}
-
-const std::set<int>& deBlurLayer::getEnabledChannels() const
-{
-    return channels.getChannels();
 }
 
 void deBlurLayer::saveSpecific(xmlNodePtr node)

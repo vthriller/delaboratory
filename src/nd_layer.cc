@@ -43,7 +43,7 @@ dePreview* deNDLayer::createPreview(dePreviewStack& previewStack)
         return NULL;
     }
 
-    const deSize& sourceSize = sourcePreview->getSize();
+    const deSize& sourceSize = previewStack.getPreviewSize();
 
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 
@@ -66,21 +66,6 @@ bool deNDLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview
 void deNDLayer::onChangeColorSpace()
 {
     channels.fill();
-}
-
-void deNDLayer::enableChannel(int c)
-{
-    channels.insert(c);
-}
-
-void deNDLayer::clearEnabledChannels()
-{
-    channels.clear();
-}
-
-const deChannels& deNDLayer::getEnabledChannels() const
-{
-    return channels.getChannels();
 }
 
 void deNDLayer::saveSpecific(xmlNodePtr node)

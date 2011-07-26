@@ -46,6 +46,7 @@ void deChannelsSelector::rebuild()
     }
     createChannelCheckBoxes(this, property.getParent().getColorSpace(), sizer, channels, property.getChannels());
     Fit();
+    GetParent()->Layout();
 }
 
 void deChannelsSelector::check(wxCommandEvent &event)

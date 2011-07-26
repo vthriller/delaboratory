@@ -53,7 +53,8 @@ dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
         return NULL;
     }
 
-    const deSize& sourceSize = sourcePreview->getSize();
+    //const deSize& sourceSize = sourcePreview->getSize();
+    const deSize& sourceSize = previewStack.getPreviewSize();
 
     dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
 

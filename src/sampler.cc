@@ -73,7 +73,7 @@ bool deSampler::getPixel(float &v0, float &v1, float &v2, float &v3, deColorSpac
     assert(x < 1);
     assert(y < 1);
 
-    const deSize& s = preview.getSize();
+    const deSize& s = preview.getRawSize();
 
     int w = s.getW();
     int h = s.getH();

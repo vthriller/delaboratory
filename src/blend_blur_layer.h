@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLUR_LAYER_H
-#define _DE_BLUR_LAYER_H
+#ifndef _DE_BLEND_BLUR_LAYER_H
+#define _DE_BLEND_BLUR_LAYER_H
 
 #include "layer.h"
 #include "blur.h"
@@ -28,19 +28,16 @@
 #include "property_channels.h"
 #include <set>
 
-class deBlurLayer:public deLayer
+class deBlendBlurLayer:public deLayer
 {
     private:
-        dePropertyBlurType blurType;
         dePropertyValue radiusX;
         dePropertyValue radiusY;
         dePropertyChannels channels;
-        dePropertyInteger iterations;
-        dePropertyValue threshold;
 
     public:
-        deBlurLayer(deLayerStack& _stack, int _index, const std::string& _name);
-        virtual ~deBlurLayer();
+        deBlendBlurLayer(deLayerStack& _stack, int _index, const std::string& _name);
+        virtual ~deBlendBlurLayer();
 
         virtual bool canChangeSourceLayer() const {return true;};
 
@@ -49,7 +46,7 @@ class deBlurLayer:public deLayer
 
         virtual void onChangeColorSpace();
 
-        virtual std::string getType() const {return "blur";};
+        virtual std::string getType() const {return "blend_blur";};
 
         virtual void saveSpecific(xmlNodePtr node);
         virtual void loadSpecific(xmlNodePtr node);

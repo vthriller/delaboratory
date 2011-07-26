@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "high_pass_layer.h"
+#include "blend_blur_layer.h"
 #include "blur.h"
 #include "preview_stack.h"
 #include "preview.h"
@@ -24,18 +24,18 @@
 #include "blend.h"
 #include "channel.h"
 
-deHighPassLayer::deHighPassLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), radiusX(*this, "radius x", 0.0, 0.05), radiusY(*this, "radius y", 0.0, 0.05), channels(*this)
+deBlendBlurLayer::deBlendBlurLayer(deLayerStack& _stack, int _index, const std::string& _name)
+:deLayer(_stack, _index, _name), radiusX(*this, "radius x", 0.0, 0.1), radiusY(*this, "radius y", 0.0, 0.1), channels(*this)
 {
-    radiusX.setValue(0.01);
-    radiusY.setValue(0.01);
+    radiusX.setValue(0.02);
+    radiusY.setValue(0.02);
 }
 
-deHighPassLayer::~deHighPassLayer()
+deBlendBlurLayer::~deBlendBlurLayer()
 {
 }
 
-dePreview* deHighPassLayer::createPreview(dePreviewStack& previewStack)
+dePreview* deBlendBlurLayer::createPreview(dePreviewStack& previewStack)
 {
     const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
 
@@ -53,7 +53,7 @@ dePreview* deHighPassLayer::createPreview(dePreviewStack& previewStack)
     return preview;
 }
 
-bool deHighPassLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
+bool deBlendBlurLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
 {
     deColorSpace sourceColorSpace = sourcePreview->getColorSpace();
 
@@ -63,15 +63,11 @@ bool deHighPassLayer::updatePreview(const dePreview* sourcePreview, dePreview* p
     deBlurType type = deGaussianBlur;
     deValue t = 0;
 
-    deChannels c;
-    c.insert(0);
-    c.insert(1);
-    c.insert(2);
-    c.insert(3);
+    deChannels c = channels.getChannels();
 
     blur(*sourcePreview, *tmp1, deBlurHorizontal, radiusX.getValue(), c, type, t);
     blur(*tmp1, *tmp2, deBlurVertical, radiusY.getValue(), c, type, t);
-    blend(*sourcePreview, *tmp2, 1.0, *tmp1, c, deBlendAddInvert, NULL);
+    blend(*sourcePreview, *tmp2, 1.0, *tmp1, c, deBlendOverlay, NULL);
 
     int size = preview->getChannel(0)->getSize().getN();
 
@@ -113,19 +109,19 @@ bool deHighPassLayer::updatePreview(const dePreview* sourcePreview, dePreview* p
 }
 
 
-void deHighPassLayer::onChangeColorSpace()
+void deBlendBlurLayer::onChangeColorSpace()
 {
     channels.fill();
 }
 
-void deHighPassLayer::saveSpecific(xmlNodePtr node)
+void deBlendBlurLayer::saveSpecific(xmlNodePtr node)
 {
     radiusX.save(node, "radius_x");
     radiusY.save(node, "radius_y");
     channels.save(node, "channels");
 }
 
-void deHighPassLayer::loadSpecific(xmlNodePtr node)
+void deBlendBlurLayer::loadSpecific(xmlNodePtr node)
 {
     xmlNodePtr child = node->xmlChildrenNode;
 
