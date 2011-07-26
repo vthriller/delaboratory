@@ -198,7 +198,7 @@ const dePreview* dePreviewStack::generateFinalPreview(wxProgressDialog* dialog, 
             return NULL;
         }
 
-        int progress = 100 * i / n;
+        int progress = 100 * i / (n + 1);
         bool notAbort = dialog->Update(progress, wxString::FromAscii(layer->getName().c_str()));
         if (!notAbort)
         {
@@ -212,6 +212,7 @@ const dePreview* dePreviewStack::generateFinalPreview(wxProgressDialog* dialog, 
         }
         previews[i] = layer->createPreview(*this);
     }
+    dialog->Update(100, _T("finished"));
     nowUpdating = false;
     return previews[n];
 }    
