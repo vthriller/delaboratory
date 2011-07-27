@@ -152,3 +152,25 @@ void deLayerStack::load(xmlNodePtr node, deLayerFactory& factory)
         child = child->next;
     }
 }
+
+void deLayerStack::generateLayerUsage(std::vector<int>& layerUsage)
+{
+    int i;
+    int j;
+    int n = layers.size();
+    layerUsage.clear();
+    for (i = 0; i < n; i++)
+    {
+        layerUsage.push_back(0);
+    }
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < i; j++)
+        {
+            if (layers[i]->checkUsage(j))
+            {
+                layerUsage[j] = i;
+            }
+        }
+    }
+}

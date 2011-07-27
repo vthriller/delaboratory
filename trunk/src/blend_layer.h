@@ -59,6 +59,8 @@ class deBlendLayer:public deLayer
         virtual void onChangeSourceLayer();
         virtual void onChangeColorSpace();
 
+        virtual bool checkUsage(int id);
+
 };
 
 #endif

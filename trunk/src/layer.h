@@ -98,6 +98,8 @@ class deLayer
         virtual void loadSpecific(xmlNodePtr node) {};
 
         virtual void traceSampler(deSampler* sampler);
+        
+        virtual bool checkUsage(int id);
 
 };
 

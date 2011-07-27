@@ -168,3 +168,16 @@ void deBlendLayer::onChangeColorSpace()
     channels.fill();
 }
 
+bool deBlendLayer::checkUsage(int id)
+{
+    if (sourceLayer.getIndex() == id)
+    {
+        return true;
+    }
+    if (overlayLayer.getIndex() == id)
+    {
+        return true;
+    }
+    return false;
+}
+

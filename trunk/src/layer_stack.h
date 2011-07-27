@@ -50,6 +50,8 @@ class deLayerStack
         void load(xmlNodePtr node, deLayerFactory& factory);
 
         void clear();
+    
+        void generateLayerUsage(std::vector<int>& layerUsage);
 
 };
 
