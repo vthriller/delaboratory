@@ -190,6 +190,10 @@ const dePreview* dePreviewStack::generateFinalPreview(wxProgressDialog* dialog, 
 {
     deLayerStack& layerStack = project->getLayerStack();
     nowUpdating = true;
+
+    std::vector<int> layerUsage;
+    layerStack.generateLayerUsage(layerUsage);
+
     int i;
     for (i = 0; i <= n; i++)
     {
@@ -213,6 +217,16 @@ const dePreview* dePreviewStack::generateFinalPreview(wxProgressDialog* dialog, 
         }
         previews[i] = new dePreview(layer->getColorSpace(), getPreviewSize());
         layer->updatePreview(*this);
+
+        int j;
+        for (j = 0; j < i; j++)
+        {
+            if (layerUsage[j] == i)
+            {
+                delete previews[j];
+                previews[j] = NULL;
+            }
+        }
     }
     dialog->Update(100, _T("finished"));
     nowUpdating = false;

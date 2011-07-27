@@ -192,3 +192,12 @@ void deLayer::traceSampler(deSampler* sampler)
     }
 }
 
+bool deLayer::checkUsage(int id)
+{
+    if (sourceLayer.getIndex() == id)
+    {
+        return true;
+    }
+    return false;
+}
+
