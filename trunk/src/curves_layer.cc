@@ -44,28 +44,15 @@ void deCurvesLayer::onChangeColorSpace()
     resetCurves();
 }
 
-dePreview* deCurvesLayer::createPreview(dePreviewStack& previewStack)
+void deCurvesLayer::updatePreview(dePreviewStack& previewStack)
 {
     const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
+    dePreview* preview = previewStack.getPreview(index);
 
-    if (!sourcePreview)
+    if ((sourcePreview) && (preview))
     {
-        return NULL;
+        processCurves(*sourcePreview, *preview);
     }
-
-    //const deSize& sourceSize = sourcePreview->getSize();
-    const deSize& sourceSize = previewStack.getPreviewSize();
-
-    dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
-
-    updatePreview(sourcePreview, preview);
-
-    return preview;
-}
-
-bool deCurvesLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
-{
-    processCurves(*sourcePreview, *preview);
 }
 
 void deCurvesLayer::processCurves(const dePreview& source, dePreview& destination)

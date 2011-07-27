@@ -32,13 +32,6 @@ deMixerLayer::~deMixerLayer()
 {
 }
 
-/*
-deActionFrame* deMixerLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
-{
-    return new deMixerFrame(parent, *this, project->getPreviewStack(), mixer);
-}
-*/
-
 void deMixerLayer::recreateMixer()
 {
     if (colorSpace.getColorSpace() == deColorSpaceInvalid)
@@ -63,31 +56,18 @@ void deMixerLayer::onChangeSourceLayer()
     recreateMixer();
 }
 
-dePreview* deMixerLayer::createPreview(dePreviewStack& previewStack)
+void deMixerLayer::updatePreview(dePreviewStack& previewStack)
 {
     const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
+    dePreview* preview = previewStack.getPreview(index);
 
-    if (!sourcePreview)
+    if ((sourcePreview) && (preview))
     {
-        return NULL;
+        if (mixer.getMixer())
+        {
+            mixer.getMixer()->calc(*sourcePreview, *preview);
+        }        
     }
-
-    //const deSize& sourceSize = sourcePreview->getSize();
-    const deSize& sourceSize = previewStack.getPreviewSize();
-
-    dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
-
-    updatePreview(sourcePreview, preview);
-
-    return preview;
-}
-
-bool deMixerLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
-{
-    if (mixer.getMixer())
-    {
-        mixer.getMixer()->calc(*sourcePreview, *preview);
-    }        
 }
 
 void deMixerLayer::saveSpecific(xmlNodePtr node)

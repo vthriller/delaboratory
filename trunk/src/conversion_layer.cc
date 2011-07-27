@@ -34,36 +34,16 @@ deConversionLayer::~deConversionLayer()
 {
 }
 
-dePreview* deConversionLayer::createPreview(dePreviewStack& previewStack)
+void deConversionLayer::updatePreview(dePreviewStack& previewStack)
 {
     const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
+    dePreview* preview = previewStack.getPreview(index);
 
-    if (!sourcePreview)
+    if ((sourcePreview) && (preview))
     {
-        return NULL;
+        deConverter converter;
+        converter.setSource(sourcePreview);
+        converter.setDestination(preview);
+        converter.convert();
     }
-
-    //const deSize& sourceSize = sourcePreview->getSize();
-    const deSize& sourceSize = previewStack.getPreviewSize();
-
-    dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
-
-    bool result = updatePreview(sourcePreview, preview);
-
-    if (!result)
-    {
-        previewStack.setError("direct conversion from " + getColorSpaceName(sourcePreview->getColorSpace()) + " to " + getColorSpaceName(colorSpace.getColorSpace()) + " not supported");
-        delete preview;
-        preview = NULL;
-    }        
-
-    return preview;
-}
-
-bool deConversionLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
-{
-    deConverter converter;
-    converter.setSource(sourcePreview);
-    converter.setDestination(preview);
-    return converter.convert();
 }

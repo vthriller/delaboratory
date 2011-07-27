@@ -39,6 +39,7 @@ class deLayer
 
         deProperties properties;
 
+
     protected:
         deLayerStack& stack;
         int index;
@@ -50,7 +51,7 @@ class deLayer
         deLayer(deLayerStack& _stack, int _index, const std::string& _name);
         virtual ~deLayer();
 
-        virtual dePreview* createPreview(dePreviewStack& previewStack) = 0;
+        virtual void updatePreview(dePreviewStack& previewStack) = 0 ;
 
         virtual bool canChangeSourceLayer() const {return false;};
         virtual bool canChangeOverlayLayer() const {return false;};

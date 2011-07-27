@@ -44,67 +44,27 @@ void deBlendLayer::changeAlpha(deValue _alpha)
     alpha.setValue(_alpha);
 }
 
-dePreview* deBlendLayer::createPreview(dePreviewStack& previewStack)
+void deBlendLayer::updatePreview(dePreviewStack& previewStack)
 {
     const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
-
-    if (!sourcePreview)
-    {
-        return NULL;
-    }
-
-    //const deSize& sourceSize = sourcePreview->getSize();
-    const deSize& sourceSize = previewStack.getPreviewSize();
-
-    dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
-
     const dePreview* overlayPreview = previewStack.getPreview(overlayLayer.getIndex());
-    if (!overlayPreview)
-    {
-        throw deException("no overlayPreview in blend layer");
-        return NULL;
-    }
+    dePreview* preview = previewStack.getPreview(index);
 
-    deBaseChannel* mask = NULL;
-
-    if (blendMask.isEnabled())
+    if ((sourcePreview) && (preview) && (overlayPreview))
     {
-        dePreview* maskPreview = previewStack.getPreview(blendMask.getLayerIndex());
-        if (maskPreview)
+        deBaseChannel* mask = NULL;
+
+        if (blendMask.isEnabled())
         {
-            mask = maskPreview->getChannel(blendMask.getChannel());
-        }
-    }        
+            dePreview* maskPreview = previewStack.getPreview(blendMask.getLayerIndex());
+            if (maskPreview)
+            {
+                mask = maskPreview->getChannel(blendMask.getChannel());
+            }
+        }        
 
-/*
-    int oc;
-    if (singleOverlayChannel)
-    {
-        oc = overlayChannel;
+        blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, channels.getChannels(), blendMode.getBlendMode(), mask);
     }
-    else
-    {
-        oc = -1;
-    }*/
-    /*
-    int dc;
-    if (singleDestinationChannel)
-    {
-        dc = destinationChannel;
-    }
-    else
-    {
-        dc = -1;
-    }*/
-
-    updatePreview(sourcePreview, overlayPreview, mask, preview);
-
-    return preview;
-}
-
-bool deBlendLayer::updatePreview(const dePreview* sourcePreview, const dePreview* overlayPreview, deBaseChannel* mask, dePreview* preview)
-{
-    blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, channels.getChannels(), blendMode.getBlendMode(), mask);
 }
 
 /*

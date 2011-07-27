@@ -142,7 +142,8 @@ void dePreviewStack::realUpdatePreviews()
             {
                  project->logMessage("create preview...");
             }                 
-            previews[i] = layerStack.getLayer(i)->createPreview(*this);
+            previews[i] = new dePreview(layerStack.getLayer(i)->getColorSpace(), getPreviewSize());
+            layerStack.getLayer(i)->updatePreview(*this);
         }
         catch (deException& e)
         {
@@ -210,7 +211,8 @@ const dePreview* dePreviewStack::generateFinalPreview(wxProgressDialog* dialog, 
         {
             delete preview;
         }
-        previews[i] = layer->createPreview(*this);
+        previews[i] = new dePreview(layer->getColorSpace(), getPreviewSize());
+        layer->updatePreview(*this);
     }
     dialog->Update(100, _T("finished"));
     nowUpdating = false;

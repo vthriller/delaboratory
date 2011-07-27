@@ -24,6 +24,7 @@
 #include "channel.h"
 #include "exception.h"
 #include <wx/wx.h>
+#include "preview_stack.h"
 
 deSourceImageLayer::deSourceImageLayer(deLayerStack& _stack, int _index, const std::string& _name)
 :deLayer(_stack, _index, _name), previewSize(0,0)
@@ -46,32 +47,12 @@ void deSourceImageLayer::setPreviewSize(const deSize& size)
     previewSize = size;
 }
 
-/*
-deActionFrame* deSourceImageLayer::createActionFrame(wxWindow* parent, int layerNumber, deProject* project)
+void deSourceImageLayer::updatePreview(dePreviewStack& previewStack)
 {
-    return NULL;
-}
-*/
-
-dePreview* deSourceImageLayer::createPreview(dePreviewStack& previewStack)
-{
-    if (!sourceImage)
-    {
-        return NULL;
-    }
+    dePreview* preview = previewStack.getPreview(index);
 
     int n = getColorSpaceSize(sourceImage->getColorSpace());
     int i;
-    for (i = 0; i < n; i++)
-    {
-        const deBaseChannel* channel = sourceImage->getChannel(i);
-        if (!channel)
-        {
-            return NULL;
-        }
-    }
-
-    dePreview* preview = new dePreview(sourceImage->getColorSpace(), previewSize);
 
     for (i = 0; i < n; i++)
     {
@@ -88,5 +69,4 @@ dePreview* deSourceImageLayer::createPreview(dePreviewStack& previewStack)
         destinationChannel->scale(sourceChannel);
     }
 
-    return preview;
 }

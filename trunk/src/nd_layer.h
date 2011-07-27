@@ -43,8 +43,7 @@ class deNDLayer:public deLayer
         virtual bool canChangeSourceLayer() const {return true;};
         virtual void onChangeColorSpace();
 
-        virtual dePreview* createPreview(dePreviewStack& previewStack);
-        bool updatePreview(const dePreview* sourcePreview, dePreview* preview);
+        virtual void updatePreview(dePreviewStack& previewStack);
 
         virtual std::string getType() const {return "nd";};
 

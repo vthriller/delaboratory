@@ -37,17 +37,6 @@ void deGrainLayer::onChangeColorSpace()
 {
 }
 
-dePreview* deGrainLayer::createPreview(dePreviewStack& previewStack)
-{
-    const deSize& sourceSize = previewStack.getPreviewSize();
-
-    dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
-
-    fillGrain(preview);
-
-    return preview;
-}
-
 void deGrainLayer::saveSpecific(xmlNodePtr node)
 {
     //grain.save(node, "grain");
@@ -66,4 +55,14 @@ void deGrainLayer::loadSpecific(xmlNodePtr node)
 
         child = child->next;
     }*/
+}
+
+void deGrainLayer::updatePreview(dePreviewStack& previewStack)
+{
+    dePreview* preview = previewStack.getPreview(index);
+
+    if (preview)
+    {
+        fillGrain(preview);
+    }
 }

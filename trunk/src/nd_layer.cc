@@ -34,34 +34,6 @@ deNDLayer::~deNDLayer()
 {
 }
 
-dePreview* deNDLayer::createPreview(dePreviewStack& previewStack)
-{
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
-
-    if (!sourcePreview)
-    {
-        return NULL;
-    }
-
-    const deSize& sourceSize = previewStack.getPreviewSize();
-
-    dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
-
-    updatePreview(sourcePreview, preview);
-
-    return preview;
-}
-
-bool deNDLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
-{
-    deND nd;
-    nd.setType(ndType.getNDType());
-    nd.setXCenter(xCenter.getValue());
-    nd.setYCenter(yCenter.getValue());
-    nd.setPower(power.getValue());
-
-    blend(*sourcePreview, nd, *preview, blendMode.getBlendMode(), channels.getChannels());
-}
 
 void deNDLayer::onChangeColorSpace()
 {
@@ -115,5 +87,22 @@ void deNDLayer::loadSpecific(xmlNodePtr node)
         }
 
         child = child->next;
+    }
+}
+
+void deNDLayer::updatePreview(dePreviewStack& previewStack)
+{
+    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
+    dePreview* preview = previewStack.getPreview(index);
+
+    if ((sourcePreview) && (preview))
+    {
+        deND nd;
+        nd.setType(ndType.getNDType());
+        nd.setXCenter(xCenter.getValue());
+        nd.setYCenter(yCenter.getValue());
+        nd.setPower(power.getValue());
+
+        blend(*sourcePreview, nd, *preview, blendMode.getBlendMode(), channels.getChannels());
     }
 }
