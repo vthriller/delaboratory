@@ -34,7 +34,7 @@ class deGrainLayer:public deLayer
 
         virtual void onChangeColorSpace();
 
-        virtual dePreview* createPreview(dePreviewStack& previewStack);
+        virtual void updatePreview(dePreviewStack& previewStack);
 
         virtual std::string getType() const {return "grain";};
 

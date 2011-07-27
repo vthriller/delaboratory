@@ -35,24 +35,6 @@ deHighPassLayer::~deHighPassLayer()
 {
 }
 
-dePreview* deHighPassLayer::createPreview(dePreviewStack& previewStack)
-{
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
-
-    if (!sourcePreview)
-    {
-        return NULL;
-    }
-
-    const deSize& sourceSize = previewStack.getPreviewSize();
-
-    dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
-
-    updatePreview(sourcePreview, preview);
-
-    return preview;
-}
-
 bool deHighPassLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
 {
     deColorSpace sourceColorSpace = sourcePreview->getColorSpace();
@@ -150,3 +132,13 @@ void deHighPassLayer::loadSpecific(xmlNodePtr node)
     }
 }
 
+void deHighPassLayer::updatePreview(dePreviewStack& previewStack)
+{
+    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
+    dePreview* preview = previewStack.getPreview(index);
+
+    if ((sourcePreview) && (preview))
+    {
+        updatePreview(sourcePreview, preview);
+    }
+}

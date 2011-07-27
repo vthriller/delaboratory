@@ -39,8 +39,7 @@ class deMixerLayer:public deLayer
         virtual void onChangeColorSpace();
         virtual void onChangeSourceLayer();
 
-        virtual dePreview* createPreview(dePreviewStack& previewStack);
-        bool updatePreview(const dePreview* sourcePreview, dePreview* preview);
+        virtual void updatePreview(dePreviewStack& previewStack);
 
         deMixer* getMixer() {return mixer.getMixer();};
 

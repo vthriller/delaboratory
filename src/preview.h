@@ -46,9 +46,6 @@ class dePreview
         const deSize& getRawSize() const {return size;}; 
 //        const deSize& getSize() const {return size;}; 
 
-        void setDirty();
-        void clearDirty();
-
         virtual deBaseChannel* getChannel(int id);
         virtual const deBaseChannel* getChannel(int id) const;
 

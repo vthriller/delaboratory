@@ -44,8 +44,8 @@ class deBlurLayer:public deLayer
 
         virtual bool canChangeSourceLayer() const {return true;};
 
-        virtual dePreview* createPreview(dePreviewStack& previewStack);
         bool updatePreview(const dePreview* sourcePreview, dePreview* preview);
+        virtual void updatePreview(dePreviewStack& previewStack);
 
         virtual void onChangeColorSpace();
 

@@ -34,24 +34,6 @@ deBlurLayer::~deBlurLayer()
 {
 }
 
-dePreview* deBlurLayer::createPreview(dePreviewStack& previewStack)
-{
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
-
-    if (!sourcePreview)
-    {
-        return NULL;
-    }
-
-    const deSize& sourceSize = previewStack.getPreviewSize();
-
-    dePreview* preview = new dePreview(colorSpace.getColorSpace(), sourceSize);
-
-    updatePreview(sourcePreview, preview);
-
-    return preview;
-}
-
 bool deBlurLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
 {
     dePreview* tmp = new dePreview(colorSpace.getColorSpace(), preview->getRawSize());
@@ -127,5 +109,16 @@ void deBlurLayer::loadSpecific(xmlNodePtr node)
         }
 
         child = child->next;
+    }
+}
+
+void deBlurLayer::updatePreview(dePreviewStack& previewStack)
+{
+    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
+    dePreview* preview = previewStack.getPreview(index);
+
+    if ((sourcePreview) && (preview))
+    {
+        updatePreview(sourcePreview, preview);
     }
 }

@@ -36,10 +36,8 @@ class deSourceImageLayer:public deLayer
 
         void setPreviewSize(const deSize& size);
         
-        virtual dePreview* createPreview(dePreviewStack& previewStack);
+        virtual void updatePreview(dePreviewStack& previewStack);
         
-//        virtual deActionFrame* createActionFrame(wxWindow* parent, int layerNumber, deProject* project);
-
         virtual const std::string getDescription() const {return "source image";};
 
         virtual std::string getType() const {return "source_image";};

@@ -49,8 +49,7 @@ class deBlendLayer:public deLayer
         void changeAlpha(deValue _alpha);
         deValue getAlpha() const {return alpha.getValue();};
 
-        virtual dePreview* createPreview(dePreviewStack& previewStack);
-        bool updatePreview(const dePreview* sourcePreview, const dePreview* overlayPreview, deBaseChannel* mask, dePreview* preview);
+        virtual void updatePreview(dePreviewStack& previewStack);
 
         virtual std::string getType() const {return "blend";};
 
