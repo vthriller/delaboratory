@@ -26,6 +26,9 @@
 #include "blend_blur_layer.h"
 #include "grain_layer.h"
 #include "nd_layer.h"
+#include "apply_color_layer.h"
+#include "apply_luminance_layer.h"
+#include "rgb2bw_layer.h"
 #include "conversion_layer.h"
 
 deLayerFactory::deLayerFactory()
@@ -76,6 +79,21 @@ deLayer* deLayerFactory::createLayer(const std::string& type, deLayerStack& stac
     if (type == "blend_blur")
     {
         return new deBlendBlurLayer(stack, index, name);
+    }
+
+    if (type == "rgb2bw")
+    {
+        return new deRGB2BWLayer(stack, index, name);
+    }
+
+    if (type == "apply_color")
+    {
+        return new deApplyColorLayer(stack, index, name);
+    }
+
+    if (type == "apply_luminance")
+    {
+        return new deApplyLuminanceLayer(stack, index, name);
     }
 
     if (type == "nd")

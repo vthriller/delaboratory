@@ -42,6 +42,7 @@ void rgb2bw(deValue* values);
 void bw2rgb(deValue* values);
 void lab2cmyk(deValue* values);
 void cmyk2lab(deValue* values);
-
+void lab2bw(deValue* values);
+void bw2lab(deValue* values);
 
 #endif

@@ -16,19 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLEND_H
-#define _DE_BLEND_H
+#ifndef _DE_APPLY_CHANNEL_H
+#define _DE_APPLY_CHANNEL_H
 
 class dePreview;
-class deND;
-class deBaseChannel;
-#include "value.h"
-#include "blend_mode.h"
-#include "property_channels.h"
-#include <set>
+#include "color_space.h"
 
-void blend(const deBaseChannel& sourceChannel, const deBaseChannel& overlayChannel, deBaseChannel& resultChannel, deValue alpha, deBlendMode mode, deBaseChannel* mask);
-void blend(const dePreview& sourcePreview, const dePreview& overlayPreview, deValue alpha, dePreview& resultPreview, const deChannels& enabledChannels, deBlendMode mode, deBaseChannel* mask);
-void blend(const dePreview& sourcePreview, const deND& nd, dePreview& resultPreview, deBlendMode mode, const deChannels& enabledChannels);
+void applyChannels(const dePreview* sourcePreview, const dePreview* overlayPreview, dePreview* preview, deColorSpace colorSpace, bool a[4]);
 
 #endif    

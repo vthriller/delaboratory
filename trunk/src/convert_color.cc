@@ -20,6 +20,49 @@
 #include <cmath>
 #include <iostream>
 #include <cstdlib>
+#include <cassert>
+
+#define POWER_CACHE_SIZE 65536
+
+class dePower
+{
+    private:
+        double power;
+
+        double values[POWER_CACHE_SIZE];
+
+        double scale;
+
+    public:
+        dePower(double _power, int s)
+        {
+            power = _power;
+
+            scale = (POWER_CACHE_SIZE - 1.0) / s;
+
+            int i;
+            for (i = 0; i < POWER_CACHE_SIZE; i++)
+            {
+                double p = i / scale;
+                values[i] = pow(p, power);
+            }
+
+        }
+        ~dePower()
+        {
+        }
+
+        double get(double v)
+        {
+            int i = v * scale;
+            if ((i >= 0) && (i < POWER_CACHE_SIZE))
+                return values[i];
+            std::cout << "ERROR dePower value out of cache v: " << v << " i: " << i << " power: " << power  << std::endl;                    
+            return pow(v, power);
+        }
+
+
+};
 
 deValue min(deValue a, deValue b, deValue c)
 {
@@ -164,22 +207,24 @@ void cmyk2lab(deValue* values)
 
 void rgb2xyz(deValue* values)
 {
+    static dePower power(2.4, 1);
+
     deValue r = values[0];
     deValue g = values[1];
     deValue b = values[2];
 
     if ( r > 0.04045 ) 
-        r = pow( ((r + 0.055) / 1.055), 2.4);
+        r = power.get((r + 0.055) / 1.055);
     else 
         r = r / 12.92;
         
     if ( g > 0.04045 ) 
-        g = pow( ((g + 0.055) / 1.055), 2.4);
+        g = power.get( (g + 0.055) / 1.055);
     else 
         g = g / 12.92;
 
     if ( b > 0.04045 ) 
-        b = pow( ((b + 0.055) / 1.055), 2.4);
+        b = power.get((b + 0.055) / 1.055);
     else 
         b = b / 12.92;
 
@@ -190,6 +235,8 @@ void rgb2xyz(deValue* values)
 
 void xyz2rgb(deValue* values)
 {
+    static dePower power(1.0 / 2.4, 4);
+
     deValue x = values[0];
     deValue y = values[1];
     deValue z = values[2];
@@ -199,17 +246,17 @@ void xyz2rgb(deValue* values)
     deValue b = x *  0.0557 + y * -0.2040 + z *  1.0570;
 
     if ( r > 0.0031308 )
-        r = 1.055 * ( pow(r , ( 1 / 2.4 ))) - 0.055;
+        r = 1.055 * ( power.get(r )) - 0.055;
     else 
         r = 12.92 * r;
 
     if ( g > 0.0031308 ) 
-        g = 1.055 * ( pow(g, ( 1 / 2.4 ))) - 0.055;
+        g = 1.055 * ( power.get(g)) - 0.055;
     else 
         g = 12.92 * g;
 
     if ( b > 0.0031308 )
-        b = 1.055 * ( pow(b, ( 1 / 2.4 ))) - 0.055;
+        b = 1.055 * ( power.get(b )) - 0.055;
     else
         b = 12.92 * b;
 
@@ -220,22 +267,24 @@ void xyz2rgb(deValue* values)
 
 void xyz2lab(deValue* values)
 {
+    static dePower power(1.0 / 3.0, 1);
+
     deValue x = values[0] / 95.047 * 100.0;
     deValue y = values[1] / 100.0 * 100.0;
     deValue z = values[2] / 108.883 * 100.0;
 
     if ( x > 0.008856 ) 
-        x = pow(x, ( 1.0/3 ));
+        x = power.get(x );
     else 
         x = ( 7.787 * x ) + ( 16.0 / 116.0 );
 
     if ( y > 0.008856 ) 
-        y = pow(y, ( 1.0/3 ));
+        y = power.get(y);
     else 
         y = ( 7.787 * y ) + ( 16.0 / 116.0 );
 
     if ( z > 0.008856 )
-        z = pow(z, ( 1.0/3 ));
+        z = power.get(z);
     else
         z = ( 7.787 * z ) + ( 16.0 / 116.0 );
 
@@ -555,3 +604,16 @@ void bw2rgb(deValue* values)
     values[5] = values[0];
     values[6] = values[0];
 }
+
+void lab2bw(deValue* values)
+{
+    values[4] = values[0];
+}
+
+void bw2lab(deValue* values)
+{
+    values[4] = values[0];
+    values[5] = 0.5;
+    values[6] = 0.5;
+}
+
