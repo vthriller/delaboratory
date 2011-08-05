@@ -273,6 +273,11 @@ bool deConverter::setConversionFunction()
                     conversionFunction = bw2rgb;
                     return true;
                 }
+                case deColorSpaceLAB:
+                {
+                    conversionFunction = bw2lab;
+                    return true;
+                }
                 default:                    
                     return false;                        
             }
@@ -322,6 +327,11 @@ bool deConverter::setConversionFunction()
                 case deColorSpaceCMYK:
                 {
                     conversionFunction = lab2cmyk;
+                    return true;
+                }
+                case deColorSpaceBW:
+                {
+                    conversionFunction = lab2bw;
                     return true;
                 }
                 default:                    
