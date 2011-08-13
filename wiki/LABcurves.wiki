@@ -2,7 +2,7 @@
 
 = Introduction =
 
-I was asked to write a Lab curves tutorial. Due to so personal happenings i have to ask you all to be a bit patient. I will update this page often so it will some time a work in progress.
+I was asked to write a Lab curves tutorial. Due to some personal happenings i have to ask you all to be a bit patient. I will update this page often so it will some time a work in progress.
 
 I will adress the next topics:
 
