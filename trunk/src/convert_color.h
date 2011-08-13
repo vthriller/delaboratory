@@ -44,5 +44,10 @@ void lab2cmyk(deValue* values);
 void cmyk2lab(deValue* values);
 void lab2bw(deValue* values);
 void bw2lab(deValue* values);
+void lab2hsv(deValue* values);
+void hsv2lab(deValue* values);
+void lab2hsl(deValue* values);
+void hsl2lab(deValue* values);
+
 
 #endif

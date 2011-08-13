@@ -261,6 +261,11 @@ bool deConverter::setConversionFunction()
                     conversionFunction = hsl2rgb;
                     return true;
                 }
+                case deColorSpaceLAB:
+                {
+                    conversionFunction = hsl2lab;
+                    return true;
+                }
                 default:                    
                     return false;
             }
@@ -288,6 +293,11 @@ bool deConverter::setConversionFunction()
                 case deColorSpaceRGB:
                 {
                     conversionFunction = hsv2rgb;
+                    return true;
+                }
+                case deColorSpaceLAB:
+                {
+                    conversionFunction = hsv2lab;
                     return true;
                 }
                 default:                    
@@ -327,6 +337,16 @@ bool deConverter::setConversionFunction()
                 case deColorSpaceCMYK:
                 {
                     conversionFunction = lab2cmyk;
+                    return true;
+                }
+                case deColorSpaceHSV:
+                {
+                    conversionFunction = lab2hsv;
+                    return true;
+                }
+                case deColorSpaceHSL:
+                {
+                    conversionFunction = lab2hsl;
                     return true;
                 }
                 case deColorSpaceBW:
