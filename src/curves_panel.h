@@ -71,6 +71,8 @@ public:
     void changeChannel(int _channel);
     void traceSampler(deSampler* sampler);
 
+    void reset();
+
 	DECLARE_EVENT_TABLE()
 
 };

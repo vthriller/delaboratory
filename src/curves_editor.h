@@ -38,6 +38,7 @@ class deCurvesEditor:public wxPanel
         wxPanel* bigPanel;
 
         void choose(wxCommandEvent &event);
+        void reset(wxCommandEvent &event);
 
     public:
         deCurvesEditor(wxWindow *parent, dePreviewStack& _stack, dePropertyCurves& _property);
