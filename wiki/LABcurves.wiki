@@ -4,11 +4,15 @@
 
 I was asked to write a Lab curves tutorial. Due to some personal happenings i have to ask you all to be a bit patient. I will update this page often so it will some time a work in progress.
 
+First my appologies for my bad English. 
+
+I am no expert just a user. If you have comments and or remarks / suggestions? Please send me mail so i can add / correct my text. Questions? Please ask i will do my best to answer! 
+
 I will adress the next topics:
 
 * My basic use of delaboratory in combination with Geeqie
 
-* Basic introduction to Lab color space
+* Basic introduction to Lab colorspace
 
 * Introduction to curves.
 (first i will adress the L channel)
@@ -38,3 +42,13 @@ Geegie is imho the image viewer for Linux desktops. It is fast can do really a l
 When working on this tuto i will use dcraw started in Geeqie to open convert the raw files. 
 
 The command i use is dcraw -t -W - w -6 %f (=convert the image selected to a 16 bits tiff file -%f and -t -6, while do not brighten -W and keep camera whitebalance -w) I made a shortcut in Geeqie so i don't have to type the command any time i need to convert an image from raw to tiff.
+
+= Basic introduction to Lab colorspace =
+
+First off, one needs to understand the three channels and forget all you know about RGB. RGB is made for machines like displays. Lab is modeled after how our brains do 'process' light. When you are used to RGB, you will have to get adjusted to Lab. As all humans hate change, (monkey's as we are), it will cost some effort. Though when you did you have some powerfull tools extra available for every day processing.
+
+First the L channel. This is the Luminance channel. Lab sharpen etc. This is done for a very good reason. Those contrast, sharpen tools. mainly work in the L channel so they do not interfear with the colors. 
+
+Second the color spectrum is devided in only 2 channels, Not three. Af first you will find it strange to work with, though very soon you will see how intuitive, precise it is. It matches very well how we FEEL colors. We feel colors as hot and cold. That is exactly the power of the a and b channel. We do not see colors as a mix of r g b. That is how machines work not we. More about that later on.
+
+Lab is no holy grail, It is just a great flexible and precise interface. It can't be missed for advanged Post Processing. If you really want to control your image you can not do without Lab.
