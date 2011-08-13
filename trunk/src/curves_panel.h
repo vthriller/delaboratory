@@ -72,6 +72,7 @@ public:
     void traceSampler(deSampler* sampler);
 
     void reset();
+    void fill(int n);
 
 	DECLARE_EVENT_TABLE()
 

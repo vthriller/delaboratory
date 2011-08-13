@@ -35,8 +35,22 @@ deCurve::~deCurve()
 void deCurve::reset()
 {
     points.clear();
-    points.push_back(deCurvePoint(0,0));
-    points.push_back(deCurvePoint(1,1));
+    fill(1);
+//    points.push_back(deCurvePoint(0,0));
+//    points.push_back(deCurvePoint(1,1));
+    shape.build(points);
+}
+
+void deCurve::fill(int n)
+{
+    points.clear();
+    double step = 1.0 / n;
+    double p = 0.0;
+    while (p <= 1.0)
+    {
+        points.push_back(deCurvePoint(p,p));
+        p+=step;
+    }
     shape.build(points);
 }
 

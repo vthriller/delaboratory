@@ -353,6 +353,11 @@ void deCurvesPanel::updateMarker()
 
 void deCurvesPanel::reset()
 {
+    fill(1);
+}
+
+void deCurvesPanel::fill(int n)
+{
     deCurves curves = property.getCurves();
 
     if (channel >= curves.size())
@@ -367,6 +372,6 @@ void deCurvesPanel::reset()
         return;
     }
 
-    curve->reset();
+    curve->fill(n);
     paint();
 }
