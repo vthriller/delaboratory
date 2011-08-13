@@ -47,7 +47,7 @@ The command i use is dcraw -t -W - w -6 %f (=convert the image selected to a 16 
 
 First off, one needs to understand the three channels and forget all you know about RGB. RGB is made for machines like displays. Lab is modeled after how our brains do 'process' light. When you are used to RGB, you will have to get adjusted to Lab. As all humans hate change, (monkey's as we are), it will cost some effort. Though when you did you have some powerfull tools extra available for every day processing.
 
-First the L channel. This is the Luminance channel. Lab sharpen etc. This is done for a very good reason. Those contrast, sharpen tools. mainly work in the L channel so they do not interfear with the colors. 
+First the L channel. This is the Luminance channel. 
 
 Second the color spectrum is devided in only 2 channels, Not three. Af first you will find it strange to work with, though very soon you will see how intuitive, precise it is. It matches very well how we FEEL colors. We feel colors as hot and cold. That is exactly the power of the a and b channel. We do not see colors as a mix of r g b. That is how machines work not we. More about that later on.
 
