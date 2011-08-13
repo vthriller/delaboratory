@@ -60,6 +60,8 @@ Light an dark only!
 
 So we use the L channel curve to lighten / darken areas of the image and we use it for contrast
 
+Important to understand / know is bottom left is the most dark in your image aka your Black Point. Top right is the most white in your image aka your White Point
+
 = Basics L channel curve.=
 
 First we are going to play a bit with lighten up an image which is underexposed. Please convert a under exposed raw file to a tif file. Start delab. Open the image.
