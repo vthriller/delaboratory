@@ -76,7 +76,14 @@ The first step is we are gonna relight the image and aka brighten / darken.
 
 Roughly it can be said the lower third of the curve controls the shadows. aka the darker part, the mid third the midtones, and the upper third the highlights. It is not that strict though just to give a handon to start with.
 
-A point is in effect a two demensional slider. 
+http://www.flickr.com/photos/59978366@N04/5993704972/
+The light area
+
+http://www.flickr.com/photos/59978366@N04/5993723498/
+The midtomes
+
+http://www.flickr.com/photos/59978366@N04/5993740816/
+The dark area
 
 So if if you want to light an uderexposed image set a point some where. 
 Yes somewhere bottum right on the curve.  For fixing and underexposed  and ad a point at about values 10 - 10 see the curmeister L channel image.
@@ -84,3 +91,5 @@ Yes somewhere bottum right on the curve.  For fixing and underexposed  and ad a 
 abit like this: 
 
 http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/LizardTail.gif
+
+A point is in effect a two demensional slider. 
