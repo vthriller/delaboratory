@@ -33,7 +33,6 @@ class deSamplerList
         deProject* project;
 
         int selected;
-        //bool moving;
 
         void select(int sampler);
         void deselect();
@@ -55,6 +54,8 @@ class deSamplerList
         deSamplers& getSamplers();
 
         int getSelected() const;
+
+        void removeAllSamplers();
 
 };
 

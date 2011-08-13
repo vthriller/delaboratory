@@ -34,6 +34,7 @@ class deSamplerListPanel:public wxPanel
 
         void createList();
         void destroyList();
+        void clear(wxCommandEvent &event);
 
     public:
         deSamplerListPanel(wxWindow* parent, deProject* _project);
