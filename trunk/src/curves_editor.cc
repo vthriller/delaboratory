@@ -80,6 +80,10 @@ void deCurvesEditor::rebuild()
     curvesPanel = new deCurvesPanel(bigPanel,  stack, property);
     bigSizer->Add(curvesPanel, 0, wxEXPAND | wxALL, 20);
 
+    wxButton* buttonReset = new wxButton(this, wxID_ANY, _T("reset"));
+    Connect(buttonReset->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::reset));
+    sizer->Add(buttonReset, 1, wxEXPAND);
+
     sizer->Layout();
 
     Fit();
@@ -99,4 +103,10 @@ void deCurvesEditor::choose(wxCommandEvent &event)
 void deCurvesEditor::traceSampler(deSampler* sampler)
 {
     curvesPanel->traceSampler(sampler);
+}
+
+void deCurvesEditor::reset(wxCommandEvent &event)
+{
+    curvesPanel->reset();
+
 }

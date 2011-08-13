@@ -350,3 +350,23 @@ void deCurvesPanel::updateMarker()
     marker = value;
     paint();
 }
+
+void deCurvesPanel::reset()
+{
+    deCurves curves = property.getCurves();
+
+    if (channel >= curves.size())
+    {
+        return;
+    }
+
+    deCurve* curve = curves[channel];
+
+    if (!curve)
+    {
+        return;
+    }
+
+    curve->reset();
+    paint();
+}

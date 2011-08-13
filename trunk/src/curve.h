@@ -33,7 +33,6 @@ class deCurve
         deCurvePoints points;
         deCurveShape shape;
 
-        void reset();
         void loadPoint(xmlNodePtr node);
     public:    
         deCurve(int size);
@@ -53,6 +52,9 @@ class deCurve
 
         void save(xmlNodePtr node) const;
         void load(xmlNodePtr node);
+
+        void reset();
+
 };
 
 #endif
