@@ -205,6 +205,34 @@ void cmyk2lab(deValue* values)
     rgb2lab(values);
 }
 
+void lab2hsv(deValue* values)
+{
+    lab2rgb(values);
+    inverseCopy(values);
+    rgb2hsv(values);
+}
+
+void hsv2lab(deValue* values)
+{
+    hsv2rgb(values);
+    inverseCopy(values);
+    rgb2lab(values);
+}
+
+void lab2hsl(deValue* values)
+{
+    lab2rgb(values);
+    inverseCopy(values);
+    rgb2hsl(values);
+}
+
+void hsl2lab(deValue* values)
+{
+    hsl2rgb(values);
+    inverseCopy(values);
+    rgb2lab(values);
+}
+
 void rgb2xyz(deValue* values)
 {
     static dePower power(2.4, 1);
