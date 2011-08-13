@@ -60,7 +60,7 @@ Light an dark only!
 
 So we use the L channel curve to lighten / darken areas of the image and we use it for contrast
 
-Important to understand / know is bottom left is the most dark in your image aka your Black Point. Top right is the most white in your image aka your White Point
+Important to understand / know is bottom left is the most dark in your image aka your Black Point. Top right is the most white in your image aka your White Point. The range is 0-100 with zero being black. 100 being white, and 50 being about middle gray.
 
 = Basics L channel curve.=
 
