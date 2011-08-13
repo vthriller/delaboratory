@@ -27,17 +27,9 @@ I will adress the next topics:
 - Introduction to Man from Mars. Popping up colors and blending them into the image.
 - Introduction to Jacobs Ladder in a and b channel An another methode of popping up colors
 
-* Introduction to some more advanged work in the a and b channel
-
-- Introduction to Man from Mars
 
 
 
 
 
 
-TODO
-
-= Details =
-
-TODO
