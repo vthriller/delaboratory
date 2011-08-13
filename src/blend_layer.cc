@@ -27,7 +27,7 @@
 #include <sstream>
 
 deBlendLayer::deBlendLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), alpha(*this, "alpha", 0.0, 1.0), blendMode(*this), channels(*this), overlayLayer(*this, "overlay"), blendMask(*this, "mask")
+:deLayer(_stack, _index, _name), alpha(*this, "alpha", 0.0, 1.0), blendMode(*this), channels(*this), overlayLayer(*this, "overlay")/*, blendMask(*this, "mask")*/
 {
     alpha.setValue(0.5);
     blendMode.setBlendMode(deBlendNormal);
@@ -54,6 +54,7 @@ void deBlendLayer::updatePreview(dePreviewStack& previewStack)
     {
         deBaseChannel* mask = NULL;
 
+/*
         if (blendMask.isEnabled())
         {
             dePreview* maskPreview = previewStack.getPreview(blendMask.getLayerIndex());
@@ -62,6 +63,7 @@ void deBlendLayer::updatePreview(dePreviewStack& previewStack)
                 mask = maskPreview->getChannel(blendMask.getChannel());
             }
         }        
+        */
 
         blend(*sourcePreview, *overlayPreview, alpha.getValue(), *preview, channels.getChannels(), blendMode.getBlendMode(), mask);
     }
@@ -103,7 +105,7 @@ void deBlendLayer::saveSpecific(xmlNodePtr node)
 {
     alpha.save(node, "alpha");
     blendMode.save(node, "blend_mode");
-    blendMask.save(node, "blend_mask");
+    //blendMask.save(node, "blend_mask");
     channels.save(node, "channels");
     overlayLayer.save(node, "overlay_layer");
 }
@@ -126,10 +128,12 @@ void deBlendLayer::loadSpecific(xmlNodePtr node)
             blendMode.load(child);
         }
 
+/*
         if ((!xmlStrcmp(child->name, xmlCharStrdup("blend_mask")))) 
         {
             blendMask.load(child);
         }
+        */
 
         if ((!xmlStrcmp(child->name, xmlCharStrdup("channels")))) 
         {

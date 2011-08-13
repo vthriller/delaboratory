@@ -31,7 +31,7 @@ class deBlendLayer:public deLayer
 {
     private:
         dePropertyValue alpha;
-        dePropertyBlendMask blendMask;
+//        dePropertyBlendMask blendMask;
         dePropertyBlendMode blendMode;
         dePropertyChannels channels;
         dePropertyLayerIndex overlayLayer;
