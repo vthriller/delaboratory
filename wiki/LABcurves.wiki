@@ -2,6 +2,40 @@
 
 = Introduction =
 
+I was asked to write a Lab curves tutorial. Due to so personal happenings i have to ask you all to be a bit patient. I will update this page often so it will some time a work in progress.
+
+I will adress the next topics:
+
+* My basic use of delab in combination with Geeqie
+* Basic introduction to Lab color space
+
+* Introduction to curves.
+(first i will adress the L channel)
+
+- Some curves and basic functions aka how to use them
+- How to set White Point Black point
+- Relight underexposed and overexposed images
+- Enhange contrast
+- Work with color values and markers. Aka how to work presice.
+- Use of Jacobs Ladder in L channel
+
+* Basic introduction to the a and b channel
+
+- Change adapt White Balance
+- Enhange saturation
+- Some toning
+- Introduction to Man from Mars. Popping up colors and blending them into the image.
+- Introduction to Jacobs Ladder in a and b channel An another methode of popping up colors
+
+* Introduction to some more advanged work in the a and b channel
+
+- Introduction to 
+
+
+
+
+
+
 TODO
 
 = Details =
