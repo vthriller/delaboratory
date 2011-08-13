@@ -6,7 +6,7 @@ I was asked to write a Lab curves tutorial. Due to so personal happenings i have
 
 I will adress the next topics:
 
-* My basic use of delab in combination with Geeqie
+* My basic use of delaboratory in combination with Geeqie
 
 * Basic introduction to Lab color space
 
@@ -27,8 +27,6 @@ I will adress the next topics:
 - Some toning
 - Introduction to Man from Mars. Popping up colors and blending them into the image.
 - Introduction to Jacobs Ladder in a and b channel An another methode of popping up colors
-
-
 
 
 
