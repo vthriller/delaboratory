@@ -66,7 +66,7 @@ Important to understand / know is bottom left is the most dark in your image aka
 
 First we are going to play a bit with lighten up an image which is underexposed. Please convert a under exposed raw file to a tif file. Start delab. Open the image.
 Press add layer. chose convert. Select Lab. 
-Press layer chose curves
+Press add layer chose curves
 
 Double click curves a pop up with the Lab curves window will show. Right on top you see the options to select a histogram. Please select L so we can see the L channel histogramm.
 
