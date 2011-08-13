@@ -119,10 +119,12 @@ void deSamplerPanel::setLabels(deProject* project)
         {
             n = 0;
         }
+        Enable();
     }        
     else
     {
         n = 0;
+        Disable();
     }
 
     oss.precision(3);
