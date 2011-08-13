@@ -52,3 +52,16 @@ First the L channel. This is the Luminance channel. Lab sharpen etc. This is don
 Second the color spectrum is devided in only 2 channels, Not three. Af first you will find it strange to work with, though very soon you will see how intuitive, precise it is. It matches very well how we FEEL colors. We feel colors as hot and cold. That is exactly the power of the a and b channel. We do not see colors as a mix of r g b. That is how machines work not we. More about that later on.
 
 Lab is no holy grail, It is just a great flexible and precise interface. It can't be missed for advanged Post Processing. If you really want to control your image you can not do without Lab.
+
+= The Light channel. =
+
+L=Luminace 
+Light an dark only!
+
+So we use the L channel curve to lighten / darken areas of the image and we use it for contrast
+
+Please convert a raw file to a tif file. Start delab. Open the image.
+Press add layer. chose convert. Select Lab. 
+Press layer chose curves
+
+Double click curves a pop up with the Lab curves window will show.
