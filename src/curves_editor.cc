@@ -23,6 +23,8 @@
 #include "preview_stack.h"
 #include "project.h"
 
+#define FILL_COUNT 10
+
 deCurvesEditor::deCurvesEditor(wxWindow *parent, dePreviewStack& _stack, dePropertyCurves& _property)
 :wxPanel(parent), property(_property), stack(_stack)
 {
@@ -84,6 +86,10 @@ void deCurvesEditor::rebuild()
     Connect(buttonReset->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::reset));
     sizer->Add(buttonReset, 1, wxEXPAND);
 
+    wxButton* buttonFill = new wxButton(this, wxID_ANY, _T("fill"));
+    Connect(buttonFill->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::fill));
+    sizer->Add(buttonFill, 1, wxEXPAND);
+
     sizer->Layout();
 
     Fit();
@@ -108,5 +114,9 @@ void deCurvesEditor::traceSampler(deSampler* sampler)
 void deCurvesEditor::reset(wxCommandEvent &event)
 {
     curvesPanel->reset();
+}
 
+void deCurvesEditor::fill(wxCommandEvent &event)
+{
+    curvesPanel->fill(FILL_COUNT);
 }

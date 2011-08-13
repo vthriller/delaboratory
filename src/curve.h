@@ -54,6 +54,7 @@ class deCurve
         void load(xmlNodePtr node);
 
         void reset();
+        void fill(int n);
 
 };
 
