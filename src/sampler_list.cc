@@ -90,7 +90,7 @@ void deSamplerList::select(int sampler)
 
 void deSamplerList::deselect()
 {
-    assert(selected >= 0);
+//    assert(selected >= 0);
     selected =  -1;
 
     project->getGUI().updateSamplerList();
@@ -156,6 +156,16 @@ void deSamplerList::addSampler(float x, float y)
 void deSamplerList::removeSampler()
 {
     samplers[selected]->disable();
+    deselect();
+}
+
+void deSamplerList::removeAllSamplers()
+{
+    deSamplers::iterator j;
+    for (j = samplers.begin(); j != samplers.end(); j++)
+    {
+        (*j)->disable();
+    }
     deselect();
 }
 

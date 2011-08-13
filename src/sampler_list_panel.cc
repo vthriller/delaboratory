@@ -65,6 +65,11 @@ void deSamplerListPanel::createList()
 
         n++;
     }
+
+    wxButton* buttonClear = new wxButton(this, wxID_ANY, _T("clear"));
+    Connect(buttonClear->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deSamplerListPanel::clear));
+    sizer->Add(buttonClear, 1, wxEXPAND);
+
     sizer->Layout();
 }
 
@@ -103,3 +108,11 @@ void deSamplerListPanel::updateList()
     }
 
 }
+
+void deSamplerListPanel::clear(wxCommandEvent &event)
+{
+    deSamplerList& samplerList = project->getSamplerList();
+    samplerList.removeAllSamplers();
+
+}
+
