@@ -21,19 +21,26 @@ For dcraw:
 
 [Desktop Entry]
 Encoding=UTF-8
-Version=1.0
+
+Version=9.08
 Name=dcraw
+
 GenericName=dcraw
+
 Comment=convert RAWs
 
 Type=Application
+
 Categories=Graphics;Photography;
 
 Exec=dcraw -T -w -W -6 %F
+
 TryExec=dcraw
+
 Icon=
 
 Terminal=true
+
 StartupNotify=true
 
 MimeType=application/x-photivo;image/x-dcraw;image/bmp;image/jpeg;image/png;image/tiff;
