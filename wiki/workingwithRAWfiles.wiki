@@ -24,6 +24,8 @@ Note the wiki interface does change my lay out it replase brackets with a questi
 For dcraw:
 ---------------------------------------
 
+{{{
+
 [Desktop Entry]
 Encoding=UTF-8
 
@@ -49,11 +51,16 @@ Terminal=true
 StartupNotify=true
 
 MimeType=application/x-photivo;image/x-dcraw;image/bmp;image/jpeg;image/png;image/tiff;
+
+}}}
+
 -----
 
 For delaboratory
 
 ---------------------------------------
+
+{{{
 [Desktop Entry]
 
 Encoding=UTF-8
@@ -81,3 +88,6 @@ Terminal=true
 StartupNotify=true
 
 MimeType=application/x-photivo;image/x-dcraw;image/bmp;image/jpeg;image/png;image/tiff;
+
+
+}}}
