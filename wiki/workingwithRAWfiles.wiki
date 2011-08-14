@@ -64,7 +64,7 @@ Name=delab
 
 GenericName=delaboratory
 
-Comment=edit tiff's
+Comment=color enhancement tool
 
 Type=Application
 
