@@ -374,4 +374,7 @@ void deCurvesPanel::fill(int n)
 
     curve->fill(n);
     paint();
+
+    property.onUpdate();
+    update();
 }
