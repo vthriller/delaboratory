@@ -2,6 +2,8 @@
 
 = Basic use of delaboratory in combination with dcraw and Geeqie =
 
+dcraw is the raw decoder use by many raw converters. It is available for all platforms. It does the job real good.
+
 Geegie is nice image viewer for Linux desktops. It is fast and can do really a lot.
 
 The command i use is:
