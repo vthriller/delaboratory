@@ -6,8 +6,8 @@ Geegie is nice image viewer for Linux desktops. It is fast and can do really a l
 
 The command i use is:
 
-'dcraw -T -W - w -6 %f'
+`dcraw -T -W - w -6 %f`
 
-(convert the image selected to a 16 bits tiff file -%f and -T -6, while do not brighten -W and keep camera whitebalance -w) 
+(convert the image selected to a 16 bits tiff file *-%f* and *-T -6*, while do not brighten *-W* and keep camera whitebalance *-w*) 
 
 I made a shortcut in Geeqie so i don't have to type the command any time i need to convert an image from raw to tiff.
