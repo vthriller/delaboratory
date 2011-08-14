@@ -32,13 +32,6 @@ I will adress the next topics:
 - Introduction to Man from Mars. Popping up colors and blending them into the image.
 - Introduction to Jacobs Ladder in a and b channel An another methode of popping up colors
 
-= Getting ready =
-
-I am a Linux user, sry Windows people. So some will be Linux specific. I am sure there are for Windows equal solutions. Though i do not know them as i do not use it.
-
-
-Geegie is imho the image viewer for Linux desktops. It is fast can do really a lot.
-
 When working on this tuto i will use dcraw started in Geeqie to open convert the raw files. [workingwithRAWfiles]
 
 = Basic introduction to Lab colorspace =
