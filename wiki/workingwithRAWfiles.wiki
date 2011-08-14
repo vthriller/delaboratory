@@ -20,6 +20,7 @@ The added short cuts in Geegie are:
 
 Note the wiki interface does change my lay out it replase brackets with a question mark. So you have to check on that.
 
+---------------------------------------
 For dcraw:
 ---------------------------------------
 
