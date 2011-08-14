@@ -50,20 +50,29 @@ For delaboratory
 
 ---------------------------------------
 Desktop Entry]
+
 Encoding=UTF-8
-Version=1.0
+
+Version=SVN
+
 Name=delab
-GenericName=delab
+
+GenericName=delaboratory
+
 Comment=edit tiff's
 
 Type=Application
+
 Categories=Graphics;Photography;
 
 Exec= delaboratory %F
+
 TryExec=delaboratory
+
 Icon=
 
 Terminal=true
+
 StartupNotify=true
 
 MimeType=application/x-photivo;image/x-dcraw;image/bmp;image/jpeg;image/png;image/tiff;
