@@ -19,7 +19,7 @@ The added short cuts in Geegie are:
 For dcraw:
 ---------------------------------------
 
-[Desktop Entry]
+[ Desktop Entry ]
 Encoding=UTF-8
 
 Version=9.08
