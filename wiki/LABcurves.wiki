@@ -69,13 +69,13 @@ The first step is we are gonna relight the image and aka brighten / darken.
 
 Roughly it can be said the lower third of the curve controls the shadows. aka the darker part, the mid third the midtones, and the upper third the highlights. It is not that strict though just to give a handon to start with.
 
-http://www.flickr.com/photos/59978366@N04/5993704972/
+http://farm7.static.flickr.com/6138/5993704972_4b8d9fc405.jpg
 The light area
 
-http://www.flickr.com/photos/59978366@N04/5993723498/
+http://farm7.static.flickr.com/6128/5993723498_6f465a045d.jpg
 The midtomes
 
-http://www.flickr.com/photos/59978366@N04/5993740816/
+http://farm7.static.flickr.com/6128/5993723498_6f465a045d.jpg
 The dark area
 
 So if if you want to light an uderexposed image set a point some where. 
