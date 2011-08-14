@@ -49,7 +49,7 @@ MimeType=application/x-photivo;image/x-dcraw;image/bmp;image/jpeg;image/png;imag
 For delaboratory
 
 ---------------------------------------
-Desktop Entry]
+[Desktop Entry]
 
 Encoding=UTF-8
 
