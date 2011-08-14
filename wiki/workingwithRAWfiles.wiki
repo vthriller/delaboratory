@@ -11,3 +11,52 @@ The command i use is:
 (convert the image selected to a 16 bits tiff file *-%f* and *-T -6*, while do not brighten *-W* and keep camera whitebalance *-w*) 
 
 I made a shortcut in Geeqie so i don't have to type the command any time i need to convert an image from raw to tiff.
+
+I also did make a short cut to delaboratory so i can open images with a right mouse in Geegie.
+
+The added short cuts in Geegie are:
+
+For dcraw:
+---------------------------------------
+
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Name=dcraw
+GenericName=dcraw
+Comment=convert RAWs
+
+Type=Application
+Categories=Graphics;Photography;
+
+Exec=dcraw -T -w -W -6 %F
+TryExec=dcraw
+Icon=
+
+Terminal=true
+StartupNotify=true
+
+MimeType=application/x-photivo;image/x-dcraw;image/bmp;image/jpeg;image/png;image/tiff;
+-----
+
+For delaboratory
+
+---------------------------------------
+Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Name=delab
+GenericName=delab
+Comment=edit tiff's
+
+Type=Application
+Categories=Graphics;Photography;
+
+Exec= delaboratory %F
+TryExec=delaboratory
+Icon=
+
+Terminal=true
+StartupNotify=true
+
+MimeType=application/x-photivo;image/x-dcraw;image/bmp;image/jpeg;image/png;image/tiff;
