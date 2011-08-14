@@ -1,6 +1,6 @@
 #summary Working with RAW files
 
-= Basic use of delaboratory in combination with Geeqie =
+= Basic use of delaboratory in combination with dcraw and Geeqie =
 
 Geegie is nice image viewer for Linux desktops. It is fast and can do really a lot.
 
