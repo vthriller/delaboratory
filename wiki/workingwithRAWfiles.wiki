@@ -18,7 +18,6 @@ I also did make a short cut to delaboratory so i can open images with a right mo
 
 The added short cuts in Geegie are:
 
-Note the wiki interface does change my lay out it replase brackets with a question mark. So you have to check on that.
 
 ---------------------------------------
 For dcraw:
