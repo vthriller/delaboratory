@@ -8,9 +8,11 @@ Geegie is a nice image viewer for Linux desktops. It is fast and can do really a
 
 I convert my raw's using dcraw into 16 tiff's for use in delaboratory.
 
-The command i use is:
+The command i use in Geegie is:
 
-`dcraw -T -W - w -6 %f`
+dcraw -T -W - w -6 %F
+
+type in a terminal dcraw if you want to see more options.
 
 If you feel the dcraw output is to dark. Remove the -W switch
 
