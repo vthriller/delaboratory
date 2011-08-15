@@ -72,7 +72,7 @@ Name=delab
 
 GenericName=delaboratory
 
-Comment=color enhancement tool
+Comment=color enhancement utillity
 
 Type=Application
 
