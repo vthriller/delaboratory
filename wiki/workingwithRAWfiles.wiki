@@ -6,6 +6,8 @@ dcraw is the raw decoder used by many raw converters. It is available for all pl
 
 Geegie is a nice image viewer for Linux desktops. It is fast and can do really a lot.
 
+I convert my raw's using dcraw into 16 tiff's for use in delaboratory.
+
 The command i use is:
 
 `dcraw -T -W - w -6 %f`
