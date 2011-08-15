@@ -18,7 +18,7 @@ If you feel the dcraw output is to dark. Remove the -W switch
 
 I made a shortcut in Geeqie so i don't have to type the command any time i need to convert an image from raw to tiff.
 
-I also did make a short cut to delaboratory so i can open images with a right mouse in Geegie.
+I also did make a shortcut in Geegie to delaboratory so i can open images with the use of my right mouse button .
 
 The added short cuts in Geegie are:
 
