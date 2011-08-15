@@ -14,7 +14,7 @@ dcraw -T -W - w -6 %F
 
 type in a terminal dcraw if you want to see more options.
 
-(convert the image selected *-%f* to a 16 bits  *-6* tiff file *-T* * , while do not brighten *-W* and keep camera whitebalance *-w*) 
+(convert the image selected *-%f* to a 16 bits  *-6* tiff file *-T*  , while do not brighten *-W* and keep camera whitebalance *-w*) 
 
 If you feel the dcraw output is to dark. Remove the -W switch
 
