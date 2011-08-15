@@ -12,10 +12,8 @@ The command i use in Geegie is:
 
 dcraw -T -W - w -6 %F
 
-type in a terminal dcraw if you want to see more options.
-
 (convert the image selected *-%f* to a 16 bits  *-6* tiff file *-T*  , while do not brighten *-W* and keep camera whitebalance *-w*) 
-
+Type in a terminal dcraw if you want to see more options.
 If you feel the dcraw output is to dark. Remove the -W switch
 
 I made a shortcut in Geeqie executing the dcraw command so i don't have to type the command any time i need to convert an image from raw to tiff. Right mouse on the image and the Geegie short cut converts the image running the dcraw command.
