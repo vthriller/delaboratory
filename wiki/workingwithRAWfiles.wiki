@@ -4,7 +4,7 @@
 
 dcraw is the raw decoder used by many raw converters. It is available for all platforms. It does the job real good.
 
-Geegie is nice image viewer for Linux desktops. It is fast and can do really a lot.
+Geegie is a nice image viewer for Linux desktops. It is fast and can do really a lot.
 
 The command i use is:
 
