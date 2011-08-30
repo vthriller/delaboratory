@@ -90,7 +90,8 @@ http://img220.imageshack.us/img220/937/darksteptwo.png
 
 
 http://farm7.static.flickr.com/6015/5987419094_990fd08e15.jpg
-Final image
+
+Final image.Here i did use also the A and B channel Did sharpen a bit and did blend a bit. I will adress those later on.
 
 All relightning is done with L-channel curves. The RGB tab is not used!
 
