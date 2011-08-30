@@ -82,8 +82,8 @@ abit like this:
 
 http://img268.imageshack.us/img268/5236/darkstep1.png
 
-A point is in effect a two demensional slider. Move the point a litle bit to the right and move a little bit up. And see what happens.
+A point is in effect a two demensional slider. Move the point a litle bit to the left  and move  it a little bit up. And see what happens.
 
-Here you see a screen shot where i did relight the image a bit. I did also add a second point at the green leaves in the background. As it became to dark. After i knew the point on the curve i could darken only the leaves. leaving the rest te same.
+Here you see a screen shot where i did relight the image a bit. I did also add a second point at the green leaves in the background. As it became to dark. After i knew the point on the curve i could darken only the leaves. leaving the rest te same. It is not perfect yet. Though we did a bit step forward just adding a few points where needed.
 
 http://img220.imageshack.us/img220/937/darksteptwo.png
