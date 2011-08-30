@@ -53,29 +53,33 @@ So we use the L channel curve to lighten / darken areas of the image and we use 
 
 Important to understand / know is bottom left is the most dark in your image aka your Black Point. Top right is the most white in your image aka your White Point. The range is 0-100 with zero being black. 100 being white, and 50 being about middle gray.
 
+Roughly it can be said the lower third of the curve controls the shadows. aka the darker part, the mid third the midtones, and the upper third the highlights. It is not that strict though just to give a handon to start with.
+
+As shown in this image:
+
+http://img560.imageshack.us/img560/4324/tones.png
+
 = Basics L channel curve.=
 
-First we are going to play a bit with lighten up an image which is underexposed. Please convert a under exposed raw file to a tif file. Start delab. Open the image.
-Press add layer. chose convert. Select Lab. 
-Press add layer chose curves
+For now we forget RGB. later of course we will use again the great powers of RGB though first we neglect it.
+
+First we are going to play a bit with lighten up an image which is underexposed. 
+
+http://img849.imageshack.us/img849/2824/darkimage.jpg
+
+Please download the image above. Start delab. Open the image.
+Press add layer. chose convert. Select Lab. Press add layer chose curves
 
 Double click curves a pop up with the Lab curves window will show. Right on top you see the options to select a histogram. Please select L so we can see the L channel histogramm.
 
 If you did use the dcraw command with the switches i did sugges he image will look dark and perhaps a bit dull. Though that will be fixed in no time and as YOU want it.
 
-First we forget RGB. later of course we will use again the great powers of RGB though first we neglect it.
-
 The first step is we are gonna relight the image and aka brighten / darken. 
 
-Roughly it can be said the lower third of the curve controls the shadows. aka the darker part, the mid third the midtones, and the upper third the highlights. It is not that strict though just to give a handon to start with.
-
-http://img560.imageshack.us/img560/4324/tones.png
-
-So if if you want to light an uderexposed image set a point some where. 
-Yes somewhere bottum right on the curve.  For fixing and underexposed  and ad a point at about values 10 - 10 see the curmeister L channel image.
+CLick on the image somewhere in the dark. Move the spot a bit and a cross hair will show up in the L curves window.  Set the sampler to LAB so we can see the values of the spots we add.
 
 abit like this: 
 
-http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/LizardTail.gif
+http://img268.imageshack.us/img268/5236/darkstep1.png
 
-A point is in effect a two demensional slider. 
+A point is in effect a two demensional slider. Move the point a litle bit to the right and move a little bit up. And see what happens.
