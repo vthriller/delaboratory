@@ -87,3 +87,15 @@ A point is in effect a two demensional slider. Move the point a litle bit to the
 Here you see a screen shot where i did relight the image a bit. I did also add a second point at the green leaves in the background. As it became to dark. After i knew the point on the curve i could darken only the leaves. leaving the rest te same. It is not perfect yet. Though we did a bit step forward just adding a few points where needed.
 
 http://img220.imageshack.us/img220/937/darksteptwo.png
+
+
+http://farm7.static.flickr.com/6015/5987419094_990fd08e15.jpg
+Final image
+
+All relightning is done with L-channel curves. The RGB tab is not used!
+
+Later on you will see how great this is as you have a very accurate contrast and brighten / darken control where you want it!.
+
+Summary basic L channel relightning.
+
+Convert to LAB. Add curves layer. Put some points in the image where you need to lighten / darken. Move the points a litle bit, so a crosshair will show in the L curves window. If you need to remove a point just drag it outside the window and it will fanish.
