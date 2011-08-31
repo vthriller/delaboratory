@@ -212,9 +212,20 @@ Now how to put a point in the center of the curve and move it * horizontally * t
 
 http://img535.imageshack.us/img535/5276/church2q.jpg
 
+Lets compare the images:
+
+http://www.guillermoluijk.com/article/wb/wbinout1.jpg
+
+Original
+
+
+http://img21.imageshack.us/img21/1540/bluecastfixed.jpg
+
+Blue cast fixed
+
+We still have some to do about the color of the wall outside and the contrast in the church.
+
 * 2 Enhance contrast in the church.
-
-
 
 
 
