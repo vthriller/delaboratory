@@ -152,7 +152,7 @@ http://img11.imageshack.us/img11/5760/contrastcurve.png
 * The Boost * consists of a is a common contrast enhancing move that consists of moving both endpoints toward the middle. It is most often the result of setting the shadow or highlight by changing the White and or Black point when done in L channel. As it steepens the curve it does also increase contrast. In a and b channel it does boost saturation.
 
 http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/S.gif
-* The S curve * increases contrast in the midtones, and reduces contrast in the shadow and highlight. It resembles the response curve of film in that light and dark detail is compressed,
+* The S curve * increases contrast in the midtones, and reduces contrast in the shadow and highlight. It resembles the response curve of film in that light and dark detail is compressed, The main difference whith the boost curve in L channel is that it does not alter the White and or Black point. It only boosts contrast. Very powerfull. 
 
 http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/Lift.gif
 * The Raise * bumps up the mid tones and leaves the end points alone. Like the Drop, it may be used for either overall brightness increase (when used on all channels affecting brightness, or with the master curve), or color balance.
