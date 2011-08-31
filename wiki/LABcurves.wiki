@@ -143,3 +143,36 @@ An another smart dude raises his finger.
 Yes smart-dude nr 2 you are very very correct!
 
 With delab one can choose a point and steepen the curve there so the that tone area will have more contrast or less just as you want it.
+
+
+= Some more curve types =
+
+
+When you did play a bit with the curves you most likely did use also more or less of the curve types i will adress now.
+
+http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/S.gif
+* The S curve * increases contrast in the midtones, and reduces contrast in the shadow and highlight. It resembles the response curve of film in that light and dark detail is compressed,
+
+http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/Lift.gif
+* The Raise * bumps up the mid tones and leaves the end points alone. Like the Drop, it may be used for either overall brightness increase (when used on all channels affecting brightness, or with the master curve), or color balance.
+
+http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/Drop.gif
+* The Drop * simply "drops" the midtone slightly without changing the endpoints. It changes overall darkness when applied to all channels, or color balance and overall brightness in the midtones when applied to fewer channels.
+
+* High Shoulder http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/HighShoulder.gif* is half of an S curve. It is used to increase shadow detail while compressing highlights without losing them completely.
+
+http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/LizardTail.gif
+* Lizard tail * is a very small and sharp upturn or downturn at the end of a curve, normally used to rescue or otherwise emphasize shadow or highlight detail that is in danger of being lost.
+
+This goes very well with the high shoulder and the Raise curve as shown in my very underexposed image though one might need to flatten the highshoulder or the lizard tail when both types are combined.
+
+
+This is a lot of info. Though with this knowedge one can start to explore the use of the L-channel.
+
+
+These images are just provided for educational use. As in practice the different types will be combined, for sure in Photivo as it lacks the appropiate layers. That is no problem here though. When you get the hang of it. you will be able to combine the different types and adjust your image very precise to your needs. We also blend. As Lab needs blending. Often one will go to far. The 'trick to fix that is to stop! and combine work one did before. Blend. Photivo has a 'curse' on layers though does provide it and will use that by a workaround.
+
+Later one i will adress the a and b channel. and then i will show how the other very powerfull Photivo tools can be used in conjuction with curves.
+
+
+source see!: www.curvemeister.com/support/curvemeister2/help/Articles/... 
