@@ -116,7 +116,7 @@ Set the white and black point.  The White Point (WP) is the Luminance value that
 See this image
 http://img828.imageshack.us/img828/6425/wp1wg.jpg
 
-The points set are not white nor black as the value is not 0 (Black) or 100 (White) in the L channel
+The points set are not white nor black as the value is not 0 (Black) or 100 (White) in the L channel. The negative value in the b channel tell us we have a (very slight) blue cast. Aka the White Balance is not 100% correct. More about that later on.
 
 http://img845.imageshack.us/img845/9293/wp2q.jpg
 
