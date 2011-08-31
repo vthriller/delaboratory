@@ -227,6 +227,8 @@ Resume:
 
 We did fix the blue cast by setting a point and correcting the negative blue value to 0 by sliding the center of the b channel to the left until it did reach the vertical line of the cross hair and voila the blue cast was fixed. We also did correct the temperature of the tones inside the church as they got to warm.
 
+By adding a new curve we can and will set the warmth inside the church even more. Also we will add contrast inside the church where we need it to make the image much more vivid.
+
 Lessons learned: 
 
 Correcting cast by using value's. Slide until the value has the value one does need.
