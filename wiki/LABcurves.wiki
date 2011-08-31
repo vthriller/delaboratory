@@ -227,5 +227,5 @@ We still have some to do about the color of the wall outside and the contrast in
 
 * 2 Enhance contrast in the church.
 
-
+As you can see on the previous image i did allready add three points where i do want more contrast. The idea is to pop up very local the contrast. To do that real neat we need not a spline though a linear curve. Though whith splines it also can be done. It will be just a bit less dramatic. To pop up local colors or contrast we can use a technique called Jacob's Ladder.
 
