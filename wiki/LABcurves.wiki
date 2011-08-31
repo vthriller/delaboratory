@@ -175,4 +175,4 @@ These images are just provided for educational use. As in practice the different
 Later one i will adress the a and b channel. and then i will show how the other very powerfull Photivo tools can be used in conjuction with curves.
 
 
-source see!: www.curvemeister.com/support/curvemeister2/help/Articles/... 
+source see!: http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves.htm
