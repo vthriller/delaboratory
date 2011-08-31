@@ -90,7 +90,7 @@ http://img268.imageshack.us/img268/5236/darkstep1.png
 
 A point is in effect a two dimensional slider. Move the point a litle bit to the left  and move  it a little bit up. And see what happens.
 
-Here you see a screen shot where i did relight the image a bit. I did also add a second point at the green leaves in the background. As it became to dark. After i knew the point on the curve i could darken only the leaves. leaving the rest te same. It is not perfect yet. Though we did a bit step forward just adding a few points where needed.
+Here you see a screen shot where i did relight the image a bit. I did also add a second point at the green leaves in the background. As it became to bright. After i knew the point on the curve i could darken only the leaves. leaving the rest the same. It is not perfect yet. Though we did do a big step forward just adding a few points where needed and adjust accordingly the L channel curve.
 
 http://img220.imageshack.us/img220/937/darksteptwo.png
 
@@ -122,7 +122,7 @@ The points set are not white nor black as the value is not 0 (Black) or 100 (Whi
 
 http://img845.imageshack.us/img845/9293/wp2q.jpg
 
-Here the WP and BP is set at the points and the values are now pure white and pure black. At the moment Delab only has spline curves, Though Jacek told me other curves types like linear will be added. Here we would want a linear
+Here the WP and BP is set at the points and the values are now pure white and pure black. As the curve got steeper there is also more contrast in the parts between the new WP and BP. At the moment Delab only has spline curves. Here we would want a linear Though Jacek told me other curves types like linear will be added. 
 
 * Contrast and S-curves.
 
