@@ -59,9 +59,9 @@ As shown in this image:
 
 http://img560.imageshack.us/img560/4324/tones.png
 
-A more accurate display of the tones in L channel one can see in this curvemeister screen-shot:
+A more accurate display of the tones in L channel 
 
-http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/Lift.gif
+http://img691.imageshack.us/img691/9158/lchannel.jpg
 
 = Basics L channel curve.=
 
