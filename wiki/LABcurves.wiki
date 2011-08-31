@@ -177,7 +177,7 @@ source see!: http://www.curvemeister.com/support/curvemeister2/help/Articles/Cur
 
 = A practice =
 
-* Removing a local blue cast and add some local contrast *
+* Removing a local blue cast / correct local White Balance and add some local contrast *
 
 Because we did have a lot of theory it is time to work on some pics. And learn that way.
 
