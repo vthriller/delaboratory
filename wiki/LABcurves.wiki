@@ -59,6 +59,10 @@ As shown in this image:
 
 http://img560.imageshack.us/img560/4324/tones.png
 
+A more accurate display of the tones in L channel one can see in this curvemeister screenshot:
+
+http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/Lift.gif
+
 = Basics L channel curve.=
 
 For now we forget RGB. later of course we will use again the great powers of RGB though first we neglect it.
