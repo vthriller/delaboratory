@@ -65,6 +65,8 @@ http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/Lift.
 
 = Basics L channel curve.=
 
+* Recovering an underexposed image.
+
 For now we forget RGB. later of course we will use again the great powers of RGB though first we neglect it.
 
 First we are going to play a bit with lighten up an image which is underexposed. 
