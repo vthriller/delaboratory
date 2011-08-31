@@ -147,7 +147,7 @@ With delab one can choose a point and steepen the curve there so the that tone a
 When you did play a bit with the curves you most likely did use also more or less of the curve types i will adress now.
 
 http://img11.imageshack.us/img11/5760/contrastcurve.png
-* The Boost * consists of a is a common contrast enhancing move that consists of moving both endpoints toward the middle. It is most often the result of setting the shadow or highlight. As it steepens the curve it does also increase contrast.
+* The Boost * consists of a is a common contrast enhancing move that consists of moving both endpoints toward the middle. It is most often the result of setting the shadow or highlight by changing the White and or Black point when done in L channel. As it steepens the curve it does also increase contrast. In a and b channel it does boost saturation.
 
 http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/S.gif
 * The S curve * increases contrast in the midtones, and reduces contrast in the shadow and highlight. It resembles the response curve of film in that light and dark detail is compressed,
