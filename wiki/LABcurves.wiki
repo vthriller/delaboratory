@@ -223,7 +223,16 @@ http://img21.imageshack.us/img21/1540/bluecastfixed.jpg
 
 Blue cast fixed
 
-We still have some to do about the color of the wall outside and the contrast in the church.
+Resume: 
+
+We did fix the blue cast by setting a point and correcting the negative blue value to 0 by sliding the center of the b channel to the left until it did reach the vertical line of the cross hair and voila the blue cast was fixed. We also did correct the temperature of the tones inside the church as they got to warm.
+
+Lessons learned: 
+
+Correcting cast by using value's. Slide until the value has the value one does need.
+
+Setting new White Ballance outside by moving the center to the left to a set point. 
+Moving the center to the left makes a image warmer. Moving it to the right makes images colder. The White Balllance can be set very locally. Whith linear curves even more local then whith spline curves.
 
 * 2 Enhance contrast in the church.
 
