@@ -4,11 +4,11 @@
 
 I was asked to write a Lab curves tutorial. Due to some personal happenings i have to ask you all to be a bit patient. I will update this page often so it will some time a work in progress.
 
-First my appologies for my bad English. 
+First my apologies for my bad English. 
 
 I am no expert just a user. If you have comments and or remarks / suggestions? Please send me mail so i can add / correct my text. Questions? Please ask i will do my best to answer! 
 
-I will adress the next topics:
+I will address the next topics:
 
 * My basic use of delaboratory in combination with Geeqie
 
@@ -20,14 +20,14 @@ I will adress the next topics:
 - Some curves and basic functions aka how to use them
 - How to set White Point Black point
 - Relight underexposed and overexposed images
-- Enhange contrast
+- Enhance contrast
 - Work with color values and markers. Aka how to work presice.
 - Use of Jacobs Ladder in L channel
 
 * Basic introduction to the a and b channel
 
 - Change adapt White Balance
-- Enhange saturation
+- Enhance saturation
 - Some toning
 - Introduction to Man from Mars. Popping up colors and blending them into the image.
 - Introduction to Jacobs Ladder in a and b channel An another methode of popping up colors
@@ -36,30 +36,30 @@ When working on this tuto i will use dcraw started in Geeqie to open convert the
 
 = Basic introduction to Lab colorspace =
 
-First off, one needs to understand the three channels and forget all you know about RGB. RGB is made for machines like displays. Lab is modeled after how our brains do 'process' light. When you are used to RGB, you will have to get adjusted to Lab. As all humans hate change, (monkey's as we are), it will cost some effort. Though when you did you have some powerfull tools extra available for every day processing.
+First off, one needs to understand the three channels and forget all you know about RGB. RGB is made for machines like displays. Lab is modeled after how our brains do 'process' light. When you are used to RGB, you will have to get adjusted to Lab. As all humans hate change, (monkey's as we are), it will cost some effort. Though when you did you have some powerful tools extra available for every day processing.
 
 First the L channel. This is the Luminance channel. 
 
 Second the color spectrum is devided in only 2 channels, Not three. Af first you will find it strange to work with, though very soon you will see how intuitive, precise it is. It matches very well how we FEEL colors. We feel colors as hot and cold. That is exactly the power of the a and b channel. We do not see colors as a mix of r g b. That is how machines work not we. More about that later on.
 
-Lab is no holy grail, It is just a great flexible and precise interface. It can't be missed for advanged Post Processing. If you really want to control your image you can not do without Lab.
+Lab is no holy grail, It is just a great flexible and precise interface. It can't be missed for advanced Post Processing. If you really want to control your image you can not do without Lab.
 
 = The Light channel. =
 
-L=Luminace 
+L = Luminance 
 Light an dark only!
 
 So we use the L channel curve to lighten / darken areas of the image and we use it for contrast
 
 Important to understand / know is bottom left is the most dark in your image aka your Black Point. Top right is the most white in your image aka your White Point. The range is 0-100 with zero being black. 100 being white, and 50 being about middle gray.
 
-Roughly it can be said the lower third of the curve controls the shadows. aka the darker part, the mid third the midtones, and the upper third the highlights. It is not that strict though just to give a handon to start with.
+Roughly it can be said the lower third of the curve controls the shadows. aka the darker part, the mid third the mid-tones, and the upper third the highlights. It is not that strict though just to give a handon to start with.
 
 As shown in this image:
 
 http://img560.imageshack.us/img560/4324/tones.png
 
-A more accurate display of the tones in L channel one can see in this curvemeister screenshot:
+A more accurate display of the tones in L channel one can see in this curvemeister screen-shot:
 
 http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/Lift.gif
 
@@ -74,9 +74,9 @@ http://img849.imageshack.us/img849/2824/darkimage.jpg
 Please download the image above. Start delab. Open the image.
 Press add layer. chose convert. Select Lab. Press add layer chose curves
 
-Double click curves a pop up with the Lab curves window will show. Right on top you see the options to select a histogram. Please select L so we can see the L channel histogramm.
+Double click curves a pop up with the Lab curves window will show. Right on top you see the options to select a histogram. Please select L so we can see the L channel histogram.
 
-If you did use the dcraw command with the switches i did sugges he image will look dark and perhaps a bit dull. Though that will be fixed in no time and as YOU want it.
+If you did use the dcraw command with the switches i did suggest he image will look dark and perhaps a bit dull. Though that will be fixed in no time and as YOU want it.
 
 The first step is we are gonna relight the image and aka brighten / darken. 
 
@@ -86,7 +86,7 @@ abit like this:
 
 http://img268.imageshack.us/img268/5236/darkstep1.png
 
-A point is in effect a two demensional slider. Move the point a litle bit to the left  and move  it a little bit up. And see what happens.
+A point is in effect a two dimensional slider. Move the point a litle bit to the left  and move  it a little bit up. And see what happens.
 
 Here you see a screen shot where i did relight the image a bit. I did also add a second point at the green leaves in the background. As it became to dark. After i knew the point on the curve i could darken only the leaves. leaving the rest te same. It is not perfect yet. Though we did a bit step forward just adding a few points where needed.
 
@@ -95,7 +95,7 @@ http://img220.imageshack.us/img220/937/darksteptwo.png
 
 http://farm7.static.flickr.com/6015/5987419094_990fd08e15.jpg
 
-Final image. As you can see the dark parts are fixed while leaving the highligts close to untouched. I am not aware of any other way then curves to relight this presice. 
+Final image. As you can see the dark parts are fixed while leaving the highlights close to untouched. I am not aware of any other way then curves to relight this presice. 
 
 Here i did use also the A and B channel Did sharpen a bit and did blend a bit. I will adress those later on.
 
@@ -103,6 +103,24 @@ All relightning is done with L-channel curves. The RGB tab is not used!
 
 Later on you will see how great this is as you have a very accurate contrast and brighten / darken control where you want it!.
 
-Summary basic L channel relightning.
+Summary basic L channel relighting.
 
-Convert to LAB. Add curves layer. Left bottum are the dark area's Top right the highlights. Put some points in the image where you need to lighten / darken. Move the points a litle bit, so a crosshair will show in the L curves window. If you need to remove a point just drag it outside the window and it will fanish.
+Convert to LAB. Add curves layer. Left bottom are the dark area's Top right the highlights. Put some points in the image where you need to lighten / darken. Move the points a little bit, so a cross hair will show in the L curves window. If you need to remove a point just drag it outside the window and it will vanish.
+
+= Some more basics =
+
+Set the white and black point.  The White Point (WP) is the Luminance value that is pure white in the image. As the Black Point (BP) is the Luminance value that is pure black in the image. This can be set very easily. WP: click on the image what should be pure white. Move it a ll bit so the cross hair shows move that point straight up and a new white point is set. Reverse operation for setting the BP.
+
+See this image
+http://img828.imageshack.us/img828/6425/wp1wg.jpg
+
+The points set are not white nor black as the value is not 0 (Black) or 100 (White) in the L channel
+
+http://img845.imageshack.us/img845/9293/wp2q.jpg
+
+Here the WP and BP is set at the points and the values are now pure white and pure black. At the moment Delab only has spline curves, Though Jacek told me other curves types like linear will be added. Here we would want a linear
+
+
+Important to understand is: the steeper the L channel curve the more contrast the flatter the less contrast.
+
+With delab one can choose a point and steepen the curve there so the that tone area will have more contrast in the image or flatten it 
