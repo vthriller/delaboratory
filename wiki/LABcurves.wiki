@@ -124,8 +124,22 @@ http://img845.imageshack.us/img845/9293/wp2q.jpg
 
 Here the WP and BP is set at the points and the values are now pure white and pure black. At the moment Delab only has spline curves, Though Jacek told me other curves types like linear will be added. Here we would want a linear
 
-* Contrast.
+* Contrast and S-curves.
 
-Important to understand is: the steeper the L channel curve the more contrast the flatter the less contrast.
+The S curve you saw in the last image wil be used a lot in all channels.
 
-With delab one can choose a point and steepen the curve there so the that tone area will have more contrast in the image or flatten it. It is quite obvious that when you steepen and area an another area will be flattened. The point is to increase contrast where you need / want it, and decrease where you do not need it. want it. F.i in very dark and very light parts.
+Very important to know and understand is: The steeper the curve is the more the contrast the more flat a curve is the less the contrast.
+
+Now the smart dude in the class yells: "So wtf on every part i do enhance contrast i will loose some on other parts when i use a S curve."
+
+Yes smart dude that is very, very correct. The art is to enhance contrast where you need it and loose it where it has no effects. Or even less contrast on those area's might enhance the image. No need to have contrast in very dark or very light parts. You want contrast in those parts your images tells something. There you want the attention of user .There you want to lead his / her eye.
+
+S-curves will add contrast in the mid-tones. and give away some in the shadows and highlights. . Remind it is very powerful. So SMALL changes when you start.
+
+An another smart dude raises his finger.
+
+"Aha now it start to get it. That is why i need to know where each part of the curve does apply, and why i need a cross-hair even in L- channel and that the histogram is here again of great help. 
+
+Yes smart-dude nr 2 you are very very correct!
+
+With delab one can choose a point and steepen the curve there so the that tone area will have more contrast or less just as you want it.
