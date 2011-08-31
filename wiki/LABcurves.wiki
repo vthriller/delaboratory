@@ -169,10 +169,7 @@ This goes very well with the high shoulder and the Raise curve as shown in my ve
 
 This is a lot of info. Though with this knowedge one can start to explore the use of the L-channel.
 
-
-These images are just provided for educational use. As in practice the different types will be combined, for sure in Photivo as it lacks the appropiate layers. That is no problem here though. When you get the hang of it. you will be able to combine the different types and adjust your image very precise to your needs. We also blend. As Lab needs blending. Often one will go to far. The 'trick to fix that is to stop! and combine work one did before. Blend. Photivo has a 'curse' on layers though does provide it and will use that by a workaround.
-
-Later one i will adress the a and b channel. and then i will show how the other very powerfull Photivo tools can be used in conjuction with curves.
+These images are just provided for educational use. As in practice the different types will be combined,  When you get the hang of it. you will be able to combine the different types and adjust your image very precise to your needs. We also blend. As Lab needs blending. 
 
 
 source see!: http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves.htm
