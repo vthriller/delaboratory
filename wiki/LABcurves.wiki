@@ -182,9 +182,10 @@ source see!: http://www.curvemeister.com/support/curvemeister2/help/Articles/Cur
 Because we did have a lot of theory it is time to work on some pics. And learn that way.
 
 I did find a very interesting image taken by Guillermo Luijk.
+
 http://www.guillermoluijk.com/article/wb/wbinout1.jpg
 
-(Please download the image by rightclick save as)
+Please download the image by rightclick save as)
 
 This image is interesing because of several things.
 
@@ -203,9 +204,15 @@ Please open the image, convert to LAB and add curves layer.
 Open the B channel, as there the WB can be set and the blue cast can be removed.
 
 Put some points on the blue cast on the wall outside.
-The negative b values represent the blue cast. Move the one whith the most negavite number a bit.  Now how to put a point in the center of the curve and move it * horizontally * towards the vertical line of the cross hair. You will see the blue cast has gone. Perhaps you want to correct the yellows a bit also. Put a point in the center between the point you just did move and the top move it slightly down so the line above the 'blue point' is flat or close to flat. Play a bit with the 'yellow' point untile the yellow in the church is basically ok. 
+The negative b values represent the blue cast. Move the one whith the most negavite number a bit. So we get the cross hair
 
+http://img685.imageshack.us/img685/4272/church1.jpg
 
+Now how to put a point in the center of the curve and move it * horizontally * towards the vertical line of the cross hair. You will see the blue cast has gone. Perhaps you want to correct the yellows a bit also. Put a point in the center between the point you just did move and the top move it slightly down so the line above the 'blue point' is flat or close to flat. Play a bit with the 'yellow' point untile the yellow in the church is basically ok. 
+
+http://img535.imageshack.us/img535/5276/church2q.jpg
+
+* 2 Enhance contrast in the church.
 
 
 
