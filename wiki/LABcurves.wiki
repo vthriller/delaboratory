@@ -109,7 +109,7 @@ Convert to LAB. Add curves layer. Left bottom are the dark area's Top right the 
 
 = Some more basics =
 
-White and Black point.
+* White and Black point.
 
 Set the white and black point.  The White Point (WP) is the Luminance value that is pure white in the image. As the Black Point (BP) is the Luminance value that is pure black in the image. This can be set very easily. WP: click on the image what should be pure white. Move it a ll bit so the cross hair shows move that point straight up and a new white point is set. Reverse operation for setting the BP.
 
@@ -122,8 +122,8 @@ http://img845.imageshack.us/img845/9293/wp2q.jpg
 
 Here the WP and BP is set at the points and the values are now pure white and pure black. At the moment Delab only has spline curves, Though Jacek told me other curves types like linear will be added. Here we would want a linear
 
-Contrast.
+* Contrast.
 
 Important to understand is: the steeper the L channel curve the more contrast the flatter the less contrast.
 
-With delab one can choose a point and steepen the curve there so the that tone area will have more contrast in the image or flatten it 
+With delab one can choose a point and steepen the curve there so the that tone area will have more contrast in the image or flatten it. It is quite obvious that when you steepen and area an another area will be flattened. The point is to increase contrast where you need / want it, and decrease where you do not need it. want it. F.i in very dark and very light parts.
