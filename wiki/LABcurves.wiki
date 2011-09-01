@@ -185,18 +185,20 @@ I did find a very interesting image taken by Guillermo Luijk.
 
 http://www.guillermoluijk.com/article/wb/wbinout1.jpg
 
-Please download the image by rightclick save as)
+Please download the image by right click save as)
 
-This image is interesing because of several things.
+This image is interesting because of several things.
 
-1 The whitebalance out doors is different from the whitebalance in the church. This does give the outside walls a blue cast.
+1 The white-balance out doors is different from the white-balance in the church. This does give the outside walls a blue cast. 
+
+The camera or the photographer did choose an inside WB aka the light of the lamps we see above the window. So of course the day sunlight gets screwed up. We will give each its correct lighting and play a bit with it.
 
 2. This image is also very interesting because of the artificial lightning in the church.
 
 3. The image has very few colors.
 
 
-* 1. Lets start with the Whitebalance / fix the blue cast.*
+* 1. Lets start with the White-balance / fix the blue cast.*
 
 As you will see this in Lab color space and delab very easy
 
@@ -238,7 +240,7 @@ Moving the center to the left makes a image warmer. Moving it to the right makes
 
 * 2 Enhance contrast in the church.
 
-As you can see on the previous image i did allready add three points where i do want more contrast. The idea is to pop up very local the contrast. To do that real neat we need not a spline though a linear curve. Though whith splines it also can be done. It will be just a bit less dramatic. To pop up local colors or contrast we can use a technique called Jacob's Ladder and or a techinque called Man from Mars. The boost will also be used. In fact we will use all of them. By blending we will control them.
+As you can see on the previous image i did already add three points where i do want more contrast. The idea is to pop up very local the contrast. To do that real neat we need not a spline though a linear curve. Though whith splines it also can be done. It will be just a bit less dramatic. To pop up local colors or contrast we can use a technique called Jacob's Ladder and or a technique called Man from Mars. The boost will also be used. In fact we will use all of them. By blending we will control them.
 
 
 Process to final image will i publicize tomorrow
