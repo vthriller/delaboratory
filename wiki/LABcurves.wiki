@@ -126,7 +126,7 @@ Here the WP and BP is set at the points and the values are now pure white and pu
 
 The S curve you saw in the last image wil be used a lot in all channels.
 
-Very important to know and understand is: The steeper the curve is in the L-channel the more the contrast the more flat a curve is the less the contrast. A steeper curve in a and b channel will increase saturaton. More about a and b channel later on.
+Very important to know and understand is: The steeper the curve is in the L-channel the more the contrast the more flat a curve is the less the contrast. A steeper curve in a and b channel will increase saturaton. Note: this can be done VERY locally. Also remind all curves types we will address can be merged used to gether, aka use in conjunction. Up to you ! More about a and b channel later on.
 
 Now the smart dude in the class yells: "So wtf on every part i do enhance contrast i will loose some on other parts when i use a S curve."
 
