@@ -115,6 +115,7 @@ void deMainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void deMainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
+    wxMessageBox( _T("delaboratory - a Free Software color correction utility\n(c) 2011 Jacek Poplawski\nhttp://code.google.com/p/delaboratory"), _T(""), wxOK | wxICON_INFORMATION, this );
 }
 
 void deMainFrame::OnNewProject(wxCommandEvent& WXUNUSED(event))
