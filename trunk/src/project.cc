@@ -165,14 +165,13 @@ deFinalImage* deProject::generateFinalImage()
 {
     logMessage("generate final image...");
 
-    wxProgressDialog* progressDialog = new wxProgressDialog(_T("generate final image"), _T("generate final image"), 100, NULL, wxPD_CAN_ABORT);
+    wxProgressDialog* progressDialog = new wxProgressDialog(_T("generate final image"), _T("generate final image"), 100, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
 
     const dePreview* preview = getVisiblePreview();
     if (!preview)
     {
         return NULL;
     }
-    //deSize previousSize = preview->getSize();
     deSize previousSize = previewSize;
 
     setPreviewSize(sourceImageSize);

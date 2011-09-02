@@ -22,6 +22,7 @@
 class deLayer;
 class deLayerStack;
 #include <string>
+#include <list>
 
 class deLayerFactory
 {
@@ -31,6 +32,7 @@ class deLayerFactory
         virtual ~deLayerFactory();
 
         deLayer* createLayer(const std::string& type, deLayerStack& stack, int index, const std::string& name);
+        void getSupportedLayers(std::list<std::string>& layers);
 };
 
 #endif

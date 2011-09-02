@@ -24,16 +24,17 @@
 #include "preview_stack.h"
 #include "sampler.h"
 #include "project.h"
+#include "curves_editor.h"
 
 BEGIN_EVENT_TABLE(deCurvesPanel, wxPanel)
 EVT_PAINT(deCurvesPanel::paintEvent)
 END_EVENT_TABLE()
 
 
-deCurvesPanel::deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property, int s)
+deCurvesPanel::deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property, int s, deCurvesEditor& _editor)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(s, s)), 
  bitmap(s, s), stack(_stack), property(_property),
- size(s)
+ size(s), editor(_editor)
 {
     stack.getProject()->logMessage("deCurvesPanel::deCurvesPanel");
     marker = -1;
@@ -375,15 +376,21 @@ void deCurvesPanel::changeSize()
         property.setFull();
     }
     SetSize(wxSize(size, size));
-    GetParent()->Refresh();
+//    GetParent()->Refresh();
+    editor.rebuild();
 }
 
 void deCurvesPanel::reset()
 {
-    fill(1);
+    fill(1,1);
 }
 
-void deCurvesPanel::fill(int n)
+void deCurvesPanel::invert()
+{
+    fill(1,-1);
+}
+
+void deCurvesPanel::fill(int n, deValue a)
 {
     deCurves curves = property.getCurves();
 
@@ -399,7 +406,7 @@ void deCurvesPanel::fill(int n)
         return;
     }
 
-    curve->fill(n);
+    curve->fill(n, a);
     paint();
 
     property.onUpdate();

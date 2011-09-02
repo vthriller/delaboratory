@@ -39,69 +39,14 @@ void deAddLayerFrame::click(wxCommandEvent &event)
         int id = event.GetId();
 
         std::string type = "";
-
-        // FIXME get layer types from factory
-
-        if (id == curvesButton->GetId())
+    
+        std::map<int, std::string>::iterator i = buttons.find(id);
+        if (i == buttons.end())
         {
-           type = "curves";
+            return;
         }
 
-        if (id == mixerButton->GetId())
-        {
-           type = "mixer";
-        }
-
-        if (id == convertButton->GetId())
-        {
-           type = "conversion";
-        }
-
-        if (id == blendButton->GetId())
-        {
-           type = "blend";
-        }
-
-        if (id == blurButton->GetId())
-        {
-           type = "blur";
-        }
-
-        if (id == hpButton->GetId())
-        {
-           type = "high_pass";
-        }
-
-        if (id == ndButton->GetId())
-        {
-           type = "nd";
-        }
-
-        if (id == grainButton->GetId())
-        {
-           type = "grain";
-        }
-
-        if (id == bbButton->GetId())
-        {
-           type = "blend_blur";
-        }
-
-        if (id == bwButton->GetId())
-        {
-           type = "rgb2bw";
-        }
-
-        if (id == acButton->GetId())
-        {
-           type = "apply_color";
-        }
-
-        if (id == alButton->GetId())
-        {
-           type = "apply_luminance";
-        }
-
+        type = i->second;
 
         std::string name = type;
 
@@ -136,31 +81,17 @@ deAddLayerFrame::deAddLayerFrame(deLayerListPanel* _panel, deProject* _project)
 
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
-    // FIXME get layer types from factory
-    curvesButton = new wxButton(this, wxID_ANY, _T("curves"), wxDefaultPosition, wxSize(-1, 50));
-    sizer->Add(curvesButton, 1, wxEXPAND);
-    mixerButton = new wxButton(this, wxID_ANY, _T("mixer"), wxDefaultPosition, wxSize(-1, 50));
-    sizer->Add(mixerButton, 1, wxEXPAND);
-    convertButton = new wxButton(this, wxID_ANY, _T("convert"), wxDefaultPosition, wxSize(-1, 50));
-    sizer->Add(convertButton, 1, wxEXPAND);
-    blendButton = new wxButton(this, wxID_ANY, _T("blend"), wxDefaultPosition, wxSize(-1, 50));
-    sizer->Add(blendButton, 1, wxEXPAND);
-    blurButton = new wxButton(this, wxID_ANY, _T("blur"), wxDefaultPosition, wxSize(-1, 50));
-    sizer->Add(blurButton, 1, wxEXPAND);
-    hpButton = new wxButton(this, wxID_ANY, _T("high_pass"), wxDefaultPosition, wxSize(-1, 50));
-    sizer->Add(hpButton, 1, wxEXPAND);
-    ndButton = new wxButton(this, wxID_ANY, _T("nd"), wxDefaultPosition, wxSize(-1, 50));
-    sizer->Add(ndButton, 1, wxEXPAND);
-    grainButton = new wxButton(this, wxID_ANY, _T("grain"), wxDefaultPosition, wxSize(-1, 50));
-    sizer->Add(grainButton, 1, wxEXPAND);
-    bbButton = new wxButton(this, wxID_ANY, _T("blend_blur"), wxDefaultPosition, wxSize(-1, 50));
-    sizer->Add(bbButton, 1, wxEXPAND);
-    bwButton = new wxButton(this, wxID_ANY, _T("rgb2bw"), wxDefaultPosition, wxSize(-1, 50));
-    sizer->Add(bwButton, 1, wxEXPAND);
-    acButton = new wxButton(this, wxID_ANY, _T("apply_color"), wxDefaultPosition, wxSize(-1, 50));
-    sizer->Add(acButton, 1, wxEXPAND);
-    alButton = new wxButton(this, wxID_ANY, _T("apply_luminance"), wxDefaultPosition, wxSize(-1, 50));
-    sizer->Add(alButton, 1, wxEXPAND);
+    deLayerFactory& factory = project->getLayerFactory();
+    std::list<std::string> layers;
+    factory.getSupportedLayers(layers);
+
+    std::list<std::string>::const_iterator i;
+    for (i = layers.begin(); i != layers.end(); i++)
+    {
+        wxButton* button = new wxButton(this, wxID_ANY, wxString::FromAscii((*i).c_str()), wxDefaultPosition, wxSize(-1, 50));
+        sizer->Add(button, 1, wxEXPAND);
+        buttons[button->GetId()] = *i;
+    }
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deAddLayerFrame::click));
 
