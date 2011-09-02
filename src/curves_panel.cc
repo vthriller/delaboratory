@@ -191,7 +191,11 @@ void deCurvesPanel::render(wxDC& dc_orig)
 {
     wxBufferedDC dc(&dc_orig, bitmap, wxBUFFER_CLIENT_AREA);
 
-    dc.SetBackground(*wxBLACK_BRUSH);
+    int g = 50;
+    wxColour colourB(g, g, g);
+    wxBrush brush(colourB);
+
+    dc.SetBackground(brush);
     dc.Clear();
 
     drawLines(dc);
