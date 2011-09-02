@@ -25,7 +25,7 @@ dePropertyCurves::dePropertyCurves(deLayer& _parent, int _panelSize)
 :deProperty(_parent), panelSize(_panelSize)
 {
     curvesEditor = NULL;
-    half = false;
+    half = true;
 }
 
 dePropertyCurves::~dePropertyCurves()
