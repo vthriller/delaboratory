@@ -295,7 +295,7 @@ void xyz2rgb(deValue* values)
 
 void xyz2lab(deValue* values)
 {
-    static dePower power(1.0 / 3.0, 1);
+    static dePower power(1.0 / 3.0, 2);
 
     deValue x = values[0] / 95.047 * 100.0;
     deValue y = values[1] / 100.0 * 100.0;
