@@ -105,10 +105,6 @@ void deCurvesEditor::rebuild()
         buttonSize = NULL;
     }
 
-    buttonSize = new wxButton(this, wxID_ANY, _T("change size"));
-    Connect(buttonSize->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::size));
-    sizer->Add(buttonSize, 1, wxEXPAND);
-
     bigPanel = new wxPanel(this);
     bigPanel->SetBackgroundColour(*wxBLACK);
     sizer->Add(bigPanel, 0);
@@ -140,6 +136,11 @@ void deCurvesEditor::rebuild()
     buttonFill = new wxButton(this, wxID_ANY, _T("fill"));
     Connect(buttonFill->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::fill));
     sizer->Add(buttonFill, 1, wxEXPAND);
+
+    buttonSize = new wxButton(this, wxID_ANY, _T("change size (reopen window after that!)"));
+    Connect(buttonSize->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::size));
+    sizer->Add(buttonSize, 1, wxEXPAND);
+
 
     sizer->Layout();
 
