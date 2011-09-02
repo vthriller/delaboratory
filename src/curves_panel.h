@@ -28,6 +28,7 @@ class deCurve;
 class deCurvesLayer;
 class dePreviewStack;
 class dePropertyCurves;
+class deCurvesEditor;
 
 class deCurvesPanel:public wxPanel
 {
@@ -64,8 +65,10 @@ private:
 
     int size;
 
+    deCurvesEditor& editor;
+
 public:
-	deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property, int s);
+	deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property, int s, deCurvesEditor& _editor);
 	virtual ~deCurvesPanel();
 
 	void paintEvent(wxPaintEvent & evt);
@@ -76,7 +79,8 @@ public:
     void traceSampler(deSampler* sampler);
 
     void reset();
-    void fill(int n);
+    void fill(int n, deValue a);
+    void invert();
     void changeSize();
 
 	DECLARE_EVENT_TABLE()

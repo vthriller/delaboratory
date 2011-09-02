@@ -232,20 +232,38 @@ void getSupportedConversions(const deColorSpace& colorSpace, std::vector<deColor
 }
 wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
 {
-    // FIXME add different colors for different colorspaces
-    switch (channel)
+    switch (colorSpace)
     {
-        case 0:
-            return wxColour(255, 0, 0);
-        case 1:
-            return wxColour(0, 255, 0);
-        case 2:
-            return wxColour(0, 0, 255);
-        case 3:
-            return wxColour(255, 255, 255);
-        default:            
-            return wxColour(255, 255, 255);
+        case deColorSpaceRGB:
+        {
+            switch (channel)
+            {
+                case DE_CHANNEL_RED:
+                    return wxColour(255, 0, 0);
+                case DE_CHANNEL_GREEN:
+                    return wxColour(0, 255, 0);
+                case DE_CHANNEL_BLUE:
+                    return wxColour(0, 0, 255);
+            }                    
+        }            
+        case deColorSpaceCMYK:
+        {
+            switch (channel)
+            {
+                case DE_CHANNEL_CYAN:
+                    return wxColour(0, 200, 200);
+                case DE_CHANNEL_MAGENTA:
+                    return wxColour(200, 0, 200);
+                case DE_CHANNEL_YELLOW:
+                    return wxColour(200, 200, 0);
+                case DE_CHANNEL_KEY:
+                    return wxColour(200, 200, 200);
+            }                    
+        }            
     }
+
+    // in any other cases just use pure white
+    return wxColour(255, 255, 255);
 }
 
 deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v)

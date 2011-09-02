@@ -36,6 +36,11 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, dePreviewStack& _stack, dePrope
     bigPanel = NULL;
     curvesPanel = NULL;
 
+    buttonReset = NULL;
+    buttonFill = NULL;
+    buttonInvert = NULL;
+    buttonSize = NULL;
+
     rebuild();
 
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deCurvesEditor::choose));
@@ -57,7 +62,6 @@ void deCurvesEditor::rebuild()
     channelChoice = makeChannelChoice(this, colorSpace);
     sizer->Add(channelChoice, 0);
 
-
     if (bigPanel)
     {
         wxSizer* bigSizer = bigPanel->GetSizer();
@@ -72,6 +76,38 @@ void deCurvesEditor::rebuild()
         delete bigPanel;
         bigPanel = NULL;
     }
+
+    if (buttonReset)
+    {
+        sizer->Detach(buttonReset);
+        delete buttonReset;
+        buttonReset = NULL;
+    }
+
+    if (buttonFill)
+    {
+        sizer->Detach(buttonFill);
+        delete buttonFill;
+        buttonFill = NULL;
+    }
+
+    if (buttonInvert)
+    {
+        sizer->Detach(buttonInvert);
+        delete buttonInvert;
+        buttonInvert = NULL;
+    }
+
+    if (buttonSize)
+    {
+        sizer->Detach(buttonSize);
+        delete buttonSize;
+        buttonSize = NULL;
+    }
+
+    buttonSize = new wxButton(this, wxID_ANY, _T("change size"));
+    Connect(buttonSize->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::size));
+    sizer->Add(buttonSize, 1, wxEXPAND);
 
     bigPanel = new wxPanel(this);
     bigPanel->SetBackgroundColour(*wxBLACK);
@@ -90,20 +126,20 @@ void deCurvesEditor::rebuild()
         size = INITIAL_CURVES_PANEL_SIZE;
     }
 
-    curvesPanel = new deCurvesPanel(bigPanel,  stack, property, size);
+    curvesPanel = new deCurvesPanel(bigPanel,  stack, property, size, *this);
     bigSizer->Add(curvesPanel, 0, wxEXPAND | wxALL, 20);
 
-    wxButton* buttonReset = new wxButton(this, wxID_ANY, _T("reset"));
+    buttonReset = new wxButton(this, wxID_ANY, _T("neutral"));
     Connect(buttonReset->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::reset));
     sizer->Add(buttonReset, 1, wxEXPAND);
 
-    wxButton* buttonFill = new wxButton(this, wxID_ANY, _T("fill"));
+    buttonInvert = new wxButton(this, wxID_ANY, _T("invert"));
+    Connect(buttonInvert->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::invert));
+    sizer->Add(buttonInvert, 1, wxEXPAND);
+
+    buttonFill = new wxButton(this, wxID_ANY, _T("fill"));
     Connect(buttonFill->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::fill));
     sizer->Add(buttonFill, 1, wxEXPAND);
-
-    wxButton* buttonSize = new wxButton(this, wxID_ANY, _T("change size"));
-    Connect(buttonSize->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::size));
-    sizer->Add(buttonSize, 1, wxEXPAND);
 
     sizer->Layout();
 
@@ -133,7 +169,12 @@ void deCurvesEditor::reset(wxCommandEvent &event)
 
 void deCurvesEditor::fill(wxCommandEvent &event)
 {
-    curvesPanel->fill(FILL_COUNT);
+    curvesPanel->fill(FILL_COUNT, 1);
+}
+
+void deCurvesEditor::invert(wxCommandEvent &event)
+{
+    curvesPanel->invert();
 }
 
 void deCurvesEditor::size(wxCommandEvent &event)

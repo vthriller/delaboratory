@@ -31,18 +31,7 @@ class deAddLayerFrame:public wxFrame
         deLayerListPanel* panel;
         deProject* project;
 
-        wxButton* curvesButton;
-        wxButton* mixerButton;
-        wxButton* convertButton;
-        wxButton* blendButton;
-        wxButton* blurButton;
-        wxButton* hpButton;
-        wxButton* bbButton;
-        wxButton* bwButton;
-        wxButton* ndButton;
-        wxButton* acButton;
-        wxButton* alButton;
-        wxButton* grainButton;
+        std::map<int, std::string> buttons;
 
         void click(wxCommandEvent &event);
     public:
