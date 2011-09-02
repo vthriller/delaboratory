@@ -30,6 +30,7 @@ class dePropertyCurves:public deProperty
     private:
         deCurves curves;
         int panelSize;
+        bool half;
 
         deCurvesEditor* curvesEditor;
 
@@ -49,6 +50,10 @@ class dePropertyCurves:public deProperty
         virtual void load(xmlNodePtr node);
 
         virtual void traceSampler(deSampler* sampler);
+
+        void setHalf();
+        void setFull();
+        bool isHalf() const {return half;};
 
 };
 

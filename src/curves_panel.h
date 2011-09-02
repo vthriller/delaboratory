@@ -19,6 +19,8 @@
 #ifndef _DE_CURVES_PANEL_H
 #define _DE_CURVES_PANEL_H
 
+#define INITIAL_CURVES_PANEL_SIZE 500
+
 #include "wx/wx.h"
 #include "value.h"
 #include "sampler.h"
@@ -60,8 +62,10 @@ private:
 
     void updateMarker();
 
+    int size;
+
 public:
-	deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property);
+	deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property, int s);
 	virtual ~deCurvesPanel();
 
 	void paintEvent(wxPaintEvent & evt);
@@ -73,6 +77,7 @@ public:
 
     void reset();
     void fill(int n);
+    void changeSize();
 
 	DECLARE_EVENT_TABLE()
 
