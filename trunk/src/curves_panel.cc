@@ -29,11 +29,11 @@ BEGIN_EVENT_TABLE(deCurvesPanel, wxPanel)
 EVT_PAINT(deCurvesPanel::paintEvent)
 END_EVENT_TABLE()
 
-#define CURVES_PANEL_SIZE 500
 
-deCurvesPanel::deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE)), 
- bitmap(CURVES_PANEL_SIZE, CURVES_PANEL_SIZE), stack(_stack), property(_property)
+deCurvesPanel::deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property, int s)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(s, s)), 
+ bitmap(s, s), stack(_stack), property(_property),
+ size(s)
 {
     stack.getProject()->logMessage("deCurvesPanel::deCurvesPanel");
     marker = -1;
@@ -75,24 +75,35 @@ void deCurvesPanel::paint()
 
 void deCurvesPanel::getPosition(wxMouseEvent &event, deValue& x, deValue &y)
 {
-    deValue d = 1.0 / (CURVES_PANEL_SIZE - 1);
+    //deValue d = 1.0 / (CURVES_PANEL_SIZE - 1);
+    deValue d = 1.0 / (size - 1);
     x = event.GetX() * d;
     y = 1 - (event.GetY() * d);
 }
 
 void deCurvesPanel::drawLine(wxDC& dc, deValue x1, deValue y1, deValue x2, deValue y2)
 {
+/*
     int xx1 = (CURVES_PANEL_SIZE - 1) * x1;
     int xx2 = (CURVES_PANEL_SIZE - 1) * x2;
     int yy1 = (CURVES_PANEL_SIZE - 1) * (1 - y1);
     int yy2 = (CURVES_PANEL_SIZE - 1) * (1 - y2);
+    */
+    int xx1 = (size - 1) * x1;
+    int xx2 = (size - 1) * x2;
+    int yy1 = (size - 1) * (1 - y1);
+    int yy2 = (size - 1) * (1 - y2);
     dc.DrawLine(xx1, yy1, xx2, yy2);
 }
 
 void deCurvesPanel::drawPoint(wxDC& dc, deValue x, deValue y)
 {
+/*
     int xx = (CURVES_PANEL_SIZE - 1) * x;
     int yy = (CURVES_PANEL_SIZE - 1) * (1 - y);
+    */
+    int xx = (size - 1) * x;
+    int yy = (size - 1) * (1 - y);
     dc.DrawCircle(xx, yy, 5);
 }
 
@@ -349,6 +360,22 @@ void deCurvesPanel::updateMarker()
     deValue value = values[channel];
     marker = value;
     paint();
+}
+
+void deCurvesPanel::changeSize()
+{
+    if (size == INITIAL_CURVES_PANEL_SIZE)
+    {
+        size = INITIAL_CURVES_PANEL_SIZE / 2;
+        property.setHalf();
+    }
+    else
+    {
+        size = INITIAL_CURVES_PANEL_SIZE;
+        property.setFull();
+    }
+    SetSize(wxSize(size, size));
+    GetParent()->Refresh();
 }
 
 void deCurvesPanel::reset()

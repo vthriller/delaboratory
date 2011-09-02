@@ -25,6 +25,7 @@ dePropertyCurves::dePropertyCurves(deLayer& _parent, int _panelSize)
 :deProperty(_parent), panelSize(_panelSize)
 {
     curvesEditor = NULL;
+    half = false;
 }
 
 dePropertyCurves::~dePropertyCurves()
@@ -116,4 +117,14 @@ void dePropertyCurves::traceSampler(deSampler* sampler)
     {
         curvesEditor->traceSampler(sampler);
     }
+}
+
+void dePropertyCurves::setHalf()
+{
+    half = true;
+}
+
+void dePropertyCurves::setFull()
+{
+    half = false;
 }

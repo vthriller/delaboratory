@@ -79,7 +79,18 @@ void deCurvesEditor::rebuild()
 
     wxSizer* bigSizer = new wxBoxSizer(wxHORIZONTAL);
     bigPanel->SetSizer(bigSizer);
-    curvesPanel = new deCurvesPanel(bigPanel,  stack, property);
+
+    int size;
+    if (property.isHalf())
+    {
+        size = INITIAL_CURVES_PANEL_SIZE / 2;
+    }
+    else
+    {
+        size = INITIAL_CURVES_PANEL_SIZE;
+    }
+
+    curvesPanel = new deCurvesPanel(bigPanel,  stack, property, size);
     bigSizer->Add(curvesPanel, 0, wxEXPAND | wxALL, 20);
 
     wxButton* buttonReset = new wxButton(this, wxID_ANY, _T("reset"));
@@ -89,6 +100,10 @@ void deCurvesEditor::rebuild()
     wxButton* buttonFill = new wxButton(this, wxID_ANY, _T("fill"));
     Connect(buttonFill->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::fill));
     sizer->Add(buttonFill, 1, wxEXPAND);
+
+    wxButton* buttonSize = new wxButton(this, wxID_ANY, _T("change size"));
+    Connect(buttonSize->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::size));
+    sizer->Add(buttonSize, 1, wxEXPAND);
 
     sizer->Layout();
 
@@ -119,4 +134,9 @@ void deCurvesEditor::reset(wxCommandEvent &event)
 void deCurvesEditor::fill(wxCommandEvent &event)
 {
     curvesPanel->fill(FILL_COUNT);
+}
+
+void deCurvesEditor::size(wxCommandEvent &event)
+{
+    curvesPanel->changeSize();
 }
