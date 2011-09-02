@@ -116,9 +116,11 @@ void deLayerFactory::getSupportedLayers(std::list<std::string>& layers)
     layers.push_back("conversion");
     layers.push_back("blend");
     layers.push_back("blur");
-    layers.push_back("blend_blur");
+    layers.push_back("high_pass");
+    //layers.push_back("blend_blur");
     layers.push_back("rgb2bw");
     layers.push_back("apply_color");
     layers.push_back("apply_luminance");
-    layers.push_back("nd");
+    //layers.push_back("nd");
+    //layers.push_back("grain");
 }
