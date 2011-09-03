@@ -235,7 +235,7 @@ http://img685.imageshack.us/img685/4272/church1.jpg
 
 Now how to put a point in the center of the curve and move it * horizontally * towards the vertical line of the cross hair. You will see the blue cast has gone. Perhaps you want to correct the yellows a bit also. Put a point in the center between the point you just did move and the top move it slightly down so the line above the 'blue point' is flat or close to flat. Play a bit with the 'yellow' point untile the yellow in the church is basically ok. 
 
-http://img190.imageshack.us/img190/2613/bluecastfix.png
+http://img823.imageshack.us/img823/2613/bluecastfix.png
 
 Look at the blue 'move' I did move the point in the center to the left so it would touch the cross-hair. This did fix the blue cast. As a result of this move the color temp inside the church got to warm. Whith two other dots i did fix that by moving them down so there it colder. The get the point where to move first i did sat a marker in the roof of the church.
 
