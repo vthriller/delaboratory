@@ -175,9 +175,32 @@ These images are just provided for educational use. As in practice the different
 
 source see!: http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves.htm
 
+
+
+= Some about the A and B channel =
+
+The a and b channel control the color spectrum i a way that is a lot like our brain and color film. The color spectrum is devide in magenta, green, blue an yellow. The b channel controls blue and yellow
+
+http://img832.imageshack.us/img832/9672/a1channel.jpg
+
+A Chnnel
+
+http://img41.imageshack.us/img41/5269/b1channel.jpg
+
+B channel
+
+Important to know is that in A and B channel negative values are cold and positive vallues are warm
+
+When fixing WB we use this princple:
+
+http://img41.imageshack.us/img41/3576/hotcolde.jpg
+
+
 = A practice =
 
 * Removing a local blue cast / correct local White Balance and add some local contrast *
+
+
 
 Because we did have a lot of theory it is time to work on some pics. And learn that way.
 
@@ -212,7 +235,7 @@ http://img685.imageshack.us/img685/4272/church1.jpg
 
 Now how to put a point in the center of the curve and move it * horizontally * towards the vertical line of the cross hair. You will see the blue cast has gone. Perhaps you want to correct the yellows a bit also. Put a point in the center between the point you just did move and the top move it slightly down so the line above the 'blue point' is flat or close to flat. Play a bit with the 'yellow' point untile the yellow in the church is basically ok. 
 
-http://img535.imageshack.us/img535/5276/church2q.jpg
+http://img190.imageshack.us/img190/2613/bluecastfix.png
 
 Lets compare the images:
 
