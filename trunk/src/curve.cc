@@ -35,17 +35,20 @@ deCurve::~deCurve()
 void deCurve::reset()
 {
     points.clear();
-    fill(1, 1);
+    fill(1, 1, 0);
 //    points.push_back(deCurvePoint(0,0));
 //    points.push_back(deCurvePoint(1,1));
     shape.build(points);
 }
 
-void deCurve::fill(int n, deValue a)
+void deCurve::fill(int n, deValue a, deValue r)
 {
     points.clear();
     double step = 1.0 / n;
     double p = 0.0;
+
+    srand(time(0));
+
     while (p <= 1.0)
     {
         double y = p;
@@ -53,6 +56,18 @@ void deCurve::fill(int n, deValue a)
         {
             y = 1.0 - y;
         }
+        deValue rr = r * ( (double) rand() / RAND_MAX );
+        rr = 2 * rr - r;
+        y+= rr;
+        if (y < 0)
+        {
+            y = 0;
+        }
+        if (y > 1)
+        {
+            y = 1;
+        }
+
         points.push_back(deCurvePoint(p,y));
         p+=step;
     }

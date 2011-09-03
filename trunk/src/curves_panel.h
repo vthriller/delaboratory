@@ -79,7 +79,7 @@ public:
     void traceSampler(deSampler* sampler);
 
     void reset();
-    void fill(int n, deValue a);
+    void fill(int n, deValue a, deValue r);
     void invert();
     void changeSize();
 
