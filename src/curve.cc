@@ -23,6 +23,8 @@
 #include <sstream>
 #include <ctime>
 
+#define CURVE_POINT_PICK_DISTANCE 0.02
+
 deCurve::deCurve(int size)
 :shape(size)
 {
@@ -95,8 +97,7 @@ int deCurve::findPoint(deValue x, deValue y) const
         const deCurvePoint& point = *j;
         deValue xx = x - point.getX();
         float yy = y - point.getY();
-        // FIXME constant
-        if (sqrt (xx * xx + yy * yy) < 0.05)
+        if (sqrt (xx * xx + yy * yy) < CURVE_POINT_PICK_DISTANCE)
         {
             return i;
         }
