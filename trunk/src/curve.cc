@@ -21,6 +21,7 @@
 #include <cmath>
 #include <iostream>
 #include <sstream>
+#include <ctime>
 
 deCurve::deCurve(int size)
 :shape(size)
@@ -36,8 +37,6 @@ void deCurve::reset()
 {
     points.clear();
     fill(1, 1, 0);
-//    points.push_back(deCurvePoint(0,0));
-//    points.push_back(deCurvePoint(1,1));
     shape.build(points);
 }
 
