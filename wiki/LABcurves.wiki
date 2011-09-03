@@ -237,6 +237,8 @@ Now how to put a point in the center of the curve and move it * horizontally * t
 
 http://img190.imageshack.us/img190/2613/bluecastfix.png
 
+Look at the blue 'move' I did move the point in the center to the left so it would touch the cross-hair. This did fix the blue cast. As a result of this move the color temp inside the church got to warm. Whith two other dots i did fix that by moving them down so there it colder. The get the point where to move first i did sat a marker in the roof of the church.
+
 Lets compare the images:
 
 http://www.guillermoluijk.com/article/wb/wbinout1.jpg
@@ -268,7 +270,6 @@ As you can see on the previous image i did already add three points where i do w
 
 Process to final image will i publicize tomorrow
 
-
-http://img26.imageshack.us/img26/1017/finalchurch.jpg
+http://img59.imageshack.us/img59/1017/finalchurch.jpg
 
 Final image
