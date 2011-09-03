@@ -40,11 +40,13 @@ class deCurvesEditor:public wxPanel
         void choose(wxCommandEvent &event);
         void reset(wxCommandEvent &event);
         void fill(wxCommandEvent &event);
+        void random(wxCommandEvent &event);
         void invert(wxCommandEvent &event);
         void size(wxCommandEvent &event);
 
         wxButton* buttonReset;
         wxButton* buttonFill;
+        wxButton* buttonRandom;
         wxButton* buttonInvert;
         wxButton* buttonSize;
 

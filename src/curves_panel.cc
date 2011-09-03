@@ -386,15 +386,15 @@ void deCurvesPanel::changeSize()
 
 void deCurvesPanel::reset()
 {
-    fill(1,1);
+    fill(1,1, 0);
 }
 
 void deCurvesPanel::invert()
 {
-    fill(1,-1);
+    fill(1,-1,0);
 }
 
-void deCurvesPanel::fill(int n, deValue a)
+void deCurvesPanel::fill(int n, deValue a, deValue r)
 {
     deCurves curves = property.getCurves();
 
@@ -410,7 +410,7 @@ void deCurvesPanel::fill(int n, deValue a)
         return;
     }
 
-    curve->fill(n, a);
+    curve->fill(n, a, r);
     paint();
 
     property.onUpdate();

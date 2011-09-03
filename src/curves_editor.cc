@@ -38,6 +38,7 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, dePreviewStack& _stack, dePrope
 
     buttonReset = NULL;
     buttonFill = NULL;
+    buttonRandom = NULL;
     buttonInvert = NULL;
     buttonSize = NULL;
 
@@ -91,6 +92,13 @@ void deCurvesEditor::rebuild()
         buttonFill = NULL;
     }
 
+    if (buttonRandom)
+    {
+        sizer->Detach(buttonRandom);
+        delete buttonRandom;
+        buttonRandom = NULL;
+    }
+
     if (buttonInvert)
     {
         sizer->Detach(buttonInvert);
@@ -137,6 +145,10 @@ void deCurvesEditor::rebuild()
     Connect(buttonFill->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::fill));
     sizer->Add(buttonFill, 1, wxEXPAND);
 
+    buttonRandom = new wxButton(this, wxID_ANY, _T("random"));
+    Connect(buttonRandom->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::random));
+    sizer->Add(buttonRandom, 1, wxEXPAND);
+
     buttonSize = new wxButton(this, wxID_ANY, _T("change size (reopen window after that!)"));
     Connect(buttonSize->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::size));
     sizer->Add(buttonSize, 1, wxEXPAND);
@@ -170,7 +182,12 @@ void deCurvesEditor::reset(wxCommandEvent &event)
 
 void deCurvesEditor::fill(wxCommandEvent &event)
 {
-    curvesPanel->fill(FILL_COUNT, 1);
+    curvesPanel->fill(FILL_COUNT, 1, 0 );
+}
+
+void deCurvesEditor::random(wxCommandEvent &event)
+{
+    curvesPanel->fill(FILL_COUNT, 1, 0.1 );
 }
 
 void deCurvesEditor::invert(wxCommandEvent &event)
