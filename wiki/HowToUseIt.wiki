@@ -9,6 +9,7 @@
   * in "apply luminance" set source layer to the source image and overlay layer to curves
   
 The result is photo with same colors as original, but much better contrast.
+*tip* you can still modify curves layer to see how it affects luminance!
 
 = apply color = 
 
@@ -19,20 +20,90 @@ The result is photo with same colors as original, but much better contrast.
   * in "apply color" set source layer to the one from first step and overlay layer to curves
   
 The result is photo with colors you set by curves, but preserving original contrast.
+*tip* you can still modify curves layer to see how it affects color!
 
 = convert image to Black and White = 
 
 There are many ways to achieve that, there are complete books about this subject. So let's just look at two simple ways.
 
-  * add "mixer layer"
+  * add "mixer" layer
   * change mixer colorspace to BW
   * play with sliders
 
 Using mixer is the most common way of doing that, but after my experiences with portraits I found one more interesting solution. It's based on green channel (assuming your source is RGB) and overlays red and blue channels on it.
 
-  * add "rgb2bw layer"
+  * add "rgb2bw" layer
   * play with sliders
 
+*tip* you can use BW version of your photo for apply luminance layer!
+
+= LAB curves =
+
+LAB is very powerful colorspace and very easy to use if you learn it.
+
+  * add "conversion" layer
+  * set conversion colorspace to LAB
+  * add "curves" layer
+  * play with L curve to modify contrast
+  * play with A and B curves to modify colors
+
+*tip* if you want to continue processing in RGB just add another conversion layer and set its colorspace to RGB
+
+= color by numbers =
+
+This technique is very useful with skintones, you just need to learn some rules (like "yellow" should be bigger than "magenta" and much larger than "cyan") and you can set correct skin color very easily.
+
+  * click on image to add "samplers" in different areas of skin
+  * set samplers colorspace to CMYK
+  * add "curves" layer (in RGB)
+  * play with curves to get correct numbers in each sampler
+
+*tip* you are playing with colors only, so it may be good idea to use "apply color" layer after that to preserve contrast
+
+= shadows and highlights =
+
+The basic usage:
+
+  * add "blend" layer
+  * set source and overlay layer to the source image (should be already set by default)
+  * set its type to "overlay invert"
+  * play with alpha slider
+
+It's better to blend with blured version of image, so let's try again:
+
+  * add "blur" layer
+  * set type to "gaussian blur"
+  * add "blend layer"
+  * set source to source image and overlay to blended layer
+  * set type to "overlay invert"
+  * play with alpha
+
+One more optimization can be done if you want to preserve more highlights or more shadows from original version:
+
+  * add one more "blend" layer
+  * set source to the last layer (the one which is already after shadows and highlights processing)
+  * set overlay to the source image (original one)
+  * set mode to "darken" or "lighten"
+  * play with alpha
+
+= dreamy image =
+
+  * add "blur" layer
+  * add "blend" layer
+  * in blend layer set source to source image and overlay to blur layer
+  * set type to "overlay"
+  * play with alpha
+
+if you want to preserve sharp edges, you can also:
+
+  * add "high pass" layer
+  * set source of "high pass" to original image
+  * add "blend layer"
+  * set source of blend to the "dreamy" version
+  * set overlay of blend to "high pass" layer
+  * set type to "overlay"
+
+*tip* try that in other colorspaces than RGB too
 
 = external materials = 
 
