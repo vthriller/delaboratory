@@ -6,19 +6,19 @@ current features:
 
   * floating point precision - it means that internal code uses not 8-bit (like Gimp), not 16-bit (like many apps), but *float for each color component*, input and output will use 16-bit tiffs or 8-bit jpgs
 
-  * native support for *RGB*/*BW*, *CMY*/*CMYK*, *XYZ*/*LAB*/*LCH*, *HSV*/*HSL* colorspaces - each colorspace is equal, can be displayed, can be edited same way, the only limitation is the conversion between two colorspaces, sometimes it will require two steps (CMYK to RGB then RGB to HSV, instead CMYK to HSV), because it's boring to create lots of similar conversion functions :)
+  * native support for *RGB*/*BW*, *CMY*/*CMYK*, *XYZ*/*LAB*/*LCH*, *HSV*/*HSL* colorspaces - each colorspace is equal, can be displayed, can be edited same way (the only limitation is lack of direct conversions between some colorspaces, sometimes you need to use two steps)
 
-  * *adjustment layers* - it's not possible to "flatten" like in Gimp, so each operation is available for edit, the more layers you create the more complex the project will be, it's possible to change the "source" layer of each layer and colorspace, configuration window of each frame can stay on screen, so it's possible to modify - for instance - mixer and curves at same time, supported layer types: conversion, mixer, curves, blend
+  * *adjustment layers* - it's not possible to "flatten" like in Gimp, so each operation is available for edit, the more layers you create the more complex the project will be, it's possible to change the "source" layer of each layer and colorspace, configuration window of each frame can stay on screen, so it's possible to modify - for instance - mixer and curves at same time
 
-  * *realtime* - premature optimization is root of all evil so I am not going to do strange stuff while the project is far from complete, but it should be possible to use delaboratory on modern desktop computer in realtime, without waiting for anything, when you move slider you should see how preview changes, there is a danger that usage of many layers will eat memory, but that's OK, the real problem is not to slow-down operations and calculate only these previews which are really needed at given time
+  * *realtime* - you should see the result on your screen just when you move slider or curve point, without waiting for any calculations, the only time you should expect wait is during the final image generation
 
-  * *curves* - each channel in each colorspace can be processed by curve, marker show position on curve (taken from currently touched sapler)
+  * *curves* - each channel in each colorspace can be processed by curve, marker shows position on curve (taken from currently touched sapler)
 
   * *mixer* - from each colorspace to each colorspace, for instance one can mix RGB colorspace to achieve BW (black and white) image, but it's also possible to mix from RGB to LAB or CMYK if you want (there are no limitations at all), natural usage is of course mix RGB to RGB or LAB to LAB
 
-  * *blend* - it's possible to blend all channels (it's not yet clear what to do when number of channel differs) or single channel, or blend single channel to all channels, supported blend modes: *normal*, *multiply*, *screen*, *overlay*, *add*, *sub*, *difference*, *overlay_invert*, *add_invert*, *lighten*, *darken*
+  * *blend* - blend some channels from one colorspace with another, the first one is called "source" the second one "overlay", so there are three layers in this operation: "source", "overlay" and "blend" (result), supported blend modes: *normal*, *multiply*, *screen*, *overlay*, *add*, *sub*, *difference*, *overlay_invert*, *add_invert*, *lighten*, *darken*
 
-  * *blur* - each channel can be blured vertically or horizontally, the radius of the blur is not set in pixels but in the ratio of image size (width or height), so radius 0.1 means 10% of image size, there is a box blur, gaussian blur and surface blur to choose
+  * *blur* - each channel can be blured vertically or horizontally, the radius of the blur is not set in pixels but in the ratio of image size (width or height), so radius 0.1 means 10% of image size, there is a *box blur*, *gaussian blur* and *surface blur* to choose
 
   * *high pass* - "high pass" is inversion of "blur", it detects edges and can be used to sharpen the photo or just bring the edges back after bluring
 
@@ -28,6 +28,8 @@ current features:
 
 plans for next releases:
 
+  * add "blend" feature for each layer
+  * more advanced UI
   * blend mask 
   * equalizer (idea from HSV equalizer in RawTherapee) - something between curves and mixer
   * c2g-like effect like the one in GIMP/GEGL
