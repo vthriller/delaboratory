@@ -86,6 +86,8 @@ One more optimization can be done if you want to preserve more highlights or mor
   * set mode to "darken" or "lighten"
   * play with alpha
 
+*tip* you can achieve better results when using BW version of your photo instead original RGB one (which of course gives you lots of possibilities how to convert to BW first)
+
 = dreamy image =
 
   * add "blur" layer
