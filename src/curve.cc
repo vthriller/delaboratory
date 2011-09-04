@@ -23,7 +23,7 @@
 #include <sstream>
 #include <ctime>
 
-#define CURVE_POINT_PICK_DISTANCE 0.02
+#define CURVE_POINT_PICK_DISTANCE 0.03
 
 deCurve::deCurve(int size)
 :shape(size)
