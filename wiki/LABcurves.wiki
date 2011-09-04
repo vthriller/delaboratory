@@ -205,6 +205,7 @@ When fixing WB we use this princple:
 
 http://img41.imageshack.us/img41/3576/hotcolde.jpg
 
+Important to be aware of is in a an b channel a point in the center will have an effect on the WHOLE image. When you set a point in the center (to fixate it) and move points more upper or lower on the curve the effect will be much more local, does apply to a much smaller area of the color spectrum.
 
 = A practice =
 
