@@ -4,5 +4,5 @@
    * *Free Software* - delabotory is licensed under GPL3
    * *each colorspace should be treated equally*, each operation should be available in each colorspace
    * *fully non-destructive processing*, each operation can be adjusted at any time
-   * *floating point precision" in the whole engine, no problems with conversions to 8 or 16 bits
+   * *floating point precision* in the whole engine, no problems with conversions to 8 or 16 bits
    * *realtime preview* everything should be visible immediately
