@@ -49,5 +49,10 @@ void hsv2lab(deValue* values);
 void lab2hsl(deValue* values);
 void hsl2lab(deValue* values);
 
+void lab2lch(deValue* values);
+void lch2lab(deValue* values);
+void lch2rgb(deValue* values);
+void rgb2lch(deValue* values);
+
 
 #endif

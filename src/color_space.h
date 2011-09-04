@@ -34,7 +34,8 @@ enum deColorSpace
     deColorSpaceCMYK,
     deColorSpaceHSV,
     deColorSpaceHSL,
-    deColorSpaceXYZ
+    deColorSpaceXYZ,
+    deColorSpaceLCH
 };
 
 int getColorSpaceSize(const deColorSpace& colorSpace);

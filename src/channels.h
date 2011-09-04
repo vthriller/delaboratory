@@ -32,6 +32,10 @@
 #define DE_CHANNEL_A            1
 #define DE_CHANNEL_B            2
 
+// LCH
+#define DE_CHANNEL_C            1
+#define DE_CHANNEL_H            2
+
 // CMY/CMYK
 #define DE_CHANNEL_CYAN         0
 #define DE_CHANNEL_MAGENTA      1

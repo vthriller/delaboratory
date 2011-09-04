@@ -325,6 +325,25 @@ void xyz2lab(deValue* values)
     values[6] = b / 200.0 + 0.5;
 }
 
+void lab2lch(deValue* values)
+{
+    values[4] = values[0];
+    deValue a = values[1];
+    deValue b = values[2];
+    values[5] = sqrt(a * a + b * b);
+    values[6] = atan2(b, a);
+}
+
+void lch2lab(deValue* values)
+{
+    values[4] = values[0];
+    deValue c = values[1];
+    deValue h = values[2];
+    values[5] = c * cos(h);
+    values[6] = c * sin(h);
+}
+
+
 void lab2xyz(deValue* values)
 {
     deValue l = values[0] * 100.0;
@@ -378,6 +397,20 @@ void rgb2lab(deValue* values)
     rgb2xyz(values);
     inverseCopy(values);
     xyz2lab(values);
+}
+
+void lch2rgb(deValue* values)
+{
+    lch2lab(values);
+    inverseCopy(values);
+    lab2rgb(values);
+}
+
+void rgb2lch(deValue* values)
+{
+    rgb2lab(values);
+    inverseCopy(values);
+    lab2lch(values);
 }
 
 void rgb2hsl(deValue* values)
