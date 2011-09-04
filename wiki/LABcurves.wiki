@@ -160,7 +160,8 @@ http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/Lift.
 http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/Drop.gif
 * The Drop * simply "drops" the midtone slightly without changing the endpoints. It changes overall darkness when applied to all channels, or color balance and overall brightness in the midtones when applied to fewer channels.
 
-* High Shoulder http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/HighShoulder.gif* is half of an S curve. It is used to increase shadow detail while compressing highlights without losing them completely.
+* High  houlder *
+http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/HighShoulder.gif is half of an S curve. It is used to increase shadow detail while compressing highlights without losing them completely.
 
 http://www.curvemeister.com/support/curvemeister2/help/Articles/CurveMoves/LizardTail.gif
 * Lizard tail * is a very small and sharp upturn or downturn at the end of a curve, normally used to rescue or otherwise emphasize shadow or highlight detail that is in danger of being lost.
