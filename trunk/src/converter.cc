@@ -234,6 +234,11 @@ bool deConverter::setConversionFunction()
                     conversionFunction = rgb2lab;
                     return true;
                 }
+                case deColorSpaceLCH:
+                {
+                    conversionFunction = rgb2lch;
+                    return true;
+                }
                 case deColorSpaceHSL:
                 {
                     conversionFunction = rgb2hsl;
@@ -321,6 +326,20 @@ bool deConverter::setConversionFunction()
                     return false;                        
             }
             break;
+        case deColorSpaceLCH:
+            switch (destinationColorSpace)
+            {
+                case deColorSpaceRGB:
+                {
+                    conversionFunction = lch2rgb;
+                    return true;
+                }
+                case deColorSpaceLAB:
+                {
+                    conversionFunction = lch2lab;
+                    return true;
+                }
+            }                
         case deColorSpaceLAB:
             switch (destinationColorSpace)
             {
@@ -352,6 +371,11 @@ bool deConverter::setConversionFunction()
                 case deColorSpaceBW:
                 {
                     conversionFunction = lab2bw;
+                    return true;
+                }
+                case deColorSpaceLCH:
+                {
+                    conversionFunction = lab2lch;
                     return true;
                 }
                 default:                    

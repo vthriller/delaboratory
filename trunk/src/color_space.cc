@@ -36,6 +36,8 @@ int getColorSpaceSize(const deColorSpace& colorSpace)
             return 3;
         case deColorSpaceLAB:
             return 3;
+        case deColorSpaceLCH:
+            return 3;
         case deColorSpaceXYZ:
             return 3;
         case deColorSpaceCMY:
@@ -44,7 +46,6 @@ int getColorSpaceSize(const deColorSpace& colorSpace)
             return 4;
         default:
             return 0;
-//            throw deException("unsupported ColorSpace " + getColorSpaceName(colorSpace) + " in getColorSpaceSize");
     }
 }
 
@@ -70,6 +71,8 @@ std::string getColorSpaceName(deColorSpace colorSpace)
             return "HSV";
         case deColorSpaceLAB:
             return "LAB";
+        case deColorSpaceLCH:
+            return "LCH";
         case deColorSpaceXYZ:
             return "XYZ";
         case deColorSpaceCMY:
@@ -90,6 +93,10 @@ deColorSpace colorSpaceFromString(const std::string& name)
     if (name == "LAB")
     {
         return deColorSpaceLAB;
+    }
+    if (name == "LCH")
+    {
+        return deColorSpaceLCH;
     }
     if (name == "CMYK")
     {
@@ -149,6 +156,16 @@ std::string getChannelName(deColorSpace colorSpace, int channel)
                 case DE_CHANNEL_B:
                     return "B";
             }                    
+        case deColorSpaceLCH:
+            switch (channel)
+            {
+                case DE_CHANNEL_L:
+                    return "lightness";
+                case DE_CHANNEL_C:
+                    return "chroma";
+                case DE_CHANNEL_H:
+                    return "hue";
+            }                    
         case deColorSpaceXYZ:
             switch (channel)
             {
@@ -207,6 +224,7 @@ void getSupportedColorSpaces(std::vector<deColorSpace>& result)
     result.push_back(deColorSpaceCMYK);
     result.push_back(deColorSpaceHSL);
     result.push_back(deColorSpaceHSV);
+    result.push_back(deColorSpaceLCH);
 }
 
 void getSupportedConversions(const deColorSpace& colorSpace, std::vector<deColorSpace>& result)
