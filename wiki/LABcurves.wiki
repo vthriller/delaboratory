@@ -29,10 +29,19 @@ I will address the next topics:
 - Change adapt White Balance
 - Enhance saturation
 - Some toning
-- Introduction to Man from Mars. Popping up colors and blending them into the image.
-- Introduction to Jacobs Ladder in a and b channel An another methode of popping up colors
+- Local contrast control
 
-When working on this tuto i will use dcraw started in Geeqie to open convert the raw files. [workingwithRAWfiles]
+* Some more advanced technique's
+
+- use of blending.
+- some use of blur.
+- Getting limited colors in to a image using Jacob's Ladder. 
+-  Histogram streching ( a technique very often used in astro photography to get more deail. Nasa uses it f.i a lot.)
+- Man from Mars. 
+
+When multiple images is suported also toning with colors / color enhancement
+
+When working on this tuto i will use dcraw started in Geeqie to open convert the raw files. See: [workingwithRAWfiles]aka how to use dcraw and Geeqie in combination with delaboratory
 
 = Basic introduction to Lab colorspace =
 
