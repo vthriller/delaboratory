@@ -57,7 +57,7 @@ class dePower
             int i = v * scale;
             if ((i >= 0) && (i < POWER_CACHE_SIZE))
                 return values[i];
-            std::cout << "ERROR dePower value out of cache v: " << v << " i: " << i << " power: " << power  << std::endl;                    
+//            std::cout << "ERROR dePower value out of cache v: " << v << " i: " << i << " power: " << power  << std::endl;                    
             return pow(v, power);
         }
 
