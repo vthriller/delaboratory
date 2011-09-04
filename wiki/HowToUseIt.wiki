@@ -1,8 +1,38 @@
 #summary How to use it
 
-= intro =
+= apply luminance = 
 
-delaboratory should be used in the middle of the workflow - after RAW processing, before final retouch, I use it between RawTherapee and GIMP
+  * open source image
+  * add "curves" layer (in RGB)
+  * play with curves to achieve best contrast, don't worry about colors
+  * add "apply luminance" layer
+  * in "apply luminance" set source layer to the source image and overlay layer to curves
+  
+The result is photo with same colors as original, but much better contrast.
+
+= apply color = 
+
+  * open source image (or just continue processing from last section)
+  * add "curves" layer (in RGB)
+  * play with curves to achieve best color, don't worry about contrast
+  * add "apply color" layer
+  * in "apply color" set source layer to the one from first step and overlay layer to curves
+  
+The result is photo with colors you set by curves, but preserving original contrast.
+
+= convert image to Black and White = 
+
+There are many ways to achieve that, there are complete books about this subject. So let's just look at two simple ways.
+
+  * add "mixer layer"
+  * change mixer colorspace to BW
+  * play with sliders
+
+Using mixer is the most common way of doing that, but after my experiences with portraits I found one more interesting solution. It's based on green channel (assuming your source is RGB) and overlays red and blue channels on it.
+
+  * add "rgb2bw layer"
+  * play with sliders
+
 
 = external materials = 
 
@@ -11,79 +41,3 @@ delaboratory should be used in the middle of the workflow - after RAW processing
 *VideoTutorials* - tutorials (performed in photoshop) with techniques to use in delaboratory 
 
 *TextTutorials* - tutorials to read
-
-= blur hints (new in 0.2) = 
-
-  * blur is *not for skin smoothing* - you can't draw on mask so it won't work this way (however you could achieve something like that if you blend *key* channel from original CMYK on blured layer)
-  * Use it with *blend* layer for best effect (set blured layer as overlay and original as source)
-  * experiment with different channels in different colorspaces (in *LAB* blur only A and B channels)
-  * if you select big radius it will be slow, it may be a good idea to type the radius in the text field instead using slider
-  * blur can be really slow, if you set it to 0.1 it means 10% width of image per pixel, it means that for image of width 4000 pixels there will be 1 600 000 calculations per single line of image, so you will need to wait minutes for calculations of final image, solution: use smaller values 
-
-= ND hints (new in 0.2) =
-
-  * try it in LAB on A and B channels, you will be really surprised
-  * you can use multiple ND layers to create more complex shapes
-  * negative power works, just only in some special cases
-
-= simple RGB operations =
-
-Let's say that you have RAW from RawTherapee or Ufraw and you want to perform some simple operations on your photo: curves and mixer. You can do it in GIMP, but it will be limited to 8-bit color, so you will decrease quality of your photo. It's better to do it in delaboratory then send image to GIMP for further postprocessing.
-
-  * *open* your image in delaboratory (File, Open)
-  * add *curves layer*
-  * double click on curves layer and *set curves*
-  * add *mixer layer*
-  * double click on mixer layer and *set mixer*
-  * if you want you can edit curves or mixer again and again
-  * *send* image to GIMP
-
-= convert image to Black and White =
-
-There are many ways to convert your photo to BW, the most common way is to use mixer. 
-
-  * *open* your image in delaboratory (File, Open)
-  * add *mixer layer*
-  * double click on mixer layer and *change colorspace to BW*
-  * click *apply*
-  * double click on mixer layer and *set mixer*
-  * *send* image to GIMP
-
-Of course more advanced methods will also work. You could:
-
-  * blend RGB channels in overlay mode by using *blend layers*
-  * convert image to LAB or CMYK and use L or K channels
-
-= correct skin color =
-
-This is the most common problem with portrait postprocessing. How to achieve good skin tone?
-
-  * *open* your image in delaboratory (File, Open)
-  * add *conversion layer*
-  * double click on conversion layer and *change colorspace to CMYK*
-  * click on image and add some *samplers* on skin
-  * change colorspace of samplers to *CMYK*
-  * add *curves layer*
-  * double click on curves layer and *set curves*
-  * *send* image to GIMP 
-(you don't have to convert to RGB, it will be performed automagicaly)
-
-When playing with CMYK curves - try to set *yellow* a little larger than *magenta* and much larger than *cyan* (please google for skin color by numbers for details).
-
-= change colors in LAB =
-
-LAB separates color from contrast, so you can play with colors without danger of destroying contrast of your photo.
-
-  * *open* your image in delaboratory (File, Open)
-  * add *conversion layer*
-  * double click on conversion layer and *change colorspace to LAB*
-  * add *blend layer*
-  * double click on blend layer and *set blend options*
-  * change blending mode to *overlay* and set *alpha*
-  * add *curves layer*
-  * double click on curves layer and *set curves*
-  * add *mixer layer*
-  * double click on mixer layer and *set mixer*
-  * *send* image to GIMP 
-
-Try different channels in blend layer, try mixing A and B channels. You can change settings all over again and when finish when you will be happy with the result.
