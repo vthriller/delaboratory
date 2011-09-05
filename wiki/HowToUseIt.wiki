@@ -1,5 +1,19 @@
 #summary How to use it
 
+= introduction for first time users =
+
+  * every operation in delaboratory is stored as layer, to add new operation you have to add new layer with *add layer button*
+
+  * after you add layer you need to configure it (for instance when you add curves layer it contains "neutral" curve which does nothing), you need to *double click layer* and then set it (for instance set curve to the shape you want), there is no "OK" button because each change happens immediately, you can safely close layer window when you done, or you can use it later 
+
+  * every layer has its *source*, by default this is previous layer, so each layer is based on last one, but you can change it, every layer can use every other bottom layer as its source
+
+  * every layer has its *colorspace*, by default it's RGB but the primary feature of delaboratory is ability to work in multiple colorspaces, explore this feature (hint: start with LAB colorspace which is widely know and very usable), to convert image between one colorspace and another please use *conversion layer*
+
+  * during the edit, delaboratory works on *previews*, not full image, there are two reasons for that: speed and memory consumption, after you done, you need to *generate final image* with one of the save buttons at the bottom of main window, it will take some time, it can use huge amount of your memory, so when you are not sure - you can also *save project* first to avoid any problems
+
+  * to learn more about this technique of image processing I recommend looking at work of *Dan Margulis*, but also search for info about *"LAB colorspace"*, *"digital BW photography"*, *"image channels"* and *"blend modes"*
+
 = apply luminance = 
 
   * open source image
