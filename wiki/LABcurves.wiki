@@ -192,11 +192,8 @@ source see!: http://www.curvemeister.com/support/curvemeister2/help/Articles/Cur
 The a and b channel control the color spectrum i a way that is a lot like our brain and color film. The color spectrum is devide in magenta, green, blue an yellow. The b channel controls blue and yellow
 
 http://img832.imageshack.us/img832/9672/a1channel.jpg
-
 A Channel
-
 http://img41.imageshack.us/img41/5269/b1channel.jpg
-
 B channel
 
 Important to know is that in A and B channel negative values are cold and positive vallues are warm
