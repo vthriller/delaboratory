@@ -16,7 +16,7 @@ You need wxWidgets.
 I use version 2.8.12.
 To check your version please type:
 
-'wx-config --version'
+`wx-config --version`
 
 If there is no wx-config then you need to install wxWidgets first or delaboratory won't compile. 
 
