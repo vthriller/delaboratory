@@ -279,4 +279,4 @@ Process to final image will i publicize tomorrow
 http://img839.imageshack.us/img839/6123/kerkm.jpg
 http://img832.imageshack.us/img832/1074/kerk2.jpg
 
-left image: contrast enhancement. Right image colorboost
+left image: contrast enhancement + local red boost. Right image colorboost
