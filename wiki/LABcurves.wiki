@@ -252,10 +252,9 @@ Look at the blue 'move' I did move the point in the center to the left so it wou
 Lets compare the images:
 
 http://www.guillermoluijk.com/article/wb/wbinout1.jpg
-Original
 http://img823.imageshack.us/img823/5482/bluecastoutsidefixed.png
 
-Blue cast fixed. One can see i did make it a bit colder inside the church then the original. (Look at the values also) If one does want it to be exact just move one the points that correspondent whith the church in side a bit up until you reached the same values as the original has in side the church.
+Left image: Original. Right image: Blue cast fixed. One can see i did make it a bit colder inside the church then the original. (Look at the values also) If one does want it to be exact just move one the points that correspondent whith the church in side a bit up until you reached the same values as the original has in side the church.
 
 Resume: 
 
