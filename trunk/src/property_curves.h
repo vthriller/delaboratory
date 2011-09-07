@@ -55,6 +55,9 @@ class dePropertyCurves:public deProperty
         void setFull();
         bool isHalf() const {return half;};
 
+        virtual void onKey(int key);
+        virtual void onCloseLayerFrame();
+
 };
 
 #endif

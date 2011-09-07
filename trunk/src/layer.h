@@ -100,6 +100,7 @@ class deLayer
         virtual void traceSampler(deSampler* sampler);
         
         virtual bool checkUsage(int id);
+        void onKey(int key);
 
 };
 

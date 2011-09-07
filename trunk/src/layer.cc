@@ -27,7 +27,7 @@
 #include <sstream>
 
 deLayer::deLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:stack(_stack), index(_index), name(*this), sourceLayer(*this, "source"), /*overlayLayer(*this, "overlay"),*/ colorSpace(*this)
+:stack(_stack), index(_index), name(*this), sourceLayer(*this, "source"), colorSpace(*this)
 {
     name.setName(_name);
     actionFrame = NULL;
@@ -50,6 +50,11 @@ void deLayer::setName(const std::string& _name)
 void deLayer::closeActionFrame()
 {
     actionFrame = NULL;
+    deProperties::iterator i;
+    for (i = properties.begin(); i != properties.end(); i++)
+    {
+        (*i)->onCloseLayerFrame();
+    }
 }
 
 void deLayer::setActionFrame(deActionFrame* frame)
@@ -127,6 +132,15 @@ void deLayer::notifyPropertiesOnColorSpaceChange()
     if (actionFrame)
     {
         actionFrame->Layout();
+    }
+}
+
+void deLayer::onKey(int key)
+{
+    deProperties::iterator i;
+    for (i = properties.begin(); i != properties.end(); i++)
+    {
+        (*i)->onKey(key);
     }
 }
 

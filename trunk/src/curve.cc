@@ -24,6 +24,7 @@
 #include <ctime>
 
 #define CURVE_POINT_PICK_DISTANCE 0.03
+#define VERTICAL_STEP 0.01
 
 deCurve::deCurve(int size)
 :shape(size)
@@ -195,6 +196,43 @@ void deCurve::movePoint(int p, deValue x, deValue y)
     }
 
     (*i).move(x, y);
+    shape.build(points);
+}
+
+void deCurve::movePointUp(int p)
+{
+    movePointStep(p, -1);
+}
+
+void deCurve::movePointDown(int p)
+{
+    movePointStep(p, 1);
+}    
+
+void deCurve::movePointStep(int p, int dir)
+{
+    deCurvePoints::iterator i = points.begin();
+    while (p > 0)
+    {
+        i++;
+        p--;
+    }
+
+    deValue xx = (*i).getX();
+    deValue yy = (*i).getY();
+
+    yy += dir * VERTICAL_STEP;
+
+    if (yy < 0.0)
+    {
+        yy = 0.0;
+    }
+    if (yy > 1.0)
+    {
+        yy = 1.0;
+    }
+
+    (*i).move(xx, yy);
     shape.build(points);
 }
 

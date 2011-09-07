@@ -34,6 +34,7 @@ class deCurve
         deCurveShape shape;
 
         void loadPoint(xmlNodePtr node);
+        void movePointStep(int p, int dir);
     public:    
         deCurve(int size);
         virtual ~deCurve();
@@ -55,6 +56,9 @@ class deCurve
 
         void reset();
         void fill(int n, deValue a, deValue r);
+        void movePointUp(int p);
+        void movePointDown(int p);
+
 
 };
 

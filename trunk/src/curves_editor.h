@@ -21,13 +21,15 @@
 
 #include <vector>
 #include <wx/wx.h>
+#include <wx/collpane.h>
 class deCurvesLayer;
 class dePreviewStack;
 class deCurvesPanel;
 class dePropertyCurves;
 class deSampler;
 
-class deCurvesEditor:public wxPanel
+//class deCurvesEditor:public wxPanel
+class deCurvesEditor:public wxCollapsiblePane
 {
     private:
         wxSizer* sizer;
@@ -38,6 +40,7 @@ class deCurvesEditor:public wxPanel
         wxPanel* bigPanel;
 
         void choose(wxCommandEvent &event);
+        void collapse(wxCommandEvent &event);
         void reset(wxCommandEvent &event);
         void fill(wxCommandEvent &event);
         void random(wxCommandEvent &event);
@@ -54,8 +57,10 @@ class deCurvesEditor:public wxPanel
         deCurvesEditor(wxWindow *parent, dePreviewStack& _stack, dePropertyCurves& _property);
         virtual ~deCurvesEditor();
 
+
         void rebuild();
         virtual void traceSampler(deSampler* sampler);
+        virtual void onKey(int key);
 
 };
 

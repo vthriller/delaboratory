@@ -52,6 +52,8 @@ class deLayerStack
         void clear();
     
         void generateLayerUsage(std::vector<int>& layerUsage);
+        
+        void onKey(int key);
 
 };
 

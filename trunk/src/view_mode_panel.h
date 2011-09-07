@@ -41,6 +41,8 @@ class deViewModePanel:public wxPanel
 
         void updateButtons(deColorSpace colorSpace);
 
+        void setButton(int b);
+
 };
 
 #endif

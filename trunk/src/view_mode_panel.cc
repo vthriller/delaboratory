@@ -66,3 +66,11 @@ void deViewModePanel::updateButtons(deColorSpace colorSpace)
     gui.refreshView();
 }    
 
+void deViewModePanel::setButton(int b)
+{
+    if (b >= buttons.size())
+    {
+        return;
+    }
+    buttons[b]->SetValue(true);
+}

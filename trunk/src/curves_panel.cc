@@ -40,6 +40,7 @@ deCurvesPanel::deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropert
     marker = -1;
 
     selectedPoint = -1;
+    lastSelectedPoint = -1;
     channel = 0;
 
     SetBackgroundColour(*wxBLACK);
@@ -146,7 +147,6 @@ void deCurvesPanel::drawCurve(wxDC& dc)
         return;
     }
 
-
     deCurve* curve = curves[channel];
 
     if (!curve)
@@ -210,6 +210,8 @@ void deCurvesPanel::render(wxDC& dc_orig)
 
 void deCurvesPanel::click(wxMouseEvent &event)
 {
+    SetFocus();
+
     stack.getProject()->logMessage("deCurvesPanel::click");
     deCurves curves = property.getCurves();
 
@@ -240,6 +242,8 @@ void deCurvesPanel::click(wxMouseEvent &event)
     {
         selectedPoint = curve->addPoint(x, y);
     }
+
+    lastSelectedPoint = selectedPoint;
 
     const deCurvePoint& point = curve->getPoint(selectedPoint);
     grabX = point.getX() - x;
@@ -278,6 +282,7 @@ void deCurvesPanel::release(wxMouseEvent &event)
         if ((x < -0.1) || (y < -0.1) || (x>1.1) || (y>1.1))
         {
             curve->deletePoint(selectedPoint);
+            lastSelectedPoint = -1;
         }
     }
 
@@ -335,6 +340,64 @@ void deCurvesPanel::move(wxMouseEvent &event)
     }
 }
 
+void deCurvesPanel::onKey(int key)
+{
+    deCurves curves = property.getCurves();
+    deColorSpace colorSpace = property.getParent().getColorSpace();
+    int s = getColorSpaceSize(colorSpace);
+
+    if (key == WXK_CONTROL)
+    {
+        if (marker >= 0)
+        {
+            int i;
+            for (i = 0; i < s; i++)
+            {
+                deCurve* curve = curves[i];
+                deValue v = samplerValues[i];
+                int p = curve->addPoint(v, v);
+                if (i == channel)
+                {
+                    lastSelectedPoint = p;
+                }
+            }
+            property.onUpdate();
+            update();
+        }
+        return;
+    }
+
+    if (lastSelectedPoint < 0)
+    {
+        return;
+    }
+
+    deCurve* curve = curves[channel];
+
+    if (key == 'A')
+    {
+        curve->movePointDown(lastSelectedPoint);
+        property.onUpdate();
+        update();
+    }
+
+    if (key == 'Z')
+    {
+        curve->movePointUp(lastSelectedPoint);
+        property.onUpdate();
+        update();
+    }
+
+    if (key == 'X')
+    {
+        curve->deletePoint(lastSelectedPoint);
+        lastSelectedPoint = -1;
+        property.onUpdate();
+        update();
+    }
+
+}
+
 void deCurvesPanel::traceSampler(deSampler* _sampler)
 {
     if (!_sampler)
@@ -355,14 +418,13 @@ void deCurvesPanel::updateMarker()
         return;
     }
 
-    deValue values[4];
-    bool result = sampler.getPixel(values[0], values[1], values[2], values[3], property.getParent().getColorSpace(), *preview);
+    bool result = sampler.getPixel(samplerValues[0], samplerValues[1], samplerValues[2], samplerValues[3], property.getParent().getColorSpace(), *preview);
     if (!result)
     {
         marker = -1;
         return;
     }
-    deValue value = values[channel];
+    deValue value = samplerValues[channel];
     marker = value;
     paint();
 }

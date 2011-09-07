@@ -102,6 +102,19 @@ bool deRenderer::render(wxDC& dc)
 
 void deRenderer::setViewMode(const deViewMode& mode, int channel)
 {
+    const dePreview* preview = project->getVisiblePreview();
+    if (!preview)
+    {
+        return;
+    }
+    deColorSpace colorSpace = preview->getColorSpace();
+    int s = getColorSpaceSize(colorSpace);
+
+    if (channel >= s)
+    {
+        return;
+    }
+
     viewMode = mode;
     viewChannel = channel;
 }

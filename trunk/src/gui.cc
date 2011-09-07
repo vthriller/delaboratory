@@ -145,6 +145,14 @@ void deGUI::updateLayerListPanel()
     }
 }
 
+void deGUI::setViewModeButton(int b)
+{
+    if (viewModePanel)
+    {
+        viewModePanel->setButton(b);
+    }        
+}
+
 void deGUI::updateViewModePanel(deColorSpace colorSpace)
 {
     if (viewModePanel)

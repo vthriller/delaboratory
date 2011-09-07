@@ -174,3 +174,12 @@ void deLayerStack::generateLayerUsage(std::vector<int>& layerUsage)
         }
     }
 }
+
+void deLayerStack::onKey(int key)
+{
+    std::vector<deLayer*>::iterator i;
+    for (i = layers.begin(); i != layers.end(); i++)
+    {
+        (*i)->onKey(key);
+    }        
+}
