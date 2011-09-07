@@ -57,6 +57,9 @@ class deProperty
 
         virtual void traceSampler(deSampler* sampler) {};
 
+        virtual void onKey(int key) {};
+        virtual void onCloseLayerFrame() {};
+
 };
 
 #endif

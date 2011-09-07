@@ -74,6 +74,7 @@ class deGUI
         void setViewMode(const deViewMode& mode, int channel);
         void updateSamplerList();
         void start();
+        void setViewModeButton(int b);
 
 };
 

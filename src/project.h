@@ -98,6 +98,8 @@ class deProject
 
         void resetLayerStack();
 
+        void onKey(int key);
+
 };
 
 #endif

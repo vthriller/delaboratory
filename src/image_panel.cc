@@ -82,6 +82,7 @@ deImagePanel::deImagePanel(wxWindow* parent, deProject* _project)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), project(_project), renderer(project)
 {
 
+    SetFocus();
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
     if (project)
     {

@@ -33,6 +33,11 @@ dePropertyCurves::~dePropertyCurves()
     deleteCurves();
 }
 
+void dePropertyCurves::onCloseLayerFrame()
+{
+    curvesEditor = NULL;
+}
+
 void dePropertyCurves::resetCurves()
 {
     deColorSpace colorSpace = parent.getColorSpace();
@@ -127,4 +132,12 @@ void dePropertyCurves::setHalf()
 void dePropertyCurves::setFull()
 {
     half = false;
+}
+
+void dePropertyCurves::onKey(int key)
+{
+    if (curvesEditor)
+    {
+        curvesEditor->onKey(key);
+    }        
 }

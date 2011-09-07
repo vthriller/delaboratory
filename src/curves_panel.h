@@ -45,6 +45,7 @@ private:
     void getPosition(wxMouseEvent &event, deValue& x, deValue &y);
 
     int selectedPoint;
+    int lastSelectedPoint;
     wxBitmap bitmap;
     int channel;
 
@@ -67,6 +68,8 @@ private:
 
     deCurvesEditor& editor;
 
+    deValue samplerValues[4];
+
 public:
 	deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property, int s, deCurvesEditor& _editor);
 	virtual ~deCurvesPanel();
@@ -82,6 +85,7 @@ public:
     void fill(int n, deValue a, deValue r);
     void invert();
     void changeSize();
+    virtual void onKey(int key);
 
 	DECLARE_EVENT_TABLE()
 

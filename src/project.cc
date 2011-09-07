@@ -366,3 +366,39 @@ const deSize& deProject::getPreviewSize() const
 {
     return previewSize;
 }
+
+void deProject::onKey(int key)
+{
+    if (key == '`')
+    {
+        gui.setViewMode(deViewNormal, -1);
+        gui.setViewModeButton(0);
+        gui.refreshView();
+    }
+    if (key == '1')
+    {
+        gui.setViewMode(deViewSingleChannel, 0);
+        gui.setViewModeButton(1);
+        gui.refreshView();
+    }
+    if (key == '2')
+    {
+        gui.setViewMode(deViewSingleChannel, 1);
+        gui.setViewModeButton(2);
+        gui.refreshView();
+    }
+    if (key == '3')
+    {
+        gui.setViewMode(deViewSingleChannel, 2);
+        gui.setViewModeButton(3);
+        gui.refreshView();
+    }
+    if (key == '4')
+    {
+        gui.setViewMode(deViewSingleChannel, 3);
+        gui.setViewModeButton(4);
+        gui.refreshView();
+    }
+
+    layerStack.onKey(key);
+}

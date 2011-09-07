@@ -36,10 +36,24 @@ class deLaboratory: public wxApp
     private:
     	virtual bool OnInit();
         deProject project;
+
+        virtual int FilterEvent(wxEvent& event);
+
 };
 
 
 IMPLEMENT_APP(deLaboratory)
+
+int deLaboratory::FilterEvent(wxEvent& event)
+{
+    if  (event.GetEventType()==wxEVT_KEY_DOWN )
+    {
+         project.onKey(((wxKeyEvent&)event).GetKeyCode());
+         return true;
+    }
+
+    return -1;
+}
 
 bool deLaboratory::OnInit()
 {
