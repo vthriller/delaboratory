@@ -25,7 +25,7 @@ Just use your graphic installer like synaptic:
 
 =Debian and Debian based distro's like , Dreamlinux. Mint LMDE=
 
-Add to/etc/apt/sources.list using an editor like f.i nano
+Add to /etc/apt/sources.list using an editor like f.i nano
 
 `deb http://ppa.launchpad.net/dhor/myway/ubuntu lucid main` 
 
