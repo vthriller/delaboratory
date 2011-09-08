@@ -10,6 +10,7 @@ The delaboratory.deb files are created and maintained by Dariusz Duma and can be
 
 Just use your graphic installer like synaptic:
   * add to your sources: ppa:dhor/myway
+  * update 
   * install delaboratory
 
 == on terminal ==
