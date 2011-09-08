@@ -12,7 +12,7 @@ Ubuntu packages were created by Dariusz Duma (you can find them on : https://lau
 == with installer ==
 
 Just use your graphic installer like synaptic:
-  * add the Dh0r ppa
+  * add to your sources: ppa:dhor/myway
   * install delaboratory
 
 == on terminal ==
