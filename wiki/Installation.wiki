@@ -7,7 +7,7 @@ You can find them in the *Downloads* section.
 
 = Ubuntu =
 
-Ubuntu packages were created by Dariusz Duma (you can find them on his website: https://launchpad.net/~dhor/+archive/myway).
+Ubuntu packages were created by Dariusz Duma (you can find them on : https://launchpad.net/~dhor/+archive/myway).
 
 == with installer ==
 
@@ -23,7 +23,9 @@ Just use your graphic installer like synaptic:
 
 `sudo apt-get install delaboratory`
 
-=Debian and Debian based distro's like , Dreamlinux. Mint LMDE:
+=Debian and Debian based distro's like , Dreamlinux. Mint LMDE=
+
+Add to sources.list
 
 deb http://ppa.launchpad.net/dhor/myway/ubuntu lucid main 
 
