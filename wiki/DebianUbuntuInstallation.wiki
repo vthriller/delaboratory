@@ -42,7 +42,7 @@ add to /etc/apt/sources.list.d/debian.list
 
 `deb-src http://hppa.launchpad.net/dhor/myway/ubuntu maverick main`
 
-sudo or su 
+su 
 
 `apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93330B78`
 
