@@ -27,16 +27,17 @@ Just use your graphic installer like synaptic:
 
 Add to sources.list
 
-deb http://ppa.launchpad.net/dhor/myway/ubuntu lucid main 
+'deb http://ppa.launchpad.net/dhor/myway/ubuntu lucid main' 
 
-deb-src http://hppa.launchpad.net/dhor/myway/ubuntu lucid main 
+'deb-src http://hppa.launchpad.net/dhor/myway/ubuntu lucid main'
 
 sudo or su 
 
-apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93330B78
+'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93330B78'
 
-apt-get update
-apt-get install delaboratory
+'apt-get update'
+
+'apt-get install delaboratory'
 
 = Arch Linux =
 
