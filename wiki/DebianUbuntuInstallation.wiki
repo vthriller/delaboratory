@@ -1,6 +1,6 @@
 #summary Installation for Debian / Ubuntu
 
-The delaboratory.deb files are made and maintained by Dariusz Duma and can be found at https://launchpad.net/~dhor/+archive/myway
+The delaboratory.deb files are created and maintained by Dariusz Duma and can be found at https://launchpad.net/~dhor/+archive/myway
 
 = Installation =
 
