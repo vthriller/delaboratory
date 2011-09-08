@@ -23,6 +23,19 @@ Just use your graphic installer like synaptic:
 
 `sudo apt-get install delaboratory`
 
+=Debian and Debian based distro's like , Dreamlinux. Mint LMDE:
+
+deb http://ppa.launchpad.net/dhor/myway/ubuntu lucid main 
+
+deb-src http://hppa.launchpad.net/dhor/myway/ubuntu lucid main 
+
+sudo or su 
+
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93330B78
+
+apt-get update
+apt-get install delaboratory
+
 = Arch Linux =
 
 AUR package was crated by speps, you can find it here:
