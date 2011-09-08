@@ -24,7 +24,7 @@ Add to /etc/apt/sources.list using an editor like f.i nano
 
 `deb http://ppa.launchpad.net/dhor/myway/ubuntu lucid main` 
 
-`deb-src http://hppa.launchpad.net/dhor/myway/ubuntu lucid main`
+`deb-src http://ppa.launchpad.net/dhor/myway/ubuntu lucid main`
 
 sudo or su 
 
