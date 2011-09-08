@@ -40,7 +40,7 @@ add to /etc/apt/sources.list.d/debian.list
 
 `deb http://ppa.launchpad.net/dhor/myway/ubuntu maverick main` 
 
-`deb-src http://hppa.launchpad.net/dhor/myway/ubuntu maverick main`
+`deb-src http://ppa.launchpad.net/dhor/myway/ubuntu maverick main`
 
 su 
 
