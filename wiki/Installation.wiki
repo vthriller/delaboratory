@@ -7,21 +7,25 @@ You can find them in the *Downloads* section.
 
 = Ubuntu =
 
-Ubuntu packages were created by Dariusz Duma, you can find them on Launchpad: https://launchpad.net/~dhor/+archive/myway
+Ubuntu packages were created by Dariusz Duma (you can find them on his website: https://launchpad.net/~dhor/+archive/myway).
 
-to install:
+== with installer ==
 
-sudo add-apt-repository ppa:dhor/myway
+Just use your graphic installer like synaptic:
+  * add the Dh0r ppa
+  * install delaboratory
 
-sudo apt-get update
+== on terminal ==
 
-sudo apt-get install delaboratory
+`sudo add-apt-repository ppa:dhor/myway`
 
-Or use your favorite graphic installer like for instance Synaptic
+`sudo apt-get update`
+
+`sudo apt-get install delaboratory`
 
 = Arch Linux =
 
-You can find AUR package here:
+AUR package was crated by speps, you can find it here:
 http://aur.archlinux.org/packages.php?ID=49517
 
 = Compiling the source code =
