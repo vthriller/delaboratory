@@ -5,9 +5,11 @@
 Windows builds are created and maintained by Partha (http://www.partha.com/). 
 You can find them in the *Downloads* section.
 
-= Ubuntu =
+= Debian / Ubuntu =
 
-Ubuntu packages were created by Dariusz Duma (you can find them on : https://launchpad.net/~dhor/+archive/myway).
+.deb packages were created by Dariusz Duma
+
+[DebianUbuntuInstallation] 
 
 == with installer ==
 
