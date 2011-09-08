@@ -7,7 +7,15 @@ You can find them in the *Downloads* section.
 
 = Ubuntu =
 
-Ubuntu packages were created by Dariusz Duma, you can find them on his website: https://launchpad.net/~dhor/+archive/myway
+Ubuntu packages were created by Dariusz Duma, you can find them on Launchpad: https://launchpad.net/~dhor/+archive/myway
+
+to install:
+
+sudo add-apt-repository ppa:dhor/myway
+sudo apt-get update
+sudo apt-get install delaboratory
+
+Or use your favorite graphic installer like for instance Synaptic
 
 = Arch Linux =
 
