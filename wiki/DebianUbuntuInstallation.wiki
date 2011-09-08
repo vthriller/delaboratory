@@ -16,9 +16,9 @@ Just use your graphic installer like synaptic:
 
 `sudo apt-get install delaboratory`
 
-=Debian / Debian based distro's 
+=Debian / Debian based distro's =
 
-as Dreamlinux. Mint based on Debian, LMDE=
+* Dreamlinux. Mint based on Debian, LMDE, etc, *
 
 Add to /etc/apt/sources.list using an editor like f.i nano
 
