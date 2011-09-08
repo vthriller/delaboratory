@@ -9,7 +9,7 @@ You can find them in the *Downloads* section.
 
 Ubuntu packages were created by Dariusz Duma (you can find them on : https://launchpad.net/~dhor/+archive/myway).
 
-== with graphic installer ==
+== with installer ==
 
 Just use your graphic installer like synaptic:
   * add to your sources: ppa:dhor/myway
