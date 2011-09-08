@@ -47,4 +47,4 @@ su
 `apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93330B78`
 
 `apt-get update`
-`apt-get install photivo`
+`apt-get install delaboratory`
