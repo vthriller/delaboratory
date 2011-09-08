@@ -12,7 +12,9 @@ Ubuntu packages were created by Dariusz Duma, you can find them on Launchpad: ht
 to install:
 
 sudo add-apt-repository ppa:dhor/myway
+
 sudo apt-get update
+
 sudo apt-get install delaboratory
 
 Or use your favorite graphic installer like for instance Synaptic
