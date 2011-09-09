@@ -68,6 +68,11 @@ As shown in this image:
 
 http://img641.imageshack.us/img641/29/toneslchannel.jpg
 
+If we move a point to left and / or up the effect will be a lighting, to the right and / or down will be a darkening.
+
+http://img27.imageshack.us/img27/3923/46685153.png
+
+
 Note: When one does add only one point the place where one did put it will be most effected, though as the whole curve will change the whole image will be effected. If one whants only a very specific area to be altered one needs to add more points.
 
 = Basics L channel curve.=
