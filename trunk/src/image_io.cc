@@ -168,3 +168,78 @@ void loadJPEG(const std::string& fileName, deBaseChannel& channelR, deBaseChanne
     }
 
 }
+
+void saveJPEG(const std::string& fileName, const deBaseChannel& channelR, const deBaseChannel& channelG, const deBaseChannel& channelB, deSize& size)
+{
+    wxImage* image;
+    int w = size.getW();
+    int h = size.getH();
+
+    image = new wxImage(w, h);
+
+    int pos = 0;
+    int y;
+    for (y = 0; y < h; y++)
+    {
+        int x;
+        for (x = 0; x < w; x++)
+        {
+            deValue r = 255 * channelR.getValue(pos);
+            deValue g = 255 * channelG.getValue(pos);
+            deValue b = 255 * channelB.getValue(pos);
+            image->SetRGB(x, y, r, g, b); 
+
+            pos++;
+
+        }
+    }
+    image->SaveFile(wxString::FromAscii(fileName.c_str()));
+    delete image;
+}
+
+void saveTIFF(const std::string& fileName, const deBaseChannel& channelR, const deBaseChannel& channelG, const deBaseChannel& channelB, deSize& size)
+{
+    int w = size.getW();
+    int h = size.getH();
+
+    TIFF* tif = TIFFOpen(fileName.c_str(), "w");
+
+    TIFFSetField (tif, TIFFTAG_SOFTWARE, "delaboratory");
+    TIFFSetField (tif, TIFFTAG_IMAGEWIDTH, w);
+    TIFFSetField (tif, TIFFTAG_IMAGELENGTH, h);
+    TIFFSetField (tif, TIFFTAG_SAMPLESPERPIXEL, 3);
+    TIFFSetField (tif, TIFFTAG_BITSPERSAMPLE, 16);
+    TIFFSetField (tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+    TIFFSetField (tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
+    TIFFSetField (tif, TIFFTAG_ROWSPERSTRIP, h);
+    TIFFSetField (tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+    TIFFSetField (tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+
+    tdata_t buf;
+    int ssize = TIFFScanlineSize(tif);
+    buf = _TIFFmalloc(ssize);
+    uint16* bb = (uint16*)(buf);
+
+    int pos = 0;
+    int y;
+    for (y = 0; y < h; y++)
+    {
+        int x;
+        for (x = 0; x < w; x++)
+        {
+            deValue d = 256 * 256 - 1 ;;
+            deValue r = d * channelR.getValue(pos);
+            deValue g = d * channelG.getValue(pos);
+            deValue b = d * channelB.getValue(pos);
+            bb[3*x+0] = r;
+            bb[3*x+1] = g;
+            bb[3*x+2] = b;;
+
+            pos++;
+
+        }
+        TIFFWriteScanline (tif, buf, y, 0);
+    }
+
+    TIFFClose(tif);
+}
