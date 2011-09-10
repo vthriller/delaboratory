@@ -22,6 +22,8 @@
 #include "channels.h"
 #include "color_space.h"
 #include <tiffio.h>
+#include "image_io.h"
+#include <cassert>
 
 deSourceImage::deSourceImage()
 :dePreview(deColorSpaceRGB)
@@ -30,105 +32,29 @@ deSourceImage::deSourceImage()
 
 void deSourceImage::load(const std::string& fileName)
 {
-    {
-        size_t pos = fileName.rfind("tif");
-        if ((pos == fileName.size() - 3) || (pos == fileName.size() - 4))
-        {
-            loadTIFF(fileName);
-            return;
-        }
-    }
-    {
-        size_t pos = fileName.rfind("TIF");
-        if ((pos == fileName.size() - 3) || (pos == fileName.size() - 4))
-        {
-            loadTIFF(fileName);
-            return;
-        }
-    }
-    loadJPEG(fileName);
-}
+    bool tiff = checkTIFF(fileName);
+    bool jpeg = checkJPEG(fileName);
 
-void deSourceImage::loadTIFF(const std::string& fileName)
-{
-    TIFF* tif = TIFFOpen(fileName.c_str(), "r");
-    if (!tif)
+    if ((!tiff) && (!jpeg))
     {
         return;
     }
-    tdata_t buf;
 
-    int w;
-    int h;
-    uint16 bps;
-    uint16 spp;
-    TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
-    TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
-    TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bps);
-    TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &spp);
-    size = deSize(w,h);
-
-    createChannels(size);
-
-    deBaseChannel* channelR = getChannel(DE_CHANNEL_RED);
-    deBaseChannel* channelG = getChannel(DE_CHANNEL_GREEN);
-    deBaseChannel* channelB = getChannel(DE_CHANNEL_BLUE);
-
-    int pos = 0;
-    int y;
-
-    int ssize = TIFFScanlineSize(tif);
-    buf = _TIFFmalloc(ssize);
-
-    for (y = 0; y < h; y++)
+    if ((tiff) && (jpeg))
     {
-        TIFFReadScanline(tif, buf, y);
-        int x;
-        for (x = 0; x < w; x++)
-        {
-            deValue r;
-            deValue g;
-            deValue b;
-            if (bps == 16)
-            {
-                uint16* bb = (uint16*)(buf);
-                uint16 u1 = bb[spp*x+0];
-                uint16 u2 = bb[spp*x+1];
-                uint16 u3 = bb[spp*x+2];
-                deValue d = (256 * 256) - 1;
-                r = u1 / d;
-                g = u2 / d;
-                b = u3 / d;
-            }         
-            else
-            {
-                uint8* bb = (uint8*)(buf);
-                uint8 u1 = bb[spp*x+0];
-                uint8 u2 = bb[spp*x+1];
-                uint8 u3 = bb[spp*x+2];
-                deValue d = 256 - 1;
-                r = u1 / d;
-                g = u2 / d;
-                b = u3 / d;
-            }
-            channelR->setValue(pos, r );
-            channelG->setValue(pos, g );
-            channelB->setValue(pos, b );
-            pos++;
-        }
+        // you got to be kidding
+        assert(false);
     }
-    _TIFFfree(buf);
-    TIFFClose(tif);
-}
 
-void deSourceImage::loadJPEG( const std::string& fileName)
-{
-    wxImage image;
-    image.LoadFile(wxString::FromAscii(fileName.c_str()), wxBITMAP_TYPE_JPEG);
-    int w = image.GetWidth();
-    int h = image.GetHeight();
+    if (tiff)
+    {
+        size = getTIFFSize(fileName);
+    }
 
-    size = deSize(w,h);
+    if (jpeg)
+    {
+        size = getJPEGSize(fileName);
+    }
 
     createChannels(size);
 
@@ -136,23 +62,17 @@ void deSourceImage::loadJPEG( const std::string& fileName)
     deBaseChannel* channelG = getChannel(DE_CHANNEL_GREEN);
     deBaseChannel* channelB = getChannel(DE_CHANNEL_BLUE);
 
-    int pos = 0;
-
-    int y;
-    for (y =0; y < h; y++)
-    {   
-        int x;
-        for (x = 0; x < w; x++)
-        {
-            deValue r = image.GetRed(x, y) / 255.0; 
-            deValue g = image.GetGreen(x, y) / 255.0; 
-            deValue b = image.GetBlue(x, y) / 255.0; 
-            channelR->setValue(pos, r );
-            channelG->setValue(pos, g );
-            channelB->setValue(pos, b );
-            pos++;
-        }
+    if (tiff)
+    {
+       loadTIFF(fileName, *channelR, *channelG, *channelB);
     }
+
+    if (jpeg)
+    {
+       loadJPEG(fileName, *channelR, *channelG, *channelB);
+    }
+
+
 
 }
 

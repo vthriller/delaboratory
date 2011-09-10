@@ -28,6 +28,7 @@
 #include "gui.h"
 #include "logger.h"
 #include "layer_factory.h"
+#include "channel_manager.h"
 
 class deFinalImage;
 
@@ -47,6 +48,8 @@ class deProject
         deLayerFactory layerFactory;
 
         std::string sourceImageFileName;
+
+        deChannelManager channelManager;
 
         deProject(const deProject& project);
 

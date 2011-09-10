@@ -16,26 +16,18 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_SOURCE_IMAGE_H
-#define _DE_SOURCE_IMAGE_H
+#ifndef _DE_IMAGE_IO_H
+#define _DE_IMAGE_IO_H
 
 #include <string>
-#include "preview.h"
-//#include "tiffio.h"
+#include "size.h"
+#include "channel.h"
 
-class deSourceImage:public dePreview
-{
-    private:
-//        void loadTIFF(TIFF* tif);
-
-    public:
-        deSourceImage();
-        virtual ~deSourceImage();
-
-//        void loadJPEG( const std::string& fileName);
-//        void loadTIFF( const std::string& fileName);
-        void load(const std::string& fileName);
-
-};
+bool checkTIFF(const std::string& fileName);
+bool checkJPEG(const std::string& fileName);
+deSize getTIFFSize(const std::string& fileName);
+deSize getJPEGSize( const std::string& fileName);
+void loadTIFF(const std::string& fileName, deBaseChannel& channelR, deBaseChannel& channelG, deBaseChannel& channelB);
+void loadJPEG(const std::string& fileName, deBaseChannel& channelR, deBaseChannel& channelG, deBaseChannel& channelB);
 
 #endif

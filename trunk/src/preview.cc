@@ -86,7 +86,7 @@ void dePreview::createChannels(const deSize& size)
         deValue min;
         deValue max;
         getColorSpaceChannelRanges(colorSpace, i, min, max);
-        channels[i] = new deChannel(size, min, max);
+        channels[i] = new deTrueChannel(size, min, max);
     }
     for (i = n; i < 4; i++)
     {

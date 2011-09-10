@@ -56,12 +56,12 @@ void deSourceImageLayer::updatePreview(dePreviewStack& previewStack)
 
     for (i = 0; i < n; i++)
     {
-        const deChannel* sourceChannel = dynamic_cast<const deChannel*>(sourceImage->getChannel(i));
+        const deTrueChannel* sourceChannel = dynamic_cast<const deTrueChannel*>(sourceImage->getChannel(i));
         if (!sourceChannel)
         {
             throw deException("no sourceChannel in deSourceImageLayer::generatePreview");
         }
-        deChannel* destinationChannel = dynamic_cast<deChannel*>(preview->getChannel(i));
+        deTrueChannel* destinationChannel = dynamic_cast<deTrueChannel*>(preview->getChannel(i));
         if (!destinationChannel)
         {
             throw deException("no destinationChannel in deSourceImageLayer::generatePreview");

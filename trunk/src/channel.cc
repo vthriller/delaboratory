@@ -19,23 +19,23 @@
 #include "channel.h"
 #include <iostream>
 
-deChannel::deChannel(const deSize& _size, deValue _min, deValue _max)
+deTrueChannel::deTrueChannel(const deSize& _size, deValue _min, deValue _max)
 :deBaseChannel(_size), min(_min), max(_max)
 {
     pixels = new deValue [size.getN()];
 }
 
-deChannel::~deChannel()
+deTrueChannel::~deTrueChannel()
 {
     delete [] pixels;
 }
 
-deValue deChannel::getValue(int pos) const
+deValue deTrueChannel::getValue(int pos) const
 {
     return pixels[pos];
 }
 
-void deChannel::setValue(int pos, deValue value)
+void deTrueChannel::setValue(int pos, deValue value)
 {
     if (value < min)
     {
@@ -48,7 +48,7 @@ void deChannel::setValue(int pos, deValue value)
     pixels[pos] = value;
 }
 
-bool deChannel::copy(const deBaseChannel* channel)
+bool deTrueChannel::copy(const deBaseChannel* channel)
 {
     if (!channel)        
     {
@@ -59,7 +59,7 @@ bool deChannel::copy(const deBaseChannel* channel)
         return false;
     }
 
-    const deChannel* c = dynamic_cast<const deChannel*>(channel);
+    const deTrueChannel* c = dynamic_cast<const deTrueChannel*>(channel);
     if (!c)
     {
         return false;
@@ -74,7 +74,7 @@ bool deChannel::copy(const deBaseChannel* channel)
     return true;
 }
 
-bool deChannel::scale(const deChannel* channel)
+bool deTrueChannel::scale(const deTrueChannel* channel)
 {
     if (!channel)        
     {
@@ -102,7 +102,7 @@ bool deChannel::scale(const deChannel* channel)
     return true;
 }
 
-const deValue* deChannel::getPixels() const
+const deValue* deTrueChannel::getPixels() const
 {
     return pixels;
 }
