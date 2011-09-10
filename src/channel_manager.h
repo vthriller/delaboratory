@@ -16,25 +16,37 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_SOURCE_IMAGE_H
-#define _DE_SOURCE_IMAGE_H
+#ifndef _DE_CHANNEL_MANAGER_H
+#define _DE_CHANNEL_MANAGER_H
 
-#include <string>
-#include "preview.h"
-//#include "tiffio.h"
+#include "size.h"
+#include <vector>
+#include "channel.h"
 
-class deSourceImage:public dePreview
+class deChannelManager
 {
     private:
-//        void loadTIFF(TIFF* tif);
+        deSize originalSize;
+        deSize previewSize;
 
+        std::vector<deChannel*> channels;
+
+        int insertNewChannel(deChannel* channel);
+        void destroyAllChannels();
+        void destroyAllPreviewChannels();
+        
     public:
-        deSourceImage();
-        virtual ~deSourceImage();
+        deChannelManager();
+        virtual ~deChannelManager();
 
-//        void loadJPEG( const std::string& fileName);
-//        void loadTIFF( const std::string& fileName);
-        void load(const std::string& fileName);
+        void setOriginalSize(const deSize& size);
+        void setPreviewSize(const deSize& size);
+
+        int allocateOriginalSize();
+        int allocatePreviewSize();
+        deChannel* get(int index);
+        int destroyChannel(int index);
+
 
 };
 

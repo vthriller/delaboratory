@@ -22,7 +22,7 @@
 
 void fillGrain(deBaseChannel* c)
 {
-    deChannel* d = dynamic_cast<deChannel*>(c);
+    deTrueChannel* d = dynamic_cast<deTrueChannel*>(c);
     if (!d)
     {
         return;

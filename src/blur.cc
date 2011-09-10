@@ -188,13 +188,13 @@ void fillWeightsGaussian(deValue* weights, int blurSize)
 
 void blurChannel(const deBaseChannel* source, deBaseChannel* destination, deBlurDirection direction, deValue radius, deBlurType type, deValue t)
 {
-    deChannel* d = dynamic_cast<deChannel*>(destination);
+    deTrueChannel* d = dynamic_cast<deTrueChannel*>(destination);
     if (!d)
     {
         return;
     }
     
-    const deChannel* s = dynamic_cast<const deChannel*>(source);
+    const deTrueChannel* s = dynamic_cast<const deTrueChannel*>(source);
     if (!s)
     {
         return;
