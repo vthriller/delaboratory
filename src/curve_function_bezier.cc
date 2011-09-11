@@ -35,7 +35,13 @@ deCurveFunctionBezier::~deCurveFunctionBezier()
 
 deValue deCurveFunctionBezier::calc(deValue value) const
 {
-    deValue t = (value - x0) / (x3 - x0);
+    deValue d = x3 - x0;
+    if (d == 0.0)
+    {
+        return value;
+    }
+
+    deValue t = (value - x0) / d;
     deValue t1 = 1.0 - t;
 
     return (y0 * t1 * t1 * t1) + 3 * (y1 * t1 * t1 * t) + 3 * (y2 * t1 * t * t) + (y3 * t * t * t);
