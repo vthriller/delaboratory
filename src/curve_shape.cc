@@ -19,6 +19,9 @@
 #include "curve_shape.h"
 #include <iostream>
 #include "curve_function_spline.h"
+#include "curve_function_bezier.h"
+
+#define BEZIER 0
 
 deCurveShape::deCurveShape(int _size)
 :size(_size)
@@ -107,8 +110,11 @@ void deCurveShape::build(const deCurvePoints& points)
         storeValues(x1, y1, x2, y2);
     }
     */
-
+#if BEZIER
+    generateBezier();
+#else    
     generateSpline();
+#endif
 }
 
 void deCurveShape::getControlPoints(deCurvePoints& points) const
@@ -223,4 +229,38 @@ void deCurveShape::generateSpline()
     delete [] y;
     delete [] u;
     delete [] y2;
+}
+
+void deCurveShape::generateBezier()
+{
+    deNodes::const_iterator i;
+    
+    for (i = nodes.begin(); i != nodes.end(); i++)
+    {
+        deValue x0 = (*i).first;
+        deValue y0 = (*i).second;
+        deNodes::const_iterator k = i;
+        k++;
+        deValue x3 = x0;
+        deValue y3 = y0;
+        if (k != nodes.end())
+        {
+            x3 = (*k).first;
+            y3 = (*k).second;
+        }
+        deValue dx = x3 - x0;
+        deValue dy = y3 - y0;
+
+        deValue y1 = y0 + dy / 3.0;
+        deValue y2 = y0 + dy * 2.0 / 3.0;
+
+        int p1 = x0 * (size - 1);
+        int p2 = x3 * (size - 1);
+        int iii;
+        for (iii = p1; iii <= p2; iii++)
+        {
+            functions[iii] = new deCurveFunctionBezier(x0, x3, y0, y1, y2, y3);
+        }
+    }
+
 }
