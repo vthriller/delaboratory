@@ -24,6 +24,9 @@
 #include "exception.h"
 #include "action_frame.h"
 
+#define LAYER_FRAME_TRANSPARENCY 192
+
+
 void deLayerListPanel::select(wxCommandEvent &event)
 {
     wxListEvent& e = dynamic_cast<wxListEvent&>(event);
@@ -50,6 +53,7 @@ void deLayerListPanel::activate(wxCommandEvent &event)
     if (frame)
     {
         frame->Show();
+        frame->SetTransparent(LAYER_FRAME_TRANSPARENCY);
     }        
 
 }
