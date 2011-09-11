@@ -64,12 +64,17 @@ void deSourceImage::load(const std::string& fileName)
 
     if (tiff)
     {
-       loadTIFF(fileName, *channelR, *channelG, *channelB);
+        bool icc;
+        loadTIFF(fileName, *channelR, *channelG, *channelB, icc);
+        if (icc)
+        {
+            wxMessageBox( _T("Warning! this TIFF file contains ICC profile which is ignored by delaboratory\n\ndelaboratory expects sRGB - colors may be not accurate\n\nThis problem happens (for instance) when tiff is created by dcraw\nyou can fix it by calling tifficc command, by default it converts tiff to sRGB"), _T("ICC profile ignored"), wxOK | wxICON_INFORMATION, NULL );
+        }
     }
 
     if (jpeg)
     {
-       loadJPEG(fileName, *channelR, *channelG, *channelB);
+        loadJPEG(fileName, *channelR, *channelG, *channelB);
     }
 
 

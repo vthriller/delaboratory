@@ -27,7 +27,7 @@ bool checkTIFF(const std::string& fileName);
 bool checkJPEG(const std::string& fileName);
 deSize getTIFFSize(const std::string& fileName);
 deSize getJPEGSize( const std::string& fileName);
-void loadTIFF(const std::string& fileName, deBaseChannel& channelR, deBaseChannel& channelG, deBaseChannel& channelB);
+void loadTIFF(const std::string& fileName, deBaseChannel& channelR, deBaseChannel& channelG, deBaseChannel& channelB, bool& icc);
 void loadJPEG(const std::string& fileName, deBaseChannel& channelR, deBaseChannel& channelG, deBaseChannel& channelB);
 void saveJPEG(const std::string& fileName, const deBaseChannel& channelR, const deBaseChannel& channelG, const deBaseChannel& channelB, deSize& size);
 void saveTIFF(const std::string& fileName, const deBaseChannel& channelR, const deBaseChannel& channelG, const deBaseChannel& channelB, deSize& size);
