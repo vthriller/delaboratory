@@ -77,7 +77,7 @@ deSize getJPEGSize( const std::string& fileName)
     return size;
 }    
 
-void loadTIFF(const std::string& fileName, deBaseChannel& channelR, deBaseChannel& channelG, deBaseChannel& channelB)
+void loadTIFF(const std::string& fileName, deBaseChannel& channelR, deBaseChannel& channelG, deBaseChannel& channelB, bool& icc)
 {
     TIFF* tif = TIFFOpen(fileName.c_str(), "r");
     if (!tif)
@@ -94,6 +94,17 @@ void loadTIFF(const std::string& fileName, deBaseChannel& channelR, deBaseChanne
     TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
     TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bps);
     TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &spp);
+
+    uint32* count;
+    void** profile;
+    if (TIFFGetField(tif, TIFFTAG_ICCPROFILE, &count, &profile))
+    {
+        icc = true;
+    }        
+    else
+    {
+        icc = false;
+    }
 
     int pos = 0;
     int y;
