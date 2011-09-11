@@ -37,6 +37,7 @@ class deCurveShape
 //        void storeValues(deValue x1, deValue y1, deValue x2, deValue y2);
         void clearFunctions();
         void generateSpline();
+        void generateBezier();
     public:
         deCurveShape(int _size);
         ~deCurveShape();
