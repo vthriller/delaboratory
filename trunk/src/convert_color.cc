@@ -152,7 +152,12 @@ void cmy2cmyk(deValue* values)
     // so it doesn't really matter if I scale this by some parameter, right?
 
     deValue k = min(values[0], values[1], values[2]);
-    k*=0.3;
+    //k*=0.3;
+    k*=0.9;
+    if (k > 0.5)
+    {
+        k = 0.5;
+    }
 
     deValue kk = (1 - k);
 
