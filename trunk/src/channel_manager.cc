@@ -19,7 +19,7 @@
 #include "channel_manager.h"
 
 deChannelManager::deChannelManager()
-:originalSize(0,0), previewSize(0,0)
+:channelSize(0,0)
 {
 }
 
@@ -27,27 +27,14 @@ deChannelManager::~deChannelManager()
 {
 }
 
-void deChannelManager::setOriginalSize(const deSize& size)
+void deChannelManager::setChannelSize(const deSize& size)
 {
-    originalSize = size;
-    destroyAllChannels();
+    channelSize = size;
 }
 
-void deChannelManager::setPreviewSize(const deSize& size)
+int deChannelManager::allocateNewChannel()
 {
-    previewSize = size;
-    destroyAllPreviewChannels();
-}
-
-int deChannelManager::allocateOriginalSize()
-{
-    deChannel* channel = new deChannel(originalSize.getN(), false);
-    return insertNewChannel(channel);
-}
-
-int deChannelManager::allocatePreviewSize()
-{
-    deChannel* channel = new deChannel(previewSize.getN(), true);
+    deChannel* channel = new deChannel(channelSize.getN());
     return insertNewChannel(channel);
 }
 
@@ -75,7 +62,7 @@ int deChannelManager::insertNewChannel(deChannel* channel)
     return n;
 }
 
-deChannel* deChannelManager::get(int index)
+deChannel* deChannelManager::getChannel(int index)
 {
     return channels[index];
 }
@@ -89,15 +76,3 @@ void deChannelManager::destroyAllChannels()
     }
 }
 
-void deChannelManager::destroyAllPreviewChannels()
-{
-    int i;
-    for (i = 0; i < channels.size(); i++)
-    {
-        deChannel* channel = channels[i];
-        if (channel->isPreview())
-        {
-            destroyChannel(i);
-        }            
-    }
-}
