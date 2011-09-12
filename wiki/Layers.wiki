@@ -1,0 +1,50 @@
+#summary Description of Layer types
+
+= Source Image = 
+
+Source Image Layer has no source layer. Its source is a *real image* (tiff/jpg).
+This is always first layer on stack.
+In future it will be also possible to add multiple Source Image Layers.
+
+= Curves = 
+
+Curves Layer has source layer and *set of curves* - one for each channel.
+Every channel is calculated by processing one source channel with one curve.
+
+Curves is the most important tool of delaboratory.
+
+= Mixer = 
+
+Mixer Layer has source layer and a *mixer*. 
+Every channel is calculated by processing each source channel with mixer.
+Mixer is set of sliders, number of sliders is n * m, where *n* is number of source channels and *m* is number of destination channels.
+
+Mixer is used where curves are unusable. It's more difficult tool to master, requires more experience. 
+
+Mixer is also used as nice way of converting RGB into BW.
+
+= Blend =
+
+Blend Layer has source layer and overlay layer.
+Blending means mixing two layers together, how they are mixed is defined by *blend type* and *alpha* parameter.
+
+The primary usage of Blend Layer is to reduce opacity of other effects (blend mode is set to normal and alpha is set to opacity).
+
+More advanced usage requires knowledge of blend modes.
+
+= Conversion = 
+
+Conversion Layer is used to change colorspace.
+In Conversion Layer you need to set source layer and colorspace.
+
+Sometimes direct conversion is not available, and you need two steps (for instance when converting between HSL and LCH), try convert to RGB first.
+
+= Blur = 
+
+Blur is used to make image unsharp.
+It is used mostly in cooperation with blend in advanced effects, like shadows&highlights or to give image dreamy look.
+
+= High Pass = 
+
+High Pass is opposite of blur, it detects edges and can be used to make images sharper (in cooperation with blend in overlay mode).
+
