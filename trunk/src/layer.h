@@ -80,7 +80,7 @@ class deLayer
 
         virtual const std::string getDescription() const {return "base layer";};
 
-        int getSourceLayerID() const {return sourceLayer.getIndex();};
+        int getSourceLayerID() const {return sourceLayer.getLayerIndex();};
 
         void registerProperty(deProperty& property);
 
@@ -101,6 +101,8 @@ class deLayer
         
         virtual bool checkUsage(int id);
         void onKey(int key);
+
+        bool isLast() const;
 
 };
 

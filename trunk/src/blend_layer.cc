@@ -31,7 +31,7 @@ deBlendLayer::deBlendLayer(deLayerStack& _stack, int _index, const std::string& 
 {
     alpha.setValue(0.5);
     blendMode.setBlendMode(deBlendNormal);
-    overlayLayer.setIndex(-1);
+    overlayLayer.setLayerIndex(-1);
 }
 
 deBlendLayer::~deBlendLayer()
@@ -46,8 +46,8 @@ void deBlendLayer::changeAlpha(deValue _alpha)
 
 void deBlendLayer::updatePreview(dePreviewStack& previewStack)
 {
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
-    const dePreview* overlayPreview = previewStack.getPreview(overlayLayer.getIndex());
+    const dePreview* sourcePreview = previewStack.getPreview(getSourceLayerID());
+    const dePreview* overlayPreview = previewStack.getPreview(overlayLayer.getLayerIndex());
     dePreview* preview = previewStack.getPreview(index);
 
     if ((sourcePreview) && (preview) && (overlayPreview))
@@ -155,15 +155,15 @@ void deBlendLayer::loadSpecific(xmlNodePtr node)
         int s;
         iss >> s;
 
-        overlayLayer.setIndex(s);
+        overlayLayer.setLayerIndex(s);
     }        
 }
 
 void deBlendLayer::onChangeSourceLayer()
 {
-    if (overlayLayer.getIndex() < 0)
+    if (overlayLayer.getLayerIndex() < 0)
     {
-        overlayLayer.setIndex(sourceLayer.getIndex());
+        overlayLayer.setLayerIndex(getSourceLayerID());
     }
 }
 
@@ -174,11 +174,11 @@ void deBlendLayer::onChangeColorSpace()
 
 bool deBlendLayer::checkUsage(int id)
 {
-    if (sourceLayer.getIndex() == id)
+    if (getSourceLayerID() == id)
     {
         return true;
     }
-    if (overlayLayer.getIndex() == id)
+    if (overlayLayer.getLayerIndex() == id)
     {
         return true;
     }

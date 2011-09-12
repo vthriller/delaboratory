@@ -30,7 +30,7 @@ dePropertyLayerIndex::~dePropertyLayerIndex()
 {
 }
 
-void dePropertyLayerIndex::setIndex(int _index)
+void dePropertyLayerIndex::setLayerIndex(int _index)
 {
     index = _index;
 }

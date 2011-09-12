@@ -114,7 +114,7 @@ void deBlurLayer::loadSpecific(xmlNodePtr node)
 
 void deBlurLayer::updatePreview(dePreviewStack& previewStack)
 {
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
+    const dePreview* sourcePreview = previewStack.getPreview(getSourceLayerID());
     dePreview* preview = previewStack.getPreview(index);
 
     if ((sourcePreview) && (preview))

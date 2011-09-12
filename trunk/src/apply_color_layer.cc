@@ -29,7 +29,7 @@
 deApplyColorLayer::deApplyColorLayer(deLayerStack& _stack, int _index, const std::string& _name)
 :deLayer(_stack, _index, _name), overlayLayer(*this, "overlay")
 {
-    overlayLayer.setIndex(-1);
+    overlayLayer.setLayerIndex(-1);
 }
 
 deApplyColorLayer::~deApplyColorLayer()
@@ -56,8 +56,8 @@ void deApplyColorLayer::loadSpecific(xmlNodePtr node)
 
 void deApplyColorLayer::updatePreview(dePreviewStack& previewStack)
 {
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
-    const dePreview* overlayPreview = previewStack.getPreview(overlayLayer.getIndex());
+    const dePreview* sourcePreview = previewStack.getPreview(getSourceLayerID());
+    const dePreview* overlayPreview = previewStack.getPreview(overlayLayer.getLayerIndex());
     dePreview* preview = previewStack.getPreview(index);
 
     if ((sourcePreview) && (preview) && (overlayPreview))
@@ -68,8 +68,8 @@ void deApplyColorLayer::updatePreview(dePreviewStack& previewStack)
 
 void deApplyColorLayer::onChangeSourceLayer()
 {
-    if (overlayLayer.getIndex() < 0)
+    if (overlayLayer.getLayerIndex() < 0)
     {
-        overlayLayer.setIndex(sourceLayer.getIndex());
+        overlayLayer.setLayerIndex(sourceLayer.getLayerIndex());
     }
 }

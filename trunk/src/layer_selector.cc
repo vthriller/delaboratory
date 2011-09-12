@@ -29,7 +29,7 @@ deLayerSelector::deLayerSelector(wxPanel* parent, dePropertyLayerIndex& _propert
     wxStaticText* label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(s.c_str()) );
     sizer->Add(label);
 
-    layerChoice = makeLayerChoice(this, property.getParent().getIndex(), property.getIndex());
+    layerChoice = makeLayerChoice(this, property.getParent().getIndex(), property.getLayerIndex());
     sizer->Add(layerChoice);
 
     SetSizer(sizer);
@@ -43,7 +43,7 @@ deLayerSelector::~deLayerSelector()
 
 void deLayerSelector::choose(wxCommandEvent &event)
 {
-    property.setIndex( layerChoice->GetCurrentSelection() );
+    property.setLayerIndex( layerChoice->GetCurrentSelection() );
     property.onUpdate();
 }
 
