@@ -11,7 +11,9 @@ In future it will be also possible to add multiple Source Image Layers.
 Curves Layer has source layer and *set of curves* - one for each channel.
 Every channel is calculated by processing one source channel with one curve.
 
-Curves is the most important tool of delaboratory.
+Curves Layer is the most important tool of delaboratory.
+
+*tip* find Cross Processing tutorial for Gimp or Photoshop and try it in delaboratory to start with curves
 
 = Mixer = 
 
@@ -23,6 +25,8 @@ Mixer is used where curves are unusable. It's more difficult tool to master, req
 
 Mixer is also used as nice way of converting RGB into BW.
 
+*tip* try Mixer in RGB mode and play with sliders to make colors more interesting, it requires a lot of time at start, but you will learn what can be achieved with this tool
+
 = Blend =
 
 Blend Layer has source layer and overlay layer.
@@ -32,6 +36,8 @@ The primary usage of Blend Layer is to reduce opacity of other effects (blend mo
 
 More advanced usage requires knowledge of blend modes.
 
+*tip* after Curves or Mixer create Blend Layer and try reducing opacity of Curves/Mixer, you will learn how to use blend correctly
+
 = Conversion = 
 
 Conversion Layer is used to change colorspace.
@@ -39,12 +45,17 @@ In Conversion Layer you need to set source layer and colorspace.
 
 Sometimes direct conversion is not available, and you need two steps (for instance when converting between HSL and LCH), try convert to RGB first.
 
+*tip* try converting to LAB, play with curves there, then convert back to RGB
+
 = Blur = 
 
 Blur is used to make image unsharp.
 It is used mostly in cooperation with blend in advanced effects, like shadows&highlights or to give image dreamy look.
 
+*tip* add blur layer, then add blend layer and use overlay mode to give image dreamy look
+
 = High Pass = 
 
 High Pass is opposite of blur, it detects edges and can be used to make images sharper (in cooperation with blend in overlay mode).
 
+*tip* add high pass layer, set radius correctly, then add blend layer in overlay mode and make image sharper
