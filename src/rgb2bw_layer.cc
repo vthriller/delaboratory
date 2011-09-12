@@ -22,12 +22,6 @@
 #include "preview.h"
 
 
-/*
-#include "blur.h"
-#include "project.h"
-#include "channel.h"
-*/
-
 deRGB2BWLayer::deRGB2BWLayer(deLayerStack& _stack, int _index, const std::string& _name)
 :deLayer(_stack, _index, _name), alphaR(*this, "alpha R", 0.0, 1.0), alphaB(*this, "alpha B", 0.0, 1.0)
 {
@@ -44,8 +38,6 @@ deRGB2BWLayer::~deRGB2BWLayer()
 bool deRGB2BWLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
 {
     dePreview* tmp = new dePreview(deColorSpaceBW, preview->getRawSize());
-    //blend(sourcePreview->getChannel(1), sourcePreview->getChannel(0), tmp->getChannel(0), alphaR.getValue(), deBlendOverlay, NULL);
-    //blend(tmp->GetChannel(0), sourcePreview->getChannel(2), preview->getChannel(0), alphaB.getValue(), deBlendOverlay, NULL);
     blend(*(sourcePreview->getChannel(1)), *(sourcePreview->getChannel(0)), *(tmp->getChannel(0)), alphaR.getValue(), deBlendOverlay, NULL);
     blend(*(tmp->getChannel(0)), *(sourcePreview->getChannel(2)), *(preview->getChannel(0)), alphaB.getValue(), deBlendOverlay, NULL);
     delete tmp;
@@ -55,43 +47,15 @@ bool deRGB2BWLayer::updatePreview(const dePreview* sourcePreview, dePreview* pre
 
 void deRGB2BWLayer::saveSpecific(xmlNodePtr node)
 {
-/*
-    radiusX.save(node, "radius_x");
-    radiusY.save(node, "radius_y");
-    channels.save(node, "channels");
-    */
 }
 
 void deRGB2BWLayer::loadSpecific(xmlNodePtr node)
 {
-/*
-    xmlNodePtr child = node->xmlChildrenNode;
-
-    while (child)
-    {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("radius_x")))) 
-        {
-            radiusX.load(child);
-        }
-
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("radius_y")))) 
-        {
-            radiusY.load(child);
-        }
-
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("channels")))) 
-        {
-            channels.load(child);
-        }
-
-        child = child->next;
-    }
-    */
 }
 
 void deRGB2BWLayer::updatePreview(dePreviewStack& previewStack)
 {
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
+    const dePreview* sourcePreview = previewStack.getPreview(getSourceLayerID());
     dePreview* preview = previewStack.getPreview(index);
 
     if ((sourcePreview) && (preview))

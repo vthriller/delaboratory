@@ -32,8 +32,8 @@ class dePropertyLayerIndex:public deProperty
         dePropertyLayerIndex(deLayer& _parent, const std::string& _label);
         virtual ~dePropertyLayerIndex();
 
-        int getIndex() const {return index;};
-        void setIndex(int _index);
+        int getLayerIndex() const {return index;};
+        void setLayerIndex(int _index);
 
         virtual void addPanelContent(wxPanel* panel, wxSizer* sizer);
         virtual void saveContent(xmlNodePtr node);

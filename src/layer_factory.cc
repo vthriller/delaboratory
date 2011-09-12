@@ -23,7 +23,7 @@
 #include "curves_layer.h"
 #include "blur_layer.h"
 #include "high_pass_layer.h"
-#include "blend_blur_layer.h"
+//#include "blend_blur_layer.h"
 #include "grain_layer.h"
 #include "nd_layer.h"
 #include "apply_color_layer.h"
@@ -76,10 +76,12 @@ deLayer* deLayerFactory::createLayer(const std::string& type, deLayerStack& stac
         return new deHighPassLayer(stack, index, name);
     }
 
+/*
     if (type == "blend_blur")
     {
         return new deBlendBlurLayer(stack, index, name);
     }
+*/
 
     if (type == "rgb2bw")
     {

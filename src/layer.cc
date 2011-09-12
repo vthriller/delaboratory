@@ -70,7 +70,7 @@ deActionFrame* deLayer::getActionFrame()
 
 void deLayer::changeSourceLayer(int id)
 {
-    sourceLayer.setIndex(id);
+    sourceLayer.setLayerIndex(id);
     updateColorSpace();
     onChangeSourceLayer();
 }
@@ -83,7 +83,7 @@ void deLayer::changeColorSpace(deColorSpace _colorSpace)
 
 deLayer* deLayer::getSourceLayer()
 {
-    return stack.getLayer(sourceLayer.getIndex());
+    return stack.getLayer(getSourceLayerID());
 }
 
 void deLayer::updateColorSpace()
@@ -92,7 +92,7 @@ void deLayer::updateColorSpace()
     {
         return;
     }
-    deLayer* source = stack.getLayer(sourceLayer.getIndex());
+    deLayer* source = stack.getLayer(getSourceLayerID());
     if (source)
     {
         deColorSpace c = source->getColorSpace();
@@ -208,10 +208,14 @@ void deLayer::traceSampler(deSampler* sampler)
 
 bool deLayer::checkUsage(int id)
 {
-    if (sourceLayer.getIndex() == id)
+    if (getSourceLayerID() == id)
     {
         return true;
     }
     return false;
 }
 
+bool deLayer::isLast() const
+{
+    return (index == stack.getSize() - 1);
+}

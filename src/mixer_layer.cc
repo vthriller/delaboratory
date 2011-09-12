@@ -38,7 +38,7 @@ void deMixerLayer::recreateMixer()
     {
         return;
     }
-    const deLayer* source = stack.getLayer(sourceLayer.getIndex());
+    const deLayer* source = stack.getLayer(getSourceLayerID());
     if (!source)
     {
         return;
@@ -58,7 +58,7 @@ void deMixerLayer::onChangeSourceLayer()
 
 void deMixerLayer::updatePreview(dePreviewStack& previewStack)
 {
-    const dePreview* sourcePreview = previewStack.getPreview(sourceLayer.getIndex());
+    const dePreview* sourcePreview = previewStack.getPreview(getSourceLayerID());
     dePreview* preview = previewStack.getPreview(index);
 
     if ((sourcePreview) && (preview))
