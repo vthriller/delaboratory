@@ -26,25 +26,21 @@
 class deChannelManager
 {
     private:
-        deSize originalSize;
-        deSize previewSize;
+        deSize channelSize;
 
         std::vector<deChannel*> channels;
 
         int insertNewChannel(deChannel* channel);
         void destroyAllChannels();
-        void destroyAllPreviewChannels();
         
     public:
         deChannelManager();
         virtual ~deChannelManager();
 
-        void setOriginalSize(const deSize& size);
-        void setPreviewSize(const deSize& size);
+        void setChannelSize(const deSize& size);
 
-        int allocateOriginalSize();
-        int allocatePreviewSize();
-        deChannel* get(int index);
+        int allocateNewChannel();
+        deChannel* getChannel(int index);
         int destroyChannel(int index);
 
 

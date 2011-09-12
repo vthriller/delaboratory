@@ -45,12 +45,10 @@ class deChannel
 {
     private:
         deValue* pixels;
-        bool preview;
     public:
-        deChannel(int size, bool _preview)
+        deChannel(int size)
         {
             pixels = new deValue [size];
-            preview = _preview;
         }
 
         virtual ~deChannel()
@@ -62,8 +60,6 @@ class deChannel
         {
             return pixels;
         }
-
-        bool isPreview() const {return preview;};
 };
 
 #endif
