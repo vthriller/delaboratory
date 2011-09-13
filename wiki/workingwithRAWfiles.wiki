@@ -75,7 +75,7 @@ Type=Application
 
 Categories=Graphics;Photography;
 
-Exec=
+Exec=raw2delab.sh
 
 TryExec=raw2delab.sh
 
