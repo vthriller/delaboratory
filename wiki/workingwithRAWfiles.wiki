@@ -24,7 +24,7 @@ The added short cuts in Geegie are:
 
 *Update on dcraw and use off it in combination with delaboratory*
 
-We did find out that the command as mentioned add as a ICC profile to the file which delab ignores. Loading a tampered file as result.
+We did find out that the command as mentioned adds an ICC profile to the file which delab ignores. Loading a tampered file as result.
 
 This can be fixed by running this dcraw command: dcraw -T -6 -w -c myrawfile.raw then run:  tifficc -W -n myrawfile.tiff
 
