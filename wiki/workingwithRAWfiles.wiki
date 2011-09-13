@@ -83,6 +83,5 @@ Terminal=true
 
 StartupNotify=true
 
-MimeType=application/x-raw2delab;image/x-dcraw;image/bmp;image/jpeg;image/png;image/tiff;
-
+MimeType=application/x-raw2delab;image/x-dcraw;
 }}}
