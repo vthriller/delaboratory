@@ -261,9 +261,12 @@ void rgb2xyz(deValue* values)
     else 
         b = b / 12.92;
 
-    values[4] = 0.412453 * r + 0.357580 * g + 0.180423 * b;
+    /*values[4] = 0.412453 * r + 0.357580 * g + 0.180423 * b;
     values[5] = 0.212671 * r + 0.715160 * g + 0.072169 * b;
-    values[6] = 0.019334 * r + 0.119193 * g + 0.950227 * b; 
+    values[6] = 0.019334 * r + 0.119193 * g + 0.950227 * b; */
+    values[4] = 0.4124564 * r + 0.3575761 * g + 0.1804375 * b;
+    values[5] = 0.2126729 * r + 0.7151522 * g + 0.0721750 * b;
+    values[6] = 0.0193339 * r + 0.1191920 * g + 0.9503041 * b; 
 }
 
 void xyz2rgb(deValue* values)
@@ -274,9 +277,12 @@ void xyz2rgb(deValue* values)
     deValue y = values[1];
     deValue z = values[2];
 
-    deValue r = x *  3.2406 + y * -1.5372 + z * -0.4986;
+    /*deValue r = x *  3.2406 + y * -1.5372 + z * -0.4986;
     deValue g = x * -0.9689 + y *  1.8758 + z *  0.0415;
-    deValue b = x *  0.0557 + y * -0.2040 + z *  1.0570;
+    deValue b = x *  0.0557 + y * -0.2040 + z *  1.0570;*/
+    deValue r = x *  3.2404542 + y * -1.5371385 + z * -0.4985314;
+    deValue g = x * -0.9692660 + y *  1.8760108 + z *  0.0415560;
+    deValue b = x *  0.0556434 + y * -0.2040259 + z *  1.0572252;
 
     if ( r > 0.0031308 )
         r = 1.055 * ( power.get(r )) - 0.055;
