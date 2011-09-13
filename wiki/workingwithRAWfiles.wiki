@@ -22,7 +22,7 @@ I also did make a shortcut in Geegie to delaboratory so i can open images with t
 
 The added short cuts in Geegie are:
 
-Update on dcraw and use off it in combination with delaboratory
+*Update on dcraw and use off it in combination with delaboratory*
 
 We did find out that the command as mentioned add as a ICC profile to the file which delab ignores. Loading a tampered file as result.
 
