@@ -22,6 +22,27 @@ I also did make a shortcut in Geegie to delaboratory so i can open images with t
 
 The added short cuts in Geegie are:
 
+Update on dcraw and use off it in combination with delaboratory
+
+We did find out that the command as mentioned add as a ICC profile to the file which delab ignores. Loading a tampered file as result.
+
+This can be fixed by running this dcraw command: dcraw -T -6 -w -c myrawfile.raw then run:  tifficc -W -n myrawfile.tiff
+
+I did make a bash file what does automate this. 
+download can be done here: http://www.mediafire.com/?7lxlhgge1izf920
+
+If you want to use it copy it as root to /usr/bin
+
+I also did create a .desktop file
+
+can be found here: http://www.mediafire.com/?8r1095tnhf3qt1c
+
+If you copy it as root to /usr/share/applications an menu entry will be created also one can right click on a raw file. It then will be opened in delaboratory.
+
+a debian / Ubuntu installer can be found here: 
+http://www.mediafire.com/?j5f5jbh8nl97c7l
+
+
 
 ---------------------------------------
 For dcraw:
