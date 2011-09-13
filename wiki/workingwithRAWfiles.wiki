@@ -25,6 +25,7 @@ I also did make a shortcut in Geegie to delaboratory so i can open images with t
 We did find out that the command as mentioned adds an ICC profile to the file which delab ignores. Loading a tampered file as result. Most likely this will happen also on Windows. We did not check that yet.
 
 This can be fixed by running this dcraw command: dcraw -T -6 -w -c myrawfile.raw (1) then run:  tifficc -W -n myrawfile.tiff 
+
 (1) It might be usefull to use the -b switch. One can tune with it the birghten dcraw does apply.For my camera -b 0.8 works best. -b 1.0 is default -b 0.0= -W
 
 One will need to install if not installed yet liblcms-utils as that package contains tifficc
