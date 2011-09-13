@@ -28,7 +28,7 @@ We did find out that the command as mentioned adds an ICC profile to the file wh
 
 This can be fixed by running this dcraw command: dcraw -T -6 -w -c myrawfile.raw then run:  tifficc -W -n myrawfile.tiff
 
-One will need to install if it is not installed yet liblcms-utils as that package contains tifficc
+One will need to install if not installed yet liblcms-utils as that package contains tifficc
 
 I did make a bash file what does automate this. 
 download can be done here: http://www.mediafire.com/?7lxlhgge1izf920
