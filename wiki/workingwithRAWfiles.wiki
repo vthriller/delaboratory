@@ -20,9 +20,9 @@ I made a shortcut in Geeqie executing the dcraw command so i don't have to type 
 
 I also did make a shortcut in Geegie to delaboratory so i can open images with the use of my right mouse button .
 
-*Update on dcraw and use off it in combination with delaboratory*
+*Update on dcraw and use off it in combination with delaboratory on Linux*
 
-We did find out that the command as mentioned adds an ICC profile to the file which delab ignores. Loading a tampered file as result.
+We did find out that the command as mentioned adds an ICC profile to the file which delab ignores. Loading a tampered file as result. Most likely this will happen also on Windows. We did not check that yet.
 
 This can be fixed by running this dcraw command: dcraw -T -6 -w -c myrawfile.raw then run:  tifficc -W -n myrawfile.tiff
 
