@@ -31,26 +31,32 @@ This can be fixed by running this dcraw command: dcraw -T -6 -w -c myrawfile.raw
 One will need to install if not installed yet liblcms-utils as that package contains tifficc
 
 I did make a bash file what does automate this. 
+raw2delab.sh
 download can be done here: http://www.mediafire.com/?7lxlhgge1izf920
 
 If you want to use it copy it as root to /usr/bin
 
 I also did create a .desktop file
-
+raw2delab.desktop
 can be found here: http://www.mediafire.com/?8r1095tnhf3qt1c
 
 If you copy it as root to /usr/share/applications an menu entry will be created also one can right click on a raw file. It then will be opened in delaboratory.
 
-*raw2delab* 
+*raw2delab debian / Ubuntu installer* 
+
+
+A installer can be found here:
+http://www.mediafire.com/?cz37e7t9ggtrzzh
 
 When installed one can use rightmouse on a RAW file and it will be opened in delab.
 
-A debian / Ubuntu installer can be found here:
-http://www.mediafire.com/?cz37e7t9ggtrzzh
-
 
 ---------------------------------------
-For dcraw:
+Geeqie shortcuts
+
+requires: 
+raw2delab.sh
+liblcms-utils
 ---------------------------------------
 
 {{{
@@ -59,19 +65,19 @@ For dcraw:
 Encoding=UTF-8
 
 Version=9.08
-Name=dcraw
+Name=raw2
 
-GenericName=dcraw
+GenericName=raw2delab
 
-Comment=convert RAWs
+Comment=opens RAW files in delaboratory
 
 Type=Application
 
 Categories=Graphics;Photography;
 
-Exec=dcraw -T -w -W -6 %F
+Exec=
 
-TryExec=dcraw
+TryExec=raw2delab.sh
 
 Icon=
 
@@ -79,44 +85,6 @@ Terminal=true
 
 StartupNotify=true
 
-MimeType=application/x-photivo;image/x-dcraw;image/bmp;image/jpeg;image/png;image/tiff;
-
-}}}
-
------
-
-For delaboratory
-
----------------------------------------
-
-{{{
-[Desktop Entry]
-
-Encoding=UTF-8
-
-Version=SVN
-
-Name=delab
-
-GenericName=delaboratory
-
-Comment=color enhancement utillity
-
-Type=Application
-
-Categories=Graphics;Photography;
-
-Exec= delaboratory %F
-
-TryExec=delaboratory
-
-Icon=
-
-Terminal=true
-
-StartupNotify=true
-
-MimeType=application/x-photivo;image/x-dcraw;image/bmp;image/jpeg;image/png;image/tiff;
-
+MimeType=application/x-raw2delab;image/x-dcraw;image/bmp;image/jpeg;image/png;image/tiff;
 
 }}}
