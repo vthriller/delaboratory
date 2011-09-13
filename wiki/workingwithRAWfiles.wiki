@@ -41,7 +41,11 @@ can be found here: http://www.mediafire.com/?8r1095tnhf3qt1c
 
 If you copy it as root to /usr/share/applications an menu entry will be created also one can right click on a raw file. It then will be opened in delaboratory.
 
-*A debian / Ubuntu installer can be found here:* 
+*raw2delab* 
+
+When installed one can use rightmouse on a RAW file and it will be opened in delab.
+
+A debian / Ubuntu installer can be found here:
 http://www.mediafire.com/?cz37e7t9ggtrzzh
 
 
