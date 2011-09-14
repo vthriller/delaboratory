@@ -48,7 +48,7 @@ If you copy it as root to /usr/share/applications an menu entry will be created 
 A installer can be found here:
 http://www.mediafire.com/?cz37e7t9ggtrzzh
 
-When installed one can use rightmouse on a RAW file and it will be opened in delab. Aka it adds baice though very functional raw conversion to delaboratory.
+When installed one can use rightmouse on a RAW file and it will be opened in delab. Aka it adds basic though very functional raw conversion to delaboratory.
 
 
 ---------------------------------------
