@@ -11,9 +11,9 @@ You can find them in the *Downloads* section.
 
 Please read detailed informations here: [DebianUbuntuInstallation] 
 
-= OpenSuse= 
+= OpenSUSE =  
 
-OpenSuse packages were created by Marcin Bajor
+OpenSUSE packages were created by Marcin Bajor
 
 Find them here: https://build.opensuse.org/package/show?package=delaboratory&project=graphics
 
