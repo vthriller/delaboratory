@@ -11,6 +11,12 @@ You can find them in the *Downloads* section.
 
 Please read detailed informations here: [DebianUbuntuInstallation] 
 
+= OpenSuse= 
+
+OpenSuse packages were created by Marcin Bajor
+
+Find them here: https://build.opensuse.org/package/show?package=delaboratory&project=graphics
+
 = Arch Linux =
 
 AUR package was crated by speps, you can find it here:
