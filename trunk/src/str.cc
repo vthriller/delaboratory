@@ -29,3 +29,26 @@ std::string getExtension(const std::string& s)
     int pos = s.rfind(".");    
     return s.substr(pos + 1, s.size() - pos - 1);
 }
+
+/*
+std::string replaceExtension(const std::string& s, const std::string& ext)
+{
+    return getBaseName(s) + "." + ext;
+}
+*/
+
+std::string removePathAndExtension(const std::string& fileName)
+{
+    size_t posDot = fileName.rfind(".");
+    size_t posSlash = fileName.rfind("/");
+    int posStart;
+    if (posSlash > fileName.size())
+    {
+        posStart= 0;
+    }
+    else
+    {
+        posStart = posSlash + 1;
+    }
+    return fileName.substr(posStart, posDot - posStart );
+}

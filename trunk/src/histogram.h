@@ -24,7 +24,7 @@
 #include "value.h"
 //#include "curve_point.h"
 
-class deBaseChannel;
+class deChannel;
 
 class deHistogram
 {
@@ -38,7 +38,7 @@ class deHistogram
         virtual ~deHistogram();
 
         void put(deValue value);
-        void calc(const deBaseChannel* channel, int n);
+        void calc(const deChannel* channel, int n);
         int get(int bar) const;
         void clear();
 
@@ -46,6 +46,8 @@ class deHistogram
 
         int getMax() const;
         int getSize() const;
+
+        bool render(unsigned char* data, int sizeW, int sizeH, unsigned char g1, unsigned char g2);
 
 };
 

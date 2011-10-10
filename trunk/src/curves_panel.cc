@@ -17,102 +17,109 @@
 */
 
 #include "curves_panel.h"
-#include "curve.h"
-#include "curves_layer.h"
-#include <iostream>
 #include <wx/dcbuffer.h>
-#include "preview_stack.h"
-#include "sampler.h"
-#include "project.h"
-#include "curves_editor.h"
+#include "curves_layer.h"
+
 
 BEGIN_EVENT_TABLE(deCurvesPanel, wxPanel)
 EVT_PAINT(deCurvesPanel::paintEvent)
 END_EVENT_TABLE()
 
-
-deCurvesPanel::deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property, int s, deCurvesEditor& _editor)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(s, s)), 
- bitmap(s, s), stack(_stack), property(_property),
- size(s), editor(_editor)
+deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(CURVES_PANEL_SIZE_X, CURVES_PANEL_SIZE_Y)),
+sizeX(CURVES_PANEL_SIZE_X), sizeY(CURVES_PANEL_SIZE_Y), layer(_layer), histogram(CURVES_PANEL_SIZE_X)
 {
-    stack.getProject()->logMessage("deCurvesPanel::deCurvesPanel");
-    marker = -1;
-
-    selectedPoint = -1;
-    lastSelectedPoint = -1;
-    channel = 0;
-
-    SetBackgroundColour(*wxBLACK);
+    SetFocus();
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deCurvesPanel::click));
     Connect(wxEVT_LEFT_UP, wxMouseEventHandler(deCurvesPanel::release));
     Connect(wxEVT_MOTION, wxMouseEventHandler(deCurvesPanel::move));
+    channel = 0;
+    selectedPoint = -1;
+    marker = -1;
+
+    backgroundBitmap = NULL;
+    clickPosition = -1;
+
+    generateBackground();
 }
 
 deCurvesPanel::~deCurvesPanel()
 {
-    stack.getProject()->logMessage("deCurvesPanel::~deCurvesPanel");
+    delete backgroundBitmap;
 }
 
-void deCurvesPanel::changeChannel(int _channel)
+void deCurvesPanel::generateBackground()
 {
-    channel = _channel;
-    updateMarker();
-    paint();
+    if (backgroundBitmap)
+    {
+        delete backgroundBitmap;
+    }
+
+    deChannel* c = layer.getSourceChannel(channel);
+    int n = layer.getChannelSize().getN();
+
+    histogram.clear();
+    histogram.calc(c, n);
+
+    wxImage* image = new wxImage(sizeX, sizeY);
+    unsigned char* data = image->GetData();
+
+    unsigned char g1 = 220;
+    unsigned char g2 = 120;
+
+    histogram.render(data, sizeX, sizeY, g1, g2);
+
+    backgroundBitmap = new wxBitmap(*image);
+    delete image;
 }
+
 
 void deCurvesPanel::paintEvent(wxPaintEvent & evt)
 {
-    stack.getProject()->logMessage("deCurvesPanel::paintEvent");
     wxPaintDC dc(this);
     render(dc);
 }
 
-void deCurvesPanel::paint()
+void deCurvesPanel::render(wxDC& dc_orig)
 {
-    stack.getProject()->logMessage("deCurvesPanel::paint");
-    wxClientDC dc(this);
-    render(dc);
-}
+    wxBufferedDC dc(&dc_orig, bitmap, wxBUFFER_CLIENT_AREA);
 
-void deCurvesPanel::getPosition(wxMouseEvent &event, deValue& x, deValue &y)
-{
-    //deValue d = 1.0 / (CURVES_PANEL_SIZE - 1);
-    deValue d = 1.0 / (size - 1);
-    x = event.GetX() * d;
-    y = 1 - (event.GetY() * d);
-}
+    int g = 50;
+    wxColour colourB(g, g, g);
+    wxBrush brush(colourB);
 
-void deCurvesPanel::drawLine(wxDC& dc, deValue x1, deValue y1, deValue x2, deValue y2)
-{
-/*
-    int xx1 = (CURVES_PANEL_SIZE - 1) * x1;
-    int xx2 = (CURVES_PANEL_SIZE - 1) * x2;
-    int yy1 = (CURVES_PANEL_SIZE - 1) * (1 - y1);
-    int yy2 = (CURVES_PANEL_SIZE - 1) * (1 - y2);
-    */
-    int xx1 = (size - 1) * x1;
-    int xx2 = (size - 1) * x2;
-    int yy1 = (size - 1) * (1 - y1);
-    int yy2 = (size - 1) * (1 - y2);
-    dc.DrawLine(xx1, yy1, xx2, yy2);
+    dc.DrawBitmap(*backgroundBitmap, 0, 0, false);
+
+    drawLines(dc);
+
+    wxColour colour = getChannelwxColour(layer.getColorSpace(), channel);
+    wxPen pen(colour);
+    dc.SetPen(pen);
+
+    drawCurve(dc);
 }
 
 void deCurvesPanel::drawPoint(wxDC& dc, deValue x, deValue y)
 {
-/*
-    int xx = (CURVES_PANEL_SIZE - 1) * x;
-    int yy = (CURVES_PANEL_SIZE - 1) * (1 - y);
-    */
-    int xx = (size - 1) * x;
-    int yy = (size - 1) * (1 - y);
+    int xx = (sizeX - 1) * x;
+    int yy = (sizeY - 1) * (1 - y);
     dc.DrawCircle(xx, yy, 5);
+}
+
+
+void deCurvesPanel::drawLine(wxDC& dc, deValue x1, deValue y1, deValue x2, deValue y2)
+{
+    int xx1 = (sizeX - 1) * x1;
+    int xx2 = (sizeX - 1) * x2;
+    int yy1 = (sizeY - 1) * (1 - y1);
+    int yy2 = (sizeY - 1) * (1 - y2);
+    dc.DrawLine(xx1, yy1, xx2, yy2);
 }
 
 void deCurvesPanel::drawLines(wxDC& dc)
 {
-    int g1 = 100;
-    int g2 = 150;
+    int g1 = 180;
+    int g2 = 80;
 
     wxPen pen1(wxColour(g1, g1, g1));
     wxPen pen2(wxColour(g2, g2, g2));
@@ -120,34 +127,29 @@ void deCurvesPanel::drawLines(wxDC& dc)
     dc.SetPen(pen1);
 
     float y;
-    for (y = 0.0; y <= 1.0; y += 0.25)
+    for (y = 0.0; y <= 1.0; y += (1/8.0))
     {
         drawLine(dc, 0.0, y, 1.0, y);
     }        
 
     float x;
-    for (x = 0.0; x <= 1.0; x += 0.25)
+    for (x = 0.0; x <= 1.0; x += (1/8.0))
     {
         drawLine(dc, x, 0.0, x, 1.0);
     }        
 
     dc.SetPen(pen2);
 
-    drawLine(dc, 0.0, marker, 1.0, marker);
-    drawLine(dc, marker, 0.0, marker, 1.0);
-
+    if (marker >= 0)
+    {
+        drawLine(dc, 0.0, marker, 1.0, marker);
+        drawLine(dc, marker, 0.0, marker, 1.0);
+    }        
 }
 
 void deCurvesPanel::drawCurve(wxDC& dc)
 {
-    deCurves curves = property.getCurves();
-
-    if (channel >= curves.size())
-    {
-        return;
-    }
-
-    deCurve* curve = curves[channel];
+    deCurve* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -178,49 +180,21 @@ void deCurvesPanel::drawCurve(wxDC& dc)
     deCurvePoints controlPoints;
     curve->getControlPoints(controlPoints);
 
+
+    int index = 0;
     for (i = controlPoints.begin(); i != controlPoints.end(); i++)
     {
         const deCurvePoint& point = *i;
         deValue x = point.getX();
         deValue y = point.getY();
         drawPoint(dc, x, y);
+        index++;
     }
 }
-
-void deCurvesPanel::render(wxDC& dc_orig)
-{
-    wxBufferedDC dc(&dc_orig, bitmap, wxBUFFER_CLIENT_AREA);
-
-    int g = 50;
-    wxColour colourB(g, g, g);
-    wxBrush brush(colourB);
-
-    dc.SetBackground(brush);
-    dc.Clear();
-
-    drawLines(dc);
-
-    wxColour colour = getChannelwxColour(property.getParent().getColorSpace(), channel);
-    wxPen pen(colour);
-    dc.SetPen(pen);
-
-    drawCurve(dc);
-}
-
 
 void deCurvesPanel::click(wxMouseEvent &event)
 {
-    SetFocus();
-
-    stack.getProject()->logMessage("deCurvesPanel::click");
-    deCurves curves = property.getCurves();
-
-    if (channel >= curves.size())
-    {
-        return;
-    }
-
-    deCurve* curve = curves[channel];
+    deCurve* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -249,25 +223,72 @@ void deCurvesPanel::click(wxMouseEvent &event)
     grabX = point.getX() - x;
     grabY = point.getY() - y;
 
-    property.onUpdate();
-    update();
+    update(false);
 }
 
-void deCurvesPanel::update()
+void deCurvesPanel::reset()
+{
+    deCurve* curve = layer.getCurve(channel);
+
+    if (!curve)
+    {
+        return;
+    }
+    curve->reset();
+    update(true);
+}
+
+void deCurvesPanel::invert()
+{
+    deCurve* curve = layer.getCurve(channel);
+
+    if (!curve)
+    {
+        return;
+    }
+    curve->invert();
+    update(true);
+}
+
+void deCurvesPanel::setConst(deValue v)
+{
+    deCurve* curve = layer.getCurve(channel);
+
+    if (!curve)
+    {
+        return;
+    }
+    curve->setConst(v);
+    update(true);
+}
+
+void deCurvesPanel::setAngle(int a)
+{
+    deCurve* curve = layer.getCurve(channel);
+
+    if (!curve)
+    {
+        return;
+    }
+    curve->setAngle(a);
+    update(true);
+}
+
+
+void deCurvesPanel::update(bool finished)
 {
     paint();
+    if (finished)
+    {
+        layer.onChannelChange(channel);
+        layer.updateOtherLayers();
+        layer.repaint();
+    }
 }
 
 void deCurvesPanel::release(wxMouseEvent &event)
 {
-    deCurves curves = property.getCurves();
-
-    if (channel >= curves.size())
-    {
-        return;
-    }
-
-    deCurve* curve = curves[channel];
+    deCurve* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -283,25 +304,21 @@ void deCurvesPanel::release(wxMouseEvent &event)
         {
             curve->deletePoint(selectedPoint);
             lastSelectedPoint = -1;
+            selectedPoint = -1;
+            update(true);
+            return;
         }
     }
 
     selectedPoint = -1;
 
-    paint();
+    update(true);
 
 }
 
 void deCurvesPanel::move(wxMouseEvent &event)
 {
-    deCurves curves = property.getCurves();
-
-    if (channel >= curves.size())
-    {
-        return;
-    }
-
-    deCurve* curve = curves[channel];
+    deCurve* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -335,146 +352,62 @@ void deCurvesPanel::move(wxMouseEvent &event)
         }
 
         curve->movePoint(selectedPoint, x, y);
-        property.onUpdate();
-        update();
+        update(false);
     }
+}
+
+void deCurvesPanel::getPosition(wxMouseEvent &event, deValue& x, deValue &y)
+{
+    deValue dX = 1.0 / (sizeX - 1);
+    deValue dY = 1.0 / (sizeY - 1);
+    x = event.GetX() * dX;
+    y = 1 - (event.GetY() * dY);
+}
+
+void deCurvesPanel::paint()
+{
+    wxClientDC dc(this);
+    render(dc);
+}
+
+void deCurvesPanel::changeChannel(int _channel)
+{
+    channel = _channel;
+    marker = -1;
+    generateBackground();
+    paint();
+}
+
+void deCurvesPanel::onImageClick(deValue x, deValue y)
+{
+    deChannel* c = layer.getSourceChannel(channel);
+    deSize size = layer.getChannelSize();
+    clickPosition = (y * size.getH() )  * size.getW() + (x * size.getW());
+    marker = c->getValue(clickPosition);
+    paint();
 }
 
 void deCurvesPanel::onKey(int key)
 {
-    deCurves curves = property.getCurves();
-    deColorSpace colorSpace = property.getParent().getColorSpace();
+    deColorSpace colorSpace = layer.getColorSpace();
     int s = getColorSpaceSize(colorSpace);
 
     if (key == WXK_CONTROL)
     {
-        if (marker >= 0)
+        if (clickPosition >= 0)
         {
             int i;
             for (i = 0; i < s; i++)
             {
-                deCurve* curve = curves[i];
-                deValue v = samplerValues[i];
-                int p = curve->addPoint(v, v);
-                if (i == channel)
-                {
-                    lastSelectedPoint = p;
-                }
+                deChannel* c = layer.getSourceChannel(i);
+                deValue m = c->getValue(clickPosition);
+
+                deCurve* curve = layer.getCurve(i);
+
+                curve->addPoint(m, curve->calcValue(m));
             }
-            property.onUpdate();
-            update();
+            update(true);
         }
         return;
     }
-
-    if (lastSelectedPoint < 0)
-    {
-        return;
-    }
-
-    deCurve* curve = curves[channel];
-
-    if (key == 'A')
-    {
-        curve->movePointDown(lastSelectedPoint);
-        property.onUpdate();
-        update();
-    }
-
-    if (key == 'Z')
-    {
-        curve->movePointUp(lastSelectedPoint);
-        property.onUpdate();
-        update();
-    }
-
-    if (key == 'X')
-    {
-        curve->deletePoint(lastSelectedPoint);
-        lastSelectedPoint = -1;
-        property.onUpdate();
-        update();
-    }
-
-}
-
-void deCurvesPanel::traceSampler(deSampler* _sampler)
-{
-    if (!_sampler)
-    {
-        return;
-    }
-
-    sampler = *_sampler;
-    updateMarker();
-}
-
-void deCurvesPanel::updateMarker()
-{
-    int source = property.getParent().getSourceLayerID();
-    dePreview* preview = stack.getPreview(source);
-    if (!preview)
-    {
-        return;
-    }
-
-    bool result = sampler.getPixel(samplerValues[0], samplerValues[1], samplerValues[2], samplerValues[3], property.getParent().getColorSpace(), *preview);
-    if (!result)
-    {
-        marker = -1;
-        return;
-    }
-    deValue value = samplerValues[channel];
-    marker = value;
-    paint();
-}
-
-void deCurvesPanel::changeSize()
-{
-    if (size == INITIAL_CURVES_PANEL_SIZE)
-    {
-        size = INITIAL_CURVES_PANEL_SIZE / 2;
-        property.setHalf();
-    }
-    else
-    {
-        size = INITIAL_CURVES_PANEL_SIZE;
-        property.setFull();
-    }
-    SetSize(wxSize(size, size));
-//    GetParent()->Refresh();
-    editor.rebuild();
-}
-
-void deCurvesPanel::reset()
-{
-    fill(1,1, 0);
-}
-
-void deCurvesPanel::invert()
-{
-    fill(1,-1,0);
-}
-
-void deCurvesPanel::fill(int n, deValue a, deValue r)
-{
-    deCurves curves = property.getCurves();
-
-    if (channel >= curves.size())
-    {
-        return;
-    }
-
-    deCurve* curve = curves[channel];
-
-    if (!curve)
-    {
-        return;
-    }
-
-    curve->fill(n, a, r);
-    paint();
-
-    property.onUpdate();
-    update();
 }

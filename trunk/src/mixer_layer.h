@@ -19,34 +19,34 @@
 #ifndef _DE_MIXER_LAYER_H
 #define _DE_MIXER_LAYER_H
 
-#include "layer.h"
-#include "color_space.h"
-#include "property_mixer.h"
+#include "action_layer.h"
+#include "mixer.h"
 
-class deMixerLayer:public deLayer
+class deMixerLayer:public deActionLayer
 {
     private:
-        dePropertyMixer mixer;
-        void recreateMixer();
+        std::vector<deMixer*> mixers;
 
-    public:
-        deMixerLayer(deLayerStack& _stack, int _index, const std::string& _name);
-        virtual ~deMixerLayer();
-
-        virtual bool canChangeSourceLayer() const {return true;};
-        virtual bool canChangeColorSpace() const {return true;};
-
-        virtual void onChangeColorSpace();
-        virtual void onChangeSourceLayer();
-
-        virtual void updatePreview(dePreviewStack& previewStack);
-
-        deMixer* getMixer() {return mixer.getMixer();};
-
+    protected:
+        virtual bool singleChannelProcessing() const {return false;};
         virtual std::string getType() const {return "mixer";};
 
-        virtual void saveSpecific(xmlNodePtr node);
-        virtual void loadSpecific(xmlNodePtr node);
+    public:
+        deMixerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        virtual ~deMixerLayer();
+
+        virtual void createActionFrame(wxWindow* parent);
+
+        deMixer* getMixer(int index);
+
+        virtual bool isChannelNeutral(int index);
+
+        virtual void processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize);
+
+        void setValue(int s, int d, deValue value);
+        deValue getValue(int s, int d);
+
+
 
 };
 

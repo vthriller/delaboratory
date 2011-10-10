@@ -20,27 +20,36 @@
 #define _DE_SOURCE_IMAGE_LAYER_H
 
 #include "layer.h"
-class deSourceImage;
-#include "size.h"
+class deProject;
+#include "image.h"
 
 class deSourceImageLayer:public deLayer
 {
     private:
-        const deSourceImage* sourceImage;
-        deSize previewSize;
-    public:
-        deSourceImageLayer(deLayerStack& _stack, int _index, const std::string& _name);
-        virtual ~deSourceImageLayer();
+        int sourceR;
+        int sourceG;
+        int sourceB;
 
-        void setSourceImage(deSourceImage* _sourceImage);
+        deImage image;
 
-        void setPreviewSize(const deSize& size);
-        
-        virtual void updatePreview(dePreviewStack& previewStack);
-        
-        virtual const std::string getDescription() const {return "source image";};
+        deProject& project;
 
         virtual std::string getType() const {return "source_image";};
+
+
+    public:
+        deSourceImageLayer(int _index, deProject& _project);
+        virtual ~deSourceImageLayer();
+
+        void setSource(int r, int g, int b);
+
+        //virtual void updatePreview(deProject& project);
+        virtual void updateImage();
+
+        virtual const deImage& getImage() const;
+
+        virtual void updateChannelUsage(std::map<int, int>& channelUsage) const;
+
 };
 
 #endif

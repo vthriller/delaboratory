@@ -17,37 +17,59 @@
 */
 
 #include "view_mode_panel.h"
-#include "gui.h"
-#include "layer.h"
-#include "channel_buttons.h"
+//#include "gui.h"
+//#include "layer.h"
+//#include "channel_buttons.h"
+#include <iostream>
+#include "color_space.h"
+#include "project.h"
 #include <iostream>
 
 void deViewModePanel::select(wxCommandEvent &event)
 {
     int i = event.GetId();
-    int c = channels[i];
+    deViewManager& viewManager = project.getViewManager();
 
-    if (c < 0)
+    if (buttons[0]->GetId() == i)
     {
-        gui.setViewMode(deViewNormal, -1);
+        viewManager.setNormal();
+        return;
     }
-    else
+
+    int j;
+    for (j = 0; j < 4; j++)
     {
-        gui.setViewMode(deViewSingleChannel, c);
+        if (buttons[j+1]->GetId() == i)
+        {
+            viewManager.setSingleChannel(j);
+        }
     }
-    gui.refreshView();
 
 }
 
-deViewModePanel::deViewModePanel(wxWindow* parent, deGUI& _gui)
-:wxPanel(parent), gui(_gui)
+deViewModePanel::deViewModePanel(wxWindow* parent, deProject& _project)
+:wxPanel(parent), project(_project)
 {
-    gui.setViewModePanel(this);
+    project.setViewModePanel(this);
+    //gui.setViewModePanel(this);
 
-    sizer = new wxBoxSizer(wxHORIZONTAL);
+    wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
     SetSizer(sizer);
 
-    updateButtons(deColorSpaceRGB);
+    int i;
+    for (i = 0; i < 5; i++)
+    {
+        wxRadioButton* b = new wxRadioButton(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize);
+        sizer->Add(b);
+        buttons.push_back(b);
+
+    }        
+
+
+//  updateButtons(deColorSpaceRGB);
+
+    updateNames();
+    updateMode();
 
     Connect(wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler(deViewModePanel::select));
 
@@ -58,7 +80,60 @@ deViewModePanel::~deViewModePanel()
 
 }
 
+void deViewModePanel::updateNames()
+{
+    deViewManager& viewManager = project.getViewManager();
 
+    deColorSpace colorSpace = viewManager.getColorSpace();
+
+    int i;
+    int n = getColorSpaceSize(colorSpace);
+    for (i = 0; i < 5; i++)
+    {
+        wxRadioButton* b = buttons[i];
+        if (i == 0)
+        {
+            b->SetLabel(wxString::FromAscii(getColorSpaceName(colorSpace).c_str()));
+            b->Show();
+        }
+        else 
+        {
+            int c = i - 1;
+            if (c < n)
+            {
+                std::string name = getChannelName(colorSpace, c);
+                b->SetLabel(wxString::FromAscii(name.c_str()));
+                b->Show();
+            }
+            else
+            {
+                b->Hide();
+            }
+        }
+
+    }        
+
+    Layout();
+    Fit();
+    SetFocus();
+}
+
+void deViewModePanel::updateMode()
+{
+    deViewManager& viewManager = project.getViewManager();
+
+    if (viewManager.isSingleChannel())
+    {
+        int c = viewManager.getChannel();
+        buttons[c+1]->SetValue(1);
+    }
+    else
+    {
+        buttons[0]->SetValue(1);
+    }
+}
+
+/*
 void deViewModePanel::updateButtons(deColorSpace colorSpace)
 {
     createChannelButtons(colorSpace, buttons, channels, this, sizer, false);
@@ -74,3 +149,4 @@ void deViewModePanel::setButton(int b)
     }
     buttons[b]->SetValue(true);
 }
+    */

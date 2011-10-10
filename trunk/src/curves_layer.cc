@@ -17,77 +17,59 @@
 */
 
 #include "curves_layer.h"
-#include "preview_stack.h"
-#include "layer_stack.h"
-#include "size.h"
-#include "preview.h"
 #include "project.h"
+#include "curves_editor.h"
+#include <iostream>
 
-#define CURVES_PANEL_SIZE 500
-
-deCurvesLayer::deCurvesLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), curves(*this, CURVES_PANEL_SIZE)
+deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
 {
+
+    int n = getColorSpaceSize(colorSpace);
+    curves = new deCurve[n];
+
 }
 
 deCurvesLayer::~deCurvesLayer()
 {
+    delete [] curves;
 }
 
-void deCurvesLayer::resetCurves()
+void deCurvesLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
-    curves.resetCurves();
+    curves[i].process(sourceChannel, channel, size.getN());
 }
 
-void deCurvesLayer::onChangeColorSpace()
-{
-    resetCurves();
-}
 
-void deCurvesLayer::updatePreview(dePreviewStack& previewStack)
+void deCurvesLayer::createActionFrame(wxWindow* parent)
 {
-    const dePreview* sourcePreview = previewStack.getPreview(getSourceLayerID());
-    dePreview* preview = previewStack.getPreview(index);
-
-    if ((sourcePreview) && (preview))
+    if (!actionFrame)
     {
-        processCurves(*sourcePreview, *preview);
+        actionFrame = new deCurvesEditor(parent, *this);
+        actionFrame->Show(true);
+    }        
+}
+
+deCurve* deCurvesLayer::getCurve(int index)
+{
+    int n = getColorSpaceSize(colorSpace);
+    if ((index < 0) || (index >= n))
+    {
+        return NULL;
     }
+    return &(curves[index]);
 }
 
-void deCurvesLayer::processCurves(const dePreview& source, dePreview& destination)
+bool deCurvesLayer::isChannelNeutral(int index)
 {
-    int n = getColorSpaceSize(colorSpace.getColorSpace());
-    int i;
-    for (i = 0; i < n; i++)
+    return curves[index].isNeutral();
+}    
+
+void deCurvesLayer::onKey(int key)
+{
+    if (actionFrame)
     {
-        deCurve* curve = curves.getCurve(i);
-        if (curve)
-        {
-            const deBaseChannel* sourceChannel = source.getChannel(i);
-            deBaseChannel* destinationChannel = destination.getChannel(i);
-            curve->process(*sourceChannel, *destinationChannel);
-        }            
-    }
-
-}
-
-void deCurvesLayer::saveSpecific(xmlNodePtr node)
-{
-    curves.save(node, "curves");
-}
-
-void deCurvesLayer::loadSpecific(xmlNodePtr node)
-{
-    xmlNodePtr child = node->xmlChildrenNode;
-
-    while (child)
-    {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("curves")))) 
-        {
-            curves.load(child);
-        }
-
-        child = child->next;
+        deCurvesEditor* editor = dynamic_cast<deCurvesEditor*>(actionFrame);
+        editor->onKey(key);
     }
 }

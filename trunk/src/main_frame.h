@@ -21,23 +21,42 @@
 
 #include "wx/wx.h"
 class deProject;
+class deImageAreaPanel;
+class deLayerGridPanel;
 
 class deMainFrame: public wxFrame
 {
 private:
     deProject* project;
+    wxPanel* hPanel;
+    wxPanel* topPanel;
+    deLayerGridPanel* layerGridPanel;
+    wxPanel* controlPanel;
+    wxSizer* mainSizer;
+    deImageAreaPanel* leftPanel;
+    bool full;
+
+	void onQuit(wxCommandEvent& event);
+	void onSaveProject(wxCommandEvent& event);
+	void onNewProject(wxCommandEvent& event);
+	void onOpenProject(wxCommandEvent& event);
+	void onHelpColorSpaces(wxCommandEvent& event);
+	void onHelpColorSpaces2(wxCommandEvent& event);
+	void onHelpColorSpaces3(wxCommandEvent& event);
+	void onHelpColorSpaces4(wxCommandEvent& event);
+	void onHelpColorSpaces5(wxCommandEvent& event);
+	void onLABColors1(wxCommandEvent& event);
+	void onLABColors2(wxCommandEvent& event);
+	void onLABColors5(wxCommandEvent& event);
+	void onMemoryInfo(wxCommandEvent& event);
 
 public:
 	deMainFrame(const wxSize& size, deProject* _project);
-	void OnQuit(wxCommandEvent& event);
-	void OnOpenImage(wxCommandEvent& event);
-	void OnNewProject(wxCommandEvent& event);
-	void OnOpenProject(wxCommandEvent& event);
-	void OnOpenLayerStack(wxCommandEvent& event);
-	void OnSaveProject(wxCommandEvent& event);
-	void OnAbout(wxCommandEvent& event);
 
-	void OnOpen(bool image);
+    void showPanels();
+    void hidePanels();
+
+    void onKey(int key);
 
 	DECLARE_EVENT_TABLE()
 };

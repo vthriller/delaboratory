@@ -24,7 +24,7 @@
 #include "curve_shape.h"
 #include <list>
 
-class deBaseChannel;
+class deChannel;
 
 
 class deCurve
@@ -36,7 +36,7 @@ class deCurve
         void loadPoint(xmlNodePtr node);
         void movePointStep(int p, int dir);
     public:    
-        deCurve(int size);
+        deCurve();
         virtual ~deCurve();
 
         int findPoint(deValue x, deValue y) const;
@@ -44,7 +44,7 @@ class deCurve
         void deletePoint(int p);
         void movePoint(int p, deValue x, deValue y);
 
-        void process(const deBaseChannel& source, deBaseChannel& destination);
+        void process(const deChannel& source, deChannel& destination, int n);
 
         const deCurvePoints& getPoints() const;
         void getControlPoints(deCurvePoints& points) const;
@@ -55,9 +55,16 @@ class deCurve
         void load(xmlNodePtr node);
 
         void reset();
+        void setConst(deValue v);
+        void setAngle(int a);
+        void invert();
         void fill(int n, deValue a, deValue r);
         void movePointUp(int p);
         void movePointDown(int p);
+
+        bool isNeutral() const;
+
+        deValue calcValue(deValue value);
 
 
 };

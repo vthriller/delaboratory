@@ -17,75 +17,69 @@
 */
 
 #include "mixer_layer.h"
-#include "layer_stack.h"
-#include "preview.h"
-#include "preview_stack.h"
 #include "project.h"
-#include "mixer.h"
+#include "mixer_editor.h"
+#include <iostream>
 
-deMixerLayer::deMixerLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), mixer(*this)
+deMixerLayer::deMixerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
 {
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        mixers.push_back( new deMixer(n));
+        mixers[i]->reset(i);
+    }
+
 }
 
 deMixerLayer::~deMixerLayer()
 {
-}
-
-void deMixerLayer::recreateMixer()
-{
-    if (colorSpace.getColorSpace() == deColorSpaceInvalid)
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
     {
-        return;
-    }
-    const deLayer* source = stack.getLayer(getSourceLayerID());
-    if (!source)
-    {
-        return;
-    }
-    mixer.recreateMixer();
-}
-
-void deMixerLayer::onChangeColorSpace()
-{
-    recreateMixer();
-}
-
-void deMixerLayer::onChangeSourceLayer()
-{
-    recreateMixer();
-}
-
-void deMixerLayer::updatePreview(dePreviewStack& previewStack)
-{
-    const dePreview* sourcePreview = previewStack.getPreview(getSourceLayerID());
-    dePreview* preview = previewStack.getPreview(index);
-
-    if ((sourcePreview) && (preview))
-    {
-        if (mixer.getMixer())
-        {
-            mixer.getMixer()->calc(*sourcePreview, *preview);
-        }        
+        delete mixers[i];
     }
 }
 
-void deMixerLayer::saveSpecific(xmlNodePtr node)
+void deMixerLayer::processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize)
 {
-    mixer.save(node, "mixer");
+    mixers[i]->process(s1, s2, s3, s4, channel, channelSize);
 }
 
-void deMixerLayer::loadSpecific(xmlNodePtr node)
+
+void deMixerLayer::createActionFrame(wxWindow* parent)
 {
-    xmlNodePtr child = node->xmlChildrenNode;
-
-    while (child)
+    if (!actionFrame)
     {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("mixer")))) 
-        {
-            mixer.load(child);
-        }
+        actionFrame = new deMixerEditor(parent, *this);
+        actionFrame->Show(true);
+    }        
+}
 
-        child = child->next;
+deMixer* deMixerLayer::getMixer(int index)
+{
+    int n = getColorSpaceSize(colorSpace);
+    if ((index < 0) || (index >= n))
+    {
+        return NULL;
     }
+    return mixers[index];
+}
+
+bool deMixerLayer::isChannelNeutral(int index)
+{
+    return mixers[index]->isNeutral(index);
+}    
+
+void deMixerLayer::setValue(int s, int d, deValue value)
+{
+    mixers[d]->setValue(s, value);
+}
+
+deValue deMixerLayer::getValue(int s, int d)
+{
+    return mixers[d]->getValue(s);
 }

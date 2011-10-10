@@ -19,22 +19,16 @@
 #ifndef _DE_LAYER_FRAME_H
 #define _DE_LAYER_FRAME_H
 
-#include "action_frame.h"
-#include "property.h"
-class dePreviewStack;
+#include "frame.h"
+class deActionLayer;
 
-class deLayerFrame:public deActionFrame
+class deLayerFrame:public deFrame
 {
-    private:
-        wxSizer* sizer;
-        dePreviewStack& stack;
+    protected:
+        deActionLayer& layer;
     public:
-        deLayerFrame(wxWindow *parent, deLayer& _layer, dePreviewStack& _stack);
-
+        deLayerFrame(wxWindow *parent, deActionLayer& _layer, const std::string& name);
         virtual ~deLayerFrame();
-
-        void addProperty(deProperty* property);
-
 };
 
 #endif

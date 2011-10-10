@@ -17,20 +17,17 @@
 */
 
 #include "layer.h"
-#include "layer_stack.h"
-#include "layer_frame.h"
-#include "size.h"
-#include "preview.h"
-#include <iostream>
 #include "action_frame.h"
-#include "project.h"
+#include "blend_frame.h"
 #include <sstream>
 
-deLayer::deLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:stack(_stack), index(_index), name(*this), sourceLayer(*this, "source"), colorSpace(*this)
+deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer)
+:name(_name), colorSpace(_colorSpace), index(_index), sourceLayer(_sourceLayer)
 {
-    name.setName(_name);
+//    std::cout << "create layer with _index " << _index << std::endl;
+//    std::cout << "create layer with index " << index << std::endl;
     actionFrame = NULL;
+    blendFrame = NULL;
 }
 
 deLayer::~deLayer()
@@ -39,183 +36,113 @@ deLayer::~deLayer()
     {
         actionFrame->Close();
     }
+    if (blendFrame)
+    {
+        blendFrame->Close();
+    }
+}
+
+deColorSpace deLayer::getColorSpace() const
+{
+    return colorSpace;
 }
 
 
-void deLayer::setName(const std::string& _name)
+std::string deLayer::getName() const
 {
-    name.setName(_name);
+    return name;
+}
+
+bool deLayer::hasAction() const
+{
+    return false;
+}
+
+bool deLayer::hasBlending() const
+{
+    return false;
+}
+
+bool deLayer::canDisable() const
+{
+    return false;
+}
+
+bool deLayer::isEnabled() const
+{
+    return true;
+}
+
+void deLayer::setEnabled(bool e)
+{
 }
 
 void deLayer::closeActionFrame()
 {
     actionFrame = NULL;
-    deProperties::iterator i;
-    for (i = properties.begin(); i != properties.end(); i++)
-    {
-        (*i)->onCloseLayerFrame();
-    }
 }
 
 void deLayer::setActionFrame(deActionFrame* frame)
 {
-    assert(!actionFrame);
     actionFrame = frame;
 }
 
-deActionFrame* deLayer::getActionFrame()
+void deLayer::createActionFrame(wxWindow* parent)
 {
-    return actionFrame;
 }
 
-void deLayer::changeSourceLayer(int id)
+void deLayer::closeBlendFrame()
 {
-    sourceLayer.setLayerIndex(id);
-    updateColorSpace();
-    onChangeSourceLayer();
+    blendFrame = NULL;
 }
 
-void deLayer::changeColorSpace(deColorSpace _colorSpace)
+void deLayer::setBlendFrame(deBlendFrame* frame)
 {
-    colorSpace.setColorSpace(_colorSpace);
-    onChangeColorSpace();
+    blendFrame = frame;
 }
 
-deLayer* deLayer::getSourceLayer()
+void deLayer::createBlendFrame(wxWindow* parent)
 {
-    return stack.getLayer(getSourceLayerID());
 }
 
-void deLayer::updateColorSpace()
+void deLayer::onImageClick(deValue x, deValue y)
 {
-    if ((colorSpace.getColorSpace() != deColorSpaceInvalid) && (canChangeColorSpace()))
-    {
-        return;
-    }
-    deLayer* source = stack.getLayer(getSourceLayerID());
-    if (source)
-    {
-        deColorSpace c = source->getColorSpace();
-        if (c != colorSpace.getColorSpace())
-        {
-            changeColorSpace(c);
-        }
-    }        
-}   
-
-void deLayer::registerProperty(deProperty& property)
-{
-    properties.push_back(&property);
-}
-
-deActionFrame* deLayer::createLayerFrame(wxWindow* parent, int layerNumber, deProject* project)
-{
-    deLayerFrame* frame = new deLayerFrame(parent, *this, project->getPreviewStack());
-    deProperties::iterator i;
-    for (i = properties.begin(); i != properties.end(); i++)
-    {
-        frame->addProperty(*i);
-    }
-
-    frame->Fit();
-
-    return frame;
-}
-
-void deLayer::notifyPropertiesOnColorSpaceChange()
-{
-    deProperties::iterator i;
-    for (i = properties.begin(); i != properties.end(); i++)
-    {
-        (*i)->onColorSpaceChange();
-    }
     if (actionFrame)
     {
-        actionFrame->Layout();
-    }
-}
-
-void deLayer::onKey(int key)
-{
-    deProperties::iterator i;
-    for (i = properties.begin(); i != properties.end(); i++)
-    {
-        (*i)->onKey(key);
+        actionFrame->onImageClick(x, y);
     }
 }
 
 void deLayer::save(xmlNodePtr node)
 {
-    xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("type"), NULL);
-    xmlNodeSetContent(child, xmlCharStrdup(getType().c_str()));
-
-    name.save(node, "name");
-    colorSpace.save(node, "color_space");
-    sourceLayer.save(node, "source_layer");
-
-    saveSpecific(node);
-}
-
-void deLayer::load(xmlNodePtr node)
-{
-    xmlNodePtr child = node->xmlChildrenNode;
-
-    std::string colorSpaceString = "";
-    std::string sourceLayerString = "";
-    std::string overlayLayerString = "";
-
-    while (child)
     {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("color_space")))) 
-        {
-            xmlChar* s = xmlNodeGetContent(child);            
-            colorSpaceString = (char*)(s);
-            xmlFree(s);
-        }
-
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("source_layer")))) 
-        {
-            xmlChar* s = xmlNodeGetContent(child);            
-            sourceLayerString = (char*)(s);
-            xmlFree(s);
-        }
-
-
-        child = child->next;
+        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("type"), NULL);
+        xmlNodeSetContent(child, xmlCharStrdup(getType().c_str()));
     }
 
-    changeColorSpace(colorSpaceFromString(colorSpaceString));
+    {
+        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("name"), NULL);
+        xmlNodeSetContent(child, xmlCharStrdup(name.c_str()));
+    }
 
     {
-        std::istringstream iss(sourceLayerString);
-        int s;
-        iss >> s;
-
-        changeSourceLayer(s);
+        std::ostringstream oss;
+        oss << index;
+        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("index"), NULL);
+        xmlNodeSetContent(child, xmlCharStrdup(oss.str().c_str()));
     }        
 
-    loadSpecific(node);
-}
-
-void deLayer::traceSampler(deSampler* sampler)
-{
-    deProperties::iterator i;
-    for (i = properties.begin(); i != properties.end(); i++)
     {
-        (*i)->traceSampler(sampler);
-    }
-}
+        std::ostringstream oss;
+        oss << sourceLayer;
+        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("source"), NULL);
+        xmlNodeSetContent(child, xmlCharStrdup(oss.str().c_str()));
+    }        
 
-bool deLayer::checkUsage(int id)
-{
-    if (getSourceLayerID() == id)
     {
-        return true;
-    }
-    return false;
-}
+        std::string c = getColorSpaceName(colorSpace);
+        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("color_space"), NULL);
+        xmlNodeSetContent(child, xmlCharStrdup(c.c_str()));
+    }        
 
-bool deLayer::isLast() const
-{
-    return (index == stack.getSize() - 1);
 }

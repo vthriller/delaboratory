@@ -19,31 +19,20 @@
 #ifndef _DE_MIXER_EDITOR_H
 #define _DE_MIXER_EDITOR_H
 
-#include <wx/wx.h>
+#include "action_frame.h"
+class deMixerEditorChannel;
 #include <vector>
-#include <list>
-class deMixerLayer;
-class deMixerSlider;
-class dePropertyMixer;
 
-class deMixerEditor:public wxPanel
+class deMixerEditor:public deActionFrame
 {
     private:
-        dePropertyMixer& property;
-
-        wxSizer* sizer;
-        wxWindow* parent;
-
-        std::list<wxPanel*> panels;
-
-        void build();
-        void destroy();
+        std::vector<deMixerEditorChannel*> channels;
 
     public:
-        deMixerEditor(wxWindow *parent, dePropertyMixer& _property);
+        deMixerEditor(wxWindow *parent, deActionLayer& _layer);
         virtual ~deMixerEditor();
 
-        void rebuild();
+        virtual void onImageClick(deValue x, deValue y);
 
 };
 

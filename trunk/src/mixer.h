@@ -19,41 +19,57 @@
 #ifndef _DE_MIXER_H
 #define _DE_MIXER_H
 
-#include "color_space.h"
 #include "value.h"
+class deChannel;
+
+/*
+#include "color_space.h"
 #include <libxml/parser.h>
 
 class dePreview;
+*/
 
 class deMixer
 {
     private:
+        int size;
+        deValue* weights;
+    /*
         deColorSpace sourceColorSpace;
         deColorSpace destinationColorSpace;
 
-        deValue* values;
 
         deValue range;
+        */
 
     public:
-        deMixer(deColorSpace _sourceColorSpace, deColorSpace _destinationColorSpace);
+        deMixer(int _size);
         virtual ~deMixer();
+
+        deValue getValue(int c) const;
+        void setValue(int c, deValue value);
+
+        void process(const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& destination, int n);
+
+        bool isNeutral(int index) const;
+
+        void reset(int index);
+
+        /*
 
         void calc(const dePreview& source, dePreview& destination) const;
 
-        void reset();
 
         deColorSpace getSourceColorSpace() const;
         deColorSpace getDestinationColorSpace() const;
 
-        deValue getValue(int s, int d) const;
-        void setValue(int s, int d, deValue value);
 
         deValue getRangeMin() const;
         deValue getRangeMax() const;
 
         void save(xmlNodePtr node);
         void load(xmlNodePtr node);
+        */
     
 };
 

@@ -17,66 +17,71 @@
 */
 
 #include "mixer_editor.h"
-#include "mixer.h"
+#include "color_space.h"
 #include "mixer_layer.h"
-#include <iostream>
-#include <sstream>
-#include "layer_stack.h"
-#include "preview.h"
-#include "mixer_slider.h"
 #include "mixer_editor_channel.h"
 
-deMixerEditor::deMixerEditor(wxWindow *_parent, dePropertyMixer& _property)
-:wxPanel(_parent),
-parent(_parent),
-property(_property)
+deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer)
+:deActionFrame(parent, _layer)
 {
-    sizer = new wxBoxSizer(wxVERTICAL);
-    build();
+    deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(_layer);
+
+    deColorSpace colorSpace = layer.getColorSpace();
+
+    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
-    Fit();
-}    
 
-void deMixerEditor::rebuild()
-{
-    destroy();
-    build();
-    Layout();
-}
-
-void deMixerEditor::build()
-{
-    deMixer* mixer = property.getMixer();
-    if (!mixer)
-    {
-        return;
-    }
-
-    int d = getColorSpaceSize(mixer->getDestinationColorSpace());
+    int n = getColorSpaceSize(colorSpace);
 
     int i;
-    for (i = 0; i < d; i++)
+    for (i = 0; i < n; i++)
     {
-        deMixerEditorChannel* editorChannel = new deMixerEditorChannel(this, property, i);
-        panels.push_back(editorChannel);
-        sizer->Add(editorChannel, 1, wxEXPAND);
+        deMixerEditorChannel* mixerEditorChannel = new deMixerEditorChannel(this, mixerLayer, i);
+        sizer->Add(mixerEditorChannel);
+        channels.push_back(mixerEditorChannel);
     }
+    /*
+    wxString* channelStrings = new wxString [n];
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        channelStrings[i] = wxString::FromAscii(getChannelName(colorSpace,i).c_str());
+    }        
+
+    channelChoice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), n, channelStrings);
+    channelChoice->SetSelection(0);
+
+    delete [] channelStrings;
+
+    sizer->Add(channelChoice);
+
+    curvesPanel = new deCurvesPanel(this, curvesLayer );
+
+    sizer->Add(curvesPanel);
+
+    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deMixerEditor::choose));
+    */
+    sizer->Layout();
+    Fit();
 }
 
 deMixerEditor::~deMixerEditor()
 {
-    destroy();
 }
 
-void deMixerEditor::destroy()
+/*
+void deMixerEditor::choose(wxCommandEvent &event)
 {
-    while (panels.size() > 0)
-    {
-        std::list<wxPanel*>::iterator i = panels.begin();
-        wxPanel* panel = *i;
-        sizer->Detach(panel);
-        panels.erase(i);
-        delete panel;
-    }
+    int b = channelChoice->GetCurrentSelection();
+    curvesPanel->changeChannel(b);
 }
 
+void deMixerEditor::onImageClick(deValue x, deValue y)
+{
+    curvesPanel->onImageClick(x, y);
+}
+*/
+
+void deMixerEditor::onImageClick(deValue x, deValue y)
+{
+}

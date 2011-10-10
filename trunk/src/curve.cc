@@ -26,8 +26,8 @@
 #define CURVE_POINT_PICK_DISTANCE 0.03
 #define VERTICAL_STEP 0.01
 
-deCurve::deCurve(int size)
-:shape(size)
+deCurve::deCurve()
+:shape(256)
 {
     reset();
 }
@@ -40,6 +40,44 @@ void deCurve::reset()
 {
     points.clear();
     fill(1, 1, 0);
+    shape.build(points);
+}
+
+void deCurve::invert()
+{
+    points.clear();
+    fill(1, -1, 0);
+    shape.build(points);
+}
+
+void deCurve::setConst(deValue v)
+{
+    points.clear();
+    points.push_back(deCurvePoint(0,v));
+    points.push_back(deCurvePoint(1,v));
+    shape.build(points);
+}
+
+void deCurve::setAngle(int a)
+{
+    if (a < 4)
+    {
+        deValue p1 = a / 8.0;
+        deValue p2 = 1 - p1;
+        points.clear();
+        points.push_back(deCurvePoint(0,0));
+        points.push_back(deCurvePoint(p1,0));
+        points.push_back(deCurvePoint(p2,1));
+        points.push_back(deCurvePoint(1,1));
+    }
+    else
+    {
+        deValue p1 = (a - 3) / 8.0;
+        deValue p2 = 1 - p1;
+        points.clear();
+        points.push_back(deCurvePoint(0,p1));
+        points.push_back(deCurvePoint(1,p2));
+    }
     shape.build(points);
 }
 
@@ -76,15 +114,20 @@ void deCurve::fill(int n, deValue a, deValue r)
     shape.build(points);
 }
 
-void deCurve::process(const deBaseChannel& source, deBaseChannel& destination)
+deValue deCurve::calcValue(deValue value)
+{
+    return shape.calc(value);
+}
+
+void deCurve::process(const deChannel& source, deChannel& destination, int n)
 {
     int i;
-    int n = source.getSize().getN();
     for (i = 0; i < n; i++)
     {
         deValue value = source.getValue(i);
         deValue result = shape.calc(value);
-        destination.setValue(i, result);
+
+        destination.setValueClip(i, result);
     }
 }
 
@@ -346,4 +389,25 @@ void deCurve::load(xmlNodePtr node)
     }
 
     shape.build(points);
+}
+
+bool deCurve::isNeutral() const
+{
+    if (points.size() != 2)
+    {
+        return false;
+    }
+    deCurvePoints::const_iterator i = points.begin();
+    deCurvePoint a = *i;
+    if (a.getY() != 0)
+    {
+        return false;
+    }
+    i++;
+    deCurvePoint b = *i;
+    if (b.getY() != 1)
+    {
+        return false;
+    }
+    return true;
 }

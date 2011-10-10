@@ -17,46 +17,82 @@
 */
 
 #include "source_image_layer.h"
-#include <cassert>
-#include "source_image.h"
-#include "color_space.h"
+#include "channel_manager.h"
+#include "project.h"
+#include "scale_channel.h"
 #include <iostream>
-#include "channel.h"
-#include "exception.h"
-#include <wx/wx.h>
-#include "preview_stack.h"
 
-deSourceImageLayer::deSourceImageLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), previewSize(0,0)
+deSourceImageLayer::deSourceImageLayer(int _index, deProject& _project)
+:deLayer("source image", deColorSpaceRGB, _index, -1), 
+project(_project),
+sourceR(-1), 
+sourceG(-1), 
+sourceB(-1), 
+image(deColorSpaceRGB, _project.getPreviewChannelManager()) 
 {
-    sourceImage = NULL;
-    colorSpace.setColorSpace(deColorSpaceRGB);
+    //image.setInvalid();
 }
 
 deSourceImageLayer::~deSourceImageLayer()
 {
 }
 
-void deSourceImageLayer::setSourceImage(deSourceImage* _sourceImage)
+void deSourceImageLayer::setSource(int r, int g, int b)
 {
-    sourceImage = _sourceImage;
+    sourceR = r;
+    sourceG = g;
+    sourceB = b;
 }
 
-void deSourceImageLayer::setPreviewSize(const deSize& size)
+void deSourceImageLayer::updateImage()
 {
-    previewSize = size;
-}
+    deChannelManager& previewChannelManager = project.getPreviewChannelManager();
+    deChannelManager& sourceChannelManager = project.getSourceChannelManager();
 
-void deSourceImageLayer::updatePreview(dePreviewStack& previewStack)
-{
-    dePreview* preview = previewStack.getPreview(index);
+/*
+    std::cout << "deSourceImageLayer::updatePreview sourceR: " << sourceR << std::endl;
+    std::cout << "deSourceImageLayer::updatePreview sourceG: " << sourceG << std::endl;
+    std::cout << "deSourceImageLayer::updatePreview sourceB: " << sourceB << std::endl;
+*/
+    deChannel* sourceChannelR = sourceChannelManager.getChannel(sourceR);
+    deChannel* sourceChannelG = sourceChannelManager.getChannel(sourceG);
+    deChannel* sourceChannelB = sourceChannelManager.getChannel(sourceB);
 
-    int n = getColorSpaceSize(sourceImage->getColorSpace());
-    int i;
+    if (!sourceChannelR)
+    {
+        return;
+    }
+
+/*
+    std::cout << "sourceImage r: " << image.getChannel(0) << std::endl;
+    std::cout << "sourceImage g: " << image.getChannel(1) << std::endl;
+    std::cout << "sourceImage b: " << image.getChannel(2) << std::endl;
+*/
+
+    image.enableChannel(0);
+    image.enableChannel(1);
+    image.enableChannel(2);
+
+    deChannel* channelR = previewChannelManager.getChannel(image.getChannelIndex(0));
+    deChannel* channelG = previewChannelManager.getChannel(image.getChannelIndex(1));
+    deChannel* channelB = previewChannelManager.getChannel(image.getChannelIndex(2));
+
+    const deSize ss = sourceChannelManager.getChannelSize();
+    const deSize ds = previewChannelManager.getChannelSize();
+
+    scaleChannel(*sourceChannelR, *channelR, ss, ds);
+    scaleChannel(*sourceChannelG, *channelG, ss, ds);
+    scaleChannel(*sourceChannelB, *channelB, ss, ds);
+
+    //image.setValid();
+
+//    std::cout << "deSourceImageLayer::updatePreview done" << std::endl;
+
+    /*
 
     for (i = 0; i < n; i++)
     {
-        const deTrueChannel* sourceChannel = dynamic_cast<const deTrueChannel*>(sourceImage->getChannel(i));
+        const deChannel* sourceChannel = dynamic_cast<const deTrueChannel*>(sourceImage->getChannel(i));
         if (!sourceChannel)
         {
             throw deException("no sourceChannel in deSourceImageLayer::generatePreview");
@@ -67,6 +103,16 @@ void deSourceImageLayer::updatePreview(dePreviewStack& previewStack)
             throw deException("no destinationChannel in deSourceImageLayer::generatePreview");
         }
         destinationChannel->scale(sourceChannel);
-    }
+    }*/
 
+}
+
+const deImage& deSourceImageLayer::getImage() const
+{
+    return image;
+}
+ 
+void deSourceImageLayer::updateChannelUsage(std::map<int, int>& channelUsage) const
+{
+    image.updateChannelUsage(channelUsage, index);
 }

@@ -38,7 +38,7 @@ deValue deCurveFunctionBezier::calc(deValue value) const
     deValue d = x3 - x0;
     if (d == 0.0)
     {
-        return value;
+        return y0;
     }
 
     deValue t = (value - x0) / d;

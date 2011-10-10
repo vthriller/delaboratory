@@ -17,52 +17,197 @@
 */
 
 #include "mixer_editor_channel.h"
-#include "mixer.h"
-#include "mixer_slider.h"
-#include "property_mixer.h"
+#include "mixer_layer.h"
+#include "slider.h"
+#include "gradient_panel.h"
 
-deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, dePropertyMixer& _property, int _channel)
-:wxPanel(parent), property(_property), channel(_channel)
+class deMixerSlider:public deSlider
 {
+    private:
+        deMixerLayer& layer;
+        int s;
+        int d;
 
-    deMixer* mixer = property.getMixer();
-    if (!mixer)
-    {
-        return;
-    }
+    public:
+        deMixerSlider(wxWindow *parent, int range, deMixerLayer& _layer, int _s, int _d, const std::string& name)
+        :deSlider(parent, name, range, -2.0, 2.0, 0.0), layer(_layer), s(_s), d(_d)
+        {
+            setValue(layer.getValue(s, d));
+        }
 
-    int s = getColorSpaceSize(mixer->getSourceColorSpace());
+        virtual ~deMixerSlider()
+        {
+        }
 
-    // FIXME constant
-    sliderRange = 300;
+        virtual void onValueChange(deValue value, bool finished)
+        {
+            if (finished)
+            {
+                layer.setValue(s, d, value);
+                layer.onChannelChange(d);
+                layer.updateOtherLayers();
+                layer.repaint();
+            }                
+        }
+};        
 
-    deColorSpace sourceColorSpace = mixer->getSourceColorSpace();
-    deColorSpace colorSpace = mixer->getDestinationColorSpace();
+deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _layer, int _index)
+:wxPanel(parent), layer(_layer), index(_index)
+{
+    deColorSpace colorSpace = layer.getColorSpace();
+    int n = getColorSpaceSize(colorSpace);
 
-    sizer = new wxBoxSizer(wxVERTICAL);
+    std::string name = getChannelName(colorSpace, index);
+    wxSizer* sizer = new wxStaticBoxSizer(wxVERTICAL, this,  wxString::FromAscii(name.c_str()));
     SetSizer(sizer);
-    
-    std::string dc = getChannelName(colorSpace, channel);
-    wxStaticText* destLabel = new wxStaticText(this, wxID_ANY, wxString::FromAscii(dc.c_str()), wxDefaultPosition, wxSize(100, -1));
-    sizer->Add(destLabel, 1, wxEXPAND);
 
-    int j;
-    for (j = 0; j < s; j++)
+    int barSize = 20;
+    int width = 300;
+
+    deGradientPanel* gradient = new deGradientPanel(this, wxSize(width, barSize), colorSpace, index, -1, -1, -1, -1);
+    sizer->Add(gradient, 0, wxCENTER);
+
+    std::string src1;
+    std::string src2;
+
+    int i;
+    int counter = 0;
+    for (i = 0; i < n; i++)
     {
-        std::string sc = getChannelName(sourceColorSpace, j);
-        deMixerSlider* slider = new deMixerSlider(this, sc, sliderRange, mixer->getRangeMin(), mixer->getRangeMax(), j, channel, property);
+        std::string src = getChannelName(colorSpace, i);
+        deMixerSlider* slider = new deMixerSlider(this, width, layer, i, index, src);        
         sliders.push_back(slider);
-        sizer->Add(slider, 1, wxEXPAND);
+        sizer->Add(slider);
+        if (i != index)
+        {
+            counter++;
+            if (counter == 1)
+            {
+                src1 = src;
+            }
+            else
+            {
+                src2 = src;
+            }
+        }            
     }
+
+    wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
+    sizer->Add(sizerB, 0);
+
+    reset = new wxButton(this, wxID_ANY, _T("reset"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(reset, 0);
+
+    app1 = new wxButton(this, wxID_ANY, wxString::FromAscii(src1.c_str()), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(app1, 0);
+
+    app2 = new wxButton(this, wxID_ANY, wxString::FromAscii(src2.c_str()), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(app2, 0);
+
+    mix1 = new wxButton(this, wxID_ANY, _T("0.1"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(mix1, 0);
+
+    mix2 = new wxButton(this, wxID_ANY, _T("0.3"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(mix2, 0);
+
+    mix3 = new wxButton(this, wxID_ANY, _T("-0.3"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(mix3, 0);
+
+    mix4 = new wxButton(this, wxID_ANY, _T("-0.5"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(mix4, 0);
+
+    Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMixerEditorChannel::click));
+
+    Layout();
+    Fit();
+
 }
 
 deMixerEditorChannel::~deMixerEditorChannel()
 {
-    while (sliders.size() > 0)
-    {
-        std::vector<deMixerSlider*>::iterator i = sliders.begin();
-        delete *i;
-        sliders.erase(i);
-    }
 }
 
+void deMixerEditorChannel::click(wxCommandEvent &event)
+{
+    int id = event.GetId();
+
+    if (reset->GetId() == id)
+    {
+        preset(0);
+    }      
+
+    if (mix1->GetId() == id)
+    {
+        preset(0.1);
+    }      
+
+    if (mix2->GetId() == id)
+    {
+        preset(0.3);
+    }      
+
+    if (mix3->GetId() == id)
+    {
+        preset(-0.3);
+    }      
+
+    if (mix4->GetId() == id)
+    {
+        preset(-0.5);
+    }      
+
+    if (app1->GetId() == id)
+    {
+        preset2(1.0, 0, 0);
+    }      
+
+    if (app2->GetId() == id)
+    {
+        preset2(0, 1.0, 0);
+    }      
+}
+
+void deMixerEditorChannel::preset(deValue a)
+{
+    int i;
+    for (i = 0; i < sliders.size(); i++) 
+    {
+        deValue v = a;
+        if (i == index)
+        {
+            v = 1.0 - 2 * a;
+        }
+        sliders[i]->setValue(v);
+        layer.setValue(i, index, v);
+        layer.onChannelChange(index);
+    }
+    layer.updateOtherLayers();
+    layer.repaint();
+}
+
+void deMixerEditorChannel::preset2(deValue a, deValue b, deValue c)
+{
+    int i;
+    int counter = 0;
+    for (i = 0; i < sliders.size(); i++) 
+    {
+        deValue v = c;
+        if (i != index)
+        {
+            counter++;
+            if (counter == 1)
+            {
+                v = a;
+            }
+            else
+            {
+                v = b;
+            }
+        }
+        sliders[i]->setValue(v);
+        layer.setValue(i, index, v);
+        layer.onChannelChange(index);
+    }
+    layer.updateOtherLayers();
+    layer.repaint();
+}

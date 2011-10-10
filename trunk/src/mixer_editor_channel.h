@@ -20,22 +20,34 @@
 #define _DE_MIXER_EDITOR_CHANNEL_H
 
 #include <wx/wx.h>
-class dePropertyMixer;
-class deMixerSlider;
+class deMixerLayer;
+#include "slider.h"
 #include <vector>
 
 class deMixerEditorChannel:public wxPanel
 {
     private:
-        int sliderRange;
-        int channel;
-        dePropertyMixer& property;
-        wxSizer* sizer;
-        std::vector<deMixerSlider*> sliders;
+        std::vector<deSlider*> sliders;
+        deMixerLayer& layer;
+        int index;
+
+        wxButton* reset;
+        wxButton* app1;
+        wxButton* app2;
+        wxButton* mix1;
+        wxButton* mix2;
+        wxButton* mix3;
+        wxButton* mix4;
+
+        void click(wxCommandEvent &event);
+        void preset(deValue a);
+        void preset2(deValue a, deValue b, deValue c);
 
     public:
-        deMixerEditorChannel(wxWindow *parent, dePropertyMixer& _property, int _channel);
+        deMixerEditorChannel(wxWindow *parent, deMixerLayer& _layer, int _index);
         virtual ~deMixerEditorChannel();
+
+
 
 };
 

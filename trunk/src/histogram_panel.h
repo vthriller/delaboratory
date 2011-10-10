@@ -27,24 +27,31 @@ class deHistogramPanel:public wxPanel
 {
     private:
 //        std::vector<deHistogram*> histograms;
-        deHistogram* histogram;
-        int size;
+        deHistogram histogram;
+//        int size;
         deProject* project;
+        wxImage histogramImage;
+        int channel;
+        bool generated;
 
         void paintEvent(wxPaintEvent & evt);
-        void paint();
         void render(wxDC& dc);
 
         DECLARE_EVENT_TABLE()
 
-        void destroyHistograms();
-        void renderHistogram(deHistogram* histogram, wxDC& dc, int max);
+//        void destroyHistograms();
+//        void renderHistogram(deHistogram* histogram, wxDC& dc, int max);
 
     public:
         deHistogramPanel(wxWindow* parent, deProject* _project);
         virtual ~deHistogramPanel();
 
-        void updateHistograms();
+        void generate();
+        void paint();
+
+        void setChannel(int _channel);
+
+//        void updateHistograms();
 };
 
 #endif

@@ -18,10 +18,7 @@
 
 #include "layer_stack.h"
 #include "layer.h"
-#include "exception.h"
-#include <iostream>
-#include "action_frame.h"
-#include "layer_factory.h"
+#include "channel_manager.h"
 
 deLayerStack::deLayerStack()
 {
@@ -29,7 +26,9 @@ deLayerStack::deLayerStack()
 
 deLayerStack::~deLayerStack()
 {
+//    std::cout << " delete layer stack..." << std::endl;
     clear();
+//    std::cout << " delete layer stack done" << std::endl;
 }
 
 void deLayerStack::clear()
@@ -38,21 +37,6 @@ void deLayerStack::clear()
     {
         removeTopLayer();
     }
-}
-
-deLayer* deLayerStack::getLayer(int id) const
-{
-    unsigned int i = id;
-    if ((i >= layers.size()) || (id < 0))
-    {
-        return NULL;
-    }
-    return layers[i];
-}
-
-void deLayerStack::addLayer(deLayer* layer)
-{
-    layers.push_back(layer);
 }
 
 void deLayerStack::removeTopLayer()
@@ -65,31 +49,107 @@ void deLayerStack::removeTopLayer()
     layers.erase(i);
 }
 
+void deLayerStack::addLayer(deLayer* layer)
+{
+    layers.push_back(layer);
+}
+
 int deLayerStack::getSize() const
 {
     return layers.size();
 }
 
-void deLayerStack::traceSampler(deSampler* sampler)
+deLayer* deLayerStack::getLayer(int id) const
 {
-    std::vector<deLayer*>::iterator i;
-    for (i = layers.begin(); i != layers.end(); i++)
+    unsigned int i = id;
+    if ((i >= layers.size()) || (id < 0))
     {
-        deActionFrame* frame = (*i)->getActionFrame();
-        if (frame)
-        {
-            frame->traceSampler(sampler);
-        }
+        return 0;
+    }
+    return layers[i];
+}
+
+void deLayerStack::updateImages()
+{
+    updateImages(0, layers.size() - 1);
+}
+
+void deLayerStack::updateImages(int a, int b)
+{
+    unsigned int i;
+    assert(b < layers.size() );
+    for (i = a; i <= b; i++)
+    {
+//        std::cout << "update image of layer " << i << std::endl;
+        layers[i]->updateImage();
     }
 }
 
-void deLayerStack::updateColorSpaces()
+void deLayerStack::updateImagesSmart(deChannelManager& channelManager, int view)
 {
-    std::vector<deLayer*>::iterator i;
-    for (i = layers.begin(); i != layers.end(); i++)
+    // FIXME channels are enabled/disabled/allocated during update, can't use this method
+
+//    updateImages();
+    channelManager.lock();
+
+    std::map<int, int> channelUsage;
+    generateChannelUsage(channelUsage);
+
+
+    std::map<int, int>::iterator i;
+    for (i = channelUsage.begin(); i != channelUsage.end(); i++)
     {
-        (*i)->updateColorSpace();
-    }        
+//        std::cout << "c: " << i->first << " l: " << i->second << std::endl;
+    }
+
+    unsigned int index;
+    assert(view < layers.size());
+    for (index = 0; index <= view; index++)
+    {
+//        std::cout << "update layer " << index << std::endl;
+        int previous = index - 1;
+        if (previous >= 0)
+        {
+            for (i = channelUsage.begin(); i != channelUsage.end(); i++)
+            {
+                int c = i->first;
+                int l = i->second;
+                if (l == previous)
+                {
+//                    std::cout << "destroy channel " << c << std::endl;
+                    channelManager.destroyChannel(c);
+                }
+            }
+        }
+
+        layers[index]->updateImage();
+//        std::cout << "channels: " << channelManager.getNumberOfAllocatedChannels() << std::endl;
+    }
+
+    channelManager.unlock();
+}
+
+void deLayerStack::generateChannelUsage(std::map<int, int>& channelUsage)
+{
+    channelUsage.clear();
+    int i;
+    int n = layers.size();
+    for (i = 0; i < n; i++)
+    {
+        deLayer* layer = layers[i];
+        layer->updateChannelUsage(channelUsage);
+    }
+}
+
+void deLayerStack::onKey(int key)
+{
+    int i;
+    int n = layers.size();
+    for (i = 0; i < n; i++)
+    {
+        deLayer* layer = layers[i];
+        layer->onKey(key);
+    }
 }
 
 void deLayerStack::save(xmlNodePtr node)
@@ -100,86 +160,4 @@ void deLayerStack::save(xmlNodePtr node)
         xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("layer"), NULL);
         (*i)->save(child);
     }
-}
-
-void deLayerStack::loadLayer(xmlNodePtr node, deLayerFactory& factory)
-{
-    xmlNodePtr child = node->xmlChildrenNode;
-    std::string type = "";
-    std::string name = "";
-
-    while (child)
-    {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("type")))) 
-        {
-            xmlChar* s = xmlNodeGetContent(child);            
-            type = (char*)(s);
-            xmlFree(s);
-        }
-
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("name")))) 
-        {
-            xmlChar* s = xmlNodeGetContent(child);            
-            name = (char*)(s);
-            xmlFree(s);
-        }
-
-        child = child->next;
-    }
-
-    if (type.size() > 0)
-    {
-        int index = layers.size();
-
-        deLayer* layer = factory.createLayer(type, *this, index, name);
-
-        if (layer)
-        {
-            layer->load(node);
-            addLayer(layer);
-        }
-    }
-    
-}
-
-void deLayerStack::load(xmlNodePtr node, deLayerFactory& factory)
-{
-    xmlNodePtr child = node->xmlChildrenNode;
-
-    while (child)
-    {
-        loadLayer(child, factory);
-        child = child->next;
-    }
-}
-
-void deLayerStack::generateLayerUsage(std::vector<int>& layerUsage)
-{
-    int i;
-    int j;
-    int n = layers.size();
-    layerUsage.clear();
-    for (i = 0; i < n; i++)
-    {
-        layerUsage.push_back(0);
-    }
-    for (i = 0; i < n; i++)
-    {
-        for (j = 0; j < i; j++)
-        {
-            if (layers[i]->checkUsage(j))
-            {
-                layerUsage[j] = i;
-            }
-        }
-    }
-}
-
-void deLayerStack::onKey(int key)
-{
-    std::vector<deLayer*>::iterator i;
-    for (i = layers.begin(); i != layers.end(); i++)
-    {
-        (*i)->onKey(key);
-    }        
 }

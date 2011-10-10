@@ -19,22 +19,17 @@
 #ifndef _DE_ACTION_FRAME_H
 #define _DE_ACTION_FRAME_H
 
-#include <wx/wx.h>
-class deLayer;
-class deSampler;
+#include "layer_frame.h"
+#include "value.h"
 
-class deActionFrame:public wxFrame
+class deActionFrame:public deLayerFrame
 {
     private:
-        deLayer& layer;
     public:
-        deActionFrame(wxWindow *parent, deLayer& _layer, const wxString& name);
-
+        deActionFrame(wxWindow *parent, deActionLayer& _layer);
         virtual ~deActionFrame();
 
-        void traceSampler(deSampler* sampler);
-
-
+        virtual void onImageClick(deValue x, deValue y) = 0;
 };
 
 #endif

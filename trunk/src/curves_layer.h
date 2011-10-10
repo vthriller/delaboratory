@@ -19,31 +19,35 @@
 #ifndef _DE_CURVES_LAYER_H
 #define _DE_CURVES_LAYER_H
 
-#include "layer.h"
-#include "property_curves.h"
-#include "color_space.h"
-class dePreview;
+#include "action_layer.h"
+#include "curve.h"
 
-class deCurvesLayer:public deLayer
+class deCurvesLayer:public deActionLayer
 {
     private:
-        dePropertyCurves curves;
+        deCurve* curves;
 
-        void resetCurves();
-        void processCurves(const dePreview& source, dePreview& destination);
+    protected:
+        virtual bool singleChannelProcessing() const {return true;};
+        virtual std::string getType() const {return "curves";};
 
     public:
-        deCurvesLayer(deLayerStack& _stack, int _index, const std::string& _name);
+        deCurvesLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
         virtual ~deCurvesLayer();
 
-        virtual bool canChangeSourceLayer() const {return true;};
 
-        virtual void onChangeColorSpace();
-        virtual void updatePreview(dePreviewStack& previewStack);
+        virtual void createActionFrame(wxWindow* parent);
 
-        virtual std::string getType() const {return "curves";};
-        virtual void saveSpecific(xmlNodePtr node);
-        virtual void loadSpecific(xmlNodePtr node);
+        deCurve* getCurve(int index);
+
+        virtual bool isChannelNeutral(int index);
+
+        virtual void processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
+
+        virtual void onKey(int key);
+
+
+
 
 };
 

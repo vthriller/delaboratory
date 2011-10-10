@@ -17,11 +17,10 @@
 */
 
 #include "action_frame.h"
-#include "layer.h"
+#include "action_layer.h"
 
-deActionFrame::deActionFrame(wxWindow *parent, deLayer& _layer, const wxString& name)
-:wxFrame(parent, wxID_ANY, name, wxDefaultPosition, wxDefaultSize, wxCAPTION | wxCLOSE_BOX | wxFRAME_FLOAT_ON_PARENT),
-layer(_layer)
+deActionFrame::deActionFrame(wxWindow *parent, deActionLayer& _layer)
+:deLayerFrame(parent, _layer, _layer.getName())
 {
     layer.setActionFrame(this);
 }
@@ -31,7 +30,3 @@ deActionFrame::~deActionFrame()
     layer.closeActionFrame();
 }
 
-void deActionFrame::traceSampler(deSampler* sampler)
-{
-    layer.traceSampler(sampler);
-}
