@@ -34,7 +34,7 @@
 
 *Q* Why are you creating this?
 
-*A* I love Free Software, I use it on my desktop since 1998. I bought my first digital camera in 2005, in 2009 photography started to be my really serious hobby. I quickly realized what are limits of _GIMP_, I was searching for alternatives - I discovered _rawtherapee_ and _GMIC_. I was under heavy influence of Dan Margulis classic guide to color correction. The delaboratory is a product of all my experiences. I code this project because I need it for my photos. It does what I need in my postprocessing. It fits exactly between rawtherapee and Gimp in my workflow. 
+*A* I love Free Software, I use it on my desktop since 1998. I bought my first digital camera in 2005, in 2009 photography started to be my really serious hobby. I quickly realized what are limits of _GIMP_, I was searching for alternatives - I discovered _rawtherapee_ and _GMIC_. I was under heavy influence of Dan Margulis classic guide to color correction. The delaboratory is a product of all my experiences. I code this project because I need it for my photos. It does what I need in my postprocessing. It fits exactly between _rawtherapee_ and _GIMP_ in my workflow. 
 
 *Q* Can I help?
 
