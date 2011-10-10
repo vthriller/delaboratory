@@ -19,40 +19,32 @@
 #ifndef _DE_BLUR_LAYER_H
 #define _DE_BLUR_LAYER_H
 
-#include "layer.h"
-#include "blur.h"
-#include "property_value.h"
-#include "property_blur_direction.h"
-#include "property_blur_type.h"
-#include "property_integer.h"
-#include "property_channels.h"
-#include <set>
+#include "action_layer.h"
 
-class deBlurLayer:public deLayer
+class deBlurLayer:public deActionLayer
 {
     private:
-        dePropertyBlurType blurType;
-        dePropertyValue radiusX;
-        dePropertyValue radiusY;
-        dePropertyChannels channels;
-        dePropertyInteger iterations;
-        dePropertyValue threshold;
+        deValue blurRadius;
 
-    public:
-        deBlurLayer(deLayerStack& _stack, int _index, const std::string& _name);
-        virtual ~deBlurLayer();
-
-        virtual bool canChangeSourceLayer() const {return true;};
-
-        bool updatePreview(const dePreview* sourcePreview, dePreview* preview);
-        virtual void updatePreview(dePreviewStack& previewStack);
-
-        virtual void onChangeColorSpace();
-
+    protected:
+        virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "blur";};
 
-        virtual void saveSpecific(xmlNodePtr node);
-        virtual void loadSpecific(xmlNodePtr node);
+    public:
+        deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        virtual ~deBlurLayer();
+
+        virtual void createActionFrame(wxWindow* parent);
+
+        virtual bool isChannelNeutral(int index);
+
+        virtual void processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
+
+        void setBlurRadius(deValue r);
+        deValue getBlurRadius() const;
+
+
+
 
 };
 

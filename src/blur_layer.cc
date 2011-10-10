@@ -17,108 +17,56 @@
 */
 
 #include "blur_layer.h"
-#include "blur.h"
-#include "preview_stack.h"
-#include "preview.h"
 #include "project.h"
+#include <iostream>
+#include "blur.h"
+#include "blur_frame.h"
 
-deBlurLayer::deBlurLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name), radiusX(*this, "radius x", 0.0, 0.05), radiusY(*this, "radius y", 0.0, 0.05), channels(*this), iterations(*this, "iterations", 1, 10), threshold(*this, "threshold", 0.0, 1.0), blurType(*this)
+deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
 {
-    radiusX.setValue(0.01);
-    radiusY.setValue(0.01);
-    iterations.setValue(1);
+    blurRadius = 0.005;
+
 }
 
 deBlurLayer::~deBlurLayer()
 {
 }
 
-bool deBlurLayer::updatePreview(const dePreview* sourcePreview, dePreview* preview)
+void deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
-    dePreview* tmp = new dePreview(colorSpace.getColorSpace(), preview->getRawSize());
+    const deValue* source = sourceChannel.getPixels();
+    deValue* destination = channel.getPixels();
+    deBlurType type = deGaussianBlur;
+    deValue t = 0.0;
 
-    deBlurType type = blurType.getBlurType();
-    deValue t = threshold.getValue();
+    blurChannel(source, destination, size, blurRadius, type, t);
+}
 
-    int i;
-    int n = iterations.getValue();
-    for (i = 0; i < n; i++)
+
+void deBlurLayer::createActionFrame(wxWindow* parent)
+{
+    if (!actionFrame)
     {
-        const dePreview* src;
-        if (i == 0)
-        {
-            src = sourcePreview;
-        }
-        else
-        {
-            src = preview;
-        }
-
-        blur(*src, *tmp, deBlurHorizontal, radiusX.getValue(), channels.getChannels(), type, t);
-        blur(*tmp, *preview, deBlurVertical, radiusY.getValue(), channels.getChannels(), type, t);
-    }
-
-    delete tmp;
+        actionFrame = new deBlurFrame(parent, *this);
+        actionFrame->Show(true);
+    }        
 }
 
-
-void deBlurLayer::onChangeColorSpace()
+bool deBlurLayer::isChannelNeutral(int index)
 {
-    channels.fill();
+    return (blurRadius == 0);
+}    
+
+void deBlurLayer::setBlurRadius(deValue r)
+{
+    blurRadius = r;
+    updateImage();
+    updateOtherLayers();
+    repaint();
 }
 
-void deBlurLayer::saveSpecific(xmlNodePtr node)
+deValue deBlurLayer::getBlurRadius() const
 {
-    radiusX.save(node, "radius_x");
-    radiusY.save(node, "radius_y");
-    channels.save(node, "channels");
-    iterations.save(node, "iterations");
-    blurType.save(node, "blur_type");
-}
-
-void deBlurLayer::loadSpecific(xmlNodePtr node)
-{
-    xmlNodePtr child = node->xmlChildrenNode;
-
-    while (child)
-    {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("radius_x")))) 
-        {
-            radiusX.load(child);
-        }
-
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("radius_y")))) 
-        {
-            radiusY.load(child);
-        }
-
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("channels")))) 
-        {
-            channels.load(child);
-        }
-
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("iterations")))) 
-        {
-            iterations.load(child);
-        }
-
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("blur_type")))) 
-        {
-            blurType.load(child);
-        }
-
-        child = child->next;
-    }
-}
-
-void deBlurLayer::updatePreview(dePreviewStack& previewStack)
-{
-    const dePreview* sourcePreview = previewStack.getPreview(getSourceLayerID());
-    dePreview* preview = previewStack.getPreview(index);
-
-    if ((sourcePreview) && (preview))
-    {
-        updatePreview(sourcePreview, preview);
-    }
+    return blurRadius;
 }

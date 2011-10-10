@@ -17,172 +17,248 @@
 */
 
 #include "main_frame.h"
-#include "right_panel.h"
-#include "left_panel.h"
-#include "top_panel.h"
-#include "bottom_panel.h"
-#include "center_panel.h"
-#include "exception.h"
+#include "layer_grid_panel.h"
+#include "control_panel.h"
+#include "image_area_panel.h"
+#include "histogram_panel.h"
+#include "view_mode_panel.h"
+#include "help_color_spaces_frame.h"
+#include "help_color_spaces_frame2.h"
+#include "help_color_spaces_frame3.h"
+#include "help_color_spaces_frame4.h"
+#include "help_color_spaces_frame5.h"
+#include "help_color_spaces_frame6.h"
+#include "memory_info_frame.h"
 #include "project.h"
-#include <iostream>
 
 enum
 {
     ID_Quit = 1,
-    ID_OpenImage,
     ID_NewProject,
     ID_OpenProject,
-    ID_OpenLayerStack,
     ID_SaveProject,
-    ID_About
+    ID_HelpColorSpaces,
+    ID_HelpColorSpaces2,
+    ID_HelpColorSpaces3,
+    ID_HelpColorSpaces4,
+    ID_HelpColorSpaces5,
+    ID_LABColors1,
+    ID_LABColors2,
+    ID_LABColors5,
+    ID_MemoryInfo
 };
 
 BEGIN_EVENT_TABLE(deMainFrame, wxFrame)
-EVT_MENU(ID_Quit, deMainFrame::OnQuit)
-EVT_MENU(ID_OpenImage, deMainFrame::OnOpenImage)
-EVT_MENU(ID_NewProject, deMainFrame::OnNewProject)
-EVT_MENU(ID_OpenProject, deMainFrame::OnOpenProject)
-EVT_MENU(ID_OpenLayerStack, deMainFrame::OnOpenLayerStack)
-EVT_MENU(ID_SaveProject, deMainFrame::OnSaveProject)
-EVT_MENU(ID_About, deMainFrame::OnAbout)
+EVT_MENU(ID_Quit, deMainFrame::onQuit)
+EVT_MENU(ID_NewProject, deMainFrame::onNewProject)
+EVT_MENU(ID_OpenProject, deMainFrame::onOpenProject)
+EVT_MENU(ID_SaveProject, deMainFrame::onSaveProject)
+EVT_MENU(ID_HelpColorSpaces, deMainFrame::onHelpColorSpaces)
+EVT_MENU(ID_HelpColorSpaces2, deMainFrame::onHelpColorSpaces2)
+EVT_MENU(ID_HelpColorSpaces3, deMainFrame::onHelpColorSpaces3)
+EVT_MENU(ID_HelpColorSpaces4, deMainFrame::onHelpColorSpaces4)
+EVT_MENU(ID_HelpColorSpaces5, deMainFrame::onHelpColorSpaces5)
+EVT_MENU(ID_LABColors1, deMainFrame::onLABColors1)
+EVT_MENU(ID_LABColors2, deMainFrame::onLABColors2)
+EVT_MENU(ID_LABColors5, deMainFrame::onLABColors5)
+EVT_MENU(ID_MemoryInfo, deMainFrame::onMemoryInfo)
 END_EVENT_TABLE()
 
 deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
 : wxFrame() , project(_project)
 {
-    project->logMessage("create main frame...");
+    bool created = Create((wxFrame *)NULL, wxID_ANY, _T("delaboratory-svn (c) 2011 Jacek Poplawski"), wxDefaultPosition, size);
 
-    bool created = Create((wxFrame *)NULL, wxID_ANY, _T("delaboratory 0.4 (c) 2011 Jacek Poplawski"), wxDefaultPosition, size);
+    mainSizer = new wxBoxSizer(wxVERTICAL);
 
-    if (created)
-    {
-        project->logMessage("Create called");
-    }
-    else
-    {
-        project->logMessage("Create called but failed");
-    }
-
-    wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-
-    wxPanel* topPanel = new deTopPanel(this, project->getGUI());
+    topPanel = new wxPanel(this);
+//    topPanel->SetBackgroundColour(wxColour(100,100,100));
+    topPanel->SetSize(300,20);
     mainSizer->Add(topPanel, 0, wxEXPAND);
+
+    wxSizer* topSizer = new wxBoxSizer(wxHORIZONTAL);
+    topPanel->SetSizer(topSizer);
+
+    wxPanel* viewModePanel = new deViewModePanel(topPanel, *project);
+    topSizer->Add(viewModePanel);
 
     wxSizer* middleSizer = new wxBoxSizer(wxHORIZONTAL);
 
-    wxPanel* leftPanel = new deLeftPanel(this, project);
-    middleSizer->Add(leftPanel, 0, wxEXPAND);
+    leftPanel = new deImageAreaPanel(this, project);
+//    leftPanel->SetBackgroundColour(wxColour(100,100,100));
+    leftPanel->SetSize(300,300);
+    middleSizer->Add(leftPanel, 1, wxEXPAND);
 
-    wxPanel* centerPanel = new deCenterPanel(this, project);
-    middleSizer->Add(centerPanel, 1, wxEXPAND);
+    wxSizer* rightSizer = new wxBoxSizer(wxVERTICAL);
+    hPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(280, 200));
+//    hPanel->SetBackgroundColour(wxColour(100,100,100));
+    wxSizer* sizerH = new wxStaticBoxSizer(wxVERTICAL, hPanel,  _T("histogram"));
+    hPanel->SetSizer(sizerH);
 
-    wxPanel* rightPanel = new deRightPanel(this, project);
-    middleSizer->Add(rightPanel, 0, wxEXPAND);
+    deHistogramPanel* histogramPanel = new deHistogramPanel(hPanel, project);
+    sizerH->Add(histogramPanel, 0, wxCENTER);
+
+    rightSizer->Add(hPanel, 0, wxEXPAND);
+
+    layerGridPanel = new deLayerGridPanel(this, project);
+//    layerGridPanel->SetBackgroundColour(wxColour(150,150,150));
+    //layerGridPanel->SetSize(300,300);
+    //rightSizer->Add(layerGridPanel, 0, wxEXPAND);
+    //rightSizer->Add(layerGridPanel, 0, wxEXPAND);
+    rightSizer->Add(layerGridPanel, 1, wxEXPAND);
+
+    controlPanel = new deControlPanel(this, project, layerGridPanel);
+//    controlPanel->SetBackgroundColour(wxColour(110,110,110));
+//    controlPanel->SetSize(300,300);
+    rightSizer->Add(controlPanel, 0, wxEXPAND);
+    //rightSizer->Add(controlPanel, 1, wxEXPAND);
+
+//    rightSizer->Layout();
+
+    middleSizer->Add(rightSizer, 0, wxEXPAND);
 
     mainSizer->Add(middleSizer, 1, wxEXPAND);
 
-    wxPanel* bottomPanel = new deBottomPanel(this, project);
-    mainSizer->Add(bottomPanel, 0, wxEXPAND);
-
     SetSizer(mainSizer);
+//    mainSizer->Layout();
 
-    mainSizer->Layout();
+    full = false;
 
     wxMenu *menuFile = new wxMenu;
-
-    menuFile->Append( ID_OpenImage, _("&Open source image") );
     menuFile->Append( ID_NewProject, _("New project") );
     menuFile->Append( ID_OpenProject, _("Open project") );
-    menuFile->Append( ID_OpenLayerStack, _("Open layer stack") );
     menuFile->Append( ID_SaveProject, _("Save project") );
-    menuFile->Append( ID_About, _("&About") );
-    menuFile->AppendSeparator();
     menuFile->Append( ID_Quit, _("E&xit") );
+
+    wxMenu *menuHelp = new wxMenu;
+    menuHelp->Append( ID_HelpColorSpaces, _("channels") );
+    menuHelp->Append( ID_HelpColorSpaces2, _("mix of channels") );
+    menuHelp->Append( ID_HelpColorSpaces3, _("lightness/value in LAB/LCH/HSL/HSV") );
+    menuHelp->Append( ID_HelpColorSpaces4, _("hue in LCH/HSL/HSV") );
+    menuHelp->Append( ID_HelpColorSpaces5, _("CMYK skin colors") );
+    menuHelp->Append( ID_LABColors1, _("LAB colors 1") );
+    menuHelp->Append( ID_LABColors2, _("LAB colors 2") );
+    menuHelp->Append( ID_LABColors5, _("LAB colors 5") );
+    menuHelp->Append( ID_MemoryInfo, _("memory info") );
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, _("&File") );
+    menuBar->Append( menuHelp, _("&Help") );
 
     SetMenuBar( menuBar );
 
-    project->logMessage("create main frame done");
+    Layout();
 
+    leftPanel->SetFocus();
 }
 
-void deMainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
+void deMainFrame::hidePanels()
+{
+    topPanel->Hide();
+    hPanel->Hide();
+    layerGridPanel->Hide();
+    controlPanel->Hide();
+    mainSizer->Layout();
+    full = true;
+    leftPanel->SetFocus();
+}
+
+void deMainFrame::showPanels()
+{
+    topPanel->Show();
+    hPanel->Show();
+    layerGridPanel->Show();
+    controlPanel->Show();
+    mainSizer->Layout();
+    full = false;
+    leftPanel->SetFocus();
+}
+
+void deMainFrame::onKey(int key)
+{
+    if (key == 'F')
+    {
+        if (full)
+        {
+           showPanels();
+        }        
+        else
+        {
+           hidePanels();
+        }        
+    }
+}
+
+void deMainFrame::onQuit(wxCommandEvent& WXUNUSED(event))
 {
 	Close(TRUE);
 }
 
-void deMainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
+void deMainFrame::onSaveProject(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox( _T("delaboratory - a Free Software color correction utility\n(c) 2011 Jacek Poplawski\nhttp://code.google.com/p/delaboratory"), _T(""), wxOK | wxICON_INFORMATION, this );
+    project->save("project.delab");
 }
 
-void deMainFrame::OnNewProject(wxCommandEvent& WXUNUSED(event))
+void deMainFrame::onOpenProject(wxCommandEvent& WXUNUSED(event))
 {
-    project->resetLayerStack();
+    project->load("project.delab");
 }
 
-void deMainFrame::OnOpen(bool image)
+void deMainFrame::onNewProject(wxCommandEvent& WXUNUSED(event))
 {
-    wxString type = _T("delaboratory files (*.delab;)|*.delab");
-    wxFileDialog openFileDialog(this, _T("Open .delab"), _T(""), _T(""), type, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
-
-    if (openFileDialog.ShowModal() == wxID_CANCEL)
-    {
-        return;
-    }
-
-    wxString fileName = openFileDialog.GetPath();
-    char cstring[1024];
-    strncpy(cstring, (const char*)fileName.mb_str(wxConvUTF8), 1023);
-
-    project->open(cstring, image);
+    project->newProject();
 }
 
-void deMainFrame::OnOpenProject(wxCommandEvent& WXUNUSED(event))
+void deMainFrame::onHelpColorSpaces(wxCommandEvent& event)
 {
-    OnOpen(true);
+    wxFrame* help = new deHelpColorSpacesFrame(this);
+    help->Show();
 }
 
-void deMainFrame::OnOpenLayerStack(wxCommandEvent& WXUNUSED(event))
+void deMainFrame::onHelpColorSpaces2(wxCommandEvent& event)
 {
-    OnOpen(false);
+    wxFrame* help = new deHelpColorSpacesFrame2(this);
+    help->Show();
 }
 
-void deMainFrame::OnSaveProject(wxCommandEvent& WXUNUSED(event))
+void deMainFrame::onHelpColorSpaces3(wxCommandEvent& event)
 {
-    wxString type = _T("delaboratory files (*.delab;)|*.delab");
-    wxFileDialog openFileDialog(this, _T("Save project"), _T(""), _T(""), type, wxFD_SAVE);
-
-    if (openFileDialog.ShowModal() == wxID_CANCEL)
-    {
-        return;
-    }
-
-    wxString fileName = openFileDialog.GetPath();
-    char cstring[1024];
-    strncpy(cstring, (const char*)fileName.mb_str(wxConvUTF8), 1023);
-
-    std::string f = std::string(cstring);
-    project->save(f);
+    wxFrame* help = new deHelpColorSpacesFrame3(this);
+    help->Show();
 }
 
-void deMainFrame::OnOpenImage(wxCommandEvent& WXUNUSED(event))
+void deMainFrame::onHelpColorSpaces4(wxCommandEvent& event)
 {
-    wxString type = _T("JPEG/TIFF files (*.jpg;*.jpeg;*.tiff;*.tif;*.TIF;*.TIFF)|*.jpg;*.jpeg;*.tiff;*.tif;*.TIF;*.TIFF");
-    wxFileDialog openFileDialog(this, _T("Open source image"), _T(""), _T(""), type, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
-
-    if (openFileDialog.ShowModal() == wxID_CANCEL)
-    {
-        return;
-    }
-
-    wxString fileName = openFileDialog.GetPath();
-    char cstring[1024];
-    strncpy(cstring, (const char*)fileName.mb_str(wxConvUTF8), 1023);
-
-    project->loadSourceImage(cstring);
-
+    wxFrame* help = new deHelpColorSpacesFrame4(this);
+    help->Show();
 }
 
+void deMainFrame::onHelpColorSpaces5(wxCommandEvent& event)
+{
+    wxFrame* help = new deHelpColorSpacesFrame5(this);
+    help->Show();
+}
+
+void deMainFrame::onLABColors1(wxCommandEvent& event)
+{
+    wxFrame* help = new deHelpColorSpacesFrame6(this, 1);
+    help->Show();
+}
+
+void deMainFrame::onLABColors2(wxCommandEvent& event)
+{
+    wxFrame* help = new deHelpColorSpacesFrame6(this, 2);
+    help->Show();
+}
+
+void deMainFrame::onLABColors5(wxCommandEvent& event)
+{
+    wxFrame* help = new deHelpColorSpacesFrame6(this, 5);
+    help->Show();
+}
+
+void deMainFrame::onMemoryInfo(wxCommandEvent& event)
+{
+    wxFrame* help = new deMemoryInfoFrame(this, *project);
+    help->Show();
+}

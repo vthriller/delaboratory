@@ -19,44 +19,60 @@
 #ifndef _DE_CURVES_PANEL_H
 #define _DE_CURVES_PANEL_H
 
-#define INITIAL_CURVES_PANEL_SIZE 500
+#define CURVES_PANEL_SIZE_X 384
+#define CURVES_PANEL_SIZE_Y 256
 
 #include "wx/wx.h"
+class deCurvesLayer;
 #include "value.h"
+#include "histogram.h"
+
+/*
+#define INITIAL_CURVES_PANEL_SIZE 500
+
 #include "sampler.h"
 class deCurve;
-class deCurvesLayer;
 class dePreviewStack;
 class dePropertyCurves;
 class deCurvesEditor;
+*/
 
 class deCurvesPanel:public wxPanel
 {
 private:
+    deHistogram histogram;
+    wxBitmap bitmap;
+    wxBitmap* backgroundBitmap;
+    int sizeX;
+    int sizeY;
+    deCurvesLayer& layer;
+    int channel;
+
+    void drawPoint(wxDC& dc, deValue x, deValue y);
+    void drawCurve(wxDC& dc);
+
 	void click(wxMouseEvent &event);
 	void release(wxMouseEvent &event);
 	void move(wxMouseEvent &event);
-
-    void drawPoint(wxDC& dc, deValue x, deValue y);
-    void drawLine(wxDC& dc, deValue x1, deValue y1, deValue x2, deValue y2);
-    void drawLines(wxDC& dc);
-    void drawCurve(wxDC& dc);
-
-    void getPosition(wxMouseEvent &event, deValue& x, deValue &y);
+    void update(bool finished);
 
     int selectedPoint;
     int lastSelectedPoint;
-    wxBitmap bitmap;
-    int channel;
 
     deValue grabX;
     deValue grabY;
 
-    dePreviewStack& stack;
-
-    void update();
+    void getPosition(wxMouseEvent &event, deValue& x, deValue &y);
 
     deValue marker;
+
+    int clickPosition;
+
+/*
+
+    dePreviewStack& stack;
+
+
 
     deSampler sampler;
 
@@ -64,21 +80,40 @@ private:
 
     void updateMarker();
 
-    int size;
 
     deCurvesEditor& editor;
 
     deValue samplerValues[4];
+*/
+    void drawLine(wxDC& dc, deValue x1, deValue y1, deValue x2, deValue y2);
+    void drawLines(wxDC& dc);
 
+    void generateBackground();
 public:
-	deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property, int s, deCurvesEditor& _editor);
-	virtual ~deCurvesPanel();
+    deCurvesPanel(wxWindow* parent, deCurvesLayer& layer);
+    ~deCurvesPanel();
 
 	void paintEvent(wxPaintEvent & evt);
 	void render(wxDC& dc);
     void paint();
 
     void changeChannel(int _channel);
+    void onImageClick(deValue x, deValue y);
+
+    void reset();
+    void invert();
+    void setConst(deValue v);
+    void setAngle(int a);
+
+    void onKey(int key);
+
+/*
+	deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property, int s, deCurvesEditor& _editor);
+	virtual ~deCurvesPanel();
+
+
+
+
     void traceSampler(deSampler* sampler);
 
     void reset();
@@ -87,6 +122,7 @@ public:
     void changeSize();
     virtual void onKey(int key);
 
+    */
 	DECLARE_EVENT_TABLE()
 
 };

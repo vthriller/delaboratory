@@ -19,89 +19,90 @@
 #ifndef _DE_PROJECT_H
 #define _DE_PROJECT_H
 
-#include "size.h"
-#include "layer_stack.h"
-#include "sampler_list.h"
-#include "preview_stack.h"
-#include "source_image.h"
 #include <string>
-#include "gui.h"
-#include "logger.h"
-#include "layer_factory.h"
 #include "channel_manager.h"
+#include "layer_stack.h"
+#include "view_manager.h"
+#include "color_space.h"
+#include "sampler_manager.h"
 
-class deFinalImage;
+class deImagePanel;
+class deHistogramPanel;
+class deControlPanel;
+class deViewModePanel;
 
 class deProject
 {
     private:
-        deSize sourceImageSize;
-        deSize previewSize;
-        deLayerStack layerStack;
-        dePreviewStack previewStack;
-        deSamplerList samplerList;
-        int view;
-        deSourceImage sourceImage;
-        deGUI gui;
-        std::string sourceFileName;
-        deLogger logger;
-        deLayerFactory layerFactory;
+        deProject(const deProject& project);
 
+        deLayerStack layerStack;
+        deSamplerManager samplerManager;
+
+        deChannelManager previewChannelManager;
+        deChannelManager sourceChannelManager;
+
+        deViewManager viewManager;
+
+        deImagePanel* imagePanel;
+
+        std::string imageFileName;
         std::string sourceImageFileName;
 
-        deChannelManager channelManager;
+        bool receiveKeys;
 
-        deProject(const deProject& project);
+        deHistogramPanel* histogramPanel;
+        deViewModePanel* viewModePanel;
+        deControlPanel* controlPanel;
 
     public:
         deProject();
         virtual ~deProject();
-
-        void setSourceImageSize(const deSize& size);
-        const deSize& getSourceImageSize() const;
-
-        void setPreviewSize(const deSize& size);
-        const deSize& getPreviewSize() const;
-
-        void addLayer(deLayer* layer);
-        deLayer* getVisibleLayer();
-        dePreview* getVisiblePreview();
-
-        void removeTopLayer();
-
-        const deLayerStack& getLayerStack() const;
-        deLayerStack& getLayerStack();
-        
-        const dePreviewStack& getPreviewStack() const;
-        dePreviewStack& getPreviewStack();
-
-        int getVisibleLayerID() const;
-
-        deFinalImage* generateFinalImage();
-
-        void setView(int v);
-
-        deSamplerList& getSamplerList();
-
-        void start();
-
+        void onKey(int key);
         void init(const std::string& fileName);
-        void loadSourceImage(const std::string& fileName);
-
-        deGUI& getGUI();
-
-        const std::string getSourceFileName() const;
-
-        void logMessage(const std::string& message);
-
-        deLayerFactory& getLayerFactory() {return layerFactory;};
-
-        void open(const std::string& fileName, bool image);
-        void save(const std::string& fileName);
-
+        void addLayer(deLayer* layer);
         void resetLayerStack();
 
-        void onKey(int key);
+        deChannelManager& getPreviewChannelManager();
+        deChannelManager& getSourceChannelManager();
+        deLayerStack& getLayerStack();
+
+        void setPreviewSize(const deSize& size);
+
+        const deViewManager& getViewManager() const;
+        deViewManager& getViewManager();
+
+        deSamplerManager& getSamplerManager();
+
+        void setImagePanel(deImagePanel* _imagePanel);
+        void repaintImage();
+
+        void addLAB();
+        void addRGB();
+
+        void onChangeView(int a, int b);
+
+        void exportTIFF(const std::string& app);
+
+        void deleteLayer();
+
+        void setLastView();
+
+        bool shouldReceiveKeys() const {return receiveKeys;};
+
+        void disableKeys();
+        void enableKeys();
+
+        void setHistogramPanel(deHistogramPanel* _histogramPanel);
+        void setViewModePanel(deViewModePanel* _viewModePanel);
+        void setControlPanel(deControlPanel* _controlPanel);
+        void onChangeViewMode();
+        void updateSamplers();
+
+        bool samplersVisible() const;
+        void save(const std::string& fileName);
+        void load(const std::string& fileName);
+        void newProject();
 
 };
 

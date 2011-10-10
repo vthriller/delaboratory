@@ -19,21 +19,33 @@
 #ifndef _DE_SAMPLER_H
 #define _DE_SAMPLER_H
 
-class dePreview;
 #include "color_space.h"
+/*
+class dePreview;
+*/
 
 class deSampler
 {
     private:
-        float x;
-        float y;
-        bool enabled;
+        deValue x;
+        deValue y;
+        deColorSpace colorSpace;
+//        bool enabled;
 
 
     public:
         deSampler();
-        deSampler(const deSampler& sampler);
         virtual ~deSampler();
+
+        deValue getX() const {return x;};
+        deValue getY() const {return y;};
+
+        void setPosition(deValue _x, deValue _y);
+
+        deColorSpace getColorSpace() const {return colorSpace;};
+        void setColorSpace(deColorSpace c);
+
+        /*
 
         void setPosition(float _x, float _y);
 
@@ -45,6 +57,7 @@ class deSampler
         bool isEnabled() const;
         void enable();
         void disable();
+        */
 
 };
 

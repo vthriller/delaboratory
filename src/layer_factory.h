@@ -20,19 +20,14 @@
 #define _DE_LAYER_FACTORY_H
 
 class deLayer;
-class deLayerStack;
 #include <string>
-#include <list>
+#include <vector>
+#include "color_space.h"
+class deLayerStack;
+class deChannelManager;
+class deViewManager;
 
-class deLayerFactory
-{
-    private:
-    public:
-        deLayerFactory();
-        virtual ~deLayerFactory();
-
-        deLayer* createLayer(const std::string& type, deLayerStack& stack, int index, const std::string& name);
-        void getSupportedLayers(std::list<std::string>& layers);
-};
+deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name);
+void getSupportedActions(std::vector<std::string>& actions);
 
 #endif

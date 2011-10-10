@@ -19,25 +19,25 @@
 #include "histogram_panel.h"
 #include "project.h"
 #include "color_space.h"
-#include "preview.h"
 #include "channel.h"
 #include <sstream>
+#include "layer.h"
 
 BEGIN_EVENT_TABLE(deHistogramPanel, wxPanel)
 EVT_PAINT(deHistogramPanel::paintEvent)
 END_EVENT_TABLE()
 
 deHistogramPanel::deHistogramPanel(wxWindow* parent, deProject* _project)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(256, 200)), project(_project)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(256, 200)), project(_project), histogram(256), histogramImage(256, 200)
 {
-    SetBackgroundColour(*wxBLACK);
-    project->getGUI().setHistogramPanel(this);
-    histogram = NULL;
+    channel = 0;
+    generated = false;
+    project->setHistogramPanel(this);
+    generate();
 }
 
 deHistogramPanel::~deHistogramPanel()
 {
-    destroyHistograms();
 }
 
 void deHistogramPanel::paintEvent(wxPaintEvent & evt)
@@ -54,116 +54,44 @@ void deHistogramPanel::paint()
 
 void deHistogramPanel::render(wxDC& dc)
 {
-    int histogramMode = project->getGUI().getHistogramMode();
-    if (histogramMode < 0)
+    if (generated)
     {
-        return;
-    }
-
-    if (!histogram)
+        wxBitmap* bitmap = new wxBitmap(histogramImage);
+        dc.DrawBitmap(*bitmap, 0, 0, false);
+    }       
+    else
     {
-        updateHistograms();
-    }
-
-#ifdef DE_PROFILER
-    wxStopWatch sw;
-#endif    
-
-    const dePreview* preview = project->getVisiblePreview();
-    if (!preview)
-    {
-        return;
-    }
-    int i = histogramMode;
-    int max = histogram->getMax();
-    deColorSpace colorSpace = preview->getColorSpace();
-    {
-        wxColour colour = getChannelwxColour(colorSpace, i);
-        wxPen pen(colour);
-        dc.SetPen(pen);
-        renderHistogram(histogram, dc, max);
-    }
-
-#ifdef DE_PROFILER
-    long t = sw.Time();
-
-    std::ostringstream oss;
-    oss << "rh: " << t << std::endl;
-    project->getGUI().setInfo(5, oss.str());
-#endif    
-}
-
-void deHistogramPanel::renderHistogram(deHistogram* histogram, wxDC& dc, int max)
-{
-    int xx;
-    int yy;
-    GetSize(&xx, &yy);
-
-    int n = histogram->getSize();
-    if (max <=0)
-    {
-        return;
-    }
-    int i;
-    int height = yy;
-    for (i = 0; i < n; i++)
-    {
-        float v = histogram->get(i);
-        int h = height * (1 - v / max);
-        dc.DrawLine(i, height, i, h);
+        dc.Clear();
     }
 }
 
-
-
-void deHistogramPanel::updateHistograms()
+void deHistogramPanel::generate()
 {
-#ifdef DE_PROFILER
-    wxStopWatch sw;
-#endif    
+    generated = false;
+    deLayerStack& layerStack = project->getLayerStack();
+    deViewManager& viewManager = project->getViewManager();
+    deChannelManager& channelManager = project->getPreviewChannelManager();
 
-    destroyHistograms();    
+    int view = viewManager.getView();
+    deLayer* layer = layerStack.getLayer(view);
+    const deImage& image = layer->getImage();
+    int channelIndex = image.getChannelIndex(channel);
+    deChannel* c = channelManager.getChannel(channelIndex);
 
-    int histogramMode = project->getGUI().getHistogramMode();
-    if (histogramMode < 0)
-    {
-        return;
-    }
+    int n = channelManager.getChannelSize().getN();
 
-    const dePreview* preview = project->getVisiblePreview();
-    if (!preview)
-    {
-        return;
-    }
+    histogram.clear();
+    histogram.calc(c, n);
 
-    //const deSize& size = preview->getSize();
-    const deSize& size = project->getPreviewSize();
-    int n = size.getN();
+    int sizeW = 256;
+    int sizeH = 200;
+    unsigned char g1 = 50;
+    unsigned char g2 = 120;
 
-    int xx;
-    int yy;
-    GetSize(&xx, &yy);
-
-    int bars = xx - 1 ;
-
-    histogram = new deHistogram(bars);
-    const deBaseChannel* channel = preview->getChannel(histogramMode);
-    histogram->calc(channel, n);
-
-#ifdef DE_PROFILER
-    long t = sw.Time();
-
-    std::ostringstream oss;
-    oss << "ch: " << t << std::endl;
-    project->getGUI().setInfo(4, oss.str());
-#endif    
+    generated = histogram.render(histogramImage.GetData(), sizeW, sizeH, g1, g2);
 }
 
-void deHistogramPanel::destroyHistograms()
+void deHistogramPanel::setChannel(int _channel)
 {
-    if (histogram)
-    {
-        delete histogram;
-        histogram = NULL;
-    }
+    channel = _channel;
 }

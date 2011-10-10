@@ -19,103 +19,304 @@
 #include "renderer.h"
 #include <wx/wx.h>
 #include "project.h"
-#include "preview.h"
+#include "image.h"
 #include "layer.h"
-#include "channels.h"
-#include "channel.h"
-#include "convert_color.h"
-#include "converter.h"
-#include "color_space.h"
-#include <sstream>
+#include <iostream>
+#include "conversion_functions.h"
+
+void renderImage(const deImage& image, unsigned char* data, deChannelManager& channelManager)
+{
+    deColorSpace colorSpace = image.getColorSpace();
+
+    deConversion3x3 conversion3x3 = getConversion3x3(colorSpace, deColorSpaceRGB);
+    deConversion4x3 conversion4x3 = NULL;
+    deConversion1x3 conversion1x3 = NULL;
+    if (!conversion3x3)
+    {
+        conversion4x3 = getConversion4x3(colorSpace, deColorSpaceRGB);
+        if (!conversion4x3)
+        {
+            conversion1x3 = getConversion1x3(colorSpace, deColorSpaceRGB);
+            if (!conversion1x3)
+            {
+                return;
+            }            
+        }            
+    }
+
+    const deSize& s = channelManager.getChannelSize();
+
+    deChannel* channel0 = channelManager.getChannel(image.getChannelIndex(0));
+    deChannel* channel1 = channelManager.getChannel(image.getChannelIndex(1));
+    deChannel* channel2 = channelManager.getChannel(image.getChannelIndex(2));
+    deChannel* channel3 = channelManager.getChannel(image.getChannelIndex(3));
+
+    if (!channel0)
+    {
+        return;
+    }
+    /*
+    if (!channel1)
+    {
+        return;
+    }
+    if (!channel2)
+    {
+        return;
+    }
+    if ((conversion4x3) && (!channel3))
+    {
+        return;
+    }
+    */
+
+    const deValue* pixels0 = channel0->getPixels();
+    const deValue* pixels1 = NULL;
+    if (channel1)
+    {
+        pixels1 = channel1->getPixels();
+    }
+    const deValue* pixels2 = NULL;
+    if (channel2)
+    {
+        pixels2 = channel2->getPixels();
+    }
+    const deValue* pixels3 = NULL;
+    if (channel3)
+    {
+        pixels3 = channel3->getPixels();
+    }
+
+    deValue rr;
+    deValue gg;
+    deValue bb;
+
+    int n = s.getN();
+    int i;
+    int pos = 0;
+
+    if (conversion4x3)
+    {
+        if (!pixels0)
+        {
+            return;
+        }
+        if (!pixels1)
+        {
+            return;
+        }
+        if (!pixels2)
+        {
+            return;
+        }
+        if (!pixels3)
+        {
+            return;
+        }
+        for (i = 0; i < n; i++)
+        {
+            deValue s0 = pixels0[i];
+            deValue s1 = pixels1[i];
+            deValue s2 = pixels2[i];
+            deValue s3 = pixels3[i];
+            conversion4x3(s0, s1, s2, s3, rr, gg, bb);
+
+            unsigned char r = 255 * rr;
+            data[pos] = r;
+            pos++;
+            unsigned char g = 255 * gg;
+            data[pos] = g;
+            pos++;
+            unsigned char b = 255 * bb;
+            data[pos] = b;
+            pos++;
+        }
+    }
+    else if (conversion1x3)
+    {
+        if (!pixels0)
+        {
+            return;
+        }
+        for (i = 0; i < n; i++)
+        {
+            deValue s0 = pixels0[i];
+            conversion1x3(s0, rr, gg, bb);
+
+            unsigned char r = 255 * rr;
+            data[pos] = r;
+            pos++;
+            unsigned char g = 255 * gg;
+            data[pos] = g;
+            pos++;
+            unsigned char b = 255 * bb;
+            data[pos] = b;
+            pos++;
+        }
+    }
+    else
+    {
+        if (!pixels0)
+        {
+            return;
+        }
+        if (!pixels1)
+        {
+            return;
+        }
+        if (!pixels2)
+        {
+            return;
+        }
+        for (i = 0; i < n; i++)
+        {
+            deValue s1 = pixels0[i];
+            deValue s2 = pixels1[i];
+            deValue s3 = pixels2[i];
+            conversion3x3(s1, s2, s3, rr, gg, bb);
+
+            unsigned char r = 255 * rr;
+            data[pos] = r;
+            pos++;
+            unsigned char g = 255 * gg;
+            data[pos] = g;
+            pos++;
+            unsigned char b = 255 * bb;
+            data[pos] = b;
+            pos++;
+        }
+    }
+
+}
+
+void renderChannel(const deImage& image, int c, unsigned char* data, deChannelManager& channelManager)
+{
+    const deSize& s = channelManager.getChannelSize();
+
+    deChannel* channel = channelManager.getChannel(image.getChannelIndex(c));
+
+    if (!channel)
+    {
+        return;
+    }
+
+    const deValue* pixels = channel->getPixels();
+
+    int n = s.getN();
+    int i;
+    int pos = 0;
+    for (i = 0; i < n; i++)
+    {
+        deValue s = pixels[i];
+
+        unsigned char ss = 255 * s;
+
+        data[pos] = ss;
+        pos++;
+        data[pos] = ss;
+        pos++;
+        data[pos] = ss;
+        pos++;
+    }      
+
+}
+
+void renderChannel(int c, unsigned char* data, deChannelManager& channelManager)
+{
+    const deSize& s = channelManager.getChannelSize();
+
+    deChannel* channel = channelManager.getChannel(c);
+
+    if (!channel)
+    {
+        return;
+    }
+
+    const deValue* pixels = channel->getPixels();
+
+    int n = s.getN();
+    int i;
+    int pos = 0;
+    for (i = 0; i < n; i++)
+    {
+        deValue s = pixels[i];
+
+        unsigned char ss = 255 * s;
+
+        data[pos] = ss;
+        pos++;
+        data[pos] = ss;
+        pos++;
+        data[pos] = ss;
+        pos++;
+    }      
+
+}
 
 deRenderer::deRenderer(deProject* _project)
 :project(_project), size(0,0)
 {
-    project->getGUI().setRenderer(this);
-    image = new wxImage(0,0);
-#ifdef DE_PROFILER
-    renders = 0;
-#endif    
+    image = NULL;
 }
 
 deRenderer::~deRenderer()
 {
-    delete image;
+    if (image)
+    {
+        delete image;
+    }        
 }
 
 bool deRenderer::render(wxDC& dc)
 {
-#ifdef DE_PROFILER
-    wxStopWatch sw;
-#endif
-
-    const dePreview* preview = project->getVisiblePreview();
-
-    if (!preview)
-    {
-        return false;
-    }
-    const deSize& s = project->getPreviewSize();
-
-    int w = s.getW();
-    int h = s.getH();
+    deChannelManager& channelManager = project->getPreviewChannelManager();
+    const deSize& s = channelManager.getChannelSize();
     if (s != size)
     {
-        delete image;
+        if (image)
+        {
+            delete image;
+        }            
+        int w = s.getW();
+        int h = s.getH();
         image = new wxImage(w,h);
         size = s;
     }
 
+    const deViewManager& viewManager = project->getViewManager();
+    int view = viewManager.getView();
+
+    deLayerStack& layerStack = project->getLayerStack();
+
     unsigned char* data = image->GetData();
 
-    deConverter converter;
-    converter.setSource(preview);
-    converter.setData(data);
-
-    if (viewMode == deViewSingleChannel)
+    if (viewManager.maskVisible())
     {
-        converter.storeSingleChannel(viewChannel);
+        renderChannel(viewManager.getMaskChannel(), data, channelManager);
     }
     else
     {
-        converter.storeAllChannels();
+        deLayer* layer = layerStack.getLayer(view);
+        if (!layer)
+        {
+            return false;
+        }
+
+        const deImage& layerImage = layer->getImage();
+
+        if (viewManager.isSingleChannel())
+        {
+            renderChannel(layerImage, viewManager.getChannel(), data, channelManager);
+        }
+        else
+        {
+            renderImage(layerImage, data, channelManager);
+        }
     }
 
     wxBitmap bitmap(*image);
     dc.DrawBitmap(bitmap, 0, 0, false);
 
-#ifdef DE_PROFILER
-    long t = sw.Time();
-
-    std::ostringstream oss;
-    oss << "r: " << t << std::endl;
-    project->getGUI().setInfo(1, oss.str());
-
-    renders++;
-    oss.str("");
-    oss << renders << " pr" << std::endl;
-    project->getGUI().setInfo(3, oss.str());
-#endif
-
     return true;
-}
-
-void deRenderer::setViewMode(const deViewMode& mode, int channel)
-{
-    const dePreview* preview = project->getVisiblePreview();
-    if (!preview)
-    {
-        return;
-    }
-    deColorSpace colorSpace = preview->getColorSpace();
-    int s = getColorSpaceSize(colorSpace);
-
-    if (channel >= s)
-    {
-        return;
-    }
-
-    viewMode = mode;
-    viewChannel = channel;
 }
 

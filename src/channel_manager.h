@@ -21,6 +21,7 @@
 
 #include "size.h"
 #include <vector>
+#include <set>
 #include "channel.h"
 
 class deChannelManager
@@ -29,20 +30,29 @@ class deChannelManager
         deSize channelSize;
 
         std::vector<deChannel*> channels;
+        std::set<int> trashed;
 
-        int insertNewChannel(deChannel* channel);
         void destroyAllChannels();
+
+        bool locked;
         
     public:
         deChannelManager();
         virtual ~deChannelManager();
 
         void setChannelSize(const deSize& size);
+        deSize getChannelSize() const;
 
         int allocateNewChannel();
+        void freeChannel(int index);
         deChannel* getChannel(int index);
-        int destroyChannel(int index);
+        void destroyChannel(int index);
+        void recreateChannel(int index);
 
+        void lock();
+        void unlock();
+
+        int getNumberOfAllocatedChannels() const;
 
 };
 

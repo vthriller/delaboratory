@@ -23,25 +23,33 @@
 #include <vector>
 #include <map>
 #include "color_space.h"
-class deGUI;
+class deProject;
 
 class deViewModePanel:public wxPanel
 {
     private:
+        std::vector<wxRadioButton*> buttons;
+        deProject& project;
+    /*
         deGUI& gui;
         wxSizer* sizer;
-        std::vector<wxRadioButton*> buttons;
         std::map<int, int> channels;
 
         void addButton(const std::string& label, int c);
+
+        */
         void select(wxCommandEvent &event);
     public:
-        deViewModePanel(wxWindow* parent, deGUI& _gui);
+        deViewModePanel(wxWindow* parent, deProject& _project);
         virtual ~deViewModePanel();
 
+        void updateNames();
+        void updateMode();
+
+/*
         void updateButtons(deColorSpace colorSpace);
 
-        void setButton(int b);
+        void setButton(int b);*/
 
 };
 

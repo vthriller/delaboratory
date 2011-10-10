@@ -19,47 +19,25 @@
 #ifndef _DE_CHANNEL_H
 #define _DE_CHANNEL_H
 
-#include "base_channel.h"
-
-class deTrueChannel:public deBaseChannel
-{
-    private:
-        deValue* pixels;
-        deValue min;
-        deValue max;
-
-    public:
-        deTrueChannel(const deSize& _size, deValue _min, deValue _max);
-        virtual ~deTrueChannel();
-
-        virtual bool copy(const deBaseChannel* channel);
-        bool scale(const deTrueChannel* channel);
-
-        virtual deValue getValue(int pos) const;
-        virtual void setValue(int pos, deValue value);
-
-        const deValue* getPixels() const;
-};
+#include "value.h"
+#include <iostream>
 
 class deChannel
 {
     private:
         deValue* pixels;
     public:
-        deChannel(int size)
-        {
-            pixels = new deValue [size];
-        }
+        deChannel(int size);
 
-        virtual ~deChannel()
-        {
-            delete pixels;
-        }
+        virtual ~deChannel();
 
-        deValue* getPixels()
-        {
-            return pixels;
-        }
+        deValue* getPixels();
+
+        const deValue* getPixels() const;
+
+        deValue getValue(int pos) const;
+        void setValue(int pos, const deValue& value);
+        void setValueClip(int pos, const deValue& value);
 };
 
 #endif

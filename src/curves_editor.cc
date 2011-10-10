@@ -17,152 +17,110 @@
 */
 
 #include "curves_editor.h"
+#include "color_space.h"
 #include "curves_layer.h"
 #include "curves_panel.h"
-#include "channel_choice.h"
-#include "preview_stack.h"
-#include "project.h"
-#include <wx/collpane.h>
+#include "gradient_panel.h"
 
-#define FILL_COUNT 10
-
-deCurvesEditor::deCurvesEditor(wxWindow *parent, dePreviewStack& _stack, dePropertyCurves& _property)
-:wxCollapsiblePane(parent, wxID_ANY, _T("")), property(_property), stack(_stack)
+deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer)
+:deActionFrame(parent, _layer)
 {
+    deCurvesLayer& curvesLayer = dynamic_cast<deCurvesLayer&>(_layer);
 
-    stack.getProject()->logMessage("deCurvesEditor::deCurvesEditor");
-    sizer = new wxBoxSizer(wxVERTICAL);
-    GetPane()->SetSizer(sizer);
+    deColorSpace colorSpace = layer.getColorSpace();
 
-    channelChoice = NULL;
-    bigPanel = NULL;
-    curvesPanel = NULL;
+    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(sizer);
 
-    buttonReset = NULL;
-    buttonFill = NULL;
-    buttonRandom = NULL;
-    buttonInvert = NULL;
-    buttonSize = NULL;
-
-    rebuild();
-
-    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deCurvesEditor::choose));
-    Connect(wxEVT_COMMAND_COLLPANE_CHANGED, wxCommandEventHandler(deCurvesEditor::collapse));
-
-    Expand();
-}
-
-void deCurvesEditor::rebuild()
-{
-    stack.getProject()->logMessage("deCurvesEditor::rebuild");
-
-    deColorSpace colorSpace = property.getParent().getColorSpace();
-
-    if (channelChoice)
+    int n = getColorSpaceSize(colorSpace);
+    wxString* channelStrings = new wxString [n];
+    int i;
+    for (i = 0; i < n; i++)
     {
-        sizer->Detach(channelChoice);
-        delete channelChoice;
-        channelChoice = NULL;
-    }
+        channelStrings[i] = wxString::FromAscii(getChannelName(colorSpace,i).c_str());
+    }        
 
-    channelChoice = makeChannelChoice(GetPane(), colorSpace);
-    sizer->Add(channelChoice, 0);
+    channelChoice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), n, channelStrings);
+    channelChoice->SetSelection(0);
 
-    if (bigPanel)
-    {
-        wxSizer* bigSizer = bigPanel->GetSizer();
-        if (curvesPanel)
-        {
-            bigSizer->Detach(curvesPanel);
-            delete curvesPanel;
-            curvesPanel = NULL;
-        }
+    delete [] channelStrings;
 
-        sizer->Detach(bigPanel);
-        delete bigPanel;
-        bigPanel = NULL;
-    }
+    sizer->Add(channelChoice);
 
-    if (buttonReset)
-    {
-        sizer->Detach(buttonReset);
-        delete buttonReset;
-        buttonReset = NULL;
-    }
+    wxSizer* sizerSB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
+    sizer->Add(sizerSB);
 
-    if (buttonFill)
-    {
-        sizer->Detach(buttonFill);
-        delete buttonFill;
-        buttonFill = NULL;
-    }
+    wxSizer* sizerC = new wxFlexGridSizer(2, 8, 8);
+    sizerSB->Add(sizerC);
 
-    if (buttonRandom)
-    {
-        sizer->Detach(buttonRandom);
-        delete buttonRandom;
-        buttonRandom = NULL;
-    }
+    curvesPanel = new deCurvesPanel(this, curvesLayer );
 
-    if (buttonInvert)
-    {
-        sizer->Detach(buttonInvert);
-        delete buttonInvert;
-        buttonInvert = NULL;
-    }
+    int barSize = 16;
 
-    if (buttonSize)
-    {
-        sizer->Detach(buttonSize);
-        delete buttonSize;
-        buttonSize = NULL;
-    }
+    leftBar = new deGradientPanel(this, wxSize(barSize, CURVES_PANEL_SIZE_Y), colorSpace, 0, -1, -1, -1, -1);
+    bottomBar = new deGradientPanel(this, wxSize(CURVES_PANEL_SIZE_X, barSize), colorSpace, 0, -1, -1, -1, -1);
 
-    bigPanel = new wxPanel(GetPane());
-    bigPanel->SetBackgroundColour(*wxBLACK);
-    sizer->Add(bigPanel, 0);
+    //sizer->Add(curvesPanel);
+    sizerC->Add(leftBar, 0, wxCENTER);
+    sizerC->Add(curvesPanel, 0, wxCENTER);
+    sizerC->Add(-1, 0, wxCENTER);
+    sizerC->Add(bottomBar, 0, wxCENTER);
 
-    wxSizer* bigSizer = new wxBoxSizer(wxHORIZONTAL);
-    bigPanel->SetSizer(bigSizer);
+    wxSizer* sizerB = new wxGridSizer(5);
+    sizer->Add(sizerB, 0, wxCENTER);
 
-    int size;
-    if (property.isHalf())
-    {
-        size = INITIAL_CURVES_PANEL_SIZE / 2;
-    }
-    else
-    {
-        size = INITIAL_CURVES_PANEL_SIZE;
-    }
 
-    curvesPanel = new deCurvesPanel(bigPanel,  stack, property, size, *this);
-    bigSizer->Add(curvesPanel, 0, wxEXPAND | wxALL, 20);
+    reset = new wxButton(this, wxID_ANY, _T("reset"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(reset, 0);
 
-    buttonReset = new wxButton(GetPane(), wxID_ANY, _T("neutral"));
-    Connect(buttonReset->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::reset));
-    sizer->Add(buttonReset, 1, wxEXPAND);
+    invert = new wxButton(this, wxID_ANY, _T("invert"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(invert, 0);
 
-    buttonInvert = new wxButton(GetPane(), wxID_ANY, _T("invert"));
-    Connect(buttonInvert->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::invert));
-    sizer->Add(buttonInvert, 1, wxEXPAND);
+    const0 = new wxButton(this, wxID_ANY, _T("0"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(const0, 0);
 
-    buttonFill = new wxButton(GetPane(), wxID_ANY, _T("fill"));
-    Connect(buttonFill->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::fill));
-    sizer->Add(buttonFill, 1, wxEXPAND);
+    const05 = new wxButton(this, wxID_ANY, _T("0.5"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(const05, 0);
 
-    buttonRandom = new wxButton(GetPane(), wxID_ANY, _T("random"));
-    Connect(buttonRandom->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::random));
-    sizer->Add(buttonRandom, 1, wxEXPAND);
+    const1 = new wxButton(this, wxID_ANY, _T("1"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(const1, 0);
 
-    buttonSize = new wxButton(GetPane(), wxID_ANY, _T("change size (reopen window after that!)"));
-    Connect(buttonSize->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::size));
-    sizer->Add(buttonSize, 1, wxEXPAND);
+    angle1 = new wxButton(this, wxID_ANY, _T("+ 1/4"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(angle1, 0);
+    angle2 = new wxButton(this, wxID_ANY, _T("+ 2/4"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(angle2, 0);
+    angle3 = new wxButton(this, wxID_ANY, _T("+ 3/4"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(angle3, 0);
+    angle4 = new wxButton(this, wxID_ANY, _T("- 1/4"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(angle4, 0);
+    angle5 = new wxButton(this, wxID_ANY, _T("- 2/4"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(angle5, 0);
 
+    /*
+    app1 = new wxButton(this, wxID_ANY, wxString::FromAscii(src1.c_str()), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(app1, 0);
+
+    app2 = new wxButton(this, wxID_ANY, wxString::FromAscii(src2.c_str()), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(app2, 0);
+
+    mix1 = new wxButton(this, wxID_ANY, _T("0.1"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(mix1, 0);
+
+    mix2 = new wxButton(this, wxID_ANY, _T("0.3"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(mix2, 0);
+
+    mix3 = new wxButton(this, wxID_ANY, _T("-0.3"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(mix3, 0);
+
+    mix4 = new wxButton(this, wxID_ANY, _T("-0.5"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(mix4, 0);
+    */
 
     sizer->Layout();
-
     Fit();
 
+    Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::click));
+    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deCurvesEditor::choose));
 }
 
 deCurvesEditor::~deCurvesEditor()
@@ -173,52 +131,64 @@ void deCurvesEditor::choose(wxCommandEvent &event)
 {
     int b = channelChoice->GetCurrentSelection();
     curvesPanel->changeChannel(b);
+    leftBar->changeChannel(b);
+    bottomBar->changeChannel(b);
 }
 
-void deCurvesEditor::collapse(wxCommandEvent &event)
+void deCurvesEditor::click(wxCommandEvent &event)
 {
-    GetParent()->Update();
-    GetParent()->Refresh();
-    GetParent()->Fit();
-    GetParent()->GetParent()->Update();
-    GetParent()->GetParent()->Refresh();
-    GetParent()->GetParent()->Fit();
+    int id = event.GetId();
+
+    if (reset->GetId() == id)
+    {
+        curvesPanel->reset();
+    }      
+
+    if (invert->GetId() == id)
+    {
+        curvesPanel->invert();
+    }      
+
+    if (const0->GetId() == id)
+    {
+        curvesPanel->setConst(0.0);
+    }      
+
+    if (const05->GetId() == id)
+    {
+        curvesPanel->setConst(0.5);
+    }      
+
+    if (const1->GetId() == id)
+    {
+        curvesPanel->setConst(1);
+    }      
+
+    if (angle1->GetId() == id)
+    {
+        curvesPanel->setAngle(1);
+    }      
+    if (angle2->GetId() == id)
+    {
+        curvesPanel->setAngle(2);
+    }      
+    if (angle3->GetId() == id)
+    {
+        curvesPanel->setAngle(3);
+    }      
+    if (angle4->GetId() == id)
+    {
+        curvesPanel->setAngle(4);
+    }      
+    if (angle5->GetId() == id)
+    {
+        curvesPanel->setAngle(5);
+    }      
 }
 
-void deCurvesEditor::traceSampler(deSampler* sampler)
+void deCurvesEditor::onImageClick(deValue x, deValue y)
 {
-    curvesPanel->traceSampler(sampler);
-}
-
-void deCurvesEditor::reset(wxCommandEvent &event)
-{
-    curvesPanel->reset();
-}
-
-void deCurvesEditor::fill(wxCommandEvent &event)
-{
-    curvesPanel->fill(FILL_COUNT, 1, 0 );
-}
-
-void deCurvesEditor::random(wxCommandEvent &event)
-{
-    curvesPanel->fill(FILL_COUNT, 1, 0.1 );
-}
-
-void deCurvesEditor::invert(wxCommandEvent &event)
-{
-    curvesPanel->invert();
-}
-
-void deCurvesEditor::size(wxCommandEvent &event)
-{
-    curvesPanel->changeSize();
-    wxWindow* top = GetParent()->GetParent();
-    wxWindow* mid = GetParent();
-    top->Layout();
-    top->Fit();
-    mid->Layout();
-    mid->Fit();
+    curvesPanel->onImageClick(x, y);
 }
 
 void deCurvesEditor::onKey(int key)

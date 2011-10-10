@@ -17,33 +17,41 @@
 */
 
 #include "conversion_layer.h"
-#include "layer_stack.h"
-#include "preview.h"
-#include "channels.h"
-#include "channel.h"
-#include <wx/wx.h>
-#include "preview_stack.h"
-#include "converter.h"
+#include "project.h"
+#include "convert_image.h"
 
-deConversionLayer::deConversionLayer(deLayerStack& _stack, int _index, const std::string& _name)
-:deLayer(_stack, _index, _name)
+deConversionLayer::deConversionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
+:deLayer("conversion", _colorSpace, _index, _sourceLayer), 
+ layerStack(_layerStack),
+ channelManager(_channelManager),
+ image(_colorSpace, _channelManager) 
 {
+
 }
 
 deConversionLayer::~deConversionLayer()
 {
 }
 
-void deConversionLayer::updatePreview(dePreviewStack& previewStack)
+const deImage& deConversionLayer::getImage() const
 {
-    const dePreview* sourcePreview = previewStack.getPreview(getSourceLayerID());
-    dePreview* preview = previewStack.getPreview(index);
-
-    if ((sourcePreview) && (preview))
-    {
-        deConverter converter;
-        converter.setSource(sourcePreview);
-        converter.setDestination(preview);
-        converter.convert();
-    }
+    return image;
 }
+
+void deConversionLayer::updateImage()
+{
+    deLayer* source = layerStack.getLayer(sourceLayer);
+    const deImage& sourceImage = source->getImage();
+
+    image.enableAllChannels();
+    convertImage(sourceImage, image, channelManager);
+}
+
+void deConversionLayer::updateChannelUsage(std::map<int, int>& channelUsage) const
+{
+    deLayer* source = layerStack.getLayer(sourceLayer);
+    const deImage& sourceImage = source->getImage();
+    sourceImage.updateChannelUsage(channelUsage, index);
+    image.updateChannelUsage(channelUsage, index);
+}
+

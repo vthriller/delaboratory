@@ -17,112 +17,62 @@
 */
 
 #include "layer_factory.h"
-#include "source_image_layer.h"
-#include "mixer_layer.h"
-#include "blend_layer.h"
+#include "layer_stack.h"
 #include "curves_layer.h"
 #include "blur_layer.h"
-#include "high_pass_layer.h"
-//#include "blend_blur_layer.h"
-#include "grain_layer.h"
-#include "nd_layer.h"
-#include "apply_color_layer.h"
-#include "apply_luminance_layer.h"
-#include "rgb2bw_layer.h"
+#include "apply_image_layer.h"
+#include "mixer_layer.h"
 #include "conversion_layer.h"
+#include "usm_layer.h"
 
-deLayerFactory::deLayerFactory()
-{
-}
 
-deLayerFactory::~deLayerFactory()
+deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name)
 {
-}
+    //int index = _layerStack.getSize() + 1;
+    int index = _layerStack.getSize();
 
-deLayer* deLayerFactory::createLayer(const std::string& type, deLayerStack& stack, int index, const std::string& name)
-{
-    if (type == "source_image")
-    {
-        return new deSourceImageLayer(stack, index, name);
-    }
+//    std::cout << "create layer " << type << " index: " << index << std::endl;
 
     if (type == "curves")
     {
-        return new deCurvesLayer(stack, index, name);
-    }
-
-    if (type == "mixer")
-    {
-        return new deMixerLayer(stack, index, name);
-    }
-
-    if (type == "conversion")
-    {
-        return new deConversionLayer(stack, index, name);
-    }
-
-    if (type == "blend")
-    {
-        return new deBlendLayer(stack, index, name);
+        return new deCurvesLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
     }
 
     if (type == "blur")
     {
-        return new deBlurLayer(stack, index, name);
+        return new deBlurLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
     }
 
-    if (type == "high_pass")
+    if (type == "usm")
     {
-        return new deHighPassLayer(stack, index, name);
+        return new deUSMLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
     }
 
-/*
-    if (type == "blend_blur")
+    if (type == "mixer")
     {
-        return new deBlendBlurLayer(stack, index, name);
-    }
-*/
-
-    if (type == "rgb2bw")
-    {
-        return new deRGB2BWLayer(stack, index, name);
+        return new deMixerLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
     }
 
-    if (type == "apply_color")
+    if (type == "apply_image")
     {
-        return new deApplyColorLayer(stack, index, name);
+        return new deApplyImageLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
     }
-
-    if (type == "apply_luminance")
+    
+    if (type == "conversion")
     {
-        return new deApplyLuminanceLayer(stack, index, name);
-    }
-
-    if (type == "nd")
-    {
-        return new deNDLayer(stack, index, name);
-    }
-
-    if (type == "grain")
-    {
-        return new deGrainLayer(stack, index, name);
+        return new deConversionLayer(colorSpace, index, source, _layerStack, _channelManager);
     }
 
     return NULL;
 }
 
-void deLayerFactory::getSupportedLayers(std::list<std::string>& layers)
+void getSupportedActions(std::vector<std::string>& actions)
 {
-    layers.push_back("curves");
-    layers.push_back("mixer");
-    layers.push_back("conversion");
-    layers.push_back("blend");
-    layers.push_back("blur");
-    layers.push_back("high_pass");
-    //layers.push_back("blend_blur");
-    layers.push_back("rgb2bw");
-    layers.push_back("apply_color");
-    layers.push_back("apply_luminance");
-    //layers.push_back("nd");
-    //layers.push_back("grain");
+    actions.push_back("curves");
+    actions.push_back("mixer");
+    actions.push_back("apply_image");
+    actions.push_back("blur");
+    actions.push_back("usm");
+//    actions.push_back("nd");
 }
+

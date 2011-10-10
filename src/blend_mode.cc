@@ -160,11 +160,33 @@ deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode)
             }
             break;
         case deBlendAdd:                    
-            return src + v2;
+        {
+            deValue v = src + v2;
+            if (v < 0)
+            {
+                return 0;
+            }
+            if (v > 1)
+            {
+                return 1;
+            }
+            return v;
             break;
-        case deBlendAddInvert:                    
-            return 0.5 + src - v2;
+        }            
+        case deBlendAddInvert:                   
+        {
+            deValue v = 0.5 + src - v2;
+            if (v < 0)
+            {
+                return 0;
+            }
+            if (v > 1)
+            {
+                return 1;
+            }
+            return v;
             break;
+        }            
         case deBlendSub:                    
             return src - v2;
             break;

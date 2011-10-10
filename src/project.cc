@@ -17,321 +17,360 @@
 */
 
 #include "project.h"
+#include "image_io.h"
+#include <cassert>
+#include <wx/wx.h>
+#include <iostream>
 #include "source_image_layer.h"
-#include "exception.h"
+#include "curves_layer.h"
+#include "conversion_layer.h"
 #include "image_panel.h"
-#include "final_image.h"
-#include "sampler_list_panel.h"
-#include "info_bar_panel.h"
-#include "source_image.h"
-#include "logger.h"
 #include "str.h"
-
-#include <libxml/parser.h>
-
-#include <wx/progdlg.h>
+#include "histogram_panel.h"
+#include "control_panel.h"
+#include "view_mode_panel.h"
 
 deProject::deProject()
-:sourceImageSize(0,0), previewSize(0,0)
+:viewModePanel(NULL),
+ controlPanel(NULL),
+ viewManager(*this),
+ samplerManager(*this)
 {
-#ifdef DE_LOGGER
-    logger.setFile("delaboratory.log");
-    logMessage("starting project...");
-#endif    
-    sourceFileName = "";
-    view = -1;
-    previewStack.setProject(this);
-    samplerList.setProject(this);
+    imageFileName = "";
+    sourceImageFileName = "";
+    imagePanel = NULL;
     resetLayerStack();
+    histogramPanel = NULL;
+
+    receiveKeys = true;
+}
+
+void deProject::disableKeys()
+{
+    receiveKeys = false;
+}
+
+void deProject::enableKeys()
+{
+    receiveKeys = true;
 }
 
 deProject::~deProject()
 {
+    layerStack.clear();
+}
+
+void deProject::onKey(int key)
+{
+    if (key == '`')
+    {
+        viewManager.setNormal();
+    }
+    if (key == '1')
+    {
+        viewManager.setSingleChannel(0);
+    }
+    if (key == '2')
+    {
+        viewManager.setSingleChannel(1);
+    }
+    if (key == '3')
+    {
+        viewManager.setSingleChannel(2);
+    }
+    if (key == '4')
+    {
+        viewManager.setSingleChannel(3);
+    }
+    if (key == WXK_F1)
+    {
+        histogramPanel->setChannel(0);
+        histogramPanel->generate();
+        histogramPanel->paint();
+    }
+    if (key == WXK_F2)
+    {
+        histogramPanel->setChannel(1);
+        histogramPanel->generate();
+        histogramPanel->paint();
+    }
+    if (key == WXK_F3)
+    {
+        histogramPanel->setChannel(2);
+        histogramPanel->generate();
+        histogramPanel->paint();
+    }
+    if (key == WXK_F4)
+    {
+        histogramPanel->setChannel(3);
+        histogramPanel->generate();
+        histogramPanel->paint();
+    }
+
+    layerStack.onKey(key);
+}
+
+void deProject::init(const std::string& fileName)
+{
+    bool tiff = checkTIFF(fileName);
+    bool jpeg = checkJPEG(fileName);
+
+    if ((!tiff) && (!jpeg))
+    {
+        return;
+    }
+
+    if ((tiff) && (jpeg))
+    {
+        assert(false);
+    }
+
+    deSize size(0,0);
+
+    if (tiff)
+    {
+        size = getTIFFSize(fileName);
+    }
+
+    if (jpeg)
+    {
+        size = getJPEGSize(fileName);
+    }
+
+    sourceChannelManager.setChannelSize(size);
+    int r = sourceChannelManager.allocateNewChannel();
+    int g = sourceChannelManager.allocateNewChannel();
+    int b = sourceChannelManager.allocateNewChannel();
+
+    deChannel* channelR = sourceChannelManager.getChannel(r);
+    deChannel* channelG = sourceChannelManager.getChannel(g);
+    deChannel* channelB = sourceChannelManager.getChannel(b);
+
+    if (tiff)
+    {
+        bool icc;
+        loadTIFF(fileName, *channelR, *channelG, *channelB, icc);
+        if (icc)
+        {
+            wxMessageBox( _T("Warning! this TIFF file contains ICC profile which is ignored by delaboratory\n\ndelaboratory expects sRGB - colors may be not accurate\n\nThis problem happens (for instance) when tiff is created by dcraw\nyou can fix it by calling tifficc command, by default it converts tiff to sRGB"), _T("ICC profile ignored"), wxOK | wxICON_INFORMATION, NULL );
+        }
+    }
+
+    if (jpeg)
+    {
+        loadJPEG(fileName, *channelR, *channelG, *channelB);
+    }
+
+    deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
+
+    l->setSource(r, g, b);
+
+    imageFileName = removePathAndExtension(fileName);
+    sourceImageFileName = fileName;
+
+
 }
 
 void deProject::resetLayerStack()
 {
     layerStack.clear();
-    previewStack.clear();
-    deSourceImageLayer* layer = new deSourceImageLayer(layerStack, 0, "source image");
-    layer->setSourceImage(&sourceImage);
+    deSourceImageLayer* layer = new deSourceImageLayer(0, *this);
     addLayer(layer);
+    viewManager.setView(0);
+
+    layerStack.updateImages();
 }
 
-void deProject::setSourceImageSize(const deSize& size)
+
+
+void deProject::addLayer(deLayer* layer)
 {
-    sourceImageSize = size;
+    layerStack.addLayer(layer);
 }
 
-const deSize& deProject::getSourceImageSize() const
+deChannelManager& deProject::getPreviewChannelManager() 
 {
-    return sourceImageSize;
+    return previewChannelManager;
+}
+
+deChannelManager& deProject::getSourceChannelManager() 
+{
+    return sourceChannelManager;
+}
+
+deLayerStack& deProject::getLayerStack()
+{
+    return layerStack;
 }
 
 void deProject::setPreviewSize(const deSize& size)
 {
-    logMessage("set preview size " + size.str() + "...");
-
-    previewSize = size;
-
-    deLayer* layer = layerStack.getLayer(0);
-    deSourceImageLayer* sourceImageLayer = dynamic_cast<deSourceImageLayer*>(layer);
-    if (!sourceImageLayer)
+    deSize oldSize = previewChannelManager.getChannelSize();
+    if (oldSize == size)
     {
-        throw deException("no source image layer in project");
+        return;
     }
 
-    sourceImageLayer->setPreviewSize(size);
+    previewChannelManager.setChannelSize(size);
 
-    previewStack.updatePreviews(0);
+    layerStack.updateImages();
+
+    if (histogramPanel)
+    {
+        histogramPanel->generate();
+        histogramPanel->paint();
+    }
 }
 
-void deProject::addLayer(deLayer* layer)
+void deProject::onChangeView(int a, int b)
 {
-    logMessage("add new layer...");
-    try
+    layerStack.updateImages(a + 1, b);
+    if (controlPanel)
     {
-        layerStack.addLayer(layer);
-        previewStack.addPreview();
-        setView (layerStack.getSize() - 1);
-        previewStack.updatePreviews(previewStack.getSize() - 1);
-        gui.updateLayerListPanel();
+        controlPanel->onChangeView();
     }
-    catch (deException& e)
+    if (viewModePanel)
     {
+        viewModePanel->updateNames();
     }
-    logMessage("add new layer done");
+    updateSamplers();
 }
 
-void deProject::removeTopLayer()
+const deViewManager& deProject::getViewManager() const
 {
-    logMessage("remove top layer...");
+    return viewManager;
+}
+
+deViewManager& deProject::getViewManager() 
+{
+    return viewManager;
+}
+
+deSamplerManager& deProject::getSamplerManager() 
+{
+    return samplerManager;
+}
+
+void deProject::setImagePanel(deImagePanel* _imagePanel)
+{
+    imagePanel = _imagePanel;
+}
+
+void deProject::repaintImage()
+{
+    if (imagePanel)
+    {
+        imagePanel->paint();
+    }        
+    if (histogramPanel)
+    {
+        histogramPanel->generate();
+        histogramPanel->paint();
+    }
+    updateSamplers();
+}
+
+void deProject::exportTIFF(const std::string& app)
+{
+    std::string path = "";
+
+    if (app.size() > 0)
+    {
+        path = "/tmp/";
+    }
+
+    std::string fileName = path + imageFileName + ".tiff";
+
+    deSize originalSize = previewChannelManager.getChannelSize();
+
+    int view = viewManager.getView();
+
+    previewChannelManager.setChannelSize(sourceChannelManager.getChannelSize());
+    layerStack.updateImagesSmart(previewChannelManager, view);
+
+    deLayer* layer = layerStack.getLayer(view);
+    const deImage& image = layer->getImage();
+    deChannel* r = previewChannelManager.getChannel(image.getChannelIndex(0));
+    deChannel* g = previewChannelManager.getChannel(image.getChannelIndex(1));
+    deChannel* b = previewChannelManager.getChannel(image.getChannelIndex(2));
+    saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+
+    previewChannelManager.setChannelSize(originalSize);
+
+    if (app.size() > 0)
+    {
+        const char* c = fileName.c_str();
+        wxString s(c, wxConvUTF8);
+        const wxString command = wxString::FromAscii(app.c_str()) + _T(" ") + s;
+        wxExecute(command);
+    }
+
+    layerStack.updateImages();
+
+}
+
+void deProject::deleteLayer()
+{
+    if (layerStack.getSize() < 2)
+    {
+        return;
+    }
     layerStack.removeTopLayer();
-    if (view > layerStack.getSize() - 1)
+    int view = viewManager.getView();
+    if (view >= layerStack.getSize())
     {
-        setView (layerStack.getSize() - 1);
-    }
-    gui.updateLayerListPanel();
-}
-
-deLayer* deProject::getVisibleLayer()
-{
-    if (view < 0)
-    {
-        return NULL;
-    }
-    return layerStack.getLayer(view);
-}
-
-dePreview* deProject::getVisiblePreview()
-{
-    if (view < 0)
-    {
-        return NULL;
-    }
-    return previewStack.getPreview(view);
-}
-
-int deProject::getVisibleLayerID() const
-{
-    if (view < 0)
-    {
-        return -1;
-    }
-    return view;
-}
-
-const deLayerStack& deProject::getLayerStack() const
-{
-    return layerStack;
-}
-
-deLayerStack& deProject::getLayerStack() 
-{
-    return layerStack;
-}
-
-const dePreviewStack& deProject::getPreviewStack() const
-{
-    return previewStack;
-}
-
-dePreviewStack& deProject::getPreviewStack() 
-{
-    return previewStack;
-}
-
-deFinalImage* deProject::generateFinalImage()
-{
-    logMessage("generate final image...");
-
-    wxProgressDialog* progressDialog = new wxProgressDialog(_T("generate final image"), _T("generate final image"), 100, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
-
-    const dePreview* preview = getVisiblePreview();
-    if (!preview)
-    {
-        return NULL;
-    }
-    deSize previousSize = previewSize;
-
-    setPreviewSize(sourceImageSize);
-
-    const dePreview* finalPreview = previewStack.generateFinalPreview(progressDialog, view);
-    deFinalImage* finalImage = NULL;
-
-    if (finalPreview)
-    {
-        finalImage = new deFinalImage(*finalPreview);
-    }        
-
-    setPreviewSize(previousSize);
-    previewStack.updatePreviews(0);
-    delete progressDialog;
-
-    return finalImage;
-}
-
-void deProject::setView(int v)
-{
-    logMessage("set view...");
-
-    int old = view;
-    view = v;
-    previewStack.updatePreviews(old + 1);
-
-    deLayer* layer = getVisibleLayer();
-    if (!layer)
-    {
-        return;
-    }
-
-    const deColorSpace colorSpace = layer->getColorSpace();
-    gui.updateAfterSetView(colorSpace);
-
-    logMessage("set view done");
-}
-
-deSamplerList& deProject::getSamplerList() 
-{
-    return samplerList;
-}
-
-void deProject::init(const std::string& fileName)
-{
-    const std::string ext = getExtension(fileName);
-    if (ext == "delab")
-    {
-        open(fileName, true);
-    }
-    else
-    {
-        loadSourceImage(fileName);
+        viewManager.setView( layerStack.getSize() - 1 );
     }
 }
 
-void deProject::loadSourceImage(const std::string& fileName)
+void deProject::setLastView()
 {
-    logMessage("loading source image " + fileName + "...");
-    sourceImageFileName = fileName;
-
-    size_t posDot = fileName.rfind(".");
-    size_t posSlash = fileName.rfind("/");
-    int posStart;
-    if (posSlash > fileName.size())
-    {
-        posStart= 0;
-    }
-    else
-    {
-        posStart = posSlash + 1;
-    }
-    sourceFileName = fileName.substr(posStart, posDot - posStart );
-
-    sourceImage.load(fileName);
-    setSourceImageSize(sourceImage.getRawSize());
-    gui.updateCenterPanel();
-    previewStack.updatePreviews(0);
-    gui.refreshView();
-}
-
-deGUI& deProject::getGUI()
-{
-    return gui;
-}
-
-const std::string deProject::getSourceFileName() const
-{
-    return sourceFileName;
-}
-
-void deProject::logMessage(const std::string& message)
-{
-    // FIXME it should be implemented differently, there should be LOG macro instead function
-#ifdef DE_LOGGER
-    logger.log(message);
-#endif    
-}
-
-void deProject::open(const std::string& fileName, bool image)
-{
-
-
-    layerStack.clear();
-    previewStack.clear();
-
-    xmlDocPtr doc = xmlParseFile(fileName.c_str());
-
-    if (!doc)
-    {
-        return;
-    }
-
-    xmlNodePtr root = xmlDocGetRootElement(doc);
-
-    if (!root)
-    {
-        return;
-    }
-
-    xmlNodePtr child = root->xmlChildrenNode;
-
-    while (child)
-    {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("layer_stack")))) 
-        {
-            layerStack.load(child, layerFactory);
-        }
-
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("source_image_file_name")))) 
-        {
-            xmlChar* s = xmlNodeGetContent(child);            
-            sourceImageFileName = (char*)(s);
-            xmlFree(s);
-        }
-
-        child = child->next;
-    }
-
-    deSourceImageLayer* layer = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
-    if (layer)
-    {
-        layer->setSourceImage(&sourceImage);
-    }
-
+    int a = viewManager.getView();
     int n = layerStack.getSize();
-    int i;
-    for (i = 0; i < n; i++)
+    n--;
+    viewManager.setView(n);
+    onChangeView(a, n);
+}
+
+void deProject::setHistogramPanel(deHistogramPanel* _histogramPanel)
+{
+    histogramPanel = _histogramPanel;
+}
+
+void deProject::setViewModePanel(deViewModePanel* _viewModePanel)
+{
+    viewModePanel = _viewModePanel;
+}
+
+
+void deProject::setControlPanel(deControlPanel* _controlPanel)
+{
+    controlPanel = _controlPanel;
+}
+
+void deProject::onChangeViewMode()
+{
+    if (viewModePanel)
     {
-        previewStack.addPreview();
+        viewModePanel->updateMode();
     }
+}
 
-    setView (layerStack.getSize() - 1);
-
-    if (image)
+void deProject::updateSamplers()
+{
+    if (controlPanel)
     {
-        loadSourceImage(sourceImageFileName);
-    }        
+        controlPanel->updateSamplerManagerFrame();
+    }
+}
 
+bool deProject::samplersVisible() const
+{
+    if (controlPanel)
+    {
+        return controlPanel->samplersVisible();
+    }
+    return false;
 }
 
 void deProject::save(const std::string& fileName)
@@ -362,43 +401,14 @@ void deProject::save(const std::string& fileName)
     xmlSaveFormatFile (f.c_str(), doc, 1); 
 }
 
-const deSize& deProject::getPreviewSize() const
+void deProject::load(const std::string& fileName)
 {
-    return previewSize;
+    resetLayerStack();
+    controlPanel->updateLayerGrid();
 }
 
-void deProject::onKey(int key)
+void deProject::newProject()
 {
-    if (key == '`')
-    {
-        gui.setViewMode(deViewNormal, -1);
-        gui.setViewModeButton(0);
-        gui.refreshView();
-    }
-    if (key == '1')
-    {
-        gui.setViewMode(deViewSingleChannel, 0);
-        gui.setViewModeButton(1);
-        gui.refreshView();
-    }
-    if (key == '2')
-    {
-        gui.setViewMode(deViewSingleChannel, 1);
-        gui.setViewModeButton(2);
-        gui.refreshView();
-    }
-    if (key == '3')
-    {
-        gui.setViewMode(deViewSingleChannel, 2);
-        gui.setViewModeButton(3);
-        gui.refreshView();
-    }
-    if (key == '4')
-    {
-        gui.setViewMode(deViewSingleChannel, 3);
-        gui.setViewModeButton(4);
-        gui.refreshView();
-    }
-
-    layerStack.onKey(key);
+    resetLayerStack();
+    controlPanel->updateLayerGrid();
 }

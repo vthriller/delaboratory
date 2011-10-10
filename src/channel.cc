@@ -17,92 +17,50 @@
 */
 
 #include "channel.h"
-#include <iostream>
 
-deTrueChannel::deTrueChannel(const deSize& _size, deValue _min, deValue _max)
-:deBaseChannel(_size), min(_min), max(_max)
+deChannel::deChannel(int size)
 {
-    pixels = new deValue [size.getN()];
+//    std::cout << "new channel" << std::endl;
+    pixels = new deValue [size];
 }
 
-deTrueChannel::~deTrueChannel()
+deChannel::~deChannel()
 {
-    delete [] pixels;
+//    std::cout << "destroy channel" << std::endl;
+    delete pixels;
 }
 
-deValue deTrueChannel::getValue(int pos) const
+deValue* deChannel::getPixels()
+{
+    return pixels;
+}
+
+const deValue* deChannel::getPixels() const
+{
+    return pixels;
+}
+
+deValue deChannel::getValue(int pos) const
 {
     return pixels[pos];
 }
 
-void deTrueChannel::setValue(int pos, deValue value)
+void deChannel::setValue(int pos, const deValue& value)
 {
-    if (value < min)
-    {
-        value = min;
-    }
-    else if (value > max)
-    {
-        value = max;
-    }
     pixels[pos] = value;
 }
 
-bool deTrueChannel::copy(const deBaseChannel* channel)
+void deChannel::setValueClip(int pos, const deValue& value)
 {
-    if (!channel)        
+    if (value < 0)
     {
-        return false;
+        pixels[pos] = 0;
+        return;
     }
-    if (size != channel->getSize())
+    if (value > 1)
     {
-        return false;
+        pixels[pos] = 1;
+        return;
     }
-
-    const deTrueChannel* c = dynamic_cast<const deTrueChannel*>(channel);
-    if (!c)
-    {
-        return false;
-    }
-
-    int i;
-    int n = size.getN();
-    for (i = 0; i < n; i++)
-    {
-        pixels[i] = c->pixels[i];
-    }
-    return true;
-}
-
-bool deTrueChannel::scale(const deTrueChannel* channel)
-{
-    if (!channel)        
-    {
-        return false;
-    }
-
-    int ws = channel->size.getW();
-    int hs = channel->size.getH();
-    int wd = size.getW();
-    int hd = size.getH();
-    float scaleW = (float) ws / wd;
-    float scaleH = (float) hs / hd;
-
-    int x;
-    int y;
-    for (x = 0; x < wd; x++)
-    {
-        for (y = 0; y < hd; y++)
-        {
-            int xx = scaleW * x;
-            int yy = scaleH * y;
-            pixels[y*wd+x] = channel->pixels[yy*ws+xx];
-        }
-    }
-    return true;
-}
-
-const deValue* deTrueChannel::getPixels() const
-{
-    return pixels;
+    pixels[pos] = value;
 }

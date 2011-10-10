@@ -17,6 +17,138 @@
 */
 
 #include "mixer.h"
+#include "channel.h"
+
+deMixer::deMixer(int _size)
+:size(_size)
+{
+    weights = new deValue [size];
+}
+
+deMixer::~deMixer()
+{
+    delete [] weights;
+}
+
+void deMixer::reset(int index)
+{
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        if (i == index)
+        {
+            weights[i] = 1.0;
+        }
+        else
+        {
+            weights[i] = 0.0;
+        }
+    }
+}
+
+deValue deMixer::getValue(int c) const
+{
+    if ((c < 0) || (c >= size))
+    {
+        return 0.0;
+    }
+    return weights[c];
+}
+
+void deMixer::setValue(int c, deValue value)
+{
+    if ((c < 0) || (c >= size))
+    {
+        return;
+    }
+    weights[c] = value;
+}
+
+void deMixer::process(const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& destination, int n)
+{
+    if (size < 1)
+    {
+        return;
+    }
+
+    int i;
+
+    if (!s1)
+    {
+        return;
+    }
+    const deValue *p1 = s1->getPixels();
+    if (size == 1)
+    {
+        for (i = 0; i < n; i++)
+        {
+            deValue result = weights[0] * p1[i];
+            destination.setValueClip(i, result);
+        }
+        return;
+    }        
+
+    if (!s2)
+    {
+        return;
+    }
+    if (!s3)
+    {
+        return;
+    }
+    const deValue *p2 = s2->getPixels();
+    const deValue *p3 = s3->getPixels();
+    if (size == 3)
+    {
+        for (i = 0; i < n; i++)
+        {
+            deValue result = weights[0] * p1[i];
+            result += weights[1] * p2[i];
+            result += weights[2] * p3[i];
+            destination.setValueClip(i, result);
+        }
+        return;
+    }        
+
+    if (!s4)
+    {
+        return;
+    }
+    const deValue *p4 = s4->getPixels();
+    for (i = 0; i < n; i++)
+    {
+        deValue result = weights[0] * p1[i];
+        result += weights[1] * p2[i];
+        result += weights[2] * p3[i];
+        result += weights[3] * p4[i];
+        destination.setValueClip(i, result);
+    }
+}
+
+bool deMixer::isNeutral(int index) const
+{
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        if (i == index)
+        {
+            if (weights[i] != 1.0)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (weights[i] != 0.0)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+        /*
 #include "preview.h"
 #include "channel.h"
 #include <iostream>
@@ -212,3 +344,4 @@ void deMixer::load(xmlNodePtr node)
         child = child->next;
     }
 }
+*/

@@ -27,8 +27,9 @@ class deSlider:public wxPanel
     private:
         wxSizer* sizer;
         wxStaticText* label;
+        wxStaticText* labelValue;
         wxSlider* slider;
-        wxTextCtrl* edit;
+//        wxTextCtrl* edit;
         int sliderRange;
         deValue valueMin;
         deValue valueMax;
@@ -38,20 +39,20 @@ class deSlider:public wxPanel
         void finishMoveSlider(wxCommandEvent &event);
         void textEnter(wxCommandEvent &event);
 
-        void updateValueFromSlider();
+        void updateValueFromSlider(bool finished);
 
         void setEdit(deValue v);
         void setSlider(deValue v);
 
     public:
-        deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax);
+        deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue);
         virtual ~deSlider();
 
         void setIntegerMode();
 
         void setValue(deValue v);
 
-        virtual void onValueChange(deValue value) = 0;
+        virtual void onValueChange(deValue value, bool finished) = 0;
 };        
 
 #endif

@@ -20,23 +20,26 @@
 #define _DE_CONVERSION_LAYER_H
 
 #include "layer.h"
-#include "mixer.h"
-#include "color_space.h"
+class deLayerStack;
+class deChannelManager;
 
 class deConversionLayer:public deLayer
 {
     private:
-
-    public:
-        deConversionLayer(deLayerStack& _stack, int _index, const std::string& _name);
-        virtual ~deConversionLayer();
-
-        virtual bool canChangeSourceLayer() const {return true;};
-        virtual bool canChangeColorSpace() const {return true;};
-
-        virtual void updatePreview(dePreviewStack& previewStack);
+        deImage image;
+        deLayerStack& layerStack;
+        deChannelManager& channelManager;
 
         virtual std::string getType() const {return "conversion";};
+
+    public:
+        deConversionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
+        virtual ~deConversionLayer();
+
+        virtual const deImage& getImage() const;
+        virtual void updateImage();
+
+        virtual void updateChannelUsage(std::map<int, int>& channelUsage) const;
 
 };
 

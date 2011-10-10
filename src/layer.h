@@ -19,90 +19,66 @@
 #ifndef _DE_LAYER_H
 #define _DE_LAYER_H
 
-#include <list>
-#include "property_name.h"
-#include "property_color_space.h"
-#include "property_layer_index.h"
-class deLayerStack;
-class deActionFrame;
-class dePreview;
+#include "color_space.h"
+#include "channel.h"
+#include "image.h"
+#include <string>
+#include <libxml/parser.h>
 class deProject;
-
-typedef std::list<deProperty*> deProperties;
+class deActionFrame;
+class deBlendFrame;
 
 class deLayer
 {
     private:
         deLayer(const deLayer& layer);
         deLayer& operator = (const deLayer& layer);
-        deActionFrame* actionFrame;
-
-        deProperties properties;
-
+        std::string name;
 
     protected:
-        deLayerStack& stack;
+        deColorSpace colorSpace;
+        deActionFrame* actionFrame;
+        deBlendFrame* blendFrame;
         int index;
-        dePropertyName name;
-        dePropertyColorSpace colorSpace;
-        dePropertyLayerIndex sourceLayer;
-
-    public:
-        deLayer(deLayerStack& _stack, int _index, const std::string& _name);
-        virtual ~deLayer();
-
-        virtual void updatePreview(dePreviewStack& previewStack) = 0 ;
-
-        virtual bool canChangeSourceLayer() const {return false;};
-        virtual bool canChangeOverlayLayer() const {return false;};
-        virtual bool canChangeColorSpace() const {return false;};
-
-        void changeSourceLayer(int id);
-        void changeColorSpace(deColorSpace _colorSpace);
-
-        virtual void onChangeColorSpace() {};
-        virtual void onChangeSourceLayer() {};
-        virtual void onChangeOverlayLayer() {};
-
-        void notifyPropertiesOnColorSpaceChange();
-
-        void updateColorSpace();
-
-        const deColorSpace getColorSpace() const {return colorSpace.getColorSpace();};
-
-        void setName(const std::string& _name);
-        const std::string& getName() const {return name.getName();};
-
-        deActionFrame* createLayerFrame(wxWindow* parent, int layerNumber, deProject* project);
-        void closeActionFrame();
-        void setActionFrame(deActionFrame* frame);
-        deActionFrame* getActionFrame();
-
-        virtual const std::string getDescription() const {return "base layer";};
-
-        int getSourceLayerID() const {return sourceLayer.getLayerIndex();};
-
-        void registerProperty(deProperty& property);
-
-        deLayer* getSourceLayer();
-        
-        deLayerStack& getStack() {return stack;};
-        int getIndex() const {return index;};
+        int sourceLayer;
 
         virtual std::string getType() const = 0;
 
+    public:
+        deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer);
+        virtual ~deLayer();
+
+        deColorSpace getColorSpace() const;
+        virtual const deImage& getImage() const = 0;
+        virtual void updateImage() = 0;
+
+        std::string getName() const;
+
+        virtual bool hasAction() const;
+        virtual bool hasBlending() const;
+        virtual bool canDisable() const;
+
+        virtual bool isEnabled() const;
+        virtual void setEnabled(bool e);
+
+        void closeActionFrame();
+        void setActionFrame(deActionFrame* frame);
+        virtual void createActionFrame(wxWindow* parent);
+
+        void closeBlendFrame();
+        void setBlendFrame(deBlendFrame* frame);
+        virtual void createBlendFrame(wxWindow* parent);
+
+        virtual void onImageClick(deValue x, deValue y);
+
+        virtual void updateChannelUsage(std::map<int, int>& channelUsage) const = 0;
+
+        int getIndex() const {return index;};
+
+        virtual void onKey(int key) {};
+        
         void save(xmlNodePtr node);
-        void load(xmlNodePtr node);
-        
-        virtual void saveSpecific(xmlNodePtr node) {};
-        virtual void loadSpecific(xmlNodePtr node) {};
 
-        virtual void traceSampler(deSampler* sampler);
-        
-        virtual bool checkUsage(int id);
-        void onKey(int key);
-
-        bool isLast() const;
 
 };
 

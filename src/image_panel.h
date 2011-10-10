@@ -21,25 +21,29 @@
 
 #include "wx/wx.h"
 #include "renderer.h"
-
+#include "value.h"
 class deProject;
+/*
+
 class deSize;
 class dePreview;
-
+*/
 class deImagePanel:public wxPanel
 {
 private:
 	
     deProject* project;
     deRenderer renderer;
+    bool clicked;
 
 	void click(wxMouseEvent &event);
 	void release(wxMouseEvent &event);
 	void move(wxMouseEvent &event);
+
+    void setPosition(deValue x, deValue y);
     void drawSamplers(wxDC& dc);
 
 public:
-	//deImagePanel(wxWindow* parent, const deSize& size, deProject* _project);
 	deImagePanel(wxWindow* parent, deProject* _project);
 	virtual ~deImagePanel();
 

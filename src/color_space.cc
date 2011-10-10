@@ -17,10 +17,7 @@
 */
 
 #include "color_space.h"
-#include "exception.h"
 #include "channels.h"
-#include "preview.h"
-#include "converter.h"
 
 int getColorSpaceSize(const deColorSpace& colorSpace)
 {
@@ -217,66 +214,52 @@ std::string getChannelName(deColorSpace colorSpace, int channel)
 void getSupportedColorSpaces(std::vector<deColorSpace>& result)
 {
     result.push_back(deColorSpaceRGB);
-    result.push_back(deColorSpaceBW);
     result.push_back(deColorSpaceLAB);
-    result.push_back(deColorSpaceXYZ);
-    result.push_back(deColorSpaceCMY);
-    result.push_back(deColorSpaceCMYK);
+    result.push_back(deColorSpaceBW);
     result.push_back(deColorSpaceHSL);
     result.push_back(deColorSpaceHSV);
     result.push_back(deColorSpaceLCH);
+    result.push_back(deColorSpaceXYZ);
+    result.push_back(deColorSpaceCMY);
+    result.push_back(deColorSpaceCMYK);
 }
 
-void getSupportedConversions(const deColorSpace& colorSpace, std::vector<deColorSpace>& result)
-{
-    deConverter converter;
-
-    dePreview sourcePreview(colorSpace, deSize(0,0));
-    converter.setSource(&sourcePreview);
-
-    std::vector<deColorSpace> all;
-    getSupportedColorSpaces(all);
-    std::vector<deColorSpace>::iterator i;
-    for (i = all.begin(); i != all.end(); i++)
-    {
-        deColorSpace destination = *i;
-        dePreview destinationPreview(destination, deSize(0,0));
-        converter.setDestination(&destinationPreview);
-        if (converter.setConversionFunction())
-        {
-            result.push_back(destination);
-        }                
-    }
-}
 wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
 {
     switch (colorSpace)
     {
         case deColorSpaceRGB:
         {
+            int g = 200;
             switch (channel)
             {
                 case DE_CHANNEL_RED:
-                    return wxColour(255, 0, 0);
+                    return wxColour(g, 0, 0);
                 case DE_CHANNEL_GREEN:
-                    return wxColour(0, 255, 0);
+                    return wxColour(0, g, 0);
                 case DE_CHANNEL_BLUE:
-                    return wxColour(0, 0, 255);
+                    return wxColour(0, 0, g);
             }                    
         }            
         case deColorSpaceCMYK:
         {
+            int g = 200;
             switch (channel)
             {
                 case DE_CHANNEL_CYAN:
-                    return wxColour(0, 200, 200);
+                    return wxColour(0, g, g);
                 case DE_CHANNEL_MAGENTA:
-                    return wxColour(200, 0, 200);
+                    return wxColour(g, 0, g);
                 case DE_CHANNEL_YELLOW:
-                    return wxColour(200, 200, 0);
+                    return wxColour(g, g, 0);
                 case DE_CHANNEL_KEY:
-                    return wxColour(200, 200, 200);
+                    return wxColour(g, g, g);
             }                    
+        }            
+        case deColorSpaceLAB:
+        {
+            int g = 50;
+            return wxColour(g, g, g);
         }            
     }
 
@@ -301,9 +284,31 @@ deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v)
     {
         return 255 * v;
     }
-    if (colorSpace == deColorSpaceCMYK)
+    if ((colorSpace == deColorSpaceCMYK) || (colorSpace == deColorSpaceCMY))
     {
         return 100 * v;
+    }
+    if ((colorSpace == deColorSpaceHSL) || (colorSpace == deColorSpaceHSV))
+    {
+        if (channel == DE_CHANNEL_HUE)
+        {
+           return 360 * v;
+        }       
+        else
+        {
+           return 100 * v;
+        }
+    }
+    if (colorSpace == deColorSpaceLCH)
+    {
+        if (channel == DE_CHANNEL_H)
+        {
+           return 360 * v;
+        }       
+        else
+        {
+           return 100 * v;
+        }
     }
     return v;
 }

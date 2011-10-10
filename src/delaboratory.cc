@@ -19,7 +19,6 @@
 #include "wx/wx.h"
 #include "project.h"
 #include "main_frame.h"
-#include "logger.h"
 
 class deLaboratory: public wxApp
 {	
@@ -36,6 +35,7 @@ class deLaboratory: public wxApp
     private:
     	virtual bool OnInit();
         deProject project;
+        deMainFrame* frame;
 
         virtual int FilterEvent(wxEvent& event);
 
@@ -46,10 +46,14 @@ IMPLEMENT_APP(deLaboratory)
 
 int deLaboratory::FilterEvent(wxEvent& event)
 {
-    if  (event.GetEventType()==wxEVT_KEY_DOWN )
+    if (project.shouldReceiveKeys())
     {
-         project.onKey(((wxKeyEvent&)event).GetKeyCode());
-         return true;
+        if  (event.GetEventType()==wxEVT_KEY_DOWN )
+        {
+             project.onKey(((wxKeyEvent&)event).GetKeyCode());
+             frame->onKey(((wxKeyEvent&)event).GetKeyCode());
+             return true;
+        }
     }
 
     return -1;
@@ -57,17 +61,14 @@ int deLaboratory::FilterEvent(wxEvent& event)
 
 bool deLaboratory::OnInit()
 {
-    project.logMessage("on init...");
-
     wxInitAllImageHandlers();
 
-	int width = 1024;
-	int height = 880;
+	//int width = 1024;
+	//int height = 880;
+	int width = 1200;
+	int height = 960;
 
-    project.logMessage("creating main frame on init...");
-
-	deMainFrame *frame = new deMainFrame( wxSize(width,height), &project);
-    project.getGUI().start();
+	frame = new deMainFrame( wxSize(width,height), &project);
 
     if (argc > 1)
     {
@@ -75,7 +76,6 @@ bool deLaboratory::OnInit()
         char cstring[1024];
         strncpy(cstring, (const char*)arg.mb_str(wxConvUTF8), 1023);
         project.init(cstring);
-
     }
 
 	frame->Show(TRUE);

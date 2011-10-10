@@ -17,7 +17,6 @@
 */
 
 #include "histogram.h"
-#include "exception.h"
 #include <iostream>
 #include "channel.h"
 
@@ -45,7 +44,6 @@ void deHistogram::put(deValue value)
 {
     if ((value < 0) || (value > 1))
     {
-        throw deException("value in histogram out of range");
         return;
     }
 
@@ -79,8 +77,13 @@ int deHistogram::getSize() const
     return size;
 }
 
-void deHistogram::calc(const deBaseChannel* channel, int n)
+void deHistogram::calc(const deChannel* channel, int n)
 {
+    if (!channel)
+    {
+        return;
+    }
+
     int j;
     for (j = 0; j < n; j++)
     {
@@ -93,3 +96,50 @@ void deHistogram::calc(const deBaseChannel* channel, int n)
     }
 }
 
+bool deHistogram::render(unsigned char* data, int sizeW, int sizeH, unsigned char g1, unsigned char g2)
+{
+    int mm = getMax();
+    if (mm <= 0)
+    {
+        return false;
+    }
+
+    int maxH = sizeH - 10;
+
+    int x;
+    int y;
+    for (x = 0; x < sizeW; x++)
+    {
+        int hh = get(x);
+        int hp = hh;
+        int hn = hh;
+        if (x > 0)
+        {
+            hp = get(x - 1);
+        }
+        if (x < sizeW - 1)
+        {
+            hn = get(x + 1);
+        }
+        hh = (hh + hp + hn) / 3;
+        int h = maxH * hh / mm;
+        if (h > maxH)
+        {
+            h = maxH;
+        }
+        for (y = 0; y < sizeH - h; y++)
+        {
+            data[3*(y*sizeW+x)] = g1;
+            data[3*(y*sizeW+x)+1] = g1;
+            data[3*(y*sizeW+x)+2] = g1;
+        }
+        for (y = sizeH - h; y < sizeH; y++)
+        {
+            data[3*(y*sizeW+x)] = g2;
+            data[3*(y*sizeW+x)+1] = g2;
+            data[3*(y*sizeW+x)+2] = g2;
+        }
+    }
+
+    return true;
+}    

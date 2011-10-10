@@ -18,21 +18,13 @@
 
 #include "layer_frame.h"
 
-deLayerFrame::deLayerFrame(wxWindow *parent, deLayer& _layer, dePreviewStack& _stack)
-:deActionFrame(parent, _layer, _T("generic")), stack(_stack)
+deLayerFrame::deLayerFrame(wxWindow *parent, deActionLayer& _layer, const std::string& name)
+:deFrame(parent, name),
+layer(_layer)
 {
-    sizer = new wxBoxSizer(wxVERTICAL);
-
-    SetSizer(sizer);
 }
 
 deLayerFrame::~deLayerFrame()
 {
 }
 
-
-void deLayerFrame::addProperty(deProperty* property)
-{
-    wxPanel* panel = property->getPanel(this, stack);
-    sizer->Add(panel, 0);
-}

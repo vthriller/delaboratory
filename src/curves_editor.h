@@ -16,51 +16,42 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_CURVES_FRAME_H
-#define _DE_CURVES_FRAME_H
+#ifndef _DE_CURVES_EDITOR_H
+#define _DE_CURVES_EDITOR_H
 
-#include <vector>
-#include <wx/wx.h>
-#include <wx/collpane.h>
-class deCurvesLayer;
-class dePreviewStack;
+#include "action_frame.h"
 class deCurvesPanel;
-class dePropertyCurves;
-class deSampler;
+class deGradientPanel;
 
-//class deCurvesEditor:public wxPanel
-class deCurvesEditor:public wxCollapsiblePane
+class deCurvesEditor:public deActionFrame
 {
     private:
-        wxSizer* sizer;
-        wxChoice* channelChoice;
         deCurvesPanel* curvesPanel;
-        dePropertyCurves& property;
-        dePreviewStack& stack;
-        wxPanel* bigPanel;
 
         void choose(wxCommandEvent &event);
-        void collapse(wxCommandEvent &event);
-        void reset(wxCommandEvent &event);
-        void fill(wxCommandEvent &event);
-        void random(wxCommandEvent &event);
-        void invert(wxCommandEvent &event);
-        void size(wxCommandEvent &event);
+        void click(wxCommandEvent &event);
 
-        wxButton* buttonReset;
-        wxButton* buttonFill;
-        wxButton* buttonRandom;
-        wxButton* buttonInvert;
-        wxButton* buttonSize;
+        deGradientPanel* leftBar;
+        deGradientPanel* bottomBar;
+
+        wxChoice* channelChoice;
+        wxButton* reset;
+        wxButton* invert;
+        wxButton* const0;
+        wxButton* const05;
+        wxButton* const1;
+        wxButton* angle1;
+        wxButton* angle2;
+        wxButton* angle3;
+        wxButton* angle4;
+        wxButton* angle5;
 
     public:
-        deCurvesEditor(wxWindow *parent, dePreviewStack& _stack, dePropertyCurves& _property);
+        deCurvesEditor(wxWindow *parent, deActionLayer& _layer);
         virtual ~deCurvesEditor();
 
-
-        void rebuild();
-        virtual void traceSampler(deSampler* sampler);
-        virtual void onKey(int key);
+        virtual void onImageClick(deValue x, deValue y);
+        void onKey(int key);
 
 };
 

@@ -20,40 +20,39 @@
 #define _DE_LAYER_STACK_H
 
 #include <vector>
+#include <map>
 #include <libxml/parser.h>
 
 class deLayer;
-class deSampler;
-class deLayerFactory;
+class deChannelManager;
 
 class deLayerStack
 {
     private:
         std::vector<deLayer*> layers;
 
-        void loadLayer(xmlNodePtr node, deLayerFactory& factory);
-        
     public:
         deLayerStack();
         virtual ~deLayerStack();
 
-        deLayer* getLayer(int id) const;
-        void addLayer(deLayer* layer);
+        void clear();
         void removeTopLayer();
 
-        int getSize() const;
+        void addLayer(deLayer* layer);
 
-        void traceSampler(deSampler* sampler);
-        void updateColorSpaces();
+        int getSize() const;
+        deLayer* getLayer(int id) const;
+
+        void updateImages();
+        void updateImages(int a, int b);
+
+        void updateImagesSmart(deChannelManager& channelManager, int view);
+
+        void generateChannelUsage(std::map<int, int>& channelUsage);
+
+        void onKey(int key);
 
         void save(xmlNodePtr node);
-        void load(xmlNodePtr node, deLayerFactory& factory);
-
-        void clear();
-    
-        void generateLayerUsage(std::vector<int>& layerUsage);
-        
-        void onKey(int key);
 
 };
 

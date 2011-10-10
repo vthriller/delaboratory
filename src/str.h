@@ -27,4 +27,7 @@ std::string getBaseName(const std::string& s);
 /* returns str after ".", so for "abcde.jpg" returns "jpg" */
 std::string getExtension(const std::string& s);
 
+//std::string replaceExtension(const std::string& s, const std::string& ext);
+std::string removePathAndExtension(const std::string& fileName);
+
 #endif

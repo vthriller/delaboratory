@@ -20,6 +20,7 @@
 #include <tiffio.h>
 #include <wx/wx.h>
 #include "channel.h"
+#include "conversion_functions.h"
 
 bool checkTIFF(const std::string& fileName)
 {
@@ -42,7 +43,13 @@ bool checkJPEG(const std::string& fileName)
     wxLogNull noerrormessages;
 
     wxImage image;
-    return image.LoadFile(wxString::FromAscii(fileName.c_str()), wxBITMAP_TYPE_JPEG);
+
+    const char* c = fileName.c_str();
+    wxString s(c, wxConvUTF8);
+
+    bool result = image.LoadFile(s, wxBITMAP_TYPE_JPEG);
+
+    return result;
 }   
 
 deSize getTIFFSize(const std::string& fileName)
@@ -67,7 +74,9 @@ deSize getJPEGSize( const std::string& fileName)
     wxImage image;
     deSize size(0,0);
 
-    if (image.LoadFile(wxString::FromAscii(fileName.c_str()), wxBITMAP_TYPE_JPEG))
+    const char* c = fileName.c_str();
+    wxString s(c, wxConvUTF8);
+    if (image.LoadFile(s, wxBITMAP_TYPE_JPEG))
     {
         int w = image.GetWidth();
         int h = image.GetHeight();
@@ -77,7 +86,7 @@ deSize getJPEGSize( const std::string& fileName)
     return size;
 }    
 
-void loadTIFF(const std::string& fileName, deBaseChannel& channelR, deBaseChannel& channelG, deBaseChannel& channelB, bool& icc)
+void loadTIFF(const std::string& fileName, deChannel& channelR, deChannel& channelG, deChannel& channelB, bool& icc)
 {
     TIFF* tif = TIFFOpen(fileName.c_str(), "r");
     if (!tif)
@@ -90,6 +99,13 @@ void loadTIFF(const std::string& fileName, deBaseChannel& channelR, deBaseChanne
     int h;
     uint16 bps;
     uint16 spp;
+
+    uint16 photometric;
+
+    TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric);
+
+    deConversion3x3 conversionLAB = getConversion3x3(deColorSpaceLAB, deColorSpaceRGB);
+
     TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
     TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
     TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bps);
@@ -143,6 +159,27 @@ void loadTIFF(const std::string& fileName, deBaseChannel& channelR, deBaseChanne
                 g = u2 / d;
                 b = u3 / d;
             }
+
+            if (photometric == PHOTOMETRIC_CIELAB)
+            {
+                deValue _l = r;
+                deValue _a = g;
+                deValue _b = b;
+                _a+= 0.5;
+                _b+= 0.5;
+
+                if (_a > 1.0)
+                {
+                    _a-= 1.0;
+                }
+                if (_b > 1.0)
+                {
+                    _b-= 1.0;
+                }
+
+                conversionLAB(_l, _a, _b, r, g, b);
+            }
+
             channelR.setValue(pos, r );
             channelG.setValue(pos, g );
             channelB.setValue(pos, b );
@@ -153,10 +190,12 @@ void loadTIFF(const std::string& fileName, deBaseChannel& channelR, deBaseChanne
     TIFFClose(tif);
 }
 
-void loadJPEG(const std::string& fileName, deBaseChannel& channelR, deBaseChannel& channelG, deBaseChannel& channelB)
+void loadJPEG(const std::string& fileName, deChannel& channelR, deChannel& channelG, deChannel& channelB)
 {
+    const char* c = fileName.c_str();
+    wxString s(c, wxConvUTF8);
     wxImage image;
-    image.LoadFile(wxString::FromAscii(fileName.c_str()), wxBITMAP_TYPE_JPEG);
+    image.LoadFile(s, wxBITMAP_TYPE_JPEG);
     int w = image.GetWidth();
     int h = image.GetHeight();
 
@@ -180,7 +219,7 @@ void loadJPEG(const std::string& fileName, deBaseChannel& channelR, deBaseChanne
 
 }
 
-void saveJPEG(const std::string& fileName, const deBaseChannel& channelR, const deBaseChannel& channelG, const deBaseChannel& channelB, deSize& size)
+void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size)
 {
     wxImage* image;
     int w = size.getW();
@@ -204,11 +243,13 @@ void saveJPEG(const std::string& fileName, const deBaseChannel& channelR, const 
 
         }
     }
-    image->SaveFile(wxString::FromAscii(fileName.c_str()));
+    const char* c = fileName.c_str();
+    wxString s(c, wxConvUTF8);
+    image->SaveFile(s);
     delete image;
 }
 
-void saveTIFF(const std::string& fileName, const deBaseChannel& channelR, const deBaseChannel& channelG, const deBaseChannel& channelB, deSize& size)
+void saveTIFF(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size)
 {
     int w = size.getW();
     int h = size.getH();

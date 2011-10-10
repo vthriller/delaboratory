@@ -20,18 +20,10 @@
 #define _DE_BLUR_H
 
 #include "value.h"
-#include <set>
-#include "property_channels.h"
 #include "blur_type.h"
+#include "size.h"
+#include "channel.h"
 
-enum deBlurDirection
-{
-    deBlurHorizontal,
-    deBlurVertical
-};
-
-class dePreview;
-
-void blur(const dePreview& sourcePreview, dePreview& destinationPreview, deBlurDirection direction, deValue radius, const deChannels& enabledChannels, deBlurType type, deValue t);
+void blurChannel(const deValue* source, deValue* destination, deSize size, deValue radius, deBlurType type, deValue t);
 
 #endif    
