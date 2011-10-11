@@ -18,27 +18,28 @@
 
 #include "source_image_layer.h"
 #include "channel_manager.h"
-#include "project.h"
+//#include "project.h"
 #include "scale_channel.h"
 #include <iostream>
 
-deSourceImageLayer::deSourceImageLayer(int _index, deProject& _project)
+deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager)
 :deLayer("source image", deColorSpaceRGB, _index, -1), 
-project(_project),
+previewChannelManager(_previewChannelManager),
 sourceR(-1), 
 sourceG(-1), 
 sourceB(-1), 
-image(deColorSpaceRGB, _project.getPreviewChannelManager()) 
+image(deColorSpaceRGB, _previewChannelManager) 
 {
-    //image.setInvalid();
+    sourceChannelManager = NULL;
 }
 
 deSourceImageLayer::~deSourceImageLayer()
 {
 }
 
-void deSourceImageLayer::setSource(int r, int g, int b)
+void deSourceImageLayer::setSource(int r, int g, int b, deChannelManager* _sourceChannelManager)
 {
+    sourceChannelManager = _sourceChannelManager;
     sourceR = r;
     sourceG = g;
     sourceB = b;
@@ -46,17 +47,14 @@ void deSourceImageLayer::setSource(int r, int g, int b)
 
 void deSourceImageLayer::updateImage()
 {
-    deChannelManager& previewChannelManager = project.getPreviewChannelManager();
-    deChannelManager& sourceChannelManager = project.getSourceChannelManager();
+    if (!sourceChannelManager)
+    {
+        return;
+    }
 
-/*
-    std::cout << "deSourceImageLayer::updatePreview sourceR: " << sourceR << std::endl;
-    std::cout << "deSourceImageLayer::updatePreview sourceG: " << sourceG << std::endl;
-    std::cout << "deSourceImageLayer::updatePreview sourceB: " << sourceB << std::endl;
-*/
-    deChannel* sourceChannelR = sourceChannelManager.getChannel(sourceR);
-    deChannel* sourceChannelG = sourceChannelManager.getChannel(sourceG);
-    deChannel* sourceChannelB = sourceChannelManager.getChannel(sourceB);
+    deChannel* sourceChannelR = sourceChannelManager->getChannel(sourceR);
+    deChannel* sourceChannelG = sourceChannelManager->getChannel(sourceG);
+    deChannel* sourceChannelB = sourceChannelManager->getChannel(sourceB);
 
     if (!sourceChannelR)
     {
@@ -77,7 +75,7 @@ void deSourceImageLayer::updateImage()
     deChannel* channelG = previewChannelManager.getChannel(image.getChannelIndex(1));
     deChannel* channelB = previewChannelManager.getChannel(image.getChannelIndex(2));
 
-    const deSize ss = sourceChannelManager.getChannelSize();
+    const deSize ss = sourceChannelManager->getChannelSize();
     const deSize ds = previewChannelManager.getChannelSize();
 
     scaleChannel(*sourceChannelR, *channelR, ss, ds);

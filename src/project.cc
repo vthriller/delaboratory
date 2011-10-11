@@ -29,6 +29,8 @@
 #include "histogram_panel.h"
 #include "control_panel.h"
 #include "view_mode_panel.h"
+#include <sstream>
+#include "layer_factory.h"
 
 deProject::deProject()
 :viewModePanel(NULL),
@@ -138,13 +140,13 @@ void deProject::init(const std::string& fileName)
     }
 
     sourceChannelManager.setChannelSize(size);
-    int r = sourceChannelManager.allocateNewChannel();
-    int g = sourceChannelManager.allocateNewChannel();
-    int b = sourceChannelManager.allocateNewChannel();
+    sourceR = sourceChannelManager.allocateNewChannel();
+    sourceG = sourceChannelManager.allocateNewChannel();
+    sourceB = sourceChannelManager.allocateNewChannel();
 
-    deChannel* channelR = sourceChannelManager.getChannel(r);
-    deChannel* channelG = sourceChannelManager.getChannel(g);
-    deChannel* channelB = sourceChannelManager.getChannel(b);
+    deChannel* channelR = sourceChannelManager.getChannel(sourceR);
+    deChannel* channelG = sourceChannelManager.getChannel(sourceG);
+    deChannel* channelB = sourceChannelManager.getChannel(sourceB);
 
     if (tiff)
     {
@@ -161,12 +163,21 @@ void deProject::init(const std::string& fileName)
         loadJPEG(fileName, *channelR, *channelG, *channelB);
     }
 
-    deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
-
-    l->setSource(r, g, b);
-
     imageFileName = removePathAndExtension(fileName);
     sourceImageFileName = fileName;
+
+    setSource();
+}
+
+void deProject::setSource()
+{
+    deChannel* channelR = sourceChannelManager.getChannel(sourceR);
+    deChannel* channelG = sourceChannelManager.getChannel(sourceG);
+    deChannel* channelB = sourceChannelManager.getChannel(sourceB);
+
+    deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
+
+    l->setSource(sourceR, sourceG, sourceB, &sourceChannelManager);
 
 
 }
@@ -174,14 +185,16 @@ void deProject::init(const std::string& fileName)
 void deProject::resetLayerStack()
 {
     layerStack.clear();
-    deSourceImageLayer* layer = new deSourceImageLayer(0, *this);
-    addLayer(layer);
-    viewManager.setView(0);
+
+    deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, previewChannelManager, viewManager, "source image");
+
+    if (layer)
+    {
+        addLayer(layer);
+    }        
 
     layerStack.updateImages();
 }
-
-
 
 void deProject::addLayer(deLayer* layer)
 {
@@ -401,9 +414,129 @@ void deProject::save(const std::string& fileName)
     xmlSaveFormatFile (f.c_str(), doc, 1); 
 }
 
-void deProject::load(const std::string& fileName)
+void deProject::loadLayer(xmlNodePtr root)
 {
-    resetLayerStack();
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    int index = -1;
+    std::string type = "";
+    std::string name = "";
+    int source = -1;
+    deColorSpace colorSpace = deColorSpaceInvalid;
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("index")))) 
+        {
+            xmlChar* xs = xmlNodeGetContent(child);            
+            std::string s = (char*)(xs);
+            xmlFree(xs);
+
+            std::istringstream iss(s);
+            iss >> index;
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("source")))) 
+        {
+            xmlChar* xs = xmlNodeGetContent(child);            
+            std::string s = (char*)(xs);
+            xmlFree(xs);
+
+            std::istringstream iss(s);
+            iss >> source;
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("color_space")))) 
+        {
+            xmlChar* xs = xmlNodeGetContent(child);            
+            std::string s = (char*)(xs);
+            xmlFree(xs);
+
+            colorSpace = colorSpaceFromString(s);
+        }
+
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("type")))) 
+        {
+            xmlChar* xs = xmlNodeGetContent(child);            
+            type = (char*)(xs);
+            xmlFree(xs);
+        }
+        
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("name")))) 
+        {
+            xmlChar* xs = xmlNodeGetContent(child);            
+            name = (char*)(xs);
+            xmlFree(xs);
+        }
+
+        child = child->next;
+    }
+        
+    deLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, name);
+
+    if (layer)
+    {
+        addLayer(layer);
+    }        
+
+}
+
+void deProject::loadLayers(xmlNodePtr root)
+{
+    layerStack.clear();
+
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("layer")))) 
+        {
+            loadLayer(child);
+        }
+
+        child = child->next;
+    }
+
+    setSource();
+    layerStack.updateImages();
+}
+
+void deProject::open(const std::string& fileName)
+{
+    xmlDocPtr doc = xmlParseFile(fileName.c_str());
+
+    if (!doc)
+    {
+        return;
+    }
+
+    xmlNodePtr root = xmlDocGetRootElement(doc);
+
+    if (!root)
+    {
+        return;
+    }
+
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("layer_stack")))) 
+        {
+            loadLayers(child);
+        }
+/*
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("source_image_file_name")))) 
+        {
+            xmlChar* s = xmlNodeGetContent(child);            
+            sourceImageFileName = (char*)(s);
+            xmlFree(s);
+        }*/
+
+        child = child->next;
+    }
+
+    setLastView();
     controlPanel->updateLayerGrid();
 }
 

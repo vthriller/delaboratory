@@ -34,6 +34,12 @@ class deViewModePanel;
 class deProject
 {
     private:
+        // FIXME move somewhere else!
+        int sourceR;
+        int sourceG;
+        int sourceB;
+        // FIXME
+
         deProject(const deProject& project);
 
         deLayerStack layerStack;
@@ -54,6 +60,11 @@ class deProject
         deHistogramPanel* histogramPanel;
         deViewModePanel* viewModePanel;
         deControlPanel* controlPanel;
+
+        void loadLayers(xmlNodePtr root);
+        void loadLayer(xmlNodePtr root);
+
+        void setSource();
 
     public:
         deProject();
@@ -101,7 +112,7 @@ class deProject
 
         bool samplersVisible() const;
         void save(const std::string& fileName);
-        void load(const std::string& fileName);
+        void open(const std::string& fileName);
         void newProject();
 
 };

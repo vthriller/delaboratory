@@ -201,7 +201,7 @@ void deMainFrame::onSaveProject(wxCommandEvent& WXUNUSED(event))
 
 void deMainFrame::onOpenProject(wxCommandEvent& WXUNUSED(event))
 {
-    project->load("project.delab");
+    project->open("project.delab");
 }
 
 void deMainFrame::onNewProject(wxCommandEvent& WXUNUSED(event))
