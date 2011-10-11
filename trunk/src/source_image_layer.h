@@ -22,6 +22,7 @@
 #include "layer.h"
 class deProject;
 #include "image.h"
+class deChannelManager;
 
 class deSourceImageLayer:public deLayer
 {
@@ -32,16 +33,17 @@ class deSourceImageLayer:public deLayer
 
         deImage image;
 
-        deProject& project;
+        deChannelManager& previewChannelManager;
+        deChannelManager* sourceChannelManager;
 
         virtual std::string getType() const {return "source_image";};
 
 
     public:
-        deSourceImageLayer(int _index, deProject& _project);
+        deSourceImageLayer(int _index, deChannelManager& _previewChannelManager);
         virtual ~deSourceImageLayer();
 
-        void setSource(int r, int g, int b);
+        void setSource(int r, int g, int b, deChannelManager* _sourceChannelManager);
 
         //virtual void updatePreview(deProject& project);
         virtual void updateImage();
