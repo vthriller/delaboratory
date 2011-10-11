@@ -28,7 +28,7 @@ class deBlurRadiusSlider3:public deSlider
 
     public:
         deBlurRadiusSlider3(wxWindow *parent, int range, deUSMLayer& _layer)
-        :deSlider(parent, "blur radius", range, 0.0, 0.02, 0.0), layer(_layer)
+        :deSlider(parent, "blur radius", range, 0.0, 0.1, 0.0), layer(_layer)
         {
             setValue(layer.getBlurRadius());
         }
@@ -53,7 +53,7 @@ class deUSMAmountSlider3:public deSlider
 
     public:
         deUSMAmountSlider3(wxWindow *parent, int range, deUSMLayer& _layer)
-        :deSlider(parent, "amount", range, 0.0, 10, 0.0), layer(_layer)
+        :deSlider(parent, "amount", range, 0.0, 5, 0.0), layer(_layer)
         {
             setValue(layer.getAmount());
         }
