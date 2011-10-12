@@ -22,6 +22,7 @@
 #include "layer.h"
 #include "convert_pixel.h"
 #include <sstream>
+#include <iostream>
 
 deSamplerManagerFrame::deSamplerManagerFrame(deControlPanel *parent, deProject& _project)
 :deFrame(parent, "samplers"), project(_project)
@@ -172,6 +173,9 @@ void deSamplerManagerFrame::update()
                 row.v2->Hide();
                 row.v3->Hide();
                 row.v4->Hide();
+                row.v2->SetLabel(_T(""));
+                row.v3->SetLabel(_T(""));
+                row.v4->SetLabel(_T(""));
             }
             else
             {
@@ -190,6 +194,7 @@ void deSamplerManagerFrame::update()
                 if (n == 3)
                 {
                     row.v4->Hide();
+                    row.v4->SetLabel(_T(""));
                 }
                 else
                 {
@@ -257,3 +262,29 @@ void deSamplerManagerFrame::choose(wxCommandEvent &event)
     update();
 }
 
+void deSamplerManagerFrame::dumpColor()
+{
+    deSamplerManager& samplerManager = project.getSamplerManager();
+
+    std::vector<deSamplerRow>::const_iterator i;
+    int index = 0;
+    for (i = samplerRows.begin(); i != samplerRows.end(); i++)
+    {
+        const deSamplerRow& row = *i;
+        if (row.selected->GetValue() == 1)
+        {
+            wxString v1 = row.v1->GetLabel();
+            wxString v2 = row.v2->GetLabel();
+            wxString v3 = row.v3->GetLabel();
+            wxString v4 = row.v4->GetLabel();
+
+            wxString s = v1 + _T(" ") + v2 + _T(" ") + v3 + _T(" ") + v4;
+
+            char cstring[1024];
+            strncpy(cstring, (const char*)s.mb_str(wxConvUTF8), 1023);
+
+            std::cout << cstring << std::endl;
+        }
+        index++;
+    }
+}

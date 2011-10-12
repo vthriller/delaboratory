@@ -61,6 +61,8 @@ class deSamplerManagerFrame:public deFrame
         virtual ~deSamplerManagerFrame();
 
         void update();
+
+        void dumpColor();
 };
 
 #endif
