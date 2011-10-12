@@ -69,7 +69,7 @@ class deLayer
         void setBlendFrame(deBlendFrame* frame);
         virtual void createBlendFrame(wxWindow* parent);
 
-        virtual void onImageClick(deValue x, deValue y);
+        virtual bool onImageClick(deValue x, deValue y);
 
         virtual void updateChannelUsage(std::map<int, int>& channelUsage) const = 0;
 

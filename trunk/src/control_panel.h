@@ -65,68 +65,8 @@ class deControlPanel:public wxPanel
         bool samplersVisible() const;
 
         void updateLayerGrid();
+        void showSamplers();
 };
 
-/*
-#include <wx/listctrl.h>
-#include <vector>
-
-
-class deLayerGridPanel:public wxPanel
-{
-    class deLayerRow
-    {
-        public:
-            deLayerRow(int _index)
-            :index(_index)
-            {
-            };
-
-            int index;
-            wxStaticText* id;
-            wxRadioButton* view;
-            wxStaticText* name;
-            wxButton* action;
-            wxButton* blend;
-            wxCheckBox* enabled;
-    };
-
-    private:
-        std::vector<deLayerRow> layerRows;
-
-        deProject* project;
-
-
-        wxFlexGridSizer* gridSizer;
-
-        wxButton* addCurvesQuick;
-        wxButton* addMixerQuick;
-        wxButton* addLABQuick;
-        wxButton* addLCHQuick;
-        wxButton* addRGBQuick;
-
-        wxButton* addCurves;
-        wxButton* addLAB;
-        wxButton* addRGB;
-        wxButton* addHSV;
-        wxButton* addHSL;
-
-
-        void buildRows();
-        void clearRows();
-        void check(wxCommandEvent &event);
-        void select(wxCommandEvent &event);
-        void repaintImage();
-    
-    public:
-        deLayerGridPanel(wxWindow* parent, deProject* _project);
-        ~deLayerGridPanel();
-
-
-//      void update();
-        
-};
-
-*/
 
 #endif

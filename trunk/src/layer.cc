@@ -105,12 +105,14 @@ void deLayer::createBlendFrame(wxWindow* parent)
 {
 }
 
-void deLayer::onImageClick(deValue x, deValue y)
+bool deLayer::onImageClick(deValue x, deValue y)
 {
     if (actionFrame)
     {
         actionFrame->onImageClick(x, y);
+        return true;
     }
+    return false;
 }
 
 void deLayer::save(xmlNodePtr node)

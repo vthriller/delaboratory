@@ -25,17 +25,6 @@ BEGIN_EVENT_TABLE(deImagePanel, wxPanel)
 EVT_PAINT(deImagePanel::paintEvent)
 END_EVENT_TABLE()
 
-/*
-#include "size.h"
-#include "color_space.h"
-#include "preview.h"
-#include "channels.h"
-#include "channel.h"
-#include "sampler_list.h"
-#include "sampler.h"
-#include "exception.h"
-*/
-
 void deImagePanel::click(wxMouseEvent &event)
 {
     int ex = event.GetX();
@@ -45,11 +34,6 @@ void deImagePanel::click(wxMouseEvent &event)
     GetSize(&xx, &yy);
     float x = (float) ex / xx;
     float y = (float) ey / yy;
-    /*
-
-    deSamplerList& samplerList = project->getSamplerList();
-
-    samplerList.click(x, y);*/
 
     clicked = true;
 
@@ -67,10 +51,6 @@ void deImagePanel::release(wxMouseEvent &event)
     float y = (float) ey / yy;
     clicked = false;
 
-/*
-    deSamplerList& samplerList = project->getSamplerList();
-
-    samplerList.release(x, y);*/
 }
 
 void deImagePanel::move(wxMouseEvent &event)
@@ -85,11 +65,6 @@ void deImagePanel::move(wxMouseEvent &event)
 
     setPosition(x, y);
 
-/*
-    deSamplerList& samplerList = project->getSamplerList();
-
-    samplerList.move(x, y);
-    */
 }
 
 void deImagePanel::setPosition(deValue x, deValue y)
@@ -100,7 +75,12 @@ void deImagePanel::setPosition(deValue x, deValue y)
         int view = viewManager.getView();
         deLayerStack& layerStack = project->getLayerStack();
         deLayer* layer = layerStack.getLayer(view);
-        layer->onImageClick(x, y);
+        bool used = layer->onImageClick(x, y);
+
+        if (!used)
+        {
+            project->showSamplers();
+        }
 
         deSamplerManager& samplerManager = project->getSamplerManager();
         samplerManager.onImageClick(x, y);

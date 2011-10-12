@@ -111,6 +111,7 @@ class deProject
         void updateSamplers();
 
         bool samplersVisible() const;
+        void showSamplers();
         void save(const std::string& fileName);
         void open(const std::string& fileName);
         void newProject();

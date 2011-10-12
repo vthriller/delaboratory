@@ -545,3 +545,11 @@ void deProject::newProject()
     resetLayerStack();
     controlPanel->updateLayerGrid();
 }
+
+void deProject::showSamplers()
+{
+    if (controlPanel)
+    {
+        controlPanel->showSamplers();
+    }
+}

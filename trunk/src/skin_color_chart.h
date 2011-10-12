@@ -30,6 +30,11 @@ struct deSkinCMYK
     deValue m;
     deValue y;
     deValue k;
+
+    deSkinCMYK(int _c, int _m, int _y, int _k)
+    :c(_c), m(_m), y(_y), k(_k)
+    {
+    }
 };
 
 struct deSkinRGB
