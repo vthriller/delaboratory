@@ -74,6 +74,10 @@ void deHistogramPanel::generate()
 
     int view = viewManager.getView();
     deLayer* layer = layerStack.getLayer(view);
+    if (!layer)
+    {
+        return;
+    }
     const deImage& image = layer->getImage();
     int channelIndex = image.getChannelIndex(channel);
     deChannel* c = channelManager.getChannel(channelIndex);

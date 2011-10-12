@@ -85,10 +85,11 @@ void deHistogram::calc(const deChannel* channel, int n)
     }
 
     int j;
+    int scale = size - 1;
     for (j = 0; j < n; j++)
     {
         deValue value = channel->getValue(j);
-        int bar = (size-1) * value;
+        int bar = scale * value;
         if ((bar >=0) && (bar < size))
         {
             bars[bar] ++;    
@@ -121,7 +122,26 @@ bool deHistogram::render(unsigned char* data, int sizeW, int sizeH, unsigned cha
         {
             hn = get(x + 1);
         }
-        hh = (hh + hp + hn) / 3;
+        if ((hh > hp) && (hh > hn))
+        {
+            // max, don't change
+        }
+        else
+        {
+            if (hh > hp)
+            {
+                hh = (1 * hh + 10 * hn) / 11;
+            }
+            else if (hh > hn)
+            {
+                hh = (1 * hh + 10 * hp) / 11;
+            }
+            else
+            {
+                hh = (1 * hh + 5 * hp + 5 * hn) / 11;
+            }
+
+        }
         int h = maxH * hh / mm;
         if (h > maxH)
         {

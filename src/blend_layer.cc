@@ -29,9 +29,7 @@
 deBlendLayer::deBlendLayer(deLayerStack& _stack, int _index, const std::string& _name)
 :deLayer(_stack, _index, _name), alpha(*this, "alpha", 0.0, 1.0), blendMode(*this), channels(*this), overlayLayer(*this, "overlay")/*, blendMask(*this, "mask")*/
 {
-    alpha.setValue(0.5);
-    blendMode.setBlendMode(deBlendNormal);
-    overlayLayer.setLayerIndex(-1);
+    reset();
 }
 
 deBlendLayer::~deBlendLayer()

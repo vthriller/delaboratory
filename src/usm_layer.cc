@@ -25,8 +25,7 @@
 deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
 {
-    blurRadius = 0.005;
-    amount = 0.9;
+    reset();
 }
 
 deUSMLayer::~deUSMLayer()
@@ -126,4 +125,44 @@ void deUSMLayer::setThreshold(deValue r)
 deValue deUSMLayer::getThreshold() const
 {
     return threshold;
+}
+
+void deUSMLayer::reset()
+{
+    blurRadius = 0.002;
+    amount = 2.0;
+    threshold = 0.0;
+    updateImage();
+    updateOtherLayers();
+    repaint();
+}
+
+void deUSMLayer::sharp()
+{
+    blurRadius = 0.001;
+    amount = 4.0;
+    threshold = 0.0;
+    updateImage();
+    updateOtherLayers();
+    repaint();
+}
+
+void deUSMLayer::hiraloam1()
+{
+    blurRadius = 0.1;
+    amount = 0.1;
+    threshold = 0.0;
+    updateImage();
+    updateOtherLayers();
+    repaint();
+}
+
+void deUSMLayer::hiraloam2()
+{
+    blurRadius = 0.1;
+    amount = 0.2;
+    threshold = 0.0;
+    updateImage();
+    updateOtherLayers();
+    repaint();
 }

@@ -30,6 +30,13 @@ class deUSMFrame:public deActionFrame
         deSlider* amount;
         deSlider* threshold;
 
+        wxButton* reset;
+        wxButton* sharp;
+        wxButton* hiraloam1;
+        wxButton* hiraloam2;
+
+        void click(wxCommandEvent &event);
+
     public:
         deUSMFrame(wxWindow *parent, deActionLayer& _layer);
         virtual ~deUSMFrame();
