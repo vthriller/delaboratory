@@ -19,8 +19,6 @@
 #include "sampler_manager.h"
 #include "project.h"
 
-//#include "layer.h"
-
 deSamplerManager::deSamplerManager(deProject& _project)
 :project(_project)
 {
@@ -28,7 +26,6 @@ deSamplerManager::deSamplerManager(deProject& _project)
     for (i = 0; i < 5; i++)
     {
         deSampler s;
-        s.setPosition(-1, -1);
         samplers.push_back(s);
     }        
 
