@@ -22,7 +22,7 @@ deSampler::deSampler()
 {
     x = -1;
     y = -1;
-    colorSpace = deColorSpaceRGB;
+    colorSpace = deColorSpaceCMYK;
 }
 
 deSampler::~deSampler()

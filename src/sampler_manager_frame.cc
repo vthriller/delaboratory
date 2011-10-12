@@ -83,6 +83,16 @@ void deSamplerManagerFrame::buildRows()
         row.colorSpace = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, colorSpaces.size(), colorSpaceStrings);
         gridSizer->Add(row.colorSpace, 0, wxALIGN_CENTER);
 
+        deColorSpace colorSpace = sampler->getColorSpace();
+        int j;
+        for (j = 0; j < colorSpaces.size(); j++)
+        {
+            if (colorSpaces[j] == colorSpace)
+            {
+                row.colorSpace->SetSelection(j);
+            }
+        }        
+
         row.v1 = new wxStaticText(this, wxID_ANY, _T("v1"), wxDefaultPosition, wxSize(valueWidth, -1));
         gridSizer->Add(row.v1, 0, wxALIGN_CENTER);
         row.v2 = new wxStaticText(this, wxID_ANY, _T("v2"), wxDefaultPosition, wxSize(valueWidth, -1));
