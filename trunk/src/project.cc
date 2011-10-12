@@ -110,6 +110,10 @@ void deProject::onKey(int key)
     }
 
     layerStack.onKey(key);
+    if (controlPanel)
+    {
+        controlPanel->onKey(key);
+    }        
 }
 
 void deProject::init(const std::string& fileName)

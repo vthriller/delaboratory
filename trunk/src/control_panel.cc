@@ -209,53 +209,61 @@ void deControlPanel::click(wxCommandEvent &event)
     if (c != convertButtonsColorSpaces.end())
     {
         deColorSpace colorSpace = c->second;
-
-        deLayerStack& layerStack = project->getLayerStack();
-        deChannelManager& channelManager = project->getPreviewChannelManager();
-        deViewManager& viewManager = project->getViewManager();
-
-        int s = viewManager.getView();
-
-        std::string name = getColorSpaceName(colorSpace);
-
-        deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, channelManager, viewManager, name);
-
-        if (layer)
-        {
-            project->addLayer(layer);
-            project->setLastView();
-
-            updateLayerGrid();
-            
-        }
+        addConversionLayer(colorSpace);
     }
 
     std::map<int, std::string>::iterator a = actionButtonsNames.find(id);
     if (a != actionButtonsNames.end())
     {
         std::string action = a->second;
-
-        deLayerStack& layerStack = project->getLayerStack();
-        deChannelManager& channelManager = project->getPreviewChannelManager();
-        deViewManager& viewManager = project->getViewManager();
-
-        int s = viewManager.getView();
-
-        deColorSpace colorSpace = layerStack.getLayer(s)->getColorSpace();
-
-        deLayer* layer = createLayer(action, s, colorSpace, layerStack, channelManager, viewManager, action);
-
-        if (layer)
-        {
-            project->addLayer(layer);
-            project->setLastView();
-
-            updateLayerGrid();
-        }
+        addActionLayer(action);
 
     }
 
 }
+
+void deControlPanel::addConversionLayer(deColorSpace colorSpace)
+{
+    deLayerStack& layerStack = project->getLayerStack();
+    deChannelManager& channelManager = project->getPreviewChannelManager();
+    deViewManager& viewManager = project->getViewManager();
+
+    int s = viewManager.getView();
+
+    std::string name = getColorSpaceName(colorSpace);
+
+    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, channelManager, viewManager, name);
+
+    if (layer)
+    {
+        project->addLayer(layer);
+        project->setLastView();
+
+        updateLayerGrid();
+        
+    }
+}        
+
+void deControlPanel::addActionLayer(const std::string& action)
+{
+    deLayerStack& layerStack = project->getLayerStack();
+    deChannelManager& channelManager = project->getPreviewChannelManager();
+    deViewManager& viewManager = project->getViewManager();
+
+    int s = viewManager.getView();
+
+    deColorSpace colorSpace = layerStack.getLayer(s)->getColorSpace();
+
+    deLayer* layer = createLayer(action, s, colorSpace, layerStack, channelManager, viewManager, action);
+
+    if (layer)
+    {
+        project->addLayer(layer);
+        project->setLastView();
+
+        updateLayerGrid();
+    }
+}    
 
 void deControlPanel::closeSamplerManagerFrame()
 {
@@ -293,3 +301,27 @@ void deControlPanel::showSamplers()
         project->repaintImage();
     }
 }        
+
+void deControlPanel::onKey(int key)
+{
+    if (key == 'B')
+    {
+        addActionLayer("blur");
+    }
+    if (key == 'C')
+    {
+        addActionLayer("curves");
+    }
+    if (key == 'M')
+    {
+        addActionLayer("mixer");
+    }
+    if (key == 'S')
+    {
+        if (samplerManagerFrame)
+        {
+            samplerManagerFrame->dumpColor();
+        }
+    }
+}
+
