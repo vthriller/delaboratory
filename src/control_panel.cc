@@ -192,12 +192,7 @@ void deControlPanel::click(wxCommandEvent &event)
 
     if (samplers->GetId() == id)
     {
-        if (!samplerManagerFrame)
-        {
-            samplerManagerFrame = new deSamplerManagerFrame(this, *project);
-            samplerManagerFrame->Show();
-            project->repaintImage();
-        }
+        showSamplers();
     }
 
     if (exportTIFF->GetId() == id)
@@ -288,3 +283,13 @@ void deControlPanel::updateLayerGrid()
     layerGridPanel->Layout();
     layerGridPanel->repaintImage();
 }
+
+void deControlPanel::showSamplers()
+{
+    if (!samplerManagerFrame)
+    {
+        samplerManagerFrame = new deSamplerManagerFrame(this, *project);
+        samplerManagerFrame->Show();
+        project->repaintImage();
+    }
+}        

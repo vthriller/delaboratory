@@ -26,6 +26,7 @@
 
 #include "skin_color_chart.h"
 
+/*
 void generateAllSkins(wxWindow* window, wxSizer* sizer)
 {
     std::map<deValue, deSkinCMYK> skins;
@@ -109,6 +110,7 @@ void generateAllSkins(wxWindow* window, wxSizer* sizer)
         sizer_B->Add(gradient, 0, wxCENTER);
     }
 }
+*/
 
 void generateFelixVonLuschan(wxWindow* window, wxSizer* sizer)
 {
