@@ -40,27 +40,6 @@ deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer)
         sizer->Add(mixerEditorChannel);
         channels.push_back(mixerEditorChannel);
     }
-    /*
-    wxString* channelStrings = new wxString [n];
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        channelStrings[i] = wxString::FromAscii(getChannelName(colorSpace,i).c_str());
-    }        
-
-    channelChoice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), n, channelStrings);
-    channelChoice->SetSelection(0);
-
-    delete [] channelStrings;
-
-    sizer->Add(channelChoice);
-
-    curvesPanel = new deCurvesPanel(this, curvesLayer );
-
-    sizer->Add(curvesPanel);
-
-    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deMixerEditor::choose));
-    */
     sizer->Layout();
     Fit();
 }
@@ -68,19 +47,6 @@ deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer)
 deMixerEditor::~deMixerEditor()
 {
 }
-
-/*
-void deMixerEditor::choose(wxCommandEvent &event)
-{
-    int b = channelChoice->GetCurrentSelection();
-    curvesPanel->changeChannel(b);
-}
-
-void deMixerEditor::onImageClick(deValue x, deValue y)
-{
-    curvesPanel->onImageClick(x, y);
-}
-*/
 
 void deMixerEditor::onImageClick(deValue x, deValue y)
 {

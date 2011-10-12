@@ -121,10 +121,12 @@ deValue deCurve::calcValue(deValue value)
 
 void deCurve::process(const deChannel& source, deChannel& destination, int n)
 {
+    const deValue* pixels = source.getPixels();
+
     int i;
     for (i = 0; i < n; i++)
     {
-        deValue value = source.getValue(i);
+        deValue value = pixels[i];
         deValue result = shape.calc(value);
 
         destination.setValueClip(i, result);

@@ -27,7 +27,7 @@ deChannel::deChannel(int size)
 deChannel::~deChannel()
 {
 //    std::cout << "destroy channel" << std::endl;
-    delete pixels;
+    delete [] pixels;
 }
 
 deValue* deChannel::getPixels()

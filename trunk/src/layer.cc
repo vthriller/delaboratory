@@ -115,7 +115,7 @@ bool deLayer::onImageClick(deValue x, deValue y)
     return false;
 }
 
-void deLayer::save(xmlNodePtr node)
+void deLayer::saveCommon(xmlNodePtr node)
 {
     {
         xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("type"), NULL);

@@ -31,6 +31,7 @@
 #include "view_mode_panel.h"
 #include <sstream>
 #include "layer_factory.h"
+#include "convert_image.h"
 
 deProject::deProject()
 :viewModePanel(NULL),
@@ -289,6 +290,11 @@ void deProject::repaintImage()
 
 void deProject::exportTIFF(const std::string& app)
 {
+    if (imageFileName == "")
+    {
+        return;
+    }
+
     std::string path = "";
 
     if (app.size() > 0)
@@ -307,10 +313,26 @@ void deProject::exportTIFF(const std::string& app)
 
     deLayer* layer = layerStack.getLayer(view);
     const deImage& image = layer->getImage();
-    deChannel* r = previewChannelManager.getChannel(image.getChannelIndex(0));
-    deChannel* g = previewChannelManager.getChannel(image.getChannelIndex(1));
-    deChannel* b = previewChannelManager.getChannel(image.getChannelIndex(2));
-    saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+
+    if (image.getColorSpace() == deColorSpaceRGB)
+    {
+        deChannel* r = previewChannelManager.getChannel(image.getChannelIndex(0));
+        deChannel* g = previewChannelManager.getChannel(image.getChannelIndex(1));
+        deChannel* b = previewChannelManager.getChannel(image.getChannelIndex(2));
+        saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+    }
+    else
+    {
+        deImage finalImage(deColorSpaceRGB, previewChannelManager);
+        finalImage.enableAllChannels();
+        convertImage(image, finalImage, previewChannelManager);
+        deChannel* r = previewChannelManager.getChannel(finalImage.getChannelIndex(0));
+        deChannel* g = previewChannelManager.getChannel(finalImage.getChannelIndex(1));
+        deChannel* b = previewChannelManager.getChannel(finalImage.getChannelIndex(2));
+        saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+
+    }
+
 
     previewChannelManager.setChannelSize(originalSize);
 
@@ -482,6 +504,8 @@ void deProject::loadLayer(xmlNodePtr root)
     {
         addLayer(layer);
     }        
+
+    //layer->load(root);
 
 }
 

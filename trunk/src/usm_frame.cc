@@ -30,7 +30,7 @@ class deBlurRadiusSlider3:public deSlider
         deBlurRadiusSlider3(wxWindow *parent, int range, deUSMLayer& _layer)
         :deSlider(parent, "blur radius", range, 0.0, 0.1, 0.0), layer(_layer)
         {
-            setValue(layer.getBlurRadius());
+            set();
         }
 
         virtual ~deBlurRadiusSlider3()
@@ -44,6 +44,11 @@ class deBlurRadiusSlider3:public deSlider
                 layer.setBlurRadius(value);
             }                
         }
+
+        void set()
+        {
+            setValue(layer.getBlurRadius());
+        }
 };        
 
 class deUSMAmountSlider3:public deSlider
@@ -54,6 +59,11 @@ class deUSMAmountSlider3:public deSlider
     public:
         deUSMAmountSlider3(wxWindow *parent, int range, deUSMLayer& _layer)
         :deSlider(parent, "amount", range, 0.0, 5, 0.0), layer(_layer)
+        {
+            set();
+        }
+        
+        void set()
         {
             setValue(layer.getAmount());
         }
@@ -104,20 +114,66 @@ deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer)
 
     deUSMLayer& usmLayer = dynamic_cast<deUSMLayer&>(_layer);
 
-    radius = new deBlurRadiusSlider3(this, 200, usmLayer);
+    int range = 400;
+
+    radius = new deBlurRadiusSlider3(this, range, usmLayer);
     sizer->Add(radius);
 
-    amount = new deUSMAmountSlider3(this, 200, usmLayer);
+    amount = new deUSMAmountSlider3(this, range, usmLayer);
     sizer->Add(amount);
 
-    threshold = new deUSMThresholdSlider3(this, 200, usmLayer);
+    threshold = new deUSMThresholdSlider3(this, range, usmLayer);
     sizer->Add(threshold);
 
+    wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
+    sizer->Add(sizerB, 0);
+
+    reset = new wxButton(this, wxID_ANY, _T("reset"), wxDefaultPosition, wxSize(100,25));
+    sizerB->Add(reset, 0);
+
+    sharp = new wxButton(this, wxID_ANY, _T("sharp"), wxDefaultPosition, wxSize(100,25));
+    sizerB->Add(sharp, 0);
+
+    hiraloam1 = new wxButton(this, wxID_ANY, _T("hiraloam 1"), wxDefaultPosition, wxSize(100,25));
+    sizerB->Add(hiraloam1, 0);
+
+    hiraloam2 = new wxButton(this, wxID_ANY, _T("hiraloam 2"), wxDefaultPosition, wxSize(100,25));
+    sizerB->Add(hiraloam2, 0);
 
     Fit();
+
+    Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deUSMFrame::click));
 }
 
 deUSMFrame::~deUSMFrame()
 {
 }
 
+void deUSMFrame::click(wxCommandEvent &event)
+{
+    int id = event.GetId();
+    deUSMLayer& usmLayer = dynamic_cast<deUSMLayer&>(layer);
+
+    if (reset->GetId() == id)
+    {
+        usmLayer.reset();
+    }      
+
+    if (sharp->GetId() == id)
+    {
+        usmLayer.sharp();
+    }      
+
+    if (hiraloam1->GetId() == id)
+    {
+        usmLayer.hiraloam1();
+    }      
+
+    if (hiraloam2->GetId() == id)
+    {
+        usmLayer.hiraloam2();
+    }      
+
+    dynamic_cast<deBlurRadiusSlider3*>(radius)->set();
+    dynamic_cast<deUSMAmountSlider3*>(amount)->set();
+}   

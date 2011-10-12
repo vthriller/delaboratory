@@ -49,6 +49,11 @@ class deUSMLayer:public deActionLayer
         void setThreshold(deValue r);
         deValue getThreshold() const;
 
+        void reset();
+        void sharp();
+        void hiraloam1();
+        void hiraloam2();
+
 
 
 
