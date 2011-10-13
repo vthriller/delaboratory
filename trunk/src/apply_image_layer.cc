@@ -106,3 +106,12 @@ void deApplyImageLayer::setAppliedChannel(int c)
     appliedChannel = c;
     updateImage();
 }
+
+void deApplyImageLayer::save(xmlNodePtr root)
+{
+    saveCommon(root);
+};
+
+void deApplyImageLayer::load(xmlNodePtr root)
+{
+}

@@ -41,6 +41,9 @@ class deConversionLayer:public deLayer
 
         virtual void updateChannelUsage(std::map<int, int>& channelUsage) const;
 
+        virtual void load(xmlNodePtr root) {};
+        virtual void save(xmlNodePtr root) {saveCommon(root);};
+
 };
 
 #endif

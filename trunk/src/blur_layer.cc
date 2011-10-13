@@ -70,3 +70,12 @@ deValue deBlurLayer::getBlurRadius() const
 {
     return blurRadius;
 }
+
+void deBlurLayer::save(xmlNodePtr root)
+{
+    saveCommon(root);
+};
+
+void deBlurLayer::load(xmlNodePtr root)
+{
+}

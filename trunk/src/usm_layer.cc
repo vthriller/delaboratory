@@ -166,3 +166,12 @@ void deUSMLayer::hiraloam2()
     updateOtherLayers();
     repaint();
 }
+
+void deUSMLayer::save(xmlNodePtr root)
+{
+    saveCommon(root);
+};
+
+void deUSMLayer::load(xmlNodePtr root)
+{
+}

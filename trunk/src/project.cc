@@ -618,9 +618,9 @@ void deProject::loadLayer(xmlNodePtr root)
     if (layer)
     {
         addLayer(layer);
+        layer->load(root);
     }        
 
-    //layer->load(root);
 
 }
 

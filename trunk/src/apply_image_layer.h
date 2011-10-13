@@ -56,6 +56,10 @@ class deApplyImageLayer:public deActionLayer
 
         deColorSpace getAppliedColorSpace();
 
+        virtual void load(xmlNodePtr root);
+        virtual void save(xmlNodePtr root);
+
+
 };
 
 #endif

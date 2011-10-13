@@ -146,6 +146,7 @@ class deActionLayer:public deLayer
         void enableChannel(int index);
         void disableChannel(int index);
 
+
 };
 
 #endif

@@ -46,6 +46,9 @@ class deMixerLayer:public deActionLayer
         void setValue(int s, int d, deValue value);
         deValue getValue(int s, int d);
 
+        virtual void load(xmlNodePtr root);
+        virtual void save(xmlNodePtr root);
+
 
 
 };
