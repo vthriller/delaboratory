@@ -115,6 +115,7 @@ class deProject
         void save(const std::string& fileName);
         void open(const std::string& fileName);
         void newProject();
+        void setTestImage();
 
 };
 

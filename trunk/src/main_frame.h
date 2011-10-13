@@ -36,6 +36,7 @@ private:
     deImageAreaPanel* leftPanel;
     bool full;
 
+	void onTestImage(wxCommandEvent& event);
 	void onQuit(wxCommandEvent& event);
 	void onSaveProject(wxCommandEvent& event);
 	void onNewProject(wxCommandEvent& event);

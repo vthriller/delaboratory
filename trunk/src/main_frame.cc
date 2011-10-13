@@ -35,6 +35,7 @@ enum
 {
     ID_Quit = 1,
     ID_NewProject,
+    ID_TestImage,
     ID_OpenProject,
     ID_SaveProject,
     ID_HelpColorSpaces,
@@ -51,6 +52,7 @@ enum
 BEGIN_EVENT_TABLE(deMainFrame, wxFrame)
 EVT_MENU(ID_Quit, deMainFrame::onQuit)
 EVT_MENU(ID_NewProject, deMainFrame::onNewProject)
+EVT_MENU(ID_TestImage, deMainFrame::onTestImage)
 EVT_MENU(ID_OpenProject, deMainFrame::onOpenProject)
 EVT_MENU(ID_SaveProject, deMainFrame::onSaveProject)
 EVT_MENU(ID_HelpColorSpaces, deMainFrame::onHelpColorSpaces)
@@ -128,6 +130,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
     menuFile->Append( ID_NewProject, _("New project") );
     menuFile->Append( ID_OpenProject, _("Open project") );
     menuFile->Append( ID_SaveProject, _("Save project") );
+    menuFile->Append( ID_TestImage, _("Set test image") );
     menuFile->Append( ID_Quit, _("E&xit") );
 
     wxMenu *menuHelp = new wxMenu;
@@ -207,6 +210,11 @@ void deMainFrame::onOpenProject(wxCommandEvent& WXUNUSED(event))
 void deMainFrame::onNewProject(wxCommandEvent& WXUNUSED(event))
 {
     project->newProject();
+}
+
+void deMainFrame::onTestImage(wxCommandEvent& WXUNUSED(event))
+{
+    project->setTestImage();
 }
 
 void deMainFrame::onHelpColorSpaces(wxCommandEvent& event)

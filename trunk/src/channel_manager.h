@@ -32,13 +32,14 @@ class deChannelManager
         std::vector<deChannel*> channels;
         std::set<int> trashed;
 
-        void destroyAllChannels();
 
         bool locked;
         
     public:
         deChannelManager();
         virtual ~deChannelManager();
+
+        void destroyAllChannels();
 
         void setChannelSize(const deSize& size);
         deSize getChannelSize() const;
