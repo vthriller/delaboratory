@@ -297,8 +297,6 @@ void deProject::setSource()
 
     previewChannelManager.destroyAllChannels();
 
-
-
 }
 
 void deProject::resetLayerStack()
@@ -312,6 +310,7 @@ void deProject::resetLayerStack()
         addLayer(layer);
     }        
 
+    setSource();
     layerStack.updateImages();
 }
 
@@ -687,6 +686,7 @@ void deProject::open(const std::string& fileName)
 void deProject::newProject()
 {
     resetLayerStack();
+    setLastView();
     controlPanel->updateLayerGrid();
 }
 
