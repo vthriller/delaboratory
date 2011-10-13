@@ -73,3 +73,35 @@ void deCurvesLayer::onKey(int key)
         editor->onKey(key);
     }
 }
+
+void deCurvesLayer::save(xmlNodePtr root)
+{
+    saveCommon(root);
+
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        deCurve& curve = curves[i];
+        xmlNodePtr child = xmlNewChild(root, NULL, xmlCharStrdup("curve"), NULL);
+        curve.save(child);
+    }
+};
+
+void deCurvesLayer::load(xmlNodePtr root)
+{
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    int i = 0;
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, xmlCharStrdup("curve")))) 
+        {
+            deCurve& curve = curves[i];
+            curve.load(child);
+            i++;
+        }
+
+        child = child->next;
+    }
+}

@@ -44,6 +44,8 @@ class deLayer
 
         virtual std::string getType() const = 0;
 
+        void saveCommon(xmlNodePtr node);
+
 
     public:
         deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer);
@@ -78,11 +80,9 @@ class deLayer
 
         virtual void onKey(int key) {};
        
-       /*
         virtual void load(xmlNodePtr root) = 0;
         virtual void save(xmlNodePtr root) = 0;
-        */
-        void saveCommon(xmlNodePtr node);
+
 
 
 };

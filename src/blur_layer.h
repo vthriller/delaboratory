@@ -43,6 +43,9 @@ class deBlurLayer:public deActionLayer
         void setBlurRadius(deValue r);
         deValue getBlurRadius() const;
 
+        virtual void load(xmlNodePtr root);
+        virtual void save(xmlNodePtr root);
+
 
 
 

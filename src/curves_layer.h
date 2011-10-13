@@ -46,6 +46,9 @@ class deCurvesLayer:public deActionLayer
 
         virtual void onKey(int key);
 
+        virtual void load(xmlNodePtr root);
+        virtual void save(xmlNodePtr root);
+
 
 
 

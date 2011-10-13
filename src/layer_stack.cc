@@ -158,6 +158,6 @@ void deLayerStack::save(xmlNodePtr node)
     for (i = layers.begin(); i != layers.end(); i++)
     {
         xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("layer"), NULL);
-        (*i)->saveCommon(child);
+        (*i)->save(child);
     }
 }

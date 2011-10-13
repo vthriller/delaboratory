@@ -83,3 +83,12 @@ deValue deMixerLayer::getValue(int s, int d)
 {
     return mixers[d]->getValue(s);
 }
+
+void deMixerLayer::save(xmlNodePtr root)
+{
+    saveCommon(root);
+};
+
+void deMixerLayer::load(xmlNodePtr root)
+{
+}

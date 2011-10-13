@@ -54,6 +54,9 @@ class deUSMLayer:public deActionLayer
         void hiraloam1();
         void hiraloam2();
 
+        virtual void load(xmlNodePtr root);
+        virtual void save(xmlNodePtr root);
+
 
 
 
