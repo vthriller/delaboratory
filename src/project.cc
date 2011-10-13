@@ -39,6 +39,9 @@ deProject::deProject()
  viewManager(*this),
  samplerManager(*this)
 {
+    sourceR = -1;
+    sourceG = -1;
+    sourceB = -1;
     imageFileName = "";
     sourceImageFileName = "";
     imagePanel = NULL;
@@ -174,6 +177,114 @@ void deProject::init(const std::string& fileName)
     setSource();
 }
 
+void generateTestImage(deValue* r, deValue* g, deValue* b, deSize size)
+{
+    deValue w = size.getW();
+    deValue h = size.getH();
+
+    int p = 0;
+
+    deValue maxI = 512.0;
+    deValue marg = 4.0;
+
+    deValue zoomX = 0.1;
+    deValue zoomY = 0.1;
+    deValue offX = - 0.64;
+    deValue offY = - 0.45;
+
+    deValue y;
+    for (y = 0; y < h; y++)
+    {
+        deValue x;
+        deValue cy = (y / h - 0.5) * zoomY + offY;
+        for (x = 0; x < w; x++)
+        {
+            deValue cx = (x / w - 0.5) * zoomX + offX;
+
+            deValue zx = 0;
+            deValue zy = 0;
+
+            deValue zx2 = 0;
+            deValue zy2 = 0;
+
+            int i;
+            for (i=0; i<maxI && (zx2 + zy2 < marg); i++)
+            {
+                zy = 2 * zx * zy + cy;
+                zx = zx2 - zy2 + cx;
+                zx2 = zx * zx;
+                zy2 = zy * zy;
+            }
+
+            if ((i == 1) || (i == maxI))
+            {
+                r[p] = 0;
+                g[p] = 0;
+                b[p] = 0;
+            }
+            else
+            {
+                deValue v = i / maxI;
+                deValue v1 = 0.8 * v;
+                if (v1 > 1)
+                {
+                    v1 = 1;
+                }
+                deValue v2 = 1.0 * v;
+                if (v2 > 1)
+                {
+                    v2 = 1;
+                }
+                deValue v3 = 1.2 * v;
+                if (v3 > 1)
+                {
+                    v3 = 1;
+                }
+                r[p] = v1;
+                g[p] = v2;
+                b[p] = v3;
+            }                
+
+            p++;
+        }
+    }
+}
+
+void deProject::setTestImage()
+{
+    if (sourceR > 0)
+    {
+        sourceChannelManager.freeChannel(sourceR);
+    }
+    if (sourceG > 0)
+    {
+        sourceChannelManager.freeChannel(sourceG);
+    }
+    if (sourceB > 0)
+    {
+        sourceChannelManager.freeChannel(sourceB);
+    }
+
+    deSize size(800,600);
+
+    sourceChannelManager.setChannelSize(size);
+    sourceR = sourceChannelManager.allocateNewChannel();
+    sourceG = sourceChannelManager.allocateNewChannel();
+    sourceB = sourceChannelManager.allocateNewChannel();
+
+    deChannel* channelR = sourceChannelManager.getChannel(sourceR);
+    deChannel* channelG = sourceChannelManager.getChannel(sourceG);
+    deChannel* channelB = sourceChannelManager.getChannel(sourceB);
+
+    generateTestImage(channelR->getPixels(), channelG->getPixels(), channelB->getPixels(), size);
+
+    imageFileName = "delaboratory_test_image";
+
+    setSource();
+    layerStack.updateImages();
+    repaintImage();
+}
+
 void deProject::setSource()
 {
     deChannel* channelR = sourceChannelManager.getChannel(sourceR);
@@ -183,6 +294,9 @@ void deProject::setSource()
     deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
 
     l->setSource(sourceR, sourceG, sourceB, &sourceChannelManager);
+
+    previewChannelManager.destroyAllChannels();
+
 
 
 }
@@ -427,10 +541,12 @@ void deProject::save(const std::string& fileName)
     xmlNodePtr root = xmlNewNode(NULL, xmlCharStrdup("project"));
     xmlDocSetRootElement(doc, root);
 
+/*
     {
         xmlNodePtr node = xmlNewChild(root, NULL, xmlCharStrdup("source_image_file_name"), NULL);
         xmlNodeSetContent(node, xmlCharStrdup(sourceImageFileName.c_str()));
     }
+    */
 
     {
         xmlNodePtr child = xmlNewChild(root, NULL, xmlCharStrdup("layer_stack"), NULL);
