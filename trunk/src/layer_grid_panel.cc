@@ -22,8 +22,6 @@
 #include <sstream>
 #include "layer.h"
 
-#include "create_layer_dialog.h"
-
 #include <iostream>
 
 #include "layer_factory.h"
