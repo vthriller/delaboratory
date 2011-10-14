@@ -285,7 +285,12 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer)
 
 deBlendFrame::~deBlendFrame()
 {
+    deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
+    deViewManager& viewManager = layer.getViewManager();
+    viewManager.hideThisMask(l.getAllocatedBlendMaskChannel());
+    l.hideBlendMask();
     layer.closeBlendFrame();
+    l.repaint();
 }
 
 void deBlendFrame::choose(wxCommandEvent &event)
@@ -404,12 +409,10 @@ void deBlendFrame::updateMask()
     if (maskShow->IsChecked())
     {
         l.setBlendMask(layer, channel);
-        viewManager.showMask(l.getAllocatedBlendMaskChannel());
         l.showBlendMask();
     }
     else
     {
-        viewManager.hideMask();
         l.hideBlendMask();
     }
 
@@ -423,6 +426,15 @@ void deBlendFrame::updateMask()
     }
 
     l.onBlendSet();
+
+    if (maskShow->IsChecked())
+    {
+        viewManager.showMask(l.getAllocatedBlendMaskChannel());
+    }
+    else
+    {
+        viewManager.hideMask();
+    }
 
     setChannels();
     showHide();

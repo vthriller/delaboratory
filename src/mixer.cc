@@ -18,6 +18,10 @@
 
 #include "mixer.h"
 #include "channel.h"
+#include "str.h"
+#include "xml.h"
+#include <sstream>
+#include <cassert>
 
 deMixer::deMixer(int _size)
 :size(_size)
@@ -148,3 +152,33 @@ bool deMixer::isNeutral(int index) const
     return true;
 }
 
+void deMixer::save(xmlNodePtr node) 
+{
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        saveChild(node, "weight", str(weights[i]));
+    }
+}
+
+void deMixer::load(xmlNodePtr node) 
+{
+    xmlNodePtr child = node->xmlChildrenNode;
+
+    int i = 0;
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, BAD_CAST("weight")))) 
+        {
+            xmlChar* s = xmlNodeGetContent(child);            
+            std::string ss = (char*)(s);
+            xmlFree(s);
+            std::istringstream iss(ss);
+            assert(i < size);
+            iss >> weights[i];
+            i++;
+        }            
+
+        child = child->next;
+    }
+}

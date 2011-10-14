@@ -312,11 +312,15 @@ void deActionLayer::updateBlend(int i)
 
     deValue* maskPixels = NULL;
 
-    if (blendMask)
+    if ((blendMask) || (blendMaskShow))
     {
-        enableBlendMaskChannel();
-        deChannel* allocatedMaskChannel = channelManager.getChannel(allocatedBlendMaskChannel);
-        maskPixels = allocatedMaskChannel->getPixels();
+//        enableBlendMaskChannel();
+        assert(allocatedBlendMaskChannel>=0);
+        if (blendMask)
+        {
+            deChannel* allocatedMaskChannel = channelManager.getChannel(allocatedBlendMaskChannel);
+            maskPixels = allocatedMaskChannel->getPixels();
+        }            
     }
     else
     {
@@ -386,8 +390,11 @@ void deActionLayer::onBlendSet()
     }
 
     if ((blendMask) || (blendMaskShow))
-    {
+    {   
         renderBlendMask();
+    }
+    else
+    {
     }
 
     updateOnlyBlend();
@@ -561,7 +568,7 @@ void deActionLayer::renderBlendMask()
 
     if (blendBlurRadius <= 0)
     {
-        copyChannel(*maskChannel, *allocatedMaskChannel, channelManager.getChannelSize());
+        copyChannel(maskChannel->getPixels(), allocatedMaskChannel->getPixels(), channelManager.getChannelSize());
     }
     else
     {

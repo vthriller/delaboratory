@@ -36,6 +36,6 @@ void copyImage(const deImage& sourceImage, const deImage& image, deChannelManage
        int c = image.getChannelIndex(i);
        deChannel* channel = channelManager.getChannel(c);
 
-       copyChannel(*sourceChannel, *channel, channelManager.getChannelSize());
+       copyChannel(sourceChannel->getPixels(), channel->getPixels(), channelManager.getChannelSize());
     }
 }

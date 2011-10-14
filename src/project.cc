@@ -32,6 +32,7 @@
 #include <sstream>
 #include "layer_factory.h"
 #include "convert_image.h"
+#include "fractal.h"
 
 deProject::deProject()
 :viewModePanel(NULL),
@@ -177,78 +178,6 @@ void deProject::init(const std::string& fileName)
     setSource();
 }
 
-void generateTestImage(deValue* r, deValue* g, deValue* b, deSize size)
-{
-    deValue w = size.getW();
-    deValue h = size.getH();
-
-    int p = 0;
-
-    deValue maxI = 512.0;
-    deValue marg = 4.0;
-
-    deValue zoomX = 0.1;
-    deValue zoomY = 0.1;
-    deValue offX = - 0.64;
-    deValue offY = - 0.45;
-
-    deValue y;
-    for (y = 0; y < h; y++)
-    {
-        deValue x;
-        deValue cy = (y / h - 0.5) * zoomY + offY;
-        for (x = 0; x < w; x++)
-        {
-            deValue cx = (x / w - 0.5) * zoomX + offX;
-
-            deValue zx = 0;
-            deValue zy = 0;
-
-            deValue zx2 = 0;
-            deValue zy2 = 0;
-
-            int i;
-            for (i=0; i<maxI && (zx2 + zy2 < marg); i++)
-            {
-                zy = 2 * zx * zy + cy;
-                zx = zx2 - zy2 + cx;
-                zx2 = zx * zx;
-                zy2 = zy * zy;
-            }
-
-            if ((i == 1) || (i == maxI))
-            {
-                r[p] = 0;
-                g[p] = 0;
-                b[p] = 0;
-            }
-            else
-            {
-                deValue v = i / maxI;
-                deValue v1 = 0.8 * v;
-                if (v1 > 1)
-                {
-                    v1 = 1;
-                }
-                deValue v2 = 1.0 * v;
-                if (v2 > 1)
-                {
-                    v2 = 1;
-                }
-                deValue v3 = 1.2 * v;
-                if (v3 > 1)
-                {
-                    v3 = 1;
-                }
-                r[p] = v1;
-                g[p] = v2;
-                b[p] = v3;
-            }                
-
-            p++;
-        }
-    }
-}
 
 void deProject::setTestImage()
 {
@@ -276,7 +205,7 @@ void deProject::setTestImage()
     deChannel* channelG = sourceChannelManager.getChannel(sourceG);
     deChannel* channelB = sourceChannelManager.getChannel(sourceB);
 
-    generateTestImage(channelR->getPixels(), channelG->getPixels(), channelB->getPixels(), size);
+    generateFractal(channelR->getPixels(), channelG->getPixels(), channelB->getPixels(), size);
 
     imageFileName = "delaboratory_test_image";
 
@@ -535,20 +464,13 @@ void deProject::save(const std::string& fileName)
         f += ".delab";
     }
 
-    xmlDocPtr doc = xmlNewDoc(xmlCharStrdup("1.0"));
+    xmlDocPtr doc = xmlNewDoc(BAD_CAST("1.0"));
 
-    xmlNodePtr root = xmlNewNode(NULL, xmlCharStrdup("project"));
+    xmlNodePtr root = xmlNewNode(NULL, BAD_CAST("project"));
     xmlDocSetRootElement(doc, root);
 
-/*
     {
-        xmlNodePtr node = xmlNewChild(root, NULL, xmlCharStrdup("source_image_file_name"), NULL);
-        xmlNodeSetContent(node, xmlCharStrdup(sourceImageFileName.c_str()));
-    }
-    */
-
-    {
-        xmlNodePtr child = xmlNewChild(root, NULL, xmlCharStrdup("layer_stack"), NULL);
+        xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("layer_stack"), NULL);
         layerStack.save(child);
     }
 
@@ -567,7 +489,7 @@ void deProject::loadLayer(xmlNodePtr root)
 
     while (child)
     {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("index")))) 
+        if ((!xmlStrcmp(child->name, BAD_CAST("index")))) 
         {
             xmlChar* xs = xmlNodeGetContent(child);            
             std::string s = (char*)(xs);
@@ -577,7 +499,7 @@ void deProject::loadLayer(xmlNodePtr root)
             iss >> index;
         }
 
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("source")))) 
+        if ((!xmlStrcmp(child->name, BAD_CAST("source")))) 
         {
             xmlChar* xs = xmlNodeGetContent(child);            
             std::string s = (char*)(xs);
@@ -587,7 +509,7 @@ void deProject::loadLayer(xmlNodePtr root)
             iss >> source;
         }
 
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("color_space")))) 
+        if ((!xmlStrcmp(child->name, BAD_CAST("color_space")))) 
         {
             xmlChar* xs = xmlNodeGetContent(child);            
             std::string s = (char*)(xs);
@@ -596,14 +518,14 @@ void deProject::loadLayer(xmlNodePtr root)
             colorSpace = colorSpaceFromString(s);
         }
 
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("type")))) 
+        if ((!xmlStrcmp(child->name, BAD_CAST("type")))) 
         {
             xmlChar* xs = xmlNodeGetContent(child);            
             type = (char*)(xs);
             xmlFree(xs);
         }
         
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("name")))) 
+        if ((!xmlStrcmp(child->name, BAD_CAST("name")))) 
         {
             xmlChar* xs = xmlNodeGetContent(child);            
             name = (char*)(xs);
@@ -632,7 +554,7 @@ void deProject::loadLayers(xmlNodePtr root)
 
     while (child)
     {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("layer")))) 
+        if ((!xmlStrcmp(child->name, BAD_CAST("layer")))) 
         {
             loadLayer(child);
         }
@@ -664,17 +586,10 @@ void deProject::open(const std::string& fileName)
 
     while (child)
     {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("layer_stack")))) 
+        if ((!xmlStrcmp(child->name, BAD_CAST("layer_stack")))) 
         {
             loadLayers(child);
         }
-/*
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("source_image_file_name")))) 
-        {
-            xmlChar* s = xmlNodeGetContent(child);            
-            sourceImageFileName = (char*)(s);
-            xmlFree(s);
-        }*/
 
         child = child->next;
     }

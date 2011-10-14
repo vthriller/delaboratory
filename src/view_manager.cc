@@ -32,58 +32,6 @@ deViewManager::~deViewManager()
 {
 }
 
-/*
-void deViewManager::setChannelSize(const deSize& size)
-{
-    channelSize = size;
-}
-
-int deViewManager::allocateNewChannel()
-{
-    deChannel* channel = new deChannel(channelSize.getN());
-    return insertNewChannel(channel);
-}
-
-int deViewManager::destroyChannel(int index)
-{
-    delete channels[index];
-    channels[index] = NULL;
-}
-
-int deViewManager::insertNewChannel(deChannel* channel)
-{
-    std::vector<deChannel*>::iterator i;
-    int n = 0;
-    for (i = channels.begin(); i != channels.end(); i++)
-    {
-        deChannel* c = *i;
-        if (c == NULL)
-        {
-            channels[n] = channel;
-            return n;
-        }
-        n++;
-    }
-    channels.push_back(channel);
-    return n;
-}
-
-deChannel* deViewManager::getChannel(int index)
-{
-    return channels[index];
-}
-
-void deViewManager::destroyAllChannels()
-{
-    int i;
-    for (i = 0; i < channels.size(); i++)
-    {
-        destroyChannel(i);
-    }
-}
-
-*/
-
 int deViewManager::getView() const
 {
     return view;
@@ -127,6 +75,16 @@ void deViewManager::showMask(int maskChannel)
 {
     showBlendMask = true;
     blendMaskChannel = maskChannel;
+    project.onChangeViewMode();
+}
+
+void deViewManager::hideThisMask(int maskChannel)
+{
+    if (blendMaskChannel != maskChannel)
+    {
+        return;
+    }
+    showBlendMask = false;
     project.onChangeViewMode();
 }
 

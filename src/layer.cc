@@ -20,6 +20,8 @@
 #include "action_frame.h"
 #include "blend_frame.h"
 #include <sstream>
+#include "xml.h"
+#include "str.h"
 
 deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer)
 :name(_name), colorSpace(_colorSpace), index(_index), sourceLayer(_sourceLayer)
@@ -117,34 +119,9 @@ bool deLayer::onImageClick(deValue x, deValue y)
 
 void deLayer::saveCommon(xmlNodePtr node)
 {
-    {
-        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("type"), NULL);
-        xmlNodeSetContent(child, xmlCharStrdup(getType().c_str()));
-    }
-
-    {
-        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("name"), NULL);
-        xmlNodeSetContent(child, xmlCharStrdup(name.c_str()));
-    }
-
-    {
-        std::ostringstream oss;
-        oss << index;
-        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("index"), NULL);
-        xmlNodeSetContent(child, xmlCharStrdup(oss.str().c_str()));
-    }        
-
-    {
-        std::ostringstream oss;
-        oss << sourceLayer;
-        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("source"), NULL);
-        xmlNodeSetContent(child, xmlCharStrdup(oss.str().c_str()));
-    }        
-
-    {
-        std::string c = getColorSpaceName(colorSpace);
-        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("color_space"), NULL);
-        xmlNodeSetContent(child, xmlCharStrdup(c.c_str()));
-    }        
-
+    saveChild(node, "type", getType());
+    saveChild(node, "name", name);
+    saveChild(node, "index", str(index));
+    saveChild(node, "source", str(sourceLayer));
+    saveChild(node, "color_space", getColorSpaceName(colorSpace));
 }

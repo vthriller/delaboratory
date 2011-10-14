@@ -16,22 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_STR_H
-#define _DE_STR_H
+#ifndef _DE_FRACTAL_H
+#define _DE_FRACTAL_H
 
-#include <string>
 #include "value.h"
+#include "size.h"
 
-/* returns str before ".", so for "abcde.jpg" returns "abcde" */
-std::string getBaseName(const std::string& s);
-
-/* returns str after ".", so for "abcde.jpg" returns "jpg" */
-std::string getExtension(const std::string& s);
-
-//std::string replaceExtension(const std::string& s, const std::string& ext);
-std::string removePathAndExtension(const std::string& fileName);
-
-std::string str(deValue n);
-std::string str(int n);
+void generateFractal(deValue* r, deValue* g, deValue* b, deSize size);
 
 #endif
