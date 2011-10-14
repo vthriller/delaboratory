@@ -83,7 +83,7 @@ void cmy2cmyk(deValue c, deValue m, deValue y, deValue& _c, deValue& _m, deValue
         }
     }
 
-    k = k - 0.2;
+    k = k - 0.25;
     if (k < 0.0)
     {
         k = 0.0;

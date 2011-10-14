@@ -16,22 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_STR_H
-#define _DE_STR_H
+#include "xml.h"
 
-#include <string>
-#include "value.h"
+void saveChild(xmlNodePtr node, std::string name, std::string value)
+{
+    xmlChar* _name = BAD_CAST(name.c_str());
+    xmlChar* _value = BAD_CAST(value.c_str());
 
-/* returns str before ".", so for "abcde.jpg" returns "abcde" */
-std::string getBaseName(const std::string& s);
-
-/* returns str after ".", so for "abcde.jpg" returns "jpg" */
-std::string getExtension(const std::string& s);
-
-//std::string replaceExtension(const std::string& s, const std::string& ext);
-std::string removePathAndExtension(const std::string& fileName);
-
-std::string str(deValue n);
-std::string str(int n);
-
-#endif
+    xmlNodePtr child = xmlNewChild(node, NULL, _name, NULL);
+    xmlNodeSetContent(child, _value);
+}

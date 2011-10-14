@@ -49,25 +49,27 @@ void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
         deValue src = source[i];
         deValue u = src - unsharpMask[i];
 
-        deValue d = src;
-
         if (fabs(u) >= threshold)
         {
-            d += amount * u;
-        }
+            deValue d = src + amount * u;
 
-        if (d < 0)
-        {
-            destination[i] = 0;
-        }
-        else if (d > 1)
-        {
-            destination[i] = 1;
+            if (d < 0)
+            {
+                destination[i] = 0;
+            }
+            else if (d > 1)
+            {
+                destination[i] = 1;
+            }
+            else
+            {    
+                destination[i] = d;
+            }               
         }
         else
-        {    
-            destination[i] = d;
-        }               
+        {
+            destination[i] = src;
+        }
     }
 
     delete unsharpMask;

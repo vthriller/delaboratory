@@ -22,6 +22,8 @@
 #include <iostream>
 #include <sstream>
 #include <ctime>
+#include "str.h"
+#include "xml.h"
 
 #define CURVE_POINT_PICK_DISTANCE 0.03
 #define VERTICAL_STEP 0.01
@@ -313,21 +315,11 @@ void deCurve::save(xmlNodePtr node) const
     
     for (i = points.begin(); i != points.end(); i++)
     {
-        xmlNodePtr child = xmlNewChild(node, NULL, xmlCharStrdup("point"), NULL);
+        xmlNodePtr child = xmlNewChild(node, NULL, BAD_CAST("point"), NULL);
         const deCurvePoint& point = *i;
-        
-        {
-            xmlNodePtr x = xmlNewChild(child, NULL, xmlCharStrdup("x"), NULL);
-            std::ostringstream oss; 
-            oss << point.getX();
-            xmlNodeSetContent(x, xmlCharStrdup(oss.str().c_str()));
-        }
-        {
-            xmlNodePtr y = xmlNewChild(child, NULL, xmlCharStrdup("y"), NULL);
-            std::ostringstream oss; 
-            oss << point.getY();
-            xmlNodeSetContent(y, xmlCharStrdup(oss.str().c_str()));
-        }
+
+        saveChild(child, "x", str(point.getX()));
+        saveChild(child, "y", str(point.getY()));
 
     }        
 }
@@ -341,14 +333,14 @@ void deCurve::loadPoint(xmlNodePtr node)
 
     while (child)
     {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("x")))) 
+        if ((!xmlStrcmp(child->name, BAD_CAST("x")))) 
         {
             xmlChar* s = xmlNodeGetContent(child);            
             xStr = (char*)(s);
             xmlFree(s);
         }            
 
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("y")))) 
+        if ((!xmlStrcmp(child->name, BAD_CAST("y")))) 
         {
             xmlChar* s = xmlNodeGetContent(child);            
             yStr = (char*)(s);
@@ -382,7 +374,7 @@ void deCurve::load(xmlNodePtr node)
 
     while (child)
     {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("point")))) 
+        if ((!xmlStrcmp(child->name, BAD_CAST("point")))) 
         {
             loadPoint(child);
         }            

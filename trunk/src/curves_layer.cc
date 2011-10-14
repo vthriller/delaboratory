@@ -20,6 +20,7 @@
 #include "project.h"
 #include "curves_editor.h"
 #include <iostream>
+#include <cassert>
 
 deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
@@ -83,7 +84,7 @@ void deCurvesLayer::save(xmlNodePtr root)
     for (i = 0; i < n; i++)
     {
         deCurve& curve = curves[i];
-        xmlNodePtr child = xmlNewChild(root, NULL, xmlCharStrdup("curve"), NULL);
+        xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("curve"), NULL);
         curve.save(child);
     }
 };
@@ -91,12 +92,14 @@ void deCurvesLayer::save(xmlNodePtr root)
 void deCurvesLayer::load(xmlNodePtr root)
 {
     xmlNodePtr child = root->xmlChildrenNode;
+    int n = getColorSpaceSize(colorSpace);
 
     int i = 0;
     while (child)
     {
-        if ((!xmlStrcmp(child->name, xmlCharStrdup("curve")))) 
+        if ((!xmlStrcmp(child->name, BAD_CAST("curve")))) 
         {
+            assert(i < n);
             deCurve& curve = curves[i];
             curve.load(child);
             i++;

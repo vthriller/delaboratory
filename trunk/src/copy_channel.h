@@ -19,9 +19,9 @@
 #ifndef _DE_COPY_CHANNEL_H
 #define _DE_COPY_CHANNEL_H
 
-class deChannel;
 #include "size.h"
+#include "value.h"
 
-void copyChannel(const deChannel& s, deChannel& d, const deSize& size);
+void copyChannel(const deValue* src, deValue* dst, const deSize& size);
 
 #endif

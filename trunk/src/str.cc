@@ -17,6 +17,7 @@
 */
 
 #include "str.h"
+#include <sstream>
 
 std::string getBaseName(const std::string& s)
 {
@@ -52,3 +53,17 @@ std::string removePathAndExtension(const std::string& fileName)
     }
     return fileName.substr(posStart, posDot - posStart );
 }
+
+std::string str(int n)
+{
+    std::ostringstream oss;
+    oss << n;
+    return oss.str();
+}    
+
+std::string str(deValue n)
+{
+    std::ostringstream oss;
+    oss << n;
+    return oss.str();
+}    

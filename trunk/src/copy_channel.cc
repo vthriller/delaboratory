@@ -17,13 +17,10 @@
 */
 
 #include "copy_channel.h"
-#include "channel.h"
 #include <iostream>
 
-void copyChannel(const deChannel& s, deChannel& d, const deSize& size)
+void copyChannel(const deValue* src, deValue* dst, const deSize& size)
 {
-    const deValue* src = s.getPixels();
-    deValue* dst = d.getPixels();
     int n = size.getN();
 
     int i;

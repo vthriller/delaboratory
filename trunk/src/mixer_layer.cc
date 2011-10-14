@@ -87,8 +87,29 @@ deValue deMixerLayer::getValue(int s, int d)
 void deMixerLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
+
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("mixer"), NULL);
+        mixers[i]->save(child);
+    }
 };
 
 void deMixerLayer::load(xmlNodePtr root)
 {
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    int i = 0;
+    while (child)
+    {
+        if ((!xmlStrcmp(child->name, BAD_CAST("mixer")))) 
+        {
+            mixers[i]->load(child);
+            i++;
+        }
+
+        child = child->next;
+    }
 }

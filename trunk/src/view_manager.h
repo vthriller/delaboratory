@@ -22,12 +22,6 @@
 class deProject;
 #include "color_space.h"
 
-/*
-#include "size.h"
-#include <vector>
-#include "channel.h"
-
-*/
 class deViewManager
 {
     private:
@@ -37,14 +31,6 @@ class deViewManager
         int channel;
         bool showBlendMask;
         int blendMaskChannel;
-    /*
-        deSize channelSize;
-
-        std::vector<deChannel*> channels;
-
-        int insertNewChannel(deChannel* channel);
-        void destroyAllChannels();
-        */
         
     public:
         deViewManager(deProject& _project);
@@ -64,20 +50,11 @@ class deViewManager
         int getChannel() const {return channel;};
 
         void showMask(int maskChannel);
+        void hideThisMask(int maskChannel);
         void hideMask();
 
         bool maskVisible() const;
         int getMaskChannel() const;
-
-    /*
-
-        void setChannelSize(const deSize& size);
-
-        int allocateNewChannel();
-        deChannel* getChannel(int index);
-        int destroyChannel(int index);
-        */
-
 
 };
 
