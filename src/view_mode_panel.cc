@@ -17,9 +17,6 @@
 */
 
 #include "view_mode_panel.h"
-//#include "gui.h"
-//#include "layer.h"
-//#include "channel_buttons.h"
 #include <iostream>
 #include "color_space.h"
 #include "project.h"
@@ -51,7 +48,6 @@ deViewModePanel::deViewModePanel(wxWindow* parent, deProject& _project)
 :wxPanel(parent), project(_project)
 {
     project.setViewModePanel(this);
-    //gui.setViewModePanel(this);
 
     wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
     SetSizer(sizer);
@@ -64,9 +60,6 @@ deViewModePanel::deViewModePanel(wxWindow* parent, deProject& _project)
         buttons.push_back(b);
 
     }        
-
-
-//  updateButtons(deColorSpaceRGB);
 
     updateNames();
     updateMode();
@@ -133,20 +126,3 @@ void deViewModePanel::updateMode()
     }
 }
 
-/*
-void deViewModePanel::updateButtons(deColorSpace colorSpace)
-{
-    createChannelButtons(colorSpace, buttons, channels, this, sizer, false);
-    gui.setViewMode(deViewNormal, -1);
-    gui.refreshView();
-}    
-
-void deViewModePanel::setButton(int b)
-{
-    if (b >= buttons.size())
-    {
-        return;
-    }
-    buttons[b]->SetValue(true);
-}
-    */
