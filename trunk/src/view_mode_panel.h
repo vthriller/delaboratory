@@ -30,14 +30,7 @@ class deViewModePanel:public wxPanel
     private:
         std::vector<wxRadioButton*> buttons;
         deProject& project;
-    /*
-        deGUI& gui;
-        wxSizer* sizer;
-        std::map<int, int> channels;
 
-        void addButton(const std::string& label, int c);
-
-        */
         void select(wxCommandEvent &event);
     public:
         deViewModePanel(wxWindow* parent, deProject& _project);
@@ -45,11 +38,6 @@ class deViewModePanel:public wxPanel
 
         void updateNames();
         void updateMode();
-
-/*
-        void updateButtons(deColorSpace colorSpace);
-
-        void setButton(int b);*/
 
 };
 
