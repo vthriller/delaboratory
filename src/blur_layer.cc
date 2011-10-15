@@ -19,13 +19,17 @@
 #include "blur_layer.h"
 #include "project.h"
 #include <iostream>
-#include "blur.h"
 #include "blur_frame.h"
+#include "str.h"
+#include "xml.h"
+#include <sstream>
 
 deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
 {
-    blurRadius = 0.03;
+    radius = 0.03;
+    threshold = 0.0;
+    type = deGaussianBlur;
 
 }
 
@@ -37,10 +41,8 @@ void deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel
 {
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
-    deBlurType type = deGaussianBlur;
-    deValue t = 0.0;
 
-    blurChannel(source, destination, size, blurRadius, type, t);
+    blurChannel(source, destination, size, radius, type, threshold);
 }
 
 
@@ -55,12 +57,12 @@ void deBlurLayer::createActionFrame(wxWindow* parent)
 
 bool deBlurLayer::isChannelNeutral(int index)
 {
-    return (blurRadius == 0);
+    return (radius == 0);
 }    
 
 void deBlurLayer::setBlurRadius(deValue r)
 {
-    blurRadius = r;
+    radius = r;
     updateImage();
     updateOtherLayers();
     repaint();
@@ -68,14 +70,35 @@ void deBlurLayer::setBlurRadius(deValue r)
 
 deValue deBlurLayer::getBlurRadius() const
 {
-    return blurRadius;
+    return radius;
 }
 
 void deBlurLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
+
+    saveChild(root, "radius", str(radius));
 };
 
 void deBlurLayer::load(xmlNodePtr root)
 {
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    while (child)
+    {
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("radius")))) 
+        {
+            xmlChar* xs = xmlNodeGetContent(child);            
+            std::string s = (char*)(xs);
+            xmlFree(xs);
+
+            std::istringstream iss(s);
+            iss >> radius;
+        }
+
+        child = child->next;
+
+    }        
+
 }

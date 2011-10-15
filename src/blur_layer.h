@@ -20,11 +20,14 @@
 #define _DE_BLUR_LAYER_H
 
 #include "action_layer.h"
+#include "blur.h"
 
 class deBlurLayer:public deActionLayer
 {
     private:
-        deValue blurRadius;
+        deValue radius;
+        deValue threshold;
+        deBlurType type;
 
     protected:
         virtual bool singleChannelProcessing() const {return true;};
