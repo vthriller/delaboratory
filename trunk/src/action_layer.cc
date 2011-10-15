@@ -26,6 +26,34 @@
 #include "copy_channel.h"
 #include "process_linear.h"
 
+void blend(deValue* sourcePixels, deValue* overlayPixels, deValue* resultPixels, deValue* maskPixels, deBlendMode blendMode, deValue opacity, int channelSize)
+{
+    int j;
+    if (maskPixels)
+    {
+        for (j = 0; j < channelSize; j++)
+        {
+            deValue src = sourcePixels[j];
+            deValue ov = overlayPixels[j];
+            deValue dst = calcBlendResult(src, ov, blendMode);
+            deValue m = maskPixels[j] * opacity;
+            deValue result = (1 - m) * src + m * dst;
+            resultPixels[j] = result;
+        }        
+    }
+    else
+    {
+        for (j = 0; j < channelSize; j++)
+        {
+            deValue src = sourcePixels[j];
+            deValue ov = overlayPixels[j];
+            deValue dst = calcBlendResult(src, ov, blendMode);
+            deValue result = (1 - opacity) * src + opacity * dst;
+            resultPixels[j] = result;
+        }        
+    }
+}
+
 deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
 :deLayer(_name, _colorSpace, _index, _sourceLayer),
  layerStack(_layerStack),
@@ -172,7 +200,6 @@ void deActionLayer::updateApply()
 
     int channelSize = channelManager.getChannelSize().getN();
 
-    // FIXME channel may be NULL
     deChannel* sc1 = channelManager.getChannel(sourceImage.getChannelIndex(0));
     if (!sc1)
     {
@@ -230,10 +257,6 @@ void deActionLayer::updateApply()
             applyColor(r1[i], g1[i], b1[i], r2[i], g2[i], b2[i], r[i], g[i], b[i]);
         }
     }        
-
-
-//    imageApplyPass.setValid();
-
 }
 
 void deActionLayer::setApplyMode(deApplyMode mode)
@@ -267,7 +290,6 @@ void deActionLayer::updateBlend(int i)
     int channelSize = channelManager.getChannelSize().getN();
 
     int s = sourceImage.getChannelIndex(i);
-
 
     if (!blending)
     {
@@ -314,7 +336,6 @@ void deActionLayer::updateBlend(int i)
 
     if ((blendMask) || (blendMaskShow))
     {
-//        enableBlendMaskChannel();
         assert(allocatedBlendMaskChannel>=0);
         if (blendMask)
         {
@@ -327,35 +348,11 @@ void deActionLayer::updateBlend(int i)
         disableBlendMaskChannel();
     }        
 
-
-    int j;
     deValue* sourcePixels = sourceChannel->getPixels();
     deValue* overlayPixels = channel->getPixels();
     deValue* resultPixels = blendChannel->getPixels();
 
-    if (maskPixels)
-    {
-        for (j = 0; j < channelSize; j++)
-        {
-            deValue src = sourcePixels[j];
-            deValue ov = overlayPixels[j];
-            deValue dst = calcBlendResult(src, ov, blendMode);
-            deValue m = maskPixels[j] * opacity;
-            deValue result = (1 - m) * src + m * dst;
-            resultPixels[j] = result;
-        }        
-    }
-    else
-    {
-        for (j = 0; j < channelSize; j++)
-        {
-            deValue src = sourcePixels[j];
-            deValue ov = overlayPixels[j];
-            deValue dst = calcBlendResult(src, ov, blendMode);
-            deValue result = (1 - opacity) * src + opacity * dst;
-            resultPixels[j] = result;
-        }        
-    }
+    blend(sourcePixels, overlayPixels, resultPixels, maskPixels, blendMode, opacity, channelSize);
 
 }
 
