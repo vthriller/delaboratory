@@ -22,7 +22,6 @@
 #include "blur_frame.h"
 #include "str.h"
 #include "xml.h"
-#include <sstream>
 
 deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
@@ -89,8 +88,7 @@ void deBlurLayer::load(xmlNodePtr root)
 
         if ((!xmlStrcmp(child->name, BAD_CAST("radius")))) 
         {
-            std::istringstream iss(getContent(child));
-            iss >> radius;
+            radius = getValue(getContent(child));
         }
 
         child = child->next;

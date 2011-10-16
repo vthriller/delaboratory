@@ -67,3 +67,19 @@ std::string str(deValue n)
     oss << n;
     return oss.str();
 }    
+
+deValue getValue(const std::string& s)
+{
+    deValue v;
+    std::istringstream iss(s);
+    iss >> v;
+    return v;
+}    
+
+int getInt(const std::string& s)
+{
+    int v;
+    std::istringstream iss(s);
+    iss >> v;
+    return v;
+}    

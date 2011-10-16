@@ -34,4 +34,7 @@ std::string removePathAndExtension(const std::string& fileName);
 std::string str(deValue n);
 std::string str(int n);
 
+deValue getValue(const std::string& s);
+int getInt(const std::string& s);
+
 #endif

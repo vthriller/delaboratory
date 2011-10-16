@@ -350,13 +350,11 @@ void deCurve::loadPoint(xmlNodePtr node)
     deValue y = 0;
 
     {
-        std::istringstream iss(xStr);
-        iss >> x;
+        x = getValue(xStr);
     }
 
     {
-        std::istringstream iss(yStr);
-        iss >> y;
+        y = getValue(yStr);
     }
 
     points.push_back(deCurvePoint(x,y));
