@@ -90,6 +90,11 @@ class deUSMThresholdSlider3:public deSlider
         deUSMThresholdSlider3(wxWindow *parent, int range, deUSMLayer& _layer)
         :deSlider(parent, "threshold", range, 0.0, 0.5, 0.0), layer(_layer)
         {
+            set();
+        }
+
+        void set()
+        {
             setValue(layer.getThreshold());
         }
 
@@ -176,4 +181,5 @@ void deUSMFrame::click(wxCommandEvent &event)
 
     dynamic_cast<deBlurRadiusSlider3*>(radius)->set();
     dynamic_cast<deUSMAmountSlider3*>(amount)->set();
+    dynamic_cast<deUSMThresholdSlider3*>(threshold)->set();
 }   
