@@ -29,6 +29,8 @@ class deConversionBWLayer:public deConversionLayer
         deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
         virtual ~deConversionBWLayer();
 
+        virtual void createActionFrame(wxWindow* parent);
+
 /*
         virtual const deImage& getImage() const;
         virtual void updateImage();
