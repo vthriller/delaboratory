@@ -492,14 +492,12 @@ void deProject::loadLayer(xmlNodePtr root)
     {
         if ((!xmlStrcmp(child->name, BAD_CAST("index")))) 
         {
-            std::istringstream iss(getContent(child));
-            iss >> index;
+            index = getInt(getContent(child));
         }
 
         if ((!xmlStrcmp(child->name, BAD_CAST("source")))) 
         {
-            std::istringstream iss(getContent(child));
-            iss >> source;
+            source = getInt(getContent(child));
         }
 
         if ((!xmlStrcmp(child->name, BAD_CAST("color_space")))) 

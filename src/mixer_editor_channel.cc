@@ -32,7 +32,7 @@ class deMixerSlider:public deSlider
         deMixerSlider(wxWindow *parent, int range, deMixerLayer& _layer, int _s, int _d, const std::string& name)
         :deSlider(parent, name, range, -2.0, 2.0, 0.0), layer(_layer), s(_s), d(_d)
         {
-            setValue(layer.getValue(s, d));
+            setValue(layer.getWeight(s, d));
         }
 
         virtual ~deMixerSlider()
@@ -43,7 +43,7 @@ class deMixerSlider:public deSlider
         {
             if (finished)
             {
-                layer.setValue(s, d, value);
+                layer.setWeight(s, d, value);
                 layer.onChannelChange(d);
                 layer.updateOtherLayers();
                 layer.repaint();
@@ -178,7 +178,7 @@ void deMixerEditorChannel::preset(deValue a)
             v = 1.0 - 2 * a;
         }
         sliders[i]->setValue(v);
-        layer.setValue(i, index, v);
+        layer.setWeight(i, index, v);
         layer.onChannelChange(index);
     }
     layer.updateOtherLayers();
@@ -205,7 +205,7 @@ void deMixerEditorChannel::preset2(deValue a, deValue b, deValue c)
             }
         }
         sliders[i]->setValue(v);
-        layer.setValue(i, index, v);
+        layer.setWeight(i, index, v);
         layer.onChannelChange(index);
     }
     layer.updateOtherLayers();

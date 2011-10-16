@@ -33,8 +33,8 @@ class deMixer
         deMixer(int _size);
         virtual ~deMixer();
 
-        deValue getValue(int c) const;
-        void setValue(int c, deValue value);
+        deValue getWeight(int c) const;
+        void setWeight(int c, deValue value);
 
         void process(const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& destination, int n);
 

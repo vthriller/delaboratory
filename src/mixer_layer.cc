@@ -74,14 +74,14 @@ bool deMixerLayer::isChannelNeutral(int index)
     return mixers[index]->isNeutral(index);
 }    
 
-void deMixerLayer::setValue(int s, int d, deValue value)
+void deMixerLayer::setWeight(int s, int d, deValue value)
 {
-    mixers[d]->setValue(s, value);
+    mixers[d]->setWeight(s, value);
 }
 
-deValue deMixerLayer::getValue(int s, int d)
+deValue deMixerLayer::getWeight(int s, int d)
 {
-    return mixers[d]->getValue(s);
+    return mixers[d]->getWeight(s);
 }
 
 void deMixerLayer::save(xmlNodePtr root)

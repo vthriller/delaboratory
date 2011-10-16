@@ -50,7 +50,7 @@ void deMixer::reset(int index)
     }
 }
 
-deValue deMixer::getValue(int c) const
+deValue deMixer::getWeight(int c) const
 {
     if ((c < 0) || (c >= size))
     {
@@ -59,7 +59,7 @@ deValue deMixer::getValue(int c) const
     return weights[c];
 }
 
-void deMixer::setValue(int c, deValue value)
+void deMixer::setWeight(int c, deValue value)
 {
     if ((c < 0) || (c >= size))
     {
@@ -170,9 +170,8 @@ void deMixer::load(xmlNodePtr node)
     {
         if ((!xmlStrcmp(child->name, BAD_CAST("weight")))) 
         {
-            std::istringstream iss(getContent(child));
             assert(i < size);
-            iss >> weights[i];
+            weights[i] = getValue(getContent(child));
             i++;
         }            
 

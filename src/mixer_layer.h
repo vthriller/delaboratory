@@ -43,8 +43,8 @@ class deMixerLayer:public deActionLayer
 
         virtual void processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize);
 
-        void setValue(int s, int d, deValue value);
-        deValue getValue(int s, int d);
+        void setWeight(int s, int d, deValue value);
+        deValue getWeight(int s, int d);
 
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
