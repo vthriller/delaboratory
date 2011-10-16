@@ -21,6 +21,8 @@
 #include "project.h"
 #include <iostream>
 #include "blur.h"
+#include "str.h"
+#include "xml.h"
 
 deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
@@ -172,8 +174,35 @@ void deUSMLayer::hiraloam2()
 void deUSMLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
+    saveChild(root, "radius", str(blurRadius));
+    saveChild(root, "amount", str(amount));
+    saveChild(root, "threshold", str(threshold));
 };
 
 void deUSMLayer::load(xmlNodePtr root)
 {
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    while (child)
+    {
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("radius")))) 
+        {
+            blurRadius = getValue(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("amount")))) 
+        {
+            amount = getValue(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("threshold")))) 
+        {
+            threshold = getValue(getContent(child));
+        }
+
+        child = child->next;
+
+    }        
 }
+
