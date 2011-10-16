@@ -23,16 +23,14 @@
 #include "apply_image_layer.h"
 #include "mixer_layer.h"
 #include "conversion_layer.h"
+#include "conversion_bw_layer.h"
 #include "usm_layer.h"
 #include "source_image_layer.h"
 
 
 deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name)
 {
-    //int index = _layerStack.getSize() + 1;
     int index = _layerStack.getSize();
-
-//    std::cout << "create layer " << type << " index: " << index << std::endl;
 
     if (type == "curves")
     {
@@ -61,7 +59,14 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
     
     if (type == "conversion")
     {
-        return new deConversionLayer(colorSpace, index, source, _layerStack, _channelManager);
+        if (colorSpace == deColorSpaceBW)
+        {
+            return new deConversionBWLayer(index, source, _layerStack, _channelManager);
+        }
+        else
+        {
+            return new deConversionLayer(colorSpace, index, source, _layerStack, _channelManager);
+        }
     }
 
     if (type == "source_image")
