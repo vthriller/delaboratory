@@ -64,7 +64,6 @@ deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace,
  imageBlendPass(_colorSpace, _channelManager)
 {
     enabled = true;
-    blending = false;
     blendMode = deBlendNormal;
     applyMode = deApplyLuminanceAndColor;
     opacity = 1.0;
@@ -167,7 +166,7 @@ const deImage& deActionLayer::getImage() const
         return imageApplyPass;
     }
 
-    if (blending)
+    if (isBlendingEnabled())
     {
         return imageBlendPass;
     }
@@ -224,7 +223,7 @@ void deActionLayer::updateApply()
     deValue* g2;
     deValue* b2;
      
-    if (blending)
+    if (isBlendingEnabled())
     {
         r2 = channelManager.getChannel(imageBlendPass.getChannelIndex(0))->getPixels();
         g2 = channelManager.getChannel(imageBlendPass.getChannelIndex(1))->getPixels();
@@ -291,7 +290,7 @@ void deActionLayer::updateBlend(int i)
 
     int s = sourceImage.getChannelIndex(i);
 
-    if (!blending)
+    if (!isBlendingEnabled())
     {
         return;
     }
@@ -375,17 +374,28 @@ void deActionLayer::setBlendMode(deBlendMode mode)
     onBlendSet();
 }
 
-void deActionLayer::onBlendSet()
+bool deActionLayer::isBlendingEnabled() const
 {
-    if ((opacity == 1.0) && (blendMode == deBlendNormal) && (!blendMask))
+    if (opacity < 1.0)
     {
-        blending = false;
-    }
-    else
-    {
-        blending = true;
+        return true;
     }
 
+    if (blendMode != deBlendNormal)
+    {
+        return true;
+    }
+
+    if (blendMask)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+void deActionLayer::onBlendSet()
+{
     if ((blendMask) || (blendMaskShow))
     {   
         renderBlendMask();
@@ -510,7 +520,7 @@ void deActionLayer::updateChannelUsage(std::map<int, int>& channelUsage) const
 
     imageActionPass.updateChannelUsage(channelUsage, index);
 
-    if (blending)
+    if (isBlendingEnabled())
     {
         imageBlendPass.updateChannelUsage(channelUsage, index);
     }

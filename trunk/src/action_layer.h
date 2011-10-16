@@ -31,7 +31,6 @@ class deViewManager;
 class deActionLayer:public deLayer
 {
     private:
-        bool blending;
         deViewManager& viewManager;
 
         deBlendMode blendMode;
@@ -76,6 +75,8 @@ class deActionLayer:public deLayer
         virtual void updateChannel(int i);
 
         void renderBlendMask();
+
+        bool isBlendingEnabled() const;
 
     protected:
         bool enabled;
