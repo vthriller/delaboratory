@@ -26,3 +26,11 @@ void saveChild(xmlNodePtr node, std::string name, std::string value)
     xmlNodePtr child = xmlNewChild(node, NULL, _name, NULL);
     xmlNodeSetContent(child, _value);
 }
+
+std::string getContent(xmlNodePtr node)
+{
+    xmlChar* xs = xmlNodeGetContent(node);            
+    std::string s = (char*)(xs);
+    xmlFree(xs);
+    return s;
+}            

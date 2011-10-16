@@ -23,5 +23,6 @@
 #include <libxml/parser.h>
 
 void saveChild(xmlNodePtr node, std::string name, std::string value);
+std::string getContent(xmlNodePtr node);
 
 #endif
