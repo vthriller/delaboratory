@@ -21,9 +21,10 @@
 #include "layer_stack.h"
 #include "convert_image.h"
 #include "channel_manager.h"
+#include "view_manager.h"
 
-deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, int n)
-:deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _channelManager), mixer(n)
+deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int n)
+:deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _channelManager), mixer(n), viewManager(_viewManager)
 {
     if (n == 3)
     {
@@ -84,4 +85,26 @@ void deConversionBWLayer::updateImage()
     deChannel* d = channelManager.getChannel(image.getChannelIndex(0));
 
     mixer.process(sc1, sc2, sc3, sc4, *d, n);
+}
+
+deColorSpace deConversionBWLayer::getSourceColorSpace() const
+{
+    deLayer* source = layerStack.getLayer(sourceLayer);
+    return source->getColorSpace();
+}
+
+void deConversionBWLayer::setWeight(int s, deValue value)
+{
+    mixer.setWeight(s, value);
+}
+
+deValue deConversionBWLayer::getWeight(int s)
+{
+    return mixer.getWeight(s);
+}
+
+void deConversionBWLayer::updateAndRepaint()
+{
+    layerStack.updateImages(index + 1, viewManager.getView());
+    viewManager.repaint();
 }

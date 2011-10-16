@@ -21,30 +21,32 @@
 
 #include "conversion_layer.h"
 #include "mixer.h"
+class deViewManager;
 
 class deConversionBWLayer:public deConversionLayer
 {
     private:
+        // from project
+        deViewManager& viewManager;
+
+
         deMixer mixer;
 
         virtual bool hasAction() const {return true;};
     public:
-        deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, int n);
+        deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int n);
         virtual ~deConversionBWLayer();
 
         virtual void createActionFrame(wxWindow* parent);
 
         virtual void updateImage();
 
-/*
-        virtual const deImage& getImage() const;
-        virtual void updateImage();
+        deColorSpace getSourceColorSpace() const;
 
-        virtual void updateChannelUsage(std::map<int, int>& channelUsage) const;
+        void setWeight(int s, deValue value);
+        deValue getWeight(int s);
 
-        virtual void load(xmlNodePtr root) {};
-        virtual void save(xmlNodePtr root) {saveCommon(root);};
-        */
+        void updateAndRepaint();
 
 };
 

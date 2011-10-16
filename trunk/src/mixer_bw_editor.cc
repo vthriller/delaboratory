@@ -18,11 +18,67 @@
 
 #include "mixer_bw_editor.h"
 #include "conversion_bw_layer.h"
+#include "slider.h"
+
+class deMixerBWSlider:public deSlider
+{
+    private:
+        deConversionBWLayer& layer;
+        int s;
+
+    public:
+        deMixerBWSlider(wxWindow *parent, int range, deConversionBWLayer& _layer, int _s, const std::string& name)
+        :deSlider(parent, name, range, -2.0, 2.0, 0.0), layer(_layer), s(_s)
+        {
+            setValue(layer.getWeight(s));
+        }
+
+        virtual ~deMixerBWSlider()
+        {
+        }
+
+        virtual void onValueChange(deValue value, bool finished)
+        {
+            if (finished)
+            {
+                layer.setWeight(s, value);
+                /*
+                layer.onChannelChange(d);
+                layer.updateOtherLayers();
+                */
+                layer.updateImage();
+                layer.updateAndRepaint();
+            }                
+        }
+};        
 
 deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, const std::string& _name)
 :deFrame(parent, _name), layer( _layer)
 {
     layer.setActionFrame(this);
+
+    deColorSpace sourceColorSpace = layer.getSourceColorSpace();
+
+    int n = getColorSpaceSize(sourceColorSpace);
+
+    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(sizer);
+
+    int barSize = 20;
+    int width = 300;
+
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        std::string src = getChannelName(sourceColorSpace, i);
+        deMixerBWSlider* slider = new deMixerBWSlider(this, width, layer, i, src);        
+    //    sliders.push_back(slider);
+        sizer->Add(slider);
+    }
+
+    Layout();
+    Fit();
+
 }
 
 deMixerBWEditor::~deMixerBWEditor()
