@@ -31,13 +31,25 @@ class deViewManager;
 class deActionLayer:public deLayer
 {
     private:
+        // from project
         deViewManager& viewManager;
 
-        deBlendMode blendMode;
-        deApplyMode applyMode;
-        deValue opacity;
+        // images
+        deImage imageApplyPass;
+        deImage imageBlendPass;
+
+        // channel
+        int allocatedBlendMaskChannel;
+
+        // settings
+        bool enabled;
 
         std::set<int> channels;
+
+        deBlendMode blendMode;
+        deValue opacity;
+
+        deApplyMode applyMode;
 
         bool blendMask;
         bool blendMaskShow;
@@ -47,11 +59,6 @@ class deActionLayer:public deLayer
         deValue blendMaskMin;
         deValue blendMaskMax;
         bool blendMaskInvert;
-
-        deImage imageApplyPass;
-        deImage imageBlendPass;
-
-        int allocatedBlendMaskChannel;
 
         virtual bool hasAction() const {return true;};
         virtual bool hasBlending() const {return true;};
@@ -78,12 +85,8 @@ class deActionLayer:public deLayer
 
         bool isBlendingEnabled() const;
 
-    protected:
-        bool enabled;
-        deLayerStack& layerStack;
         deChannelManager& channelManager;
 
-        deImage imageActionPass;
 
         void updateBlend(int i);
         virtual void updateApply();
@@ -93,6 +96,14 @@ class deActionLayer:public deLayer
         virtual void processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize) {};
 
         virtual bool singleChannelProcessing() const = 0;
+
+
+    protected:
+        // from project
+        deLayerStack& layerStack;
+
+        // image
+        deImage imageActionPass;
 
         virtual void updateImage();
 
