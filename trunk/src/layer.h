@@ -25,7 +25,7 @@
 #include <string>
 #include <libxml/parser.h>
 class deProject;
-class deActionFrame;
+class deFrame;
 class deBlendFrame;
 
 class deLayer
@@ -37,7 +37,7 @@ class deLayer
 
     protected:
         deColorSpace colorSpace;
-        deActionFrame* actionFrame;
+        deFrame* actionFrame;
         deBlendFrame* blendFrame;
         int index;
         int sourceLayer;
@@ -65,7 +65,7 @@ class deLayer
         virtual void setEnabled(bool e);
 
         void closeActionFrame();
-        void setActionFrame(deActionFrame* frame);
+        void setActionFrame(deFrame* frame);
         virtual void createActionFrame(wxWindow* parent);
 
         void closeBlendFrame();

@@ -84,7 +84,7 @@ void deLayer::closeActionFrame()
     actionFrame = NULL;
 }
 
-void deLayer::setActionFrame(deActionFrame* frame)
+void deLayer::setActionFrame(deFrame* frame)
 {
     actionFrame = frame;
 }
@@ -111,8 +111,12 @@ bool deLayer::onImageClick(deValue x, deValue y)
 {
     if (actionFrame)
     {
-        actionFrame->onImageClick(x, y);
-        return true;
+        deActionFrame* trueActionFrame = dynamic_cast<deActionFrame*>(actionFrame);
+        if (trueActionFrame)
+        {
+            trueActionFrame->onImageClick(x, y);
+            return true;    
+        }            
     }
     return false;
 }

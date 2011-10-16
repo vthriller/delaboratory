@@ -16,24 +16,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "conversion_bw_layer.h"
 #include "mixer_bw_editor.h"
+#include "conversion_bw_layer.h"
 
-deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
-:deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _channelManager)
+deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, const std::string& _name)
+:deFrame(parent, _name), layer( _layer)
 {
-
+    layer.setActionFrame(this);
 }
 
-deConversionBWLayer::~deConversionBWLayer()
+deMixerBWEditor::~deMixerBWEditor()
 {
+    layer.closeActionFrame();
 }
 
-void deConversionBWLayer::createActionFrame(wxWindow* parent)
-{
-    if (!actionFrame)
-    {
-        actionFrame = new deMixerBWEditor(parent, *this, "BW conversion");
-        actionFrame->Show(true);
-    }        
-}
