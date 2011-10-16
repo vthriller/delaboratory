@@ -83,3 +83,28 @@ int getInt(const std::string& s)
     iss >> v;
     return v;
 }    
+
+bool getBool(const std::string& s)
+{
+    if (s == "true")
+    {
+        return true;
+    }
+    else
+    {
+        // TODO some kind of assert of exception in other case?
+        return false;
+    }
+}
+
+std::string str(bool b)
+{
+    if (b)
+    {
+        return "true";
+    }
+    else
+    {
+        return "false";
+    }
+}
