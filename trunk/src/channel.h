@@ -26,6 +26,9 @@ class deChannel
 {
     private:
         deValue* pixels;
+
+        deChannel(const deChannel& c);
+        deChannel& operator =(const deChannel& c);
     public:
         deChannel(int size);
 

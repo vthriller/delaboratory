@@ -41,6 +41,7 @@ class deProject
         // FIXME
 
         deProject(const deProject& project);
+        deProject& operator =(const deProject& project);
 
         deLayerStack layerStack;
         deSamplerManager samplerManager;

@@ -31,7 +31,7 @@ class deViewManager
         int channel;
         bool showBlendMask;
         int blendMaskChannel;
-        
+
     public:
         deViewManager(deProject& _project);
         virtual ~deViewManager();
