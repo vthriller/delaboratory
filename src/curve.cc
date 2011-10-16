@@ -335,16 +335,12 @@ void deCurve::loadPoint(xmlNodePtr node)
     {
         if ((!xmlStrcmp(child->name, BAD_CAST("x")))) 
         {
-            xmlChar* s = xmlNodeGetContent(child);            
-            xStr = (char*)(s);
-            xmlFree(s);
+            xStr = getContent(child);
         }            
 
         if ((!xmlStrcmp(child->name, BAD_CAST("y")))) 
         {
-            xmlChar* s = xmlNodeGetContent(child);            
-            yStr = (char*)(s);
-            xmlFree(s);
+            yStr = getContent(child);
         }            
 
         child = child->next;

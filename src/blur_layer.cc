@@ -89,11 +89,7 @@ void deBlurLayer::load(xmlNodePtr root)
 
         if ((!xmlStrcmp(child->name, BAD_CAST("radius")))) 
         {
-            xmlChar* xs = xmlNodeGetContent(child);            
-            std::string s = (char*)(xs);
-            xmlFree(xs);
-
-            std::istringstream iss(s);
+            std::istringstream iss(getContent(child));
             iss >> radius;
         }
 

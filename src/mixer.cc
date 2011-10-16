@@ -170,10 +170,7 @@ void deMixer::load(xmlNodePtr node)
     {
         if ((!xmlStrcmp(child->name, BAD_CAST("weight")))) 
         {
-            xmlChar* s = xmlNodeGetContent(child);            
-            std::string ss = (char*)(s);
-            xmlFree(s);
-            std::istringstream iss(ss);
+            std::istringstream iss(getContent(child));
             assert(i < size);
             iss >> weights[i];
             i++;

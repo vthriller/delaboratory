@@ -33,6 +33,7 @@
 #include "layer_factory.h"
 #include "convert_image.h"
 #include "fractal.h"
+#include "xml.h"
 
 deProject::deProject()
 :viewModePanel(NULL),
@@ -491,45 +492,29 @@ void deProject::loadLayer(xmlNodePtr root)
     {
         if ((!xmlStrcmp(child->name, BAD_CAST("index")))) 
         {
-            xmlChar* xs = xmlNodeGetContent(child);            
-            std::string s = (char*)(xs);
-            xmlFree(xs);
-
-            std::istringstream iss(s);
+            std::istringstream iss(getContent(child));
             iss >> index;
         }
 
         if ((!xmlStrcmp(child->name, BAD_CAST("source")))) 
         {
-            xmlChar* xs = xmlNodeGetContent(child);            
-            std::string s = (char*)(xs);
-            xmlFree(xs);
-
-            std::istringstream iss(s);
+            std::istringstream iss(getContent(child));
             iss >> source;
         }
 
         if ((!xmlStrcmp(child->name, BAD_CAST("color_space")))) 
         {
-            xmlChar* xs = xmlNodeGetContent(child);            
-            std::string s = (char*)(xs);
-            xmlFree(xs);
-
-            colorSpace = colorSpaceFromString(s);
+            colorSpace = colorSpaceFromString(getContent(child));
         }
 
         if ((!xmlStrcmp(child->name, BAD_CAST("type")))) 
         {
-            xmlChar* xs = xmlNodeGetContent(child);            
-            type = (char*)(xs);
-            xmlFree(xs);
+            type = getContent(child);
         }
         
         if ((!xmlStrcmp(child->name, BAD_CAST("name")))) 
         {
-            xmlChar* xs = xmlNodeGetContent(child);            
-            name = (char*)(xs);
-            xmlFree(xs);
+            name = getContent(child);
         }
 
         child = child->next;
