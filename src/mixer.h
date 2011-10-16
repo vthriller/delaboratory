@@ -29,6 +29,9 @@ class deMixer
         int size;
         deValue* weights;
 
+        deMixer(const deMixer& mixer);
+        deMixer operator=(const deMixer& mixer);
+
     public:
         deMixer(int _size);
         virtual ~deMixer();

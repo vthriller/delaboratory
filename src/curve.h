@@ -35,6 +35,10 @@ class deCurve
 
         void loadPoint(xmlNodePtr node);
         void movePointStep(int p, int dir);
+
+        deCurve(const deCurve& c);
+        deCurve& operator=(const deCurve& c);
+
     public:    
         deCurve();
         virtual ~deCurve();

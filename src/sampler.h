@@ -20,9 +20,6 @@
 #define _DE_SAMPLER_H
 
 #include "color_space.h"
-/*
-class dePreview;
-*/
 
 class deSampler
 {
@@ -30,8 +27,6 @@ class deSampler
         deValue x;
         deValue y;
         deColorSpace colorSpace;
-//        bool enabled;
-
 
     public:
         deSampler();
@@ -44,20 +39,6 @@ class deSampler
 
         deColorSpace getColorSpace() const {return colorSpace;};
         void setColorSpace(deColorSpace c);
-
-        /*
-
-        void setPosition(float _x, float _y);
-
-        float getX() const;
-        float getY() const;
-
-        bool getPixel(float &v0, float &v1, float &v2, float &v3, deColorSpace mode, dePreview& preview) const;
-
-        bool isEnabled() const;
-        void enable();
-        void disable();
-        */
 
 };
 

@@ -32,8 +32,10 @@ class deChannelManager
         std::vector<deChannel*> channels;
         std::set<int> trashed;
 
-
         bool locked;
+
+        deChannelManager(const deChannelManager& m);
+        deChannelManager& operator =(const deChannelManager& m);
         
     public:
         deChannelManager();
