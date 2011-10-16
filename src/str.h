@@ -33,8 +33,10 @@ std::string removePathAndExtension(const std::string& fileName);
 
 std::string str(deValue n);
 std::string str(int n);
+std::string str(bool b);
 
 deValue getValue(const std::string& s);
 int getInt(const std::string& s);
+bool getBool(const std::string& s);
 
 #endif

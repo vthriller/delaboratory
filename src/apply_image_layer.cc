@@ -20,6 +20,8 @@
 #include "layer_stack.h"
 #include "channel_manager.h"
 #include "apply_image_frame.h"
+#include "xml.h"
+#include "str.h"
 
 deApplyImageLayer::deApplyImageLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
@@ -110,8 +112,35 @@ void deApplyImageLayer::setAppliedChannel(int c)
 void deApplyImageLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
+    saveChild(root, "applied_layer", str(appliedLayer));
+    saveChild(root, "applied_channel", str(appliedChannel));
+    saveChild(root, "single_channel", str(singleChannel));
 };
 
 void deApplyImageLayer::load(xmlNodePtr root)
 {
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    while (child)
+    {
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("applied_layer")))) 
+        {
+            appliedLayer = getInt(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("applied_channel")))) 
+        {
+            appliedChannel = getValue(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("single_channel")))) 
+        {
+            singleChannel = getBool(getContent(child));
+        }
+
+        child = child->next;
+
+    }        
 }
+
