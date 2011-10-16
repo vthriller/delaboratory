@@ -26,11 +26,12 @@ class deChannelManager;
 class deConversionLayer:public deLayer
 {
     private:
-        deImage image;
+        virtual std::string getType() const {return "conversion";};
+
+    protected:        
         deLayerStack& layerStack;
         deChannelManager& channelManager;
-
-        virtual std::string getType() const {return "conversion";};
+        deImage image;
 
     public:
         deConversionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);

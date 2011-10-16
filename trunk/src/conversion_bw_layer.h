@@ -34,6 +34,8 @@ class deConversionBWLayer:public deConversionLayer
 
         virtual void createActionFrame(wxWindow* parent);
 
+        virtual void updateImage();
+
 /*
         virtual const deImage& getImage() const;
         virtual void updateImage();
