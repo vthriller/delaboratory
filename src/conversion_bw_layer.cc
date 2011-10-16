@@ -19,8 +19,8 @@
 #include "conversion_bw_layer.h"
 #include "mixer_bw_editor.h"
 
-deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
-:deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _channelManager)
+deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, int n)
+:deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _channelManager), mixer(n)
 {
 
 }

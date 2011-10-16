@@ -20,13 +20,16 @@
 #define _DE_CONVERSION_BW_LAYER_H
 
 #include "conversion_layer.h"
+#include "mixer.h"
 
 class deConversionBWLayer:public deConversionLayer
 {
     private:
+        deMixer mixer;
+
         virtual bool hasAction() const {return true;};
     public:
-        deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
+        deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, int n);
         virtual ~deConversionBWLayer();
 
         virtual void createActionFrame(wxWindow* parent);

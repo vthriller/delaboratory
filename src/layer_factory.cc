@@ -61,7 +61,10 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
     {
         if (colorSpace == deColorSpaceBW)
         {
-            return new deConversionBWLayer(index, source, _layerStack, _channelManager);
+            deLayer* sourceLayer = _layerStack.getLayer(source);
+            deColorSpace sourceColorSpace = sourceLayer->getColorSpace();
+            int n = getColorSpaceSize(sourceColorSpace);
+            return new deConversionBWLayer(index, source, _layerStack, _channelManager, n);
         }
         else
         {
