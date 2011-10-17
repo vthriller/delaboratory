@@ -489,10 +489,15 @@ void deActionLayer::updateChannel(int i)
         }
         else
         {
-            deChannel* s1 = channelManager.getChannel(0);
-            deChannel* s2 = channelManager.getChannel(1);
-            deChannel* s3 = channelManager.getChannel(2);
-            deChannel* s4 = channelManager.getChannel(3);
+            int s1 = sourceImage.getChannelIndex(i);
+            int s2 = sourceImage.getChannelIndex(i);
+            int s3 = sourceImage.getChannelIndex(i);
+            int s4 = sourceImage.getChannelIndex(i);
+
+            deChannel* sc1 = channelManager.getChannel(s1);
+            deChannel* sc2 = channelManager.getChannel(s2);
+            deChannel* sc3 = channelManager.getChannel(s3);
+            deChannel* sc4 = channelManager.getChannel(s4);
 
             imageActionPass.enableChannel(i);
             int c = imageActionPass.getChannelIndex(i);
@@ -500,7 +505,7 @@ void deActionLayer::updateChannel(int i)
 
             if (channel)
             {
-                processAction4(i, s1, s2, s3, s4, *channel, channelSize);
+                processAction4(i, sc1, sc2, sc3, sc4, *channel, channelSize);
             }
         }
     }
