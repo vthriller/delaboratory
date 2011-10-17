@@ -30,6 +30,8 @@ class deImagePanel;
 class deHistogramPanel;
 class deControlPanel;
 class deViewModePanel;
+class deHistogramModePanel;
+class deImageAreaPanel;
 
 class deProject
 {
@@ -60,12 +62,16 @@ class deProject
 
         deHistogramPanel* histogramPanel;
         deViewModePanel* viewModePanel;
+        deHistogramModePanel* histogramModePanel;
         deControlPanel* controlPanel;
+        deImageAreaPanel* imageAreaPanel;
 
         void loadLayers(xmlNodePtr root);
         void loadLayer(xmlNodePtr root);
 
         void setSource();
+
+        void freeImage();
 
     public:
         deProject();
@@ -107,16 +113,22 @@ class deProject
 
         void setHistogramPanel(deHistogramPanel* _histogramPanel);
         void setViewModePanel(deViewModePanel* _viewModePanel);
+        void setHistogramModePanel(deHistogramModePanel* _histogramModePanel);
         void setControlPanel(deControlPanel* _controlPanel);
         void onChangeViewMode();
         void updateSamplers();
 
+        deHistogramPanel* getHistogramPanel();
+
         bool samplersVisible() const;
         void showSamplers();
-        void save(const std::string& fileName);
-        void open(const std::string& fileName);
+        void save(const std::string& fileName, bool image);
+        void open(const std::string& fileName, bool image);
+        void openImage(const std::string& fileName);
         void newProject();
         void setTestImage();
+
+        void setImageAreaPanel(deImageAreaPanel* _imageAreaPanel);
 
 };
 

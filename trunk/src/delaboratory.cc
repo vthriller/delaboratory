@@ -19,6 +19,7 @@
 #include "wx/wx.h"
 #include "project.h"
 #include "main_frame.h"
+#include "str.h"
 
 class deLaboratory: public wxApp
 {	
@@ -72,10 +73,8 @@ bool deLaboratory::OnInit()
 
     if (argc > 1)
     {
-        wxString arg = argv[1];
-        char cstring[1024];
-        strncpy(cstring, (const char*)arg.mb_str(wxConvUTF8), 1023);
-        project.init(cstring);
+        wxString a = argv[1];
+        project.init(str(a));
     }
 
 	frame->Show(TRUE);

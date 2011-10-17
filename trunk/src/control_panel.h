@@ -38,6 +38,7 @@ class deControlPanel:public wxPanel
 
         wxButton* samplers;
 
+        wxButton* exportJPEG;
         wxButton* exportTIFF;
         wxButton* externalEditor;
 

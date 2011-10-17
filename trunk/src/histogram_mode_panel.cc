@@ -17,46 +17,93 @@
 */
 
 #include "histogram_mode_panel.h"
-#include "channel_buttons.h"
-#include "gui.h"
-#include "layer.h"
+#include <iostream>
+#include "color_space.h"
+#include "project.h"
+#include <iostream>
+#include "histogram_panel.h"
 
 void deHistogramModePanel::select(wxCommandEvent &event)
 {
     int i = event.GetId();
-    int c = channels[i];
+    deViewManager& viewManager = project.getViewManager();
+    deHistogramPanel* histogramPanel = project.getHistogramPanel();
 
-    if (c < 0)
+    int j;
+    for (j = 0; j < 4; j++)
     {
-        gui.setHistogramMode(-1);
-    }
-    else
-    {
-        gui.setHistogramMode(c);
+        if (buttons[j]->GetId() == i)
+        {
+            histogramPanel->setChannel(j);
+            histogramPanel->generate();
+            histogramPanel->paint();
+        }
     }
 
 }
 
-
-deHistogramModePanel::deHistogramModePanel(wxWindow* parent, deGUI& _gui)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(200,10)), gui(_gui)
+deHistogramModePanel::deHistogramModePanel(wxWindow* parent, deProject& _project)
+:wxPanel(parent), project(_project)
 {
-    sizer = new wxBoxSizer(wxHORIZONTAL);
+    project.setHistogramModePanel(this);
+
+    wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
     SetSizer(sizer);
 
-    updateButtons(deColorSpaceRGB);
+    int i;
+    for (i = 0; i < 4; i++)
+    {
+        wxRadioButton* b = new wxRadioButton(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize);
+        sizer->Add(b);
+        buttons.push_back(b);
 
-    gui.setHistogramModePanel(this);
+    }        
+
+    updateNames();
+    updateMode();
 
     Connect(wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler(deHistogramModePanel::select));
 }
 
 deHistogramModePanel::~deHistogramModePanel()
 {
+
 }
 
-void deHistogramModePanel::updateButtons(deColorSpace colorSpace)
+void deHistogramModePanel::updateNames()
 {
-    createChannelButtons(colorSpace, buttons, channels, this, sizer, true);
-    gui.setHistogramMode(-1);
+    deViewManager& viewManager = project.getViewManager();
+    deColorSpace colorSpace = viewManager.getColorSpace();
+
+    int i;
+    int n = getColorSpaceSize(colorSpace);
+    for (i = 0; i < 4; i++)
+    {
+        wxRadioButton* b = buttons[i];
+        if (i < n)
+        {
+            std::string name = getChannelName(colorSpace, i);
+            b->SetLabel(wxString::FromAscii(name.c_str()));
+            b->Show();
+        }
+        else
+        {
+            b->Hide();
+        }
+    }        
+
+    Layout();
+    Fit();
+    SetFocus();
 }
+
+void deHistogramModePanel::updateMode()
+{
+    deViewManager& viewManager = project.getViewManager();
+    deHistogramPanel* histogramPanel = project.getHistogramPanel();
+
+    int c = histogramPanel->getChannel();
+
+    buttons[c]->SetValue(1);
+}
+

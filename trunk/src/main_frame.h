@@ -37,10 +37,13 @@ private:
     bool full;
 
 	void onTestImage(wxCommandEvent& event);
+	void onOpenImage(wxCommandEvent& event);
 	void onQuit(wxCommandEvent& event);
-	void onSaveProject(wxCommandEvent& event);
 	void onNewProject(wxCommandEvent& event);
 	void onOpenProject(wxCommandEvent& event);
+	void onSaveProject(wxCommandEvent& event);
+	void onOpenLayerStack(wxCommandEvent& event);
+	void onSaveLayerStack(wxCommandEvent& event);
 	void onHelpColorSpaces(wxCommandEvent& event);
 	void onHelpColorSpaces2(wxCommandEvent& event);
 	void onHelpColorSpaces3(wxCommandEvent& event);

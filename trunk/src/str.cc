@@ -108,3 +108,12 @@ std::string str(bool b)
         return "false";
     }
 }
+
+
+std::string str(wxString& ws)
+{
+    char cstring[1024];
+    strncpy(cstring, (const char*)ws.mb_str(wxConvUTF8), 1023);
+
+    return cstring;
+}    

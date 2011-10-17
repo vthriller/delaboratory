@@ -23,6 +23,7 @@
 #include "convert_pixel.h"
 #include <sstream>
 #include <iostream>
+#include "str.h"
 
 deSamplerManagerFrame::deSamplerManagerFrame(deControlPanel *parent, deProject& _project)
 :deFrame(parent, "samplers"), project(_project)
@@ -290,10 +291,7 @@ void deSamplerManagerFrame::dumpColor()
 
             wxString s = v1 + _T(" ") + v2 + _T(" ") + v3 + _T(" ") + v4;
 
-            char cstring[1024];
-            strncpy(cstring, (const char*)s.mb_str(wxConvUTF8), 1023);
-
-            std::cout << cstring << std::endl;
+            std::cout << str(s) << std::endl;
         }
         index++;
     }

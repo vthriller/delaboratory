@@ -103,12 +103,16 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject* _project, deLayerGri
         mainSizer->Add(sizerE, 0, wxCENTER);
 
         {
+            exportJPEG = new wxButton(this, wxID_ANY, _T("JPEG"));
+            sizerE->Add(exportJPEG, 0);
+        }
+        {
             exportTIFF = new wxButton(this, wxID_ANY, _T("16-bit TIFF"));
-            sizerE->Add(exportTIFF, 1);
+            sizerE->Add(exportTIFF, 0);
         }
         {
             externalEditor = new wxButton(this, wxID_ANY, _T("external editor"));
-            sizerE->Add(externalEditor, 1);
+            sizerE->Add(externalEditor, 0);
         }
     }
 

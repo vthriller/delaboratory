@@ -99,3 +99,8 @@ void deHistogramPanel::setChannel(int _channel)
 {
     channel = _channel;
 }
+
+int deHistogramPanel::getChannel() const
+{
+    return channel;
+}

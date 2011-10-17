@@ -27,6 +27,7 @@
 #include "image_panel.h"
 #include "str.h"
 #include "histogram_panel.h"
+#include "histogram_mode_panel.h"
 #include "control_panel.h"
 #include "view_mode_panel.h"
 #include <sstream>
@@ -34,6 +35,7 @@
 #include "convert_image.h"
 #include "fractal.h"
 #include "xml.h"
+#include "image_area_panel.h"
 
 deProject::deProject()
 :viewModePanel(NULL),
@@ -95,24 +97,28 @@ void deProject::onKey(int key)
         histogramPanel->setChannel(0);
         histogramPanel->generate();
         histogramPanel->paint();
+        histogramModePanel->updateMode();
     }
     if (key == WXK_F2)
     {
         histogramPanel->setChannel(1);
         histogramPanel->generate();
         histogramPanel->paint();
+        histogramModePanel->updateMode();
     }
     if (key == WXK_F3)
     {
         histogramPanel->setChannel(2);
         histogramPanel->generate();
         histogramPanel->paint();
+        histogramModePanel->updateMode();
     }
     if (key == WXK_F4)
     {
         histogramPanel->setChannel(3);
         histogramPanel->generate();
         histogramPanel->paint();
+        histogramModePanel->updateMode();
     }
 
     layerStack.onKey(key);
@@ -124,63 +130,12 @@ void deProject::onKey(int key)
 
 void deProject::init(const std::string& fileName)
 {
-    bool tiff = checkTIFF(fileName);
-    bool jpeg = checkJPEG(fileName);
+//    std::cout << "init: " << fileName << std::endl;
+    openImage(fileName);
 
-    if ((!tiff) && (!jpeg))
-    {
-        return;
-    }
-
-    if ((tiff) && (jpeg))
-    {
-        assert(false);
-    }
-
-    deSize size(0,0);
-
-    if (tiff)
-    {
-        size = getTIFFSize(fileName);
-    }
-
-    if (jpeg)
-    {
-        size = getJPEGSize(fileName);
-    }
-
-    sourceChannelManager.setChannelSize(size);
-    sourceR = sourceChannelManager.allocateNewChannel();
-    sourceG = sourceChannelManager.allocateNewChannel();
-    sourceB = sourceChannelManager.allocateNewChannel();
-
-    deChannel* channelR = sourceChannelManager.getChannel(sourceR);
-    deChannel* channelG = sourceChannelManager.getChannel(sourceG);
-    deChannel* channelB = sourceChannelManager.getChannel(sourceB);
-
-    if (tiff)
-    {
-        bool icc;
-        loadTIFF(fileName, *channelR, *channelG, *channelB, icc);
-        if (icc)
-        {
-            wxMessageBox( _T("Warning! this TIFF file contains ICC profile which is ignored by delaboratory\n\ndelaboratory expects sRGB - colors may be not accurate\n\nThis problem happens (for instance) when tiff is created by dcraw\nyou can fix it by calling tifficc command, by default it converts tiff to sRGB"), _T("ICC profile ignored"), wxOK | wxICON_INFORMATION, NULL );
-        }
-    }
-
-    if (jpeg)
-    {
-        loadJPEG(fileName, *channelR, *channelG, *channelB);
-    }
-
-    imageFileName = removePathAndExtension(fileName);
-    sourceImageFileName = fileName;
-
-    setSource();
 }
 
-
-void deProject::setTestImage()
+void deProject::freeImage()
 {
     if (sourceR > 0)
     {
@@ -194,8 +149,14 @@ void deProject::setTestImage()
     {
         sourceChannelManager.freeChannel(sourceB);
     }
+}
 
-    deSize size(800,600);
+void deProject::setTestImage()
+{
+
+    freeImage();
+
+    deSize size(900,900);
 
     sourceChannelManager.setChannelSize(size);
     sourceR = sourceChannelManager.allocateNewChannel();
@@ -211,6 +172,7 @@ void deProject::setTestImage()
     imageFileName = "delaboratory_test_image";
 
     setSource();
+    imageAreaPanel->updateSize();
     layerStack.updateImages();
     repaintImage();
 }
@@ -293,6 +255,10 @@ void deProject::onChangeView(int a, int b)
     if (viewModePanel)
     {
         viewModePanel->updateNames();
+    }
+    if (histogramModePanel)
+    {
+        histogramModePanel->updateNames();
     }
     updateSamplers();
 }
@@ -424,6 +390,11 @@ void deProject::setViewModePanel(deViewModePanel* _viewModePanel)
     viewModePanel = _viewModePanel;
 }
 
+void deProject::setHistogramModePanel(deHistogramModePanel* _histogramModePanel)
+{
+    histogramModePanel = _histogramModePanel;
+}
+
 
 void deProject::setControlPanel(deControlPanel* _controlPanel)
 {
@@ -455,7 +426,7 @@ bool deProject::samplersVisible() const
     return false;
 }
 
-void deProject::save(const std::string& fileName)
+void deProject::save(const std::string& fileName, bool image)
 {
     std::string f = fileName;
 
@@ -549,7 +520,7 @@ void deProject::loadLayers(xmlNodePtr root)
     layerStack.updateImages();
 }
 
-void deProject::open(const std::string& fileName)
+void deProject::open(const std::string& fileName, bool image)
 {
     xmlDocPtr doc = xmlParseFile(fileName.c_str());
 
@@ -594,4 +565,77 @@ void deProject::showSamplers()
     {
         controlPanel->showSamplers();
     }
+}
+
+void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
+{
+    imageAreaPanel = _imageAreaPanel;
+}
+
+deHistogramPanel* deProject::getHistogramPanel()
+{
+    return histogramPanel;
+}
+
+void deProject::openImage(const std::string& fileName)
+{
+//    std::cout << "open: " << fileName << std::endl;
+    freeImage();
+
+    bool tiff = checkTIFF(fileName);
+    bool jpeg = checkJPEG(fileName);
+
+    if ((!tiff) && (!jpeg))
+    {
+        return;
+    }
+
+    if ((tiff) && (jpeg))
+    {
+        assert(false);
+    }
+
+    deSize size(0,0);
+
+    if (tiff)
+    {
+        size = getTIFFSize(fileName);
+    }
+
+    if (jpeg)
+    {
+        size = getJPEGSize(fileName);
+    }
+
+    sourceChannelManager.setChannelSize(size);
+    sourceR = sourceChannelManager.allocateNewChannel();
+    sourceG = sourceChannelManager.allocateNewChannel();
+    sourceB = sourceChannelManager.allocateNewChannel();
+
+    deChannel* channelR = sourceChannelManager.getChannel(sourceR);
+    deChannel* channelG = sourceChannelManager.getChannel(sourceG);
+    deChannel* channelB = sourceChannelManager.getChannel(sourceB);
+
+    if (tiff)
+    {
+        bool icc;
+        loadTIFF(fileName, *channelR, *channelG, *channelB, icc);
+        if (icc)
+        {
+            wxMessageBox( _T("Warning! this TIFF file contains ICC profile which is ignored by delaboratory\n\ndelaboratory expects sRGB - colors may be not accurate\n\nThis problem happens (for instance) when tiff is created by dcraw\nyou can fix it by calling tifficc command, by default it converts tiff to sRGB"), _T("ICC profile ignored"), wxOK | wxICON_INFORMATION, NULL );
+        }
+    }
+
+    if (jpeg)
+    {
+        loadJPEG(fileName, *channelR, *channelG, *channelB);
+    }
+
+    imageFileName = removePathAndExtension(fileName);
+    sourceImageFileName = fileName;
+
+    setSource();
+    imageAreaPanel->updateSize();
+    layerStack.updateImages();
+    repaintImage();
 }
