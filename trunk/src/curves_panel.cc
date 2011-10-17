@@ -373,18 +373,30 @@ void deCurvesPanel::paint()
 void deCurvesPanel::changeChannel(int _channel)
 {
     channel = _channel;
-    marker = -1;
     generateBackground();
+    setMarker();
     paint();
 }
 
 void deCurvesPanel::onImageClick(deValue x, deValue y)
 {
-    deChannel* c = layer.getSourceChannel(channel);
     deSize size = layer.getChannelSize();
     clickPosition = (y * size.getH() )  * size.getW() + (x * size.getW());
-    marker = c->getValue(clickPosition);
+    setMarker();
     paint();
+}
+
+void deCurvesPanel::setMarker()
+{
+    if (clickPosition < 0)
+    {
+        marker = -1;
+    }
+    else
+    {
+        deChannel* c = layer.getSourceChannel(channel);
+        marker = c->getValue(clickPosition);
+    }        
 }
 
 void deCurvesPanel::onKey(int key)

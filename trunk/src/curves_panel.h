@@ -27,16 +27,6 @@ class deCurvesLayer;
 #include "value.h"
 #include "histogram.h"
 
-/*
-#define INITIAL_CURVES_PANEL_SIZE 500
-
-#include "sampler.h"
-class deCurve;
-class dePreviewStack;
-class dePropertyCurves;
-class deCurvesEditor;
-*/
-
 class deCurvesPanel:public wxPanel
 {
 private:
@@ -68,23 +58,6 @@ private:
 
     int clickPosition;
 
-/*
-
-    dePreviewStack& stack;
-
-
-
-    deSampler sampler;
-
-    dePropertyCurves& property;
-
-    void updateMarker();
-
-
-    deCurvesEditor& editor;
-
-    deValue samplerValues[4];
-*/
     void drawLine(wxDC& dc, deValue x1, deValue y1, deValue x2, deValue y2);
     void drawLines(wxDC& dc);
 
@@ -107,22 +80,8 @@ public:
 
     void onKey(int key);
 
-/*
-	deCurvesPanel(wxWindow* parent, dePreviewStack& _stack, dePropertyCurves& _property, int s, deCurvesEditor& _editor);
-	virtual ~deCurvesPanel();
+    void setMarker();
 
-
-
-
-    void traceSampler(deSampler* sampler);
-
-    void reset();
-    void fill(int n, deValue a, deValue r);
-    void invert();
-    void changeSize();
-    virtual void onKey(int key);
-
-    */
 	DECLARE_EVENT_TABLE()
 
 };
