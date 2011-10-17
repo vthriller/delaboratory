@@ -55,14 +55,8 @@ void deImageAreaPanel::updateSize()
 deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject* _project)
 :wxPanel(parent), project(_project)
 {
-/*
-    project->getGUI().setCenterPanel(this);
-
-    Connect(wxEVT_PAINT, wxPaintEventHandler(deImageAreaPanel::paint));
-
-*/
     imagePanel = new deImagePanel(this, project);
-//    imagePanel->SetBackgroundColour(*wxBLACK);
+    project->setImageAreaPanel(this);
 
     Connect(wxEVT_SIZE, wxSizeEventHandler(deImageAreaPanel::resize));
 }

@@ -26,9 +26,7 @@ class deProject;
 class deHistogramPanel:public wxPanel
 {
     private:
-//        std::vector<deHistogram*> histograms;
         deHistogram histogram;
-//        int size;
         deProject* project;
         wxImage histogramImage;
         int channel;
@@ -39,9 +37,6 @@ class deHistogramPanel:public wxPanel
 
         DECLARE_EVENT_TABLE()
 
-//        void destroyHistograms();
-//        void renderHistogram(deHistogram* histogram, wxDC& dc, int max);
-
     public:
         deHistogramPanel(wxWindow* parent, deProject* _project);
         virtual ~deHistogramPanel();
@@ -51,7 +46,7 @@ class deHistogramPanel:public wxPanel
 
         void setChannel(int _channel);
 
-//        void updateHistograms();
+        int getChannel() const;
 };
 
 #endif

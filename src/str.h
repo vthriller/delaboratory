@@ -21,6 +21,7 @@
 
 #include <string>
 #include "value.h"
+#include <wx/wx.h>
 
 /* returns str before ".", so for "abcde.jpg" returns "abcde" */
 std::string getBaseName(const std::string& s);
@@ -34,6 +35,7 @@ std::string removePathAndExtension(const std::string& fileName);
 std::string str(deValue n);
 std::string str(int n);
 std::string str(bool b);
+std::string str(wxString& ws);
 
 deValue getValue(const std::string& s);
 int getInt(const std::string& s);

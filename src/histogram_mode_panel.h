@@ -21,25 +21,26 @@
 
 #include <wx/wx.h>
 #include <vector>
+/*
 #include <map>
 #include "color_space.h"
-class deGUI;
+*/
+class deProject;
 
 class deHistogramModePanel:public wxPanel
 {
     private:
-        deGUI& gui;
-        wxSizer* sizer;
         std::vector<wxRadioButton*> buttons;
-        std::map<int, int> channels;
+        deProject& project;
 
         void select(wxCommandEvent &event);
-        
     public:
-        deHistogramModePanel(wxWindow* parent, deGUI& _gui);
+        deHistogramModePanel(wxWindow* parent, deProject& _project);
         virtual ~deHistogramModePanel();
 
-        void updateButtons(deColorSpace colorSpace);
+        void updateNames();
+        void updateMode();
+
 };
 
 #endif

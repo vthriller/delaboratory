@@ -72,23 +72,14 @@ void generateMandelbrot(deValue* r, deValue* g, deValue* b, deSize size, deValue
                 zy2 = zy * zy;
             }
 
-/*            if ((i == 1) || (i == maxI))
-            {
-                r[p] = 0;
-                g[p] = 0;
-                b[p] = 0;
-            }
-            else*/
-            {
-                deValue v = i / maxI;
-                deValue v1;
-                deValue v2;
-                deValue v3;
-                generateFractalColor(v, v1, v2, v3);
-                r[p] = v1;
-                g[p] = v2;
-                b[p] = v3;
-            }                
+            deValue v = i / maxI;
+            deValue v1;
+            deValue v2;
+            deValue v3;
+            generateFractalColor(v, v1, v2, v3);
+            r[p] = v1;
+            g[p] = v2;
+            b[p] = v3;
 
             p++;
         }
