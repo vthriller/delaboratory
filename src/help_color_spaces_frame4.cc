@@ -73,7 +73,7 @@ void add2(deColorSpace colorSpace, wxWindow* parent, wxSizer* sizer)
 }
 
 deHelpColorSpacesFrame4::deHelpColorSpacesFrame4(wxWindow *parent)
-:deHelpFrame(parent)
+:deHelpFrame(parent, "hue")
 {
     wxSizer* sizer = new wxGridSizer(1);
     SetSizer(sizer);

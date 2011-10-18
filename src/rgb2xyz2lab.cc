@@ -309,3 +309,18 @@ void lab2xyz(deValue l, deValue a, deValue b, deValue &x, deValue &y, deValue& z
     assert(z <= 1);
 
 }
+
+void initLAB()
+{
+    /* this code just calls LAB conversion to create dePower function
+       calling this is not important for functionality but will affect benchmarks */
+
+    deValue x = 0.4;
+    deValue y = 0.4;
+    deValue z = 0.4;
+    deValue l;
+    deValue a;
+    deValue b;
+    xyz2lab(x, y, z, l, a, b);
+    
+}

@@ -18,8 +18,8 @@
 
 #include "help_frame.h"
 
-deHelpFrame::deHelpFrame(wxWindow *parent)
-:wxFrame(parent, wxID_ANY, _T("help"), wxDefaultPosition, wxDefaultSize, wxCAPTION | wxCLOSE_BOX | wxFRAME_FLOAT_ON_PARENT)
+deHelpFrame::deHelpFrame(wxWindow *parent, const std::string& name)
+:wxFrame(parent, wxID_ANY, wxString::FromAscii(name.c_str()), wxDefaultPosition, wxDefaultSize, wxCAPTION | wxCLOSE_BOX | wxFRAME_FLOAT_ON_PARENT)
 {
 }
 

@@ -21,7 +21,7 @@
 #include "gradient_panel.h"
 
 deHelpColorSpacesFrame::deHelpColorSpacesFrame(wxWindow *parent)
-:deHelpFrame(parent)
+:deHelpFrame(parent, "channels")
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);

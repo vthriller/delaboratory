@@ -70,7 +70,7 @@ void generateAB(wxWindow* window, wxSizer* sizer, int scale)
 }
 
 deHelpColorSpacesFrame6::deHelpColorSpacesFrame6(wxWindow *parent, int scale)
-:deHelpFrame(parent)
+:deHelpFrame(parent, "LAB")
 {
     wxSizer* sizer = new wxFlexGridSizer(1 + LAB_COLORS_ELEMENTS, 0, 0);
     SetSizer(sizer);
