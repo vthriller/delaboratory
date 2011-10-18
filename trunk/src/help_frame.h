@@ -25,7 +25,7 @@ class deHelpFrame:public wxFrame
 {
     private:
     public:
-        deHelpFrame(wxWindow *parent);
+        deHelpFrame(wxWindow *parent, const std::string& _name);
         virtual ~deHelpFrame();
 };
 

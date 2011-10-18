@@ -81,7 +81,7 @@ void generateFelixVonLuschan(wxWindow* window, wxSizer* sizer)
 }
 
 deHelpColorSpacesFrame5::deHelpColorSpacesFrame5(wxWindow *parent)
-:deHelpFrame(parent)
+:deHelpFrame(parent, "skin colors in CMYK (based on Felix Von Lunshan scale)")
 {
     wxSizer* sizer = new wxFlexGridSizer(3);
     SetSizer(sizer);

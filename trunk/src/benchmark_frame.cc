@@ -92,7 +92,7 @@ void deBenchmarkFrame::addBenchmarkColor()
 }
 
 deBenchmarkFrame::deBenchmarkFrame(wxWindow *parent, const std::string& type)
-:deHelpFrame(parent)
+:deHelpFrame(parent, "benchmark")
 {
     sizer = new wxFlexGridSizer(3, 0, 50);
     SetSizer(sizer);

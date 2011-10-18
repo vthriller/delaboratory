@@ -61,14 +61,12 @@ void add(deColorSpace colorSpace, wxWindow* parent, wxSizer* sizer)
         deGradientPanel* gradient = new deGradientPanel(parent, wxSize(w, h), colorSpace, c1, c2, light, -1, -1);
         sizerBC->Add(gradient, 0, wxCENTER);
 
-
     }
-
 
 }
 
 deHelpColorSpacesFrame3::deHelpColorSpacesFrame3(wxWindow *parent)
-:deHelpFrame(parent)
+:deHelpFrame(parent, "lightness / value")
 {
     wxSizer* sizer = new wxGridSizer(1);
     SetSizer(sizer);

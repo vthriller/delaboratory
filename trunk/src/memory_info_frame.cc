@@ -88,7 +88,7 @@ void deMemoryInfoFrame::update()
 }
 
 deMemoryInfoFrame::deMemoryInfoFrame(wxWindow *parent, deProject& _project)
-:deHelpFrame(parent), project(_project)
+:deHelpFrame(parent, "memory info"), project(_project)
 {
     wxSizer* sizerB = new wxStaticBoxSizer(wxVERTICAL, this,  _T("memory info"));
     SetSizer(sizerB);

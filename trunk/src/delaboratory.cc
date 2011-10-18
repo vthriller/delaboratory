@@ -20,6 +20,7 @@
 #include "project.h"
 #include "main_frame.h"
 #include "str.h"
+#include "rgb2xyz2lab.h"
 
 class deLaboratory: public wxApp
 {	
@@ -79,6 +80,8 @@ bool deLaboratory::OnInit()
 
 	frame->Show(TRUE);
 	SetTopWindow(frame);
+
+    initLAB();
 
 	return TRUE;
 } 
