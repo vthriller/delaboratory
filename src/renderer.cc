@@ -55,20 +55,6 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
     {
         return;
     }
-    /*
-    if (!channel1)
-    {
-        return;
-    }
-    if (!channel2)
-    {
-        return;
-    }
-    if ((conversion4x3) && (!channel3))
-    {
-        return;
-    }
-    */
 
     const deValue* pixels0 = channel0->getPixels();
     const deValue* pixels1 = NULL;

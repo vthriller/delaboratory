@@ -22,7 +22,6 @@
 #include <vector>
 #include <list>
 #include "value.h"
-//#include "curve_point.h"
 
 class deChannel;
 
@@ -30,19 +29,15 @@ class deHistogram
 {
     private:
         std::vector<int> bars;
-/*        float min;
-        float max;*/
         int size;
     public:
-        deHistogram(/*float _min, float _max, */int _size);
+        deHistogram(int _size);
         virtual ~deHistogram();
 
         void put(deValue value);
         void calc(const deChannel* channel, int n);
         int get(int bar) const;
         void clear();
-
-//        virtual void fill(std::list<deCurvePoint>& points, int m) const;
 
         int getMax() const;
         int getSize() const;

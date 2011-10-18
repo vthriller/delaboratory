@@ -63,32 +63,6 @@ void cmyk2rgb(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deVal
 
     cmy2rgb(c, m, y, d1, d2, d3);
 
-/*
-    if (d1 < 0)
-    {
-        d1 = 0;
-    }
-    else if (d1 > 1)
-    {
-        d1 = 1;
-    }
-    if (d2 < 0)
-    {
-        d2 = 0;
-    }
-    else if (d2 > 1)
-    {
-        d2 = 1;
-    }
-    if (d3 < 0)
-    {
-        d3 = 0;
-    }
-    else if (d3 > 1)
-    {
-        d3 = 1;
-    }
-*/
 }
 
 void cmyk2hsv(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deValue& d2, deValue& d3)
@@ -181,7 +155,6 @@ void lch2rgb(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deVal
     lch2lab(s1, s2, s3, l, a, b);
 
     lab2rgb(l, a, b, d1, d2, d3);
-
 }
 
 deConversion4x3 getConversion4x3(deColorSpace s, deColorSpace d)

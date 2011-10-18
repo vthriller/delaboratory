@@ -23,8 +23,6 @@
 #include "channel_manager.h"
 
 
-// FIXME channels may be NULL!!!!!!!!!!!
-
 void convertImage3x3(const deImage& sourceImage, deImage& image, deChannelManager& channelManager, deConversion3x3 conversion)
 {
     int n = channelManager.getChannelSize().getN();
@@ -203,7 +201,6 @@ void convertImage3x1(const deImage& sourceImage, deImage& image, deChannelManage
     }
 
 }
-
 
 
 void convertImage(const deImage& sourceImage, deImage& image, deChannelManager& channelManager)

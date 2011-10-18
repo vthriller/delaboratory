@@ -26,92 +26,6 @@
 
 #include "skin_color_chart.h"
 
-/*
-void generateAllSkins(wxWindow* window, wxSizer* sizer)
-{
-    std::map<deValue, deSkinCMYK> skins;
-
-    //deConversion4x3 f = getConversion4x3(deColorSpaceCMYK, deColorSpaceLAB);
-    deConversion4x3 f = getConversion4x3(deColorSpaceCMYK, deColorSpaceHSV);
-
-    int w = 100;
-    int h = 40;
-
-    int c;
-    int m;
-    int y;
-
-    int min_m = 15;
-    int limit_y = 70;
-    int limit_m = 65;
-
-    int step_m = 5;
-    int step_y = 5;
-    int step_c = 6;
-
-    for (m = min_m; m <= limit_m; m += step_m)
-    {
-        int max_y = m * 2.2;
-        if (max_y > limit_y)
-        {
-            max_y = limit_y;
-        }
-
-        for (y = m; y <= max_y; y += step_y)
-        {
-
-            int min_c = m / 6;
-            int max_c = m / 2.2;
-
-            for (c = min_c; c <= max_c; c += step_c)
-            {
-
-                deValue h;
-                deValue s;
-                deValue v;
-                f(c / 100.0, m / 100.0, y / 100.0, 0.9, h, s, v);
-
-//              std::cout << "a: " << a << " b: " << b << std::endl;
-
-                deSkinCMYK skin;
-                skin.c = c;
-                skin.m = m;
-                skin.y = y;
-
-                deValue hash = 1000 * h + v + s / 1000.0;
-
-                skins[hash] = skin;
-            }                
-        }
-
-    }        
-
-    std::map<deValue, deSkinCMYK>::iterator i;
-
-    for (i = skins.begin(); i != skins.end(); i++)
-    {
-
-        deSkinCMYK skin = i->second;
-
-        int c = skin.c;
-        int m = skin.m;
-        int y = skin.y;
-
-        deValue mm = m / 100.0;
-        deValue yy = y / 100.0;
-        deValue cc = c / 100.0;
-
-        std::ostringstream oss;
-        oss << "C" << c << " M" << m << " Y" << y;
-        wxSizer* sizer_B = new wxStaticBoxSizer(wxHORIZONTAL, window,  wxString::FromAscii(oss.str().c_str()));
-        sizer->Add(sizer_B);
-
-        deGradientPanel* gradient = new deGradientPanel(window, wxSize(w, h), deColorSpaceCMYK, 3, -1, cc, mm, yy);
-        sizer_B->Add(gradient, 0, wxCENTER);
-    }
-}
-*/
-
 void generateFelixVonLuschan(wxWindow* window, wxSizer* sizer)
 {
     int w = 240;
@@ -172,7 +86,6 @@ deHelpColorSpacesFrame5::deHelpColorSpacesFrame5(wxWindow *parent)
     wxSizer* sizer = new wxFlexGridSizer(3);
     SetSizer(sizer);
 
-//    generateAllSkins(this, sizer);
     generateFelixVonLuschan(this, sizer);
 
     Fit();

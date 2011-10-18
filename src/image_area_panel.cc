@@ -36,13 +36,10 @@ void deImageAreaPanel::updateSize()
     wxSize s = GetSize();
 
     const deSize ps(s.GetWidth(), s.GetHeight());
-//    std::cout << "ps " << ps.str() << std::endl;
     
     const deSize& ss = project->getSourceChannelManager().getChannelSize();
-//    std::cout << "ss " << ss.str() << std::endl;
 
     deSize fit = fitInside(ps, ss);
-//    std::cout << "fit " << fit.str() << std::endl;
 
     project->setPreviewSize(fit);
 

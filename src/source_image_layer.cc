@@ -18,7 +18,6 @@
 
 #include "source_image_layer.h"
 #include "channel_manager.h"
-//#include "project.h"
 #include "scale_channel.h"
 #include <iostream>
 
@@ -61,12 +60,6 @@ void deSourceImageLayer::updateImage()
         return;
     }
 
-/*
-    std::cout << "sourceImage r: " << image.getChannel(0) << std::endl;
-    std::cout << "sourceImage g: " << image.getChannel(1) << std::endl;
-    std::cout << "sourceImage b: " << image.getChannel(2) << std::endl;
-*/
-
     image.enableChannel(0);
     image.enableChannel(1);
     image.enableChannel(2);
@@ -81,27 +74,6 @@ void deSourceImageLayer::updateImage()
     scaleChannel(*sourceChannelR, *channelR, ss, ds);
     scaleChannel(*sourceChannelG, *channelG, ss, ds);
     scaleChannel(*sourceChannelB, *channelB, ss, ds);
-
-    //image.setValid();
-
-//    std::cout << "deSourceImageLayer::updatePreview done" << std::endl;
-
-    /*
-
-    for (i = 0; i < n; i++)
-    {
-        const deChannel* sourceChannel = dynamic_cast<const deTrueChannel*>(sourceImage->getChannel(i));
-        if (!sourceChannel)
-        {
-            throw deException("no sourceChannel in deSourceImageLayer::generatePreview");
-        }
-        deTrueChannel* destinationChannel = dynamic_cast<deTrueChannel*>(preview->getChannel(i));
-        if (!destinationChannel)
-        {
-            throw deException("no destinationChannel in deSourceImageLayer::generatePreview");
-        }
-        destinationChannel->scale(sourceChannel);
-    }*/
 
 }
 

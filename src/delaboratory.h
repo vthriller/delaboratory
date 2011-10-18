@@ -17,4 +17,20 @@
 */
 
 
+#include <string>
+
+std::string getApplicationName()
+{
+    return "delaboratory";
+}
+
+std::string getVersion()
+{
+    return "SVN";
+}
+
+std::string getCopyright()
+{
+    return "(c) 2011 Jacek Poplawski";
+}
 

@@ -36,7 +36,8 @@ private:
     deImageAreaPanel* leftPanel;
     bool full;
 
-	void onTestImage(wxCommandEvent& event);
+	void onTestImageSmall(wxCommandEvent& event);
+	void onTestImageBig(wxCommandEvent& event);
 	void onOpenImage(wxCommandEvent& event);
 	void onQuit(wxCommandEvent& event);
 	void onNewProject(wxCommandEvent& event);
@@ -53,6 +54,8 @@ private:
 	void onLABColors2(wxCommandEvent& event);
 	void onLABColors5(wxCommandEvent& event);
 	void onMemoryInfo(wxCommandEvent& event);
+	void onBenchmarkBlur(wxCommandEvent& event);
+	void onBenchmarkColor(wxCommandEvent& event);
 
 public:
 	deMainFrame(const wxSize& size, deProject* _project);

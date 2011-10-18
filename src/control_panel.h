@@ -57,6 +57,8 @@ class deControlPanel:public wxPanel
         void addConversionLayer(deColorSpace colorSpace);
         void addActionLayer(const std::string& action);
 
+        void generateFinalImage(const std::string& app, const std::string& type, const std::string& name);
+
     public:
         deControlPanel(wxWindow* parent, deProject* _project, deLayerGridPanel* _layerGridPanel);
         ~deControlPanel();

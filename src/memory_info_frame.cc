@@ -19,6 +19,7 @@
 #include "memory_info_frame.h"
 #include "project.h"
 #include <sstream>
+#include "str.h"
 
 int generateInfo(deChannelManager& channelManager, wxWindow* parent, wxSizer* sizer, wxString name)
 {
@@ -51,60 +52,94 @@ int generateInfo(deChannelManager& channelManager, wxWindow* parent, wxSizer* si
     return m;
 }
 
+void deMemoryInfoFrame::update()
+{
+    int m1;
+    int m2;
+    {
+        deChannelManager& channelManager = project.getPreviewChannelManager();
+        int size = sizeof(deValue) * channelManager.getChannelSize().getN();
+        int n = channelManager.getNumberOfAllocatedChannels();
+        m1 = n * size / (1024 * 1024);
+
+        previewChannels->SetLabel(wxString::FromAscii(str(n).c_str()));
+        previewSize->SetLabel(wxString::FromAscii(str(size).c_str()));
+        std::string s = str(m1) + "MB";
+        previewMemory->SetLabel(wxString::FromAscii(s.c_str()));
+    }        
+    {
+        deChannelManager& channelManager = project.getSourceChannelManager();
+        int size = sizeof(deValue) * channelManager.getChannelSize().getN();
+        int n = channelManager.getNumberOfAllocatedChannels();
+        m2 = n * size / (1024 * 1024);
+
+        sourceChannels->SetLabel(wxString::FromAscii(str(n).c_str()));
+        sourceSize->SetLabel(wxString::FromAscii(str(size).c_str()));
+        std::string s = str(m2) + "MB";
+        sourceMemory->SetLabel(wxString::FromAscii(s.c_str()));
+    }        
+
+    int m = m1 + m2;
+    std::string s = str(m) + "MB";
+    totalMemory->SetLabel(wxString::FromAscii(s.c_str()));
+
+    Layout();
+    Fit();
+}
+
 deMemoryInfoFrame::deMemoryInfoFrame(wxWindow *parent, deProject& _project)
 :deHelpFrame(parent), project(_project)
 {
-    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    SetSizer(sizer);
-
-    int m = 0;
-
-    { 
-        deChannelManager& channelManager = project.getPreviewChannelManager();
-        m+= generateInfo(channelManager, this, sizer, _T("preview channels"));
-    }        
-
-    { 
-        deChannelManager& channelManager = project.getSourceChannelManager();
-        m+= generateInfo(channelManager, this, sizer, _T("source channels"));
-    }        
+    wxSizer* sizerB = new wxStaticBoxSizer(wxVERTICAL, this,  _T("memory info"));
+    SetSizer(sizerB);
+    wxSizer* sizer = new wxFlexGridSizer(2);
+    sizerB->Add(sizer);
 
     {
-        std::ostringstream oss;
-        oss << "total memory usage: " << m << " MB";
-        wxStaticText* l1 = new wxStaticText(this, wxID_ANY, wxString::FromAscii(oss.str().c_str()));
-        sizer->Add(l1);
-    }
-
-    /*
-
-    std::vector<deColorSpace> colorSpaces;
-    getSupportedColorSpaces(colorSpaces);
-
-    int width = 256;
-    int barSize = 40;
-
-    std::vector<deColorSpace>::iterator i;
-    for (i = colorSpaces.begin(); i != colorSpaces.end(); i++)
+        wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("allocated preview channels:"));
+        sizer->Add(l);
+        previewChannels = new wxStaticText(this, wxID_ANY, _T(""));
+        sizer->Add(previewChannels);
+    }        
     {
-        deColorSpace c = *i;
+        wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("preview channel size:"));
+        sizer->Add(l);
+        previewSize = new wxStaticText(this, wxID_ANY, _T(""));
+        sizer->Add(previewSize);
+    }        
+    {
+        wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("memory used by preview channels:"));
+        sizer->Add(l);
+        previewMemory = new wxStaticText(this, wxID_ANY, _T(""));
+        sizer->Add(previewMemory);
+    }        
+    {
+        wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("allocated source channels:"));
+        sizer->Add(l);
+        sourceChannels = new wxStaticText(this, wxID_ANY, _T(""));
+        sizer->Add(sourceChannels);
+    }        
+    {
+        wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("source channel size:"));
+        sizer->Add(l);
+        sourceSize = new wxStaticText(this, wxID_ANY, _T(""));
+        sizer->Add(sourceSize);
+    }        
+    {
+        wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("memory used by source channels:"));
+        sizer->Add(l);
+        sourceMemory = new wxStaticText(this, wxID_ANY, _T(""));
+        sizer->Add(sourceMemory);
+    }        
+    {
+        wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("total memory used:"));
+        sizer->Add(l);
+        totalMemory = new wxStaticText(this, wxID_ANY, _T(""));
+        sizer->Add(totalMemory);
+    }        
 
-        wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this,  wxString::FromAscii(getColorSpaceName(c).c_str()));
-        sizer->Add(sizerB);
+    update();
 
-        int n = getColorSpaceSize(c);
-        int j;
-        for (j = 0; j < n; j++)
-        {
-            wxSizer* sizerBC= new wxStaticBoxSizer(wxHORIZONTAL, this,  wxString::FromAscii(getChannelName(c, j).c_str()));
-            sizerB->Add(sizerBC);
-
-            deGradientPanel* gradient = new deGradientPanel(this, wxSize(width, barSize), c, j, -1);
-            sizerBC->Add(gradient, 0, wxCENTER);
-        }
-    }*/
-
-    Fit();
 
 }
 

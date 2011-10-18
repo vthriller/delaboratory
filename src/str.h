@@ -34,6 +34,7 @@ std::string removePathAndExtension(const std::string& fileName);
 
 std::string str(deValue n);
 std::string str(int n);
+std::string str(unsigned int n);
 std::string str(bool b);
 std::string str(wxString& ws);
 

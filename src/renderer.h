@@ -24,33 +24,18 @@ class wxDC;
 class wxImage;
 #include "size.h"
 
-/*
-class dePreview;
-#include "view_mode.h"
-*/
-
 class deRenderer
 {
     private:
         wxImage* image;
         deProject* project;
         deSize size;
-    /*
-        deViewMode viewMode;
-        int viewChannel;
-#ifdef DE_PROFILER        
-        int renders;
-#endif        
-*/
+
     public:
         deRenderer(deProject* _project);
         virtual ~deRenderer();
 
         bool render(wxDC& dc);
-
-/*
-        void setViewMode(const deViewMode& mode, int channel);
-        */
 };
 
 #endif

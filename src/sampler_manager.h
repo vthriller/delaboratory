@@ -23,16 +23,6 @@ class deProject;
 #include "sampler.h"
 #include <vector>
 
-
-/*
-#include "color_space.h"
-*/
-
-/*
-#include "size.h"
-#include "channel.h"
-
-*/
 class deSamplerManager
 {
     private:
@@ -41,21 +31,6 @@ class deSamplerManager
 
         int selected;
 
-    /*
-        int view;
-        deProject& project;
-        bool single;
-        int channel;
-        bool showBlendMask;
-        int blendMaskChannel;
-        */
-    /*
-        deSize channelSize;
-
-
-        int insertNewChannel(deChannel* channel);
-        void destroyAllChannels();
-        */
         
     public:
         deSamplerManager(deProject& _project);
@@ -67,40 +42,6 @@ class deSamplerManager
         void onImageClick(deValue x, deValue y);
         void setSelected(int s);
         int getSelected() const {return selected;};
-
-
-        /*
-
-        void setView(int v);
-        int getView() const;
-
-        void repaint();
-
-        void setSingleChannel(int _channel);
-        void setNormal();
-
-        deColorSpace getColorSpace() const;
-
-        bool isSingleChannel() const {return single;};
-        int getChannel() const {return channel;};
-
-        void showMask(int maskChannel);
-        void hideMask();
-
-        bool maskVisible() const;
-        int getMaskChannel() const;
-        */
-
-    /*
-
-        void setChannelSize(const deSize& size);
-
-        int allocateNewChannel();
-        deChannel* getChannel(int index);
-        int destroyChannel(int index);
-        */
-
-
 };
 
 #endif

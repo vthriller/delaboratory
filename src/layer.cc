@@ -26,8 +26,6 @@
 deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer)
 :name(_name), colorSpace(_colorSpace), index(_index), sourceLayer(_sourceLayer)
 {
-//    std::cout << "create layer with _index " << _index << std::endl;
-//    std::cout << "create layer with index " << index << std::endl;
     actionFrame = NULL;
     blendFrame = NULL;
 }

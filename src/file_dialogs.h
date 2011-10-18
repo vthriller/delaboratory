@@ -16,12 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_APPLY_CHANNEL_H
-#define _DE_APPLY_CHANNEL_H
+#ifndef _DE_FILE_DIALOGS_H
+#define _DE_FILE_DIALOGS_H
 
-class dePreview;
-#include "color_space.h"
+#include <string>
+#include <wx/wx.h>
 
-void applyChannels(const dePreview* sourcePreview, const dePreview* overlayPreview, dePreview* preview, deColorSpace colorSpace, bool a[4]);
+std::string getSaveFile(wxWindow* parent, const std::string& info, const std::string& t);
+std::string getOpenFile(wxWindow* parent, const std::string& info, const std::string& t);
 
-#endif    
+#endif

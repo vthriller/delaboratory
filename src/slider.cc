@@ -41,7 +41,6 @@ void deSlider::setEdit(deValue v)
 {
     std::ostringstream oss;
     oss << v;
-    //edit->ChangeValue(wxString::FromAscii(oss.str().c_str()));
     labelValue->SetLabel(wxString::FromAscii(oss.str().c_str()));
 }
 
@@ -62,19 +61,6 @@ void deSlider::finishMoveSlider(wxCommandEvent &event)
     updateValueFromSlider(true);
 }
 
-void deSlider::textEnter(wxCommandEvent &event)
-{
-/*
-    wxString valueStr = edit->GetValue();
-    double value;
-    if (valueStr.ToDouble(&value))
-    {
-        setSlider(value);
-        onValueChange(value, true);
-    }
-    */
-}
-
 deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue)
 :wxPanel(parent), sliderRange(_sliderRange), valueMin(_valueMin), valueMax(_valueMax)
 {
@@ -82,16 +68,12 @@ deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _slider
     sizer = new wxBoxSizer(wxHORIZONTAL);
     
     label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(labelString.c_str()), wxDefaultPosition, wxSize(80, 30));
-    //sizer->Add(label, 0, wxEXPAND);
     sizer->Add(label, 0, wxCENTER);
 
     slider = new wxSlider(this, wxID_ANY, sliderRange, 0,  sliderRange, wxDefaultPosition, wxSize(sliderRange, -1), wxSL_HORIZONTAL);
     sizer->Add(slider, 0);
 
-    /*edit = new wxTextCtrl(this, wxID_ANY, _T("inv"), wxDefaultPosition, wxSize(60, -1), wxTE_PROCESS_ENTER);
-    sizer->Add(edit, 0, wxEXPAND);*/
     labelValue = new wxStaticText(this, wxID_ANY, _T("inv"), wxDefaultPosition, wxSize(40, 30));
-    //sizer->Add(labelValue, 0, wxEXPAND);
     sizer->Add(labelValue, 0, wxCENTER);
 
     SetSizer(sizer);
@@ -100,7 +82,6 @@ deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _slider
 
     Connect(wxEVT_SCROLL_THUMBTRACK, wxCommandEventHandler(deSlider::moveSlider));
     Connect(wxEVT_SCROLL_CHANGED, wxCommandEventHandler(deSlider::finishMoveSlider));
-//    Connect(wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler(deSlider::textEnter));
 }
 
 deSlider::~deSlider()

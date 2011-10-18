@@ -31,13 +31,6 @@ std::string getExtension(const std::string& s)
     return s.substr(pos + 1, s.size() - pos - 1);
 }
 
-/*
-std::string replaceExtension(const std::string& s, const std::string& ext)
-{
-    return getBaseName(s) + "." + ext;
-}
-*/
-
 std::string removePathAndExtension(const std::string& fileName)
 {
     size_t posDot = fileName.rfind(".");
@@ -55,6 +48,13 @@ std::string removePathAndExtension(const std::string& fileName)
 }
 
 std::string str(int n)
+{
+    std::ostringstream oss;
+    oss << n;
+    return oss.str();
+}    
+
+std::string str(unsigned int n)
 {
     std::ostringstream oss;
     oss << n;
