@@ -28,8 +28,8 @@ void boxBlur(deValue* source, deValue* destination, int n, int s)
     {
         deValue result = 0.0;
 
-        int n1 = i - s;
-        int n2 = i + s;
+        int n1 = i - s + 1;
+        int n2 = i + s - 1;
         if (n1 < 0)
         {
             n1 = 0;
