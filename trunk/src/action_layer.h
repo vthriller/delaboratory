@@ -21,12 +21,18 @@
 
 #include "layer.h"
 #include "blend_mode.h"
-#include "apply_mode.h"
 #include "size.h"
 class deLayerStack;
 class deChannelManager;
 class deViewManager;
 #include <set>
+
+enum deApplyMode
+{
+    deApplyLuminance,
+    deApplyColor,
+    deApplyLuminanceAndColor
+};
 
 class deActionLayer:public deLayer
 {

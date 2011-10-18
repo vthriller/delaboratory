@@ -22,6 +22,7 @@
 #include <vector>
 #include <map>
 #include <libxml/parser.h>
+#include <wx/progdlg.h>
 
 class deLayer;
 class deChannelManager;
@@ -46,7 +47,7 @@ class deLayerStack
         void updateImages();
         void updateImages(int a, int b);
 
-        void updateImagesSmart(deChannelManager& channelManager, int view);
+        void updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog);
 
         void generateChannelUsage(std::map<int, int>& channelUsage);
 

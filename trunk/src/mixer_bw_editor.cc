@@ -42,10 +42,6 @@ class deMixerBWSlider:public deSlider
             if (finished)
             {
                 layer.setWeight(s, value);
-                /*
-                layer.onChannelChange(d);
-                layer.updateOtherLayers();
-                */
                 layer.updateImage();
                 layer.updateAndRepaint();
             }                
@@ -72,7 +68,6 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
     {
         std::string src = getChannelName(sourceColorSpace, i);
         deMixerBWSlider* slider = new deMixerBWSlider(this, width, layer, i, src);        
-    //    sliders.push_back(slider);
         sizer->Add(slider);
     }
 

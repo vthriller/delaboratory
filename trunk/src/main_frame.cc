@@ -30,14 +30,18 @@
 #include "help_color_spaces_frame5.h"
 #include "help_color_spaces_frame6.h"
 #include "memory_info_frame.h"
+#include "benchmark_frame.h"
 #include "project.h"
 #include "str.h"
+#include "file_dialogs.h"
+#include "delaboratory.h"
 
 enum
 {
     ID_Quit = 1,
     ID_NewProject,
-    ID_TestImage,
+    ID_TestImageSmall,
+    ID_TestImageBig,
     ID_OpenImage,
     ID_OpenProject,
     ID_SaveProject,
@@ -51,13 +55,16 @@ enum
     ID_LABColors1,
     ID_LABColors2,
     ID_LABColors5,
-    ID_MemoryInfo
+    ID_MemoryInfo,
+    ID_BenchmarkBlur,
+    ID_BenchmarkColor
 };
 
 BEGIN_EVENT_TABLE(deMainFrame, wxFrame)
 EVT_MENU(ID_Quit, deMainFrame::onQuit)
 EVT_MENU(ID_NewProject, deMainFrame::onNewProject)
-EVT_MENU(ID_TestImage, deMainFrame::onTestImage)
+EVT_MENU(ID_TestImageSmall, deMainFrame::onTestImageSmall)
+EVT_MENU(ID_TestImageBig, deMainFrame::onTestImageBig)
 EVT_MENU(ID_OpenImage, deMainFrame::onOpenImage)
 EVT_MENU(ID_OpenProject, deMainFrame::onOpenProject)
 EVT_MENU(ID_SaveProject, deMainFrame::onSaveProject)
@@ -72,69 +79,16 @@ EVT_MENU(ID_LABColors1, deMainFrame::onLABColors1)
 EVT_MENU(ID_LABColors2, deMainFrame::onLABColors2)
 EVT_MENU(ID_LABColors5, deMainFrame::onLABColors5)
 EVT_MENU(ID_MemoryInfo, deMainFrame::onMemoryInfo)
+EVT_MENU(ID_BenchmarkBlur, deMainFrame::onBenchmarkBlur)
+EVT_MENU(ID_BenchmarkColor, deMainFrame::onBenchmarkColor)
 END_EVENT_TABLE()
-
-wxString getFileType(const std::string& t)
-{
-    if (t == "image")
-    {
-        return _T("TIFF / JPEG (*.tiff;*.tif;*.jpeg;*.jpg) | *.tiff;*.tif;*.jpeg;*.jpg");
-    }
-    if (t == "tiff")
-    {
-        return _T("TIFF (*.tiff;*.tif) | *.tiff;*.tif");
-    }
-    if (t == "jpeg")
-    {
-        return _T("JPEG (*.jpeg;*.jpg) | *.jpeg;*.jpg");
-    }
-    if (t == "delab")
-    {
-        //return _T("JPEG (;*.delab) | ;*.delab");
-        return _T("JPEG (*.delab) | ;*.delab");
-    }
-
-    return _T("");
-}
-
-std::string getSaveFile(wxWindow* parent, const std::string& info, const std::string& t)
-{
-    wxString type = getFileType(t);
-
-    wxFileDialog saveFileDialog(parent, wxString::FromAscii(info.c_str()), _T(""), _T(""), type, wxFD_SAVE);
-
-    if (saveFileDialog.ShowModal() == wxID_CANCEL)
-    {
-        return "";
-    }
-
-    wxString path = saveFileDialog.GetPath();
-    return str(path);
-}
-
-std::string getOpenFile(wxWindow* parent, const std::string& info, const std::string& t)
-{
-
-    //wxString pwd = wxGetCwd();
-    //std::cout << "current: " << str(pwd) << std::endl;
-
-    wxString type = getFileType(t);
-
-    wxFileDialog openFileDialog(parent, wxString::FromAscii(info.c_str()), _T(""), _T(""), type, wxFD_OPEN);
-
-    if (openFileDialog.ShowModal() == wxID_CANCEL)
-    {
-        return "";
-    }
-
-    wxString path = openFileDialog.GetPath();
-    return str(path);
-}
 
 deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
 : wxFrame() , project(_project)
 {
-    bool created = Create((wxFrame *)NULL, wxID_ANY, _T("delaboratory-svn (c) 2011 Jacek Poplawski"), wxDefaultPosition, size);
+    std::string s = getApplicationName() + " " + getVersion() + " " + getCopyright();
+
+    bool created = Create((wxFrame *)NULL, wxID_ANY, wxString::FromAscii(s.c_str()), wxDefaultPosition, size);
 
     mainSizer = new wxBoxSizer(wxHORIZONTAL);
 
@@ -184,7 +138,8 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
     menuFile->Append( ID_NewProject, _("New project") );
     menuFile->AppendSeparator();
     menuFile->Append( ID_OpenImage, _("Open image") );
-    menuFile->Append( ID_TestImage, _("Generate test image") );
+    menuFile->Append( ID_TestImageSmall, _("Generate test image (small)") );
+    menuFile->Append( ID_TestImageBig, _("Generate test image (big, slow)") );
     menuFile->AppendSeparator();
     menuFile->Append( ID_OpenLayerStack, _("Open layer stack") );
     menuFile->Append( ID_SaveLayerStack, _("Save layer stack") );
@@ -203,11 +158,16 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
     menuHelp->Append( ID_LABColors1, _("LAB colors 1") );
     menuHelp->Append( ID_LABColors2, _("LAB colors 2") );
     menuHelp->Append( ID_LABColors5, _("LAB colors 5") );
-    menuHelp->AppendSeparator();
-    menuHelp->Append( ID_MemoryInfo, _("memory info") );
+
+    wxMenu *menuInfo = new wxMenu;
+    menuInfo->Append( ID_MemoryInfo, _("memory info") );
+    menuInfo->AppendSeparator();
+    menuInfo->Append( ID_BenchmarkColor, _("benchmark color conversion") );
+    menuInfo->Append( ID_BenchmarkBlur, _("benchmark blur") );
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, _("&File") );
+    menuBar->Append( menuInfo, _("&Info") );
     menuBar->Append( menuHelp, _("&Help") );
 
     SetMenuBar( menuBar );
@@ -288,9 +248,14 @@ void deMainFrame::onNewProject(wxCommandEvent& WXUNUSED(event))
     project->newProject();
 }
 
-void deMainFrame::onTestImage(wxCommandEvent& WXUNUSED(event))
+void deMainFrame::onTestImageSmall(wxCommandEvent& WXUNUSED(event))
 {
-    project->setTestImage();
+    project->setTestImage(900);
+}
+
+void deMainFrame::onTestImageBig(wxCommandEvent& WXUNUSED(event))
+{
+    project->setTestImage(1800);
 }
 
 void deMainFrame::onOpenImage(wxCommandEvent& WXUNUSED(event))
@@ -351,4 +316,18 @@ void deMainFrame::onMemoryInfo(wxCommandEvent& event)
 {
     wxFrame* help = new deMemoryInfoFrame(this, *project);
     help->Show();
+}
+
+void deMainFrame::onBenchmarkBlur(wxCommandEvent& event)
+{
+    deBenchmarkFrame* help = new deBenchmarkFrame(this, "blur");
+    help->Show();
+    help->perform();
+}
+
+void deMainFrame::onBenchmarkColor(wxCommandEvent& event)
+{
+    deBenchmarkFrame* help = new deBenchmarkFrame(this, "color");
+    help->Show();
+    help->perform();
 }

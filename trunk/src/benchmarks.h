@@ -16,28 +16,46 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_MEMORY_INFO_FRAME_H
-#define _DE_MEMORY_INFO_FRAME_H
+#ifndef _DE_BENCHMARKS_H
+#define _DE_BENCHMARKS_H
 
-#include "help_frame.h"
-class deProject;
+#include "blur.h"
+#include "color_space.h"
 
-class deMemoryInfoFrame:public deHelpFrame
+class deBenchmark
 {
     private:
-        deProject& project;
-        wxStaticText* previewChannels;
-        wxStaticText* previewSize;
-        wxStaticText* previewMemory;
-        wxStaticText* sourceChannels;
-        wxStaticText* sourceSize;
-        wxStaticText* sourceMemory;
-        wxStaticText* totalMemory;
     public:
-        deMemoryInfoFrame(wxWindow *parent, deProject& _project);
-        virtual ~deMemoryInfoFrame();
+        deBenchmark();
+        virtual ~deBenchmark();
 
-        void update();
+        virtual int perform() = 0;
+};
+
+class deBenchmarkBlur:public deBenchmark
+{
+    private:
+        deSize size;
+        deValue radius;
+        deBlurType type;
+    public:
+        deBenchmarkBlur(deSize _size, deValue _radius, deBlurType _type);
+        virtual ~deBenchmarkBlur();
+
+        virtual int perform();
+};
+
+class deBenchmarkColor:public deBenchmark
+{
+    private:
+        int size;
+        deColorSpace src;
+        deColorSpace dst;
+    public:
+        deBenchmarkColor(int _size, deColorSpace _src, deColorSpace _dst);
+        virtual ~deBenchmarkColor();
+
+        virtual int perform();
 };
 
 #endif

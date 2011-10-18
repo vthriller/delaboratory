@@ -39,7 +39,7 @@ void generateMandelbrot(deValue* r, deValue* g, deValue* b, deSize size, deValue
 
     int p = 0;
 
-    deValue maxI = 500.0;
+    deValue maxI = 400.0;
 
     deValue marg = 4.0;
 
@@ -64,7 +64,7 @@ void generateMandelbrot(deValue* r, deValue* g, deValue* b, deSize size, deValue
             deValue zy2 = 0;
 
             int i;
-            for (i = 0; i< maxI && (zx2 + zy2 < marg); i++)
+            for (i = 0; i < maxI && (zx2 + zy2 < marg); i++)
             {
                 zy = 2 * zx * zy + cy;
                 zx = zx2 - zy2 + cx;

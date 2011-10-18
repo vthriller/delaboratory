@@ -19,6 +19,7 @@
 #include "layer_stack.h"
 #include "layer.h"
 #include "channel_manager.h"
+#include "str.h"
 
 deLayerStack::deLayerStack()
 {
@@ -26,9 +27,7 @@ deLayerStack::deLayerStack()
 
 deLayerStack::~deLayerStack()
 {
-//    std::cout << " delete layer stack..." << std::endl;
     clear();
-//    std::cout << " delete layer stack done" << std::endl;
 }
 
 void deLayerStack::clear()
@@ -80,33 +79,23 @@ void deLayerStack::updateImages(int a, int b)
     assert(b < layers.size() );
     for (i = a; i <= b; i++)
     {
-//        std::cout << "update image of layer " << i << std::endl;
         layers[i]->updateImage();
     }
 }
 
-void deLayerStack::updateImagesSmart(deChannelManager& channelManager, int view)
+void deLayerStack::updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog)
 {
-    // FIXME channels are enabled/disabled/allocated during update, can't use this method
-
-//    updateImages();
     channelManager.lock();
 
     std::map<int, int> channelUsage;
     generateChannelUsage(channelUsage);
 
-
-    std::map<int, int>::iterator i;
-    for (i = channelUsage.begin(); i != channelUsage.end(); i++)
-    {
-//        std::cout << "c: " << i->first << " l: " << i->second << std::endl;
-    }
-
     unsigned int index;
+    int progress = 0;
     assert(view < layers.size());
     for (index = 0; index <= view; index++)
     {
-//        std::cout << "update layer " << index << std::endl;
+        std::map<int, int>::iterator i;
         int previous = index - 1;
         if (previous >= 0)
         {
@@ -116,15 +105,31 @@ void deLayerStack::updateImagesSmart(deChannelManager& channelManager, int view)
                 int l = i->second;
                 if (l == previous)
                 {
-//                    std::cout << "destroy channel " << c << std::endl;
                     channelManager.destroyChannel(c);
                 }
             }
         }
 
-        layers[index]->updateImage();
-//        std::cout << "channels: " << channelManager.getNumberOfAllocatedChannels() << std::endl;
+        deLayer* layer = layers[index];
+        std::string label = str(index) + " " + layer->getName();
+
+        progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
+
+        layer->updateImage();
+
+        if (view > 0)
+        {
+            progress = 100 * index / view;
+        }
+        else
+        {
+            progress = 100;
+        }
+
+        progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
     }
+
+    progressDialog->Update(100, _T("finished"));
 
     channelManager.unlock();
 }

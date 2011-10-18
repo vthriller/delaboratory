@@ -130,7 +130,6 @@ void deProject::onKey(int key)
 
 void deProject::init(const std::string& fileName)
 {
-//    std::cout << "init: " << fileName << std::endl;
     openImage(fileName);
 
 }
@@ -151,12 +150,11 @@ void deProject::freeImage()
     }
 }
 
-void deProject::setTestImage()
+void deProject::setTestImage(int s)
 {
-
     freeImage();
 
-    deSize size(900,900);
+    deSize size(s, s);
 
     sourceChannelManager.setChannelSize(size);
     sourceR = sourceChannelManager.allocateNewChannel();
@@ -297,9 +295,9 @@ void deProject::repaintImage()
     updateSamplers();
 }
 
-void deProject::exportTIFF(const std::string& app)
+void deProject::exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog)
 {
-    if (imageFileName == "")
+    if ((name == "") && (imageFileName == ""))
     {
         return;
     }
@@ -311,14 +309,18 @@ void deProject::exportTIFF(const std::string& app)
         path = "/tmp/";
     }
 
-    std::string fileName = path + imageFileName + ".tiff";
+    std::string fileName = name;
+    if (fileName == "")
+    {
+        fileName = path + imageFileName + "." + type;
+    }        
 
     deSize originalSize = previewChannelManager.getChannelSize();
 
     int view = viewManager.getView();
 
     previewChannelManager.setChannelSize(sourceChannelManager.getChannelSize());
-    layerStack.updateImagesSmart(previewChannelManager, view);
+    layerStack.updateImagesSmart(previewChannelManager, view, progressDialog);
 
     deLayer* layer = layerStack.getLayer(view);
     const deImage& image = layer->getImage();
@@ -328,7 +330,15 @@ void deProject::exportTIFF(const std::string& app)
         deChannel* r = previewChannelManager.getChannel(image.getChannelIndex(0));
         deChannel* g = previewChannelManager.getChannel(image.getChannelIndex(1));
         deChannel* b = previewChannelManager.getChannel(image.getChannelIndex(2));
-        saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+
+        if (type == "tiff")
+        {
+            saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+        }            
+        if (type == "jpeg")
+        {
+            saveJPEG(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+        }            
     }
     else
     {
@@ -338,10 +348,15 @@ void deProject::exportTIFF(const std::string& app)
         deChannel* r = previewChannelManager.getChannel(finalImage.getChannelIndex(0));
         deChannel* g = previewChannelManager.getChannel(finalImage.getChannelIndex(1));
         deChannel* b = previewChannelManager.getChannel(finalImage.getChannelIndex(2));
-        saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
-
+        if (type == "tiff")
+        {
+            saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+        }            
+        if (type == "jpeg")
+        {
+            saveJPEG(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+        }            
     }
-
 
     previewChannelManager.setChannelSize(originalSize);
 
@@ -354,6 +369,7 @@ void deProject::exportTIFF(const std::string& app)
     }
 
     layerStack.updateImages();
+    repaintImage();
 
 }
 
@@ -579,7 +595,6 @@ deHistogramPanel* deProject::getHistogramPanel()
 
 void deProject::openImage(const std::string& fileName)
 {
-//    std::cout << "open: " << fileName << std::endl;
     freeImage();
 
     bool tiff = checkTIFF(fileName);

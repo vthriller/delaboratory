@@ -21,10 +21,7 @@
 
 #include <wx/wx.h>
 #include <vector>
-/*
-#include <map>
-#include "color_space.h"
-*/
+
 class deProject;
 
 class deHistogramModePanel:public wxPanel

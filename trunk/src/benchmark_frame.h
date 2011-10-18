@@ -16,21 +16,31 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_APPLY_MODE_H
-#define _DE_APPLY_MODE_H
+#ifndef _DE_BENCHMARK_FRAME_H
+#define _DE_BENCHMARK_FRAME_H
 
-enum deApplyMode
+#include "help_frame.h"
+#include "benchmarks.h"
+
+class deBenchmarkFrame:public deHelpFrame
 {
-    deApplyLuminance,
-    deApplyColor,
-    deApplyLuminanceAndColor
-};
+    private:
+        wxSizer* sizer;
+        std::vector<deBenchmark*> benchmarks;
+        std::vector<wxStaticText*> results;
 
-/*
-std::string getBlendModeName(deBlendMode mode);
-void getSupportedBlendModes(std::vector<deBlendMode>& result);
-deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode);
-deBlendMode blendModeFromString(const std::string& s);
-*/
+        void addBenchmark(const std::string& s, std::string name, int value);
+        void addBenchmarkBlur(deSize size, deValue radius, deBlurType type);
+        void addBenchmarkBlurs( deSize size, deBlurType type);
+        void addBenchmarkColor();
+        void addBenchmarkColor(deColorSpace colorSpace);
+
+    public:
+        deBenchmarkFrame(wxWindow *parent, const std::string& type);
+        virtual ~deBenchmarkFrame();
+
+        void perform();
+
+};
 
 #endif

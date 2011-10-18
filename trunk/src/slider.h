@@ -29,7 +29,6 @@ class deSlider:public wxPanel
         wxStaticText* label;
         wxStaticText* labelValue;
         wxSlider* slider;
-//        wxTextCtrl* edit;
         int sliderRange;
         deValue valueMin;
         deValue valueMax;
@@ -37,7 +36,6 @@ class deSlider:public wxPanel
 
         void moveSlider(wxCommandEvent &event);
         void finishMoveSlider(wxCommandEvent &event);
-        void textEnter(wxCommandEvent &event);
 
         void updateValueFromSlider(bool finished);
 

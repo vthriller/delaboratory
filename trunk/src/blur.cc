@@ -22,6 +22,7 @@
 
 void boxBlur(deValue* source, deValue* destination, int n, int s)
 {
+//    std::cout << "box blur s: " << s << std::endl;
     int i;
     for (i = 0; i < n; i++)
     {
@@ -50,6 +51,7 @@ void boxBlur(deValue* source, deValue* destination, int n, int s)
 
 void gaussianBlur(deValue* source, deValue* destination, int n, int s, deValue* weights)
 {
+//    std::cout << "gaussian blur s: " << s << std::endl;
     int i;
     for (i = 0; i < n; i++)
     {
@@ -208,6 +210,9 @@ void blurChannel(const deValue* source, deValue* destination, deSize size, deVal
     {
         blurSizeH = 1;
     }
+
+//    std::cout << "w: " << blurSizeW << " h: " << blurSizeH << std::endl;
+
     int maxSize = blurSizeW;
     if (blurSizeH > maxSize)
     {

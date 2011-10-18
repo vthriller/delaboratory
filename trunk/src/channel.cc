@@ -20,13 +20,11 @@
 
 deChannel::deChannel(int size)
 {
-//    std::cout << "new channel" << std::endl;
     pixels = new deValue [size];
 }
 
 deChannel::~deChannel()
 {
-//    std::cout << "destroy channel" << std::endl;
     delete [] pixels;
 }
 

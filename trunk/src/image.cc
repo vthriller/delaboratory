@@ -69,23 +69,6 @@ int deImage::getChannelIndex(int n) const
     return channelsVisible[n];
 }
 
-/*
-void deImage::setValid()
-{
-    valid = true;
-}
-
-void deImage::setInvalid()
-{
-    valid = false;
-}    
-
-bool deImage::isValid() const
-{
-    return valid;
-}
-*/
-
 deColorSpace deImage::getColorSpace() const
 {
     return colorSpace;
@@ -120,7 +103,6 @@ void deImage::updateChannelUsage(std::map<int, int>& channelUsage, int index) co
     {
         int c = channelsVisible[i];
         channelUsage[c] = index;
-//        std::cout << "channel " << c << " used by " << index << std::endl;
     }        
 }
 

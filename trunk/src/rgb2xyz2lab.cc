@@ -48,10 +48,6 @@ static const deValue c4_29 = 4.0 / 29.0;
 
 void rgb2xyz(deValue r, deValue g, deValue b, deValue &x, deValue &y, deValue& z)
 {
-    /*x = 0.431 * r + 0.342 * g + 0.178 * b;
-    y = 0.222 * r + 0.707 * g + 0.071 * b;
-    z = 0.020 * r + 0.130 * g + 0.939 * b;
-    */
     assert(r >= 0);
     assert(g >= 0);
     assert(b >= 0);
@@ -86,12 +82,6 @@ void xyz2rgb(deValue x, deValue y, deValue z, deValue &r, deValue &g, deValue& b
     y *= Yscale;
     z *= Zscale;
 
-    /*r =  3.063 * x - 1.393 * y - 0.476 * z;
-    g = -0.969 * x + 1.876 * y + 0.042 * z;
-    b =  0.068 * x - 0.229 * y + 1.069 * z;*/
-    /*r =  3.2406 * x - 1.5372 * y - 0.4986 * z;
-    g = -0.9689 * x + 1.8758 * y + 0.0415 * z;
-    b =  0.0557 * x - 0.2040 * y + 1.0570 * z;*/
     r =  3.2410 * x - 1.5374 * y - 0.4986 * z;
     g = -0.9692 * x + 1.8760 * y + 0.0416 * z;
     b =  0.0556 * x - 0.2040 * y + 1.0570 * z;
@@ -310,49 +300,6 @@ void lab2xyz(deValue l, deValue a, deValue b, deValue &x, deValue &y, deValue& z
     x += Xoffset;
     y += Yoffset;
     z += Zoffset;
-
-/*
-    if (x < 0)
-    {
-        x = 0;
-    }
-    if (y < 0)
-    {
-        y = 0;
-    }
-    if (z < 0)
-    {
-        z = 0;
-    }
-    if (x > 1)
-    {
-        x = 1;
-    }
-    if (y > 1)
-    {
-        y = 1;
-    }
-    if (z > 1)
-    {
-        z = 1;
-    }*/
-
-    if (z < 0)
-    {
-        std::cout << "z: " << z << std::endl;
-    }
-    if (z > 1)
-    {
-        std::cout << "z: " << z << std::endl;
-    }
-    if (x < 0)
-    {
-        std::cout << "x: " << x << std::endl;
-    }
-    if (x > 1)
-    {
-        std::cout << "x: " << x << std::endl;
-    }
 
     assert(x >= 0);
     assert(y >= 0);

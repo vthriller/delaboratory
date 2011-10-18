@@ -96,16 +96,6 @@ deImagePanel::deImagePanel(wxWindow* parent, deProject* _project)
     Connect(wxEVT_LEFT_UP, wxMouseEventHandler(deImagePanel::release));
     Connect(wxEVT_MOTION, wxMouseEventHandler(deImagePanel::move));
     clicked = false;
-//    SetFocus();
-/*
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-    if (project)
-    {
-        project->logMessage("creating deImagePanel");
-    }        
-    project->getGUI().setImagePanel(this);
-
-*/
 }
 
 deImagePanel::~deImagePanel()
@@ -123,7 +113,6 @@ void deImagePanel::paint()
 {
     wxClientDC dc(this);
     wxBufferedDC bufferedDC(&dc);
-    //dc.Clear();
     bufferedDC.Clear();
     render(bufferedDC);
 }
@@ -173,34 +162,5 @@ void deImagePanel::drawSamplers(wxDC& dc)
         }            
     }
 
-    /*
-
-
-    deSamplers& samplers = samplerList.getSamplers();
-
-
-    deSamplers::const_iterator j;
-    int n = 0;
-    for (j = samplers.begin(); j != samplers.end(); j++)
-    {
-        const deSampler* sampler = *j;
-        if (sampler->isEnabled())
-        {
-            if (n == selected)
-            {
-                dc.SetPen(penGREEN);
-            }
-            else
-            {
-                dc.SetPen(penBLACK);
-            }
-            float x = sampler->getX();
-            float y = sampler->getY();
-            dc.DrawCircle(w * x, h * y, 3);
-        }
-        n++;
-    }
-    dc.SetPen(penBLACK);
-    */
 }
 

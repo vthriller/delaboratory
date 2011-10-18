@@ -100,7 +100,7 @@ class deProject
 
         void onChangeView(int a, int b);
 
-        void exportTIFF(const std::string& app);
+        void exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog);
 
         void deleteLayer();
 
@@ -126,7 +126,7 @@ class deProject
         void open(const std::string& fileName, bool image);
         void openImage(const std::string& fileName);
         void newProject();
-        void setTestImage();
+        void setTestImage(int s);
 
         void setImageAreaPanel(deImageAreaPanel* _imageAreaPanel);
 

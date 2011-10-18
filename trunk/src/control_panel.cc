@@ -23,6 +23,7 @@
 #include "layer_factory.h"
 #include "layer_grid_panel.h"
 #include "sampler_manager_frame.h"
+#include "file_dialogs.h"
 
 const int g_txt = 220;
 
@@ -183,6 +184,15 @@ void deControlPanel::onChangeView()
     setConversions();
 }
 
+void deControlPanel::generateFinalImage(const std::string& app, const std::string& type, const std::string& name)
+{
+    wxProgressDialog* progressDialog = new wxProgressDialog(_T("generate final image"), _T("generate final image"), 100, GetParent(), wxPD_AUTO_HIDE | wxPD_ELAPSED_TIME);
+
+    project->exportFinalImage(app, type, name, progressDialog);
+
+    delete progressDialog;
+}
+
 void deControlPanel::click(wxCommandEvent &event)
 {
     int id = event.GetId();
@@ -199,14 +209,23 @@ void deControlPanel::click(wxCommandEvent &event)
         showSamplers();
     }
 
+    if (exportJPEG->GetId() == id)
+    {
+        std::string jpegFile = getSaveFile(this, "export JPEG", "jpeg");
+
+        generateFinalImage("", "jpeg", jpegFile);
+    }
+
     if (exportTIFF->GetId() == id)
     {
-        project->exportTIFF("");
+        std::string tiffFile = getSaveFile(this, "export TIFF", "tiff");
+
+        generateFinalImage("", "tiff", tiffFile);
     }
 
     if (externalEditor->GetId() == id)
     {
-        project->exportTIFF("gimp");
+        generateFinalImage("gimp", "tiff", "");
     }
 
     std::map<int, deColorSpace>::iterator c = convertButtonsColorSpaces.find(id);
