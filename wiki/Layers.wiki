@@ -57,7 +57,7 @@ Making whole image unsharp without any blending/masking is not a good idea.
 
 = USM = 
 
-USM means UnSharp Mask and it's sharpening tool known from other applications.
+USM means Unsharp Mask and it's sharpening tool known from other applications.
 There are three sliders: radius, amount and threshold.
 There are 4 presets to help you. 
 HIRALOAM means "high radius low amount" and it's well known technique (popularized by Dan Margulis) used to increase local contrast.
