@@ -94,8 +94,11 @@ void deBenchmarkFrame::addBenchmarkColor()
 deBenchmarkFrame::deBenchmarkFrame(wxWindow *parent, const std::string& type)
 :deHelpFrame(parent, "benchmark")
 {
+    wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(mainSizer);
+
     sizer = new wxFlexGridSizer(3, 0, 50);
-    SetSizer(sizer);
+    mainSizer->Add(sizer);
 
     if (type == "blur")
     {
@@ -109,6 +112,17 @@ deBenchmarkFrame::deBenchmarkFrame(wxWindow *parent, const std::string& type)
     if (type == "color")
     {
         addBenchmarkColor();
+    }        
+
+    {
+        wxSizer* totalSizer = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
+        mainSizer->Add(totalSizer, 0, wxEXPAND);
+
+        wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("total:"));
+        totalSizer->Add(l, 1, wxEXPAND);
+
+        total = new wxStaticText(this, wxID_ANY, _T(""));
+        totalSizer->Add(total, 1, wxEXPAND);
     }        
 
     Layout();
@@ -129,15 +143,22 @@ void deBenchmarkFrame::perform()
     int i;
     Update();
     Refresh();
+    deValue sum = 0.0;
     for (i = 0; i < benchmarks.size(); i++)
     {
         int r = benchmarks[i]->perform();
         int vv = r / 10;
         deValue vvv = vv / 100.0;
 
+        sum += vvv;
+
         results[i]->SetLabel(wxString::FromAscii(str(vvv).c_str()));
 
         Update();
         Refresh();
     }
+    total->SetLabel(wxString::FromAscii(str(sum).c_str()));
+    Update();
+    Refresh();
+
 }
