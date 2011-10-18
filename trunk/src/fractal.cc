@@ -101,5 +101,5 @@ void generateFractal(deValue* r, deValue* g, deValue* b, deSize size)
     blurChannel(b, tmp, size, r2, deGaussianBlur, 0);
     copyChannel(tmp, b, size);
 
-    delete tmp;
+    delete [] tmp;
 }
