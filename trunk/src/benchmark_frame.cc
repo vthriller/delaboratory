@@ -99,10 +99,12 @@ deBenchmarkFrame::deBenchmarkFrame(wxWindow *parent, const std::string& type)
 
     if (type == "blur")
     {
-        addBenchmarkBlurs(deSize(1024, 768), deBoxBlur);
+        addBenchmarkBlurs(deSize(1024, 1024), deBoxBlur);
         addBenchmarkBlurs(deSize(4000, 3000), deBoxBlur);
-        addBenchmarkBlurs(deSize(1024, 768), deGaussianBlur);
+        addBenchmarkBlurs(deSize(1024, 1024), deGaussianBlur);
         addBenchmarkBlurs(deSize(4000, 3000), deGaussianBlur);
+        addBenchmarkBlurs(deSize(1024, 1024), deSurfaceBlur);
+        addBenchmarkBlurs(deSize(4000, 3000), deSurfaceBlur);
     }        
     if (type == "color")
     {

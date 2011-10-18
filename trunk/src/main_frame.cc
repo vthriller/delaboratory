@@ -163,7 +163,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
     menuInfo->Append( ID_MemoryInfo, _("memory info") );
     menuInfo->AppendSeparator();
     menuInfo->Append( ID_BenchmarkColor, _("benchmark color conversion") );
-    menuInfo->Append( ID_BenchmarkBlur, _("benchmark blur") );
+    menuInfo->Append( ID_BenchmarkBlur, _("benchmark blur (slow!)") );
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, _("&File") );

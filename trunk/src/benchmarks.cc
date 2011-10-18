@@ -25,11 +25,19 @@ int benchmarkBlur(deSize size, deValue radius, deBlurType type)
     deValue* channel1 = new deValue[size.getN()];
     deValue* channel2 = new deValue[size.getN()];
 
+    int i;
+    int n = size.getN();
+
+    for (i = 0; i < n; i++)
+    {
+        channel1[i] = (deValue) rand() / RAND_MAX;
+    }            
+
     int t;
     {
         wxStopWatch sw;
 
-        blurChannel(channel1, channel2, size, radius, type, 0.5);
+        blurChannel(channel1, channel2, size, radius, type, 0.1);
 
         t = sw.Time();
     }
