@@ -29,6 +29,8 @@ class deBenchmarkFrame:public deHelpFrame
         std::vector<deBenchmark*> benchmarks;
         std::vector<wxStaticText*> results;
 
+        wxStaticText* total;
+
         void addBenchmark(const std::string& s, std::string name, int value);
         void addBenchmarkBlur(deSize size, deValue radius, deBlurType type);
         void addBenchmarkBlurs( deSize size, deBlurType type);
