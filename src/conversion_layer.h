@@ -20,6 +20,7 @@
 #define _DE_CONVERSION_LAYER_H
 
 #include "layer.h"
+#include "image.h"
 class deLayerStack;
 class deChannelManager;
 

@@ -22,6 +22,8 @@
 #include "layer.h"
 #include "blend_mode.h"
 #include "size.h"
+#include "image.h"
+#include "channel.h"
 class deLayerStack;
 class deChannelManager;
 class deViewManager;

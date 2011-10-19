@@ -19,14 +19,15 @@
 #ifndef _DE_LAYER_H
 #define _DE_LAYER_H
 
-#include "color_space.h"
-#include "channel.h"
-#include "image.h"
 #include <string>
+#include <map>
+#include "color_space.h"
 #include <libxml/parser.h>
+
 class deProject;
 class deFrame;
 class deBlendFrame;
+class deImage;
 
 class deLayer
 {
