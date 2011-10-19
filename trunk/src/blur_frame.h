@@ -21,37 +21,19 @@
 
 #include "action_frame.h"
 #include "slider.h"
-
-/*
-class deCurvesPanel;
-class deGradientPanel;
-*/
+#include <vector>
+#include "blur_type.h"
 
 class deBlurFrame:public deActionFrame
 {
     private:
+        wxChoice* choice;
         deSlider* radius;
-    /*
-        deCurvesPanel* curvesPanel;
+        deSlider* threshold;
+
+        std::vector<deBlurType> blurTypes;
 
         void choose(wxCommandEvent &event);
-        void click(wxCommandEvent &event);
-
-        deGradientPanel* leftBar;
-        deGradientPanel* bottomBar;
-
-        wxChoice* channelChoice;
-        wxButton* reset;
-        wxButton* invert;
-        wxButton* const0;
-        wxButton* const05;
-        wxButton* const1;
-        wxButton* angle1;
-        wxButton* angle2;
-        wxButton* angle3;
-        wxButton* angle4;
-        wxButton* angle5;
-        */
 
     public:
         deBlurFrame(wxWindow *parent, deActionLayer& _layer);

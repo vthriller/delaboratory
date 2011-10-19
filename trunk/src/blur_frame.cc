@@ -27,7 +27,7 @@ class deBlurRadiusSlider2:public deSlider
 
     public:
         deBlurRadiusSlider2(wxWindow *parent, int range, deBlurLayer& _layer)
-        :deSlider(parent, "blur radius", range, 0.0, 0.05, 0.0), layer(_layer)
+        :deSlider(parent, "radius", range, 0.0, 0.05, 0.0), layer(_layer)
         {
             setValue(layer.getBlurRadius());
         }
@@ -45,6 +45,31 @@ class deBlurRadiusSlider2:public deSlider
         }
 };        
 
+class deBlurThresholdSlider2:public deSlider
+{
+    private:
+        deBlurLayer& layer;
+
+    public:
+        deBlurThresholdSlider2(wxWindow *parent, int range, deBlurLayer& _layer)
+        :deSlider(parent, "threshold", range, 0.0, 1.0, 0.0), layer(_layer)
+        {
+            setValue(layer.getBlurThreshold());
+        }
+
+        virtual ~deBlurThresholdSlider2()
+        {
+        }
+
+        virtual void onValueChange(deValue value, bool finished)
+        {
+            if (finished)
+            {
+                layer.setBlurThreshold(value);
+            }                
+        }
+};        
+
 deBlurFrame::deBlurFrame(wxWindow *parent, deActionLayer& _layer)
 :deActionFrame(parent, _layer)
 {
@@ -53,13 +78,49 @@ deBlurFrame::deBlurFrame(wxWindow *parent, deActionLayer& _layer)
 
     deBlurLayer& blurLayer = dynamic_cast<deBlurLayer&>(_layer);
 
+    {
+        getSupportedBlurTypes(blurTypes);
+
+        deBlurType currentBlurType = blurLayer.getBlurType();
+
+        wxString* blurTypeStrings = new wxString [blurTypes.size()];
+        unsigned int i;
+        int selectedBlurType;
+        for (i = 0; i < blurTypes.size(); i++)
+        {
+            blurTypeStrings[i] = wxString::FromAscii(getBlurTypeName(blurTypes[i]).c_str());
+            if (currentBlurType == blurTypes[i])
+            {
+                selectedBlurType = i;
+            }
+        }        
+
+        choice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), blurTypes.size(), blurTypeStrings);
+        choice->SetSelection(selectedBlurType);
+
+        sizer->Add(choice);
+    }
+
     radius = new deBlurRadiusSlider2(this, 100, blurLayer);
     sizer->Add(radius);
 
+    threshold = new deBlurThresholdSlider2(this, 100, blurLayer);
+    sizer->Add(threshold);
+
     Fit();
+
+    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deBlurFrame::choose));
 }
 
 deBlurFrame::~deBlurFrame()
 {
 }
 
+void deBlurFrame::choose(wxCommandEvent &event)
+{
+    deBlurLayer& l = dynamic_cast<deBlurLayer&>(layer);
+
+    int i = event.GetInt();
+    deBlurType& type = blurTypes[i];
+    l.setBlurType(type);
+}
