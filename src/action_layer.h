@@ -166,6 +166,9 @@ class deActionLayer:public deLayer
         void enableChannel(int index);
         void disableChannel(int index);
 
+        virtual void loadBlend(xmlNodePtr root);
+        virtual void saveBlend(xmlNodePtr root);
+
 
 };
 

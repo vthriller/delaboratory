@@ -101,12 +101,16 @@ deValue deBlurLayer::getBlurThreshold() const
 void deBlurLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
+    saveBlend(root);
 
     saveChild(root, "radius", str(radius));
+    saveChild(root, "threshold", str(threshold));
 };
 
 void deBlurLayer::load(xmlNodePtr root)
 {
+    loadBlend(root);
+
     xmlNodePtr child = root->xmlChildrenNode;
 
     while (child)
@@ -115,6 +119,11 @@ void deBlurLayer::load(xmlNodePtr root)
         if ((!xmlStrcmp(child->name, BAD_CAST("radius")))) 
         {
             radius = getValue(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("threshold")))) 
+        {
+            threshold = getValue(getContent(child));
         }
 
         child = child->next;

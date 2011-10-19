@@ -633,3 +633,11 @@ void deActionLayer::disableChannel(int index)
     updateOtherLayers();
     repaint();
 }
+
+void deActionLayer::saveBlend(xmlNodePtr root)
+{
+};
+
+void deActionLayer::loadBlend(xmlNodePtr root)
+{
+}
