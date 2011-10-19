@@ -25,13 +25,13 @@
 #include <vector>
 
 typedef std::map<deValue, deValue> deNodes;
-class deCurveFunction;
+class deCurveFunctionBezier;
 
 class deCurveShape
 {
     private:
         deNodes nodes;
-        std::vector<deCurveFunction*> functions;
+        std::vector<deCurveFunctionBezier*> functions;
         int size;
 
 //        void storeValues(deValue x1, deValue y1, deValue x2, deValue y2);
