@@ -19,12 +19,10 @@
 #ifndef _DE_PROJECT_H
 #define _DE_PROJECT_H
 
-#include <string>
-#include "channel_manager.h"
 #include "layer_stack.h"
-#include "view_manager.h"
-#include "color_space.h"
 #include "sampler_manager.h"
+#include "channel_manager.h"
+#include "view_manager.h"
 
 class deImagePanel;
 class deHistogramPanel;

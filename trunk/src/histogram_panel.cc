@@ -22,6 +22,7 @@
 #include "channel.h"
 #include <sstream>
 #include "layer.h"
+#include "image.h"
 
 BEGIN_EVENT_TABLE(deHistogramPanel, wxPanel)
 EVT_PAINT(deHistogramPanel::paintEvent)

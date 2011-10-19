@@ -20,7 +20,6 @@
 #define _DE_CHANNEL_H
 
 #include "value.h"
-#include <iostream>
 
 class deChannel
 {
