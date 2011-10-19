@@ -489,10 +489,10 @@ void deActionLayer::updateChannel(int i)
         }
         else
         {
-            int s1 = sourceImage.getChannelIndex(i);
-            int s2 = sourceImage.getChannelIndex(i);
-            int s3 = sourceImage.getChannelIndex(i);
-            int s4 = sourceImage.getChannelIndex(i);
+            int s1 = sourceImage.getChannelIndex(0);
+            int s2 = sourceImage.getChannelIndex(1);
+            int s3 = sourceImage.getChannelIndex(2);
+            int s4 = sourceImage.getChannelIndex(3);
 
             deChannel* sc1 = channelManager.getChannel(s1);
             deChannel* sc2 = channelManager.getChannel(s2);
