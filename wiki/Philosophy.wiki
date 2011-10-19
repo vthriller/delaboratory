@@ -1,7 +1,7 @@
 #summary Design philosophy
 
   # == KISS ==
-   KISS - keep it simple - _“A poet knows he has achieved perfection not when there is nothing left to add, but when there is nothing left to take away.”_ *Leonardo da Vinci*
+   KISS - keep it simple - _"A designer knows he has achieved perfection not when there is nothing left to add, but when there is nothing left to take away."_ * Antoine de Saint-Exupéry *
   # == Free Software ==
    delaboratory is licensed under GPL3 - _"Software is like sex: it's better when it's free."_ *Linus Torvalds*
   # == Floating point precision ==
