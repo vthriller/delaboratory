@@ -653,4 +653,54 @@ void deActionLayer::saveBlend(xmlNodePtr root)
 
 void deActionLayer::loadBlend(xmlNodePtr root)
 {
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    while (child)
+    {
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("enabled")))) 
+        {
+            enabled = getBool(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("blend_mask")))) 
+        {
+            blendMask = getBool(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("opacity"))))
+        {
+            opacity = getValue(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("blend_blur_radius"))))
+        {
+            blendBlurRadius = getValue(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("blend_mask_min"))))
+        {
+            blendMaskMin = getValue(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("blend_mask_max"))))
+        {
+            blendMaskMax = getValue(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("blend_mask_layer"))))
+        {
+            blendMaskLayer = getInt(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("blend_mask_channel"))))
+        {
+            blendMaskChannel = getInt(getContent(child));
+        }
+
+
+        child = child->next;
+
+    }        
+
 }
