@@ -23,11 +23,7 @@
 #include "renderer.h"
 #include "value.h"
 class deProject;
-/*
 
-class deSize;
-class dePreview;
-*/
 class deImagePanel:public wxPanel
 {
 private:
