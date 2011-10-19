@@ -19,9 +19,9 @@
 #ifndef _DE_CURVE_FUNCTION_BEZIER_H
 #define _DE_CURVE_FUNCTION_BEZIER_H
 
-#include "curve_function.h"
+#include "value.h"
 
-class deCurveFunctionBezier:public deCurveFunction
+class deCurveFunctionBezier
 {
     private:
         deValue x0;
