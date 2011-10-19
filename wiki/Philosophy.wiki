@@ -1,8 +1,12 @@
 #summary Design philosophy
 
-   * *KISS* - keep it simple
-   * *Free Software* - delabotory is licensed under GPL3
-   * *each colorspace should be treated equally*, each operation should be available in each colorspace
-   * *fully non-destructive processing*, each operation can be adjusted at any time
-   * *floating point precision* in the whole engine, no problems with conversions to 8 or 16 bits
-   * *realtime preview* everything should be visible immediately
+  # == KISS ==
+   KISS - keep it simple - _“A poet knows he has achieved perfection not when there is nothing left to add, but when there is nothing left to take away.”_ *Leonardo da Vinci*
+  # == Free Software ==
+   delaboratory is licensed under GPL3 - _"Software is like sex: it's better when it's free."_ *Linus Torvalds*
+  # == Floating point precision ==
+   Each channel is stored as an array of floats. It means *96 bits per pixel* in RGB or LAB mode and 128 bits per pixel in CMYK mode. (GIMP uses 24 bits per pixel, many other applications use 48 bits per pixel, 96 bits per pixel can be achieved in RawTherapee and in G'MIC).
+  # == Non-destructive processing ==
+   Each operation can be adjusted at any time.
+  # == Realtime preview == 
+   Result of each operation should be immediately visible on preview.
