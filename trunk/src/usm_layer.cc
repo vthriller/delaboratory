@@ -174,6 +174,8 @@ void deUSMLayer::hiraloam2()
 void deUSMLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
+    saveBlend(root);
+
     saveChild(root, "radius", str(blurRadius));
     saveChild(root, "amount", str(amount));
     saveChild(root, "threshold", str(threshold));
@@ -181,6 +183,8 @@ void deUSMLayer::save(xmlNodePtr root)
 
 void deUSMLayer::load(xmlNodePtr root)
 {
+    loadBlend(root);
+
     xmlNodePtr child = root->xmlChildrenNode;
 
     while (child)

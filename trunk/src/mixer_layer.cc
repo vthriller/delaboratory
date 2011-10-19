@@ -87,6 +87,7 @@ deValue deMixerLayer::getWeight(int s, int d)
 void deMixerLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
+    saveBlend(root);
 
     int n = getColorSpaceSize(colorSpace);
     int i;
@@ -99,6 +100,8 @@ void deMixerLayer::save(xmlNodePtr root)
 
 void deMixerLayer::load(xmlNodePtr root)
 {
+    loadBlend(root);
+
     xmlNodePtr child = root->xmlChildrenNode;
 
     int i = 0;

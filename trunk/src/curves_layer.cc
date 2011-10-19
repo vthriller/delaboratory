@@ -78,6 +78,7 @@ void deCurvesLayer::onKey(int key)
 void deCurvesLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
+    saveBlend(root);
 
     int n = getColorSpaceSize(colorSpace);
     int i;
@@ -91,6 +92,8 @@ void deCurvesLayer::save(xmlNodePtr root)
 
 void deCurvesLayer::load(xmlNodePtr root)
 {
+    loadBlend(root);
+
     xmlNodePtr child = root->xmlChildrenNode;
     int n = getColorSpaceSize(colorSpace);
 

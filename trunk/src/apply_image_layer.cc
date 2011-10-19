@@ -112,6 +112,8 @@ void deApplyImageLayer::setAppliedChannel(int c)
 void deApplyImageLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
+    saveBlend(root);
+
     saveChild(root, "applied_layer", str(appliedLayer));
     saveChild(root, "applied_channel", str(appliedChannel));
     saveChild(root, "single_channel", str(singleChannel));
@@ -119,6 +121,8 @@ void deApplyImageLayer::save(xmlNodePtr root)
 
 void deApplyImageLayer::load(xmlNodePtr root)
 {
+    loadBlend(root);
+
     xmlNodePtr child = root->xmlChildrenNode;
 
     while (child)
