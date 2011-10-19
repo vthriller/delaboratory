@@ -61,12 +61,13 @@ class deActionLayer:public deLayer
 
         bool blendMask;
         bool blendMaskShow;
+
         int blendMaskLayer;
         int blendMaskChannel;
+
         deValue blendBlurRadius;
         deValue blendMaskMin;
         deValue blendMaskMax;
-        bool blendMaskInvert;
 
         virtual bool hasAction() const {return true;};
         virtual bool hasBlending() const {return true;};

@@ -25,6 +25,8 @@
 #include "blur.h"
 #include "copy_channel.h"
 #include "process_linear.h"
+#include "str.h"
+#include "xml.h"
 
 void blend(deValue* sourcePixels, deValue* overlayPixels, deValue* resultPixels, deValue* maskPixels, deBlendMode blendMode, deValue opacity, int channelSize)
 {
@@ -74,7 +76,6 @@ deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace,
     blendBlurRadius = 0;
     blendMaskMin = 0;
     blendMaskMax = 1;
-    blendMaskInvert = false;
     allocatedBlendMaskChannel = -1;
 
     int n = getColorSpaceSize(colorSpace);
@@ -587,7 +588,7 @@ void deActionLayer::renderBlendMask()
         blurChannel(maskPixels, allocatedMaskPixels, channelManager.getChannelSize(), blendBlurRadius, type, t);
     }       
 
-    processLinear(allocatedMaskPixels, channelManager.getChannelSize().getN(), blendMaskMin, blendMaskMax, blendMaskInvert);
+    processLinear(allocatedMaskPixels, channelManager.getChannelSize().getN(), blendMaskMin, blendMaskMax, false);
 
 }
 
@@ -636,6 +637,18 @@ void deActionLayer::disableChannel(int index)
 
 void deActionLayer::saveBlend(xmlNodePtr root)
 {
+    saveChild(root, "enabled", str(enabled));
+    // TODO channels
+    // TODO blend mode
+    saveChild(root, "opacity", str(opacity));
+    // TODO apply mode
+    saveChild(root, "blend_mask", str(blendMask));
+    saveChild(root, "blend_mask_layer", str(blendMaskLayer));
+    saveChild(root, "blend_mask_channel", str(blendMaskChannel));
+    saveChild(root, "blend_blur_radius", str(blendBlurRadius));
+    saveChild(root, "blend_mask_min", str(blendMaskMin));
+    saveChild(root, "blend_mask_max", str(blendMaskMax));
+
 };
 
 void deActionLayer::loadBlend(xmlNodePtr root)
