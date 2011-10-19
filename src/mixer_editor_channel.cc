@@ -179,8 +179,8 @@ void deMixerEditorChannel::preset(deValue a)
         }
         sliders[i]->setValue(v);
         layer.setWeight(i, index, v);
-        layer.onChannelChange(index);
     }
+    layer.onChannelChange(index);
     layer.updateOtherLayers();
     layer.repaint();
 }
@@ -206,8 +206,8 @@ void deMixerEditorChannel::preset2(deValue a, deValue b, deValue c)
         }
         sliders[i]->setValue(v);
         layer.setWeight(i, index, v);
-        layer.onChannelChange(index);
     }
+    layer.onChannelChange(index);
     layer.updateOtherLayers();
     layer.repaint();
 }

@@ -45,6 +45,8 @@ deImage::~deImage()
 
 void deImage::enableChannel(int n)
 {
+    assert(n >= 0);
+    assert(n < 4);
     if (channelsAllocated[n] < 0)
     {
         channelsAllocated[n] = channelManager.allocateNewChannel();
@@ -54,6 +56,8 @@ void deImage::enableChannel(int n)
 
 void deImage::disableChannel(int n, int c)
 {
+    assert(n >= 0);
+    assert(n < 4);
     channelsVisible[n] = c;
     if (channelsAllocated[n] >= 0)
     {

@@ -29,7 +29,6 @@ deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer,
     radius = 0.03;
     threshold = 0.0;
     type = deGaussianBlur;
-
 }
 
 deBlurLayer::~deBlurLayer()
@@ -70,6 +69,33 @@ void deBlurLayer::setBlurRadius(deValue r)
 deValue deBlurLayer::getBlurRadius() const
 {
     return radius;
+}
+
+void deBlurLayer::setBlurType(deBlurType t)
+{
+    type = t;
+    updateImage();
+    updateOtherLayers();
+    repaint();
+}
+
+deBlurType deBlurLayer::getBlurType() const
+{
+    return type;
+}
+
+
+void deBlurLayer::setBlurThreshold(deValue r)
+{
+    threshold = r;
+    updateImage();
+    updateOtherLayers();
+    repaint();
+}
+
+deValue deBlurLayer::getBlurThreshold() const
+{
+    return threshold;
 }
 
 void deBlurLayer::save(xmlNodePtr root)
