@@ -105,6 +105,7 @@ void deBlurLayer::save(xmlNodePtr root)
 
     saveChild(root, "radius", str(radius));
     saveChild(root, "threshold", str(threshold));
+    saveChild(root, "type", getBlurTypeName(type));
 };
 
 void deBlurLayer::load(xmlNodePtr root)
@@ -124,6 +125,11 @@ void deBlurLayer::load(xmlNodePtr root)
         if ((!xmlStrcmp(child->name, BAD_CAST("threshold")))) 
         {
             threshold = getValue(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("type")))) 
+        {
+            type = blurTypeFromString(getContent(child));
         }
 
         child = child->next;

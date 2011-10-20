@@ -638,10 +638,8 @@ void deActionLayer::disableChannel(int index)
 void deActionLayer::saveBlend(xmlNodePtr root)
 {
     saveChild(root, "enabled", str(enabled));
-    // TODO channels
-    // TODO blend mode
+    saveChild(root, "blend_mode", getBlendModeName(blendMode));
     saveChild(root, "opacity", str(opacity));
-    // TODO apply mode
     saveChild(root, "blend_mask", str(blendMask));
     saveChild(root, "blend_mask_layer", str(blendMaskLayer));
     saveChild(root, "blend_mask_channel", str(blendMaskChannel));
@@ -649,18 +647,55 @@ void deActionLayer::saveBlend(xmlNodePtr root)
     saveChild(root, "blend_mask_min", str(blendMaskMin));
     saveChild(root, "blend_mask_max", str(blendMaskMax));
 
+    std::string apply = "normal";
+    if (applyMode == deApplyLuminance)
+    {
+        apply = "luminance";
+    }
+    if (applyMode == deApplyColor)
+    {
+        apply = "color";
+    }
+    saveChild(root, "apply", apply);
+
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        bool c = isChannelEnabled(i);
+        saveChild(root, "channel", str(c));
+    }
+
 };
 
 void deActionLayer::loadBlend(xmlNodePtr root)
 {
     xmlNodePtr child = root->xmlChildrenNode;
 
+    int channelIndex = 0;
+    channels.clear();
+
     while (child)
     {
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("channel")))) 
+        {
+            bool c = getBool(getContent(child));
+            if (c)
+            {
+                channels.insert(channelIndex);
+            }
+            channelIndex++;
+        }
 
         if ((!xmlStrcmp(child->name, BAD_CAST("enabled")))) 
         {
             enabled = getBool(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("blend_mode")))) 
+        {
+            blendMode = blendModeFromString(getContent(child));
         }
 
         if ((!xmlStrcmp(child->name, BAD_CAST("blend_mask")))) 
@@ -696,6 +731,20 @@ void deActionLayer::loadBlend(xmlNodePtr root)
         if ((!xmlStrcmp(child->name, BAD_CAST("blend_mask_channel"))))
         {
             blendMaskChannel = getInt(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("apply"))))
+        {
+            std::string apply = getContent(child);
+            applyMode = deApplyLuminanceAndColor;
+            if (apply == "luminance")
+            {
+                applyMode = deApplyLuminance;
+            }                
+            if (apply == "color")
+            {
+                applyMode = deApplyColor;
+            }                
         }
 
 
