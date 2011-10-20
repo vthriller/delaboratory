@@ -571,6 +571,10 @@ void deActionLayer::renderBlendMask()
     const deImage& maskImage = maskLayer->getImage();
     int m = maskImage.getChannelIndex(blendMaskChannel);
     deChannel* maskChannel = channelManager.getChannel(m);
+    if (!maskChannel)
+    {
+        return;
+    }
     deValue* maskPixels = maskChannel->getPixels();
 
     deChannel* allocatedMaskChannel = channelManager.getChannel(allocatedBlendMaskChannel);
