@@ -35,6 +35,8 @@ class deBlurFrame:public deActionFrame
 
         void choose(wxCommandEvent &event);
 
+        void update();
+
     public:
         deBlurFrame(wxWindow *parent, deActionLayer& _layer);
         virtual ~deBlurFrame();

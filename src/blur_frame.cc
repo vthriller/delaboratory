@@ -107,6 +107,8 @@ deBlurFrame::deBlurFrame(wxWindow *parent, deActionLayer& _layer)
     threshold = new deBlurThresholdSlider2(this, 100, blurLayer);
     sizer->Add(threshold);
 
+    update();
+
     Fit();
 
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deBlurFrame::choose));
@@ -123,4 +125,19 @@ void deBlurFrame::choose(wxCommandEvent &event)
     int i = event.GetInt();
     deBlurType& type = blurTypes[i];
     l.setBlurType(type);
+
+    update();
+}
+
+void deBlurFrame::update()
+{
+    deBlurLayer& blurLayer = dynamic_cast<deBlurLayer&>(layer);
+    if (blurLayer.getBlurType() == deSurfaceBlur)
+    {
+        threshold->Enable();
+    }
+    else
+    {
+        threshold->Disable();
+    }
 }
