@@ -1,0 +1,33 @@
+#summary Keyboard
+
+== view mode ==
+
+|| *~* || normal view mode ||
+|| *1* || view channel 1 ||
+|| *2* || view channel 2 ||
+|| *3* || view channel 3 ||
+|| *4* || view channel 4 ||
+|| *F* || "full" view (hide panels) ||
+
+== histogram ==
+
+|| *F1* || histogram channel 1 ||
+|| *F2* || histogram channel 2 ||
+|| *F3* || histogram channel 3 ||
+|| *F4* || histogram channel 4 ||
+
+== layers ==
+|| *B* || add blur layer ||
+|| *C* || add curves layer ||
+|| *M* || add mixer layer ||
+
+== curves editor ==
+
+|| *CTRL* || add control points on curves ||
+|| *X* || delete last selected curve point ||
+|| *A* || move last selected curve point up ||
+|| *Z* || move last selected curve point down ||
+
+== other ==
+
+|| *S* || dump sampler color on console ||
