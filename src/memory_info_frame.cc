@@ -145,5 +145,6 @@ deMemoryInfoFrame::deMemoryInfoFrame(wxWindow *parent, deProject& _project)
 
 deMemoryInfoFrame::~deMemoryInfoFrame()
 {
+    project.closeMemoryInfoFrame();
 }
 

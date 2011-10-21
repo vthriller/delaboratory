@@ -29,7 +29,6 @@
 #include "help_color_spaces_frame4.h"
 #include "help_color_spaces_frame5.h"
 #include "help_color_spaces_frame6.h"
-#include "memory_info_frame.h"
 #include "benchmark_frame.h"
 #include "project.h"
 #include "str.h"
@@ -314,8 +313,7 @@ void deMainFrame::onLABColors5(wxCommandEvent& event)
 
 void deMainFrame::onMemoryInfo(wxCommandEvent& event)
 {
-    wxFrame* help = new deMemoryInfoFrame(this, *project);
-    help->Show();
+    project->openMemoryInfoFrame(this);
 }
 
 void deMainFrame::onBenchmarkBlur(wxCommandEvent& event)

@@ -34,7 +34,6 @@ class deCurve
         deCurveShape shape;
 
         void loadPoint(xmlNodePtr node);
-        void movePointStep(int p, int dir);
 
         deCurve(const deCurve& c);
         deCurve& operator=(const deCurve& c);
@@ -63,12 +62,12 @@ class deCurve
         void setAngle(int a);
         void invert();
         void fill(int n, deValue a, deValue r);
-        void movePointUp(int p);
-        void movePointDown(int p);
 
         bool isNeutral() const;
 
         deValue calcValue(deValue value);
+
+        void movePointVertically(int p, deValue delta);
 
 
 };

@@ -26,6 +26,7 @@
 
 class deLayer;
 class deChannelManager;
+class deMemoryInfoFrame;
 
 class deLayerStack
 {
@@ -47,7 +48,7 @@ class deLayerStack
         void updateImages();
         void updateImages(int a, int b);
 
-        void updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog);
+        void updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame);
 
         void generateChannelUsage(std::map<int, int>& channelUsage);
 

@@ -246,17 +246,7 @@ void deCurve::movePoint(int p, deValue x, deValue y)
     shape.build(points);
 }
 
-void deCurve::movePointUp(int p)
-{
-    movePointStep(p, -1);
-}
-
-void deCurve::movePointDown(int p)
-{
-    movePointStep(p, 1);
-}    
-
-void deCurve::movePointStep(int p, int dir)
+void deCurve::movePointVertically(int p, deValue delta)
 {
     deCurvePoints::iterator i = points.begin();
     while (p > 0)
@@ -268,7 +258,7 @@ void deCurve::movePointStep(int p, int dir)
     deValue xx = (*i).getX();
     deValue yy = (*i).getY();
 
-    yy += dir * VERTICAL_STEP;
+    yy += delta;
 
     if (yy < 0.0)
     {

@@ -20,6 +20,7 @@
 #include "layer.h"
 #include "channel_manager.h"
 #include "str.h"
+#include "memory_info_frame.h"
 
 deLayerStack::deLayerStack()
 {
@@ -83,7 +84,7 @@ void deLayerStack::updateImages(int a, int b)
     }
 }
 
-void deLayerStack::updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog)
+void deLayerStack::updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame)
 {
     channelManager.lock();
 
@@ -116,6 +117,11 @@ void deLayerStack::updateImagesSmart(deChannelManager& channelManager, int view,
         progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
 
         layer->updateImage();
+
+        if (memoryInfoFrame)
+        {
+            memoryInfoFrame->update();
+        }
 
         if (view > 0)
         {
