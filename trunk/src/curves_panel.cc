@@ -422,4 +422,38 @@ void deCurvesPanel::onKey(int key)
         }
         return;
     }
+    deValue delta = 0.0;
+
+    if (key == 'A')
+    {
+        delta = 1.0;
+    }
+
+    if (key == 'Z')
+    {
+        delta = -1.0;
+    }
+
+    if (delta != 0.0)
+    {
+        deValue dY = delta / (sizeY - 1);
+        if (lastSelectedPoint >= 0)
+        {
+            deCurve* curve = layer.getCurve(channel);
+            curve->movePointVertically(lastSelectedPoint, dY);
+            update(true);
+        }
+    }        
+
+    if (key == 'X')
+    {
+        if (lastSelectedPoint >= 0)
+        {
+            deCurve* curve = layer.getCurve(channel);
+            curve->deletePoint(lastSelectedPoint);
+            lastSelectedPoint = -1;
+            update(true);
+        }
+    }
+
 }

@@ -36,6 +36,7 @@
 #include "fractal.h"
 #include "xml.h"
 #include "image_area_panel.h"
+#include "memory_info_frame.h"
 
 deProject::deProject()
 :viewModePanel(NULL),
@@ -51,6 +52,7 @@ deProject::deProject()
     imagePanel = NULL;
     resetLayerStack();
     histogramPanel = NULL;
+    memoryInfoFrame = NULL;
 
     receiveKeys = true;
 }
@@ -130,7 +132,10 @@ void deProject::onKey(int key)
 
 void deProject::init(const std::string& fileName)
 {
-    openImage(fileName);
+    if (!openImage(fileName))
+    {
+        open(fileName, true);
+    }
 
 }
 
@@ -207,6 +212,7 @@ void deProject::resetLayerStack()
 void deProject::addLayer(deLayer* layer)
 {
     layerStack.addLayer(layer);
+    updateMemoryInfo();
 }
 
 deChannelManager& deProject::getPreviewChannelManager() 
@@ -259,6 +265,7 @@ void deProject::onChangeView(int a, int b)
         histogramModePanel->updateNames();
     }
     updateSamplers();
+    updateMemoryInfo();
 }
 
 const deViewManager& deProject::getViewManager() const
@@ -293,6 +300,7 @@ void deProject::repaintImage()
         histogramPanel->paint();
     }
     updateSamplers();
+    updateMemoryInfo();
 }
 
 void deProject::exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog)
@@ -320,7 +328,7 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
     int view = viewManager.getView();
 
     previewChannelManager.setChannelSize(sourceChannelManager.getChannelSize());
-    layerStack.updateImagesSmart(previewChannelManager, view, progressDialog);
+    layerStack.updateImagesSmart(previewChannelManager, view, progressDialog, memoryInfoFrame);
 
     deLayer* layer = layerStack.getLayer(view);
     const deImage& image = layer->getImage();
@@ -385,6 +393,7 @@ void deProject::deleteLayer()
     {
         viewManager.setView( layerStack.getSize() - 1 );
     }
+    updateMemoryInfo();
 }
 
 void deProject::setLastView()
@@ -460,6 +469,11 @@ void deProject::save(const std::string& fileName, bool image)
     {
         xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("layer_stack"), NULL);
         layerStack.save(child);
+
+        if (image)
+        {
+            saveChild(root, "source_image", sourceImageFileName);
+        }
     }
 
     xmlSaveFormatFile (f.c_str(), doc, 1); 
@@ -554,6 +568,8 @@ void deProject::open(const std::string& fileName, bool image)
 
     xmlNodePtr child = root->xmlChildrenNode;
 
+    std::string imageFile = "";
+
     while (child)
     {
         if ((!xmlStrcmp(child->name, BAD_CAST("layer_stack")))) 
@@ -561,8 +577,18 @@ void deProject::open(const std::string& fileName, bool image)
             loadLayers(child);
         }
 
+        if ((!xmlStrcmp(child->name, BAD_CAST("source_image")))) 
+        {
+            imageFile = getContent(child);
+        }
+
         child = child->next;
     }
+
+    if (image)
+    {
+        openImage(imageFile);
+    }        
 
     setLastView();
     controlPanel->updateLayerGrid();
@@ -593,7 +619,7 @@ deHistogramPanel* deProject::getHistogramPanel()
     return histogramPanel;
 }
 
-void deProject::openImage(const std::string& fileName)
+bool deProject::openImage(const std::string& fileName)
 {
     freeImage();
 
@@ -602,7 +628,7 @@ void deProject::openImage(const std::string& fileName)
 
     if ((!tiff) && (!jpeg))
     {
-        return;
+        return false;
     }
 
     if ((tiff) && (jpeg))
@@ -631,6 +657,8 @@ void deProject::openImage(const std::string& fileName)
     deChannel* channelG = sourceChannelManager.getChannel(sourceG);
     deChannel* channelB = sourceChannelManager.getChannel(sourceB);
 
+    bool status = false;
+
     if (tiff)
     {
         bool icc;
@@ -639,11 +667,13 @@ void deProject::openImage(const std::string& fileName)
         {
             wxMessageBox( _T("Warning! this TIFF file contains ICC profile which is ignored by delaboratory\n\ndelaboratory expects sRGB - colors may be not accurate\n\nThis problem happens (for instance) when tiff is created by dcraw\nyou can fix it by calling tifficc command, by default it converts tiff to sRGB"), _T("ICC profile ignored"), wxOK | wxICON_INFORMATION, NULL );
         }
+        status = true;
     }
 
     if (jpeg)
     {
         loadJPEG(fileName, *channelR, *channelG, *channelB);
+        status = true;
     }
 
     imageFileName = removePathAndExtension(fileName);
@@ -653,4 +683,28 @@ void deProject::openImage(const std::string& fileName)
     imageAreaPanel->updateSize();
     layerStack.updateImages();
     repaintImage();
+
+    return status;
+}
+
+void deProject::openMemoryInfoFrame(wxWindow* parent)
+{
+    if (!memoryInfoFrame)
+    {
+        memoryInfoFrame = new deMemoryInfoFrame(parent, *this);
+        memoryInfoFrame->Show();
+    }
+}
+
+void deProject::closeMemoryInfoFrame()
+{
+    memoryInfoFrame = NULL;
+}
+
+void deProject::updateMemoryInfo()
+{
+    if (memoryInfoFrame)
+    {
+        memoryInfoFrame->update();
+    }
 }

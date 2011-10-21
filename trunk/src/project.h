@@ -30,6 +30,7 @@ class deControlPanel;
 class deViewModePanel;
 class deHistogramModePanel;
 class deImageAreaPanel;
+class deMemoryInfoFrame;
 
 class deProject
 {
@@ -52,6 +53,8 @@ class deProject
         deViewManager viewManager;
 
         deImagePanel* imagePanel;
+
+        deMemoryInfoFrame* memoryInfoFrame;
 
         std::string imageFileName;
         std::string sourceImageFileName;
@@ -122,11 +125,16 @@ class deProject
         void showSamplers();
         void save(const std::string& fileName, bool image);
         void open(const std::string& fileName, bool image);
-        void openImage(const std::string& fileName);
+        bool openImage(const std::string& fileName);
         void newProject();
         void setTestImage(int s);
 
         void setImageAreaPanel(deImageAreaPanel* _imageAreaPanel);
+
+        void openMemoryInfoFrame(wxWindow* parent);
+        void closeMemoryInfoFrame();
+
+        void updateMemoryInfo();
 
 };
 
