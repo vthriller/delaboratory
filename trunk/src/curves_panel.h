@@ -37,6 +37,8 @@ private:
     int sizeY;
     deCurvesLayer& layer;
     int channel;
+    
+    bool realtime;
 
     void drawPoint(wxDC& dc, deValue x, deValue y);
     void drawCurve(wxDC& dc);
