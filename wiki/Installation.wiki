@@ -43,3 +43,7 @@ Please extract sources and type:
 if you want to install it, su root and:
 
 `make install`
+
+= Performance = 
+
+Makefile uses only standard optimization flag: -O3, you can produce faster code when using other options like -march=i686, etc. To see if your options produce faster code use built-in [Benchmarks].
