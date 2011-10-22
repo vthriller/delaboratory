@@ -51,7 +51,9 @@ void deLayerGridPanel::buildRows()
         row.name = new wxStaticText(this, wxID_ANY, wxString::FromAscii(layer->getName().c_str()), wxDefaultPosition, wxSize(100, -1));
         gridSizer->Add(row.name, 0, wxALIGN_CENTER);
 
-        row.action = new wxButton(this, wxID_ANY, _T("action"), wxDefaultPosition, wxSize(60,25));
+        std::string action = layer->getActionName();
+
+        row.action = new wxButton(this, wxID_ANY, wxString::FromAscii(action.c_str()), wxDefaultPosition, wxSize(60,25));
         if (layer->hasAction())
         {
             gridSizer->Add(row.action, 0);

@@ -48,6 +48,8 @@ class deConversionBWLayer:public deConversionLayer
 
         void updateAndRepaint();
 
+        virtual std::string getActionName() {return "mixer";};
+
 };
 
 #endif
