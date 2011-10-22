@@ -27,6 +27,7 @@
 || *X* || delete last selected curve point ||
 || *A* || move last selected curve point up ||
 || *Z* || move last selected curve point down ||
+|| *R* || realtime switch (not persistent) ||
 
 == other ==
 
