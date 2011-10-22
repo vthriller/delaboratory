@@ -49,6 +49,8 @@ class deMixerLayer:public deActionLayer
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
 
+        virtual std::string getActionName() {return "mixer";};
+
 
 
 };
