@@ -117,7 +117,7 @@ void deApplyImageLayer::save(xmlNodePtr root)
     saveChild(root, "applied_layer", str(appliedLayer));
     saveChild(root, "applied_channel", str(appliedChannel));
     saveChild(root, "single_channel", str(singleChannel));
-};
+}
 
 void deApplyImageLayer::load(xmlNodePtr root)
 {

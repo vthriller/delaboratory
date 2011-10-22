@@ -45,12 +45,13 @@ class deProject
         deProject& operator =(const deProject& project);
 
         deLayerStack layerStack;
+        deViewModePanel* viewModePanel;
+        deControlPanel* controlPanel;
+        deViewManager viewManager;
         deSamplerManager samplerManager;
 
         deChannelManager previewChannelManager;
         deChannelManager sourceChannelManager;
-
-        deViewManager viewManager;
 
         deImagePanel* imagePanel;
 
@@ -62,10 +63,9 @@ class deProject
         bool receiveKeys;
 
         deHistogramPanel* histogramPanel;
-        deViewModePanel* viewModePanel;
         deHistogramModePanel* histogramModePanel;
-        deControlPanel* controlPanel;
         deImageAreaPanel* imageAreaPanel;
+
 
         void loadLayers(xmlNodePtr root);
         void loadLayer(xmlNodePtr root);

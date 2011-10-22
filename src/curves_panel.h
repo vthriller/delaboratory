@@ -30,12 +30,12 @@ class deCurvesLayer;
 class deCurvesPanel:public wxPanel
 {
 private:
-    deHistogram histogram;
     wxBitmap bitmap;
     wxBitmap* backgroundBitmap;
     int sizeX;
     int sizeY;
     deCurvesLayer& layer;
+    deHistogram histogram;
     int channel;
     
     bool realtime;

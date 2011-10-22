@@ -88,7 +88,7 @@ void deCurvesLayer::save(xmlNodePtr root)
         xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("curve"), NULL);
         curve.save(child);
     }
-};
+}
 
 void deCurvesLayer::load(xmlNodePtr root)
 {

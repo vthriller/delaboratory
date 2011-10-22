@@ -261,10 +261,11 @@ wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
             int g = 50;
             return wxColour(g, g, g);
         }            
+        default:
+            // in any other cases just use pure white
+            return wxColour(255, 255, 255);
     }
 
-    // in any other cases just use pure white
-    return wxColour(255, 255, 255);
 }
 
 deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v)

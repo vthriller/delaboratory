@@ -26,7 +26,6 @@
 void deHistogramModePanel::select(wxCommandEvent &event)
 {
     int i = event.GetId();
-    deViewManager& viewManager = project.getViewManager();
     deHistogramPanel* histogramPanel = project.getHistogramPanel();
 
     int j;
@@ -99,7 +98,6 @@ void deHistogramModePanel::updateNames()
 
 void deHistogramModePanel::updateMode()
 {
-    deViewManager& viewManager = project.getViewManager();
     deHistogramPanel* histogramPanel = project.getHistogramPanel();
 
     int c = histogramPanel->getChannel();

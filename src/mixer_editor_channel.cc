@@ -55,7 +55,7 @@ deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _laye
 :wxPanel(parent), layer(_layer), index(_index)
 {
     deColorSpace colorSpace = layer.getColorSpace();
-    int n = getColorSpaceSize(colorSpace);
+    unsigned int n = getColorSpaceSize(colorSpace);
 
     std::string name = getChannelName(colorSpace, index);
     wxSizer* sizer = new wxStaticBoxSizer(wxVERTICAL, this,  wxString::FromAscii(name.c_str()));
@@ -70,7 +70,7 @@ deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _laye
     std::string src1;
     std::string src2;
 
-    int i;
+    unsigned int i;
     int counter = 0;
     for (i = 0; i < n; i++)
     {
@@ -169,7 +169,7 @@ void deMixerEditorChannel::click(wxCommandEvent &event)
 
 void deMixerEditorChannel::preset(deValue a)
 {
-    int i;
+    unsigned int i;
     for (i = 0; i < sliders.size(); i++) 
     {
         deValue v = a;
@@ -187,7 +187,7 @@ void deMixerEditorChannel::preset(deValue a)
 
 void deMixerEditorChannel::preset2(deValue a, deValue b, deValue c)
 {
-    int i;
+    unsigned int i;
     int counter = 0;
     for (i = 0; i < sliders.size(); i++) 
     {

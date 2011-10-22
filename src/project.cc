@@ -178,16 +178,11 @@ void deProject::setTestImage(int s)
 
 void deProject::setSource()
 {
-    deChannel* channelR = sourceChannelManager.getChannel(sourceR);
-    deChannel* channelG = sourceChannelManager.getChannel(sourceG);
-    deChannel* channelB = sourceChannelManager.getChannel(sourceB);
-
     deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
 
     l->setSource(sourceR, sourceG, sourceB, &sourceChannelManager);
 
     previewChannelManager.destroyAllChannels();
-
 }
 
 void deProject::resetLayerStack()
@@ -479,7 +474,6 @@ void deProject::loadLayer(xmlNodePtr root)
 {
     xmlNodePtr child = root->xmlChildrenNode;
 
-    int index = -1;
     std::string type = "";
     std::string name = "";
     int source = -1;
@@ -487,11 +481,6 @@ void deProject::loadLayer(xmlNodePtr root)
 
     while (child)
     {
-        if ((!xmlStrcmp(child->name, BAD_CAST("index")))) 
-        {
-            index = getInt(getContent(child));
-        }
-
         if ((!xmlStrcmp(child->name, BAD_CAST("source")))) 
         {
             source = getInt(getContent(child));

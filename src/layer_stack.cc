@@ -77,8 +77,8 @@ void deLayerStack::updateImages()
 void deLayerStack::updateImages(int a, int b)
 {
     unsigned int i;
-    assert(b < layers.size() );
-    for (i = a; i <= b; i++)
+    assert((unsigned int)b < layers.size() );
+    for (i = (unsigned int)a; i <= (unsigned int)b; i++)
     {
         layers[i]->updateImage();
     }
@@ -93,8 +93,8 @@ void deLayerStack::updateImagesSmart(deChannelManager& channelManager, int view,
 
     unsigned int index;
     int progress = 0;
-    assert(view < layers.size());
-    for (index = 0; index <= view; index++)
+    assert((unsigned int)view < layers.size());
+    for (index = 0; index <= (unsigned int)view; index++)
     {
         std::map<int, int>::iterator i;
         int previous = index - 1;

@@ -27,13 +27,14 @@ class deChannelManager;
 class deSourceImageLayer:public deLayer
 {
     private:
+        deChannelManager& previewChannelManager;
+
         int sourceR;
         int sourceG;
         int sourceB;
 
         deImage image;
 
-        deChannelManager& previewChannelManager;
         deChannelManager* sourceChannelManager;
 
         virtual std::string getType() const {return "source_image";};

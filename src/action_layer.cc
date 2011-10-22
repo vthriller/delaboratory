@@ -358,9 +358,6 @@ void deActionLayer::updateBlend(int i)
 
 void deActionLayer::updateOnlyBlend()
 {
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    const deImage& sourceImage = source->getImage();
-
     int n = getColorSpaceSize(colorSpace);
     int i;
     for (i = 0; i < n; i++)
@@ -420,9 +417,6 @@ void deActionLayer::setOpacity(deValue _opacity)
 
 void deActionLayer::updateImage()
 {
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    const deImage& sourceImage = source->getImage();
-
     int n = getColorSpaceSize(colorSpace);
     int i;
     for (i = 0; i < n; i++)
@@ -669,8 +663,7 @@ void deActionLayer::saveBlend(xmlNodePtr root)
         bool c = isChannelEnabled(i);
         saveChild(root, "channel", str(c));
     }
-
-};
+}
 
 void deActionLayer::loadBlend(xmlNodePtr root)
 {

@@ -42,15 +42,7 @@ void deImagePanel::click(wxMouseEvent &event)
 
 void deImagePanel::release(wxMouseEvent &event)
 {
-    int ex = event.GetX();
-    int ey = event.GetY();
-    int xx;
-    int yy;
-    GetSize(&xx, &yy);
-    float x = (float) ex / xx;
-    float y = (float) ey / yy;
     clicked = false;
-
 }
 
 void deImagePanel::move(wxMouseEvent &event)

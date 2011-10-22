@@ -87,7 +87,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
 {
     std::string s = getApplicationName() + " " + getVersion() + " " + getCopyright();
 
-    bool created = Create((wxFrame *)NULL, wxID_ANY, wxString::FromAscii(s.c_str()), wxDefaultPosition, size);
+    Create((wxFrame *)NULL, wxID_ANY, wxString::FromAscii(s.c_str()), wxDefaultPosition, size);
 
     mainSizer = new wxBoxSizer(wxHORIZONTAL);
 

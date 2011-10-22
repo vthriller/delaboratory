@@ -27,9 +27,6 @@ void deBenchmarkFrame::addBenchmark(const std::string& s, std::string name, int 
     wxStaticText* l = new wxStaticText(this, wxID_ANY, wxString::FromAscii(name.c_str()));
     sizer->Add(l);
 
-    int vv = value / 10;
-    deValue vvv = vv / 100.0;
-
     wxStaticText* r = new wxStaticText(this, wxID_ANY, _T(""));
 
     r->SetMinSize(wxSize(100, -1));
@@ -80,7 +77,7 @@ void deBenchmarkFrame::addBenchmarkColor()
     std::vector<deColorSpace> colorSpaces;
 
     getSupportedColorSpaces(colorSpaces);
-    int i;
+    unsigned int i;
     for (i = 0; i < colorSpaces.size(); i++)
     {
         deColorSpace colorSpace = colorSpaces[i];
@@ -131,7 +128,7 @@ deBenchmarkFrame::deBenchmarkFrame(wxWindow *parent, const std::string& type)
 
 deBenchmarkFrame::~deBenchmarkFrame()
 {
-    int i;
+    unsigned int i;
     for (i = 0; i < benchmarks.size(); i++)
     {
         delete benchmarks[i];
@@ -140,7 +137,7 @@ deBenchmarkFrame::~deBenchmarkFrame()
 
 void deBenchmarkFrame::perform()
 {
-    int i;
+    unsigned int i;
     Update();
     Refresh();
     deValue sum = 0.0;

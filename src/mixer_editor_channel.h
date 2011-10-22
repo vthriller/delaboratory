@@ -29,7 +29,7 @@ class deMixerEditorChannel:public wxPanel
     private:
         std::vector<deSlider*> sliders;
         deMixerLayer& layer;
-        int index;
+        unsigned int index;
 
         wxButton* reset;
         wxButton* app1;
