@@ -60,6 +60,7 @@ class deCurve
         void reset();
         void setConst(deValue v);
         void setAngle(int a);
+        void setS(int a);
         void invert();
         void fill(int n, deValue a, deValue r);
 

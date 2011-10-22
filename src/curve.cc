@@ -83,6 +83,22 @@ void deCurve::setAngle(int a)
     shape.build(points);
 }
 
+void deCurve::setS(int a)
+{
+    deValue h = a / 16.0;
+    deValue p1 = 1.0 / 4.0;
+    deValue p2 = 1.0 - 1.0 / 4.0;
+
+    points.clear();
+    points.push_back(deCurvePoint(0, 0));
+
+    points.push_back(deCurvePoint(p1, p1 - h));
+    points.push_back(deCurvePoint(p2, p2 + h));
+
+    points.push_back(deCurvePoint(1, 1));
+    shape.build(points);
+}
+
 void deCurve::fill(int n, deValue a, deValue r)
 {
     points.clear();

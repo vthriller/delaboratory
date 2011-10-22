@@ -45,6 +45,11 @@ class deCurvesEditor:public deActionFrame
         wxButton* angle3;
         wxButton* angle4;
         wxButton* angle5;
+        wxButton* s1;
+        wxButton* s2;
+        wxButton* s3;
+        wxButton* is1;
+        wxButton* is2;
 
     public:
         deCurvesEditor(wxWindow *parent, deActionLayer& _layer);

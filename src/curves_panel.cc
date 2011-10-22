@@ -276,6 +276,18 @@ void deCurvesPanel::setAngle(int a)
     update(true);
 }
 
+void deCurvesPanel::setS(int a)
+{
+    deCurve* curve = layer.getCurve(channel);
+
+    if (!curve)
+    {
+        return;
+    }
+    curve->setS(a);
+    update(true);
+}
+
 
 void deCurvesPanel::update(bool finished)
 {
