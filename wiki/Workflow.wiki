@@ -6,7 +6,7 @@ General application workflow should look this way:
 
 http://delaboratory.googlecode.com/svn/trunk/screenshots/general.png
 
-Without raw decoder you won't be able to read RAW file. There are many raw processors available, I recommend RawTherapee http://rawtherapee.com/ but there is also simple ufraw or command line dcraw.
+Without raw decoder you won't be able to read RAW file. There are many raw processors available, I recommend !RawTherapee http://rawtherapee.com/ but there is also simple ufraw or command line dcraw.
 
 You don't need raw decoder when you shoot JPG or TIFF. It's recommended to use TIFF, not JPG, but sometimes you have no choice.
 
@@ -15,7 +15,7 @@ Without image editor you won't be able to perform local modifications, like clon
 = My workflow =
 http://delaboratory.googlecode.com/svn/trunk/screenshots/workflow.png
 
-I use geeqie to select RAW files to edit, then I copy them to separate directory and start RawTherapee. 
+I use geeqie to select RAW files to edit, then I copy them to separate directory and start !RawTherapee. 
 
 I open one image in RT, set some basic stuff (very often I don't change anything) then click "edit image in external editor" (with GIMP icon) which is configured (in RT preferences) to start delaboratory (just type "delaboratory" in "other command line").
 
