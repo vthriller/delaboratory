@@ -96,25 +96,16 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer)
     angle5 = new wxButton(this, wxID_ANY, _T("- 2/4"), wxDefaultPosition, wxSize(60,25));
     sizerB->Add(angle5, 0);
 
-    /*
-    app1 = new wxButton(this, wxID_ANY, wxString::FromAscii(src1.c_str()), wxDefaultPosition, wxSize(60,25));
-    sizerB->Add(app1, 0);
-
-    app2 = new wxButton(this, wxID_ANY, wxString::FromAscii(src2.c_str()), wxDefaultPosition, wxSize(60,25));
-    sizerB->Add(app2, 0);
-
-    mix1 = new wxButton(this, wxID_ANY, _T("0.1"), wxDefaultPosition, wxSize(60,25));
-    sizerB->Add(mix1, 0);
-
-    mix2 = new wxButton(this, wxID_ANY, _T("0.3"), wxDefaultPosition, wxSize(60,25));
-    sizerB->Add(mix2, 0);
-
-    mix3 = new wxButton(this, wxID_ANY, _T("-0.3"), wxDefaultPosition, wxSize(60,25));
-    sizerB->Add(mix3, 0);
-
-    mix4 = new wxButton(this, wxID_ANY, _T("-0.5"), wxDefaultPosition, wxSize(60,25));
-    sizerB->Add(mix4, 0);
-    */
+    s1 = new wxButton(this, wxID_ANY, _T("S 1"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(s1, 0);
+    s2 = new wxButton(this, wxID_ANY, _T("S 2"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(s2, 0);
+    s3 = new wxButton(this, wxID_ANY, _T("S 3"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(s3, 0);
+    is1 = new wxButton(this, wxID_ANY, _T("invS 1"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(is1, 0);
+    is2 = new wxButton(this, wxID_ANY, _T("invS 2"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(is2, 0);
 
     sizer->Layout();
     Fit();
@@ -183,6 +174,27 @@ void deCurvesEditor::click(wxCommandEvent &event)
     if (angle5->GetId() == id)
     {
         curvesPanel->setAngle(5);
+    }      
+
+    if (s1->GetId() == id)
+    {
+        curvesPanel->setS(1);
+    }      
+    if (s2->GetId() == id)
+    {
+        curvesPanel->setS(2);
+    }      
+    if (s3->GetId() == id)
+    {
+        curvesPanel->setS(3);
+    }      
+    if (is1->GetId() == id)
+    {
+        curvesPanel->setS(-1);
+    }      
+    if (is2->GetId() == id)
+    {
+        curvesPanel->setS(-2);
     }      
 }
 

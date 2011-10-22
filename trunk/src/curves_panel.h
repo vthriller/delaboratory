@@ -79,6 +79,7 @@ public:
     void invert();
     void setConst(deValue v);
     void setAngle(int a);
+    void setS(int a);
 
     void onKey(int key);
 
