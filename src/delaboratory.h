@@ -26,7 +26,7 @@ std::string getApplicationName()
 
 std::string getVersion()
 {
-    return "SVN";
+    return "0.5";
 }
 
 std::string getCopyright()

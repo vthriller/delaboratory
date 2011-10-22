@@ -21,6 +21,9 @@
 
 #include "value.h"
 
+// these functions are only for RGB colorspace
+// for other colorspaces new functions are needed, but they are very easy to implement
+
 void applyLuminance(deValue r1, deValue g1, deValue b1, deValue r2, deValue g2, deValue b2, deValue &r, deValue &g, deValue &b);
 void applyColor(deValue r1, deValue g1, deValue b1, deValue r2, deValue g2, deValue b2, deValue &r, deValue &g, deValue &b);
 
