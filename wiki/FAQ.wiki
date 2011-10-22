@@ -28,6 +28,10 @@
 
 *A* The output color depth doesn't really matter. If you only watch photos on monitor all you need on output is 8-bit per channel. What really matters is color depth inside the engine. 32-bit per channel means I don't have to worry about conversions and round errors. Of course there is a cost - twice larger memory usage.
 
+*Q* Does delaboratory support multithreading?
+
+*A* No, but it's a good idea for future releaes. Currently every calculation is performed within one thread. Engine is designed this way that it should be possible to calculate channels in separate threads - the result will be (probably) much higher speed. 
+
 *Q* What's the delaboratory direct competitor?
 
 *A* I am not aware of any application with similar design, philosophy and features. Please don't compare delaboratory with raw processors, _GIMP_ or _PHOTOSHOP_ - it's totally different approach. The main reason why there are no other applications with this set of features is that Free Software developers don't need them. 
