@@ -39,8 +39,6 @@ enum deApplyMode
 class deActionLayer:public deLayer
 {
     private:
-        // from project
-        deViewManager& viewManager;
 
         // images
         deImage imageApplyPass;
@@ -110,6 +108,7 @@ class deActionLayer:public deLayer
     protected:
         // from project
         deLayerStack& layerStack;
+        deViewManager& viewManager;
 
         // image
         deImage imageActionPass;

@@ -109,3 +109,8 @@ deColorSpace deViewManager::getColorSpace() const
 
     return layer->getColorSpace();
 }
+
+void deViewManager::setHistogramChannel(int channel)
+{
+    project.setHistogramChannel(channel);
+}

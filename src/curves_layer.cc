@@ -111,3 +111,8 @@ void deCurvesLayer::load(xmlNodePtr root)
         child = child->next;
     }
 }
+
+void deCurvesLayer::setHistogramChannel(int channel)
+{
+    viewManager.setHistogramChannel(channel);
+}
