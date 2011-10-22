@@ -40,6 +40,8 @@ sizeX(CURVES_PANEL_SIZE_X), sizeY(CURVES_PANEL_SIZE_Y), layer(_layer), histogram
     backgroundBitmap = NULL;
     clickPosition = -1;
 
+    realtime = false;
+
     generateBackground();
 }
 
@@ -278,7 +280,7 @@ void deCurvesPanel::setAngle(int a)
 void deCurvesPanel::update(bool finished)
 {
     paint();
-    if (finished)
+    if ((finished) || (realtime))
     {
         layer.onChannelChange(channel);
         layer.updateOtherLayers();
@@ -432,6 +434,11 @@ void deCurvesPanel::onKey(int key)
     if (key == 'Z')
     {
         delta = -1.0;
+    }
+
+    if (key == 'R')
+    {
+        realtime = !realtime;
     }
 
     if (delta != 0.0)
