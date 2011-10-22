@@ -72,6 +72,14 @@ deProject::~deProject()
     layerStack.clear();
 }
 
+void deProject::setHistogramChannel(int channel)
+{
+    histogramPanel->setChannel(channel);
+    histogramPanel->generate();
+    histogramPanel->paint();
+    histogramModePanel->updateMode();
+}
+
 void deProject::onKey(int key)
 {
     if (key == '`')
@@ -96,31 +104,19 @@ void deProject::onKey(int key)
     }
     if (key == WXK_F1)
     {
-        histogramPanel->setChannel(0);
-        histogramPanel->generate();
-        histogramPanel->paint();
-        histogramModePanel->updateMode();
+        setHistogramChannel(0);
     }
     if (key == WXK_F2)
     {
-        histogramPanel->setChannel(1);
-        histogramPanel->generate();
-        histogramPanel->paint();
-        histogramModePanel->updateMode();
+        setHistogramChannel(1);
     }
     if (key == WXK_F3)
     {
-        histogramPanel->setChannel(2);
-        histogramPanel->generate();
-        histogramPanel->paint();
-        histogramModePanel->updateMode();
+        setHistogramChannel(2);
     }
     if (key == WXK_F4)
     {
-        histogramPanel->setChannel(3);
-        histogramPanel->generate();
-        histogramPanel->paint();
-        histogramModePanel->updateMode();
+        setHistogramChannel(3);
     }
 
     layerStack.onKey(key);

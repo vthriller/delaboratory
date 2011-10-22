@@ -51,8 +51,7 @@ class deCurvesLayer:public deActionLayer
 
         virtual std::string getActionName() {return "curves";};
 
-
-
+        void setHistogramChannel(int channel);
 
 };
 

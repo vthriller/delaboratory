@@ -389,6 +389,7 @@ void deCurvesPanel::changeChannel(int _channel)
     channel = _channel;
     generateBackground();
     setMarker();
+    layer.setHistogramChannel(channel);
     paint();
 }
 

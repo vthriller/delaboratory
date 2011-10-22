@@ -56,6 +56,8 @@ class deViewManager
         bool maskVisible() const;
         int getMaskChannel() const;
 
+        void setHistogramChannel(int channel);
+
 };
 
 #endif

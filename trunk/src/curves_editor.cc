@@ -60,7 +60,6 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer)
     leftBar = new deGradientPanel(this, wxSize(barSize, CURVES_PANEL_SIZE_Y), colorSpace, 0, -1, -1, -1, -1);
     bottomBar = new deGradientPanel(this, wxSize(CURVES_PANEL_SIZE_X, barSize), colorSpace, 0, -1, -1, -1, -1);
 
-    //sizer->Add(curvesPanel);
     sizerC->Add(leftBar, 0, wxCENTER);
     sizerC->Add(curvesPanel, 0, wxCENTER);
     sizerC->Add(-1, 0, wxCENTER);
@@ -109,6 +108,9 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer)
 
     sizer->Layout();
     Fit();
+
+    int b = 0;
+    curvesPanel->changeChannel(b);
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::click));
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deCurvesEditor::choose));

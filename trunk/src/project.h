@@ -136,6 +136,8 @@ class deProject
 
         void updateMemoryInfo();
 
+        void setHistogramChannel(int channel);
+
 };
 
 #endif
