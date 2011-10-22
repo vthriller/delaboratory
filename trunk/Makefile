@@ -27,18 +27,11 @@ WXCONFIG=wx-config
 LDFLAGS=`${WXCONFIG} --libs` `xml2-config --libs` -ltiff
 CXXFLAGS=`${WXCONFIG} --cxxflags` `xml2-config --cflags`
 
-# profler
-#CXXFLAGS+= -DDE_PROFILER
-
-# logs
-#CXXFLAGS+= -DDE_LOGGER
-
 # debug stuff
 #CXXFLAGS+=-g -Wall -pedantic 
 
 # release stuff
-#CXXFLAGS+=-O2 -march=i686
-CXXFLAGS+=-O2 
+CXXFLAGS+=-O3 -DNDEBUG
 
 # warnings from wxWidgets
 CXXFLAGS+=-Wno-long-long -Wno-variadic-macros 
@@ -48,8 +41,6 @@ ${APP}: ${OBJECTS}
 
 %.o: src/%.cc
 	${CXX} -c ${CXXFLAGS} $<
-
-#.depend: depend
 
 depend: $(SOURCES) ${HEADERS}
 		$(CXX) $(CXXFLAGS) -MM $^>>./.depend;
