@@ -60,7 +60,6 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
 
-    int barSize = 20;
     int width = 300;
 
     int i;

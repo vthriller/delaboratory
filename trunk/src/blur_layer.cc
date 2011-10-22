@@ -106,7 +106,7 @@ void deBlurLayer::save(xmlNodePtr root)
     saveChild(root, "radius", str(radius));
     saveChild(root, "threshold", str(threshold));
     saveChild(root, "type", getBlurTypeName(type));
-};
+}
 
 void deBlurLayer::load(xmlNodePtr root)
 {

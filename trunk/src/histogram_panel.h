@@ -26,8 +26,8 @@ class deProject;
 class deHistogramPanel:public wxPanel
 {
     private:
-        deHistogram histogram;
         deProject* project;
+        deHistogram histogram;
         wxImage histogramImage;
         int channel;
         bool generated;

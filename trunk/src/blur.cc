@@ -255,6 +255,8 @@ void blurChannel(const deValue* source, deValue* destination, deSize size, deVal
                 case deSurfaceBlur:
                     surfaceBlur(sourceBuffer, destinationBuffer, w, blurSizeW, weights, t);
                     break;
+                default:
+                    break;
             }
             for (j = 0; j < w; j++)
             {
@@ -286,6 +288,8 @@ void blurChannel(const deValue* source, deValue* destination, deSize size, deVal
                     break;
                 case deSurfaceBlur:
                     surfaceBlur(sourceBuffer, destinationBuffer, h, blurSizeH, weights, t);
+                    break;
+                default:
                     break;
             }
             for (j = 0; j < h; j++)

@@ -26,11 +26,10 @@ class deViewManager;
 class deConversionBWLayer:public deConversionLayer
 {
     private:
+        deMixer mixer;
+
         // from project
         deViewManager& viewManager;
-
-
-        deMixer mixer;
 
         virtual bool hasAction() const {return true;};
     public:

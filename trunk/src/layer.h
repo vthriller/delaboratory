@@ -40,8 +40,8 @@ class deLayer
         deColorSpace colorSpace;
         deFrame* actionFrame;
         deBlendFrame* blendFrame;
-        int index;
-        int sourceLayer;
+        unsigned int index;
+        unsigned int sourceLayer;
 
         virtual std::string getType() const = 0;
 

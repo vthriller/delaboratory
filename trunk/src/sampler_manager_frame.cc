@@ -50,13 +50,12 @@ deSamplerManagerFrame::~deSamplerManagerFrame()
 void deSamplerManagerFrame::buildRows()
 {
     deSamplerManager& samplerManager = project.getSamplerManager();
-    int n = samplerManager.getNumberOfSamplers();
+    unsigned int n = samplerManager.getNumberOfSamplers();
 
     getSupportedColorSpaces(colorSpaces);
 
     wxString* colorSpaceStrings = new wxString [colorSpaces.size()];
     unsigned int i;
-    int selectedColorSpace = -1;
     for (i = 0; i < colorSpaces.size(); i++)
     {
         colorSpaceStrings[i] = wxString::FromAscii(getColorSpaceName(colorSpaces[i]).c_str());
@@ -85,7 +84,7 @@ void deSamplerManagerFrame::buildRows()
         gridSizer->Add(row.colorSpace, 0, wxALIGN_CENTER);
 
         deColorSpace colorSpace = sampler->getColorSpace();
-        int j;
+        unsigned int j;
         for (j = 0; j < colorSpaces.size(); j++)
         {
             if (colorSpaces[j] == colorSpace)
@@ -106,7 +105,7 @@ void deSamplerManagerFrame::buildRows()
     delete []  colorSpaceStrings;
 
     Fit();
-};
+}
 
 void deSamplerManagerFrame::update()
 {
@@ -275,8 +274,6 @@ void deSamplerManagerFrame::choose(wxCommandEvent &event)
 
 void deSamplerManagerFrame::dumpColor()
 {
-    deSamplerManager& samplerManager = project.getSamplerManager();
-
     std::vector<deSamplerRow>::const_iterator i;
     int index = 0;
     for (i = samplerRows.begin(); i != samplerRows.end(); i++)

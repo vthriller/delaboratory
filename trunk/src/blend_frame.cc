@@ -196,7 +196,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer)
     wxSizer* sizerC = new wxStaticBoxSizer(wxVERTICAL, this,  _T("channels"));
     sizer->Add(sizerC, 0);
 
-    int nc = getColorSpaceSize(colorSpace);
+    unsigned int nc = getColorSpaceSize(colorSpace);
 
     for (i = 0; i < nc; i++)
     {
@@ -229,7 +229,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer)
         maskShow->SetValue(1);
     }
 
-    int n = layer.getIndex();
+    unsigned int n = layer.getIndex();
 
     wxString* layerStrings = new wxString [n];
     for (i = 0; i < n; i++)
@@ -245,7 +245,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer)
 
     sizerM->Add(maskLayerChoice, 0);
 
-    int s = layer.getBlendMaskChannel();
+    unsigned int s = layer.getBlendMaskChannel();
 
     for (i = 0; i < 4; i++)
     {

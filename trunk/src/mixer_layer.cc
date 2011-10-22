@@ -96,7 +96,7 @@ void deMixerLayer::save(xmlNodePtr root)
         xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("mixer"), NULL);
         mixers[i]->save(child);
     }
-};
+}
 
 void deMixerLayer::load(xmlNodePtr root)
 {

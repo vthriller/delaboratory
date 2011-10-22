@@ -179,7 +179,7 @@ void deUSMLayer::save(xmlNodePtr root)
     saveChild(root, "radius", str(blurRadius));
     saveChild(root, "amount", str(amount));
     saveChild(root, "threshold", str(threshold));
-};
+}
 
 void deUSMLayer::load(xmlNodePtr root)
 {

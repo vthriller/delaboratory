@@ -39,7 +39,7 @@ deSamplerManager::~deSamplerManager()
 
 deSampler* deSamplerManager::getSampler(int index)
 {
-    if ((index < 0) || (index >= samplers.size()))
+    if ((index < 0) || ((unsigned int)index >= samplers.size()))
     {
         return NULL;
     }

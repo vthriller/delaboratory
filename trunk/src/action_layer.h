@@ -40,10 +40,6 @@ class deActionLayer:public deLayer
 {
     private:
 
-        // images
-        deImage imageApplyPass;
-        deImage imageBlendPass;
-
         // channel
         int allocatedBlendMaskChannel;
 
@@ -92,8 +88,22 @@ class deActionLayer:public deLayer
 
         bool isBlendingEnabled() const;
 
+    protected:
+        deLayerStack& layerStack;
+
+    private:
+
         deChannelManager& channelManager;
 
+    protected:
+        deViewManager& viewManager;
+
+        deImage imageActionPass;
+
+    private:        
+        deImage imageApplyPass;
+
+        deImage imageBlendPass;
 
         void updateBlend(int i);
         virtual void updateApply();
@@ -106,12 +116,6 @@ class deActionLayer:public deLayer
 
 
     protected:
-        // from project
-        deLayerStack& layerStack;
-        deViewManager& viewManager;
-
-        // image
-        deImage imageActionPass;
 
         virtual void updateImage();
 
