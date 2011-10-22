@@ -44,9 +44,11 @@ class deProject
         deProject(const deProject& project);
         deProject& operator =(const deProject& project);
 
+
         deLayerStack layerStack;
         deViewModePanel* viewModePanel;
         deControlPanel* controlPanel;
+        deMemoryInfoFrame* memoryInfoFrame;
         deViewManager viewManager;
         deSamplerManager samplerManager;
 
@@ -54,8 +56,6 @@ class deProject
         deChannelManager sourceChannelManager;
 
         deImagePanel* imagePanel;
-
-        deMemoryInfoFrame* memoryInfoFrame;
 
         std::string imageFileName;
         std::string sourceImageFileName;

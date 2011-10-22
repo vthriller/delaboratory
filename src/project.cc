@@ -41,6 +41,7 @@
 deProject::deProject()
 :viewModePanel(NULL),
  controlPanel(NULL),
+ memoryInfoFrame(NULL),
  viewManager(*this),
  samplerManager(*this)
 {
@@ -52,7 +53,6 @@ deProject::deProject()
     imagePanel = NULL;
     resetLayerStack();
     histogramPanel = NULL;
-    memoryInfoFrame = NULL;
 
     receiveKeys = true;
 }

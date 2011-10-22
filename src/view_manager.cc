@@ -26,6 +26,7 @@ deViewManager::deViewManager(deProject& _project)
     view = 0;
     showBlendMask = false;
     single = false;
+    blendMaskChannel = 0;
 }
 
 deViewManager::~deViewManager()
