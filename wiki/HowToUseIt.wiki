@@ -1,5 +1,7 @@
 #summary How to use it
 
+This document has been created for delaboratory 0.4.
+
 = introduction for first time users =
 
   * every operation in delaboratory is stored as layer, to add new operation you have to add new layer with *add layer button*
