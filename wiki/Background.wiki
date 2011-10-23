@@ -2,7 +2,7 @@
 
 = Essential stuff = 
 
-In my opinion two most important Free Software applications for photographer are GIMP and RawTherapee. GIMP is alive for more than 15 years and it's quite mature. RawTherapee has been open sourced in 2010.
+In my opinion two most important Free Software applications for photographer are GIMP and !RawTherapee. GIMP is alive for more than 15 years and it's quite mature. !RawTherapee has been open sourced in 2010.
 
   * Gimp - http://www.gimp.org/
   * RawTherapee - http://www.rawtherapee.com/
@@ -65,7 +65,7 @@ Each developer I was discussing CMYK problem thinks, that CMYK is just a colorsp
 
 LAB colorspace separates luminance from color. It's very powerful colorspace. It's available in Gimp only as a decompose/recompose option. You can work with LAB layers same way as with CMYK layers - without seeing how the final image looks.
 
-RawTherapee has LAB curves, lots of internal stuff works in LAB and there are LAB values in navigator (sampler) window.
+!RawTherapee has LAB curves, lots of internal stuff works in LAB and there are LAB values in navigator (sampler) window.
 
 GMIC has support for both LAB and CMYK.
 
