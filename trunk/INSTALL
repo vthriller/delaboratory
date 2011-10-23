@@ -1,4 +1,14 @@
-you need wxGTK package
+You can download binary packages for Windows from project website.
+Packages for Linux distributions are also available (see "Installation" on Wiki).
+
+COMPILATION
+-----------
+
+you need:
+  - wxGTK 
+  - libtiff
+  - libxml2
+
 to compile just type:
 
 make
@@ -6,5 +16,3 @@ make
 if you want to install in /usr/local/bin, type (from root):
 
 make install
-
-that's all for now
