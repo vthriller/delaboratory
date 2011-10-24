@@ -6,7 +6,7 @@
 
 *Q* Are you going to implement painting, dodge/burn, clone tool, healing brush, etc?
 
-*A* Currently delaboratory always works on previews - scaled down images. Each local modification requires access to full size image. So the first step in way to this direction is to implement zoom support. This is complex task and won't happen in the near future - color correction is more important. Currently I use local sharpening and clone/heal in _GIMP_.
+*A* Currently delaboratory always works on previews - scaled down images. Each local modification requires access to full size image. So the first step in this direction is to implement zoom support. This is complex task and won't happen in the near future - color correction is more important. Currently I use local sharpening and clone/heal in _GIMP_.
 
 *Q* Are color profiles supported?
 
