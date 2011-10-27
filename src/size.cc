@@ -39,20 +39,35 @@ bool operator !=(const deSize& a, const deSize& b)
     return !( ( a.getW() == b.getW() ) && ( a.getH() == b.getH() ) );
 }
 
-deSize fitInside(const deSize& area, const deSize& rect)
+deSize fitInside(const deSize& area, const deSize& rect, deValue scale)
 {
     if ((rect.getW() == 0) && (rect.getH() == 0))
     {
         return deSize(area.getW(), area.getH());
     }
 
+    deValue aspect = rect.getAspect();
+
     int w = area.getW();
-    int h = w/rect.getAspect();
+    int h = w / aspect;
 
     if (h > area.getH())
     {
         h = area.getH();
-        w = h * rect.getAspect();
+        w = h * aspect;
+    }
+
+    w *= scale;
+    h *= scale;
+
+    if ( w > area.getW( ))
+    {
+        w = area.getW();
+    }
+
+    if ( h > area.getH( ))
+    {
+        h = area.getH();
     }
 
     return deSize(w,h);

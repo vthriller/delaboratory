@@ -31,6 +31,10 @@ class deViewManager
         int channel;
         bool showBlendMask;
         int blendMaskChannel;
+        deValue scale;
+        deValue offsetX;
+        deValue offsetY;
+
 
     public:
         deViewManager(deProject& _project);
@@ -53,10 +57,18 @@ class deViewManager
         void hideThisMask(int maskChannel);
         void hideMask();
 
+        void setScale(deValue _scale);
+        deValue getScale() const;
+
         bool maskVisible() const;
         int getMaskChannel() const;
 
         void setHistogramChannel(int channel);
+        void setOffset(deValue x, deValue y);
+        deValue getOffsetX() const;
+        deValue getOffsetY() const;
+
+        deValue getRealScale() const;
 
 };
 

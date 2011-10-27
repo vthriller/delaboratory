@@ -36,7 +36,7 @@ class deImageAreaPanel:public wxPanel
         deImageAreaPanel(wxWindow* parent, deProject* _project);
         virtual ~deImageAreaPanel();
         
-        void updateSize();
+        void updateSize(bool calcHistogram);
 
 };
 

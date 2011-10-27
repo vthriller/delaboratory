@@ -20,10 +20,12 @@
 #include "channel_manager.h"
 #include "scale_channel.h"
 #include <iostream>
+#include "view_manager.h"
 
-deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager)
+deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager)
 :deLayer("source image", deColorSpaceRGB, _index, -1), 
 previewChannelManager(_previewChannelManager),
+viewManager(_viewManager),
 sourceR(-1), 
 sourceG(-1), 
 sourceB(-1), 
@@ -71,9 +73,72 @@ void deSourceImageLayer::updateImage()
     const deSize ss = sourceChannelManager->getChannelSize();
     const deSize ds = previewChannelManager.getChannelSize();
 
-    scaleChannel(*sourceChannelR, *channelR, ss, ds);
-    scaleChannel(*sourceChannelG, *channelG, ss, ds);
-    scaleChannel(*sourceChannelB, *channelB, ss, ds);
+    deValue scale = viewManager.getScale();
+    deValue offsetX = viewManager.getOffsetX();
+    deValue offsetY = viewManager.getOffsetY();
+
+    deValue centerX = (offsetX + 1.0) / 2.0;
+    deValue centerY = (offsetY + 1.0) / 2.0;
+
+    int ws = ss.getW();
+    int hs = ss.getH();
+    deValue sAspect = ss.getAspect();
+    deValue dAspect = ds.getAspect();
+
+    centerX *= ws;
+    centerY *= hs;
+
+    int wd = ds.getW();
+    int hd = ds.getH();
+
+    float scaleW = (float) ws / wd;
+    float scaleH = (float) hs / hd;
+
+    scaleH *= (sAspect / dAspect);
+
+    scaleW /= scale;
+    scaleH /= scale;
+
+    int ox = centerX - scaleW * (wd / 2);
+    int oy = centerY - scaleH * (hd / 2);
+
+    int maxox = ws - scaleW * ( wd - 1);
+    int maxoy = hs - scaleH * ( hd - 1);
+
+    if (ox > maxox)
+    {
+        ox = maxox;
+    }
+    if (oy > maxoy)
+    {
+        oy = maxoy;
+    }
+    if (ox < 0)
+    {
+        ox = 0;
+    }
+    if (oy < 0)
+    {
+        oy = 0;
+    }
+
+    int maxy = hd;
+    int maxyy = (hs - oy) / scaleH;
+    if (maxyy < maxy)
+    {
+        maxy = maxyy;
+    }
+
+    int maxx = wd;
+    int maxxx = (ws - ox) / scaleW;
+    if (maxxx < maxx)
+    {
+        maxx = maxxx;
+    }
+
+    scaleChannel(sourceChannelR->getPixels(), channelR->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, wd);
+    scaleChannel(sourceChannelG->getPixels(), channelG->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, wd);
+    scaleChannel(sourceChannelB->getPixels(), channelB->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, wd);
 
 }
 
@@ -86,3 +151,4 @@ void deSourceImageLayer::updateChannelUsage(std::map<int, int>& channelUsage) co
 {
     image.updateChannelUsage(channelUsage, index);
 }
+

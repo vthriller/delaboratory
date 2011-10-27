@@ -28,10 +28,11 @@ void deImageAreaPanel::paint(wxPaintEvent& event)
 
 void deImageAreaPanel::resize(wxSizeEvent& event)
 {
-    updateSize();
+    updateSize(true);
+    Refresh();
 }
 
-void deImageAreaPanel::updateSize()
+void deImageAreaPanel::updateSize(bool calcHistogram)
 {
     wxSize s = GetSize();
 
@@ -39,13 +40,15 @@ void deImageAreaPanel::updateSize()
     
     const deSize& ss = project->getSourceChannelManager().getChannelSize();
 
-    deSize fit = fitInside(ps, ss);
+    deViewManager& viewManager = project->getViewManager();
 
-    project->setPreviewSize(fit);
+    deSize fit = fitInside(ps, ss, viewManager.getScale());
+
+    project->setPreviewSize(fit, calcHistogram);
 
     imagePanel->SetSize(wxSize(fit.getW(), fit.getH()));
 
-    Refresh();
+    //Update();
 }
 
 

@@ -291,7 +291,7 @@ void deControlPanel::addActionLayer(const std::string& action)
 void deControlPanel::closeSamplerManagerFrame()
 {
     samplerManagerFrame = NULL;
-    project->repaintImage();
+    project->repaintImage(false);
 }
 
 void deControlPanel::updateSamplerManagerFrame()
@@ -321,7 +321,7 @@ void deControlPanel::showSamplers()
     {
         samplerManagerFrame = new deSamplerManagerFrame(this, *project);
         samplerManagerFrame->Show();
-        project->repaintImage();
+        project->repaintImage(false);
     }
 }        
 

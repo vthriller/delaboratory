@@ -41,9 +41,9 @@ class deProject
         int sourceB;
         // FIXME
 
+
         deProject(const deProject& project);
         deProject& operator =(const deProject& project);
-
 
         deLayerStack layerStack;
         deViewModePanel* viewModePanel;
@@ -86,7 +86,7 @@ class deProject
         deChannelManager& getSourceChannelManager();
         deLayerStack& getLayerStack();
 
-        void setPreviewSize(const deSize& size);
+        void setPreviewSize(const deSize& size, bool calcHistogram);
 
         const deViewManager& getViewManager() const;
         deViewManager& getViewManager();
@@ -94,7 +94,7 @@ class deProject
         deSamplerManager& getSamplerManager();
 
         void setImagePanel(deImagePanel* _imagePanel);
-        void repaintImage();
+        void repaintImage(bool calcHistogram);
 
         void addLAB();
         void addRGB();
@@ -137,6 +137,9 @@ class deProject
         void updateMemoryInfo();
 
         void setHistogramChannel(int channel);
+        void zoom(int a);
+        void setViewOffset(deValue x, deValue y);
+
 
 };
 
