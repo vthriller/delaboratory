@@ -40,7 +40,9 @@ void deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
 
-    blurChannel(source, destination, size, radius, type, threshold);
+    deValue r = viewManager.getRealScale() * radius * 1000;
+
+    blurChannel(source, destination, size, r, type, threshold);
 }
 
 

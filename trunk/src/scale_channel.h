@@ -21,7 +21,12 @@
 
 class deChannel;
 #include "size.h"
+#include "value.h"
 
+/*
 void scaleChannel(const deChannel& s, deChannel& d, const deSize& ss, const deSize& ds);
+void scaleChannel(const deChannel& s, deChannel& d, const deSize& ss, const deSize& ds, deValue scale, deValue offsetX, deValue offsetY);
+*/
+void scaleChannel(deValue* src, deValue* dst, int maxx, int ox, deValue scaleW, int maxy, int oy, deValue scaleH, int ws, int wd);
 
 #endif

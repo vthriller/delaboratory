@@ -37,7 +37,11 @@ void deImagePanel::click(wxMouseEvent &event)
 
     clicked = true;
 
-    setPosition(x, y);
+    if (!setPosition(x, y))
+    {
+        grabX = x;
+        grabY = y;
+    }
 }
 
 void deImagePanel::release(wxMouseEvent &event)
@@ -55,11 +59,24 @@ void deImagePanel::move(wxMouseEvent &event)
     float x = (float) ex / xx;
     float y = (float) ey / yy;
 
-    setPosition(x, y);
-
+    if (!setPosition(x, y))
+    {
+        if (clicked)
+        {
+            project->setViewOffset(x - grabX, y - grabY);
+            grabX = x;
+            grabY = y;
+        }
+    }
 }
 
-void deImagePanel::setPosition(deValue x, deValue y)
+void deImagePanel::wheel(wxMouseEvent &event)
+{
+    project->zoom(event.GetWheelRotation());
+}
+
+
+bool deImagePanel::setPosition(deValue x, deValue y)
 {
     if (clicked)
     {
@@ -69,15 +86,19 @@ void deImagePanel::setPosition(deValue x, deValue y)
         deLayer* layer = layerStack.getLayer(view);
         bool used = layer->onImageClick(x, y);
 
+/*
         if (!used)
         {
             project->showSamplers();
         }
+        */
 
         deSamplerManager& samplerManager = project->getSamplerManager();
         samplerManager.onImageClick(x, y);
 
+        return used;
     }
+    return false;
 }
 
 deImagePanel::deImagePanel(wxWindow* parent, deProject* _project)
@@ -87,6 +108,7 @@ deImagePanel::deImagePanel(wxWindow* parent, deProject* _project)
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deImagePanel::click));
     Connect(wxEVT_LEFT_UP, wxMouseEventHandler(deImagePanel::release));
     Connect(wxEVT_MOTION, wxMouseEventHandler(deImagePanel::move));
+    Connect(wxEVT_MOUSEWHEEL, wxMouseEventHandler(deImagePanel::wheel));
     clicked = false;
 }
 

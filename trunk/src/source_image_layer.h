@@ -23,11 +23,13 @@
 class deProject;
 #include "image.h"
 class deChannelManager;
+class deViewManager;
 
 class deSourceImageLayer:public deLayer
 {
     private:
         deChannelManager& previewChannelManager;
+        deViewManager& viewManager;
 
         int sourceR;
         int sourceG;
@@ -39,9 +41,8 @@ class deSourceImageLayer:public deLayer
 
         virtual std::string getType() const {return "source_image";};
 
-
     public:
-        deSourceImageLayer(int _index, deChannelManager& _previewChannelManager);
+        deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager);
         virtual ~deSourceImageLayer();
 
         void setSource(int r, int g, int b, deChannelManager* _sourceChannelManager);
@@ -55,6 +56,8 @@ class deSourceImageLayer:public deLayer
 
         virtual void load(xmlNodePtr root) {};
         virtual void save(xmlNodePtr root) {saveCommon(root);};
+
+        void setOffset(deValue x, deValue y);
 
 };
 

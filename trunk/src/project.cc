@@ -171,9 +171,9 @@ void deProject::setTestImage(int s)
     imageFileName = "delaboratory_test_image";
 
     setSource();
-    imageAreaPanel->updateSize();
+    imageAreaPanel->updateSize(true);
     layerStack.updateImages();
-    repaintImage();
+    repaintImage(true);
 }
 
 void deProject::setSource()
@@ -221,7 +221,7 @@ deLayerStack& deProject::getLayerStack()
     return layerStack;
 }
 
-void deProject::setPreviewSize(const deSize& size)
+void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
 {
     deSize oldSize = previewChannelManager.getChannelSize();
     if (oldSize == size)
@@ -233,10 +233,13 @@ void deProject::setPreviewSize(const deSize& size)
 
     layerStack.updateImages();
 
-    if (histogramPanel)
+    if (calcHistogram)
     {
-        histogramPanel->generate();
-        histogramPanel->paint();
+        if (histogramPanel)
+        {
+            histogramPanel->generate();
+            histogramPanel->paint();
+        }
     }
 }
 
@@ -279,16 +282,19 @@ void deProject::setImagePanel(deImagePanel* _imagePanel)
     imagePanel = _imagePanel;
 }
 
-void deProject::repaintImage()
+void deProject::repaintImage(bool calcHistogram)
 {
     if (imagePanel)
     {
         imagePanel->paint();
     }        
-    if (histogramPanel)
+    if (calcHistogram)
     {
-        histogramPanel->generate();
-        histogramPanel->paint();
+        if (histogramPanel)
+        {
+            histogramPanel->generate();
+            histogramPanel->paint();
+        }
     }
     updateSamplers();
     updateMemoryInfo();
@@ -368,7 +374,7 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
     }
 
     layerStack.updateImages();
-    repaintImage();
+    repaintImage(true);
 
 }
 
@@ -665,9 +671,9 @@ bool deProject::openImage(const std::string& fileName)
     sourceImageFileName = fileName;
 
     setSource();
-    imageAreaPanel->updateSize();
+    imageAreaPanel->updateSize(true);
     layerStack.updateImages();
-    repaintImage();
+    repaintImage(true);
 
     return status;
 }
@@ -693,3 +699,36 @@ void deProject::updateMemoryInfo()
         memoryInfoFrame->update();
     }
 }
+
+void deProject::zoom(int a)
+{
+    deValue scale = viewManager.getScale() + 0.005 * a;
+    if (scale < 1.0)
+    {
+        scale = 1.0;
+    }
+    if (scale > 100.0)
+    {
+        scale = 100.0;
+    }
+    viewManager.setScale(scale);
+
+    previewChannelManager.destroyAllChannels();
+
+    imageAreaPanel->updateSize(false);
+
+    int view = viewManager.getView();
+    layerStack.updateImages(0, view);
+    repaintImage(false);
+}
+
+void deProject::setViewOffset(deValue x, deValue y)
+{
+    viewManager.setOffset(x, y);
+    previewChannelManager.destroyAllChannels();
+
+    int view = viewManager.getView();
+    layerStack.updateImages(0, view);
+    repaintImage(false);
+}
+

@@ -44,7 +44,9 @@ void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
     deBlurType type = deGaussianBlur;
     deValue t = 0.0;
 
-    blurChannel(source, unsharpMask, size, blurRadius, type, t);
+    deValue r = viewManager.getRealScale() * blurRadius * 1000;
+
+    blurChannel(source, unsharpMask, size, r, type, t);
 
     for (i = 0; i < n; i ++)
     {

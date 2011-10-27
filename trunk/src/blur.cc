@@ -198,12 +198,16 @@ void blurChannel(const deValue* source, deValue* destination, deSize size, deVal
     assert(h > 0);
     assert(radius > 0);
 
+/*
     int blurSizeW = w * radius;
+    int blurSizeH = h * radius;
+    */
+    int blurSizeW = radius;
     if (blurSizeW < 1)
     {
         blurSizeW = 1;
     }
-    int blurSizeH = h * radius;
+    int blurSizeH = radius;
     if (blurSizeH < 1)
     {
         blurSizeH = 1;

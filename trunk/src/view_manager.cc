@@ -27,6 +27,9 @@ deViewManager::deViewManager(deProject& _project)
     showBlendMask = false;
     single = false;
     blendMaskChannel = 0;
+    scale = 1;
+    offsetX = 0;
+    offsetY = 0;
 }
 
 deViewManager::~deViewManager()
@@ -48,7 +51,7 @@ void deViewManager::setView(int v)
 
 void deViewManager::repaint()
 {
-    project.repaintImage();
+    project.repaintImage(true);
 }    
 
 void deViewManager::setSingleChannel(int _channel)
@@ -56,14 +59,14 @@ void deViewManager::setSingleChannel(int _channel)
     single = true;
     channel = _channel;
     project.onChangeViewMode();
-    project.repaintImage();
+    project.repaintImage(true);
 }
 
 void deViewManager::setNormal()
 {
     single = false;
     project.onChangeViewMode();
-    project.repaintImage();
+    project.repaintImage(true);
 }
 
 void deViewManager::hideMask()
@@ -115,3 +118,70 @@ void deViewManager::setHistogramChannel(int channel)
 {
     project.setHistogramChannel(channel);
 }
+
+void deViewManager::setScale(deValue _scale)
+{
+    scale = _scale;
+}
+
+deValue deViewManager::getScale() const
+{
+    return scale;
+}
+
+void deViewManager::setOffset(deValue x, deValue y)
+{
+    deValue s = 2.0 / scale;
+
+    offsetX += -s * x;
+    offsetY += -s * y;
+
+    if (offsetX < -1)
+    {
+        offsetX = -1;
+    }
+
+    if (offsetX > 1)
+    {
+        offsetX = 1;
+    }
+
+    if (offsetY < -1)
+    {
+        offsetY = -1;
+    }
+
+    if (offsetY > 1)
+    {
+        offsetY = 1;
+    }
+}
+
+deValue deViewManager::getOffsetX() const
+{
+    return offsetX;
+}
+
+deValue deViewManager::getOffsetY() const
+{
+    return offsetY;
+}
+
+deValue deViewManager::getRealScale() const
+{
+    deSize ps = project.getPreviewChannelManager().getChannelSize();
+    deSize ss = project.getSourceChannelManager().getChannelSize();
+
+    deValue sx = (deValue) ps.getW() / ss.getW();
+    deValue sy = (deValue) ps.getH() / ss.getH();
+
+    deValue s = sx;
+    if (sy < s)
+    {
+        s = sy;
+    }
+
+    s *= scale;
+    return s;
+}
+

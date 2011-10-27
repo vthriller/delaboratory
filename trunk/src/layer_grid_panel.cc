@@ -206,5 +206,5 @@ void deLayerGridPanel::click(wxCommandEvent &event)
 
 void deLayerGridPanel::repaintImage()
 {
-    project->repaintImage();
+    project->repaintImage(true);
 }

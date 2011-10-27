@@ -20,6 +20,7 @@
 #define _DE_SIZE_H
 
 #include <string>
+#include "value.h"
 
 class deSize
 {
@@ -44,6 +45,6 @@ class deSize
 bool operator ==(const deSize& a, const deSize& b);
 bool operator !=(const deSize& a, const deSize& b);
 
-deSize fitInside(const deSize& area, const deSize& rect);
+deSize fitInside(const deSize& area, const deSize& rect, deValue scale);
 
 #endif

@@ -48,10 +48,10 @@ void deBenchmarkFrame::addBenchmarkBlur(deSize size, deValue radius, deBlurType 
 
 void deBenchmarkFrame::addBenchmarkBlurs( deSize size, deBlurType type)
 {
-    addBenchmarkBlur(size, 0.005, type);
-    addBenchmarkBlur(size, 0.01, type);
-    addBenchmarkBlur(size, 0.05, type);
-    addBenchmarkBlur(size, 0.1, type);
+    addBenchmarkBlur(size, 1, type);
+    addBenchmarkBlur(size, 10, type);
+    addBenchmarkBlur(size, 50, type);
+    addBenchmarkBlur(size, 200, type);
 }
 
 void deBenchmarkFrame::addBenchmarkColor(deColorSpace colorSpace)

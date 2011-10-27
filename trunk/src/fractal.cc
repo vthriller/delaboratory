@@ -90,8 +90,8 @@ void generateFractal(deValue* r, deValue* g, deValue* b, deSize size)
 {
     generateMandelbrot(r, g, b, size, -0.42, -0.69, -0.32, -0.59);
 
-    deValue r1 = 0.1;
-    deValue r2 = 0.2;
+    deValue r1 = 20;
+    deValue r2 = 50;
 
     deValue* tmp = new deValue[size.getN()];
 
