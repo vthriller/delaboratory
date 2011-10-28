@@ -74,6 +74,8 @@ class deProject
 
         void freeImage();
 
+        void onScaleSet();
+
     public:
         deProject();
         virtual ~deProject();
@@ -139,6 +141,9 @@ class deProject
         void setHistogramChannel(int channel);
         void zoom(int a);
         void setViewOffset(deValue x, deValue y);
+
+        void fullZoomOut();
+        void maxZoom();
 
 
 };

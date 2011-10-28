@@ -22,6 +22,7 @@
 #include "image_area_panel.h"
 #include "histogram_panel.h"
 #include "view_mode_panel.h"
+#include "zoom_panel.h"
 #include "histogram_mode_panel.h"
 #include "help_color_spaces_frame.h"
 #include "help_color_spaces_frame2.h"
@@ -103,6 +104,9 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
 
     wxPanel* viewModePanel = new deViewModePanel(topPanel, *project);
     topSizer->Add(viewModePanel);
+
+    wxPanel* zoomPanel = new deZoomPanel(topPanel, *project);
+    topSizer->Add(zoomPanel);
 
     leftPanel = new deImageAreaPanel(this, project);
     leftPanel->SetSize(300,300);

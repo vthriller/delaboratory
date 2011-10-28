@@ -324,6 +324,7 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
 
     int view = viewManager.getView();
 
+    viewManager.setScale(1.0);
     previewChannelManager.setChannelSize(sourceChannelManager.getChannelSize());
     layerStack.updateImagesSmart(previewChannelManager, view, progressDialog, memoryInfoFrame);
 
@@ -702,7 +703,17 @@ void deProject::updateMemoryInfo()
 
 void deProject::zoom(int a)
 {
-    deValue scale = viewManager.getScale() + 0.005 * a;
+    deValue mul = 1.0;
+    if (a > 0)
+    {
+        mul = 1.0 + 0.005 * a;
+    }
+    else
+    {
+        mul = 1.0 + 0.002 * a;
+    }
+    //deValue scale = viewManager.getScale() + 0.005 * a;
+    deValue scale = viewManager.getScale() * mul;
     if (scale < 1.0)
     {
         scale = 1.0;
@@ -712,7 +723,23 @@ void deProject::zoom(int a)
         scale = 100.0;
     }
     viewManager.setScale(scale);
+    onScaleSet();
+}    
 
+void deProject::fullZoomOut()
+{
+    viewManager.setScale(1.0);
+    onScaleSet();
+}
+
+void deProject::maxZoom()
+{
+    viewManager.setScale(10);
+    onScaleSet();
+}
+
+void deProject::onScaleSet()
+{
     previewChannelManager.destroyAllChannels();
 
     imageAreaPanel->updateSize(false);
