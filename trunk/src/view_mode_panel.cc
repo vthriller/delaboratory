@@ -49,8 +49,11 @@ deViewModePanel::deViewModePanel(wxWindow* parent, deProject& _project)
 {
     project.setViewModePanel(this);
 
+    wxSizer* sizerS = new wxStaticBoxSizer(wxVERTICAL, this, _T("view"));
+    SetSizer(sizerS);
+
     wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    SetSizer(sizer);
+    sizerS->Add(sizer);
 
     int i;
     for (i = 0; i < 5; i++)
