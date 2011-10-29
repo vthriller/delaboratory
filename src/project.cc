@@ -339,48 +339,67 @@ void deProject::saveImage(const std::string& fileName, const deImage& image, con
 
 void deProject::exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog)
 {
+    // name is taken from file dialog, it can be empty when we are exporting to external editor
+    // but in this case we need correct imageFileName
     if ((name == "") && (imageFileName == ""))
     {
+        wxMessageBox( _T("exporting final image failed - no file name set"));
         return;
     }
 
-    std::string path = "";
-
-    if (app.size() > 0)
+    std::string fileName;
+    
+    if (name == "")
     {
-        wxString temp;
-        if (wxGetEnv(_T("TEMP"), &temp))
+        // path is a directory for temporary save, used only when exporting to external editor
+        std::string path = "";
+
+        if (app.size() > 0)
         {
-            // on Windows $TEMP should be set
-            path = str(temp);
+            wxString temp;
+            if (wxGetEnv(_T("TEMP"), &temp))
+            {
+                // on Windows $TEMP should be set
+                path = str(temp);
+            }
+            else
+            {
+                path = "/tmp/";
+            }            
         }
         else
         {
-            path = "/tmp/";
-        }            
-    }
-
-    std::string fileName = name;
-    if (fileName == "")
-    {
+            wxMessageBox( _T("exporting final image failed - no app set"));
+        }
+        // we save file in the temporary directory
         fileName = path + imageFileName + "." + type;
     }        
+    else
+    {
+        // wa save file in the location taken from file dialog
+        fileName = name;
+    }
 
+    // remember original size of preview
     deSize originalSize = previewChannelManager.getChannelSize();
 
+    // calculate final image in full size
     int view = viewManager.getView();
-
     viewManager.setScale(1.0);
     previewChannelManager.setChannelSize(sourceChannelManager.getChannelSize());
     layerStack.updateImagesSmart(previewChannelManager, view, progressDialog, memoryInfoFrame);
 
+    // take the final image
     deLayer* layer = layerStack.getLayer(view);
     const deImage& image = layer->getImage();
 
+    // save it
     saveImage(fileName, image, type);
 
+    // bring back original size of preview
     previewChannelManager.setChannelSize(originalSize);
 
+    // execute external editor
     if (app.size() > 0)
     {
         const char* c = fileName.c_str();
@@ -389,9 +408,9 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
         wxExecute(command);
     }
 
+    // calculate image in preview size to continue editing
     layerStack.updateImages();
     repaintImage(true);
-
 }
 
 void deProject::deleteLayer()
