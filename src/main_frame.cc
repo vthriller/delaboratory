@@ -113,7 +113,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
     leftSizer->Add(leftPanel, 1, wxEXPAND);
 
     wxSizer* rightSizer = new wxBoxSizer(wxVERTICAL);
-    hPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(280, 200));
+    hPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(280, 250));
     wxSizer* sizerH = new wxStaticBoxSizer(wxVERTICAL, hPanel,  _T("histogram"));
     hPanel->SetSizer(sizerH);
 
