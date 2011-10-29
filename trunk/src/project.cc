@@ -37,6 +37,7 @@
 #include "xml.h"
 #include "image_area_panel.h"
 #include "memory_info_frame.h"
+#include <iostream>
 
 deProject::deProject()
 :viewModePanel(NULL),
@@ -498,9 +499,13 @@ void deProject::loadLayer(xmlNodePtr root)
             colorSpace = colorSpaceFromString(getContent(child));
         }
 
-        if ((!xmlStrcmp(child->name, BAD_CAST("type")))) 
+        if (type == "")
+        // this is fix for multiple "type" node in single layer
         {
-            type = getContent(child);
+            if ((!xmlStrcmp(child->name, BAD_CAST("type")))) 
+            {
+                type = getContent(child);
+            }
         }
         
         if ((!xmlStrcmp(child->name, BAD_CAST("name")))) 
@@ -510,7 +515,7 @@ void deProject::loadLayer(xmlNodePtr root)
 
         child = child->next;
     }
-        
+       
     deLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, name);
 
     if (layer)
