@@ -301,6 +301,42 @@ void deProject::repaintImage(bool calcHistogram)
     updateMemoryInfo();
 }
 
+void deProject::saveImage(const std::string& fileName, const deImage& image, const std::string& type)
+{
+    if (image.getColorSpace() == deColorSpaceRGB)
+    {
+        deChannel* r = previewChannelManager.getChannel(image.getChannelIndex(0));
+        deChannel* g = previewChannelManager.getChannel(image.getChannelIndex(1));
+        deChannel* b = previewChannelManager.getChannel(image.getChannelIndex(2));
+
+        if (type == "tiff")
+        {
+            saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+        }            
+        if (type == "jpeg")
+        {
+            saveJPEG(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+        }            
+    }
+    else
+    {
+        deImage finalImage(deColorSpaceRGB, previewChannelManager);
+        finalImage.enableAllChannels();
+        convertImage(image, finalImage, previewChannelManager);
+        deChannel* r = previewChannelManager.getChannel(finalImage.getChannelIndex(0));
+        deChannel* g = previewChannelManager.getChannel(finalImage.getChannelIndex(1));
+        deChannel* b = previewChannelManager.getChannel(finalImage.getChannelIndex(2));
+        if (type == "tiff")
+        {
+            saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+        }            
+        if (type == "jpeg")
+        {
+            saveJPEG(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+        }            
+    }
+}
+
 void deProject::exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog)
 {
     if ((name == "") && (imageFileName == ""))
@@ -341,38 +377,7 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
     deLayer* layer = layerStack.getLayer(view);
     const deImage& image = layer->getImage();
 
-    if (image.getColorSpace() == deColorSpaceRGB)
-    {
-        deChannel* r = previewChannelManager.getChannel(image.getChannelIndex(0));
-        deChannel* g = previewChannelManager.getChannel(image.getChannelIndex(1));
-        deChannel* b = previewChannelManager.getChannel(image.getChannelIndex(2));
-
-        if (type == "tiff")
-        {
-            saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
-        }            
-        if (type == "jpeg")
-        {
-            saveJPEG(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
-        }            
-    }
-    else
-    {
-        deImage finalImage(deColorSpaceRGB, previewChannelManager);
-        finalImage.enableAllChannels();
-        convertImage(image, finalImage, previewChannelManager);
-        deChannel* r = previewChannelManager.getChannel(finalImage.getChannelIndex(0));
-        deChannel* g = previewChannelManager.getChannel(finalImage.getChannelIndex(1));
-        deChannel* b = previewChannelManager.getChannel(finalImage.getChannelIndex(2));
-        if (type == "tiff")
-        {
-            saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
-        }            
-        if (type == "jpeg")
-        {
-            saveJPEG(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
-        }            
-    }
+    saveImage(fileName, image, type);
 
     previewChannelManager.setChannelSize(originalSize);
 

@@ -31,6 +31,7 @@ class deViewModePanel;
 class deHistogramModePanel;
 class deImageAreaPanel;
 class deMemoryInfoFrame;
+class deImage;
 
 class deProject
 {
@@ -75,6 +76,8 @@ class deProject
         void freeImage();
 
         void onScaleSet();
+
+        void saveImage(const std::string& filename, const deImage& image, const std::string& type);
 
     public:
         deProject();
