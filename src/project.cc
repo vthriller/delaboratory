@@ -312,7 +312,16 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
 
     if (app.size() > 0)
     {
-        path = "/tmp/";
+        wxString temp;
+        if (wxGetEnv(_T("TEMP"), &temp))
+        {
+            // on Windows $TEMP should be set
+            path = str(temp);
+        }
+        else
+        {
+            path = "/tmp/";
+        }            
     }
 
     std::string fileName = name;
