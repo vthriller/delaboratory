@@ -38,13 +38,15 @@
 #include "image_area_panel.h"
 #include "memory_info_frame.h"
 #include <iostream>
+#include "main_frame.h"
 
 deProject::deProject()
 :viewModePanel(NULL),
  controlPanel(NULL),
  memoryInfoFrame(NULL),
  viewManager(*this),
- samplerManager(*this)
+ samplerManager(*this),
+ mainFrame(NULL)
 {
     sourceR = -1;
     sourceG = -1;
@@ -262,6 +264,10 @@ void deProject::onChangeView(int a, int b)
     }
     updateSamplers();
     updateMemoryInfo();
+    if (mainFrame)
+    {
+        mainFrame->rebuild();
+    }
 }
 
 const deViewManager& deProject::getViewManager() const
@@ -798,3 +804,7 @@ void deProject::setViewOffset(deValue x, deValue y)
     repaintImage(false);
 }
 
+void deProject::setMainFrame(deMainFrame* _mainFrame)
+{
+    mainFrame = _mainFrame;
+}

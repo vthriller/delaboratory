@@ -86,6 +86,8 @@ END_EVENT_TABLE()
 deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
 : wxFrame() , project(_project)
 {
+    project->setMainFrame(this);
+
     std::string s = getApplicationName() + " " + getVersion() + " " + getCopyright();
 
     Create((wxFrame *)NULL, wxID_ANY, wxString::FromAscii(s.c_str()), wxDefaultPosition, size);
@@ -200,6 +202,12 @@ void deMainFrame::showPanels()
     mainSizer->Layout();
     full = false;
     leftPanel->SetFocus();
+}
+
+void deMainFrame::rebuild()
+{
+    hidePanels();
+    showPanels();
 }
 
 void deMainFrame::onKey(int key)
