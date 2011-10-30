@@ -27,11 +27,15 @@ WXCONFIG=wx-config
 LDFLAGS=`${WXCONFIG} --libs` `xml2-config --libs` -ltiff
 CXXFLAGS=`${WXCONFIG} --cxxflags` `xml2-config --cflags`
 
+# choose your architecture
+#OPTFLAGS=-march=i686
+OPTFLAGS=-march=core2
+
 # debug stuff
 #CXXFLAGS+=-g -Wall -pedantic 
 
 # release stuff
-CXXFLAGS+=-O3 -DNDEBUG
+CXXFLAGS+=-Ofast ${OPTFLAGS} -DNDEBUG
 
 # warnings from wxWidgets
 CXXFLAGS+=-Wno-long-long -Wno-variadic-macros 
