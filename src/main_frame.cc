@@ -206,8 +206,9 @@ void deMainFrame::showPanels()
 
 void deMainFrame::rebuild()
 {
-    hidePanels();
-    showPanels();
+    topPanel->Layout();
+    topPanel->Update();
+    topPanel->Refresh();
 }
 
 void deMainFrame::onKey(int key)
