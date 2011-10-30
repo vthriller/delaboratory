@@ -227,6 +227,8 @@ void saveJPEG(const std::string& fileName, const deChannel& channelR, const deCh
 
     image = new wxImage(w, h);
 
+    image->SetOption(wxIMAGE_OPTION_QUALITY,98);
+
     int pos = 0;
     int y;
     for (y = 0; y < h; y++)
