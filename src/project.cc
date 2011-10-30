@@ -416,7 +416,7 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
     }
 
     // calculate image in preview size to continue editing
-    layerStack.updateAllImages();
+    layerStack.updateImages(0, view);
     repaintImage(true);
 }
 
