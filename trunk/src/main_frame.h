@@ -62,6 +62,7 @@ public:
 
     void showPanels();
     void hidePanels();
+    void rebuild();
 
     void onKey(int key);
 

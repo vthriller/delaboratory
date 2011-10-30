@@ -32,6 +32,7 @@ class deHistogramModePanel;
 class deImageAreaPanel;
 class deMemoryInfoFrame;
 class deImage;
+class deMainFrame;
 
 class deProject
 {
@@ -66,7 +67,7 @@ class deProject
         deHistogramPanel* histogramPanel;
         deHistogramModePanel* histogramModePanel;
         deImageAreaPanel* imageAreaPanel;
-
+        deMainFrame* mainFrame;
 
         void loadLayers(xmlNodePtr root);
         void loadLayer(xmlNodePtr root);
@@ -147,6 +148,8 @@ class deProject
 
         void fullZoomOut();
         void maxZoom();
+
+        void setMainFrame(deMainFrame* _mainFrame);
 
 
 };
