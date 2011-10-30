@@ -45,7 +45,7 @@ class deLayerStack
         int getSize() const;
         deLayer* getLayer(int id) const;
 
-        void updateImages();
+        void updateAllImages();
         void updateImages(int a, int b);
 
         void updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame);

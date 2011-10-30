@@ -173,7 +173,7 @@ void deProject::setTestImage(int s)
 
     setSource();
     imageAreaPanel->updateSize(true);
-    layerStack.updateImages();
+    layerStack.updateAllImages();
     repaintImage(true);
 }
 
@@ -198,7 +198,7 @@ void deProject::resetLayerStack()
     }        
 
     setSource();
-    layerStack.updateImages();
+    layerStack.updateAllImages();
 }
 
 void deProject::addLayer(deLayer* layer)
@@ -232,7 +232,8 @@ void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
 
     previewChannelManager.setChannelSize(size);
 
-    layerStack.updateImages();
+    int view = viewManager.getView();
+    layerStack.updateImages(0, view);
 
     if (calcHistogram)
     {
@@ -409,7 +410,7 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
     }
 
     // calculate image in preview size to continue editing
-    layerStack.updateImages();
+    layerStack.updateAllImages();
     repaintImage(true);
 }
 
@@ -577,7 +578,7 @@ void deProject::loadLayers(xmlNodePtr root)
     }
 
     setSource();
-    layerStack.updateImages();
+    layerStack.updateAllImages();
 }
 
 void deProject::open(const std::string& fileName, bool image)
@@ -711,7 +712,7 @@ bool deProject::openImage(const std::string& fileName)
 
     setSource();
     imageAreaPanel->updateSize(true);
-    layerStack.updateImages();
+    layerStack.updateAllImages();
     repaintImage(true);
 
     return status;
