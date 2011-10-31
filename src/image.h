@@ -29,7 +29,6 @@ class deImage
         const deColorSpace colorSpace;
         int channelsVisible[4];
         int channelsAllocated[4];
-        bool valid;
         deChannelManager& channelManager;
 
         deImage(const deImage& i);

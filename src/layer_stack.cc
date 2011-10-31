@@ -106,7 +106,7 @@ void deLayerStack::updateImagesSmart(deChannelManager& channelManager, int view,
                 int l = i->second;
                 if (l == previous)
                 {
-                    channelManager.destroyChannel(c);
+                    channelManager.tryDeallocateChannel(c);
                 }
             }
         }

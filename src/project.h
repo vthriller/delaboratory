@@ -37,13 +37,6 @@ class deMainFrame;
 class deProject
 {
     private:
-        // FIXME move somewhere else!
-        int sourceR;
-        int sourceG;
-        int sourceB;
-        // FIXME
-
-
         deProject(const deProject& project);
         deProject& operator =(const deProject& project);
 
@@ -71,8 +64,6 @@ class deProject
 
         void loadLayers(xmlNodePtr root);
         void loadLayer(xmlNodePtr root);
-
-        void setSource();
 
         void freeImage();
 

@@ -28,7 +28,7 @@
 #include "source_image_layer.h"
 
 
-deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name)
+deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name, deChannelManager& _sourceChannelManager)
 {
     int index = _layerStack.getSize();
 
@@ -74,7 +74,7 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
 
     if (type == "source_image")
     {
-        return new deSourceImageLayer(index,  _channelManager, _viewManager);
+        return new deSourceImageLayer(index,  _channelManager, _viewManager, _sourceChannelManager);
     }
 
     return NULL;

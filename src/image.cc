@@ -23,9 +23,17 @@ deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelMana
 :colorSpace(_colorSpace), channelManager(_channelManager)
 {
     int i;
+    int s = getColorSpaceSize(colorSpace);
     for (i = 0; i < 4; i++)
     {
-        channelsAllocated[i] = -1;
+        if (i < s)
+        {
+            channelsAllocated[i] = channelManager.allocateNewChannel(*this);
+        }
+        else
+        {
+            channelsAllocated[i] = -1;
+        }
         channelsVisible[i] = -1;
     }        
 }
@@ -36,10 +44,8 @@ deImage::~deImage()
     int s = getColorSpaceSize(colorSpace);
     for (i = 0; i < s; i++)
     {
-        if (channelsAllocated[i] >= 0)
-        {
-            channelManager.freeChannel(channelsAllocated[i]);
-        }            
+        assert (channelsAllocated[i] >= 0);
+        channelManager.freeChannel(channelsAllocated[i]);
     }        
 }
 
@@ -47,10 +53,8 @@ void deImage::enableChannel(int n)
 {
     assert(n >= 0);
     assert(n < 4);
-    if (channelsAllocated[n] < 0)
-    {
-        channelsAllocated[n] = channelManager.allocateNewChannel();
-    }
+    assert (channelsAllocated[n] >= 0);
+    channelManager.tryAllocateChannel(channelsAllocated[n]);
     channelsVisible[n] = channelsAllocated[n];
 }
 
@@ -59,11 +63,7 @@ void deImage::disableChannel(int n, int c)
     assert(n >= 0);
     assert(n < 4);
     channelsVisible[n] = c;
-    if (channelsAllocated[n] >= 0)
-    {
-        channelManager.freeChannel(channelsAllocated[n]);
-        channelsAllocated[n] = -1;
-    }            
+    channelManager.tryDeallocateChannel(channelsAllocated[n]);
 }
 
 int deImage::getChannelIndex(int n) const

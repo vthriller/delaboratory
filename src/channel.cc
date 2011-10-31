@@ -17,15 +17,21 @@
 */
 
 #include "channel.h"
+#include <string>
+#include <cassert>
 
-deChannel::deChannel(int size)
+deChannel::deChannel(deImage& _image)
+:image(_image)
 {
-    pixels = new deValue [size];
+    pixels = NULL;
 }
 
 deChannel::~deChannel()
 {
-    delete [] pixels;
+    if (pixels)
+    {
+        deallocate();
+    }
 }
 
 deValue* deChannel::getPixels()
@@ -61,4 +67,17 @@ void deChannel::setValueClip(int pos, const deValue& value)
         return;
     }
     pixels[pos] = value;
+}
+
+void deChannel::deallocate()
+{
+    assert(pixels);
+    delete [] pixels;
+    pixels = NULL;
+}
+
+void deChannel::allocate(int size)
+{
+    assert(!pixels);
+    pixels = new deValue [size];
 }
