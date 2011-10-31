@@ -24,11 +24,22 @@ deChannelManager::deChannelManager()
 :channelSize(0,0)
 {
     locked = false;
+    primaryIndex = -1;
 }
 
 deChannelManager::~deChannelManager()
 {
-    destroyAllChannels();
+    unsigned int i;
+    for (i = 0; i < channels.size(); i++)
+    {
+        freeChannel(i);
+    }
+}
+
+void deChannelManager::setPrimary(int index)
+{
+    assert(primaryIndex < 0);
+    primaryIndex = index;
 }
 
 void deChannelManager::setChannelSize(const deSize& size)
@@ -37,11 +48,12 @@ void deChannelManager::setChannelSize(const deSize& size)
     destroyAllChannels();
 }
 
-int deChannelManager::allocateNewChannel()
+int deChannelManager::allocateNewChannel(deImage& image)
 {
     assert(!locked);
 
-    deChannel* channel = new deChannel(channelSize.getN());
+    deChannel* channel = new deChannel(image);
+    channel->allocate(channelSize.getN());
 
     if (trashed.size() > 0)
     {
@@ -54,17 +66,9 @@ int deChannelManager::allocateNewChannel()
     else
     {
         channels.push_back(channel);
-        return channels.size() - 1;
+        int c = channels.size() - 1;
+        return c;
     }        
-}
-
-void deChannelManager::destroyChannel(int index)
-{
-    assert(index >= 0);
-    assert((unsigned int)index < channels.size());
-
-    delete channels[index];
-    channels[index] = NULL;
 }
 
 void deChannelManager::freeChannel(int index)
@@ -79,14 +83,9 @@ void deChannelManager::freeChannel(int index)
         channels[index] = NULL;
         trashed.insert(index);
     }        
-}
-
-void deChannelManager::recreateChannel(int index)
-{
-    assert(index >= 0);
-    assert((unsigned int)index < channels.size());
-    assert(!channels[index]);
-    channels[index] = new deChannel(channelSize.getN());
+    else
+    {
+    }
 }
 
 deChannel* deChannelManager::getChannel(int index)
@@ -95,15 +94,10 @@ deChannel* deChannelManager::getChannel(int index)
     {
         return NULL;
     }
-    if ((unsigned int)index >= channels.size())
-    {
-        return NULL;
-    }
+    assert((unsigned int)index < channels.size());
     deChannel* channel = channels[index];
-    if (!channel)
-    {
-        recreateChannel(index);
-    }
+    assert(channel);
+    tryAllocateChannel(index);
     return channels[index];
 }
 
@@ -112,7 +106,10 @@ void deChannelManager::destroyAllChannels()
     unsigned int i;
     for (i = 0; i < channels.size(); i++)
     {
-        destroyChannel(i);
+        if (channels[i])
+        {
+            tryDeallocateChannel(i);
+        }            
     }
 }
 
@@ -141,8 +138,31 @@ int deChannelManager::getNumberOfAllocatedChannels() const
     {
         if (channels[i])
         {
-            n++;
+            if (channels[i]->isAllocated())
+            {
+                n++;
+            }
         }
     }
     return n;
+}
+
+void deChannelManager::tryAllocateChannel(int index)
+{
+    assert(index >= 0);
+    assert((unsigned int)index < channels.size());
+    if (!channels[index]->isAllocated())
+    {
+        channels[index]->allocate(channelSize.getN());
+    }        
+}
+
+void deChannelManager::tryDeallocateChannel(int index)
+{
+    assert(index >= 0);
+    assert((unsigned int)index < channels.size());
+    if (channels[index]->isAllocated())
+    {
+        channels[index]->deallocate();
+    }        
 }

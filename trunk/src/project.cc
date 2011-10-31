@@ -48,9 +48,6 @@ deProject::deProject()
  samplerManager(*this),
  mainFrame(NULL)
 {
-    sourceR = -1;
-    sourceG = -1;
-    sourceB = -1;
     imageFileName = "";
     sourceImageFileName = "";
     imagePanel = NULL;
@@ -140,18 +137,6 @@ void deProject::init(const std::string& fileName)
 
 void deProject::freeImage()
 {
-    if (sourceR > 0)
-    {
-        sourceChannelManager.freeChannel(sourceR);
-    }
-    if (sourceG > 0)
-    {
-        sourceChannelManager.freeChannel(sourceG);
-    }
-    if (sourceB > 0)
-    {
-        sourceChannelManager.freeChannel(sourceB);
-    }
 }
 
 void deProject::setTestImage(int s)
@@ -160,46 +145,42 @@ void deProject::setTestImage(int s)
 
     deSize size(s, s);
 
-    sourceChannelManager.setChannelSize(size);
-    sourceR = sourceChannelManager.allocateNewChannel();
-    sourceG = sourceChannelManager.allocateNewChannel();
-    sourceB = sourceChannelManager.allocateNewChannel();
+    deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
+    deImage& sourceImage = l->getSourceImage();
 
-    deChannel* channelR = sourceChannelManager.getChannel(sourceR);
-    deChannel* channelG = sourceChannelManager.getChannel(sourceG);
-    deChannel* channelB = sourceChannelManager.getChannel(sourceB);
+    if (l->isPrimary())
+    {
+        sourceChannelManager.setChannelSize(size);
+    }
+
+    deChannel* channelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
+    deChannel* channelG = sourceChannelManager.getChannel(sourceImage.getChannelIndex(1));
+    deChannel* channelB = sourceChannelManager.getChannel(sourceImage.getChannelIndex(2));
 
     generateFractal(channelR->getPixels(), channelG->getPixels(), channelB->getPixels(), size);
 
     imageFileName = "delaboratory_test_image";
 
-    setSource();
+    previewChannelManager.destroyAllChannels();
     imageAreaPanel->updateSize(true);
     layerStack.updateAllImages();
     repaintImage(true);
-}
-
-void deProject::setSource()
-{
-    deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
-
-    l->setSource(sourceR, sourceG, sourceB, &sourceChannelManager);
-
-    previewChannelManager.destroyAllChannels();
 }
 
 void deProject::resetLayerStack()
 {
     layerStack.clear();
 
-    deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, previewChannelManager, viewManager, "source image");
+    deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, previewChannelManager, viewManager, "source image", sourceChannelManager);
+    deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layer);
+    l->setPrimary();
 
     if (layer)
     {
         addLayer(layer);
     }        
 
-    setSource();
+    previewChannelManager.destroyAllChannels();
     layerStack.updateAllImages();
 }
 
@@ -556,7 +537,7 @@ void deProject::loadLayer(xmlNodePtr root)
         child = child->next;
     }
        
-    deLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, name);
+    deLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, name, sourceChannelManager);
 
     if (layer)
     {
@@ -583,7 +564,7 @@ void deProject::loadLayers(xmlNodePtr root)
         child = child->next;
     }
 
-    setSource();
+    previewChannelManager.destroyAllChannels();
     layerStack.updateAllImages();
 }
 
@@ -685,14 +666,18 @@ bool deProject::openImage(const std::string& fileName)
         size = getJPEGSize(fileName);
     }
 
-    sourceChannelManager.setChannelSize(size);
-    sourceR = sourceChannelManager.allocateNewChannel();
-    sourceG = sourceChannelManager.allocateNewChannel();
-    sourceB = sourceChannelManager.allocateNewChannel();
+    deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
 
-    deChannel* channelR = sourceChannelManager.getChannel(sourceR);
-    deChannel* channelG = sourceChannelManager.getChannel(sourceG);
-    deChannel* channelB = sourceChannelManager.getChannel(sourceB);
+    if (l->isPrimary())
+    {
+        sourceChannelManager.setChannelSize(size);
+    }
+
+    deImage& sourceImage = l->getSourceImage();
+
+    deChannel* channelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
+    deChannel* channelG = sourceChannelManager.getChannel(sourceImage.getChannelIndex(1));
+    deChannel* channelB = sourceChannelManager.getChannel(sourceImage.getChannelIndex(2));
 
     bool status = false;
 
@@ -716,7 +701,7 @@ bool deProject::openImage(const std::string& fileName)
     imageFileName = removePathAndExtension(fileName);
     sourceImageFileName = fileName;
 
-    setSource();
+    previewChannelManager.destroyAllChannels();
     imageAreaPanel->updateSize(true);
     layerStack.updateAllImages();
     repaintImage(true);
@@ -757,7 +742,6 @@ void deProject::zoom(int a)
     {
         mul = 1.0 + 0.002 * a;
     }
-    //deValue scale = viewManager.getScale() + 0.005 * a;
     deValue scale = viewManager.getScale() * mul;
     if (scale < 1.0)
     {

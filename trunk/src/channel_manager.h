@@ -24,6 +24,8 @@
 #include <set>
 #include "channel.h"
 
+class deImage;
+
 class deChannelManager
 {
     private:
@@ -31,6 +33,8 @@ class deChannelManager
 
         std::vector<deChannel*> channels;
         std::set<int> trashed;
+
+        int primaryIndex;
 
         bool locked;
 
@@ -46,16 +50,20 @@ class deChannelManager
         void setChannelSize(const deSize& size);
         deSize getChannelSize() const;
 
-        int allocateNewChannel();
+        int allocateNewChannel(deImage& image);
         void freeChannel(int index);
+
+        void tryAllocateChannel(int index);
+        void tryDeallocateChannel(int index);
+
         deChannel* getChannel(int index);
-        void destroyChannel(int index);
-        void recreateChannel(int index);
 
         void lock();
         void unlock();
 
         int getNumberOfAllocatedChannels() const;
+
+        void setPrimary(int index);
 
 };
 

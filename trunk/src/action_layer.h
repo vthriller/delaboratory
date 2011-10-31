@@ -40,9 +40,6 @@ class deActionLayer:public deLayer
 {
     private:
 
-        // channel
-        int allocatedBlendMaskChannel;
-
         // settings
         bool enabled;
 
@@ -100,6 +97,8 @@ class deActionLayer:public deLayer
 
         deImage imageActionPass;
 
+        deImage imageBlendMask;
+
     private:        
         deImage imageApplyPass;
 
@@ -145,7 +144,7 @@ class deActionLayer:public deLayer
         void hideBlendMask();
         void setBlendMask(int l, int c);
         void disableBlendMask();
-        int getAllocatedBlendMaskChannel() const {return allocatedBlendMaskChannel;};
+        int getAllocatedBlendMaskChannel() const {return imageBlendMask.getChannelIndex(0);};
 
         void enableBlendMaskChannel();
         void disableBlendMaskChannel();

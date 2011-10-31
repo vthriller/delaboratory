@@ -21,17 +21,25 @@
 
 #include "value.h"
 
+class deImage;
+
 class deChannel
 {
     private:
+        deImage& image;
         deValue* pixels;
 
         deChannel(const deChannel& c);
         deChannel& operator =(const deChannel& c);
     public:
-        deChannel(int size);
+        deChannel(deImage& _image);
 
         virtual ~deChannel();
+
+        void deallocate();
+        void allocate(int size);
+
+        bool isAllocated() const {return pixels;};
 
         deValue* getPixels();
 
@@ -40,6 +48,8 @@ class deChannel
         deValue getValue(int pos) const;
         void setValue(int pos, const deValue& value);
         void setValueClip(int pos, const deValue& value);
+
+        deImage& getImage() {return image;};
 };
 
 #endif

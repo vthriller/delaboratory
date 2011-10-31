@@ -22,40 +22,39 @@
 #include <iostream>
 #include "view_manager.h"
 
-deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager)
+deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deChannelManager& _sourceChannelManager)
 :deLayer("source image", deColorSpaceRGB, _index, -1), 
 previewChannelManager(_previewChannelManager),
 viewManager(_viewManager),
 sourceR(-1), 
 sourceG(-1), 
 sourceB(-1), 
-image(deColorSpaceRGB, _previewChannelManager) 
+image(deColorSpaceRGB, _previewChannelManager),
+sourceImage(deColorSpaceRGB, _sourceChannelManager),
+sourceChannelManager(_sourceChannelManager)
 {
-    sourceChannelManager = NULL;
+    sourceImage.enableChannel(0);
+    sourceImage.enableChannel(1);
+    sourceImage.enableChannel(2);
+
+    primary = false;
 }
 
 deSourceImageLayer::~deSourceImageLayer()
 {
 }
 
-void deSourceImageLayer::setSource(int r, int g, int b, deChannelManager* _sourceChannelManager)
+void deSourceImageLayer::setPrimary()
 {
-    sourceChannelManager = _sourceChannelManager;
-    sourceR = r;
-    sourceG = g;
-    sourceB = b;
+    primary = true;
+    sourceChannelManager.setPrimary(index);
 }
 
 void deSourceImageLayer::updateImage()
 {
-    if (!sourceChannelManager)
-    {
-        return;
-    }
-
-    deChannel* sourceChannelR = sourceChannelManager->getChannel(sourceR);
-    deChannel* sourceChannelG = sourceChannelManager->getChannel(sourceG);
-    deChannel* sourceChannelB = sourceChannelManager->getChannel(sourceB);
+    deChannel* sourceChannelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
+    deChannel* sourceChannelG = sourceChannelManager.getChannel(sourceImage.getChannelIndex(1));
+    deChannel* sourceChannelB = sourceChannelManager.getChannel(sourceImage.getChannelIndex(2));
 
     if (!sourceChannelR)
     {
@@ -70,7 +69,7 @@ void deSourceImageLayer::updateImage()
     deChannel* channelG = previewChannelManager.getChannel(image.getChannelIndex(1));
     deChannel* channelB = previewChannelManager.getChannel(image.getChannelIndex(2));
 
-    const deSize ss = sourceChannelManager->getChannelSize();
+    const deSize ss = sourceChannelManager.getChannelSize();
     const deSize ds = previewChannelManager.getChannelSize();
 
     deValue scale = viewManager.getScale();
@@ -152,3 +151,7 @@ void deSourceImageLayer::updateChannelUsage(std::map<int, int>& channelUsage) co
     image.updateChannelUsage(channelUsage, index);
 }
 
+deImage& deSourceImageLayer::getSourceImage()
+{
+    return sourceImage;
+}

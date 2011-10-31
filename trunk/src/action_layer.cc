@@ -62,6 +62,7 @@ deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace,
  channelManager(_channelManager),
  viewManager(_viewManager),
  imageActionPass(_colorSpace, _channelManager), 
+ imageBlendMask(deColorSpaceBW, _channelManager),
  imageApplyPass(_colorSpace, _channelManager), 
  imageBlendPass(_colorSpace, _channelManager)
 {
@@ -76,7 +77,6 @@ deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace,
     blendBlurRadius = 0;
     blendMaskMin = 0;
     blendMaskMax = 1;
-    allocatedBlendMaskChannel = -1;
 
     int n = getColorSpaceSize(colorSpace);
     int i;
@@ -93,19 +93,12 @@ deActionLayer::~deActionLayer()
 
 void deActionLayer::enableBlendMaskChannel()
 {
-    if (allocatedBlendMaskChannel < 0)
-    {
-        allocatedBlendMaskChannel = channelManager.allocateNewChannel();
-    }        
+    imageBlendMask.enableChannel(0);
 }
 
 void deActionLayer::disableBlendMaskChannel()
 {
-    if (allocatedBlendMaskChannel >= 0)
-    {
-        channelManager.freeChannel(allocatedBlendMaskChannel);
-        allocatedBlendMaskChannel = -1;
-    }
+    imageBlendMask.disableChannel(0, -1);
 }
 
 void deActionLayer::setBlendBlurRadius(deValue r)
@@ -336,10 +329,9 @@ void deActionLayer::updateBlend(int i)
 
     if ((blendMask) || (blendMaskShow))
     {
-        assert(allocatedBlendMaskChannel>=0);
         if (blendMask)
         {
-            deChannel* allocatedMaskChannel = channelManager.getChannel(allocatedBlendMaskChannel);
+            deChannel* allocatedMaskChannel = channelManager.getChannel(imageBlendMask.getChannelIndex(0));
             maskPixels = allocatedMaskChannel->getPixels();
         }            
     }
@@ -571,7 +563,7 @@ void deActionLayer::renderBlendMask()
     }
     deValue* maskPixels = maskChannel->getPixels();
 
-    deChannel* allocatedMaskChannel = channelManager.getChannel(allocatedBlendMaskChannel);
+    deChannel* allocatedMaskChannel = channelManager.getChannel(imageBlendMask.getChannelIndex(0));
     deValue* allocatedMaskPixels = allocatedMaskChannel->getPixels();
 
     deBlurType type = deGaussianBlur;

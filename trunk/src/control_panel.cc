@@ -249,13 +249,14 @@ void deControlPanel::addConversionLayer(deColorSpace colorSpace)
 {
     deLayerStack& layerStack = project->getLayerStack();
     deChannelManager& channelManager = project->getPreviewChannelManager();
+    deChannelManager& sourceChannelManager = project->getSourceChannelManager();
     deViewManager& viewManager = project->getViewManager();
 
     int s = viewManager.getView();
 
     std::string name = getColorSpaceName(colorSpace);
 
-    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, channelManager, viewManager, name);
+    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, channelManager, viewManager, name, sourceChannelManager);
 
     if (layer)
     {
@@ -271,13 +272,14 @@ void deControlPanel::addActionLayer(const std::string& action)
 {
     deLayerStack& layerStack = project->getLayerStack();
     deChannelManager& channelManager = project->getPreviewChannelManager();
+    deChannelManager& sourceChannelManager = project->getSourceChannelManager();
     deViewManager& viewManager = project->getViewManager();
 
     int s = viewManager.getView();
 
     deColorSpace colorSpace = layerStack.getLayer(s)->getColorSpace();
 
-    deLayer* layer = createLayer(action, s, colorSpace, layerStack, channelManager, viewManager, action);
+    deLayer* layer = createLayer(action, s, colorSpace, layerStack, channelManager, viewManager, action, sourceChannelManager);
 
     if (layer)
     {
