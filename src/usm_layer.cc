@@ -155,7 +155,7 @@ void deUSMLayer::sharp()
 
 void deUSMLayer::hiraloam1()
 {
-    blurRadius = 0.1;
+    blurRadius = 0.8;
     amount = 0.1;
     threshold = 0.0;
     updateImage();
@@ -165,7 +165,7 @@ void deUSMLayer::hiraloam1()
 
 void deUSMLayer::hiraloam2()
 {
-    blurRadius = 0.1;
+    blurRadius = 0.8;
     amount = 0.2;
     threshold = 0.0;
     updateImage();
