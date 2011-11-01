@@ -38,6 +38,8 @@ class deImageAreaPanel:public wxPanel
         
         void updateSize(bool calcHistogram);
 
+        deImagePanel* getImagePanel();
+
 };
 
 #endif

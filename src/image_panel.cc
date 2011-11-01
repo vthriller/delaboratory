@@ -104,7 +104,6 @@ bool deImagePanel::setPosition(deValue x, deValue y)
 deImagePanel::deImagePanel(wxWindow* parent, deProject* _project)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), project(_project), renderer(project)
 {
-    project->setImagePanel(this);
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deImagePanel::click));
     Connect(wxEVT_LEFT_UP, wxMouseEventHandler(deImagePanel::release));
     Connect(wxEVT_MOTION, wxMouseEventHandler(deImagePanel::move));
@@ -123,7 +122,7 @@ void deImagePanel::paintEvent(wxPaintEvent & evt)
     render(dc);
 }
 
-void deImagePanel::paint()
+void deImagePanel::repaint()
 {
     wxClientDC dc(this);
     wxBufferedDC bufferedDC(&dc);
