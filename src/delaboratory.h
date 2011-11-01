@@ -26,7 +26,7 @@ std::string getApplicationName()
 
 std::string getVersion()
 {
-    return "0.5";
+    return "development (unstable)";
 }
 
 std::string getCopyright()
