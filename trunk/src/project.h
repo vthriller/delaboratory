@@ -50,8 +50,6 @@ class deProject
         deChannelManager previewChannelManager;
         deChannelManager sourceChannelManager;
 
-        deImagePanel* imagePanel;
-
         std::string imageFileName;
         std::string sourceImageFileName;
 
@@ -90,7 +88,6 @@ class deProject
 
         deSamplerManager& getSamplerManager();
 
-        void setImagePanel(deImagePanel* _imagePanel);
         void repaintImage(bool calcHistogram);
 
         void addLAB();

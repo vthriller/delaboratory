@@ -65,3 +65,8 @@ deImageAreaPanel::~deImageAreaPanel()
 {
 }
 
+
+deImagePanel* deImageAreaPanel::getImagePanel()
+{
+    return imagePanel;
+}

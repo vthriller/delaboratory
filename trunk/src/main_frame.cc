@@ -36,6 +36,8 @@
 #include "file_dialogs.h"
 #include "delaboratory.h"
 
+#include "image_panel.h"
+
 #include "wx/thread.h"
 
 enum
@@ -118,9 +120,9 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
     wxButton* testButton = new wxButton(topPanel, wxID_ANY, _T("thread test - don't touch!"));
     topSizer->Add(testButton);
 
-    leftPanel = new deImageAreaPanel(this, project);
-    leftPanel->SetSize(300,300);
-    leftSizer->Add(leftPanel, 1, wxEXPAND);
+    imageAreaPanel = new deImageAreaPanel(this, project);
+    imageAreaPanel->SetSize(300,300);
+    leftSizer->Add(imageAreaPanel, 1, wxEXPAND);
 
     wxSizer* rightSizer = new wxBoxSizer(wxVERTICAL);
     hPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(280, 250));
@@ -187,7 +189,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
 
     Layout();
 
-    leftPanel->SetFocus();
+    imageAreaPanel->SetFocus();
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMainFrame::test));
 }
 
@@ -199,7 +201,7 @@ void deMainFrame::hidePanels()
     controlPanel->Hide();
     mainSizer->Layout();
     full = true;
-    leftPanel->SetFocus();
+    imageAreaPanel->SetFocus();
 }
 
 void deMainFrame::showPanels()
@@ -210,7 +212,7 @@ void deMainFrame::showPanels()
     controlPanel->Show();
     mainSizer->Layout();
     full = false;
-    leftPanel->SetFocus();
+    imageAreaPanel->SetFocus();
 }
 
 void deMainFrame::rebuild()
@@ -354,7 +356,8 @@ void deMainFrame::onBenchmarkColor(wxCommandEvent& event)
 
 void deMainFrame::onRepaintEvent(wxCommandEvent& event)
 {
-    project->repaintImage(true);
+//    project->repaintImage(true);
+    repaint();
 }
 
 class deTestThread:public wxThread
@@ -409,4 +412,9 @@ void deMainFrame::test(wxCommandEvent& event)
     if ( thread->Run() != wxTHREAD_NO_ERROR )
     {
     }
+}
+
+void deMainFrame::repaint()
+{
+    imageAreaPanel->getImagePanel()->repaint();
 }

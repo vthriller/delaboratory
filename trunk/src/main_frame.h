@@ -33,7 +33,7 @@ private:
     deLayerGridPanel* layerGridPanel;
     wxPanel* controlPanel;
     wxSizer* mainSizer;
-    deImageAreaPanel* leftPanel;
+    deImageAreaPanel* imageAreaPanel;
     bool full;
 
 	void onTestImageSmall(wxCommandEvent& event);
@@ -69,7 +69,10 @@ public:
 
     void onKey(int key);
 
+    void repaint();
+
 	DECLARE_EVENT_TABLE()
+
 };
 
 

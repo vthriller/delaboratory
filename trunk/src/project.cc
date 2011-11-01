@@ -50,7 +50,6 @@ deProject::deProject()
 {
     imageFileName = "";
     sourceImageFileName = "";
-    imagePanel = NULL;
     resetLayerStack();
     histogramPanel = NULL;
 
@@ -266,17 +265,12 @@ deSamplerManager& deProject::getSamplerManager()
     return samplerManager;
 }
 
-void deProject::setImagePanel(deImagePanel* _imagePanel)
-{
-    imagePanel = _imagePanel;
-}
-
 void deProject::repaintImage(bool calcHistogram)
 {
-    if (imagePanel)
+    if (mainFrame)
     {
-        imagePanel->paint();
-    }        
+        mainFrame->repaint();
+    }
     if (calcHistogram)
     {
         if (histogramPanel)
