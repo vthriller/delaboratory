@@ -56,6 +56,9 @@ private:
 	void onMemoryInfo(wxCommandEvent& event);
 	void onBenchmarkBlur(wxCommandEvent& event);
 	void onBenchmarkColor(wxCommandEvent& event);
+	void onRepaintEvent(wxCommandEvent& event);
+
+	void test(wxCommandEvent& event);
 
 public:
 	deMainFrame(const wxSize& size, deProject* _project);
