@@ -22,6 +22,31 @@
 #include "str.h"
 #include "rgb2xyz2lab.h"
 
+class deThread:public wxThread
+{
+    private:
+        virtual void *Entry()
+        {
+            bool w = true;
+            while (w)
+            {
+                wxThread::Sleep(1000);
+                if (TestDestroy())
+                {
+                    w = false;
+                }
+            }
+            return NULL;
+        }
+    public:    
+        deThread()
+        {
+        }
+        virtual ~deThread()
+        {
+        }
+};
+
 class deLaboratory: public wxApp
 {	
     public:
@@ -36,8 +61,11 @@ class deLaboratory: public wxApp
 
     private:
     	virtual bool OnInit();
+    	virtual int OnExit();
         deProject project;
         deMainFrame* frame;
+
+        deThread* thread;
 
         virtual int FilterEvent(wxEvent& event);
 
@@ -61,6 +89,13 @@ int deLaboratory::FilterEvent(wxEvent& event)
     return -1;
 }
 
+
+int deLaboratory::OnExit()
+{
+    thread->Delete();
+    return 0;
+}   
+
 bool deLaboratory::OnInit()
 {
     wxInitAllImageHandlers();
@@ -82,6 +117,16 @@ bool deLaboratory::OnInit()
 	SetTopWindow(frame);
 
     initLAB();
+
+    thread = new deThread();
+
+    if ( thread->Create() != wxTHREAD_NO_ERROR )
+    {
+    }
+
+    if ( thread->Run() != wxTHREAD_NO_ERROR )
+    {
+    }
 
 	return TRUE;
 } 
