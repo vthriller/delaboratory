@@ -36,6 +36,8 @@
 #include "file_dialogs.h"
 #include "delaboratory.h"
 
+#include "wx/thread.h"
+
 enum
 {
     ID_Quit = 1,
@@ -57,7 +59,9 @@ enum
     ID_LABColors5,
     ID_MemoryInfo,
     ID_BenchmarkBlur,
-    ID_BenchmarkColor
+    ID_BenchmarkColor,
+    DE_REPAINT_EVENT
+
 };
 
 BEGIN_EVENT_TABLE(deMainFrame, wxFrame)
@@ -81,6 +85,7 @@ EVT_MENU(ID_LABColors5, deMainFrame::onLABColors5)
 EVT_MENU(ID_MemoryInfo, deMainFrame::onMemoryInfo)
 EVT_MENU(ID_BenchmarkBlur, deMainFrame::onBenchmarkBlur)
 EVT_MENU(ID_BenchmarkColor, deMainFrame::onBenchmarkColor)
+EVT_MENU(DE_REPAINT_EVENT, deMainFrame::onRepaintEvent)
 END_EVENT_TABLE()
 
 deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
@@ -109,6 +114,9 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
 
     wxPanel* zoomPanel = new deZoomPanel(topPanel, *project);
     topSizer->Add(zoomPanel);
+
+    wxButton* testButton = new wxButton(topPanel, wxID_ANY, _T("thread test - don't touch!"));
+    topSizer->Add(testButton);
 
     leftPanel = new deImageAreaPanel(this, project);
     leftPanel->SetSize(300,300);
@@ -180,6 +188,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
     Layout();
 
     leftPanel->SetFocus();
+    Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMainFrame::test));
 }
 
 void deMainFrame::hidePanels()
@@ -341,4 +350,63 @@ void deMainFrame::onBenchmarkColor(wxCommandEvent& event)
     deBenchmarkFrame* help = new deBenchmarkFrame(this, "color");
     help->Show();
     help->perform();
+}
+
+void deMainFrame::onRepaintEvent(wxCommandEvent& event)
+{
+    project->repaintImage(true);
+}
+
+class deTestThread:public wxThread
+{
+    private:
+        virtual void *Entry()
+        {
+            bool w = true;
+            int i;
+            int max = 10;
+            for (i = 0; i < max; i++)
+            {
+                int j;
+                for (j = 0; j < 256 * 256 ; j++)
+                {
+                    deValue v = i * j;
+                    channel[j] = 0.5 + 0.5 * sin(v / 4323.0);
+                }
+                wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_REPAINT_EVENT );
+                wxPostEvent( frame, event );
+
+                wxThread::Sleep(1000);
+                if (TestDestroy())
+                {
+                    i = max;
+                }
+            }
+            return NULL;
+        }
+        deMainFrame* frame;
+        deValue* channel;
+    public:    
+        deTestThread(deMainFrame* _frame, deValue* _channel)
+        :frame(_frame), channel(_channel)
+        {
+        }
+        virtual ~deTestThread()
+        {
+        }
+};
+
+void deMainFrame::test(wxCommandEvent& event)
+{
+    deChannelManager& channelManager = project->getPreviewChannelManager();
+    deChannel* channel = channelManager.getChannel(0);
+    deTestThread* thread = new deTestThread(this, channel->getPixels());
+
+    if ( thread->Create() != wxTHREAD_NO_ERROR )
+    {
+    }
+
+    if ( thread->Run() != wxTHREAD_NO_ERROR )
+    {
+    }
 }
