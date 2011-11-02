@@ -268,15 +268,7 @@ void deProject::repaintImage(bool calcHistogram)
 {
     if (mainFrame)
     {
-        mainFrame->repaint();
-    }
-    if (calcHistogram)
-    {
-        if (histogramPanel)
-        {
-            histogramPanel->generate();
-            histogramPanel->paint();
-        }
+        mainFrame->repaint(calcHistogram);
     }
 }
 

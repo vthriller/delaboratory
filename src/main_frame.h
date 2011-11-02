@@ -24,6 +24,7 @@ class deProject;
 class deImageAreaPanel;
 class deLayerGridPanel;
 class deControlPanel;
+class deHistogramPanel;
 
 class deMainFrame: public wxFrame
 {
@@ -35,6 +36,7 @@ private:
     deControlPanel* controlPanel;
     wxSizer* mainSizer;
     deImageAreaPanel* imageAreaPanel;
+    deHistogramPanel* histogramPanel;
     bool full;
 
 	void onTestImageSmall(wxCommandEvent& event);
@@ -70,7 +72,7 @@ public:
 
     void onKey(int key);
 
-    void repaint();
+    void repaint(bool calcHistogram);
 
 	DECLARE_EVENT_TABLE()
 

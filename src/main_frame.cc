@@ -129,7 +129,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
     wxSizer* sizerH = new wxStaticBoxSizer(wxVERTICAL, hPanel,  _T("histogram"));
     hPanel->SetSizer(sizerH);
 
-    deHistogramPanel* histogramPanel = new deHistogramPanel(hPanel, project);
+    histogramPanel = new deHistogramPanel(hPanel, project);
     sizerH->Add(histogramPanel, 0, wxCENTER);
 
     deHistogramModePanel* histogramModePanel = new deHistogramModePanel(hPanel, *project);
@@ -356,8 +356,7 @@ void deMainFrame::onBenchmarkColor(wxCommandEvent& event)
 
 void deMainFrame::onRepaintEvent(wxCommandEvent& event)
 {
-//    project->repaintImage(true);
-    repaint();
+    repaint(true);
 }
 
 class deTestThread:public wxThread
@@ -414,10 +413,18 @@ void deMainFrame::test(wxCommandEvent& event)
     }
 }
 
-void deMainFrame::repaint()
+void deMainFrame::repaint(bool calcHistogram)
 {
     imageAreaPanel->getImagePanel()->repaint();
     controlPanel->updateSamplerManagerFrame();
     project->updateMemoryInfo();
+    if (calcHistogram)
+    {
+        if (histogramPanel)
+        {
+            histogramPanel->generate();
+            histogramPanel->paint();
+        }
+    }
 }
 
