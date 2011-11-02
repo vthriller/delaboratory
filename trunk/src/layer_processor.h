@@ -20,12 +20,15 @@
 #define _DE_LAYER_PROCESSOR_H
 
 class deMainFrame;
+class deLayerStack;
+class deViewManager;
 
 class deLayerProcessor
 {
     private:
-        class deMainFrame* mainFrame;
-        class deLayerStack* stack;
+        deMainFrame* mainFrame;
+        deLayerStack* stack;
+        deViewManager* viewManager;
 
     public:
         deLayerProcessor();
@@ -33,6 +36,7 @@ class deLayerProcessor
 
         void setMainFrame(deMainFrame* _mainFrame);
         void setLayerStack(deLayerStack* _layerStack);
+        void setViewManager(deViewManager* _viewManager);
 
         void repaintImage(bool calcHistogram);
         void updateAllImages();
