@@ -18,12 +18,14 @@
 
 #include "layer_processor.h"
 #include "main_frame.h"
+#include "layer_stack.h"
 #include <string>
 
 
 deLayerProcessor::deLayerProcessor()
 {
     mainFrame = NULL;
+    stack = NULL;
 }
 
 deLayerProcessor::~deLayerProcessor()
@@ -35,6 +37,11 @@ void deLayerProcessor::setMainFrame(deMainFrame* _mainFrame)
     mainFrame = _mainFrame;
 }
 
+void deLayerProcessor::setLayerStack(deLayerStack* _layerStack)
+{
+    stack = _layerStack;
+}
+
 void deLayerProcessor::repaintImage(bool calcHistogram)
 {
     if (mainFrame)
@@ -42,3 +49,12 @@ void deLayerProcessor::repaintImage(bool calcHistogram)
         mainFrame->repaint(calcHistogram);
     }
 }
+
+void deLayerProcessor::updateAllImages()
+{
+    if (stack)
+    {
+        stack->updateAllImages();
+    }        
+    repaintImage(true);
+}    

@@ -25,13 +25,17 @@ class deLayerProcessor
 {
     private:
         class deMainFrame* mainFrame;
+        class deLayerStack* stack;
 
     public:
         deLayerProcessor();
         virtual ~deLayerProcessor();
 
         void setMainFrame(deMainFrame* _mainFrame);
+        void setLayerStack(deLayerStack* _layerStack);
+
         void repaintImage(bool calcHistogram);
+        void updateAllImages();
 
 };
 
