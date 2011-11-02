@@ -57,6 +57,7 @@ deProject::deProject(deLayerProcessor& _processor)
     receiveKeys = true;
 
     layerProcessor.setLayerStack(&layerStack);
+    layerProcessor.setViewManager(&viewManager);
 }
 
 void deProject::disableKeys()

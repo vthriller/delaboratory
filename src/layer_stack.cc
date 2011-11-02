@@ -69,11 +69,6 @@ deLayer* deLayerStack::getLayer(int id) const
     return layers[i];
 }
 
-void deLayerStack::updateAllImages()
-{
-    updateImages(0, layers.size() - 1);
-}
-
 void deLayerStack::updateImages(int a, int b)
 {
     unsigned int i;

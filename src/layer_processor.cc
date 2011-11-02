@@ -19,6 +19,7 @@
 #include "layer_processor.h"
 #include "main_frame.h"
 #include "layer_stack.h"
+#include "view_manager.h"
 #include <string>
 
 
@@ -26,6 +27,7 @@ deLayerProcessor::deLayerProcessor()
 {
     mainFrame = NULL;
     stack = NULL;
+    viewManager = NULL;
 }
 
 deLayerProcessor::~deLayerProcessor()
@@ -42,6 +44,11 @@ void deLayerProcessor::setLayerStack(deLayerStack* _layerStack)
     stack = _layerStack;
 }
 
+void deLayerProcessor::setViewManager(deViewManager* _viewManager)
+{
+    viewManager = _viewManager;
+}
+
 void deLayerProcessor::repaintImage(bool calcHistogram)
 {
     if (mainFrame)
@@ -54,7 +61,8 @@ void deLayerProcessor::updateAllImages()
 {
     if (stack)
     {
-        stack->updateAllImages();
+        int view = viewManager->getView();
+        stack->updateImages(0, view);
     }        
     repaintImage(true);
 }    
