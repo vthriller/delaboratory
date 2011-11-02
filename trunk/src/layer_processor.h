@@ -39,7 +39,7 @@ class deLayerProcessor
         void setViewManager(deViewManager* _viewManager);
 
         void repaintImage(bool calcHistogram);
-        void updateAllImages();
+        void updateAllImages(bool calcHistogram);
 
 };
 

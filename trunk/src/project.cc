@@ -166,7 +166,7 @@ void deProject::setTestImage(int s)
 
     previewChannelManager.destroyAllChannels();
     imageAreaPanel->updateSize(true);
-    layerProcessor.updateAllImages();
+    layerProcessor.updateAllImages(true);
 }
 
 void deProject::resetLayerStack()
@@ -183,7 +183,7 @@ void deProject::resetLayerStack()
     }        
 
     previewChannelManager.destroyAllChannels();
-    layerProcessor.updateAllImages();
+    layerProcessor.updateAllImages(true);
 }
 
 void deProject::addLayer(deLayer* layer)
@@ -218,17 +218,7 @@ void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
 
     previewChannelManager.setChannelSize(size);
 
-    int view = viewManager.getView();
-    layerStack.updateImages(0, view);
-
-    if (calcHistogram)
-    {
-        if (histogramPanel)
-        {
-            histogramPanel->generate();
-            histogramPanel->paint();
-        }
-    }
+    layerProcessor.updateAllImages(false);
 }
 
 void deProject::onChangeView(int a, int b)
@@ -376,8 +366,7 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
     }
 
     // calculate image in preview size to continue editing
-    layerStack.updateImages(0, view);
-    layerProcessor.repaintImage(true);
+    layerProcessor.updateAllImages(true);
 }
 
 void deProject::deleteLayer()
@@ -537,7 +526,7 @@ void deProject::loadLayers(xmlNodePtr root)
     }
 
     previewChannelManager.destroyAllChannels();
-    layerProcessor.updateAllImages();
+    layerProcessor.updateAllImages(true);
 }
 
 void deProject::open(const std::string& fileName, bool image)
@@ -675,7 +664,7 @@ bool deProject::openImage(const std::string& fileName)
 
     previewChannelManager.destroyAllChannels();
     imageAreaPanel->updateSize(true);
-    layerProcessor.updateAllImages();
+    layerProcessor.updateAllImages(true);
 
     return status;
 }
@@ -744,9 +733,7 @@ void deProject::onScaleSet()
 
     imageAreaPanel->updateSize(false);
 
-    int view = viewManager.getView();
-    layerStack.updateImages(0, view);
-    layerProcessor.repaintImage(false);
+    layerProcessor.updateAllImages(false);
 }
 
 void deProject::setViewOffset(deValue x, deValue y)
@@ -754,9 +741,8 @@ void deProject::setViewOffset(deValue x, deValue y)
     viewManager.setOffset(x, y);
     previewChannelManager.destroyAllChannels();
 
-    int view = viewManager.getView();
-    layerStack.updateImages(0, view);
-    layerProcessor.repaintImage(false);
+    layerProcessor.updateAllImages(false);
+
 }
 
 void deProject::setMainFrame(deMainFrame* _mainFrame)

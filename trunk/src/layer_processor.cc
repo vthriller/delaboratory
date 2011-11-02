@@ -57,12 +57,12 @@ void deLayerProcessor::repaintImage(bool calcHistogram)
     }
 }
 
-void deLayerProcessor::updateAllImages()
+void deLayerProcessor::updateAllImages(bool calcHistogram)
 {
     if (stack)
     {
         int view = viewManager->getView();
         stack->updateImages(0, view);
     }        
-    repaintImage(true);
+    repaintImage(calcHistogram);
 }    
