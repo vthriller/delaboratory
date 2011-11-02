@@ -278,7 +278,6 @@ void deProject::repaintImage(bool calcHistogram)
             histogramPanel->paint();
         }
     }
-    updateMemoryInfo();
 }
 
 void deProject::saveImage(const std::string& fileName, const deImage& image, const std::string& type)
