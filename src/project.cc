@@ -39,13 +39,15 @@
 #include "memory_info_frame.h"
 #include <iostream>
 #include "main_frame.h"
+#include "layer_processor.h"
 
-deProject::deProject()
-:viewModePanel(NULL),
+deProject::deProject(deLayerProcessor& _processor)
+:layerProcessor(_processor),
+ viewModePanel(NULL),
  controlPanel(NULL),
  memoryInfoFrame(NULL),
- viewManager(*this),
- samplerManager(*this),
+ viewManager(*this, _processor),
+ samplerManager(*this, _processor),
  mainFrame(NULL)
 {
     imageFileName = "";
@@ -163,7 +165,7 @@ void deProject::setTestImage(int s)
     previewChannelManager.destroyAllChannels();
     imageAreaPanel->updateSize(true);
     layerStack.updateAllImages();
-    repaintImage(true);
+    layerProcessor.repaintImage(true);
 }
 
 void deProject::resetLayerStack()
@@ -187,6 +189,7 @@ void deProject::addLayer(deLayer* layer)
 {
     layerStack.addLayer(layer);
     updateMemoryInfo();
+    layerProcessor.repaintImage(true);
 }
 
 deChannelManager& deProject::getPreviewChannelManager() 
@@ -262,14 +265,6 @@ deViewManager& deProject::getViewManager()
 deSamplerManager& deProject::getSamplerManager() 
 {
     return samplerManager;
-}
-
-void deProject::repaintImage(bool calcHistogram)
-{
-    if (mainFrame)
-    {
-        mainFrame->repaint(calcHistogram);
-    }
 }
 
 void deProject::saveImage(const std::string& fileName, const deImage& image, const std::string& type)
@@ -381,7 +376,7 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
 
     // calculate image in preview size to continue editing
     layerStack.updateImages(0, view);
-    repaintImage(true);
+    layerProcessor.repaintImage(true);
 }
 
 void deProject::deleteLayer()
@@ -397,6 +392,7 @@ void deProject::deleteLayer()
         viewManager.setView( layerStack.getSize() - 1 );
     }
     updateMemoryInfo();
+    layerProcessor.repaintImage(true);
 }
 
 void deProject::setLastView()
@@ -679,7 +675,7 @@ bool deProject::openImage(const std::string& fileName)
     previewChannelManager.destroyAllChannels();
     imageAreaPanel->updateSize(true);
     layerStack.updateAllImages();
-    repaintImage(true);
+    layerProcessor.repaintImage(true);
 
     return status;
 }
@@ -750,7 +746,7 @@ void deProject::onScaleSet()
 
     int view = viewManager.getView();
     layerStack.updateImages(0, view);
-    repaintImage(false);
+    layerProcessor.repaintImage(false);
 }
 
 void deProject::setViewOffset(deValue x, deValue y)
@@ -760,7 +756,7 @@ void deProject::setViewOffset(deValue x, deValue y)
 
     int view = viewManager.getView();
     layerStack.updateImages(0, view);
-    repaintImage(false);
+    layerProcessor.repaintImage(false);
 }
 
 void deProject::setMainFrame(deMainFrame* _mainFrame)

@@ -20,6 +20,7 @@
 #define _DE_SAMPLER_MANAGER_H
 
 class deProject;
+class deLayerProcessor;
 #include "sampler.h"
 #include <vector>
 
@@ -27,13 +28,14 @@ class deSamplerManager
 {
     private:
         deProject& project;
+        deLayerProcessor& layerProcessor;
         std::vector<deSampler> samplers;
 
         int selected;
 
         
     public:
-        deSamplerManager(deProject& _project);
+        deSamplerManager(deProject& _project, deLayerProcessor& _processor);
         virtual ~deSamplerManager();
 
         int getNumberOfSamplers() const {return samplers.size();};

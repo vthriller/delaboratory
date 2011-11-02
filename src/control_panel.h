@@ -26,11 +26,13 @@
 class deProject;
 class deLayerGridPanel;
 class deSamplerManagerFrame;
+class deLayerProcessor;
 
 class deControlPanel:public wxPanel
 {
     private:
-        deProject* project;
+        deProject& project;
+        deLayerProcessor& layerProcessor;
         deLayerGridPanel* layerGridPanel;
         wxSizer* mainSizer;
 
@@ -60,7 +62,7 @@ class deControlPanel:public wxPanel
         void generateFinalImage(const std::string& app, const std::string& type, const std::string& name);
 
     public:
-        deControlPanel(wxWindow* parent, deProject* _project, deLayerGridPanel* _layerGridPanel);
+        deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deLayerGridPanel* _layerGridPanel);
         ~deControlPanel();
 
         void onChangeView();

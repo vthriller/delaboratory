@@ -18,9 +18,10 @@
 
 #include "sampler_manager.h"
 #include "project.h"
+#include "layer_processor.h"
 
-deSamplerManager::deSamplerManager(deProject& _project)
-:project(_project)
+deSamplerManager::deSamplerManager(deProject& _project, deLayerProcessor& _processor)
+:project(_project), layerProcessor(_processor)
 {
     int i;
     for (i = 0; i < 5; i++)
@@ -53,11 +54,11 @@ void deSamplerManager::onImageClick(deValue x, deValue y)
 
     s.setPosition(x, y);
 
-    project.repaintImage(false);
+    layerProcessor.repaintImage(false);
 }
 
 void deSamplerManager::setSelected(int s)
 {
     selected = s;
-    project.repaintImage(false);
+    layerProcessor.repaintImage(false);
 }

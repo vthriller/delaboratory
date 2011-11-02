@@ -33,6 +33,7 @@ class deImageAreaPanel;
 class deMemoryInfoFrame;
 class deImage;
 class deMainFrame;
+class deLayerProcessor;
 
 class deProject
 {
@@ -40,6 +41,7 @@ class deProject
         deProject(const deProject& project);
         deProject& operator =(const deProject& project);
 
+        deLayerProcessor& layerProcessor;
         deLayerStack layerStack;
         deViewModePanel* viewModePanel;
         deControlPanel* controlPanel;
@@ -70,7 +72,7 @@ class deProject
         void saveImage(const std::string& filename, const deImage& image, const std::string& type);
 
     public:
-        deProject();
+        deProject(deLayerProcessor& _processor);
         virtual ~deProject();
         void onKey(int key);
         void init(const std::string& fileName);
@@ -88,7 +90,6 @@ class deProject
 
         deSamplerManager& getSamplerManager();
 
-        void repaintImage(bool calcHistogram);
 
         void addLAB();
         void addRGB();
