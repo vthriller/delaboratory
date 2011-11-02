@@ -53,7 +53,6 @@ void deSamplerManager::onImageClick(deValue x, deValue y)
 
     s.setPosition(x, y);
 
-    project.updateSamplers();
     project.repaintImage(false);
 }
 

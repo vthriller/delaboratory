@@ -111,7 +111,6 @@ class deProject
         void setHistogramModePanel(deHistogramModePanel* _histogramModePanel);
         void setControlPanel(deControlPanel* _controlPanel);
         void onChangeViewMode();
-        void updateSamplers();
 
         deHistogramPanel* getHistogramPanel();
 

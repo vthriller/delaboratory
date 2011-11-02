@@ -23,6 +23,7 @@
 class deProject;
 class deImageAreaPanel;
 class deLayerGridPanel;
+class deControlPanel;
 
 class deMainFrame: public wxFrame
 {
@@ -31,7 +32,7 @@ private:
     wxPanel* hPanel;
     wxPanel* topPanel;
     deLayerGridPanel* layerGridPanel;
-    wxPanel* controlPanel;
+    deControlPanel* controlPanel;
     wxSizer* mainSizer;
     deImageAreaPanel* imageAreaPanel;
     bool full;

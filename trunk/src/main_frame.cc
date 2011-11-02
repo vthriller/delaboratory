@@ -417,4 +417,6 @@ void deMainFrame::test(wxCommandEvent& event)
 void deMainFrame::repaint()
 {
     imageAreaPanel->getImagePanel()->repaint();
+    controlPanel->updateSamplerManagerFrame();
 }
+
