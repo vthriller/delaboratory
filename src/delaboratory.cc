@@ -64,9 +64,9 @@ class deLaboratory: public wxApp
     private:
     	virtual bool OnInit();
     	virtual int OnExit();
-        deProject project;
         deMainFrame* frame;
         deLayerProcessor processor;
+        deProject project;
 
         deThread* thread;
 

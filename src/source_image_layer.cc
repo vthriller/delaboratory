@@ -52,6 +52,7 @@ void deSourceImageLayer::setPrimary()
 
 void deSourceImageLayer::updateImage()
 {
+
     deChannel* sourceChannelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
     deChannel* sourceChannelG = sourceChannelManager.getChannel(sourceImage.getChannelIndex(1));
     deChannel* sourceChannelB = sourceChannelManager.getChannel(sourceImage.getChannelIndex(2));
