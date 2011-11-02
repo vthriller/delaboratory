@@ -25,11 +25,12 @@ class deImageAreaPanel;
 class deLayerGridPanel;
 class deControlPanel;
 class deHistogramPanel;
+class deLayerProcessor;
 
 class deMainFrame: public wxFrame
 {
 private:
-    deProject* project;
+    deProject& project;
     wxPanel* hPanel;
     wxPanel* topPanel;
     deLayerGridPanel* layerGridPanel;
@@ -64,7 +65,7 @@ private:
 	void test(wxCommandEvent& event);
 
 public:
-	deMainFrame(const wxSize& size, deProject* _project);
+	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor);
 
     void showPanels();
     void hidePanels();

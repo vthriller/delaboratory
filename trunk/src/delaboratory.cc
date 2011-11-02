@@ -21,6 +21,7 @@
 #include "main_frame.h"
 #include "str.h"
 #include "rgb2xyz2lab.h"
+#include "layer_processor.h"
 
 class deThread:public wxThread
 {
@@ -51,7 +52,8 @@ class deLaboratory: public wxApp
 {	
     public:
         deLaboratory()
-        :wxApp()
+        :wxApp(),
+         project(processor)
         {
         }
 
@@ -64,6 +66,7 @@ class deLaboratory: public wxApp
     	virtual int OnExit();
         deProject project;
         deMainFrame* frame;
+        deLayerProcessor processor;
 
         deThread* thread;
 
@@ -105,7 +108,7 @@ bool deLaboratory::OnInit()
 	int width = 1200;
 	int height = 960;
 
-	frame = new deMainFrame( wxSize(width,height), &project);
+	frame = new deMainFrame( wxSize(width,height), project, processor);
 
     if (argc > 1)
     {
@@ -127,6 +130,8 @@ bool deLaboratory::OnInit()
     if ( thread->Run() != wxTHREAD_NO_ERROR )
     {
     }
+
+    processor.setMainFrame(frame);
 
 	return TRUE;
 } 

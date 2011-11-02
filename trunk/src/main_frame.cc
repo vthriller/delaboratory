@@ -90,10 +90,10 @@ EVT_MENU(ID_BenchmarkColor, deMainFrame::onBenchmarkColor)
 EVT_MENU(DE_REPAINT_EVENT, deMainFrame::onRepaintEvent)
 END_EVENT_TABLE()
 
-deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
+deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor)
 : wxFrame() , project(_project)
 {
-    project->setMainFrame(this);
+    project.setMainFrame(this);
 
     std::string s = getApplicationName() + " " + getVersion() + " " + getCopyright();
 
@@ -111,16 +111,16 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
     wxSizer* topSizer = new wxBoxSizer(wxHORIZONTAL);
     topPanel->SetSizer(topSizer);
 
-    wxPanel* viewModePanel = new deViewModePanel(topPanel, *project);
+    wxPanel* viewModePanel = new deViewModePanel(topPanel, project);
     topSizer->Add(viewModePanel);
 
-    wxPanel* zoomPanel = new deZoomPanel(topPanel, *project);
+    wxPanel* zoomPanel = new deZoomPanel(topPanel, project);
     topSizer->Add(zoomPanel);
 
     wxButton* testButton = new wxButton(topPanel, wxID_ANY, _T("thread test - don't touch!"));
     topSizer->Add(testButton);
 
-    imageAreaPanel = new deImageAreaPanel(this, project);
+    imageAreaPanel = new deImageAreaPanel(this, &project);
     imageAreaPanel->SetSize(300,300);
     leftSizer->Add(imageAreaPanel, 1, wxEXPAND);
 
@@ -129,18 +129,18 @@ deMainFrame::deMainFrame(const wxSize& size, deProject* _project)
     wxSizer* sizerH = new wxStaticBoxSizer(wxVERTICAL, hPanel,  _T("histogram"));
     hPanel->SetSizer(sizerH);
 
-    histogramPanel = new deHistogramPanel(hPanel, project);
+    histogramPanel = new deHistogramPanel(hPanel, &project);
     sizerH->Add(histogramPanel, 0, wxCENTER);
 
-    deHistogramModePanel* histogramModePanel = new deHistogramModePanel(hPanel, *project);
+    deHistogramModePanel* histogramModePanel = new deHistogramModePanel(hPanel, project);
     sizerH->Add(histogramModePanel, 0, wxLEFT);
 
     rightSizer->Add(hPanel, 0, wxEXPAND);
 
-    layerGridPanel = new deLayerGridPanel(this, project);
+    layerGridPanel = new deLayerGridPanel(this, project, _layerProcessor);
     rightSizer->Add(layerGridPanel, 1, wxEXPAND);
 
-    controlPanel = new deControlPanel(this, project, layerGridPanel);
+    controlPanel = new deControlPanel(this, project, _layerProcessor, layerGridPanel);
     rightSizer->Add(controlPanel, 0, wxEXPAND);
 
     mainSizer->Add(rightSizer, 0, wxEXPAND);
@@ -245,46 +245,46 @@ void deMainFrame::onQuit(wxCommandEvent& WXUNUSED(event))
 void deMainFrame::onSaveProject(wxCommandEvent& WXUNUSED(event))
 {
     std::string fileName = getSaveFile(this, "save project", "delab");
-    project->save(fileName, true);
+    project.save(fileName, true);
 }
 
 void deMainFrame::onSaveLayerStack(wxCommandEvent& WXUNUSED(event))
 {
     std::string fileName = getSaveFile(this, "save layer stack", "delab");
-    project->save(fileName, false);
+    project.save(fileName, false);
 }
 
 void deMainFrame::onOpenProject(wxCommandEvent& WXUNUSED(event))
 {
     std::string fileName = getOpenFile(this, "open project", "delab");
-    project->open(fileName, true);
+    project.open(fileName, true);
 }
 
 void deMainFrame::onOpenLayerStack(wxCommandEvent& WXUNUSED(event))
 {
     std::string fileName = getOpenFile(this, "open layer stack", "delab");
-    project->open(fileName, false);
+    project.open(fileName, false);
 }
 
 void deMainFrame::onNewProject(wxCommandEvent& WXUNUSED(event))
 {
-    project->newProject();
+    project.newProject();
 }
 
 void deMainFrame::onTestImageSmall(wxCommandEvent& WXUNUSED(event))
 {
-    project->setTestImage(900);
+    project.setTestImage(900);
 }
 
 void deMainFrame::onTestImageBig(wxCommandEvent& WXUNUSED(event))
 {
-    project->setTestImage(1800);
+    project.setTestImage(1800);
 }
 
 void deMainFrame::onOpenImage(wxCommandEvent& WXUNUSED(event))
 {
     std::string fileName = getOpenFile(this, "load source image", "image");
-    project->openImage(fileName);
+    project.openImage(fileName);
 }
 
 void deMainFrame::onHelpColorSpaces(wxCommandEvent& event)
@@ -337,7 +337,7 @@ void deMainFrame::onLABColors5(wxCommandEvent& event)
 
 void deMainFrame::onMemoryInfo(wxCommandEvent& event)
 {
-    project->openMemoryInfoFrame(this);
+    project.openMemoryInfoFrame(this);
 }
 
 void deMainFrame::onBenchmarkBlur(wxCommandEvent& event)
@@ -400,7 +400,7 @@ class deTestThread:public wxThread
 
 void deMainFrame::test(wxCommandEvent& event)
 {
-    deChannelManager& channelManager = project->getPreviewChannelManager();
+    deChannelManager& channelManager = project.getPreviewChannelManager();
     deChannel* channel = channelManager.getChannel(0);
     deTestThread* thread = new deTestThread(this, channel->getPixels());
 
@@ -417,7 +417,7 @@ void deMainFrame::repaint(bool calcHistogram)
 {
     imageAreaPanel->getImagePanel()->repaint();
     controlPanel->updateSamplerManagerFrame();
-    project->updateMemoryInfo();
+    project.updateMemoryInfo();
     if (calcHistogram)
     {
         if (histogramPanel)

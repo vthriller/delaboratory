@@ -19,9 +19,10 @@
 #include "view_manager.h"
 #include "project.h"
 #include "layer.h"
+#include "layer_processor.h"
 
-deViewManager::deViewManager(deProject& _project)
-:project(_project)
+deViewManager::deViewManager(deProject& _project, deLayerProcessor& _processor)
+:project(_project), layerProcessor(_processor)
 {
     view = 0;
     showBlendMask = false;
@@ -51,7 +52,7 @@ void deViewManager::setView(int v)
 
 void deViewManager::repaint()
 {
-    project.repaintImage(true);
+    layerProcessor.repaintImage(true);
 }    
 
 void deViewManager::setSingleChannel(int _channel)
@@ -59,14 +60,14 @@ void deViewManager::setSingleChannel(int _channel)
     single = true;
     channel = _channel;
     project.onChangeViewMode();
-    project.repaintImage(true);
+    layerProcessor.repaintImage(true);
 }
 
 void deViewManager::setNormal()
 {
     single = false;
     project.onChangeViewMode();
-    project.repaintImage(true);
+    layerProcessor.repaintImage(true);
 }
 
 void deViewManager::hideMask()

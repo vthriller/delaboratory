@@ -19,14 +19,19 @@
 #ifndef _DE_LAYER_PROCESSOR_H
 #define _DE_LAYER_PROCESSOR_H
 
+class deMainFrame;
 
 class deLayerProcessor
 {
     private:
+        class deMainFrame* mainFrame;
 
     public:
         deLayerProcessor();
         virtual ~deLayerProcessor();
+
+        void setMainFrame(deMainFrame* _mainFrame);
+        void repaintImage(bool calcHistogram);
 
 };
 

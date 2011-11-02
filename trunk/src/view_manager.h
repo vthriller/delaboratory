@@ -20,6 +20,7 @@
 #define _DE_PREVIEW_MANAGER_H
 
 class deProject;
+class deLayerProcessor;
 #include "color_space.h"
 
 class deViewManager
@@ -27,6 +28,7 @@ class deViewManager
     private:
         int view;
         deProject& project;
+        deLayerProcessor& layerProcessor;
         bool single;
         int channel;
         bool showBlendMask;
@@ -37,7 +39,7 @@ class deViewManager
 
 
     public:
-        deViewManager(deProject& _project);
+        deViewManager(deProject& _project, deLayerProcessor& _processor);
         virtual ~deViewManager();
 
         void setView(int v);

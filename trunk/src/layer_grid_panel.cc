@@ -25,10 +25,11 @@
 #include <iostream>
 
 #include "layer_factory.h"
+#include "layer_processor.h"
 
 void deLayerGridPanel::buildRows()
 {
-    deLayerStack& layerStack = project->getLayerStack();
+    deLayerStack& layerStack = project.getLayerStack();
     int n = layerStack.getSize();
 
     int i;
@@ -126,8 +127,8 @@ void deLayerGridPanel::clearRows()
     layerRows.clear();
 }
 
-deLayerGridPanel::deLayerGridPanel(wxWindow* parent, deProject* _project)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(250, 400)), project(_project)
+deLayerGridPanel::deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(250, 400)), project(_project), layerProcessor(_processor)
 {
     maxRows = 10;
 
@@ -158,10 +159,10 @@ void deLayerGridPanel::check(wxCommandEvent &event)
         const deLayerRow& row = *i;
         if (row.enabled->GetId() == id)
         {
-            deLayerStack& layerStack = project->getLayerStack();
+            deLayerStack& layerStack = project.getLayerStack();
             deLayer* layer = layerStack.getLayer(row.index);
             layer->setEnabled(checked);
-            repaintImage();
+            layerProcessor.repaintImage(true);
         }
     }
 }
@@ -175,15 +176,15 @@ void deLayerGridPanel::select(wxCommandEvent &event)
         const deLayerRow& row = *i;
         if (row.view->GetId() == id)
         {
-            project->getViewManager().setView(row.index);
-            repaintImage();
+            project.getViewManager().setView(row.index);
+            layerProcessor.repaintImage(true);
         }
     }
 }
 
 void deLayerGridPanel::click(wxCommandEvent &event)
 {
-    deLayerStack& layerStack = project->getLayerStack();
+    deLayerStack& layerStack = project.getLayerStack();
     int id = event.GetId();
     std::vector<deLayerRow>::const_iterator i;
     for (i = layerRows.begin(); i != layerRows.end(); i++)
@@ -203,8 +204,3 @@ void deLayerGridPanel::click(wxCommandEvent &event)
 
 }
 
-
-void deLayerGridPanel::repaintImage()
-{
-    project->repaintImage(true);
-}

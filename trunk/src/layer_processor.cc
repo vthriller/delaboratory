@@ -17,13 +17,28 @@
 */
 
 #include "layer_processor.h"
+#include "main_frame.h"
+#include <string>
 
 
 deLayerProcessor::deLayerProcessor()
 {
+    mainFrame = NULL;
 }
 
 deLayerProcessor::~deLayerProcessor()
 {
 }
 
+void deLayerProcessor::setMainFrame(deMainFrame* _mainFrame)
+{
+    mainFrame = _mainFrame;
+}
+
+void deLayerProcessor::repaintImage(bool calcHistogram)
+{
+    if (mainFrame)
+    {
+        mainFrame->repaint(calcHistogram);
+    }
+}

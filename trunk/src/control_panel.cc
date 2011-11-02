@@ -24,16 +24,17 @@
 #include "layer_grid_panel.h"
 #include "sampler_manager_frame.h"
 #include "file_dialogs.h"
+#include "layer_processor.h"
 
 const int g_txt = 220;
 
-deControlPanel::deControlPanel(wxWindow* parent, deProject* _project, deLayerGridPanel* _layerGridPanel)
-:wxPanel(parent), project(_project), layerGridPanel(_layerGridPanel)
+deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor,  deLayerGridPanel* _layerGridPanel)
+:wxPanel(parent), project(_project), layerGridPanel(_layerGridPanel), layerProcessor(_processor)
 {
 
     samplerManagerFrame = NULL;
 
-    project->setControlPanel(this);
+    project.setControlPanel(this);
 
     mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
@@ -132,9 +133,9 @@ deControlPanel::~deControlPanel()
 
 void deControlPanel::setConversions()
 {
-    deViewManager& viewManager = project->getViewManager();
+    deViewManager& viewManager = project.getViewManager();
     int view = viewManager.getView();
-    deLayerStack& layerStack = project->getLayerStack();
+    deLayerStack& layerStack = project.getLayerStack();
     deLayer* layer = layerStack.getLayer(view);
     deColorSpace currentColorSpace = layer->getColorSpace();
 
@@ -188,7 +189,7 @@ void deControlPanel::generateFinalImage(const std::string& app, const std::strin
 {
     wxProgressDialog* progressDialog = new wxProgressDialog(_T("generate final image"), _T("generate final image"), 100, GetParent(), wxPD_AUTO_HIDE | wxPD_ELAPSED_TIME);
 
-    project->exportFinalImage(app, type, name, progressDialog);
+    project.exportFinalImage(app, type, name, progressDialog);
 
     delete progressDialog;
 }
@@ -200,7 +201,7 @@ void deControlPanel::click(wxCommandEvent &event)
     if (deleteLayer->GetId() == id)
     {
 
-        project->deleteLayer();
+        project.deleteLayer();
         updateLayerGrid();
     }
 
@@ -247,10 +248,10 @@ void deControlPanel::click(wxCommandEvent &event)
 
 void deControlPanel::addConversionLayer(deColorSpace colorSpace)
 {
-    deLayerStack& layerStack = project->getLayerStack();
-    deChannelManager& channelManager = project->getPreviewChannelManager();
-    deChannelManager& sourceChannelManager = project->getSourceChannelManager();
-    deViewManager& viewManager = project->getViewManager();
+    deLayerStack& layerStack = project.getLayerStack();
+    deChannelManager& channelManager = project.getPreviewChannelManager();
+    deChannelManager& sourceChannelManager = project.getSourceChannelManager();
+    deViewManager& viewManager = project.getViewManager();
 
     int s = viewManager.getView();
 
@@ -260,8 +261,8 @@ void deControlPanel::addConversionLayer(deColorSpace colorSpace)
 
     if (layer)
     {
-        project->addLayer(layer);
-        project->setLastView();
+        project.addLayer(layer);
+        project.setLastView();
 
         updateLayerGrid();
         
@@ -270,10 +271,10 @@ void deControlPanel::addConversionLayer(deColorSpace colorSpace)
 
 void deControlPanel::addActionLayer(const std::string& action)
 {
-    deLayerStack& layerStack = project->getLayerStack();
-    deChannelManager& channelManager = project->getPreviewChannelManager();
-    deChannelManager& sourceChannelManager = project->getSourceChannelManager();
-    deViewManager& viewManager = project->getViewManager();
+    deLayerStack& layerStack = project.getLayerStack();
+    deChannelManager& channelManager = project.getPreviewChannelManager();
+    deChannelManager& sourceChannelManager = project.getSourceChannelManager();
+    deViewManager& viewManager = project.getViewManager();
 
     int s = viewManager.getView();
 
@@ -283,8 +284,8 @@ void deControlPanel::addActionLayer(const std::string& action)
 
     if (layer)
     {
-        project->addLayer(layer);
-        project->setLastView();
+        project.addLayer(layer);
+        project.setLastView();
 
         updateLayerGrid();
     }
@@ -293,7 +294,7 @@ void deControlPanel::addActionLayer(const std::string& action)
 void deControlPanel::closeSamplerManagerFrame()
 {
     samplerManagerFrame = NULL;
-    project->repaintImage(false);
+    layerProcessor.repaintImage(false);
 }
 
 void deControlPanel::updateSamplerManagerFrame()
@@ -314,16 +315,16 @@ void deControlPanel::updateLayerGrid()
     layerGridPanel->clearRows();
     layerGridPanel->buildRows();
     layerGridPanel->Layout();
-    layerGridPanel->repaintImage();
+    layerProcessor.repaintImage(false);
 }
 
 void deControlPanel::showSamplers()
 {
     if (!samplerManagerFrame)
     {
-        samplerManagerFrame = new deSamplerManagerFrame(this, *project);
+        samplerManagerFrame = new deSamplerManagerFrame(this, project);
         samplerManagerFrame->Show();
-        project->repaintImage(false);
+        layerProcessor.repaintImage(false);
     }
 }        
 

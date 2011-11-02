@@ -24,6 +24,7 @@
 #include <vector>
 
 class deProject;
+class deLayerProcessor;
 
 class deLayerGridPanel:public wxPanel
 {
@@ -47,7 +48,8 @@ class deLayerGridPanel:public wxPanel
     private:
         std::vector<deLayerRow> layerRows;
 
-        deProject* project;
+        deProject& project;
+        deLayerProcessor& layerProcessor;
 
         wxSizer* mainSizer;
 
@@ -55,59 +57,17 @@ class deLayerGridPanel:public wxPanel
 
         int maxRows;
 
-        /*
-
-        wxButton* addCurvesQuick;
-        wxButton* addMixerQuick;
-        wxButton* addLABQuick;
-        wxButton* addLCHQuick;
-        wxButton* addRGBQuick;
-
-        wxButton* addCurves;
-        wxButton* addLAB;
-        wxButton* addRGB;
-        wxButton* addHSV;
-        wxButton* addHSL;
-        wxButton* deleteLayer;
-
-        wxButton* exportTIFF;
-        wxButton* externalEditor;
-        */
-    /*
-        int selected;
-
-        wxListCtrl* listbox;
-        wxButton* buttonAdd;
-        wxButton* buttonRemove;
-        wxButton* buttonView;
-
-        std::vector<std::string> items;
-
-        void select(wxCommandEvent &event);
-        void deselect(wxCommandEvent &event);
-        void activate(wxCommandEvent &event);
-        void right_click(wxCommandEvent &event);
-        void clickAdd(wxCommandEvent &event);
-        void clickRemove(wxCommandEvent &event);
-        void clickView(wxCommandEvent &event);
-        void fill(std::vector<std::string>& names);
-        */
-
         void check(wxCommandEvent &event);
         void select(wxCommandEvent &event);
         void click(wxCommandEvent &event);
     
     public:
-        deLayerGridPanel(wxWindow* parent, deProject* _project);
+        deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor);
         ~deLayerGridPanel();
 
-        void repaintImage();
         void buildRows();
         void clearRows();
 
-
-//      void update();
-        
 };
 
 #endif
