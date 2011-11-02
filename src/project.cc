@@ -242,7 +242,6 @@ void deProject::onChangeView(int a, int b)
     {
         histogramModePanel->updateNames();
     }
-    updateSamplers();
     updateMemoryInfo();
     if (mainFrame)
     {
@@ -279,7 +278,6 @@ void deProject::repaintImage(bool calcHistogram)
             histogramPanel->paint();
         }
     }
-    updateSamplers();
     updateMemoryInfo();
 }
 
@@ -445,14 +443,6 @@ void deProject::onChangeViewMode()
     if (viewModePanel)
     {
         viewModePanel->updateMode();
-    }
-}
-
-void deProject::updateSamplers()
-{
-    if (controlPanel)
-    {
-        controlPanel->updateSamplerManagerFrame();
     }
 }
 
