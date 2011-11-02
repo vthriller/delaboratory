@@ -54,8 +54,9 @@ deProject::deProject(deLayerProcessor& _processor)
     sourceImageFileName = "";
     resetLayerStack();
     histogramPanel = NULL;
-
     receiveKeys = true;
+
+    layerProcessor.setLayerStack(&layerStack);
 }
 
 void deProject::disableKeys()
@@ -164,8 +165,7 @@ void deProject::setTestImage(int s)
 
     previewChannelManager.destroyAllChannels();
     imageAreaPanel->updateSize(true);
-    layerStack.updateAllImages();
-    layerProcessor.repaintImage(true);
+    layerProcessor.updateAllImages();
 }
 
 void deProject::resetLayerStack()
@@ -182,7 +182,7 @@ void deProject::resetLayerStack()
     }        
 
     previewChannelManager.destroyAllChannels();
-    layerStack.updateAllImages();
+    layerProcessor.updateAllImages();
 }
 
 void deProject::addLayer(deLayer* layer)
@@ -536,7 +536,7 @@ void deProject::loadLayers(xmlNodePtr root)
     }
 
     previewChannelManager.destroyAllChannels();
-    layerStack.updateAllImages();
+    layerProcessor.updateAllImages();
 }
 
 void deProject::open(const std::string& fileName, bool image)
@@ -674,8 +674,7 @@ bool deProject::openImage(const std::string& fileName)
 
     previewChannelManager.destroyAllChannels();
     imageAreaPanel->updateSize(true);
-    layerStack.updateAllImages();
-    layerProcessor.repaintImage(true);
+    layerProcessor.updateAllImages();
 
     return status;
 }
