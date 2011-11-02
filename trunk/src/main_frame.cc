@@ -418,5 +418,6 @@ void deMainFrame::repaint()
 {
     imageAreaPanel->getImagePanel()->repaint();
     controlPanel->updateSamplerManagerFrame();
+    project->updateMemoryInfo();
 }
 
