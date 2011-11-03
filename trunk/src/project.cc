@@ -173,7 +173,7 @@ void deProject::resetLayerStack()
 {
     layerStack.clear();
 
-    deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, previewChannelManager, viewManager, "source image", sourceChannelManager);
+    deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, layerProcessor, previewChannelManager, viewManager, "source image", sourceChannelManager);
     deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layer);
     l->setPrimary();
 
@@ -208,6 +208,11 @@ deLayerStack& deProject::getLayerStack()
     return layerStack;
 }
 
+deLayerProcessor& deProject::getLayerProcessor()
+{
+    return layerProcessor;
+}
+
 void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
 {
     deSize oldSize = previewChannelManager.getChannelSize();
@@ -223,7 +228,7 @@ void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
 
 void deProject::onChangeView(int a, int b)
 {
-    layerStack.updateImages(a + 1, b);
+    layerProcessor.updateImages(a + 1, b);
     if (controlPanel)
     {
         controlPanel->onChangeView();
@@ -344,7 +349,7 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
     int view = viewManager.getView();
     viewManager.setScale(1.0);
     previewChannelManager.setChannelSize(sourceChannelManager.getChannelSize());
-    layerStack.updateImagesSmart(previewChannelManager, view, progressDialog, memoryInfoFrame);
+    layerProcessor.updateImagesSmart(previewChannelManager, view, progressDialog, memoryInfoFrame);
 
     // take the final image
     deLayer* layer = layerStack.getLayer(view);
@@ -498,7 +503,7 @@ void deProject::loadLayer(xmlNodePtr root)
         child = child->next;
     }
        
-    deLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, name, sourceChannelManager);
+    deLayer* layer = createLayer(type, source, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, name, sourceChannelManager);
 
     if (layer)
     {

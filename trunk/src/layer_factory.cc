@@ -28,33 +28,33 @@
 #include "source_image_layer.h"
 
 
-deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name, deChannelManager& _sourceChannelManager)
+deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name, deChannelManager& _sourceChannelManager)
 {
     int index = _layerStack.getSize();
 
     if (type == "curves")
     {
-        return new deCurvesLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
+        return new deCurvesLayer(colorSpace, index, source, _layerStack, _processor, _channelManager, _viewManager, name);
     }
 
     if (type == "blur")
     {
-        return new deBlurLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
+        return new deBlurLayer(colorSpace, index, source, _layerStack, _processor, _channelManager, _viewManager, name);
     }
 
     if (type == "usm")
     {
-        return new deUSMLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
+        return new deUSMLayer(colorSpace, index, source, _layerStack, _processor, _channelManager, _viewManager, name);
     }
 
     if (type == "mixer")
     {
-        return new deMixerLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
+        return new deMixerLayer(colorSpace, index, source, _layerStack, _processor, _channelManager, _viewManager, name);
     }
 
     if (type == "apply_image")
     {
-        return new deApplyImageLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
+        return new deApplyImageLayer(colorSpace, index, source, _layerStack, _processor, _channelManager, _viewManager, name);
     }
     
     if (type == "conversion")
@@ -64,11 +64,11 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
             deLayer* sourceLayer = _layerStack.getLayer(source);
             deColorSpace sourceColorSpace = sourceLayer->getColorSpace();
             int n = getColorSpaceSize(sourceColorSpace);
-            return new deConversionBWLayer(index, source, _layerStack, _channelManager, _viewManager, n);
+            return new deConversionBWLayer(index, source, _layerStack, _processor, _channelManager, _viewManager, n);
         }
         else
         {
-            return new deConversionLayer(colorSpace, index, source, _layerStack, _channelManager);
+            return new deConversionLayer(colorSpace, index, source, _layerStack, _processor, _channelManager);
         }
     }
 

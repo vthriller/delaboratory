@@ -18,6 +18,7 @@
 
 #include "action_layer.h"
 #include "layer_stack.h"
+#include "layer_processor.h"
 #include "view_manager.h"
 #include "channel_manager.h"
 #include "apply_luminance_color.h"
@@ -56,9 +57,10 @@ void blend(deValue* sourcePixels, deValue* overlayPixels, deValue* resultPixels,
     }
 }
 
-deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor,  deChannelManager& _channelManager, deViewManager& _viewManager)
 :deLayer(_name, _colorSpace, _index, _sourceLayer),
  layerStack(_layerStack),
+ layerProcessor(_processor),
  channelManager(_channelManager),
  viewManager(_viewManager),
  imageActionPass(_colorSpace, _channelManager), 
@@ -133,7 +135,7 @@ void deActionLayer::setEnabled(bool e)
 
 void deActionLayer::updateOtherLayers()
 {
-    layerStack.updateImages(index + 1, viewManager.getView());
+    layerProcessor.updateImages(index + 1, viewManager.getView());
 }
 
 deChannel* deActionLayer::getSourceChannel(int index)

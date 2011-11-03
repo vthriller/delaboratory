@@ -34,7 +34,7 @@ class deBlurLayer:public deActionLayer
         virtual std::string getType() const {return "blur";};
 
     public:
-        deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
         virtual ~deBlurLayer();
 
         virtual void createActionFrame(wxWindow* parent);

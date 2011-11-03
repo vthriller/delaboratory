@@ -35,7 +35,7 @@ class deApplyImageLayer:public deActionLayer
         virtual std::string getType() const {return "apply_image";};
 
     public:
-        deApplyImageLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deApplyImageLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
         virtual ~deApplyImageLayer();
 
         virtual void createActionFrame(wxWindow* parent);

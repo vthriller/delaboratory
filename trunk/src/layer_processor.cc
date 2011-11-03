@@ -21,7 +21,10 @@
 #include "layer_stack.h"
 #include "view_manager.h"
 #include <string>
-
+#include "layer.h"
+#include "channel_manager.h"
+#include "str.h"
+#include "memory_info_frame.h"
 
 deLayerProcessor::deLayerProcessor()
 {
@@ -62,7 +65,90 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
     if (stack)
     {
         int view = viewManager->getView();
-        stack->updateImages(0, view);
+        updateImages(0, view);
     }        
     repaintImage(calcHistogram);
 }    
+
+void deLayerProcessor::updateImages(int a, int b)
+{
+    unsigned int i;
+    assert((unsigned int)b < stack->getSize() );
+    for (i = (unsigned int)a; i <= (unsigned int)b; i++)
+    {
+        deLayer* layer = stack->getLayer(i);
+        if (layer)
+        {
+            layer->updateImage();
+        }            
+    }
+}
+
+void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame)
+{
+    channelManager.lock();
+
+    std::map<int, int> channelUsage;
+    generateChannelUsage(channelUsage);
+
+    unsigned int index;
+    int progress = 0;
+    assert((unsigned int)view < layers.size());
+    for (index = 0; index <= (unsigned int)view; index++)
+    {
+        std::map<int, int>::iterator i;
+        int previous = index - 1;
+        if (previous >= 0)
+        {
+            for (i = channelUsage.begin(); i != channelUsage.end(); i++)
+            {
+                int c = i->first;
+                int l = i->second;
+                if (l == previous)
+                {
+                    channelManager.tryDeallocateChannel(c);
+                }
+            }
+        }
+
+        deLayer* layer = stack->getLayer(index);
+        std::string label = str(index) + " " + layer->getName();
+
+        progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
+
+        layer->updateImage();
+
+        if (memoryInfoFrame)
+        {
+            memoryInfoFrame->update();
+        }
+
+        if (view > 0)
+        {
+            progress = 100 * index / view;
+        }
+        else
+        {
+            progress = 100;
+        }
+
+        progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
+    }
+
+    progressDialog->Update(100, _T("finished"));
+
+    channelManager.unlock();
+}
+
+void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
+{
+    channelUsage.clear();
+    int i;
+    int n = stack->getSize();
+    for (i = 0; i < n; i++)
+    {
+        deLayer* layer = stack->getLayer(i);
+        layer->updateChannelUsage(channelUsage);
+    }
+}
+
