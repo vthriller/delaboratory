@@ -82,6 +82,7 @@ class deProject
         deChannelManager& getPreviewChannelManager();
         deChannelManager& getSourceChannelManager();
         deLayerStack& getLayerStack();
+        deLayerProcessor& getLayerProcessor();
 
         void setPreviewSize(const deSize& size, bool calcHistogram);
 

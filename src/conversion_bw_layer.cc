@@ -19,12 +19,13 @@
 #include "conversion_bw_layer.h"
 #include "mixer_bw_editor.h"
 #include "layer_stack.h"
+#include "layer_processor.h"
 #include "convert_image.h"
 #include "channel_manager.h"
 #include "view_manager.h"
 
-deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int n)
-:deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _channelManager), mixer(n), viewManager(_viewManager)
+deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, int n)
+:deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager), mixer(n), viewManager(_viewManager)
 {
     if (n == 3)
     {
@@ -105,6 +106,6 @@ deValue deConversionBWLayer::getWeight(int s)
 
 void deConversionBWLayer::updateAndRepaint()
 {
-    layerStack.updateImages(index + 1, viewManager.getView());
+    layerProcessor.updateImages(index + 1, viewManager.getView());
     viewManager.repaint();
 }

@@ -33,7 +33,7 @@ class deConversionBWLayer:public deConversionLayer
 
         virtual bool hasAction() const {return true;};
     public:
-        deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int n);
+        deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, int n);
         virtual ~deConversionBWLayer();
 
         virtual void createActionFrame(wxWindow* parent);
