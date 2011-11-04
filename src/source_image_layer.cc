@@ -26,9 +26,6 @@ deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewCha
 :deLayer("source image", deColorSpaceRGB, _index, -1), 
 previewChannelManager(_previewChannelManager),
 viewManager(_viewManager),
-sourceR(-1), 
-sourceG(-1), 
-sourceB(-1), 
 image(deColorSpaceRGB, _previewChannelManager),
 sourceImage(deColorSpaceRGB, _sourceChannelManager),
 sourceChannelManager(_sourceChannelManager)

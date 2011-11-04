@@ -78,9 +78,7 @@ class deActionLayer:public deLayer
 
         virtual bool isChannelNeutral(int index) = 0;
 
-        virtual void updateOnlyBlend();
-
-        virtual void updateChannel(int i);
+        void updateAction(int i);
 
         void renderBlendMask();
 
@@ -119,6 +117,7 @@ class deActionLayer:public deLayer
     protected:
 
         virtual void updateImage();
+        void updateImage(bool action, bool blend, int channel);
 
     public:
         deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager);
