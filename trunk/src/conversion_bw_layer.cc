@@ -54,7 +54,6 @@ void deConversionBWLayer::updateImage()
     const deImage& sourceImage = source->getImage();
 
     image.enableAllChannels();
-//    convertImage(sourceImage, image, channelManager);
 
     int n = channelManager.getChannelSize().getN();
 

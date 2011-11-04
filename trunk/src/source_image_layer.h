@@ -33,10 +33,6 @@ class deSourceImageLayer:public deLayer
 
         bool primary;
 
-        int sourceR;
-        int sourceG;
-        int sourceB;
-
         deImage image;
         deImage sourceImage;
 

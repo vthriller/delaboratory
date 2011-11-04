@@ -129,7 +129,7 @@ bool deActionLayer::isEnabled() const
 void deActionLayer::setEnabled(bool e)
 {
     enabled = e;
-    updateImage();
+    updateImage(true, true, -1);
     updateOtherLayers();
 }
 
@@ -257,7 +257,7 @@ void deActionLayer::updateApply()
 void deActionLayer::setApplyMode(deApplyMode mode)
 {
     applyMode = mode;
-    updateApply();
+    updateImage(false, false, -1);
     updateOtherLayers();
     repaint();
 }
@@ -350,16 +350,6 @@ void deActionLayer::updateBlend(int i)
 
 }
 
-void deActionLayer::updateOnlyBlend()
-{
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        updateBlend(i);
-    }
-}
-
 void deActionLayer::setBlendMode(deBlendMode mode)
 {
     blendMode = mode;
@@ -396,8 +386,7 @@ void deActionLayer::onBlendSet()
     {
     }
 
-    updateOnlyBlend();
-    updateApply();
+    updateImage(false, true, -1);
     updateOtherLayers();
     repaint();
 }
@@ -408,33 +397,60 @@ void deActionLayer::setOpacity(deValue _opacity)
     onBlendSet();
 }
 
-
 void deActionLayer::updateImage()
+{
+    updateImage(true, true, -1);
+}
+
+void deActionLayer::updateImage(bool action, bool blend, int channel)
 {
     int n = getColorSpaceSize(colorSpace);
     int i;
-    for (i = 0; i < n; i++)
-    {
-        updateChannel(i);
-    }
 
-    if ((blendMask) || (blendMaskShow))
+    if (action)
     {
-        renderBlendMask();
-    }
+        if (channel >= 0)
+        {
+            updateAction(channel);
+        }
+        else
+        {
+            for (i = 0; i < n; i++)
+            {
+                updateAction(i);
+            }
+        }
+    }        
 
-    updateOnlyBlend();
+    if (blend)
+    {
+        if ((blendMask) || (blendMaskShow))
+        {
+            renderBlendMask();
+        }
+
+        if (channel >= 0)
+        {
+            updateBlend(channel);
+        }
+        else
+        {
+            for (i = 0; i < n; i++)
+            {
+                updateBlend(i);
+            }
+        }            
+    }    
+
     updateApply();
 }
 
 void deActionLayer::onChannelChange(int i)
 {
-    updateChannel(i);
-    updateBlend(i);
-    updateApply();
+    updateImage(true, true, i);
 }
 
-void deActionLayer::updateChannel(int i)
+void deActionLayer::updateAction(int i)
 {
     if (!enabled)
     {
