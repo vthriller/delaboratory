@@ -20,13 +20,14 @@
 #define _DE_USM_LAYER_H
 
 #include "action_layer.h"
+#include "property_value.h"
 
 class deUSMLayer:public deActionLayer
 {
     private:
-        deValue blurRadius;
-        deValue amount;
-        deValue threshold;
+        dePropertyValue blurRadius;
+        dePropertyValue amount;
+        dePropertyValue threshold;
 
     protected:
         virtual bool singleChannelProcessing() const {return true;};
