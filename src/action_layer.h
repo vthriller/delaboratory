@@ -116,7 +116,6 @@ class deActionLayer:public deLayer
 
     protected:
 
-        virtual void updateImage();
         void updateImage(bool action, bool blend, int channel);
 
     public:
@@ -172,6 +171,8 @@ class deActionLayer:public deLayer
 
         virtual void loadBlend(xmlNodePtr root);
         virtual void saveBlend(xmlNodePtr root);
+
+        virtual void updateImage();
 
 
 };

@@ -47,8 +47,6 @@ class deLayer
 
         void saveCommon(xmlNodePtr node);
 
-
-
     public:
         deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer);
         virtual ~deLayer();

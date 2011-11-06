@@ -17,8 +17,9 @@
 */
 
 #include "property_value.h"
+#include "action_layer.h"
 
-dePropertyValue::dePropertyValue(deLayer& _layer)
+dePropertyValue::dePropertyValue(deActionLayer& _layer)
 :layer(_layer)
 {
     value = 0;
@@ -31,6 +32,14 @@ dePropertyValue::~dePropertyValue()
 void dePropertyValue::set(deValue _value)
 {
     value = _value;
+}
+
+void dePropertyValue::setAndUpdate(deValue _value)
+{
+    set(_value);
+    layer.updateImage();
+    layer.updateOtherLayers();
+    layer.repaint();
 }
 
 deValue dePropertyValue::get() const

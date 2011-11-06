@@ -20,18 +20,19 @@
 #define _DE_PROPERTY_VALUE_H
 
 #include "value.h"
-class deLayer;
+class deActionLayer;
 
 class dePropertyValue
 {
     private:
         deValue value;
-        deLayer& layer;
+        deActionLayer& layer;
     public:
-        dePropertyValue(deLayer& _layer);
+        dePropertyValue(deActionLayer& _layer);
         virtual ~dePropertyValue();
 
         void set(deValue _value);
+        void setAndUpdate(deValue _value);
         deValue get() const;
 };
 
