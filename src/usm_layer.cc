@@ -25,7 +25,10 @@
 #include "xml.h"
 
 deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager) 
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
+ blurRadius(*this),
+ amount(*this),
+ threshold(*this)
 {
     reset();
 }
@@ -44,7 +47,7 @@ void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
     deBlurType type = deGaussianBlur;
     deValue t = 0.0;
 
-    deValue r = viewManager.getRealScale() * blurRadius * 1000;
+    deValue r = viewManager.getRealScale() * blurRadius.get() * 1000;
 
     blurChannel(source, unsharpMask, size, r, type, t);
 
@@ -53,9 +56,9 @@ void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
         deValue src = source[i];
         deValue u = src - unsharpMask[i];
 
-        if (fabs(u) >= threshold)
+        if (fabs(u) >= threshold.get())
         {
-            deValue d = src + amount * u;
+            deValue d = src + amount.get() * u;
 
             if (d < 0)
             {
@@ -91,12 +94,12 @@ void deUSMLayer::createActionFrame(wxWindow* parent)
 
 bool deUSMLayer::isChannelNeutral(int index)
 {
-    return (blurRadius == 0);
+    return (blurRadius.get() == 0);
 }    
 
 void deUSMLayer::setBlurRadius(deValue r)
 {
-    blurRadius = r;
+    blurRadius.set(r);
     updateImage();
     updateOtherLayers();
     repaint();
@@ -104,12 +107,12 @@ void deUSMLayer::setBlurRadius(deValue r)
 
 deValue deUSMLayer::getBlurRadius() const
 {
-    return blurRadius;
+    return blurRadius.get();
 }
 
 void deUSMLayer::setAmount(deValue r)
 {
-    amount = r;
+    amount.set(r);
     updateImage();
     updateOtherLayers();
     repaint();
@@ -117,12 +120,12 @@ void deUSMLayer::setAmount(deValue r)
 
 deValue deUSMLayer::getAmount() const
 {
-    return amount;
+    return amount.get();
 }
 
 void deUSMLayer::setThreshold(deValue r)
 {
-    threshold = r;
+    threshold.set(r);
     updateImage();
     updateOtherLayers();
     repaint();
@@ -130,14 +133,14 @@ void deUSMLayer::setThreshold(deValue r)
 
 deValue deUSMLayer::getThreshold() const
 {
-    return threshold;
+    return threshold.get();
 }
 
 void deUSMLayer::reset()
 {
-    blurRadius = 0.002;
-    amount = 2.0;
-    threshold = 0.0;
+    blurRadius.set(0.002);
+    amount.set(2.0);
+    threshold.set(0.0);
     updateImage();
     updateOtherLayers();
     repaint();
@@ -145,9 +148,9 @@ void deUSMLayer::reset()
 
 void deUSMLayer::sharp()
 {
-    blurRadius = 0.001;
-    amount = 4.0;
-    threshold = 0.0;
+    blurRadius.set(0.001);
+    amount.set(4.0);
+    threshold.set(0.0);
     updateImage();
     updateOtherLayers();
     repaint();
@@ -155,9 +158,9 @@ void deUSMLayer::sharp()
 
 void deUSMLayer::hiraloam1()
 {
-    blurRadius = 0.8;
-    amount = 0.1;
-    threshold = 0.0;
+    blurRadius.set(0.8);
+    amount.set(0.1);
+    threshold.set(0.0);
     updateImage();
     updateOtherLayers();
     repaint();
@@ -165,9 +168,9 @@ void deUSMLayer::hiraloam1()
 
 void deUSMLayer::hiraloam2()
 {
-    blurRadius = 0.8;
-    amount = 0.2;
-    threshold = 0.0;
+    blurRadius.set(0.8);
+    amount.set(0.2);
+    threshold.set(0.0);
     updateImage();
     updateOtherLayers();
     repaint();
@@ -178,9 +181,9 @@ void deUSMLayer::save(xmlNodePtr root)
     saveCommon(root);
     saveBlend(root);
 
-    saveChild(root, "radius", str(blurRadius));
-    saveChild(root, "amount", str(amount));
-    saveChild(root, "threshold", str(threshold));
+    saveChild(root, "radius", str(blurRadius.get()));
+    saveChild(root, "amount", str(amount.get()));
+    saveChild(root, "threshold", str(threshold.get()));
 }
 
 void deUSMLayer::load(xmlNodePtr root)
@@ -194,17 +197,17 @@ void deUSMLayer::load(xmlNodePtr root)
 
         if ((!xmlStrcmp(child->name, BAD_CAST("radius")))) 
         {
-            blurRadius = getValue(getContent(child));
+            blurRadius.set(getValue(getContent(child)));
         }
 
         if ((!xmlStrcmp(child->name, BAD_CAST("amount")))) 
         {
-            amount = getValue(getContent(child));
+            amount.set(getValue(getContent(child)));
         }
 
         if ((!xmlStrcmp(child->name, BAD_CAST("threshold")))) 
         {
-            threshold = getValue(getContent(child));
+            threshold.set(getValue(getContent(child)));
         }
 
         child = child->next;
