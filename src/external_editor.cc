@@ -36,7 +36,7 @@ void executeExternalEditor(const std::string& fileName, const std::string& app)
 
     wxExecuteEnv env;
 #ifdef _WIN32    
-    executable = WINDOWS_GIMP_PATH + "/" + WINDOWS_GIMP_EXE;
+    executable = WINDOWS_GIMP_PATH + std::string("/") + WINDOWS_GIMP_EXE;
     env.cwd = WINDOWS_GIMP_PATH;
 #else    
     executable = app;
