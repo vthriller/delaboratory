@@ -40,6 +40,7 @@
 #include <iostream>
 #include "main_frame.h"
 #include "layer_processor.h"
+#include "external_editor.h"
 
 deProject::deProject(deLayerProcessor& _processor)
 :layerProcessor(_processor),
@@ -316,23 +317,16 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
         // path is a directory for temporary save, used only when exporting to external editor
         std::string path = "";
 
-        if (app.size() > 0)
+        wxString temp;
+        if (wxGetEnv(_T("TEMP"), &temp))
         {
-            wxString temp;
-            if (wxGetEnv(_T("TEMP"), &temp))
-            {
-                // on Windows $TEMP should be set
-                path = str(temp);
-            }
-            else
-            {
-                path = "/tmp/";
-            }            
+            // on Windows $TEMP should be set
+            path = str(temp);
         }
         else
         {
-            wxMessageBox( _T("exporting final image failed - no app set"));
-        }
+            path = "/tmp/";
+        }            
         // we save file in the temporary directory
         fileName = path + imageFileName + "." + type;
     }        
@@ -364,10 +358,7 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
     // execute external editor
     if (app.size() > 0)
     {
-        const char* c = fileName.c_str();
-        wxString s(c, wxConvUTF8);
-        const wxString command = wxString::FromAscii(app.c_str()) + _T(" ") + s;
-        wxExecute(command);
+        executeExternalEditor(fileName, app);
     }
 
     // calculate image in preview size to continue editing
