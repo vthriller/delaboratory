@@ -19,11 +19,38 @@
 #include "external_editor.h"
 #include <wx/wx.h>
 
+#define WINDOWS_GIMP_PATH "C:/Program Files/gimp-2.7.4/bin"
+#define WINDOWS_GIMP_EXE "gimp-2.7.exe"
+
 void executeExternalEditor(const std::string& fileName, const std::string& app)
 {
     const char* c = fileName.c_str();
     wxString s(c, wxConvUTF8);
+
+    std::string executable;
+
+
+    long result;
+
+#if wxMINOR_VERSION >=9
+
+    wxExecuteEnv env;
+#ifdef _WIN32    
+    executable = WINDOWS_GIMP_PATH + "/" + WINDOWS_GIMP_EXE;
+    env.cwd = WINDOWS_GIMP_PATH;
+#else    
+    executable = app;
+    env.cwd = "";
+#endif    
+
+    const wxString command = wxString::FromAscii(executable.c_str()) + _T(" ") + s;
+    result = wxExecute(command, 0, NULL, &env);
+
+#else
+
     const wxString command = wxString::FromAscii(app.c_str()) + _T(" ") + s;
-    wxExecute(command);
+    result = wxExecute(command);
+
+#endif
 }
 
