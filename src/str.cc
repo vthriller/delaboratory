@@ -34,7 +34,11 @@ std::string getExtension(const std::string& s)
 std::string removePathAndExtension(const std::string& fileName)
 {
     size_t posDot = fileName.rfind(".");
+#ifdef _WIN32
+    size_t posSlash = fileName.rfind("\\");
+#else
     size_t posSlash = fileName.rfind("/");
+#endif    
     int posStart;
     if (posSlash > fileName.size())
     {
