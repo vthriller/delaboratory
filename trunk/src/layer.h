@@ -43,7 +43,6 @@ class deLayer
         unsigned int index;
         unsigned int sourceLayer;
 
-        virtual std::string getType() const = 0;
 
         void saveCommon(xmlNodePtr node);
 
@@ -66,7 +65,6 @@ class deLayer
 
         void closeActionFrame();
         void setActionFrame(deFrame* frame);
-        virtual void createActionFrame(wxWindow* parent);
 
         void closeBlendFrame();
         void setBlendFrame(deBlendFrame* frame);
@@ -84,6 +82,10 @@ class deLayer
         virtual void save(xmlNodePtr root) = 0;
 
         virtual std::string getActionName() {return "action";};
+
+        virtual std::string getType() const = 0;
+
+        bool checkActionFrame() const;
 
 
 

@@ -18,8 +18,8 @@
 
 #include "mixer_layer.h"
 #include "project.h"
-#include "mixer_editor.h"
 #include <iostream>
+#include "frame_factory.h"
 
 deMixerLayer::deMixerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _processor, _channelManager, _viewManager) 
@@ -47,16 +47,6 @@ deMixerLayer::~deMixerLayer()
 void deMixerLayer::processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize)
 {
     mixers[i]->process(s1, s2, s3, s4, channel, channelSize);
-}
-
-
-void deMixerLayer::createActionFrame(wxWindow* parent)
-{
-    if (!actionFrame)
-    {
-        actionFrame = new deMixerEditor(parent, *this);
-        actionFrame->Show(true);
-    }        
 }
 
 deMixer* deMixerLayer::getMixer(int index)
