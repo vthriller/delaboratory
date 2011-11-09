@@ -27,6 +27,10 @@
 #include "layer_factory.h"
 #include "layer_processor.h"
 
+#include "frame_factory.h"
+
+#include "frame.h"
+
 void deLayerGridPanel::buildRows()
 {
     deLayerStack& layerStack = project.getLayerStack();
@@ -193,7 +197,14 @@ void deLayerGridPanel::click(wxCommandEvent &event)
         if (row.action->GetId() == id)
         {
             deLayer* layer = layerStack.getLayer(row.index);
-            layer->createActionFrame(this);
+
+            if (!layer->checkActionFrame())
+            {
+                deFrame* actionFrame = createFrame(this, *layer);
+                layer->setActionFrame(actionFrame);
+                actionFrame->Show(true);
+            }        
+
         }
         if (row.blend->GetId() == id)
         {

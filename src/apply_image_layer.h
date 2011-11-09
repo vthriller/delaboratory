@@ -38,8 +38,6 @@ class deApplyImageLayer:public deActionLayer
         deApplyImageLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
         virtual ~deApplyImageLayer();
 
-        virtual void createActionFrame(wxWindow* parent);
-
         virtual bool isChannelNeutral(int index);
 
         virtual void processAction(int i);

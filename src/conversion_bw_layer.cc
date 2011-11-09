@@ -17,12 +17,12 @@
 */
 
 #include "conversion_bw_layer.h"
-#include "mixer_bw_editor.h"
 #include "layer_stack.h"
 #include "layer_processor.h"
 #include "convert_image.h"
 #include "channel_manager.h"
 #include "view_manager.h"
+#include "frame_factory.h"
 
 deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, int n)
 :deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager), mixer(n), viewManager(_viewManager)
@@ -37,15 +37,6 @@ deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerSt
 
 deConversionBWLayer::~deConversionBWLayer()
 {
-}
-
-void deConversionBWLayer::createActionFrame(wxWindow* parent)
-{
-    if (!actionFrame)
-    {
-        actionFrame = new deMixerBWEditor(parent, *this, "BW conversion");
-        actionFrame->Show(true);
-    }        
 }
 
 void deConversionBWLayer::updateImage()

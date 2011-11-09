@@ -18,9 +18,11 @@
 
 #include "curves_layer.h"
 #include "project.h"
-#include "curves_editor.h"
 #include <iostream>
 #include <cassert>
+
+#include "frame_factory.h"
+#include "curves_editor.h"
 
 deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _processor, _channelManager, _viewManager) 
@@ -41,15 +43,6 @@ void deCurvesLayer::processAction(int i, const deChannel& sourceChannel, deChann
     curves[i].process(sourceChannel, channel, size.getN());
 }
 
-
-void deCurvesLayer::createActionFrame(wxWindow* parent)
-{
-    if (!actionFrame)
-    {
-        actionFrame = new deCurvesEditor(parent, *this);
-        actionFrame->Show(true);
-    }        
-}
 
 deCurve* deCurvesLayer::getCurve(int index)
 {

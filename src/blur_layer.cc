@@ -19,9 +19,9 @@
 #include "blur_layer.h"
 #include "project.h"
 #include <iostream>
-#include "blur_frame.h"
 #include "str.h"
 #include "xml.h"
+#include "frame_factory.h"
 
 deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager) 
@@ -43,16 +43,6 @@ void deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel
     deValue r = viewManager.getRealScale() * radius * 1000;
 
     blurChannel(source, destination, size, r, type, threshold);
-}
-
-
-void deBlurLayer::createActionFrame(wxWindow* parent)
-{
-    if (!actionFrame)
-    {
-        actionFrame = new deBlurFrame(parent, *this);
-        actionFrame->Show(true);
-    }        
 }
 
 bool deBlurLayer::isChannelNeutral(int index)

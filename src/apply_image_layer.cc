@@ -19,9 +19,9 @@
 #include "apply_image_layer.h"
 #include "layer_stack.h"
 #include "channel_manager.h"
-#include "apply_image_frame.h"
 #include "xml.h"
 #include "str.h"
+#include "frame_factory.h"
 
 deApplyImageLayer::deApplyImageLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager) 
@@ -69,16 +69,6 @@ deColorSpace deApplyImageLayer::getAppliedColorSpace()
     const deImage& appliedImage = applied->getImage();
     return appliedImage.getColorSpace();
 }
-
-void deApplyImageLayer::createActionFrame(wxWindow* parent)
-{
-    if (!actionFrame)
-    {
-        actionFrame = new deApplyImageFrame(parent, *this);
-        actionFrame->Show(true);
-    }        
-}
-
 
 bool deApplyImageLayer::isChannelNeutral(int index)
 {

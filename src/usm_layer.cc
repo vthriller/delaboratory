@@ -17,12 +17,12 @@
 */
 
 #include "usm_layer.h"
-#include "usm_frame.h"
 #include "project.h"
 #include <iostream>
 #include "blur.h"
 #include "str.h"
 #include "xml.h"
+#include "frame_factory.h"
 
 deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
@@ -82,15 +82,6 @@ void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
     delete unsharpMask;
 }
 
-
-void deUSMLayer::createActionFrame(wxWindow* parent)
-{
-    if (!actionFrame)
-    {
-        actionFrame = new deUSMFrame(parent, *this);
-        actionFrame->Show(true);
-    }        
-}
 
 bool deUSMLayer::isChannelNeutral(int index)
 {

@@ -87,10 +87,6 @@ void deLayer::setActionFrame(deFrame* frame)
     actionFrame = frame;
 }
 
-void deLayer::createActionFrame(wxWindow* parent)
-{
-}
-
 void deLayer::closeBlendFrame()
 {
     blendFrame = NULL;
@@ -127,3 +123,9 @@ void deLayer::saveCommon(xmlNodePtr node)
     saveChild(node, "source", str(sourceLayer));
     saveChild(node, "color_space", getColorSpaceName(colorSpace));
 }
+
+bool deLayer::checkActionFrame() const
+{
+    return actionFrame != NULL;
+}
+

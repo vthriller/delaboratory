@@ -48,8 +48,8 @@ class deMixerBWSlider:public deSlider
         }
 };        
 
-deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, const std::string& _name)
-:deFrame(parent, _name), layer( _layer)
+deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer)
+:deFrame(parent, "conversion BW"), layer( _layer)
 {
     layer.setActionFrame(this);
 

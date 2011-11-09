@@ -57,19 +57,31 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
         return new deApplyImageLayer(colorSpace, index, source, _layerStack, _processor, _channelManager, _viewManager, name);
     }
     
+    bool cbw = false;
+
     if (type == "conversion")
     {
         if (colorSpace == deColorSpaceBW)
         {
-            deLayer* sourceLayer = _layerStack.getLayer(source);
-            deColorSpace sourceColorSpace = sourceLayer->getColorSpace();
-            int n = getColorSpaceSize(sourceColorSpace);
-            return new deConversionBWLayer(index, source, _layerStack, _processor, _channelManager, _viewManager, n);
+            cbw = true;
         }
         else
         {
             return new deConversionLayer(colorSpace, index, source, _layerStack, _processor, _channelManager);
         }
+    }
+
+    if (type == "conversion_bw")
+    {
+        cbw = true;
+    }
+
+    if (cbw)
+    {
+        deLayer* sourceLayer = _layerStack.getLayer(source);
+        deColorSpace sourceColorSpace = sourceLayer->getColorSpace();
+        int n = getColorSpaceSize(sourceColorSpace);
+        return new deConversionBWLayer(index, source, _layerStack, _processor, _channelManager, _viewManager, n);
     }
 
     if (type == "source_image")

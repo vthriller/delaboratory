@@ -35,8 +35,6 @@ class deMixerLayer:public deActionLayer
         deMixerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
         virtual ~deMixerLayer();
 
-        virtual void createActionFrame(wxWindow* parent);
-
         deMixer* getMixer(int index);
 
         virtual bool isChannelNeutral(int index);

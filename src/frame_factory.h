@@ -16,21 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_MIXER_BW_EDITOR_H
-#define _DE_MIXER_BW_EDITOR_H
+#ifndef _DE_FRAME_FACTORY_H
+#define _DE_FRAME_FACTORY_H
 
-#include "frame.h"
-class deConversionBWLayer;
+#include <wx/wx.h>
+class deLayer;
+class deFrame;
 
-class deMixerBWEditor:public deFrame
-{
-    private:
-        deConversionBWLayer& layer;
-    public:
-        deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer);
-        virtual ~deMixerBWEditor();
-
-};
-
+deFrame* createFrame(wxWindow *parent, deLayer& layer);
 
 #endif
