@@ -25,6 +25,7 @@
 #include "channel_manager.h"
 #include "str.h"
 #include "memory_info_frame.h"
+#include <wx/progdlg.h>
 
 deLayerProcessor::deLayerProcessor()
 {

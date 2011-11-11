@@ -41,8 +41,6 @@ class deCurvesLayer:public deActionLayer
 
         virtual void processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
 
-        virtual void onKey(int key);
-
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
 

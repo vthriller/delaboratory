@@ -43,7 +43,6 @@ class deLayer
         unsigned int index;
         unsigned int sourceLayer;
 
-
         void saveCommon(xmlNodePtr node);
 
     public:
@@ -68,7 +67,6 @@ class deLayer
 
         void closeBlendFrame();
         void setBlendFrame(deBlendFrame* frame);
-        virtual void createBlendFrame(wxWindow* parent);
 
         virtual bool onImageClick(deValue x, deValue y);
 
@@ -76,7 +74,7 @@ class deLayer
 
         int getIndex() const {return index;};
 
-        virtual void onKey(int key) {};
+        virtual void onKey(int key);
        
         virtual void load(xmlNodePtr root) = 0;
         virtual void save(xmlNodePtr root) = 0;
@@ -86,6 +84,7 @@ class deLayer
         virtual std::string getType() const = 0;
 
         bool checkActionFrame() const;
+        bool checkBlendFrame() const;
 
 
 

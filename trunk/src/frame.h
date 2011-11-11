@@ -27,6 +27,8 @@ class deFrame:public wxFrame
     public:
         deFrame(wxWindow *parent, const std::string& name);
         virtual ~deFrame();
+
+        virtual void onKey(int key) {};
 };
 
 #endif

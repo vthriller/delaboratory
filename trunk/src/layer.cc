@@ -97,10 +97,6 @@ void deLayer::setBlendFrame(deBlendFrame* frame)
     blendFrame = frame;
 }
 
-void deLayer::createBlendFrame(wxWindow* parent)
-{
-}
-
 bool deLayer::onImageClick(deValue x, deValue y)
 {
     if (actionFrame)
@@ -127,5 +123,18 @@ void deLayer::saveCommon(xmlNodePtr node)
 bool deLayer::checkActionFrame() const
 {
     return actionFrame != NULL;
+}
+
+bool deLayer::checkBlendFrame() const
+{
+    return blendFrame != NULL;
+}
+
+void deLayer::onKey(int key)
+{
+    if (actionFrame)
+    {
+        actionFrame->onKey(key);
+    }
 }
 

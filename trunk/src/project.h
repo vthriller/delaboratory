@@ -23,6 +23,7 @@
 #include "sampler_manager.h"
 #include "channel_manager.h"
 #include "view_manager.h"
+#include <wx/progdlg.h>
 
 class deImagePanel;
 class deHistogramPanel;

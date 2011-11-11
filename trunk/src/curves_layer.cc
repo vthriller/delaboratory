@@ -59,15 +59,6 @@ bool deCurvesLayer::isChannelNeutral(int index)
     return curves[index].isNeutral();
 }    
 
-void deCurvesLayer::onKey(int key)
-{
-    if (actionFrame)
-    {
-        deCurvesEditor* editor = dynamic_cast<deCurvesEditor*>(actionFrame);
-        editor->onKey(key);
-    }
-}
-
 void deCurvesLayer::save(xmlNodePtr root)
 {
     saveCommon(root);

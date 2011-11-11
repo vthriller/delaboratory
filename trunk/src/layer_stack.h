@@ -22,7 +22,6 @@
 #include <vector>
 #include <map>
 #include <libxml/parser.h>
-#include <wx/progdlg.h>
 
 class deLayer;
 class deChannelManager;
