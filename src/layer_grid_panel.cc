@@ -31,6 +31,9 @@
 
 #include "frame.h"
 
+#include "blend_frame.h"
+#include "action_layer.h"
+
 void deLayerGridPanel::buildRows()
 {
     deLayerStack& layerStack = project.getLayerStack();
@@ -209,7 +212,13 @@ void deLayerGridPanel::click(wxCommandEvent &event)
         if (row.blend->GetId() == id)
         {
             deLayer* layer = layerStack.getLayer(row.index);
-            layer->createBlendFrame(this);
+            deActionLayer* al = dynamic_cast<deActionLayer*>(layer);
+            if (!layer->checkBlendFrame())
+            {
+                deBlendFrame* blendFrame = new deBlendFrame(this, *al);
+                layer->setBlendFrame(blendFrame);
+                blendFrame->Show(true);
+            }        
         }
     }
 

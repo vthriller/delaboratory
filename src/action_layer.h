@@ -74,8 +74,6 @@ class deActionLayer:public deLayer
 
         virtual const deImage& getImage() const;
 
-        virtual void createBlendFrame(wxWindow* parent);
-
         virtual bool isChannelNeutral(int index) = 0;
 
         void updateAction(int i);

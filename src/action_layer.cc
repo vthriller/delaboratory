@@ -263,15 +263,6 @@ void deActionLayer::setApplyMode(deApplyMode mode)
 }
 
 
-void deActionLayer::createBlendFrame(wxWindow* parent)
-{
-    if (!blendFrame)
-    {
-        blendFrame = new deBlendFrame(parent, *this);
-        blendFrame->Show(true);
-    }        
-}
-
 void deActionLayer::updateBlend(int i)
 {
     if (!enabled)

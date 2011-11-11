@@ -18,9 +18,11 @@
 
 #include "property_value.h"
 #include "action_layer.h"
+#include "str.h"
+#include "xml.h"
 
-dePropertyValue::dePropertyValue(deActionLayer& _layer)
-:layer(_layer)
+dePropertyValue::dePropertyValue(deActionLayer& _layer, const std::string& _name)
+:layer(_layer), name(_name)
 {
     value = 0;
 }
@@ -46,3 +48,16 @@ deValue dePropertyValue::get() const
 {
     return value;
 }
+
+void dePropertyValue::save(xmlNodePtr root) const
+{
+    saveChild(root, name, str(value));
+}    
+
+void dePropertyValue::load(xmlNodePtr child)
+{
+    if ((!xmlStrcmp(child->name, BAD_CAST(name.c_str())))) 
+    {
+        value = getValue(getContent(child));
+    }
+}    

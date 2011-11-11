@@ -26,9 +26,9 @@
 
 deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
- blurRadius(*this),
- amount(*this),
- threshold(*this)
+ blurRadius(*this,"blur_radius"),
+ amount(*this, "amount"),
+ threshold(*this, "threshold")
 {
     reset();
 }
@@ -171,10 +171,9 @@ void deUSMLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
     saveBlend(root);
-
-    saveChild(root, "radius", str(blurRadius.get()));
-    saveChild(root, "amount", str(amount.get()));
-    saveChild(root, "threshold", str(threshold.get()));
+    blurRadius.save(root);
+    amount.save(root);
+    threshold.save(root);
 }
 
 void deUSMLayer::load(xmlNodePtr root)
@@ -185,24 +184,11 @@ void deUSMLayer::load(xmlNodePtr root)
 
     while (child)
     {
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("radius")))) 
-        {
-            blurRadius.set(getValue(getContent(child)));
-        }
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("amount")))) 
-        {
-            amount.set(getValue(getContent(child)));
-        }
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("threshold")))) 
-        {
-            threshold.set(getValue(getContent(child)));
-        }
+        blurRadius.load(child);
+        amount.load(child);
+        threshold.load(child);
 
         child = child->next;
-
     }        
 }
 

@@ -56,7 +56,7 @@ class deCurvesEditor:public deActionFrame
         virtual ~deCurvesEditor();
 
         virtual void onImageClick(deValue x, deValue y);
-        void onKey(int key);
+        virtual void onKey(int key);
 
 };
 
