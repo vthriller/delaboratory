@@ -752,3 +752,11 @@ void deActionLayer::loadBlend(xmlNodePtr root)
     }        
 
 }
+
+void deActionLayer::updateAll()
+{
+    updateImage();
+    updateOtherLayers();
+    repaint();
+}
+

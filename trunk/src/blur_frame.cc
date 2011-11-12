@@ -19,56 +19,7 @@
 #include "blur_frame.h"
 #include "blur_layer.h"
 #include <iostream>
-
-class deBlurRadiusSlider2:public deSlider
-{
-    private:
-        deBlurLayer& layer;
-
-    public:
-        deBlurRadiusSlider2(wxWindow *parent, int range, deBlurLayer& _layer)
-        :deSlider(parent, "radius", range, 0.0, 0.05, 0.0), layer(_layer)
-        {
-            setValue(layer.getBlurRadius());
-        }
-
-        virtual ~deBlurRadiusSlider2()
-        {
-        }
-
-        virtual void onValueChange(deValue value, bool finished)
-        {
-            if (finished)
-            {
-                layer.setBlurRadius(value);
-            }                
-        }
-};        
-
-class deBlurThresholdSlider2:public deSlider
-{
-    private:
-        deBlurLayer& layer;
-
-    public:
-        deBlurThresholdSlider2(wxWindow *parent, int range, deBlurLayer& _layer)
-        :deSlider(parent, "threshold", range, 0.0, 1.0, 0.0), layer(_layer)
-        {
-            setValue(layer.getBlurThreshold());
-        }
-
-        virtual ~deBlurThresholdSlider2()
-        {
-        }
-
-        virtual void onValueChange(deValue value, bool finished)
-        {
-            if (finished)
-            {
-                layer.setBlurThreshold(value);
-            }                
-        }
-};        
+#include "property_value_slider.h"
 
 deBlurFrame::deBlurFrame(wxWindow *parent, deActionLayer& _layer)
 :deActionFrame(parent, _layer)
@@ -101,10 +52,12 @@ deBlurFrame::deBlurFrame(wxWindow *parent, deActionLayer& _layer)
         sizer->Add(choice);
     }
 
-    radius = new deBlurRadiusSlider2(this, 100, blurLayer);
+    int range = 100;
+
+    radius = new dePropertyValueSlider(this, range, blurLayer.getPropertyRadius(), blurLayer);
     sizer->Add(radius);
 
-    threshold = new deBlurThresholdSlider2(this, 100, blurLayer);
+    threshold = new dePropertyValueSlider(this, range, blurLayer.getPropertyThreshold(), blurLayer);
     sizer->Add(threshold);
 
     update();

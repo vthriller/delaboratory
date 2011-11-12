@@ -24,10 +24,10 @@
 #include "frame_factory.h"
 
 deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager) 
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
+ blurRadius(*this,"blur_radius"),
+ threshold(*this, "threshold")
 {
-    radius = 0.03;
-    threshold = 0.0;
     type = deGaussianBlur;
 }
 
@@ -40,28 +40,15 @@ void deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
 
-    deValue r = viewManager.getRealScale() * radius * 1000;
+    deValue r = viewManager.getRealScale() * blurRadius.get() * 200;
 
-    blurChannel(source, destination, size, r, type, threshold);
+    blurChannel(source, destination, size, r, type, threshold.get());
 }
 
 bool deBlurLayer::isChannelNeutral(int index)
 {
-    return (radius == 0);
+    return (blurRadius.get() == 0);
 }    
-
-void deBlurLayer::setBlurRadius(deValue r)
-{
-    radius = r;
-    updateImage();
-    updateOtherLayers();
-    repaint();
-}
-
-deValue deBlurLayer::getBlurRadius() const
-{
-    return radius;
-}
 
 void deBlurLayer::setBlurType(deBlurType t)
 {
@@ -76,28 +63,14 @@ deBlurType deBlurLayer::getBlurType() const
     return type;
 }
 
-
-void deBlurLayer::setBlurThreshold(deValue r)
-{
-    threshold = r;
-    updateImage();
-    updateOtherLayers();
-    repaint();
-}
-
-deValue deBlurLayer::getBlurThreshold() const
-{
-    return threshold;
-}
-
 void deBlurLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
     saveBlend(root);
 
-    saveChild(root, "radius", str(radius));
-    saveChild(root, "threshold", str(threshold));
     saveChild(root, "blur_type", getBlurTypeName(type));
+    blurRadius.save(root);
+    threshold.save(root);
 }
 
 void deBlurLayer::load(xmlNodePtr root)
@@ -109,20 +82,13 @@ void deBlurLayer::load(xmlNodePtr root)
     while (child)
     {
 
-        if ((!xmlStrcmp(child->name, BAD_CAST("radius")))) 
-        {
-            radius = getValue(getContent(child));
-        }
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("threshold")))) 
-        {
-            threshold = getValue(getContent(child));
-        }
-
         if ((!xmlStrcmp(child->name, BAD_CAST("blur_type")))) 
         {
             type = blurTypeFromString(getContent(child));
         }
+
+        blurRadius.load(child);
+        threshold.load(child);
 
         child = child->next;
 

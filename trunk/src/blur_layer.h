@@ -21,12 +21,13 @@
 
 #include "action_layer.h"
 #include "blur.h"
+#include "property_value.h"
 
 class deBlurLayer:public deActionLayer
 {
     private:
-        deValue radius;
-        deValue threshold;
+        dePropertyValue blurRadius;
+        dePropertyValue threshold;
         deBlurType type;
 
     protected:
@@ -41,10 +42,6 @@ class deBlurLayer:public deActionLayer
 
         virtual void processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
 
-        void setBlurRadius(deValue r);
-        deValue getBlurRadius() const;
-        void setBlurThreshold(deValue r);
-        deValue getBlurThreshold() const;
         void setBlurType(deBlurType t);
         deBlurType getBlurType() const;
 
@@ -53,8 +50,8 @@ class deBlurLayer:public deActionLayer
 
         virtual std::string getActionName() {return "blur";};
 
-
-
+        dePropertyValue& getPropertyRadius() {return blurRadius;};
+        dePropertyValue& getPropertyThreshold() {return threshold;};
 
 };
 

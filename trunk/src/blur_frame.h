@@ -20,16 +20,16 @@
 #define _DE_BLUR_FRAME_H
 
 #include "action_frame.h"
-#include "slider.h"
 #include <vector>
 #include "blur_type.h"
+class dePropertyValueSlider;
 
 class deBlurFrame:public deActionFrame
 {
     private:
         wxChoice* choice;
-        deSlider* radius;
-        deSlider* threshold;
+        dePropertyValueSlider* radius;
+        dePropertyValueSlider* threshold;
 
         std::vector<deBlurType> blurTypes;
 

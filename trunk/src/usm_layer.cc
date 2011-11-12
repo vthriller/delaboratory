@@ -48,7 +48,7 @@ void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
     deBlurType type = deGaussianBlur;
     deValue t = 0.0;
 
-    deValue r = viewManager.getRealScale() * blurRadius.get() * 1000;
+    deValue r = viewManager.getRealScale() * blurRadius.get() * 200;
 
     blurChannel(source, unsharpMask, size, r, type, t);
 
@@ -118,13 +118,6 @@ deValue deUSMLayer::getAmount() const
 void deUSMLayer::setThreshold(deValue r)
 {
     threshold.set(r);
-    updateImage();
-    updateOtherLayers();
-    repaint();
-}
-
-void deUSMLayer::updateAll()
-{
     updateImage();
     updateOtherLayers();
     repaint();
