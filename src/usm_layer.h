@@ -62,7 +62,6 @@ class deUSMLayer:public deActionLayer
         dePropertyValue& getPropertyAmount() {return amount;};
         dePropertyValue& getPropertyThreshold() {return threshold;};
 
-        virtual void updateAll();
 
 };
 

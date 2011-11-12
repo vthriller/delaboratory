@@ -172,6 +172,8 @@ class deActionLayer:public deLayer
 
         virtual void updateImage();
 
+        virtual void updateAll();
+
 
 };
 
