@@ -85,3 +85,8 @@ deValue dePropertyValue::getDefault() const
 {
     return defaultValue;
 }
+
+void dePropertyValue::setMax(deValue _max)
+{
+    max = _max;
+}

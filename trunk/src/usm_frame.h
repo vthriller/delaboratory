@@ -22,13 +22,14 @@
 #include "action_frame.h"
 #include "slider.h"
 
+class dePropertyValueSlider;
 
 class deUSMFrame:public deActionFrame
 {
     private:
-        deSlider* radius;
-        deSlider* amount;
-        deSlider* threshold;
+        dePropertyValueSlider* radius;
+        dePropertyValueSlider* amount;
+        dePropertyValueSlider* threshold;
 
         wxButton* reset;
         wxButton* sharp;

@@ -31,6 +31,7 @@ deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, d
  threshold(*this, "threshold")
 {
     reset();
+    amount.setMax(5);
 }
 
 deUSMLayer::~deUSMLayer()
@@ -117,6 +118,13 @@ deValue deUSMLayer::getAmount() const
 void deUSMLayer::setThreshold(deValue r)
 {
     threshold.set(r);
+    updateImage();
+    updateOtherLayers();
+    repaint();
+}
+
+void deUSMLayer::updateAll()
+{
     updateImage();
     updateOtherLayers();
     repaint();
