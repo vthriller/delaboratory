@@ -24,7 +24,11 @@
 dePropertyValue::dePropertyValue(deActionLayer& _layer, const std::string& _name)
 :layer(_layer), name(_name)
 {
-    value = 0;
+    min = 0.0;
+    max = 1.0;
+    defaultValue = 0.0;
+
+    value = defaultValue;
 }
 
 dePropertyValue::~dePropertyValue()
@@ -61,3 +65,23 @@ void dePropertyValue::load(xmlNodePtr child)
         value = getValue(getContent(child));
     }
 }    
+
+std::string dePropertyValue::getName() const
+{
+    return name;
+}
+
+deValue dePropertyValue::getMin() const
+{
+    return min;
+}
+
+deValue dePropertyValue::getMax() const
+{
+    return max;
+}
+
+deValue dePropertyValue::getDefault() const
+{
+    return defaultValue;
+}

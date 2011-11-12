@@ -16,40 +16,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_VALUE_H
-#define _DE_PROPERTY_VALUE_H
+#ifndef _DE_PROPERTY_VALUE_SLIDER_H
+#define _DE_PROPERTY_VALUE_SLIDER_H
 
-#include "value.h"
-#include <string>
-#include <libxml/parser.h>
-class deActionLayer;
+#include "slider.h"
+class dePropertyValue;
 
-class dePropertyValue
+class dePropertyValueSlider:public deSlider
 {
     private:
-        deValue value;
-        deActionLayer& layer;
-        std::string name;
-        std::string label;
+        dePropertyValue& property;
 
-        deValue min;
-        deValue max;
-        deValue defaultValue;
     public:
-        dePropertyValue(deActionLayer& _layer, const std::string& _name);
-        virtual ~dePropertyValue();
+        dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property);
+        virtual ~dePropertyValueSlider();
 
-        void set(deValue _value);
-        void setAndUpdate(deValue _value);
-        deValue get() const;
-
-        void save(xmlNodePtr root) const;
-        void load(xmlNodePtr root);
-
-        std::string getName() const;
-        deValue getMin() const;
-        deValue getMax() const;
-        deValue getDefault() const;
-};
+        virtual void onValueChange(deValue value, bool finished);
+};        
 
 #endif
