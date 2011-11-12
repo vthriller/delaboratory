@@ -20,18 +20,22 @@
 #define _DE_PROPERTY_VALUE_SLIDER_H
 
 #include "slider.h"
+class deLayer;
 class dePropertyValue;
 
 class dePropertyValueSlider:public deSlider
 {
     private:
         dePropertyValue& property;
+        deLayer& layer;
 
     public:
-        dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property);
+        dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayer& _layer);
         virtual ~dePropertyValueSlider();
 
         virtual void onValueChange(deValue value, bool finished);
+
+        void setFromProperty();
 };        
 
 #endif

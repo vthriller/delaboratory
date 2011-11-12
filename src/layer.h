@@ -86,6 +86,8 @@ class deLayer
         bool checkActionFrame() const;
         bool checkBlendFrame() const;
 
+        virtual void updateAll() {};
+
 
 
 };

@@ -58,8 +58,11 @@ class deUSMLayer:public deActionLayer
 
         virtual std::string getActionName() {return "usm";};
 
+        dePropertyValue& getPropertyRadius() {return blurRadius;};
+        dePropertyValue& getPropertyAmount() {return amount;};
+        dePropertyValue& getPropertyThreshold() {return threshold;};
 
-
+        virtual void updateAll();
 
 };
 

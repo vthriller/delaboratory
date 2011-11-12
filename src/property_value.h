@@ -50,6 +50,8 @@ class dePropertyValue
         deValue getMin() const;
         deValue getMax() const;
         deValue getDefault() const;
+
+        void setMax(deValue _max);
 };
 
 #endif

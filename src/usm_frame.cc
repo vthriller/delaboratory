@@ -19,97 +19,7 @@
 #include "usm_frame.h"
 #include "usm_layer.h"
 #include <iostream>
-
-
-class deBlurRadiusSlider3:public deSlider
-{
-    private:
-        deUSMLayer& layer;
-
-    public:
-        deBlurRadiusSlider3(wxWindow *parent, int range, deUSMLayer& _layer)
-        :deSlider(parent, "blur radius", range, 0.0, 1.0, 0.0), layer(_layer)
-        {
-            set();
-        }
-
-        virtual ~deBlurRadiusSlider3()
-        {
-        }
-
-        virtual void onValueChange(deValue value, bool finished)
-        {
-            if (finished)
-            {
-                layer.setBlurRadius(value);
-            }                
-        }
-
-        void set()
-        {
-            setValue(layer.getBlurRadius());
-        }
-};        
-
-class deUSMAmountSlider3:public deSlider
-{
-    private:
-        deUSMLayer& layer;
-
-    public:
-        deUSMAmountSlider3(wxWindow *parent, int range, deUSMLayer& _layer)
-        :deSlider(parent, "amount", range, 0.0, 5, 0.0), layer(_layer)
-        {
-            set();
-        }
-        
-        void set()
-        {
-            setValue(layer.getAmount());
-        }
-
-        virtual ~deUSMAmountSlider3()
-        {
-        }
-
-        virtual void onValueChange(deValue value, bool finished)
-        {
-            if (finished)
-            {
-                layer.setAmount(value);
-            }                
-        }
-};        
-
-class deUSMThresholdSlider3:public deSlider
-{
-    private:
-        deUSMLayer& layer;
-
-    public:
-        deUSMThresholdSlider3(wxWindow *parent, int range, deUSMLayer& _layer)
-        :deSlider(parent, "threshold", range, 0.0, 0.5, 0.0), layer(_layer)
-        {
-            set();
-        }
-
-        void set()
-        {
-            setValue(layer.getThreshold());
-        }
-
-        virtual ~deUSMThresholdSlider3()
-        {
-        }
-
-        virtual void onValueChange(deValue value, bool finished)
-        {
-            if (finished)
-            {
-                layer.setThreshold(value);
-            }                
-        }
-};        
+#include "property_value_slider.h"
 
 deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer)
 :deActionFrame(parent, _layer)
@@ -121,13 +31,13 @@ deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer)
 
     int range = 400;
 
-    radius = new deBlurRadiusSlider3(this, range, usmLayer);
+    radius = new dePropertyValueSlider(this, range, usmLayer.getPropertyRadius(), usmLayer);
     sizer->Add(radius);
 
-    amount = new deUSMAmountSlider3(this, range, usmLayer);
+    amount = new dePropertyValueSlider(this, range, usmLayer.getPropertyAmount(), usmLayer);
     sizer->Add(amount);
 
-    threshold = new deUSMThresholdSlider3(this, range, usmLayer);
+    threshold = new dePropertyValueSlider(this, range, usmLayer.getPropertyThreshold(), usmLayer);
     sizer->Add(threshold);
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
@@ -179,7 +89,7 @@ void deUSMFrame::click(wxCommandEvent &event)
         usmLayer.hiraloam2();
     }      
 
-    dynamic_cast<deBlurRadiusSlider3*>(radius)->set();
-    dynamic_cast<deUSMAmountSlider3*>(amount)->set();
-    dynamic_cast<deUSMThresholdSlider3*>(threshold)->set();
+    radius->setFromProperty();
+    amount->setFromProperty();
+    threshold->setFromProperty();
 }   
