@@ -16,30 +16,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_CHOICE_H
-#define _DE_PROPERTY_CHOICE_H
+#include "choice.h"
 
-#include "property.h"
-#include <vector>
-
-class dePropertyChoice:public deProperty
+deChoice::deChoice(wxWindow *parent, const std::string& labelString, const std::vector<std::string>& choices)
+:wxPanel(parent)
 {
-    private:
-        std::string value;
+    sizer = new wxBoxSizer(wxHORIZONTAL);
+    
+    label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(labelString.c_str()), wxDefaultPosition, wxSize(80, 30));
+    sizer->Add(label, 0, wxCENTER);
 
-        std::vector<std::string> choices;
-    public:
-        dePropertyChoice(const std::string& _name);
-        virtual ~dePropertyChoice();
+    wxString* ws = new wxString [choices.size()];
+    unsigned int i;
+    for (i = 0; i < choices.size(); i++)
+    {
+        ws[i] = wxString::FromAscii(choices[i].c_str());
+    }        
 
-        void set(std::string _value);
-        std::string get() const;
+    choice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), choices.size(), ws);
+    sizer->Add(choice);
+}
 
-        virtual void save(xmlNodePtr root) const;
-        virtual void load(xmlNodePtr root);
+deChoice::~deChoice()
+{
+}
 
-        std::vector<std::string>& getChoices() {return choices;};
-        
-};
-
-#endif

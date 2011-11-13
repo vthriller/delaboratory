@@ -33,5 +33,6 @@ enum deBlurType
 std::string getBlurTypeName(deBlurType type);
 deBlurType blurTypeFromString(const std::string& s);
 void getSupportedBlurTypes(std::vector<deBlurType>& result);
+void getSupportedBlurTypes(std::vector<std::string>& result);
 
 #endif

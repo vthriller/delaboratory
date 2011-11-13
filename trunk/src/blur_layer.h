@@ -22,6 +22,7 @@
 #include "action_layer.h"
 #include "blur.h"
 #include "property_value.h"
+#include "property_choice.h"
 
 class deBlurLayer:public deActionLayer
 {
@@ -29,6 +30,7 @@ class deBlurLayer:public deActionLayer
         dePropertyValue blurRadius;
         dePropertyValue threshold;
         deBlurType type;
+        dePropertyChoice blurType;
 
     protected:
         virtual bool singleChannelProcessing() const {return true;};
@@ -51,6 +53,7 @@ class deBlurLayer:public deActionLayer
         virtual std::string getActionName() {return "blur";};
 
         dePropertyValue& getPropertyRadius() {return blurRadius;};
+        dePropertyChoice& getPropertyType() {return blurType;};
         dePropertyValue& getPropertyThreshold() {return threshold;};
 
 };

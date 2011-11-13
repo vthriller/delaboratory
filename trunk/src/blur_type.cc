@@ -57,3 +57,10 @@ void getSupportedBlurTypes(std::vector<deBlurType>& result)
     result.push_back(deGaussianBlur);
     result.push_back(deSurfaceBlur);
 }
+
+void getSupportedBlurTypes(std::vector<std::string>& result)
+{
+    result.push_back("box");
+    result.push_back("gaussian");
+    result.push_back("surface");
+}
