@@ -21,7 +21,7 @@
 #include "layer.h"
 
 dePropertyValueSlider::dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayer& _layer)
-:deSlider(parent, _property.getName(), _sliderRange, _property.getMin(), _property.getMax(), _property.getDefault()),
+:deSlider(parent, _property.getLabel(), _sliderRange, _property.getMin(), _property.getMax(), _property.getDefault()),
 property(_property),
 layer(_layer)
 {

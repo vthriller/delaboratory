@@ -21,7 +21,7 @@
 #include "xml.h"
 
 dePropertyValue::dePropertyValue(const std::string& _name)
-:name(_name)
+:deProperty(_name)
 {
     min = 0.0;
     max = 1.0;
@@ -57,11 +57,6 @@ void dePropertyValue::load(xmlNodePtr child)
         value = getValue(getContent(child));
     }
 }    
-
-std::string dePropertyValue::getName() const
-{
-    return name;
-}
 
 deValue dePropertyValue::getMin() const
 {

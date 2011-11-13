@@ -16,35 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_VALUE_H
-#define _DE_PROPERTY_VALUE_H
+#ifndef _DE_PROPERTY_H
+#define _DE_PROPERTY_H
 
-#include "property.h"
-#include "value.h"
+#include <string>
+#include <libxml/parser.h>
 
-class dePropertyValue:public deProperty
+class deProperty
 {
     private:
-        deValue value;
+        std::string label;
 
-        deValue min;
-        deValue max;
-        deValue defaultValue;
+    protected:        
+        std::string name;
+
     public:
-        dePropertyValue(const std::string& _name);
-        virtual ~dePropertyValue();
+        deProperty(const std::string& _name);
+        virtual ~deProperty();
 
-        void set(deValue _value);
-        deValue get() const;
+        virtual void save(xmlNodePtr root) const = 0;
+        virtual void load(xmlNodePtr root) = 0;
 
-        virtual void save(xmlNodePtr root) const;
-        virtual void load(xmlNodePtr root);
-
-        deValue getMin() const;
-        deValue getMax() const;
-        deValue getDefault() const;
-
-        void setMax(deValue _max);
+        std::string getLabel() const;
+        void setLabel(const std::string& _label);
 };
 
 #endif
