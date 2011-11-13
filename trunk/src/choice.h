@@ -30,6 +30,8 @@ class deChoice:public wxPanel
         wxStaticText* label;
         wxChoice* choice;
 
+        void choose(wxCommandEvent &event);
+
     public:
         deChoice(wxWindow *parent, const std::string& labelString, const std::vector<std::string>& choices);
         virtual ~deChoice();
