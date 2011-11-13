@@ -22,13 +22,11 @@
 #include "value.h"
 #include <string>
 #include <libxml/parser.h>
-class deActionLayer;
 
 class dePropertyValue
 {
     private:
         deValue value;
-        deActionLayer& layer;
         std::string name;
         std::string label;
 
@@ -36,11 +34,10 @@ class dePropertyValue
         deValue max;
         deValue defaultValue;
     public:
-        dePropertyValue(deActionLayer& _layer, const std::string& _name);
+        dePropertyValue(const std::string& _name);
         virtual ~dePropertyValue();
 
         void set(deValue _value);
-        void setAndUpdate(deValue _value);
         deValue get() const;
 
         void save(xmlNodePtr root) const;

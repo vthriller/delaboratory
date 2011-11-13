@@ -17,12 +17,11 @@
 */
 
 #include "property_value.h"
-#include "action_layer.h"
 #include "str.h"
 #include "xml.h"
 
-dePropertyValue::dePropertyValue(deActionLayer& _layer, const std::string& _name)
-:layer(_layer), name(_name)
+dePropertyValue::dePropertyValue(const std::string& _name)
+:name(_name)
 {
     min = 0.0;
     max = 1.0;
@@ -40,13 +39,6 @@ void dePropertyValue::set(deValue _value)
     value = _value;
 }
 
-void dePropertyValue::setAndUpdate(deValue _value)
-{
-    set(_value);
-    layer.updateImage();
-    layer.updateOtherLayers();
-    layer.repaint();
-}
 
 deValue dePropertyValue::get() const
 {

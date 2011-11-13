@@ -25,8 +25,8 @@
 
 deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
- blurRadius(*this,"blur_radius"),
- threshold(*this, "threshold")
+ blurRadius("blur_radius"),
+ threshold("threshold")
 {
     type = deGaussianBlur;
 }
