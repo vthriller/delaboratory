@@ -32,6 +32,7 @@ deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, d
 {
     reset();
     amount.setMax(5);
+    blurRadius.setLabel("radius");
 }
 
 deUSMLayer::~deUSMLayer()

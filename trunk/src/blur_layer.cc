@@ -29,6 +29,7 @@ deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer,
  threshold("threshold")
 {
     type = deGaussianBlur;
+    blurRadius.setLabel("radius");
 }
 
 deBlurLayer::~deBlurLayer()
