@@ -22,6 +22,7 @@ deChoice::deChoice(wxWindow *parent, const std::string& labelString, const std::
 :wxPanel(parent)
 {
     sizer = new wxBoxSizer(wxHORIZONTAL);
+    SetSizer(sizer);
     
     label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(labelString.c_str()), wxDefaultPosition, wxSize(80, 30));
     sizer->Add(label, 0, wxCENTER);
@@ -35,9 +36,16 @@ deChoice::deChoice(wxWindow *parent, const std::string& labelString, const std::
 
     choice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), choices.size(), ws);
     sizer->Add(choice);
+
+    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deChoice::choose));
 }
 
 deChoice::~deChoice()
 {
 }
 
+void deChoice::choose(wxCommandEvent &event)
+{
+    int i = event.GetInt();
+    onChoose(i);
+}
