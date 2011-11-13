@@ -16,30 +16,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_CHOICE_H
-#define _DE_PROPERTY_CHOICE_H
+#ifndef _DE_CHOICE_H
+#define _DE_CHOICE_H
 
-#include "property.h"
+#include <wx/wx.h>
 #include <vector>
+#include <string>
 
-class dePropertyChoice:public deProperty
+class deChoice:public wxPanel
 {
     private:
-        std::string value;
+        wxSizer* sizer;
+        wxStaticText* label;
+        wxChoice* choice;
 
-        std::vector<std::string> choices;
     public:
-        dePropertyChoice(const std::string& _name);
-        virtual ~dePropertyChoice();
+        deChoice(wxWindow *parent, const std::string& labelString, const std::vector<std::string>& choices);
+        virtual ~deChoice();
 
-        void set(std::string _value);
-        std::string get() const;
-
-        virtual void save(xmlNodePtr root) const;
-        virtual void load(xmlNodePtr root);
-
-        std::vector<std::string>& getChoices() {return choices;};
-        
-};
+        virtual void onChoose(int c) = 0;
+};        
 
 #endif
