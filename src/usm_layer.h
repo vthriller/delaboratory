@@ -41,13 +41,6 @@ class deUSMLayer:public deActionLayer
 
         virtual void processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
 
-        void setBlurRadius(deValue r);
-        deValue getBlurRadius() const;
-        void setAmount(deValue r);
-        deValue getAmount() const;
-        void setThreshold(deValue r);
-        deValue getThreshold() const;
-
         void reset();
         void sharp();
         void hiraloam1();

@@ -39,6 +39,9 @@ class dePropertyChoice:public deProperty
         virtual void load(xmlNodePtr root);
 
         std::vector<std::string>& getChoices() {return choices;};
+
+        void setIndex(int index);
+        int getIndex() const;
         
 };
 

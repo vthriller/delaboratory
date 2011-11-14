@@ -138,3 +138,14 @@ void deLayer::onKey(int key)
     }
 }
 
+void deLayer::onUpdateProperties()
+{
+    if (actionFrame)
+    {
+        actionFrame->onUpdateProperties();
+    }
+    if (blendFrame)
+    {
+        blendFrame->onUpdateProperties();
+    }
+}

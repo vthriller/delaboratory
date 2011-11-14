@@ -23,11 +23,11 @@ std::string getBlurTypeName(deBlurType type)
     switch (type)
     {
         case deBoxBlur:
-            return "box blur";
+            return "box";
         case deGaussianBlur:
-            return "gaussian blur";
+            return "gaussian";
         case deSurfaceBlur:
-            return "surface blur";
+            return "surface";
         default:
             return "unknown";
     }
@@ -35,15 +35,15 @@ std::string getBlurTypeName(deBlurType type)
 
 deBlurType blurTypeFromString(const std::string& s)
 {
-    if (s == "box blur")
+    if (s == "box")
     {
         return deBoxBlur;
     }
-    if (s == "gaussian blur")
+    if (s == "gaussian")
     {
         return deGaussianBlur;
     }
-    if (s == "surface blur")
+    if (s == "surface")
     {
         return deSurfaceBlur;
     }

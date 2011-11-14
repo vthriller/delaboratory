@@ -90,45 +90,6 @@ bool deUSMLayer::isChannelNeutral(int index)
     return (blurRadius.get() == 0);
 }    
 
-void deUSMLayer::setBlurRadius(deValue r)
-{
-    blurRadius.set(r);
-    updateImage();
-    updateOtherLayers();
-    repaint();
-}
-
-deValue deUSMLayer::getBlurRadius() const
-{
-    return blurRadius.get();
-}
-
-void deUSMLayer::setAmount(deValue r)
-{
-    amount.set(r);
-    updateImage();
-    updateOtherLayers();
-    repaint();
-}
-
-deValue deUSMLayer::getAmount() const
-{
-    return amount.get();
-}
-
-void deUSMLayer::setThreshold(deValue r)
-{
-    threshold.set(r);
-    updateImage();
-    updateOtherLayers();
-    repaint();
-}
-
-deValue deUSMLayer::getThreshold() const
-{
-    return threshold.get();
-}
-
 void deUSMLayer::reset()
 {
     blurRadius.set(0.002);

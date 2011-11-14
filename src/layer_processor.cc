@@ -94,7 +94,7 @@ void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int v
 
     unsigned int index;
     int progress = 0;
-    assert((unsigned int)view < layers.size());
+//    assert((unsigned int)view < layers.size());
     for (index = 0; index <= (unsigned int)view; index++)
     {
         std::map<int, int>::iterator i;

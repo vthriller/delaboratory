@@ -37,6 +37,8 @@ class deChoice:public wxPanel
         virtual ~deChoice();
 
         virtual void onChoose(int c) = 0;
+
+        void set(int index);
 };        
 
 #endif

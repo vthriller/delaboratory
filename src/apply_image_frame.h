@@ -20,10 +20,12 @@
 #define _DE_APPLY_IMAGE_FRAME_H
 
 #include "action_frame.h"
+class dePropertyChoiceUI;
 
 class deApplyImageFrame:public deActionFrame
 {
     private:
+        dePropertyChoiceUI* appliedLayer;
         wxChoice* layerChoice;
         wxCheckBox* singleChannel;
         wxRadioButton* channels[4];
@@ -39,6 +41,8 @@ class deApplyImageFrame:public deActionFrame
         virtual ~deApplyImageFrame();
 
         virtual void onImageClick(deValue x, deValue y) {};
+
+        virtual void onUpdateProperties();
 
 };
 
