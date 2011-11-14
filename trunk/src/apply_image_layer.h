@@ -20,11 +20,12 @@
 #define _DE_APPLY_IMAGE_LAYER_H
 
 #include "action_layer.h"
+#include "property_choice.h"
 
 class deApplyImageLayer:public deActionLayer
 {
     private:
-        int appliedLayer;
+        dePropertyChoice appliedLayer;
         int appliedChannel;
         bool singleChannel;
 
@@ -46,10 +47,10 @@ class deApplyImageLayer:public deActionLayer
         void disableSingleChannel();
         bool isSingleChannel() const {return singleChannel;};
 
-        void setAppliedLayer(int l);
         void setAppliedChannel(int c);
 
-        int getAppliedLayer() const {return appliedLayer;};
+        dePropertyChoice& getAppliedLayer() {return appliedLayer;};
+
         int getAppliedChannel() const {return appliedChannel;};
 
         deColorSpace getAppliedColorSpace();

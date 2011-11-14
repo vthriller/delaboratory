@@ -20,6 +20,7 @@
 #include "blur_layer.h"
 #include <iostream>
 #include "property_value_slider.h"
+#include "property_choice_ui.h"
 
 deBlurFrame::deBlurFrame(wxWindow *parent, deActionLayer& _layer)
 :deActionFrame(parent, _layer)
@@ -29,29 +30,6 @@ deBlurFrame::deBlurFrame(wxWindow *parent, deActionLayer& _layer)
 
     deBlurLayer& blurLayer = dynamic_cast<deBlurLayer&>(_layer);
 
-    {
-        getSupportedBlurTypes(blurTypes);
-
-        deBlurType currentBlurType = blurLayer.getBlurType();
-
-        wxString* blurTypeStrings = new wxString [blurTypes.size()];
-        unsigned int i;
-        int selectedBlurType;
-        for (i = 0; i < blurTypes.size(); i++)
-        {
-            blurTypeStrings[i] = wxString::FromAscii(getBlurTypeName(blurTypes[i]).c_str());
-            if (currentBlurType == blurTypes[i])
-            {
-                selectedBlurType = i;
-            }
-        }        
-
-        choice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), blurTypes.size(), blurTypeStrings);
-        choice->SetSelection(selectedBlurType);
-
-        sizer->Add(choice);
-    }
-
     int range = 100;
 
     radius = new dePropertyValueSlider(this, range, blurLayer.getPropertyRadius(), blurLayer);
@@ -60,32 +38,23 @@ deBlurFrame::deBlurFrame(wxWindow *parent, deActionLayer& _layer)
     threshold = new dePropertyValueSlider(this, range, blurLayer.getPropertyThreshold(), blurLayer);
     sizer->Add(threshold);
 
-    update();
+    blurType = new dePropertyChoiceUI(this, blurLayer.getPropertyType(), blurLayer);
+    sizer->Add(blurType);
+
+    onUpdateProperties();
 
     Fit();
 
-    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deBlurFrame::choose));
 }
 
 deBlurFrame::~deBlurFrame()
 {
 }
 
-void deBlurFrame::choose(wxCommandEvent &event)
-{
-    deBlurLayer& l = dynamic_cast<deBlurLayer&>(layer);
-
-    int i = event.GetInt();
-    deBlurType& type = blurTypes[i];
-    l.setBlurType(type);
-
-    update();
-}
-
-void deBlurFrame::update()
+void deBlurFrame::onUpdateProperties()
 {
     deBlurLayer& blurLayer = dynamic_cast<deBlurLayer&>(layer);
-    if (blurLayer.getBlurType() == deSurfaceBlur)
+    if (blurLayer.getPropertyType().get() == "surface")
     {
         threshold->Enable();
     }

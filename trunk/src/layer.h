@@ -88,7 +88,7 @@ class deLayer
 
         virtual void updateAll() {};
 
-
+        void onUpdateProperties();
 
 };
 

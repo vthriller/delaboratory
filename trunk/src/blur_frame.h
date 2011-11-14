@@ -23,25 +23,22 @@
 #include <vector>
 #include "blur_type.h"
 class dePropertyValueSlider;
+class dePropertyChoiceUI;
 
 class deBlurFrame:public deActionFrame
 {
     private:
-        wxChoice* choice;
         dePropertyValueSlider* radius;
         dePropertyValueSlider* threshold;
-
-        std::vector<deBlurType> blurTypes;
-
-        void choose(wxCommandEvent &event);
-
-        void update();
+        dePropertyChoiceUI* blurType;
 
     public:
         deBlurFrame(wxWindow *parent, deActionLayer& _layer);
         virtual ~deBlurFrame();
 
         virtual void onImageClick(deValue x, deValue y) {};
+
+        virtual void onUpdateProperties();
 
 };
 

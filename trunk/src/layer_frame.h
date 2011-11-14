@@ -29,6 +29,8 @@ class deLayerFrame:public deFrame
     public:
         deLayerFrame(wxWindow *parent, deActionLayer& _layer, const std::string& name);
         virtual ~deLayerFrame();
+
+        virtual void onUpdate() {};
 };
 
 #endif

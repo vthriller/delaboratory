@@ -18,6 +18,7 @@
 
 #include "apply_image_frame.h"
 #include "apply_image_layer.h"
+#include "property_choice_ui.h"
 
 
 deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer)
@@ -28,7 +29,7 @@ deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer)
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
 
-    int i;
+/*
     int n = layer.getIndex();
 
     wxString* layerStrings = new wxString [n];
@@ -44,6 +45,10 @@ deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer)
     layerChoice->SetSelection(applyImageLayer.getAppliedLayer());
 
     mainSizer->Add(layerChoice, 0);
+    */
+
+    appliedLayer = new dePropertyChoiceUI(this, applyImageLayer.getAppliedLayer(), applyImageLayer);
+    mainSizer->Add(appliedLayer);
 
     singleChannel = new wxCheckBox(this, wxID_ANY, _T("apply single channel"));
 
@@ -58,6 +63,7 @@ deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer)
 
     mainSizer->Add(singleChannel, 0);
 
+    int i;
     for (i = 0; i < 4; i++)
     {
         wxRadioButton* b = new wxRadioButton(this, wxID_ANY, _T(""));
@@ -99,6 +105,7 @@ void deApplyImageFrame::check(wxCommandEvent &event)
 
 void deApplyImageFrame::choose(wxCommandEvent &event)
 {
+/*
     deApplyImageLayer& applyImageLayer = dynamic_cast<deApplyImageLayer&>(layer);
 
     int l = layerChoice->GetSelection();
@@ -106,6 +113,7 @@ void deApplyImageFrame::choose(wxCommandEvent &event)
     setChannels();
     layer.updateOtherLayers();
     layer.repaint();
+    */
 }
 
 void deApplyImageFrame::select(wxCommandEvent &event)
@@ -159,5 +167,10 @@ void deApplyImageFrame::setChannels()
             channels[i]->SetValue(1);
         }
     }
+}
+
+void deApplyImageFrame::onUpdateProperties()
+{
+    setChannels();
 }
 

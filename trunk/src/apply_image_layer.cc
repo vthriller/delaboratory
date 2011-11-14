@@ -24,11 +24,20 @@
 #include "frame_factory.h"
 
 deApplyImageLayer::deApplyImageLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager) 
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
+appliedLayer("applied_layer")
 {
-    appliedLayer = 0;
     appliedChannel = 0;
     singleChannel = false;
+
+    std::vector<std::string>& choices = appliedLayer. getChoices();
+    int i;
+    for (i = 0; i < index; i++)
+    {
+        choices.push_back(str(i));
+    }
+
+    appliedLayer.setIndex(0);
 
 }
 
@@ -38,7 +47,12 @@ deApplyImageLayer::~deApplyImageLayer()
 
 void deApplyImageLayer::processAction(int i)
 {
-    deLayer* applied = layerStack.getLayer(appliedLayer);
+    int a = getInt(appliedLayer.get());
+    deLayer* applied = layerStack.getLayer(a);
+    if (!applied)
+    {
+        return;
+    }
     const deImage& appliedImage = applied->getImage();
     int n = getColorSpaceSize(appliedImage.getColorSpace());
 
@@ -65,7 +79,12 @@ void deApplyImageLayer::processAction(int i)
 
 deColorSpace deApplyImageLayer::getAppliedColorSpace()
 {
-    deLayer* applied = layerStack.getLayer(appliedLayer);
+    int a = getInt(appliedLayer.get());
+    deLayer* applied = layerStack.getLayer(a);
+    if (!applied)
+    {
+        return deColorSpaceInvalid;
+    }
     const deImage& appliedImage = applied->getImage();
     return appliedImage.getColorSpace();
 }
@@ -87,12 +106,6 @@ void deApplyImageLayer::disableSingleChannel()
     updateImage();
 }
 
-void deApplyImageLayer::setAppliedLayer(int l)
-{
-    appliedLayer = l;
-    updateImage();
-}
-
 void deApplyImageLayer::setAppliedChannel(int c)
 {
     appliedChannel = c;
@@ -104,7 +117,8 @@ void deApplyImageLayer::save(xmlNodePtr root)
     saveCommon(root);
     saveBlend(root);
 
-    saveChild(root, "applied_layer", str(appliedLayer));
+    appliedLayer.save(root);
+
     saveChild(root, "applied_channel", str(appliedChannel));
     saveChild(root, "single_channel", str(singleChannel));
 }
@@ -118,10 +132,7 @@ void deApplyImageLayer::load(xmlNodePtr root)
     while (child)
     {
 
-        if ((!xmlStrcmp(child->name, BAD_CAST("applied_layer")))) 
-        {
-            appliedLayer = getInt(getContent(child));
-        }
+        appliedLayer.load(child);
 
         if ((!xmlStrcmp(child->name, BAD_CAST("applied_channel")))) 
         {

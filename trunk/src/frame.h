@@ -29,6 +29,8 @@ class deFrame:public wxFrame
         virtual ~deFrame();
 
         virtual void onKey(int key) {};
+
+        virtual void onUpdateProperties() {};
 };
 
 #endif

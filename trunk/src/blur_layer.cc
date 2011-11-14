@@ -29,11 +29,10 @@ deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer,
  threshold("threshold"),
  blurType("blur_type")
 {
-    type = deGaussianBlur;
     blurRadius.setLabel("radius");
-
-
     getSupportedBlurTypes(blurType.getChoices());
+    blurType.set("gaussian");
+    blurType.setLabel("blur type");
 }
 
 deBlurLayer::~deBlurLayer()
@@ -47,6 +46,7 @@ void deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel
 
     deValue r = viewManager.getRealScale() * blurRadius.get() * 200;
 
+    deBlurType type = blurTypeFromString(blurType.get());
     blurChannel(source, destination, size, r, type, threshold.get());
 }
 
@@ -55,26 +55,13 @@ bool deBlurLayer::isChannelNeutral(int index)
     return (blurRadius.get() == 0);
 }    
 
-void deBlurLayer::setBlurType(deBlurType t)
-{
-    type = t;
-    updateImage();
-    updateOtherLayers();
-    repaint();
-}
-
-deBlurType deBlurLayer::getBlurType() const
-{
-    return type;
-}
-
 void deBlurLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
     saveBlend(root);
 
-    saveChild(root, "blur_type", getBlurTypeName(type));
     blurRadius.save(root);
+    blurType.save(root);
     threshold.save(root);
 }
 
@@ -87,12 +74,8 @@ void deBlurLayer::load(xmlNodePtr root)
     while (child)
     {
 
-        if ((!xmlStrcmp(child->name, BAD_CAST("blur_type")))) 
-        {
-            type = blurTypeFromString(getContent(child));
-        }
-
         blurRadius.load(child);
+        blurType.load(child);
         threshold.load(child);
 
         child = child->next;

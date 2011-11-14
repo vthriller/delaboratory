@@ -29,7 +29,6 @@ class deBlurLayer:public deActionLayer
     private:
         dePropertyValue blurRadius;
         dePropertyValue threshold;
-        deBlurType type;
         dePropertyChoice blurType;
 
     protected:
@@ -43,9 +42,6 @@ class deBlurLayer:public deActionLayer
         virtual bool isChannelNeutral(int index);
 
         virtual void processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
-
-        void setBlurType(deBlurType t);
-        deBlurType getBlurType() const;
 
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
