@@ -39,6 +39,7 @@
 #include "image_panel.h"
 
 #include "wx/thread.h"
+#include "wx/notebook.h"
 
 enum
 {
@@ -137,8 +138,12 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     rightSizer->Add(hPanel, 0, wxEXPAND);
 
-    layerGridPanel = new deLayerGridPanel(this, project, _layerProcessor);
-    rightSizer->Add(layerGridPanel, 1, wxEXPAND);
+    wxNotebook* notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("notebook"));
+    rightSizer->Add(notebook, 1, wxEXPAND);
+
+    layerGridPanel = new deLayerGridPanel(notebook, project, _layerProcessor);
+    notebook->AddPage(layerGridPanel, _T("layers"));
+    notebook->AddPage(new wxPanel(notebook), _T("masks"));
 
     controlPanel = new deControlPanel(this, project, _layerProcessor, layerGridPanel);
     rightSizer->Add(controlPanel, 0, wxEXPAND);
