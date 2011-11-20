@@ -16,34 +16,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_APPLY_IMAGE_FRAME_H
-#define _DE_APPLY_IMAGE_FRAME_H
+#ifndef _DE_PROPERTY_BOOLEAN_H
+#define _DE_PROPERTY_BOOLEAN_H
 
-#include "action_frame.h"
-class dePropertyChoiceUI;
-class dePropertyBooleanUI;
+#include "property.h"
 
-class deApplyImageFrame:public deActionFrame
+class dePropertyBoolean:public deProperty
 {
     private:
-        dePropertyChoiceUI* appliedLayer;
-        dePropertyBooleanUI* applySingleChannel;
-        wxChoice* layerChoice;
-        wxRadioButton* channels[4];
-
-        void select(wxCommandEvent &event);
-
-        void setChannels();
+        bool value;
 
     public:
-        deApplyImageFrame(wxWindow *parent, deActionLayer& _layer);
-        virtual ~deApplyImageFrame();
+        dePropertyBoolean(const std::string& _name);
+        virtual ~dePropertyBoolean();
 
-        virtual void onImageClick(deValue x, deValue y) {};
+        void set(bool _value);
+        bool get() const;
 
-        virtual void onUpdateProperties();
-
+        virtual void save(xmlNodePtr root) const;
+        virtual void load(xmlNodePtr root);
 };
-
 
 #endif

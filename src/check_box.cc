@@ -16,34 +16,44 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_APPLY_IMAGE_FRAME_H
-#define _DE_APPLY_IMAGE_FRAME_H
+#include "check_box.h"
 
-#include "action_frame.h"
-class dePropertyChoiceUI;
-class dePropertyBooleanUI;
-
-class deApplyImageFrame:public deActionFrame
+deCheckBox::deCheckBox(wxWindow *parent, const std::string& labelString)
+:wxPanel(parent)
 {
-    private:
-        dePropertyChoiceUI* appliedLayer;
-        dePropertyBooleanUI* applySingleChannel;
-        wxChoice* layerChoice;
-        wxRadioButton* channels[4];
+    sizer = new wxBoxSizer(wxHORIZONTAL);
+    SetSizer(sizer);
+    
+    checkBox =  new wxCheckBox(this, wxID_ANY, wxString::FromAscii(labelString.c_str()));
+    sizer->Add(checkBox);
 
-        void select(wxCommandEvent &event);
+    Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deCheckBox::check));
+}
 
-        void setChannels();
+deCheckBox::~deCheckBox()
+{
+}
 
-    public:
-        deApplyImageFrame(wxWindow *parent, deActionLayer& _layer);
-        virtual ~deApplyImageFrame();
+void deCheckBox::check(wxCommandEvent &event)
+{
+    if (checkBox->IsChecked())
+    {
+        onCheck(true);
+    }
+    else
+    {
+        onCheck(false);
+    }
+}
 
-        virtual void onImageClick(deValue x, deValue y) {};
-
-        virtual void onUpdateProperties();
-
-};
-
-
-#endif
+void deCheckBox::set(bool b)
+{
+    if (b)
+    {
+        checkBox->SetValue(1);
+    }
+    else
+    {
+        checkBox->SetValue(0);
+    }
+}

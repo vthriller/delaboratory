@@ -16,34 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_APPLY_IMAGE_FRAME_H
-#define _DE_APPLY_IMAGE_FRAME_H
+#include "property_boolean_ui.h"
+#include "property_boolean.h"
+#include "layer.h"
 
-#include "action_frame.h"
-class dePropertyChoiceUI;
-class dePropertyBooleanUI;
-
-class deApplyImageFrame:public deActionFrame
+dePropertyBooleanUI::dePropertyBooleanUI(wxWindow *parent, dePropertyBoolean& _property, deLayer& _layer)
+:deCheckBox(parent, _property.getLabel()),
+property(_property),
+layer(_layer)
 {
-    private:
-        dePropertyChoiceUI* appliedLayer;
-        dePropertyBooleanUI* applySingleChannel;
-        wxChoice* layerChoice;
-        wxRadioButton* channels[4];
+    setFromProperty();
+}
 
-        void select(wxCommandEvent &event);
+dePropertyBooleanUI::~dePropertyBooleanUI()
+{
+}
 
-        void setChannels();
+void dePropertyBooleanUI::onCheck(bool c)
+{
+    property.set(c);
+    layer.updateAll();
+}
 
-    public:
-        deApplyImageFrame(wxWindow *parent, deActionLayer& _layer);
-        virtual ~deApplyImageFrame();
-
-        virtual void onImageClick(deValue x, deValue y) {};
-
-        virtual void onUpdateProperties();
-
-};
-
-
-#endif
+void dePropertyBooleanUI::setFromProperty()
+{
+    set(property.get());
+}

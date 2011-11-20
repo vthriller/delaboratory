@@ -21,13 +21,14 @@
 
 #include "action_layer.h"
 #include "property_choice.h"
+#include "property_boolean.h"
 
 class deApplyImageLayer:public deActionLayer
 {
     private:
         dePropertyChoice appliedLayer;
+        dePropertyBoolean applySingleChannel;
         int appliedChannel;
-        bool singleChannel;
 
         virtual bool simpleActionProcessing() const {return true;};
 
@@ -43,13 +44,12 @@ class deApplyImageLayer:public deActionLayer
 
         virtual void processAction(int i);
 
-        void enableSingleChannel();
-        void disableSingleChannel();
-        bool isSingleChannel() const {return singleChannel;};
+        bool isSingleChannel() const;
 
         void setAppliedChannel(int c);
 
         dePropertyChoice& getAppliedLayer() {return appliedLayer;};
+        dePropertyBoolean& getApplySingleChannel() {return applySingleChannel;};
 
         int getAppliedChannel() const {return appliedChannel;};
 

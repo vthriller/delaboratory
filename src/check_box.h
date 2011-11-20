@@ -16,34 +16,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_APPLY_IMAGE_FRAME_H
-#define _DE_APPLY_IMAGE_FRAME_H
+#ifndef _DE_CHECK_BOX_H
+#define _DE_CHECK_BOX_H
 
-#include "action_frame.h"
-class dePropertyChoiceUI;
-class dePropertyBooleanUI;
+#include <wx/wx.h>
+#include <string>
 
-class deApplyImageFrame:public deActionFrame
+class deCheckBox:public wxPanel
 {
     private:
-        dePropertyChoiceUI* appliedLayer;
-        dePropertyBooleanUI* applySingleChannel;
-        wxChoice* layerChoice;
-        wxRadioButton* channels[4];
+        wxSizer* sizer;
+        wxCheckBox* checkBox;
 
-        void select(wxCommandEvent &event);
-
-        void setChannels();
+        void check(wxCommandEvent &event);
 
     public:
-        deApplyImageFrame(wxWindow *parent, deActionLayer& _layer);
-        virtual ~deApplyImageFrame();
+        deCheckBox(wxWindow *parent, const std::string& labelString);
+        virtual ~deCheckBox();
 
-        virtual void onImageClick(deValue x, deValue y) {};
+        virtual void onCheck(bool c) = 0;
 
-        virtual void onUpdateProperties();
-
-};
-
+        void set(bool c);
+};        
 
 #endif
