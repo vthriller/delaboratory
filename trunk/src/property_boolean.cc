@@ -16,34 +16,41 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_APPLY_IMAGE_FRAME_H
-#define _DE_APPLY_IMAGE_FRAME_H
+#include "property_boolean.h"
+#include "str.h"
+#include "xml.h"
 
-#include "action_frame.h"
-class dePropertyChoiceUI;
-class dePropertyBooleanUI;
-
-class deApplyImageFrame:public deActionFrame
+dePropertyBoolean::dePropertyBoolean(const std::string& _name)
+:deProperty(_name)
 {
-    private:
-        dePropertyChoiceUI* appliedLayer;
-        dePropertyBooleanUI* applySingleChannel;
-        wxChoice* layerChoice;
-        wxRadioButton* channels[4];
+    value = false;
+}
 
-        void select(wxCommandEvent &event);
+dePropertyBoolean::~dePropertyBoolean()
+{
+}
 
-        void setChannels();
-
-    public:
-        deApplyImageFrame(wxWindow *parent, deActionLayer& _layer);
-        virtual ~deApplyImageFrame();
-
-        virtual void onImageClick(deValue x, deValue y) {};
-
-        virtual void onUpdateProperties();
-
-};
+void dePropertyBoolean::set(bool _value)
+{
+    value = _value;
+}
 
 
-#endif
+bool dePropertyBoolean::get() const
+{
+    return value;
+}
+
+void dePropertyBoolean::save(xmlNodePtr root) const
+{
+    saveChild(root, name, str(value));
+}    
+
+void dePropertyBoolean::load(xmlNodePtr child)
+{
+    if ((!xmlStrcmp(child->name, BAD_CAST(name.c_str())))) 
+    {
+        value = getBool(getContent(child));
+    }
+}    
+

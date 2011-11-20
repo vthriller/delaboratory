@@ -25,10 +25,11 @@
 
 deApplyImageLayer::deApplyImageLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
-appliedLayer("applied_layer")
+appliedLayer("applied_layer"),
+applySingleChannel("apply_single_channel")
 {
     appliedChannel = 0;
-    singleChannel = false;
+    applySingleChannel.set(false);
 
     std::vector<std::string>& choices = appliedLayer. getChoices();
     int i;
@@ -58,7 +59,7 @@ void deApplyImageLayer::processAction(int i)
 
     int c = -1 ;
 
-    if (singleChannel)
+    if (applySingleChannel.get())
     {
         c = appliedImage.getChannelIndex(appliedChannel);
     }
@@ -94,18 +95,6 @@ bool deApplyImageLayer::isChannelNeutral(int index)
     return false;
 }    
 
-void deApplyImageLayer::enableSingleChannel()
-{
-    singleChannel = true;
-    updateImage();
-}
-
-void deApplyImageLayer::disableSingleChannel()
-{
-    singleChannel = false;
-    updateImage();
-}
-
 void deApplyImageLayer::setAppliedChannel(int c)
 {
     appliedChannel = c;
@@ -118,9 +107,9 @@ void deApplyImageLayer::save(xmlNodePtr root)
     saveBlend(root);
 
     appliedLayer.save(root);
+    applySingleChannel.save(root);
 
     saveChild(root, "applied_channel", str(appliedChannel));
-    saveChild(root, "single_channel", str(singleChannel));
 }
 
 void deApplyImageLayer::load(xmlNodePtr root)
@@ -133,15 +122,11 @@ void deApplyImageLayer::load(xmlNodePtr root)
     {
 
         appliedLayer.load(child);
+        applySingleChannel.load(child);
 
         if ((!xmlStrcmp(child->name, BAD_CAST("applied_channel")))) 
         {
             appliedChannel = getValue(getContent(child));
-        }
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("single_channel")))) 
-        {
-            singleChannel = getBool(getContent(child));
         }
 
         child = child->next;
@@ -149,3 +134,7 @@ void deApplyImageLayer::load(xmlNodePtr root)
     }        
 }
 
+bool deApplyImageLayer::isSingleChannel() const
+{
+    return applySingleChannel.get();
+}

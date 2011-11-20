@@ -19,7 +19,7 @@
 #include "apply_image_frame.h"
 #include "apply_image_layer.h"
 #include "property_choice_ui.h"
-
+#include "property_boolean_ui.h"
 
 deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer)
 :deActionFrame(parent, _layer)
@@ -29,39 +29,11 @@ deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer)
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
 
-/*
-    int n = layer.getIndex();
-
-    wxString* layerStrings = new wxString [n];
-    for (i = 0; i < n; i++)
-    {
-        layerStrings[i] = wxString::Format(_T("%i"), i);
-    }        
-
-    layerChoice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), n, layerStrings);
-
-    delete [] layerStrings;
-
-    layerChoice->SetSelection(applyImageLayer.getAppliedLayer());
-
-    mainSizer->Add(layerChoice, 0);
-    */
-
     appliedLayer = new dePropertyChoiceUI(this, applyImageLayer.getAppliedLayer(), applyImageLayer);
     mainSizer->Add(appliedLayer);
 
-    singleChannel = new wxCheckBox(this, wxID_ANY, _T("apply single channel"));
-
-    if (applyImageLayer.isSingleChannel())
-    {
-        singleChannel->SetValue(1);
-    }
-    else
-    {
-        singleChannel->SetValue(0);
-    }
-
-    mainSizer->Add(singleChannel, 0);
+    applySingleChannel = new dePropertyBooleanUI(this, applyImageLayer.getApplySingleChannel(), applyImageLayer);
+    mainSizer->Add(applySingleChannel);
 
     int i;
     for (i = 0; i < 4; i++)
@@ -75,45 +47,11 @@ deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer)
 
     Fit();
 
-    Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deApplyImageFrame::check));
-    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deApplyImageFrame::choose));
     Connect(wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler(deApplyImageFrame::select));
 }
 
 deApplyImageFrame::~deApplyImageFrame()
 {
-}
-
-void deApplyImageFrame::check(wxCommandEvent &event)
-{
-    deApplyImageLayer& applyImageLayer = dynamic_cast<deApplyImageLayer&>(layer);
-
-    if (singleChannel->IsChecked())
-    {
-        applyImageLayer.enableSingleChannel();
-    }
-    else
-    {
-        applyImageLayer.disableSingleChannel();
-    }
-
-    setChannels();
-
-    layer.updateOtherLayers();
-    layer.repaint();
-}
-
-void deApplyImageFrame::choose(wxCommandEvent &event)
-{
-/*
-    deApplyImageLayer& applyImageLayer = dynamic_cast<deApplyImageLayer&>(layer);
-
-    int l = layerChoice->GetSelection();
-    applyImageLayer.setAppliedLayer(l);
-    setChannels();
-    layer.updateOtherLayers();
-    layer.repaint();
-    */
 }
 
 void deApplyImageFrame::select(wxCommandEvent &event)
