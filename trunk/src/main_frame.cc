@@ -144,6 +144,8 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     layerGridPanel = new deLayerGridPanel(notebook, project, _layerProcessor);
     notebook->AddPage(layerGridPanel, _T("layers"));
     notebook->AddPage(new wxPanel(notebook), _T("masks"));
+    notebook->AddPage(new wxPanel(notebook), _T("textures"));
+    notebook->AddPage(new wxPanel(notebook), _T("samplers"));
 
     controlPanel = new deControlPanel(this, project, _layerProcessor, layerGridPanel);
     rightSizer->Add(controlPanel, 0, wxEXPAND);
