@@ -38,7 +38,18 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _so
  burnMax("burn_max")
 {
     blurRadius.setLabel("radius");
+    reset();
+}
+
+void deDodgeBurnLayer::reset()
+{
     blurRadius.set(0.1);
+    dodgeAmount.set(0.5);
+    dodgeMin.set(0.1);
+    dodgeMax.set(0.9);
+    burnAmount.set(0.5);
+    burnMin.set(0.1);
+    burnMax.set(0.9);
 }
 
 deDodgeBurnLayer::~deDodgeBurnLayer()
@@ -59,19 +70,19 @@ void deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
     deBlurType type = deGaussianBlur;
     blurChannel(source, blurMap, size, r, type, 0.0);
 
-    deValue dmin = 0.0;
-    deValue dmax = 1.0;
+    deValue dmin = dodgeMin.get();
+    deValue dmax = dodgeMax.get();
 
     processLinear(blurMap, dodgeMap, size.getN(), dmin, dmax, false);
 
-    deValue da = 1.0;   // dodge amount
+    deValue da = dodgeAmount.get(); 
     blendChannel(source, source, firstStage, dodgeMap, deBlendOverlay, da, size.getN());
 
-    deValue bmin = 0.0;
-    deValue bmax = 1.0;
+    deValue bmin = burnMin.get();
+    deValue bmax = burnMax.get();
     processLinear(blurMap, burnMap, size.getN(), bmin, bmax, true);
 
-    deValue ba = 1.0;   // burn amount
+    deValue ba = burnAmount.get(); 
     blendChannel(firstStage, source, destination, burnMap, deBlendMultiply, ba, size.getN());
 
     delete [] blurMap;
