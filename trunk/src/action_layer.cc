@@ -28,34 +28,7 @@
 #include "process_linear.h"
 #include "str.h"
 #include "xml.h"
-
-void blend(deValue* sourcePixels, deValue* overlayPixels, deValue* resultPixels, deValue* maskPixels, deBlendMode blendMode, deValue opacity, int channelSize)
-{
-    int j;
-    if (maskPixels)
-    {
-        for (j = 0; j < channelSize; j++)
-        {
-            deValue src = sourcePixels[j];
-            deValue ov = overlayPixels[j];
-            deValue dst = calcBlendResult(src, ov, blendMode);
-            deValue m = maskPixels[j] * opacity;
-            deValue result = (1 - m) * src + m * dst;
-            resultPixels[j] = result;
-        }        
-    }
-    else
-    {
-        for (j = 0; j < channelSize; j++)
-        {
-            deValue src = sourcePixels[j];
-            deValue ov = overlayPixels[j];
-            deValue dst = calcBlendResult(src, ov, blendMode);
-            deValue result = (1 - opacity) * src + opacity * dst;
-            resultPixels[j] = result;
-        }        
-    }
-}
+#include "blend_channel.h"
 
 deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor,  deChannelManager& _channelManager, deViewManager& _viewManager)
 :deLayer(_name, _colorSpace, _index, _sourceLayer),
@@ -312,8 +285,8 @@ void deActionLayer::updateBlend(int i)
 
     imageBlendPass.enableChannel(i);
     int b = imageBlendPass.getChannelIndex(i);
-    deChannel* blendChannel = channelManager.getChannel(b);
-    if (!blendChannel)
+    deChannel* blendChannel_ = channelManager.getChannel(b);
+    if (!blendChannel_)
     {
         return;
     }
@@ -335,9 +308,9 @@ void deActionLayer::updateBlend(int i)
 
     deValue* sourcePixels = sourceChannel->getPixels();
     deValue* overlayPixels = channel->getPixels();
-    deValue* resultPixels = blendChannel->getPixels();
+    deValue* resultPixels = blendChannel_->getPixels();
 
-    blend(sourcePixels, overlayPixels, resultPixels, maskPixels, blendMode, opacity, channelSize);
+    blendChannel(sourcePixels, overlayPixels, resultPixels, maskPixels, blendMode, opacity, channelSize);
 
 }
 
@@ -588,7 +561,7 @@ void deActionLayer::renderBlendMask()
         blurChannel(maskPixels, allocatedMaskPixels, channelManager.getChannelSize(), r, type, t);
     }       
 
-    processLinear(allocatedMaskPixels, channelManager.getChannelSize().getN(), blendMaskMin, blendMaskMax, false);
+    processLinear(allocatedMaskPixels, allocatedMaskPixels, channelManager.getChannelSize().getN(), blendMaskMin, blendMaskMax, false);
 
 }
 
