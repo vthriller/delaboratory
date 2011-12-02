@@ -51,7 +51,14 @@ class deDodgeBurnLayer:public deActionLayer
         virtual std::string getActionName() {return "setup";};
 
         dePropertyValue& getPropertyRadius() {return blurRadius;};
+
         dePropertyValue& getPropertyDodgeAmount() {return dodgeAmount;};
+        dePropertyValue& getPropertyDodgeMin() {return dodgeMin;};
+        dePropertyValue& getPropertyDodgeMax() {return dodgeMax;};
+
+        dePropertyValue& getPropertyBurnAmount() {return burnAmount;};
+        dePropertyValue& getPropertyBurnMin() {return burnMin;};
+        dePropertyValue& getPropertyBurnMax() {return burnMax;};
 
         void reset();
 
