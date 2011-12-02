@@ -53,6 +53,8 @@ class deDodgeBurnLayer:public deActionLayer
         dePropertyValue& getPropertyRadius() {return blurRadius;};
         dePropertyValue& getPropertyDodgeAmount() {return dodgeAmount;};
 
+        void reset();
+
 };
 
 #endif
