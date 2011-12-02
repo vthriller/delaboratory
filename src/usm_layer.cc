@@ -81,7 +81,7 @@ void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
         }
     }
 
-    delete unsharpMask;
+    delete [] unsharpMask;
 }
 
 
