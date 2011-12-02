@@ -25,6 +25,7 @@
 #include "usm_frame.h"
 #include "mixer_bw_editor.h"
 #include "conversion_bw_layer.h"
+#include "dodge_burn_frame.h"
 
 #include "action_layer.h"
 
@@ -60,6 +61,12 @@ deFrame* createFrame(wxWindow *parent, deLayer& layer)
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
         return new deUSMFrame(parent, al);
+    }        
+
+    if (type == "dodge_burn")
+    {
+        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        return new deDodgeBurnFrame(parent, al);
     }        
 
     if (type == "conversion_bw")

@@ -16,11 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROCESS_LINEAR_H
-#define _DE_PROCESS_LINEAR_H
+#ifndef _DE_BLEND_CHANNEL_H
+#define _DE_BLEND_CHANNEL_H
 
 #include "value.h"
+#include "blend_mode.h"
 
-void processLinear(const deValue* src, deValue* dst, int n, deValue min, deValue max, bool invert);
+void blendChannel(const deValue* sourcePixels, const deValue* overlayPixels, deValue* resultPixels, deValue* maskPixels, deBlendMode blendMode, deValue opacity, int channelSize);
 
 #endif

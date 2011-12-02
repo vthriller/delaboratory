@@ -18,9 +18,9 @@
 
 #include "process_linear.h"
 
-void processLinear(deValue* pixels, int n, deValue min, deValue max, bool invert)
+void processLinear(const deValue* src, deValue* dst,  int n, deValue min, deValue max, bool invert)
 {
-    if ((min == 0) && (max == 1))
+    if ((min == 0) && (max == 1) && (src==dst))
     {
         return;
     }
@@ -36,7 +36,6 @@ void processLinear(deValue* pixels, int n, deValue min, deValue max, bool invert
     deValue left;
     deValue right;
     deValue a;
-
 
     if (min < max)
     {
@@ -59,17 +58,17 @@ void processLinear(deValue* pixels, int n, deValue min, deValue max, bool invert
 
     for (i = 0; i < n; i++)
     {
-        deValue v = pixels[i];
+        deValue v = src[i];
         if (v <= min)
         {
-            pixels[i] = left;               
+            dst[i] = left;               
         } else if (v >= max)
         {
-            pixels[i] = right;              
+            dst[i] = right;              
         }
         else
         {
-            pixels[i] = left + a * (v - min);
+            dst[i] = left + a * (v - min);
         }
     }
 }

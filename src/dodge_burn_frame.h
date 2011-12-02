@@ -16,11 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROCESS_LINEAR_H
-#define _DE_PROCESS_LINEAR_H
+#ifndef _DE_DODGE_BURN_FRAME_H
+#define _DE_DODGE_BURN_FRAME_H
 
-#include "value.h"
+#include "action_frame.h"
+#include "slider.h"
 
-void processLinear(const deValue* src, deValue* dst, int n, deValue min, deValue max, bool invert);
+class dePropertyValueSlider;
+
+class deDodgeBurnFrame:public deActionFrame
+{
+    private:
+        dePropertyValueSlider* radius;
+        dePropertyValueSlider* dodgeAmount;
+
+        void click(wxCommandEvent &event);
+
+    public:
+        deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer);
+        virtual ~deDodgeBurnFrame();
+
+        virtual void onImageClick(deValue x, deValue y) {};
+
+};
+
 
 #endif
