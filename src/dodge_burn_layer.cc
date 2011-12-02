@@ -76,14 +76,14 @@ void deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
     processLinear(blurMap, dodgeMap, size.getN(), dmin, dmax, false);
 
     deValue da = dodgeAmount.get(); 
-    blendChannel(source, source, firstStage, dodgeMap, deBlendOverlay, da, size.getN());
+    blendChannel(source, source, firstStage, dodgeMap, deBlendScreen, da, size.getN());
 
     deValue bmin = burnMin.get();
     deValue bmax = burnMax.get();
     processLinear(blurMap, burnMap, size.getN(), bmin, bmax, true);
 
     deValue ba = burnAmount.get(); 
-    blendChannel(firstStage, source, destination, burnMap, deBlendMultiply, ba, size.getN());
+    blendChannel(firstStage, firstStage, destination, burnMap, deBlendMultiply, ba, size.getN());
 
     delete [] blurMap;
     delete [] dodgeMap;

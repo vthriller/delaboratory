@@ -29,6 +29,11 @@ class deDodgeBurnFrame:public deActionFrame
     private:
         dePropertyValueSlider* radius;
         dePropertyValueSlider* dodgeAmount;
+        dePropertyValueSlider* dodgeMin;
+        dePropertyValueSlider* dodgeMax;
+        dePropertyValueSlider* burnAmount;
+        dePropertyValueSlider* burnMin;
+        dePropertyValueSlider* burnMax;
 
         void click(wxCommandEvent &event);
 
