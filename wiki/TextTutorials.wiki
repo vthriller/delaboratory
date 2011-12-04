@@ -1,5 +1,6 @@
 #summary Tutorials
 
+=in English=
 Curves tutorial:
 http://www.cambridgeincolour.com/tutorials/photoshop-curves.htm
 
@@ -14,3 +15,8 @@ http://www.broadhurst-family.co.uk/lefteye/MainPages/Lab.htm
 
 How to make image "pop" but increasing contrast of LAB curves:
 http://dgrin.smugmug.com/Tutorials/Photoshop-Start-Here/Pop-for-the-Adventurous/1108502_bTzCv
+
+=in Polish=
+
+Cyfrowa fotografia czarno-biała
+http://www.fototv.pl/artykuly/cyfrowa-ciemnia/cyfrowa-fotografia-czarno-biala.html
