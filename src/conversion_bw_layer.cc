@@ -23,20 +23,71 @@
 #include "channel_manager.h"
 #include "view_manager.h"
 #include "frame_factory.h"
+#include "blend_mode.h"
 
 deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, int n)
-:deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager), mixer(n), viewManager(_viewManager)
+:deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager),
+ add0("add_0"),
+ add1("add_1"),
+ add2("add_2"),
+ add3("add_3"),
+ overlay0("overlay_0"),
+ overlay1("overlay_1"),
+ overlay2("overlay_2"),
+ overlay3("overlay_3"),
+ viewManager(_viewManager)
 {
-    if (n == 3)
-    {
-        mixer.setWeight(0,0.3);
-        mixer.setWeight(1,0.6);
-        mixer.setWeight(2,0.1);
-    }
+    resetM();
+
+    add0.setMin(-1.0);
+    add0.setMax(3.0);
+    add1.setMin(-1.0);
+    add1.setMax(3.0);
+    add2.setMin(-1.0);
+    add2.setMax(3.0);
+
+    deLayer* source = layerStack.getLayer(sourceLayer);
+    deColorSpace sourceColorSpace = source->getColorSpace();
+
+    int cs = getColorSpaceSize(sourceColorSpace);
+
+    add0.setLabel(getChannelName(sourceColorSpace, 0));
+    add1.setLabel(getChannelName(sourceColorSpace, 1));
+    add2.setLabel(getChannelName(sourceColorSpace, 2));
+
+    overlay0.setLabel(getChannelName(sourceColorSpace, 0));
+    overlay1.setLabel(getChannelName(sourceColorSpace, 1));
+    overlay2.setLabel(getChannelName(sourceColorSpace, 2));
 }
 
 deConversionBWLayer::~deConversionBWLayer()
 {
+}
+
+void deConversionBWLayer::resetM()
+{
+    add0.set(0.3);
+    add1.set(0.6);
+    add2.set(0.1);
+}
+
+void deConversionBWLayer::presetM(int c)
+{
+    add0.set(0);
+    add1.set(0);
+    add2.set(0);
+    if (c == 0)
+    {
+        add0.set(1.0);
+    }
+    if (c == 1)
+    {
+        add1.set(1.0);
+    }
+    if (c == 2)
+    {
+        add2.set(1.0);
+    }
 }
 
 void deConversionBWLayer::updateImage()
@@ -48,34 +99,100 @@ void deConversionBWLayer::updateImage()
 
     int n = channelManager.getChannelSize().getN();
 
+    deChannel* sc0 = NULL;
     deChannel* sc1 = NULL;
     deChannel* sc2 = NULL;
     deChannel* sc3 = NULL;
-    deChannel* sc4 = NULL;
 
-    if (n > 0)
+    sc0 = channelManager.getChannel(sourceImage.getChannelIndex(0));
+    sc1 = channelManager.getChannel(sourceImage.getChannelIndex(1));
+    sc2 = channelManager.getChannel(sourceImage.getChannelIndex(2));
+    sc3 = channelManager.getChannel(sourceImage.getChannelIndex(3));
+
+    deChannel* dc = channelManager.getChannel(image.getChannelIndex(0));
+    if (!dc)
     {
-       sc1 = channelManager.getChannel(sourceImage.getChannelIndex(0));
+        return;
     }
 
-    if (n > 1)
+    deValue* d = dc->getPixels();
+    if (!d)
     {
-       sc2 = channelManager.getChannel(sourceImage.getChannelIndex(1));
+        return;
     }
 
-    if (n > 2)
+    deValue* v0 = NULL;
+    deValue* v1 = NULL;
+    deValue* v2 = NULL;
+    deValue* v3 = NULL;
+
+    if (sc0)
     {
-       sc3 = channelManager.getChannel(sourceImage.getChannelIndex(2));
+        v0 = sc0->getPixels();
+    }
+    if (sc1)
+    {
+        v1 = sc1->getPixels();
+    }
+    if (sc2)
+    {
+        v2 = sc2->getPixels();
+    }
+    if (sc3)
+    {
+        v3 = sc3->getPixels();
     }
 
-    if (n > 3)
+    deValue a0 = add0.get();
+    deValue a1 = add1.get();
+    deValue a2 = add2.get();
+    deValue a3 = add3.get();
+    deValue o0 = overlay0.get();
+    deValue o1 = overlay1.get();
+    deValue o2 = overlay2.get();
+    deValue o3 = overlay3.get();
+
+    int i;
+    for (i = 0; i < n; i++)
     {
-       sc4 = channelManager.getChannel(sourceImage.getChannelIndex(3));
+        deValue result = 0.0;
+
+        result += v0[i] * a0;
+        result += v1[i] * a1;
+        result += v2[i] * a2;
+
+        if (result < 0)
+        {
+            result = 0;
+        }
+
+        if (result > 1)
+        {
+            result = 1;
+        }
+
+        deValue blend0 = calcBlendResult(result, v0[i], deBlendOverlay);
+        deValue blend1 = calcBlendResult(result, v1[i], deBlendOverlay);
+        deValue blend2 = calcBlendResult(result, v2[i], deBlendOverlay);
+
+        result = result * (1 - o0) + blend0 * o0;
+        result = result * (1 - o1) + blend1 * o1;
+        result = result * (1 - o2) + blend2 * o2;
+
+        if (result < 0)
+        {
+            result = 0;
+        }
+
+        if (result > 1)
+        {
+            result = 1;
+        }
+
+        d[i] = result;
     }
 
-    deChannel* d = channelManager.getChannel(image.getChannelIndex(0));
-
-    mixer.process(sc1, sc2, sc3, sc4, *d, n);
+    //mixer.process(sc1, sc2, sc3, sc4, *d, n);
 }
 
 deColorSpace deConversionBWLayer::getSourceColorSpace() const
@@ -84,6 +201,7 @@ deColorSpace deConversionBWLayer::getSourceColorSpace() const
     return source->getColorSpace();
 }
 
+/*
 void deConversionBWLayer::setWeight(int s, deValue value)
 {
     mixer.setWeight(s, value);
@@ -93,9 +211,18 @@ deValue deConversionBWLayer::getWeight(int s)
 {
     return mixer.getWeight(s);
 }
+*/
 
 void deConversionBWLayer::updateAndRepaint()
 {
     layerProcessor.updateImages(index + 1, viewManager.getView());
     viewManager.repaint();
 }
+
+void deConversionBWLayer::updateAll()
+{
+    onUpdateProperties();
+    updateImage();
+    updateAndRepaint();
+}
+

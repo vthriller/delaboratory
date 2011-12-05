@@ -21,12 +21,22 @@
 
 #include "conversion_layer.h"
 #include "mixer.h"
+#include "property_value.h"
 class deViewManager;
 
 class deConversionBWLayer:public deConversionLayer
 {
     private:
-        deMixer mixer;
+        dePropertyValue add0;
+        dePropertyValue add1;
+        dePropertyValue add2;
+        dePropertyValue add3;
+        dePropertyValue overlay0;
+        dePropertyValue overlay1;
+        dePropertyValue overlay2;
+        dePropertyValue overlay3;
+
+        //deMixer mixer;
 
         // from project
         deViewManager& viewManager;
@@ -42,12 +52,26 @@ class deConversionBWLayer:public deConversionLayer
 
         deColorSpace getSourceColorSpace() const;
 
-        void setWeight(int s, deValue value);
-        deValue getWeight(int s);
+        dePropertyValue& getAdd0() {return add0;};
+        dePropertyValue& getAdd1() {return add1;};
+        dePropertyValue& getAdd2() {return add2;};
+        dePropertyValue& getAdd3() {return add3;};
+        dePropertyValue& getOverlay0() {return overlay0;};
+        dePropertyValue& getOverlay1() {return overlay1;};
+        dePropertyValue& getOverlay2() {return overlay2;};
+        dePropertyValue& getOverlay3() {return overlay3;};
+
+//        void setWeight(int s, deValue value);
+//        deValue getWeight(int s);
 
         void updateAndRepaint();
 
         virtual std::string getActionName() {return "mixer";};
+
+        virtual void updateAll();
+
+        void resetM();
+        void presetM(int c);
 
 };
 
