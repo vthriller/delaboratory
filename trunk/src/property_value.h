@@ -44,6 +44,7 @@ class dePropertyValue:public deProperty
         deValue getMax() const;
         deValue getDefault() const;
 
+        void setMin(deValue _min);
         void setMax(deValue _max);
 };
 

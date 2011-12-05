@@ -18,35 +18,7 @@
 
 #include "mixer_bw_editor.h"
 #include "conversion_bw_layer.h"
-#include "slider.h"
-
-class deMixerBWSlider:public deSlider
-{
-    private:
-        deConversionBWLayer& layer;
-        int s;
-
-    public:
-        deMixerBWSlider(wxWindow *parent, int range, deConversionBWLayer& _layer, int _s, const std::string& name)
-        :deSlider(parent, name, range, -2.0, 2.0, 0.0), layer(_layer), s(_s)
-        {
-            setValue(layer.getWeight(s));
-        }
-
-        virtual ~deMixerBWSlider()
-        {
-        }
-
-        virtual void onValueChange(deValue value, bool finished)
-        {
-            if (finished)
-            {
-                layer.setWeight(s, value);
-                layer.updateImage();
-                layer.updateAndRepaint();
-            }                
-        }
-};        
+#include "property_value_slider.h"
 
 deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer)
 :deFrame(parent, "conversion BW"), layer( _layer)
@@ -60,15 +32,58 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer)
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
 
-    int width = 300;
+    int range = 300;
 
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        std::string src = getChannelName(sourceColorSpace, i);
-        deMixerBWSlider* slider = new deMixerBWSlider(this, width, layer, i, src);        
-        sizer->Add(slider);
-    }
+    wxSizer* sizerM = new wxStaticBoxSizer(wxVERTICAL, this,  _T("monochrome mixer"));
+    sizer->Add(sizerM);
+
+    add0 = new dePropertyValueSlider(this, range, layer.getAdd0(), layer);
+    sizerM->Add(add0);
+
+    add1 = new dePropertyValueSlider(this, range, layer.getAdd1(), layer);
+    sizerM->Add(add1);
+
+    add2 = new dePropertyValueSlider(this, range, layer.getAdd2(), layer);
+    sizerM->Add(add2);
+
+    wxSizer* sizerBM = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T(""));
+    sizerM->Add(sizerBM);
+
+    resetM = new wxButton(this, wxID_ANY, _T("reset"), wxDefaultPosition, wxSize(60,25));
+    sizerBM->Add(resetM, 0);
+
+    preset0M = new wxButton(this, wxID_ANY, wxString::FromAscii(getChannelName(sourceColorSpace, 0).c_str()), wxDefaultPosition, wxSize(60,25));
+    sizerBM->Add(preset0M, 0);
+
+    preset1M = new wxButton(this, wxID_ANY, wxString::FromAscii(getChannelName(sourceColorSpace, 1).c_str()), wxDefaultPosition, wxSize(60,25));
+    sizerBM->Add(preset1M, 0);
+
+    preset2M = new wxButton(this, wxID_ANY, wxString::FromAscii(getChannelName(sourceColorSpace, 2).c_str()), wxDefaultPosition, wxSize(60,25));
+    sizerBM->Add(preset2M, 0);
+
+/*
+    add3 = new dePropertyValueSlider(this, range, layer.getAdd3(), layer);
+    sizer->Add(add3);
+    */
+
+    wxSizer* sizerO = new wxStaticBoxSizer(wxVERTICAL, this,  _T("overlay"));
+    sizer->Add(sizerO);
+
+    overlay0 = new dePropertyValueSlider(this, range, layer.getOverlay0(), layer);
+    sizerO->Add(overlay0);
+
+    overlay1 = new dePropertyValueSlider(this, range, layer.getOverlay1(), layer);
+    sizerO->Add(overlay1);
+
+    overlay2 = new dePropertyValueSlider(this, range, layer.getOverlay2(), layer);
+    sizerO->Add(overlay2);
+
+/*
+    overlay3 = new dePropertyValueSlider(this, range, layer.getOverlay3(), layer);
+    sizer->Add(overlay3);
+    */
+
+    Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMixerBWEditor::click));
 
     Layout();
     Fit();
@@ -80,3 +95,36 @@ deMixerBWEditor::~deMixerBWEditor()
     layer.closeActionFrame();
 }
 
+void deMixerBWEditor::click(wxCommandEvent &event)
+{
+    int id = event.GetId();
+
+    deValue v0 = 0.0;
+
+    if (resetM->GetId() == id)
+    {
+        layer.resetM();
+    }      
+
+    if (preset0M->GetId() == id)
+    {
+        layer.presetM(0);
+    }      
+
+    if (preset1M->GetId() == id)
+    {
+        layer.presetM(1);
+    }      
+
+    if (preset2M->GetId() == id)
+    {
+        layer.presetM(2);
+    }      
+
+    add0->setFromProperty();
+    add1->setFromProperty();
+    add2->setFromProperty();
+
+    layer.updateAll();
+
+}

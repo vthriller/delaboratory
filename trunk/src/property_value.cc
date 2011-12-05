@@ -77,3 +77,8 @@ void dePropertyValue::setMax(deValue _max)
 {
     max = _max;
 }
+
+void dePropertyValue::setMin(deValue _min)
+{
+    min = _min;
+}
