@@ -191,8 +191,6 @@ void deConversionBWLayer::updateImage()
 
         d[i] = result;
     }
-
-    //mixer.process(sc1, sc2, sc3, sc4, *d, n);
 }
 
 deColorSpace deConversionBWLayer::getSourceColorSpace() const
@@ -200,18 +198,6 @@ deColorSpace deConversionBWLayer::getSourceColorSpace() const
     deLayer* source = layerStack.getLayer(sourceLayer);
     return source->getColorSpace();
 }
-
-/*
-void deConversionBWLayer::setWeight(int s, deValue value)
-{
-    mixer.setWeight(s, value);
-}
-
-deValue deConversionBWLayer::getWeight(int s)
-{
-    return mixer.getWeight(s);
-}
-*/
 
 void deConversionBWLayer::updateAndRepaint()
 {
