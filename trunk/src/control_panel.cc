@@ -25,6 +25,7 @@
 #include "sampler_manager_frame.h"
 #include "file_dialogs.h"
 #include "layer_processor.h"
+#include "wx/notebook.h"
 
 const int g_txt = 220;
 
@@ -38,6 +39,51 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
 
     mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
+
+    wxNotebook* notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("notebook"));
+    mainSizer->Add(notebook, 1, wxEXPAND);
+
+    {
+        wxPanel* actionsPanel = new wxPanel(notebook);
+        notebook->AddPage(actionsPanel, _T("actions"));
+
+        std::vector<std::string> actions;
+        getSupportedActions(actions);
+
+        wxSizer* gridSizer = new wxGridSizer(3);
+        actionsPanel->SetSizer(gridSizer);
+
+        std::vector<std::string>::iterator i;
+        for (i = actions.begin(); i != actions.end(); i++)
+        {
+            wxButton* b = new wxButton(actionsPanel, wxID_ANY, wxString::FromAscii((*i).c_str()));
+            gridSizer->Add(b);
+            actionButtons.push_back(b);
+            actionButtonsNames[b->GetId()] = *i;
+        }
+    }
+
+    {
+        wxPanel* conversionsPanel = new wxPanel(notebook);
+        notebook->AddPage(conversionsPanel, _T("conversions"));
+
+        std::vector<deColorSpace> colorSpaces;
+        getSupportedColorSpaces(colorSpaces);
+
+        wxSizer* gridSizer = new wxGridSizer(3);
+        conversionsPanel->SetSizer(gridSizer);
+
+        std::vector<deColorSpace>::iterator i;
+        for (i = colorSpaces.begin(); i != colorSpaces.end(); i++)
+        {
+            std::string n = getColorSpaceName(*i);
+            wxButton* b = new wxButton(conversionsPanel, wxID_ANY, wxString::FromAscii(n.c_str()));
+            gridSizer->Add(b);
+            convertButtons.push_back(b);
+            convertButtonsColorSpaces[b->GetId()] = *i;
+        }
+    }
+
 
     wxSizer* hSizer = new wxBoxSizer(wxHORIZONTAL);
     mainSizer->Add(hSizer, 0, wxCENTER);
@@ -60,44 +106,6 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
         sizerD->Add(deleteLayer, 0, wxCENTER);
     }
 
-    {
-        std::vector<std::string> actions;
-        getSupportedActions(actions);
-
-        wxSizer* sizerA = new wxStaticBoxSizer(wxVERTICAL, this,  _T("actions"));
-        mainSizer->Add(sizerA, 0, wxCENTER);
-        wxSizer* gridSizer = new wxGridSizer(3);
-        sizerA->Add(gridSizer, 0, wxCENTER);
-
-        std::vector<std::string>::iterator i;
-        for (i = actions.begin(); i != actions.end(); i++)
-        {
-            wxButton* b = new wxButton(this, wxID_ANY, wxString::FromAscii((*i).c_str()));
-            gridSizer->Add(b);
-            actionButtons.push_back(b);
-            actionButtonsNames[b->GetId()] = *i;
-        }
-    }
-
-    {
-        std::vector<deColorSpace> colorSpaces;
-        getSupportedColorSpaces(colorSpaces);
-
-        wxSizer* sizerC = new wxStaticBoxSizer(wxVERTICAL, this,  _T("conversions"));
-        mainSizer->Add(sizerC, 0, wxCENTER);
-        wxSizer* gridSizer = new wxGridSizer(3);
-        sizerC->Add(gridSizer, 0, wxCENTER);
-
-        std::vector<deColorSpace>::iterator i;
-        for (i = colorSpaces.begin(); i != colorSpaces.end(); i++)
-        {
-            std::string n = getColorSpaceName(*i);
-            wxButton* b = new wxButton(this, wxID_ANY, wxString::FromAscii(n.c_str()));
-            gridSizer->Add(b);
-            convertButtons.push_back(b);
-            convertButtonsColorSpaces[b->GetId()] = *i;
-        }
-    }
 
     {
 

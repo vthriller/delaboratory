@@ -16,30 +16,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_DODGE_BURN_LAYER_H
-#define _DE_DODGE_BURN_LAYER_H
+#ifndef _DE_SHADOWS_HIGHLIGHTS_LAYER_H
+#define _DE_SHADOWS_HIGHLIGHTS_LAYER_H
 
 #include "action_layer.h"
 #include "property_value.h"
 
-class deDodgeBurnLayer:public deActionLayer
+class deShadowsHighlightsLayer:public deActionLayer
 {
     private:
         dePropertyValue blurRadius;
-        dePropertyValue dodgeAmount;
-        dePropertyValue dodgeMin;
-        dePropertyValue dodgeMax;
-        dePropertyValue burnAmount;
-        dePropertyValue burnMin;
-        dePropertyValue burnMax;
+        dePropertyValue shadowsHighlightsAmount;
+        dePropertyValue darkenAmount;
+        dePropertyValue lightenAmount;
 
     protected:
         virtual bool singleChannelProcessing() const {return true;};
-        virtual std::string getType() const {return "dodge_burn";};
+        virtual std::string getType() const {return "shadows_highlights";};
 
     public:
-        deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
-        virtual ~deDodgeBurnLayer();
+        deShadowsHighlightsLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        virtual ~deShadowsHighlightsLayer();
 
         virtual bool isChannelNeutral(int index);
 
@@ -48,17 +45,13 @@ class deDodgeBurnLayer:public deActionLayer
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
 
-        virtual std::string getActionName() {return "d/b";};
+        virtual std::string getActionName() {return "s/h";};
 
         dePropertyValue& getPropertyRadius() {return blurRadius;};
 
-        dePropertyValue& getPropertyDodgeAmount() {return dodgeAmount;};
-        dePropertyValue& getPropertyDodgeMin() {return dodgeMin;};
-        dePropertyValue& getPropertyDodgeMax() {return dodgeMax;};
-
-        dePropertyValue& getPropertyBurnAmount() {return burnAmount;};
-        dePropertyValue& getPropertyBurnMin() {return burnMin;};
-        dePropertyValue& getPropertyBurnMax() {return burnMax;};
+        dePropertyValue& getPropertyShadowsHighlightsAmount() {return shadowsHighlightsAmount;};
+        dePropertyValue& getPropertyDarkenAmount() {return darkenAmount;};
+        dePropertyValue& getPropertyLightenAmount() {return lightenAmount;};
 
         void reset();
 
