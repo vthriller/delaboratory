@@ -47,9 +47,6 @@ class deMixerSlider:public deSlider
             if (finished)
             {
                 layer.setWeight(s, d, value);
-                layer.onChannelChange(d);
-                layer.updateOtherLayers();
-                layer.repaint();
 
                 int index = layer.getIndex();
                 layerProcessor.markUpdateSingleChannel(index, d);
@@ -186,9 +183,9 @@ void deMixerEditorChannel::preset(deValue a)
         sliders[i]->setValue(v);
         layer.setWeight(i, index, v);
     }
-    layer.onChannelChange(index);
-    layer.updateOtherLayers();
-    layer.repaint();
+
+    int l_index = layer.getIndex();
+    layerProcessor.markUpdateSingleChannel(l_index, index);
 }
 
 void deMixerEditorChannel::preset2(deValue a, deValue b, deValue c)
@@ -213,7 +210,7 @@ void deMixerEditorChannel::preset2(deValue a, deValue b, deValue c)
         sliders[i]->setValue(v);
         layer.setWeight(i, index, v);
     }
-    layer.onChannelChange(index);
-    layer.updateOtherLayers();
-    layer.repaint();
+
+    int l_index = layer.getIndex();
+    layerProcessor.markUpdateSingleChannel(l_index, index);
 }

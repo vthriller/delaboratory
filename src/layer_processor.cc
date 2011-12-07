@@ -27,6 +27,7 @@
 #include "memory_info_frame.h"
 #include <wx/progdlg.h>
 #include <iostream>
+#include "action_layer.h"
 
 deLayerProcessor::deLayerProcessor()
 {
@@ -157,6 +158,14 @@ void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
 void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 {
 //    std::cout << "MARK update single channel layer: " << index << " channel: " << channel << std::endl;
+    deLayer* l = stack->getLayer(index);
+    deActionLayer* layer = dynamic_cast<deActionLayer*>(l);
+    if (layer)
+    {
+        layer->onChannelChange(channel);
+        layer->updateOtherLayers();
+        layer->repaint();
+    }        
 }
 
 void deLayerProcessor::markUpdateAllChannels(int index)
