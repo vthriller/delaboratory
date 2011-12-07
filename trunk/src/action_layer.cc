@@ -595,17 +595,17 @@ bool deActionLayer::isChannelEnabled(int index) const
 void deActionLayer::enableChannel(int index)
 {
     channels.insert(index);
-    onChannelChange(index);
-    updateOtherLayers();
-    repaint();
+
+    int l_index = getIndex();
+    layerProcessor.markUpdateSingleChannel(l_index, index);
 }
 
 void deActionLayer::disableChannel(int index)
 {
     channels.erase(index);
-    onChannelChange(index);
-    updateOtherLayers();
-    repaint();
+
+    int l_index = getIndex();
+    layerProcessor.markUpdateSingleChannel(l_index, index);
 }
 
 void deActionLayer::saveBlend(xmlNodePtr root)

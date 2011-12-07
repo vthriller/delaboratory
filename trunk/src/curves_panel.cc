@@ -295,10 +295,6 @@ void deCurvesPanel::update(bool finished)
     paint();
     if ((finished) || (realtime))
     {
-        layer.onChannelChange(channel);
-        layer.updateOtherLayers();
-        layer.repaint();
-
         int index = layer.getIndex();
         layerProcessor.markUpdateSingleChannel(index, channel);
     }
