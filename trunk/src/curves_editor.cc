@@ -22,7 +22,7 @@
 #include "curves_panel.h"
 #include "gradient_panel.h"
 
-deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer)
+deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
 :deActionFrame(parent, _layer)
 {
     deCurvesLayer& curvesLayer = dynamic_cast<deCurvesLayer&>(_layer);
@@ -53,7 +53,7 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer)
     wxSizer* sizerC = new wxFlexGridSizer(2, 8, 8);
     sizerSB->Add(sizerC);
 
-    curvesPanel = new deCurvesPanel(this, curvesLayer );
+    curvesPanel = new deCurvesPanel(this, curvesLayer, _layerProcessor);
 
     int barSize = 16;
 

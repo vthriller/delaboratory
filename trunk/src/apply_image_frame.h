@@ -22,6 +22,7 @@
 #include "action_frame.h"
 class dePropertyChoiceUI;
 class dePropertyBooleanUI;
+class deLayerProcessor;
 
 class deApplyImageFrame:public deActionFrame
 {
@@ -30,13 +31,14 @@ class deApplyImageFrame:public deActionFrame
         dePropertyBooleanUI* applySingleChannel;
         wxChoice* layerChoice;
         wxRadioButton* channels[4];
+        deLayerProcessor& layerProcessor;
 
         void select(wxCommandEvent &event);
 
         void setChannels();
 
     public:
-        deApplyImageFrame(wxWindow *parent, deActionLayer& _layer);
+        deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
         virtual ~deApplyImageFrame();
 
         virtual void onImageClick(deValue x, deValue y) {};

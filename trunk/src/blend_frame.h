@@ -22,6 +22,7 @@
 #include "layer_frame.h"
 #include "blend_mode.h"
 #include "slider.h"
+class deLayerProcessor;
 
 class deBlendFrame:public deLayerFrame
 {
@@ -46,6 +47,7 @@ class deBlendFrame:public deLayerFrame
         std::vector<deBlendMode> blendModes;
         std::vector<wxCheckBox*> channels;
         wxRadioButton* maskChannels[4];
+        deLayerProcessor& layerProcessor;
 
         wxCheckBox* maskEnable;
         wxCheckBox* maskShow;
@@ -57,7 +59,7 @@ class deBlendFrame:public deLayerFrame
         void showHide();
 
     public:
-        deBlendFrame(wxWindow *parent, deActionLayer& _layer);
+        deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
         virtual ~deBlendFrame();
 
 };

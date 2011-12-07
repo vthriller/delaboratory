@@ -22,11 +22,13 @@
 #include "frame.h"
 class deConversionBWLayer;
 class dePropertyValueSlider;
+class deLayerProcessor;
 
 class deMixerBWEditor:public deFrame
 {
     private:
         deConversionBWLayer& layer;
+        deLayerProcessor& layerProcessor;
 
         wxButton* resetM;
         wxButton* preset0M;
@@ -45,7 +47,7 @@ class deMixerBWEditor:public deFrame
         void click(wxCommandEvent &event);
 
     public:
-        deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer);
+        deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, deLayerProcessor& _layerProcessor);
         virtual ~deMixerBWEditor();
 
 };

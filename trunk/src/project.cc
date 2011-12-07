@@ -192,6 +192,9 @@ void deProject::addLayer(deLayer* layer)
     layerStack.addLayer(layer);
     updateMemoryInfo();
     layerProcessor.repaintImage(true);
+
+    int index = layer->getIndex();
+    layerProcessor.markUpdateAllChannels(index);
 }
 
 deChannelManager& deProject::getPreviewChannelManager() 

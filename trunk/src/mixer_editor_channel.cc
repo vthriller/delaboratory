@@ -20,6 +20,7 @@
 #include "mixer_layer.h"
 #include "slider.h"
 #include "gradient_panel.h"
+#include "layer_processor.h"
 
 class deMixerSlider:public deSlider
 {
@@ -27,10 +28,12 @@ class deMixerSlider:public deSlider
         deMixerLayer& layer;
         int s;
         int d;
+        deLayerProcessor& layerProcessor;
 
     public:
-        deMixerSlider(wxWindow *parent, int range, deMixerLayer& _layer, int _s, int _d, const std::string& name)
-        :deSlider(parent, name, range, -2.0, 2.0, 0.0), layer(_layer), s(_s), d(_d)
+        deMixerSlider(wxWindow *parent, int range, deMixerLayer& _layer, int _s, int _d, const std::string& name, deLayerProcessor& _layerProcessor)
+        :deSlider(parent, name, range, -2.0, 2.0, 0.0), layer(_layer), s(_s), d(_d),
+         layerProcessor(_layerProcessor)
         {
             setValue(layer.getWeight(s, d));
         }
@@ -47,12 +50,15 @@ class deMixerSlider:public deSlider
                 layer.onChannelChange(d);
                 layer.updateOtherLayers();
                 layer.repaint();
+
+                int index = layer.getIndex();
+                layerProcessor.markUpdateSingleChannel(index, d);
             }                
         }
 };        
 
-deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _layer, int _index)
-:wxPanel(parent), layer(_layer), index(_index)
+deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _layer, int _index, deLayerProcessor& _layerProcessor)
+:wxPanel(parent), layer(_layer), index(_index), layerProcessor(_layerProcessor)
 {
     deColorSpace colorSpace = layer.getColorSpace();
     unsigned int n = getColorSpaceSize(colorSpace);
@@ -75,7 +81,7 @@ deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _laye
     for (i = 0; i < n; i++)
     {
         std::string src = getChannelName(colorSpace, i);
-        deMixerSlider* slider = new deMixerSlider(this, width, layer, i, index, src);        
+        deMixerSlider* slider = new deMixerSlider(this, width, layer, i, index, src, layerProcessor);        
         sliders.push_back(slider);
         sizer->Add(slider);
         if (i != index)

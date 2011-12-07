@@ -23,6 +23,7 @@
 #include "slider.h"
 
 class dePropertyValueSlider;
+class deLayerProcessor;
 
 class deUSMFrame:public deActionFrame
 {
@@ -30,6 +31,8 @@ class deUSMFrame:public deActionFrame
         dePropertyValueSlider* radius;
         dePropertyValueSlider* amount;
         dePropertyValueSlider* threshold;
+
+        deLayerProcessor& layerProcessor;
 
         wxButton* reset;
         wxButton* sharp;
@@ -39,7 +42,7 @@ class deUSMFrame:public deActionFrame
         void click(wxCommandEvent &event);
 
     public:
-        deUSMFrame(wxWindow *parent, deActionLayer& _layer);
+        deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
         virtual ~deUSMFrame();
 
         virtual void onImageClick(deValue x, deValue y) {};

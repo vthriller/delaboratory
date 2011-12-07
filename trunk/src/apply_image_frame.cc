@@ -20,19 +20,20 @@
 #include "apply_image_layer.h"
 #include "property_choice_ui.h"
 #include "property_boolean_ui.h"
+#include "layer_processor.h"
 
-deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer)
-:deActionFrame(parent, _layer)
+deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
+:deActionFrame(parent, _layer), layerProcessor(_layerProcessor)
 {
     deApplyImageLayer& applyImageLayer = dynamic_cast<deApplyImageLayer&>(layer);
 
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
 
-    appliedLayer = new dePropertyChoiceUI(this, applyImageLayer.getAppliedLayer(), applyImageLayer);
+    appliedLayer = new dePropertyChoiceUI(this, applyImageLayer.getAppliedLayer(), applyImageLayer, layerProcessor);
     mainSizer->Add(appliedLayer);
 
-    applySingleChannel = new dePropertyBooleanUI(this, applyImageLayer.getApplySingleChannel(), applyImageLayer);
+    applySingleChannel = new dePropertyBooleanUI(this, applyImageLayer.getApplySingleChannel(), applyImageLayer, layerProcessor);
     mainSizer->Add(applySingleChannel);
 
     int i;
@@ -70,6 +71,9 @@ void deApplyImageFrame::select(wxCommandEvent &event)
 
     layer.updateOtherLayers();
     layer.repaint();
+
+    int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(index);
 }
 
 void deApplyImageFrame::setChannels()

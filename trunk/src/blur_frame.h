@@ -24,6 +24,7 @@
 #include "blur_type.h"
 class dePropertyValueSlider;
 class dePropertyChoiceUI;
+class deLayerProcessor;
 
 class deBlurFrame:public deActionFrame
 {
@@ -31,9 +32,10 @@ class deBlurFrame:public deActionFrame
         dePropertyValueSlider* radius;
         dePropertyValueSlider* threshold;
         dePropertyChoiceUI* blurType;
+        deLayerProcessor& layerProcessor;
 
     public:
-        deBlurFrame(wxWindow *parent, deActionLayer& _layer);
+        deBlurFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
         virtual ~deBlurFrame();
 
         virtual void onImageClick(deValue x, deValue y) {};

@@ -203,7 +203,7 @@ void deLayerGridPanel::click(wxCommandEvent &event)
 
             if (!layer->checkActionFrame())
             {
-                deFrame* actionFrame = createFrame(this, *layer);
+                deFrame* actionFrame = createFrame(this, *layer, layerProcessor);
                 if (actionFrame)
                 {
                     layer->setActionFrame(actionFrame);
@@ -218,7 +218,7 @@ void deLayerGridPanel::click(wxCommandEvent &event)
             deActionLayer* al = dynamic_cast<deActionLayer*>(layer);
             if (!layer->checkBlendFrame())
             {
-                deBlendFrame* blendFrame = new deBlendFrame(this, *al);
+                deBlendFrame* blendFrame = new deBlendFrame(this, *al, layerProcessor);
                 if (blendFrame)
                 {
                     layer->setBlendFrame(blendFrame);

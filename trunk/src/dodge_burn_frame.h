@@ -23,6 +23,7 @@
 #include "slider.h"
 
 class dePropertyValueSlider;
+class deLayerProcessor;
 
 class deDodgeBurnFrame:public deActionFrame
 {
@@ -34,11 +35,12 @@ class deDodgeBurnFrame:public deActionFrame
         dePropertyValueSlider* burnAmount;
         dePropertyValueSlider* burnMin;
         dePropertyValueSlider* burnMax;
+        deLayerProcessor& layerProcessor;
 
         void click(wxCommandEvent &event);
 
     public:
-        deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer);
+        deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
         virtual ~deDodgeBurnFrame();
 
         virtual void onImageClick(deValue x, deValue y) {};

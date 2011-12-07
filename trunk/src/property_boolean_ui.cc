@@ -19,11 +19,13 @@
 #include "property_boolean_ui.h"
 #include "property_boolean.h"
 #include "layer.h"
+#include "layer_processor.h"
 
-dePropertyBooleanUI::dePropertyBooleanUI(wxWindow *parent, dePropertyBoolean& _property, deLayer& _layer)
+dePropertyBooleanUI::dePropertyBooleanUI(wxWindow *parent, dePropertyBoolean& _property, deLayer& _layer, deLayerProcessor& _layerProcessor)
 :deCheckBox(parent, _property.getLabel()),
 property(_property),
-layer(_layer)
+layer(_layer),
+layerProcessor(_layerProcessor)
 {
     setFromProperty();
 }
@@ -36,6 +38,9 @@ void dePropertyBooleanUI::onCheck(bool c)
 {
     property.set(c);
     layer.updateAll();
+
+    int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(index);
 }
 
 void dePropertyBooleanUI::setFromProperty()

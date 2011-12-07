@@ -22,6 +22,7 @@
 #include "action_frame.h"
 class deCurvesPanel;
 class deGradientPanel;
+class deLayerProcessor;
 
 class deCurvesEditor:public deActionFrame
 {
@@ -52,7 +53,7 @@ class deCurvesEditor:public deActionFrame
         wxButton* is2;
 
     public:
-        deCurvesEditor(wxWindow *parent, deActionLayer& _layer);
+        deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
         virtual ~deCurvesEditor();
 
         virtual void onImageClick(deValue x, deValue y);

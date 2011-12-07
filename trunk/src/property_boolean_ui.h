@@ -22,15 +22,17 @@
 #include "check_box.h"
 class deLayer;
 class dePropertyBoolean;
+class deLayerProcessor;
 
 class dePropertyBooleanUI:public deCheckBox
 {
     private:
         dePropertyBoolean& property;
         deLayer& layer;
+        deLayerProcessor& layerProcessor;
 
     public:
-        dePropertyBooleanUI(wxWindow *parent, dePropertyBoolean& _property, deLayer& _layer);
+        dePropertyBooleanUI(wxWindow *parent, dePropertyBoolean& _property, deLayer& _layer, deLayerProcessor& _layerProcessor);
         virtual ~dePropertyBooleanUI();
 
         virtual void onCheck(bool c);

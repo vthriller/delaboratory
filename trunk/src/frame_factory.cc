@@ -30,56 +30,56 @@
 
 #include "action_layer.h"
 
-deFrame* createFrame(wxWindow *parent, deLayer& layer)
+deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerProcessor)
 {
     const std::string type = layer.getType();
 
     if (type == "curves")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deCurvesEditor(parent, al);
+        return new deCurvesEditor(parent, al, layerProcessor);
     }        
 
     if (type == "mixer")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deMixerEditor(parent, al);
+        return new deMixerEditor(parent, al, layerProcessor);
     }        
 
     if (type == "apply_image")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deApplyImageFrame(parent, al);
+        return new deApplyImageFrame(parent, al, layerProcessor);
     }        
 
     if (type == "blur")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deBlurFrame(parent, al);
+        return new deBlurFrame(parent, al, layerProcessor);
     }        
 
     if (type == "usm")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deUSMFrame(parent, al);
+        return new deUSMFrame(parent, al, layerProcessor);
     }        
 
     if (type == "dodge_burn")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deDodgeBurnFrame(parent, al);
+        return new deDodgeBurnFrame(parent, al, layerProcessor);
     }        
 
     if (type == "shadows_highlights")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deShadowsHighlightsFrame(parent, al);
+        return new deShadowsHighlightsFrame(parent, al, layerProcessor);
     }        
 
     if (type == "conversion_bw")
     {
         deConversionBWLayer& bwl = dynamic_cast<deConversionBWLayer&>(layer);
-        return new deMixerBWEditor(parent, bwl);
+        return new deMixerBWEditor(parent, bwl, layerProcessor);
     }        
 
     return NULL;
