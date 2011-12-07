@@ -21,8 +21,8 @@
 #include <iostream>
 #include "property_value_slider.h"
 
-deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer)
-:deActionFrame(parent, _layer)
+deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
+:deActionFrame(parent, _layer), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -31,13 +31,13 @@ deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer)
 
     int range = 400;
 
-    radius = new dePropertyValueSlider(this, range, usmLayer.getPropertyRadius(), usmLayer);
+    radius = new dePropertyValueSlider(this, range, usmLayer.getPropertyRadius(), usmLayer, layerProcessor);
     sizer->Add(radius);
 
-    amount = new dePropertyValueSlider(this, range, usmLayer.getPropertyAmount(), usmLayer);
+    amount = new dePropertyValueSlider(this, range, usmLayer.getPropertyAmount(), usmLayer, layerProcessor);
     sizer->Add(amount);
 
-    threshold = new dePropertyValueSlider(this, range, usmLayer.getPropertyThreshold(), usmLayer);
+    threshold = new dePropertyValueSlider(this, range, usmLayer.getPropertyThreshold(), usmLayer, layerProcessor);
     sizer->Add(threshold);
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));

@@ -21,7 +21,7 @@
 #include "mixer_layer.h"
 #include "mixer_editor_channel.h"
 
-deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer)
+deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
 :deActionFrame(parent, _layer)
 {
     deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(_layer);
@@ -36,7 +36,7 @@ deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer)
     int i;
     for (i = 0; i < n; i++)
     {
-        deMixerEditorChannel* mixerEditorChannel = new deMixerEditorChannel(this, mixerLayer, i);
+        deMixerEditorChannel* mixerEditorChannel = new deMixerEditorChannel(this, mixerLayer, i, _layerProcessor);
         sizer->Add(mixerEditorChannel);
         channels.push_back(mixerEditorChannel);
     }

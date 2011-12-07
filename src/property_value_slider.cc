@@ -19,11 +19,13 @@
 #include "property_value_slider.h"
 #include "property_value.h"
 #include "layer.h"
+#include "layer_processor.h"
 
-dePropertyValueSlider::dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayer& _layer)
+dePropertyValueSlider::dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayer& _layer, deLayerProcessor& _layerProcessor)
 :deSlider(parent, _property.getLabel(), _sliderRange, _property.getMin(), _property.getMax(), _property.getDefault()),
 property(_property),
-layer(_layer)
+layer(_layer),
+layerProcessor(_layerProcessor)
 {
     setFromProperty();
 }
@@ -38,6 +40,9 @@ void dePropertyValueSlider::onValueChange(deValue value, bool finished)
     {
         property.set(value);
         layer.updateAll();
+
+        int index = layer.getIndex();
+        layerProcessor.markUpdateAllChannels(index);
     }                
 }
 

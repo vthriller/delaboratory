@@ -26,6 +26,7 @@
 #include "str.h"
 #include "memory_info_frame.h"
 #include <wx/progdlg.h>
+#include <iostream>
 
 deLayerProcessor::deLayerProcessor()
 {
@@ -153,3 +154,17 @@ void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
     }
 }
 
+void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
+{
+//    std::cout << "MARK update single channel layer: " << index << " channel: " << channel << std::endl;
+}
+
+void deLayerProcessor::markUpdateAllChannels(int index)
+{
+//    std::cout << "MARK update all channels: " << index << std::endl;
+}
+
+void deLayerProcessor::markUpdateBlendAllChannels(int index)
+{
+//    std::cout << "MARK update blend all channels: " << index << std::endl;
+}

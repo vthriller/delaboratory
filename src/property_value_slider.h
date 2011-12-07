@@ -22,15 +22,17 @@
 #include "slider.h"
 class deLayer;
 class dePropertyValue;
+class deLayerProcessor;
 
 class dePropertyValueSlider:public deSlider
 {
     private:
         dePropertyValue& property;
         deLayer& layer;
+        deLayerProcessor& layerProcessor;
 
     public:
-        dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayer& _layer);
+        dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayer& _layer, deLayerProcessor& _layerProcessor);
         virtual ~dePropertyValueSlider();
 
         virtual void onValueChange(deValue value, bool finished);

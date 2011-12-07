@@ -23,6 +23,7 @@
 class deMixerLayer;
 #include "slider.h"
 #include <vector>
+class deLayerProcessor;
 
 class deMixerEditorChannel:public wxPanel
 {
@@ -30,6 +31,8 @@ class deMixerEditorChannel:public wxPanel
         std::vector<deSlider*> sliders;
         deMixerLayer& layer;
         unsigned int index;
+
+        deLayerProcessor& layerProcessor;
 
         wxButton* reset;
         wxButton* app1;
@@ -44,7 +47,7 @@ class deMixerEditorChannel:public wxPanel
         void preset2(deValue a, deValue b, deValue c);
 
     public:
-        deMixerEditorChannel(wxWindow *parent, deMixerLayer& _layer, int _index);
+        deMixerEditorChannel(wxWindow *parent, deMixerLayer& _layer, int _index, deLayerProcessor& _layerProcessor);
         virtual ~deMixerEditorChannel();
 
 

@@ -22,7 +22,8 @@
 #include <wx/wx.h>
 class deLayer;
 class deFrame;
+class deLayerProcessor;
 
-deFrame* createFrame(wxWindow *parent, deLayer& layer);
+deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerProcessor);
 
 #endif

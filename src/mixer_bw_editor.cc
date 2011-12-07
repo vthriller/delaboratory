@@ -20,8 +20,8 @@
 #include "conversion_bw_layer.h"
 #include "property_value_slider.h"
 
-deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer)
-:deFrame(parent, "conversion BW"), layer( _layer)
+deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, deLayerProcessor& _layerProcessor)
+:deFrame(parent, "conversion BW"), layer( _layer), layerProcessor(_layerProcessor)
 {
     layer.setActionFrame(this);
 
@@ -37,13 +37,13 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer)
     wxSizer* sizerM = new wxStaticBoxSizer(wxVERTICAL, this,  _T("monochrome mixer"));
     sizer->Add(sizerM);
 
-    add0 = new dePropertyValueSlider(this, range, layer.getAdd0(), layer);
+    add0 = new dePropertyValueSlider(this, range, layer.getAdd0(), layer, layerProcessor);
     sizerM->Add(add0);
 
-    add1 = new dePropertyValueSlider(this, range, layer.getAdd1(), layer);
+    add1 = new dePropertyValueSlider(this, range, layer.getAdd1(), layer, layerProcessor);
     sizerM->Add(add1);
 
-    add2 = new dePropertyValueSlider(this, range, layer.getAdd2(), layer);
+    add2 = new dePropertyValueSlider(this, range, layer.getAdd2(), layer, layerProcessor);
     sizerM->Add(add2);
 
     wxSizer* sizerBM = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T(""));
@@ -69,13 +69,13 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer)
     wxSizer* sizerO = new wxStaticBoxSizer(wxVERTICAL, this,  _T("overlay"));
     sizer->Add(sizerO);
 
-    overlay0 = new dePropertyValueSlider(this, range, layer.getOverlay0(), layer);
+    overlay0 = new dePropertyValueSlider(this, range, layer.getOverlay0(), layer, layerProcessor);
     sizerO->Add(overlay0);
 
-    overlay1 = new dePropertyValueSlider(this, range, layer.getOverlay1(), layer);
+    overlay1 = new dePropertyValueSlider(this, range, layer.getOverlay1(), layer, layerProcessor);
     sizerO->Add(overlay1);
 
-    overlay2 = new dePropertyValueSlider(this, range, layer.getOverlay2(), layer);
+    overlay2 = new dePropertyValueSlider(this, range, layer.getOverlay2(), layer, layerProcessor);
     sizerO->Add(overlay2);
 
 /*

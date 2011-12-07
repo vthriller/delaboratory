@@ -23,6 +23,7 @@
 #include "slider.h"
 
 class dePropertyValueSlider;
+class deLayerProcessor;
 
 class deShadowsHighlightsFrame:public deActionFrame
 {
@@ -31,11 +32,12 @@ class deShadowsHighlightsFrame:public deActionFrame
         dePropertyValueSlider* shAmount;
         dePropertyValueSlider* darkenAmount;
         dePropertyValueSlider* lightenAmount;
+        deLayerProcessor& layerProcessor;
 
         void click(wxCommandEvent &event);
 
     public:
-        deShadowsHighlightsFrame(wxWindow *parent, deActionLayer& _layer);
+        deShadowsHighlightsFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
         virtual ~deShadowsHighlightsFrame();
 
         virtual void onImageClick(deValue x, deValue y) {};

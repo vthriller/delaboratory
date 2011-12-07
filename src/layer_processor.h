@@ -48,6 +48,11 @@ class deLayerProcessor
         void updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame);
         void generateChannelUsage(std::map<int, int>& channelUsage);
 
+        void markUpdateSingleChannel(int index, int channel);
+        void markUpdateAllChannels(int index);
+
+        void markUpdateBlendAllChannels(int index);
+
 };
 
 #endif

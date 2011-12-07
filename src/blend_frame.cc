@@ -20,15 +20,18 @@
 #include "layer.h"
 #include "action_layer.h"
 #include "view_manager.h"
+#include "layer_processor.h"
 
 class deAlphaSlider:public deSlider
 {
     private:
         deActionLayer& layer;
+        deLayerProcessor& layerProcessor;
 
     public:
-        deAlphaSlider(wxWindow *parent, int range, deActionLayer& _layer)
-        :deSlider(parent, "opacity", range, 0.0, 1.0, 1.0), layer(_layer)
+        deAlphaSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
+        :deSlider(parent, "opacity", range, 0.0, 1.0, 1.0), layer(_layer),
+        layerProcessor(_layerProcessor)
         {
             setValue(layer.getOpacity());
         }
@@ -42,6 +45,9 @@ class deAlphaSlider:public deSlider
             if (finished)
             {
                 layer.setOpacity(value);
+
+                int index = layer.getIndex();
+                layerProcessor.markUpdateBlendAllChannels(index);
             }                
         }
 };        
@@ -50,10 +56,12 @@ class deBlurRadiusSlider:public deSlider
 {
     private:
         deActionLayer& layer;
+        deLayerProcessor& layerProcessor;
 
     public:
-        deBlurRadiusSlider(wxWindow *parent, int range, deActionLayer& _layer)
-        :deSlider(parent, "blur radius", range, 0.0, 0.2, 0.0), layer(_layer)
+        deBlurRadiusSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
+        :deSlider(parent, "blur radius", range, 0.0, 0.2, 0.0), layer(_layer),
+         layerProcessor(_layerProcessor)
         {
             setValue(layer.getBlendBlurRadius());
         }
@@ -67,6 +75,9 @@ class deBlurRadiusSlider:public deSlider
             if (finished)
             {
                 layer.setBlendBlurRadius(value);
+
+                int index = layer.getIndex();
+                layerProcessor.markUpdateBlendAllChannels(index);
             }                
         }
 };        
@@ -75,10 +86,12 @@ class deBlendMaskMinSlider:public deSlider
 {
     private:
         deActionLayer& layer;
+        deLayerProcessor& layerProcessor;
 
     public:
-        deBlendMaskMinSlider(wxWindow *parent, int range, deActionLayer& _layer)
-        :deSlider(parent, "min", range, 0.0, 1.0, 0.0), layer(_layer)
+        deBlendMaskMinSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
+        :deSlider(parent, "min", range, 0.0, 1.0, 0.0), layer(_layer),
+        layerProcessor(_layerProcessor)
         {
             setValue(layer.getBlendMaskMin());
         }
@@ -92,6 +105,9 @@ class deBlendMaskMinSlider:public deSlider
             if (finished)
             {
                 layer.setBlendMaskMin(value);
+
+                int index = layer.getIndex();
+                layerProcessor.markUpdateBlendAllChannels(index);
             }                
         }
 };        
@@ -100,10 +116,12 @@ class deBlendMaskMaxSlider:public deSlider
 {
     private:
         deActionLayer& layer;
+        deLayerProcessor& layerProcessor;
 
     public:
-        deBlendMaskMaxSlider(wxWindow *parent, int range, deActionLayer& _layer)
-        :deSlider(parent, "max", range, 0.0, 1.0, 0.0), layer(_layer)
+        deBlendMaskMaxSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
+        :deSlider(parent, "max", range, 0.0, 1.0, 0.0), layer(_layer),
+        layerProcessor(_layerProcessor)
         {
             setValue(layer.getBlendMaskMax());
         }
@@ -117,12 +135,16 @@ class deBlendMaskMaxSlider:public deSlider
             if (finished)
             {
                 layer.setBlendMaskMax(value);
+
+                int index = layer.getIndex();
+                layerProcessor.markUpdateBlendAllChannels(index);
             }                
         }
 };        
 
-deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer)
-:deLayerFrame(parent, _layer, _layer.getName())
+deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
+:deLayerFrame(parent, _layer, _layer.getName()),
+ layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -162,7 +184,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer)
 
     sizer->Add(choice, 0);
 
-    alphaSlider = new deAlphaSlider(this, 100, layer);
+    alphaSlider = new deAlphaSlider(this, 100, layer, layerProcessor);
     sizer->Add(alphaSlider, 0);
 
     wxSizer* sizerLC = new wxStaticBoxSizer(wxVERTICAL, this,  _T("luminance / color"));
@@ -263,13 +285,13 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer)
         }
     }
 
-    blurRadiusSlider = new deBlurRadiusSlider(this, 100, layer);
+    blurRadiusSlider = new deBlurRadiusSlider(this, 100, layer, layerProcessor);
     sizerM->Add(blurRadiusSlider, 0);
 
-    blendMaskMinSlider = new deBlendMaskMinSlider(this, 100, layer);
+    blendMaskMinSlider = new deBlendMaskMinSlider(this, 100, layer, layerProcessor);
     sizerM->Add(blendMaskMinSlider, 0);
 
-    blendMaskMaxSlider = new deBlendMaskMaxSlider(this, 100, layer);
+    blendMaskMaxSlider = new deBlendMaskMaxSlider(this, 100, layer, layerProcessor);
     sizerM->Add(blendMaskMaxSlider, 0);
 
     setChannels();
@@ -328,6 +350,10 @@ void deBlendFrame::check(wxCommandEvent &event)
             {
                 layer.disableChannel(i);
             }
+
+            int index = layer.getIndex();
+            layerProcessor.markUpdateBlendAllChannels(index);
+
             return;
         }
     }
@@ -345,16 +371,28 @@ void deBlendFrame::select(wxCommandEvent &event)
         if (i == b1->GetId())
         {
             l.setApplyMode(deApplyLuminanceAndColor);
+
+            int index = layer.getIndex();
+            layerProcessor.markUpdateBlendAllChannels(index);
+
             return;
         }            
         else if (i == b2->GetId())
         {
             l.setApplyMode(deApplyLuminance);
+
+            int index = layer.getIndex();
+            layerProcessor.markUpdateBlendAllChannels(index);
+
             return;
         }            
         else if (i == b3->GetId())
         {
             l.setApplyMode(deApplyColor);
+
+            int index = layer.getIndex();
+            layerProcessor.markUpdateBlendAllChannels(index);
+
             return;
         }
     }
@@ -440,6 +478,9 @@ void deBlendFrame::updateMask()
     showHide();
 
     l.repaint();
+
+    int index = l.getIndex();
+    layerProcessor.markUpdateBlendAllChannels(index);
 }
 
 void deBlendFrame::showHide()

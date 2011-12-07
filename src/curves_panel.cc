@@ -19,15 +19,16 @@
 #include "curves_panel.h"
 #include <wx/dcbuffer.h>
 #include "curves_layer.h"
-
+#include "layer_processor.h"
 
 BEGIN_EVENT_TABLE(deCurvesPanel, wxPanel)
 EVT_PAINT(deCurvesPanel::paintEvent)
 END_EVENT_TABLE()
 
-deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer)
+deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, deLayerProcessor& _layerProcessor)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(CURVES_PANEL_SIZE_X, CURVES_PANEL_SIZE_Y)),
-sizeX(CURVES_PANEL_SIZE_X), sizeY(CURVES_PANEL_SIZE_Y), layer(_layer), histogram(CURVES_PANEL_SIZE_X)
+sizeX(CURVES_PANEL_SIZE_X), sizeY(CURVES_PANEL_SIZE_Y), layer(_layer), histogram(CURVES_PANEL_SIZE_X),
+layerProcessor(_layerProcessor)
 {
     SetFocus();
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deCurvesPanel::click));
@@ -297,6 +298,9 @@ void deCurvesPanel::update(bool finished)
         layer.onChannelChange(channel);
         layer.updateOtherLayers();
         layer.repaint();
+
+        int index = layer.getIndex();
+        layerProcessor.markUpdateSingleChannel(index, channel);
     }
 }
 

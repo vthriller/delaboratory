@@ -21,8 +21,8 @@
 #include <iostream>
 #include "property_value_slider.h"
 
-deShadowsHighlightsFrame::deShadowsHighlightsFrame(wxWindow *parent, deActionLayer& _layer)
-:deActionFrame(parent, _layer)
+deShadowsHighlightsFrame::deShadowsHighlightsFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
+:deActionFrame(parent, _layer), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -31,16 +31,16 @@ deShadowsHighlightsFrame::deShadowsHighlightsFrame(wxWindow *parent, deActionLay
 
     int range = 400;
 
-    radius = new dePropertyValueSlider(this, range, shLayer.getPropertyRadius(), shLayer);
+    radius = new dePropertyValueSlider(this, range, shLayer.getPropertyRadius(), shLayer, layerProcessor);
     sizer->Add(radius);
 
-    shAmount = new dePropertyValueSlider(this, range, shLayer.getPropertyShadowsHighlightsAmount(), shLayer);
+    shAmount = new dePropertyValueSlider(this, range, shLayer.getPropertyShadowsHighlightsAmount(), shLayer, layerProcessor);
     sizer->Add(shAmount);
 
-    darkenAmount = new dePropertyValueSlider(this, range, shLayer.getPropertyDarkenAmount(), shLayer);
+    darkenAmount = new dePropertyValueSlider(this, range, shLayer.getPropertyDarkenAmount(), shLayer, layerProcessor);
     sizer->Add(darkenAmount);
 
-    lightenAmount = new dePropertyValueSlider(this, range, shLayer.getPropertyLightenAmount(), shLayer);
+    lightenAmount = new dePropertyValueSlider(this, range, shLayer.getPropertyLightenAmount(), shLayer, layerProcessor);
     sizer->Add(lightenAmount);
 
     Fit();

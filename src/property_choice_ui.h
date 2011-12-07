@@ -22,15 +22,17 @@
 #include "choice.h"
 class deLayer;
 class dePropertyChoice;
+class deLayerProcessor;
 
 class dePropertyChoiceUI:public deChoice
 {
     private:
         dePropertyChoice& property;
         deLayer& layer;
+        deLayerProcessor& layerProcessor;
 
     public:
-        dePropertyChoiceUI(wxWindow *parent, dePropertyChoice& _property, deLayer& _layer);
+        dePropertyChoiceUI(wxWindow *parent, dePropertyChoice& _property, deLayer& _layer, deLayerProcessor& _layerProcessor);
         virtual ~dePropertyChoiceUI();
 
         virtual void onChoose(int c);
