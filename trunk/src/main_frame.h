@@ -73,7 +73,7 @@ public:
 
     void onKey(int key);
 
-    void repaint(bool calcHistogram);
+    void repaintMainFrame(bool calcHistogram);
 
 	DECLARE_EVENT_TABLE()
 

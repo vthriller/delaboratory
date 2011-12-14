@@ -55,11 +55,11 @@ void deLayerProcessor::setViewManager(deViewManager* _viewManager)
     viewManager = _viewManager;
 }
 
-void deLayerProcessor::repaintImage(bool calcHistogram)
+void deLayerProcessor::repaintImageInLayerProcessor(bool calcHistogram)
 {
     if (mainFrame)
     {
-        mainFrame->repaint(calcHistogram);
+        mainFrame->repaintMainFrame(calcHistogram);
     }
 }
 
@@ -70,7 +70,7 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
         int view = viewManager->getView();
         updateImages(0, view);
     }        
-    repaintImage(calcHistogram);
+    repaintImageInLayerProcessor(calcHistogram);
 }    
 
 void deLayerProcessor::updateImages(int a, int b)
@@ -96,7 +96,6 @@ void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int v
 
     unsigned int index;
     int progress = 0;
-//    assert((unsigned int)view < layers.size());
     for (index = 0; index <= (unsigned int)view; index++)
     {
         std::map<int, int>::iterator i;
@@ -157,23 +156,51 @@ void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
 
 void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 {
-//    std::cout << "MARK update single channel layer: " << index << " channel: " << channel << std::endl;
-    deLayer* l = stack->getLayer(index);
-    deActionLayer* layer = dynamic_cast<deActionLayer*>(l);
-    if (layer)
+    if (stack)
     {
-        layer->onChannelChange(channel);
-        layer->updateOtherLayers();
-        layer->repaint();
-    }        
+        deLayer* l = stack->getLayer(index);
+        deActionLayer* layer = dynamic_cast<deActionLayer*>(l);
+        if (layer)
+        {
+            layer->updateImageInActionLayer(true, true, channel);
+
+            updateImages(index + 1, viewManager->getView());
+
+            repaintImageInLayerProcessor(true);
+        }
+    }
 }
 
 void deLayerProcessor::markUpdateAllChannels(int index)
 {
-//    std::cout << "MARK update all channels: " << index << std::endl;
+    if (stack)
+    {
+        deLayer* layer = stack->getLayer(index);
+        if (layer)
+        {
+            layer->onUpdateProperties();
+            layer->updateImage();
+
+            updateImages(index + 1, viewManager->getView());
+
+            repaintImageInLayerProcessor(true);
+        }        
+    }        
 }
 
 void deLayerProcessor::markUpdateBlendAllChannels(int index)
 {
-//    std::cout << "MARK update blend all channels: " << index << std::endl;
+    if (stack)
+    {
+        deLayer* l = stack->getLayer(index);
+        deActionLayer* layer = dynamic_cast<deActionLayer*>(l);
+        if (layer)
+        {
+            layer->onBlendSet();
+
+            updateImages(index + 1, viewManager->getView());
+
+            repaintImageInLayerProcessor(true);
+        }
+    }
 }

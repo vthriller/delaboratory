@@ -69,9 +69,6 @@ void deApplyImageFrame::select(wxCommandEvent &event)
         }
     }
 
-    layer.updateOtherLayers();
-    layer.repaint();
-
     int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(index);
 }

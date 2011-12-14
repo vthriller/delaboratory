@@ -122,7 +122,7 @@ void deImagePanel::paintEvent(wxPaintEvent & evt)
     render(dc);
 }
 
-void deImagePanel::repaint()
+void deImagePanel::repaintImagePanel()
 {
     wxClientDC dc(this);
     wxBufferedDC bufferedDC(&dc);

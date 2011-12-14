@@ -54,7 +54,8 @@ deShadowsHighlightsFrame::~deShadowsHighlightsFrame()
 
 void deShadowsHighlightsFrame::click(wxCommandEvent &event)
 {
+/*
     int id = event.GetId();
     deShadowsHighlightsLayer& shLayer = dynamic_cast<deShadowsHighlightsLayer&>(layer);
-
+*/
 }   

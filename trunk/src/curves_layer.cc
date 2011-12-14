@@ -79,7 +79,6 @@ void deCurvesLayer::load(xmlNodePtr root)
     loadBlend(root);
 
     xmlNodePtr child = root->xmlChildrenNode;
-    int n = getColorSpaceSize(colorSpace);
 
     int i = 0;
     while (child)

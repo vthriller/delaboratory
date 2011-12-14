@@ -42,7 +42,7 @@ class deLayerProcessor
         void setLayerStack(deLayerStack* _layerStack);
         void setViewManager(deViewManager* _viewManager);
 
-        void repaintImage(bool calcHistogram);
+        void repaintImageInLayerProcessor(bool calcHistogram);
         void updateAllImages(bool calcHistogram);
         void updateImages(int a, int b);
         void updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame);

@@ -45,8 +45,6 @@ class deViewManager
         void setView(int v);
         int getView() const;
 
-        void repaint();
-
         void setSingleChannel(int _channel);
         void setNormal();
 

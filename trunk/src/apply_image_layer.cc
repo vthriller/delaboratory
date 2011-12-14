@@ -32,7 +32,7 @@ applySingleChannel("apply_single_channel")
     applySingleChannel.set(false);
 
     std::vector<std::string>& choices = appliedLayer. getChoices();
-    int i;
+    unsigned int i;
     for (i = 0; i < index; i++)
     {
         choices.push_back(str(i));
@@ -98,7 +98,6 @@ bool deApplyImageLayer::isChannelNeutral(int index)
 void deApplyImageLayer::setAppliedChannel(int c)
 {
     appliedChannel = c;
-    updateImage();
 }
 
 void deApplyImageLayer::save(xmlNodePtr root)

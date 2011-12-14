@@ -50,24 +50,19 @@ void deViewManager::setView(int v)
     project.onChangeView(old, v);
 }
 
-void deViewManager::repaint()
-{
-    layerProcessor.repaintImage(true);
-}    
-
 void deViewManager::setSingleChannel(int _channel)
 {
     single = true;
     channel = _channel;
     project.onChangeViewMode();
-    layerProcessor.repaintImage(true);
+    layerProcessor.repaintImageInLayerProcessor(true);
 }
 
 void deViewManager::setNormal()
 {
     single = false;
     project.onChangeViewMode();
-    layerProcessor.repaintImage(true);
+    layerProcessor.repaintImageInLayerProcessor(true);
 }
 
 void deViewManager::hideMask()

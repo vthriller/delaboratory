@@ -36,8 +36,6 @@ class deConversionBWLayer:public deConversionLayer
         dePropertyValue overlay2;
         dePropertyValue overlay3;
 
-        //deMixer mixer;
-
         // from project
         deViewManager& viewManager;
 
@@ -61,14 +59,7 @@ class deConversionBWLayer:public deConversionLayer
         dePropertyValue& getOverlay2() {return overlay2;};
         dePropertyValue& getOverlay3() {return overlay3;};
 
-//        void setWeight(int s, deValue value);
-//        deValue getWeight(int s);
-
-        void updateAndRepaint();
-
         virtual std::string getActionName() {return "mixer";};
-
-        virtual void updateAll();
 
         void resetM();
         void presetM(int c);

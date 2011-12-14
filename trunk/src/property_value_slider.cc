@@ -39,7 +39,6 @@ void dePropertyValueSlider::onValueChange(deValue value, bool finished)
     if (finished)
     {
         property.set(value);
-        layer.updateAll();
 
         int index = layer.getIndex();
         layerProcessor.markUpdateAllChannels(index);
