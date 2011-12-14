@@ -95,8 +95,10 @@ deChannel* deChannelManager::getChannel(int index)
         return NULL;
     }
     assert((unsigned int)index < channels.size());
+    /*
     deChannel* channel = channels[index];
     assert(channel);
+    */
     tryAllocateChannel(index);
     return channels[index];
 }

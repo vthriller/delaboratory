@@ -111,26 +111,18 @@ class deActionLayer:public deLayer
 
         virtual bool singleChannelProcessing() const = 0;
 
-
-    protected:
-
-        void updateImage(bool action, bool blend, int channel);
-
     public:
         deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deActionLayer();
 
         deChannel* getSourceChannel(int index);
         deSize getChannelSize() const;
-        void updateOtherLayers();
-        void repaint();   
         void setOpacity(deValue _alpha);
         void setBlendMode(deBlendMode mode);
         deBlendMode getBlendMode() const {return blendMode;};
         deApplyMode getApplyMode() const {return applyMode;};
         void setApplyMode(deApplyMode mode);
         deValue getOpacity();
-        void onChannelChange(int i);
 
         deColorSpace getBlendMaskLayerColorSpace() const;
 
@@ -170,9 +162,8 @@ class deActionLayer:public deLayer
         virtual void loadBlend(xmlNodePtr root);
         virtual void saveBlend(xmlNodePtr root);
 
+        void updateImageInActionLayer(bool action, bool blend, int channel);
         virtual void updateImage();
-
-        virtual void updateAll();
 
 
 };

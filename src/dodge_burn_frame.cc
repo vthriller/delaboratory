@@ -63,7 +63,8 @@ deDodgeBurnFrame::~deDodgeBurnFrame()
 
 void deDodgeBurnFrame::click(wxCommandEvent &event)
 {
+/*
     int id = event.GetId();
     deDodgeBurnLayer& dodgeBurnLayer = dynamic_cast<deDodgeBurnLayer&>(layer);
-
+*/
 }   

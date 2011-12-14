@@ -35,7 +35,7 @@ void processLinear(const deValue* src, deValue* dst,  int n, deValue min, deValu
 
     deValue left;
     deValue right;
-    deValue a;
+    deValue a = 0;
 
     if (min < max)
     {

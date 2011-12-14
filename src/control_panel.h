@@ -32,8 +32,8 @@ class deControlPanel:public wxPanel
 {
     private:
         deProject& project;
-        deLayerProcessor& layerProcessor;
         deLayerGridPanel* layerGridPanel;
+        deLayerProcessor& layerProcessor;
         wxSizer* mainSizer;
 
         deSamplerManagerFrame* samplerManagerFrame;

@@ -48,7 +48,7 @@ public:
 
 	void paintEvent(wxPaintEvent & evt);
 	void render(wxDC& dc);
-    void repaint();
+    void repaintImagePanel();
 
 	DECLARE_EVENT_TABLE()
 

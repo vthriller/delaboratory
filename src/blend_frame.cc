@@ -167,7 +167,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
     wxString* blendModeStrings = new wxString [blendModes.size()];
     unsigned int i;
-    int selectedBlendMode;
+    int selectedBlendMode = 0;
     for (i = 0; i < blendModes.size(); i++)
     {
         blendModeStrings[i] = wxString::FromAscii(getBlendModeName(blendModes[i]).c_str());
@@ -312,7 +312,8 @@ deBlendFrame::~deBlendFrame()
     viewManager.hideThisMask(l.getAllocatedBlendMaskChannel());
     l.hideBlendMask();
     layer.closeBlendFrame();
-    l.repaint();
+
+    layerProcessor.repaintImageInLayerProcessor(true);
 }
 
 void deBlendFrame::choose(wxCommandEvent &event)
@@ -325,6 +326,8 @@ void deBlendFrame::choose(wxCommandEvent &event)
         int i = event.GetInt();
         deBlendMode& mode = blendModes[i];
         l.setBlendMode(mode);
+        int index = layer.getIndex();
+        layerProcessor.markUpdateBlendAllChannels(index);
     }
     else
     {
@@ -434,6 +437,7 @@ int deBlendFrame::getBlendChannel()
         }
     }
     assert(false);
+    return -1;
 }
 
 void deBlendFrame::updateMask()
@@ -476,8 +480,6 @@ void deBlendFrame::updateMask()
 
     setChannels();
     showHide();
-
-    l.repaint();
 
     int index = l.getIndex();
     layerProcessor.markUpdateBlendAllChannels(index);

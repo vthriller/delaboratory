@@ -19,6 +19,7 @@
 #include "mixer_bw_editor.h"
 #include "conversion_bw_layer.h"
 #include "property_value_slider.h"
+#include "layer_processor.h"
 
 deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, deLayerProcessor& _layerProcessor)
 :deFrame(parent, "conversion BW"), layer( _layer), layerProcessor(_layerProcessor)
@@ -125,6 +126,8 @@ void deMixerBWEditor::click(wxCommandEvent &event)
     add1->setFromProperty();
     add2->setFromProperty();
 
-    layer.updateAll();
+    //layer.updateAll();
+    int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(index);
 
 }

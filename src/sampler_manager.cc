@@ -54,11 +54,11 @@ void deSamplerManager::onImageClick(deValue x, deValue y)
 
     s.setPosition(x, y);
 
-    layerProcessor.repaintImage(false);
+    layerProcessor.repaintImageInLayerProcessor(false);
 }
 
 void deSamplerManager::setSelected(int s)
 {
     selected = s;
-    layerProcessor.repaintImage(false);
+    layerProcessor.repaintImageInLayerProcessor(false);
 }

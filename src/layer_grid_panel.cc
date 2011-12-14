@@ -169,7 +169,7 @@ void deLayerGridPanel::check(wxCommandEvent &event)
             deLayerStack& layerStack = project.getLayerStack();
             deLayer* layer = layerStack.getLayer(row.index);
             layer->setEnabled(checked);
-            layerProcessor.repaintImage(true);
+            layerProcessor.repaintImageInLayerProcessor(true);
         }
     }
 }
@@ -184,7 +184,7 @@ void deLayerGridPanel::select(wxCommandEvent &event)
         if (row.view->GetId() == id)
         {
             project.getViewManager().setView(row.index);
-            layerProcessor.repaintImage(true);
+            layerProcessor.repaintImageInLayerProcessor(true);
         }
     }
 }

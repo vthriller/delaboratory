@@ -191,7 +191,6 @@ void deProject::addLayer(deLayer* layer)
 {
     layerStack.addLayer(layer);
     updateMemoryInfo();
-    layerProcessor.repaintImage(true);
 
     int index = layer->getIndex();
     layerProcessor.markUpdateAllChannels(index);
@@ -381,7 +380,7 @@ void deProject::deleteLayer()
         viewManager.setView( layerStack.getSize() - 1 );
     }
     updateMemoryInfo();
-    layerProcessor.repaintImage(true);
+    layerProcessor.repaintImageInLayerProcessor(true);
 }
 
 void deProject::setLastView()

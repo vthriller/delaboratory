@@ -363,7 +363,7 @@ void deMainFrame::onBenchmarkColor(wxCommandEvent& event)
 
 void deMainFrame::onRepaintEvent(wxCommandEvent& event)
 {
-    repaint(true);
+    repaintMainFrame(true);
 }
 
 class deTestThread:public wxThread
@@ -371,7 +371,6 @@ class deTestThread:public wxThread
     private:
         virtual void *Entry()
         {
-            bool w = true;
             int i;
             int max = 10;
             for (i = 0; i < max; i++)
@@ -420,9 +419,9 @@ void deMainFrame::test(wxCommandEvent& event)
     }
 }
 
-void deMainFrame::repaint(bool calcHistogram)
+void deMainFrame::repaintMainFrame(bool calcHistogram)
 {
-    imageAreaPanel->getImagePanel()->repaint();
+    imageAreaPanel->getImagePanel()->repaintImagePanel();
     controlPanel->updateSamplerManagerFrame();
     project.updateMemoryInfo();
     if (calcHistogram)

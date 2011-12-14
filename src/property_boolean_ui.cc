@@ -37,7 +37,6 @@ dePropertyBooleanUI::~dePropertyBooleanUI()
 void dePropertyBooleanUI::onCheck(bool c)
 {
     property.set(c);
-    layer.updateAll();
 
     int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(index);

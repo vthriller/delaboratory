@@ -79,7 +79,6 @@ void deActionLayer::disableBlendMaskChannel()
 void deActionLayer::setBlendBlurRadius(deValue r)
 {
     blendBlurRadius = r;
-    onBlendSet();
 }
 
 const deImage& deActionLayer::getSourceImage() const
@@ -87,11 +86,6 @@ const deImage& deActionLayer::getSourceImage() const
     deLayer* source = layerStack.getLayer(sourceLayer);
     const deImage& sourceImage = source->getImage();
     return sourceImage;
-}
-
-void deActionLayer::repaint()
-{
-    viewManager.repaint();
 }
 
 bool deActionLayer::isEnabled() const
@@ -102,13 +96,8 @@ bool deActionLayer::isEnabled() const
 void deActionLayer::setEnabled(bool e)
 {
     enabled = e;
-    updateImage(true, true, -1);
-    updateOtherLayers();
-}
-
-void deActionLayer::updateOtherLayers()
-{
-    layerProcessor.updateImages(index + 1, viewManager.getView());
+    int index = getIndex();
+    layerProcessor.markUpdateAllChannels(index);
 }
 
 deChannel* deActionLayer::getSourceChannel(int index)
@@ -230,9 +219,6 @@ void deActionLayer::updateApply()
 void deActionLayer::setApplyMode(deApplyMode mode)
 {
     applyMode = mode;
-    updateImage(false, false, -1);
-    updateOtherLayers();
-    repaint();
 }
 
 
@@ -317,7 +303,6 @@ void deActionLayer::updateBlend(int i)
 void deActionLayer::setBlendMode(deBlendMode mode)
 {
     blendMode = mode;
-    onBlendSet();
 }
 
 bool deActionLayer::isBlendingEnabled() const
@@ -350,23 +335,20 @@ void deActionLayer::onBlendSet()
     {
     }
 
-    updateImage(false, true, -1);
-    updateOtherLayers();
-    repaint();
+    updateImageInActionLayer(false, true, -1);
 }
 
 void deActionLayer::setOpacity(deValue _opacity)
 {
     opacity = _opacity;
-    onBlendSet();
 }
 
 void deActionLayer::updateImage()
 {
-    updateImage(true, true, -1);
+    updateImageInActionLayer(true, true, -1);
 }
 
-void deActionLayer::updateImage(bool action, bool blend, int channel)
+void deActionLayer::updateImageInActionLayer(bool action, bool blend, int channel)
 {
     int n = getColorSpaceSize(colorSpace);
     int i;
@@ -407,11 +389,6 @@ void deActionLayer::updateImage(bool action, bool blend, int channel)
     }    
 
     updateApply();
-}
-
-void deActionLayer::onChannelChange(int i)
-{
-    updateImage(true, true, i);
 }
 
 void deActionLayer::updateAction(int i)
@@ -578,13 +555,11 @@ void deActionLayer::hideBlendMask()
 void deActionLayer::setBlendMaskMin(deValue v)
 {
     blendMaskMin = v;
-    onBlendSet();
 }
 
 void deActionLayer::setBlendMaskMax(deValue v)
 {
     blendMaskMax = v;
-    onBlendSet();
 }
 
 bool deActionLayer::isChannelEnabled(int index) const
@@ -724,13 +699,5 @@ void deActionLayer::loadBlend(xmlNodePtr root)
 
     }        
 
-}
-
-void deActionLayer::updateAll()
-{
-    onUpdateProperties();
-    updateImage();
-    updateOtherLayers();
-    repaint();
 }
 

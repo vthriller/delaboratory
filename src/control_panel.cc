@@ -304,7 +304,7 @@ void deControlPanel::addActionLayer(const std::string& action)
 void deControlPanel::closeSamplerManagerFrame()
 {
     samplerManagerFrame = NULL;
-    layerProcessor.repaintImage(false);
+    layerProcessor.repaintImageInLayerProcessor(false);
 }
 
 void deControlPanel::updateSamplerManagerFrame()
@@ -325,7 +325,7 @@ void deControlPanel::updateLayerGrid()
     layerGridPanel->clearRows();
     layerGridPanel->buildRows();
     layerGridPanel->Layout();
-    layerProcessor.repaintImage(false);
+    layerProcessor.repaintImageInLayerProcessor(false);
 }
 
 void deControlPanel::showSamplers()
@@ -334,7 +334,7 @@ void deControlPanel::showSamplers()
     {
         samplerManagerFrame = new deSamplerManagerFrame(this, project);
         samplerManagerFrame->Show();
-        layerProcessor.repaintImage(false);
+        layerProcessor.repaintImageInLayerProcessor(false);
     }
 }        
 

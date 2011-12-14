@@ -37,7 +37,6 @@ dePropertyChoiceUI::~dePropertyChoiceUI()
 void dePropertyChoiceUI::onChoose(int c)
 {
     property.setIndex(c);
-    layer.updateAll();
 
     int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(index);
