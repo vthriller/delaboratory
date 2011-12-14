@@ -41,31 +41,6 @@
 #include "wx/thread.h"
 #include "wx/notebook.h"
 
-enum
-{
-    ID_Quit = 1,
-    ID_NewProject,
-    ID_TestImageSmall,
-    ID_TestImageBig,
-    ID_OpenImage,
-    ID_OpenProject,
-    ID_SaveProject,
-    ID_OpenLayerStack,
-    ID_SaveLayerStack,
-    ID_HelpColorSpaces,
-    ID_HelpColorSpaces2,
-    ID_HelpColorSpaces3,
-    ID_HelpColorSpaces4,
-    ID_HelpColorSpaces5,
-    ID_LABColors1,
-    ID_LABColors2,
-    ID_LABColors5,
-    ID_MemoryInfo,
-    ID_BenchmarkBlur,
-    ID_BenchmarkColor,
-    DE_REPAINT_EVENT
-
-};
 
 BEGIN_EVENT_TABLE(deMainFrame, wxFrame)
 EVT_MENU(ID_Quit, deMainFrame::onQuit)

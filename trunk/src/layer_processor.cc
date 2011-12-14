@@ -59,7 +59,8 @@ void deLayerProcessor::repaintImageInLayerProcessor(bool calcHistogram)
 {
     if (mainFrame)
     {
-        mainFrame->repaintMainFrame(calcHistogram);
+        wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_REPAINT_EVENT );
+        wxPostEvent( mainFrame, event );
     }
 }
 
