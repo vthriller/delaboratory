@@ -71,7 +71,6 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
         int view = viewManager->getView();
         updateImages(0, view);
     }        
-    repaintImageInLayerProcessor(calcHistogram);
 }    
 
 void deLayerProcessor::updateImages(int a, int b)
@@ -86,6 +85,7 @@ void deLayerProcessor::updateImages(int a, int b)
             layer->updateImage();
         }            
     }
+    repaintImageInLayerProcessor(true);
 }
 
 void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame)
@@ -167,7 +167,6 @@ void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 
             updateImages(index + 1, viewManager->getView());
 
-            repaintImageInLayerProcessor(true);
         }
     }
 }
@@ -184,7 +183,6 @@ void deLayerProcessor::markUpdateAllChannels(int index)
 
             updateImages(index + 1, viewManager->getView());
 
-            repaintImageInLayerProcessor(true);
         }        
     }        
 }
@@ -201,7 +199,6 @@ void deLayerProcessor::markUpdateBlendAllChannels(int index)
 
             updateImages(index + 1, viewManager->getView());
 
-            repaintImageInLayerProcessor(true);
         }
     }
 }
