@@ -29,6 +29,8 @@
 #include <iostream>
 #include "action_layer.h"
 
+static wxMutex updateImagesMutex;
+
 deLayerProcessor::deLayerProcessor()
 {
     mainFrame = NULL;
@@ -75,6 +77,8 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
 
 void deLayerProcessor::updateImages(int a, int b)
 {
+    updateImagesMutex.Lock();
+
     unsigned int i;
     assert((unsigned int)b < stack->getSize() );
     for (i = (unsigned int)a; i <= (unsigned int)b; i++)
@@ -86,6 +90,8 @@ void deLayerProcessor::updateImages(int a, int b)
         }            
     }
     repaintImageInLayerProcessor(true);
+
+    updateImagesMutex.Unlock();
 }
 
 void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame)
