@@ -179,9 +179,8 @@ void deLayerProcessor::markUpdateAllChannels(int index)
         if (layer)
         {
             layer->onUpdateProperties();
-            layer->updateImage();
 
-            updateImages(index + 1, viewManager->getView());
+            updateImages(index, viewManager->getView());
 
         }        
     }        
