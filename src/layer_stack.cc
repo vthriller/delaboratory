@@ -22,6 +22,8 @@
 #include "str.h"
 #include "memory_info_frame.h"
 
+static wxMutex layerStackMutex;
+
 deLayerStack::deLayerStack()
 {
 }
@@ -29,6 +31,16 @@ deLayerStack::deLayerStack()
 deLayerStack::~deLayerStack()
 {
     clear();
+}
+
+void deLayerStack::lock()
+{
+    layerStackMutex.Lock();
+}
+
+void deLayerStack::unlock()
+{
+    layerStackMutex.Unlock();
 }
 
 void deLayerStack::clear()
@@ -41,17 +53,25 @@ void deLayerStack::clear()
 
 void deLayerStack::removeTopLayer()
 {
+    lock();
+
     std::vector<deLayer*>::iterator i;
     i = layers.end();    
     i--;
     deLayer* layer = *i;
     delete layer;
     layers.erase(i);
+
+    unlock();
 }
 
 void deLayerStack::addLayer(deLayer* layer)
 {
+    lock();
+
     layers.push_back(layer);
+
+    unlock();
 }
 
 int deLayerStack::getSize() const

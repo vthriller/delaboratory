@@ -149,3 +149,8 @@ void deLayer::onUpdateProperties()
         blendFrame->onUpdateProperties();
     }
 }
+
+void deLayer::updateImageThreadCall()
+{
+    updateImage();
+}

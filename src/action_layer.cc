@@ -30,6 +30,169 @@
 #include "xml.h"
 #include "blend_channel.h"
 
+#define ACTION_PROCESSING_ON_THREAD 0
+#define BLEND_PROCESSING_ON_THREAD 0
+
+class deUpdateActionThread:public wxThread
+{
+    private:
+        virtual void *Entry()
+        {
+            layer.updateActionOnThread(channel);
+            semaphore.Post();
+            return NULL;
+        }
+        deActionLayer& layer;
+        int channel;
+        wxSemaphore& semaphore;
+    public:    
+        deUpdateActionThread(deActionLayer& _layer, int _channel, wxSemaphore& _semaphore)
+        :layer(_layer),
+         channel(_channel),
+         semaphore(_semaphore)
+        {
+        }
+        virtual ~deUpdateActionThread()
+        {
+        }
+};
+
+class deUpdateBlendThread:public wxThread
+{
+    private:
+        virtual void *Entry()
+        {
+            layer.updateBlendOnThread(channel);
+            semaphore.Post();
+            return NULL;
+        }
+        deActionLayer& layer;
+        int channel;
+        wxSemaphore& semaphore;
+    public:    
+        deUpdateBlendThread(deActionLayer& _layer, int _channel, wxSemaphore& _semaphore)
+        :layer(_layer),
+         channel(_channel),
+         semaphore(_semaphore)
+        {
+        }
+        virtual ~deUpdateBlendThread()
+        {
+        }
+};
+
+void deActionLayer::updateActionAllChannels()
+{
+    wxStopWatch sw;
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+
+#if ACTION_PROCESSING_ON_THREAD
+    wxSemaphore semaphore(0, n);
+
+    for (i = 0; i < n; i++)
+    {
+        deUpdateActionThread* thread = new deUpdateActionThread(*this, i, semaphore);
+
+        if ( thread->Create() != wxTHREAD_NO_ERROR )
+        {
+            std::cout << "creating thread... CREATE ERROR" << std::endl;
+        }
+
+        if ( thread->Run() != wxTHREAD_NO_ERROR )
+        {
+            std::cout << "creating thread... RUN ERROR" << std::endl;
+        }
+    }
+
+    for (i = 0; i < n; i++)
+    {
+        semaphore.Wait();
+    }
+#else
+    for (i = 0; i < n; i++)
+    {
+        updateActionOnThread(i);
+    }
+#endif
+    int t = sw.Time();
+
+}
+
+void deActionLayer::updateBlendAllChannels()
+{
+    wxStopWatch sw;
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+
+#if BLEND_PROCESSING_ON_THREAD
+    wxSemaphore semaphore(0, n);
+
+    for (i = 0; i < n; i++)
+    {
+        deUpdateBlendThread* thread = new deUpdateBlendThread(*this, i, semaphore);
+
+        if ( thread->Create() != wxTHREAD_NO_ERROR )
+        {
+            std::cout << "creating thread... CREATE ERROR" << std::endl;
+        }
+
+        if ( thread->Run() != wxTHREAD_NO_ERROR )
+        {
+            std::cout << "creating thread... RUN ERROR" << std::endl;
+        }
+    }
+
+    for (i = 0; i < n; i++)
+    {
+        semaphore.Wait();
+    }
+#else
+    for (i = 0; i < n; i++)
+    {
+        updateBlendOnThread(i);
+    }
+#endif
+    int t = sw.Time();
+
+}
+
+void deActionLayer::updateImageInActionLayer(bool action, bool blend, int channel)
+{
+
+    if (action)
+    {
+        if (channel >= 0)
+        {
+            updateAction(channel);
+        }
+        else
+        {
+            updateActionAllChannels();
+        }
+    }        
+
+    if (blend)
+    {
+        if ((blendMask) || (blendMaskShow))
+        {
+            renderBlendMask();
+        }
+
+        if (channel >= 0)
+        {
+            updateBlend(channel);
+        }
+        else
+        {
+            updateBlendAllChannels();
+        }            
+    }    
+
+    updateApply();
+}
+
+
 deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor,  deChannelManager& _channelManager, deViewManager& _viewManager)
 :deLayer(_name, _colorSpace, _index, _sourceLayer),
  layerStack(_layerStack),
@@ -139,6 +302,7 @@ deValue deActionLayer::getOpacity()
 
 void deActionLayer::updateApply()
 {
+    // FIXME lock channels
     if (!enabled)
     {
         return;
@@ -277,6 +441,11 @@ void deActionLayer::updateBlend(int i)
         return;
     }
 
+    startChannelLocking();
+    sourceChannel->lockRead();
+    channel->lockRead();
+    blendChannel_->lockWrite();
+
     deValue* maskPixels = NULL;
 
     if ((blendMask) || (blendMaskShow))
@@ -285,18 +454,33 @@ void deActionLayer::updateBlend(int i)
         {
             deChannel* allocatedMaskChannel = channelManager.getChannel(imageBlendMask.getChannelIndex(0));
             maskPixels = allocatedMaskChannel->getPixels();
+
+            allocatedMaskChannel->lockRead();
         }            
     }
     else
     {
         disableBlendMaskChannel();
     }        
+    finishChannelLocking();
 
     deValue* sourcePixels = sourceChannel->getPixels();
     deValue* overlayPixels = channel->getPixels();
     deValue* resultPixels = blendChannel_->getPixels();
 
     blendChannel(sourcePixels, overlayPixels, resultPixels, maskPixels, blendMode, opacity, channelSize);
+
+
+    sourceChannel->unlockRead();
+    channel->unlockRead();
+    blendChannel_->unlockWrite();
+
+    if (blendMask)
+    {
+        deChannel* allocatedMaskChannel = channelManager.getChannel(imageBlendMask.getChannelIndex(0));
+
+        allocatedMaskChannel->unlockRead();
+    }            
 
 }
 
@@ -325,18 +509,12 @@ bool deActionLayer::isBlendingEnabled() const
     return false;
 }
 
+/*
 void deActionLayer::onBlendSet()
 {
-    if ((blendMask) || (blendMaskShow))
-    {   
-        renderBlendMask();
-    }
-    else
-    {
-    }
-
     updateImageInActionLayer(false, true, -1);
 }
+*/
 
 void deActionLayer::setOpacity(deValue _opacity)
 {
@@ -348,51 +526,10 @@ void deActionLayer::updateImage()
     updateImageInActionLayer(true, true, -1);
 }
 
-void deActionLayer::updateImageInActionLayer(bool action, bool blend, int channel)
-{
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-
-    if (action)
-    {
-        if (channel >= 0)
-        {
-            updateAction(channel);
-        }
-        else
-        {
-            for (i = 0; i < n; i++)
-            {
-                updateAction(i);
-            }
-        }
-    }        
-
-    if (blend)
-    {
-        if ((blendMask) || (blendMaskShow))
-        {
-            renderBlendMask();
-        }
-
-        if (channel >= 0)
-        {
-            updateBlend(channel);
-        }
-        else
-        {
-            for (i = 0; i < n; i++)
-            {
-                updateBlend(i);
-            }
-        }            
-    }    
-
-    updateApply();
-}
-
 void deActionLayer::updateAction(int i)
 {
+    // FIXME lock/unlock on channel disable/enable
+
     if (!enabled)
     {
         return;
@@ -413,6 +550,9 @@ void deActionLayer::updateAction(int i)
 
     if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
     {
+        deChannel* sourceChannel = channelManager.getChannel(s);
+        sourceChannel->lockRead();
+        sourceChannel->unlockRead();
         imageActionPass.disableChannel(i, s);
     }
     else
@@ -429,7 +569,13 @@ void deActionLayer::updateAction(int i)
 
                 if (channel)
                 {
+                    channel->lockWrite();
+                    sourceChannel->lockRead();
+
                     processAction(i, *sourceChannel, *channel, channelManager.getChannelSize());
+
+                    sourceChannel->unlockRead();
+                    channel->unlockWrite();
                 }
             }
         }
@@ -451,7 +597,44 @@ void deActionLayer::updateAction(int i)
 
             if (channel)
             {
+                if (sc1)
+                {
+                    sc1->lockRead();
+                }                    
+                if (sc2)
+                {
+                    sc2->lockRead();
+                }              
+                if (sc3)
+                {
+                    sc3->lockRead();
+                }    
+                if (sc4)
+                {
+                    sc4->lockRead();
+                }                    
+                channel->lockWrite();
+
                 processAction4(i, sc1, sc2, sc3, sc4, *channel, channelSize);
+
+                channel->unlockWrite();
+
+                if (sc1)
+                {
+                    sc1->unlockRead();
+                }
+                if (sc2)
+                {
+                    sc2->unlockRead();
+                }
+                if (sc3)
+                {
+                    sc3->unlockRead();
+                }
+                if (sc4)
+                {
+                    sc4->unlockRead();
+                }                    
             }
         }
     }
@@ -520,10 +703,15 @@ void deActionLayer::renderBlendMask()
     {
         return;
     }
+
+    maskChannel->lockRead();
+
     deValue* maskPixels = maskChannel->getPixels();
 
     deChannel* allocatedMaskChannel = channelManager.getChannel(imageBlendMask.getChannelIndex(0));
     deValue* allocatedMaskPixels = allocatedMaskChannel->getPixels();
+
+    allocatedMaskChannel->lockWrite();
 
     deBlurType type = deGaussianBlur;
     deValue t= 0.0;
@@ -539,6 +727,9 @@ void deActionLayer::renderBlendMask()
     }       
 
     processLinear(allocatedMaskPixels, allocatedMaskPixels, channelManager.getChannelSize().getN(), blendMaskMin, blendMaskMax, false);
+
+    allocatedMaskChannel->unlockWrite();
+    maskChannel->unlockRead();
 
 }
 
@@ -701,3 +892,12 @@ void deActionLayer::loadBlend(xmlNodePtr root)
 
 }
 
+void deActionLayer::updateActionOnThread(int i)
+{
+    updateAction(i);
+}
+
+void deActionLayer::updateBlendOnThread(int i)
+{
+    updateBlend(i);
+}

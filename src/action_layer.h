@@ -82,6 +82,9 @@ class deActionLayer:public deLayer
 
         bool isBlendingEnabled() const;
 
+        void updateActionAllChannels();
+        void updateBlendAllChannels();
+
     protected:
         deLayerStack& layerStack;
         deLayerProcessor& layerProcessor;
@@ -110,6 +113,8 @@ class deActionLayer:public deLayer
         virtual void processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize) {};
 
         virtual bool singleChannelProcessing() const = 0;
+
+        virtual void updateImage();
 
     public:
         deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager);
@@ -141,7 +146,7 @@ class deActionLayer:public deLayer
 
         deValue getBlendBlurRadius() const {return blendBlurRadius;};
         void setBlendBlurRadius(deValue r);
-        void onBlendSet();
+//        void onBlendSet();
         void tryRenderBlendMask();
         bool isBlendMaskEnabled() const {return blendMask;};
         bool isBlendMaskVisible() const {return blendMaskShow;};
@@ -163,7 +168,8 @@ class deActionLayer:public deLayer
         virtual void saveBlend(xmlNodePtr root);
 
         void updateImageInActionLayer(bool action, bool blend, int channel);
-        virtual void updateImage();
+        void updateActionOnThread(int i);
+        void updateBlendOnThread(int i);
 
 
 };

@@ -43,13 +43,24 @@ void convertImage3x3(const deImage& sourceImage, deImage& image, deChannelManage
         return;
     }
 
+    sc1->lockRead();
+    sc2->lockRead();
+    sc3->lockRead();
+
     deValue* s1 = sc1->getPixels();
     deValue* s2 = sc2->getPixels();
     deValue* s3 = sc3->getPixels();
 
+    deChannel* dc1 = channelManager.getChannel(image.getChannelIndex(0));
     deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
+    deChannel* dc2 = channelManager.getChannel(image.getChannelIndex(1));
     deValue* d2 = channelManager.getChannel(image.getChannelIndex(1))->getPixels();
+    deChannel* dc3 = channelManager.getChannel(image.getChannelIndex(2));
     deValue* d3 = channelManager.getChannel(image.getChannelIndex(2))->getPixels();
+
+    dc1->lockWrite();
+    dc2->lockWrite();
+    dc3->lockWrite();
 
     int i;
 
@@ -57,6 +68,14 @@ void convertImage3x3(const deImage& sourceImage, deImage& image, deChannelManage
     {
         conversion(s1[i], s2[i], s3[i], d1[i], d2[i], d3[i]);
     }
+
+    dc1->unlockWrite();
+    dc2->unlockWrite();
+    dc3->unlockWrite();
+
+    sc1->unlockRead();
+    sc2->unlockRead();
+    sc3->unlockRead();
 
 }
 

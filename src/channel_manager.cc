@@ -19,11 +19,13 @@
 #include "channel_manager.h"
 #include <cassert>
 #include <iostream>
+#include <wx/wx.h>
+
+static wxMutex channelManagerMutex;
 
 deChannelManager::deChannelManager()
 :channelSize(0,0)
 {
-    locked = false;
     primaryIndex = -1;
 }
 
@@ -50,7 +52,7 @@ void deChannelManager::setChannelSize(const deSize& size)
 
 int deChannelManager::allocateNewChannel(deImage& image)
 {
-    assert(!locked);
+    lock();
 
     deChannel* channel = new deChannel(image);
     channel->allocate(channelSize.getN());
@@ -61,19 +63,23 @@ int deChannelManager::allocateNewChannel(deImage& image)
         int c = *i;
         trashed.erase(c);
         channels[c] = channel;
+        unlock();
         return c;
     }
     else
     {
         channels.push_back(channel);
         int c = channels.size() - 1;
+        unlock();
         return c;
     }        
+
 }
 
 void deChannelManager::freeChannel(int index)
 {
-    assert(!locked);
+    lock();
+
     assert(index >= 0);
     assert((unsigned int)index < channels.size());
 
@@ -86,6 +92,8 @@ void deChannelManager::freeChannel(int index)
     else
     {
     }
+
+    unlock();
 }
 
 deChannel* deChannelManager::getChannel(int index)
@@ -95,10 +103,6 @@ deChannel* deChannelManager::getChannel(int index)
         return NULL;
     }
     assert((unsigned int)index < channels.size());
-    /*
-    deChannel* channel = channels[index];
-    assert(channel);
-    */
     tryAllocateChannel(index);
     return channels[index];
 }
@@ -122,14 +126,12 @@ deSize deChannelManager::getChannelSize() const
 
 void deChannelManager::lock()
 {
-    assert(!locked);
-    locked = true;
+    channelManagerMutex.Lock();
 }
 
 void deChannelManager::unlock()
 {
-    assert(locked);
-    locked = false;
+    channelManagerMutex.Unlock();
 }
 
 int deChannelManager::getNumberOfAllocatedChannels() const
@@ -151,20 +153,28 @@ int deChannelManager::getNumberOfAllocatedChannels() const
 
 void deChannelManager::tryAllocateChannel(int index)
 {
+    lock();
+
     assert(index >= 0);
     assert((unsigned int)index < channels.size());
     if (!channels[index]->isAllocated())
     {
         channels[index]->allocate(channelSize.getN());
     }        
+
+    unlock();
 }
 
 void deChannelManager::tryDeallocateChannel(int index)
 {
+    lock();
+
     assert(index >= 0);
     assert((unsigned int)index < channels.size());
     if (channels[index]->isAllocated())
     {
         channels[index]->deallocate();
     }        
+
+    unlock();
 }

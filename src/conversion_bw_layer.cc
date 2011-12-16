@@ -100,12 +100,10 @@ void deConversionBWLayer::updateImage()
     deChannel* sc0 = NULL;
     deChannel* sc1 = NULL;
     deChannel* sc2 = NULL;
-    //deChannel* sc3 = NULL;
 
     sc0 = channelManager.getChannel(sourceImage.getChannelIndex(0));
     sc1 = channelManager.getChannel(sourceImage.getChannelIndex(1));
     sc2 = channelManager.getChannel(sourceImage.getChannelIndex(2));
-    //sc3 = channelManager.getChannel(sourceImage.getChannelIndex(3));
 
     deChannel* dc = channelManager.getChannel(image.getChannelIndex(0));
     if (!dc)
@@ -119,10 +117,14 @@ void deConversionBWLayer::updateImage()
         return;
     }
 
+    sc0->lockRead();
+    sc1->lockRead();
+    sc2->lockRead();
+    dc->lockWrite();
+
     deValue* v0 = NULL;
     deValue* v1 = NULL;
     deValue* v2 = NULL;
-    //deValue* v3 = NULL;
 
     if (sc0)
     {
@@ -136,21 +138,13 @@ void deConversionBWLayer::updateImage()
     {
         v2 = sc2->getPixels();
     }
-    /*
-    if (sc3)
-    {
-        v3 = sc3->getPixels();
-    }
-    */
 
     deValue a0 = add0.get();
     deValue a1 = add1.get();
     deValue a2 = add2.get();
-    //deValue a3 = add3.get();
     deValue o0 = overlay0.get();
     deValue o1 = overlay1.get();
     deValue o2 = overlay2.get();
-    //deValue o3 = overlay3.get();
 
     int i;
     for (i = 0; i < n; i++)
@@ -191,6 +185,11 @@ void deConversionBWLayer::updateImage()
 
         d[i] = result;
     }
+
+    sc0->unlockRead();
+    sc1->unlockRead();
+    sc2->unlockRead();
+    dc->unlockWrite();
 }
 
 deColorSpace deConversionBWLayer::getSourceColorSpace() const

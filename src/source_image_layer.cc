@@ -49,7 +49,6 @@ void deSourceImageLayer::setPrimary()
 
 void deSourceImageLayer::updateImage()
 {
-
     deChannel* sourceChannelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
     deChannel* sourceChannelG = sourceChannelManager.getChannel(sourceImage.getChannelIndex(1));
     deChannel* sourceChannelB = sourceChannelManager.getChannel(sourceImage.getChannelIndex(2));
@@ -66,6 +65,13 @@ void deSourceImageLayer::updateImage()
     deChannel* channelR = previewChannelManager.getChannel(image.getChannelIndex(0));
     deChannel* channelG = previewChannelManager.getChannel(image.getChannelIndex(1));
     deChannel* channelB = previewChannelManager.getChannel(image.getChannelIndex(2));
+
+    sourceChannelR->lockRead();
+    sourceChannelG->lockRead();
+    sourceChannelB->lockRead();
+    channelR->lockWrite();
+    channelG->lockWrite();
+    channelB->lockWrite();
 
     const deSize ss = sourceChannelManager.getChannelSize();
     const deSize ds = previewChannelManager.getChannelSize();
@@ -136,6 +142,13 @@ void deSourceImageLayer::updateImage()
     scaleChannel(sourceChannelR->getPixels(), channelR->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, wd);
     scaleChannel(sourceChannelG->getPixels(), channelG->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, wd);
     scaleChannel(sourceChannelB->getPixels(), channelB->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, wd);
+
+    sourceChannelR->unlockRead();
+    sourceChannelG->unlockRead();
+    sourceChannelB->unlockRead();
+    channelR->unlockWrite();
+    channelG->unlockWrite();
+    channelB->unlockWrite();
 
 }
 

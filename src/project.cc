@@ -231,7 +231,8 @@ void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
 
 void deProject::onChangeView(int a, int b)
 {
-    layerProcessor.updateImages(a + 1, b);
+    layerProcessor.onChangeView(a, b);
+
     if (controlPanel)
     {
         controlPanel->onChangeView();
