@@ -20,10 +20,15 @@
 #include <string>
 #include <cassert>
 
+static wxMutex channelLockingMutex;
+
 deChannel::deChannel(deImage& _image)
-:image(_image)
+:image(_image), 
+readSemaphore(4, 4),
+writeMutex(wxMUTEX_RECURSIVE)
 {
     pixels = NULL;
+    maxReaders = 4;
 }
 
 deChannel::~deChannel()
@@ -71,13 +76,57 @@ void deChannel::setValueClip(int pos, const deValue& value)
 
 void deChannel::deallocate()
 {
+    lockWrite();
     assert(pixels);
     delete [] pixels;
     pixels = NULL;
+    unlockWrite();
 }
 
 void deChannel::allocate(int size)
 {
+    lockWrite();
     assert(!pixels);
     pixels = new deValue [size];
+    unlockWrite();
+}
+
+void deChannel::lockRead()
+{
+    readSemaphore.Wait();
+}
+
+void deChannel::unlockRead()
+{
+    readSemaphore.Post();
+}
+
+void deChannel::lockWrite()
+{
+    int i;
+    for (i = 0; i < maxReaders; i++)
+    {
+        readSemaphore.Wait();
+    }
+    writeMutex.Lock();
+}
+
+void deChannel::unlockWrite()
+{
+    writeMutex.Unlock();
+    int i;
+    for (i = 0; i < maxReaders; i++)
+    {
+        readSemaphore.Post();
+    }
+}
+
+void startChannelLocking()
+{
+    channelLockingMutex.Lock();
+}
+
+void finishChannelLocking()
+{
+    channelLockingMutex.Unlock();
 }

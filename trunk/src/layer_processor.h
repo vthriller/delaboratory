@@ -34,6 +34,8 @@ class deLayerProcessor
         deLayerStack* stack;
         deViewManager* viewManager;
 
+        void updateImages(int a, int b, int channel, bool blend, bool action);
+
     public:
         deLayerProcessor();
         virtual ~deLayerProcessor();
@@ -44,7 +46,6 @@ class deLayerProcessor
 
         void repaintImageInLayerProcessor(bool calcHistogram);
         void updateAllImages(bool calcHistogram);
-        void updateImages(int a, int b);
         void updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame);
         void generateChannelUsage(std::map<int, int>& channelUsage);
 
@@ -52,6 +53,9 @@ class deLayerProcessor
         void markUpdateAllChannels(int index);
 
         void markUpdateBlendAllChannels(int index);
+
+        void updateImagesThreadCall(int a, int b, int channel, bool blend, bool action);
+        void onChangeView(int a, int b);
 
 };
 

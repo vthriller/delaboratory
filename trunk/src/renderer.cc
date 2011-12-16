@@ -99,12 +99,21 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
         {
             return;
         }
+        channel0->lockRead();
+        channel1->lockRead();
+        channel2->lockRead();
+        channel3->lockRead();
+
+        const deValue* p0 = channel0->getPixels();
+        const deValue* p1 = channel1->getPixels();
+        const deValue* p2 = channel2->getPixels();
+        const deValue* p3 = channel3->getPixels();
         for (i = 0; i < n; i++)
         {
-            deValue s0 = pixels0[i];
-            deValue s1 = pixels1[i];
-            deValue s2 = pixels2[i];
-            deValue s3 = pixels3[i];
+            deValue s0 = p0[i];
+            deValue s1 = p1[i];
+            deValue s2 = p2[i];
+            deValue s3 = p3[i];
             conversion4x3(s0, s1, s2, s3, rr, gg, bb);
 
             unsigned char r = 255 * rr;
@@ -117,6 +126,12 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
             data[pos] = b;
             pos++;
         }
+
+        channel0->unlockRead();
+        channel1->unlockRead();
+        channel2->unlockRead();
+        channel3->unlockRead();
+
     }
     else if (conversion1x3)
     {
@@ -124,9 +139,11 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
         {
             return;
         }
+        channel0->lockRead();
+        const deValue* p0 = channel0->getPixels();
         for (i = 0; i < n; i++)
         {
-            deValue s0 = pixels0[i];
+            deValue s0 = p0[i];
             conversion1x3(s0, rr, gg, bb);
 
             unsigned char r = 255 * rr;
@@ -139,6 +156,7 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
             data[pos] = b;
             pos++;
         }
+        channel0->unlockRead();
     }
     else
     {
@@ -154,11 +172,19 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
         {
             return;
         }
+        channel0->lockRead();
+        channel1->lockRead();
+        channel2->lockRead();
+
+        const deValue* p0 = channel0->getPixels();
+        const deValue* p1 = channel1->getPixels();
+        const deValue* p2 = channel2->getPixels();
         for (i = 0; i < n; i++)
         {
-            deValue s1 = pixels0[i];
-            deValue s2 = pixels1[i];
-            deValue s3 = pixels2[i];
+
+            deValue s1 = p0[i];
+            deValue s2 = p1[i];
+            deValue s3 = p2[i];
             conversion3x3(s1, s2, s3, rr, gg, bb);
 
             unsigned char r = 255 * rr;
@@ -170,7 +196,11 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
             unsigned char b = 255 * bb;
             data[pos] = b;
             pos++;
+
         }
+        channel0->unlockRead();
+        channel1->unlockRead();
+        channel2->unlockRead();
     }
 
 }

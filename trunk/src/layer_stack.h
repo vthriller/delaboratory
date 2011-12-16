@@ -36,6 +36,9 @@ class deLayerStack
         deLayerStack();
         virtual ~deLayerStack();
 
+        void lock();
+        void unlock();
+
         void clear();
         void removeTopLayer();
 
@@ -43,8 +46,6 @@ class deLayerStack
 
         int getSize() const;
         deLayer* getLayer(int id) const;
-
-
 
         void onKey(int key);
 

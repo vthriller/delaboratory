@@ -27,10 +27,8 @@
 deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _processor, _channelManager, _viewManager) 
 {
-
     int n = getColorSpaceSize(colorSpace);
     curves = new deCurve[n];
-
 }
 
 deCurvesLayer::~deCurvesLayer()
@@ -42,7 +40,6 @@ void deCurvesLayer::processAction(int i, const deChannel& sourceChannel, deChann
 {
     curves[i].process(sourceChannel, channel, size.getN());
 }
-
 
 deCurve* deCurvesLayer::getCurve(int index)
 {
@@ -85,7 +82,7 @@ void deCurvesLayer::load(xmlNodePtr root)
     {
         if ((!xmlStrcmp(child->name, BAD_CAST("curve")))) 
         {
-            assert(i < n);
+            //assert(i < n);
             deCurve& curve = curves[i];
             curve.load(child);
             i++;

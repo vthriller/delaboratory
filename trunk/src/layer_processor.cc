@@ -31,6 +31,39 @@
 
 static wxMutex updateImagesMutex;
 
+#define LAYER_PROCESSING_ON_THREAD 0
+
+class deUpdateImagesThread:public wxThread
+{
+    private:
+        virtual void *Entry()
+        {
+            layerProcessor.updateImagesThreadCall(a, b, channel, blend, action);
+            return NULL;
+        }
+        deLayerProcessor& layerProcessor;
+        int a;
+        int b;
+        int channel;
+        bool blend;
+        bool action;
+    public:    
+        deUpdateImagesThread(deLayerProcessor& _layerProcessor, int _a, int _b, int _channel, bool _blend, bool _action)
+        :layerProcessor(_layerProcessor),
+         a(_a),
+         b(_b),
+         channel(_channel),
+         blend(_blend),
+         action(_action)
+        {
+
+        }
+        virtual ~deUpdateImagesThread()
+        {
+        }
+};
+
+
 deLayerProcessor::deLayerProcessor()
 {
     mainFrame = NULL;
@@ -59,11 +92,13 @@ void deLayerProcessor::setViewManager(deViewManager* _viewManager)
 
 void deLayerProcessor::repaintImageInLayerProcessor(bool calcHistogram)
 {
+    updateImagesMutex.Lock();
     if (mainFrame)
     {
         wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_REPAINT_EVENT );
         wxPostEvent( mainFrame, event );
     }
+    updateImagesMutex.Unlock();
 }
 
 void deLayerProcessor::updateAllImages(bool calcHistogram)
@@ -71,13 +106,39 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
     if (stack)
     {
         int view = viewManager->getView();
-        updateImages(0, view);
+        updateImages(0, view, -1, false, true);
     }        
 }    
 
-void deLayerProcessor::updateImages(int a, int b)
+void deLayerProcessor::updateImages(int a, int b, int channel, bool blend, bool action)
 {
+#if LAYER_PROCESSING_ON_THREAD 
+    deUpdateImagesThread* thread = new deUpdateImagesThread(*this, a, b, channel, blend, action);
+
+    if ( thread->Create() != wxTHREAD_NO_ERROR )
+    {
+        std::cout << "creating thread... CREATE ERROR" << std::endl;
+    }
+
+    if ( thread->Run() != wxTHREAD_NO_ERROR )
+    {
+        std::cout << "creating thread... RUN ERROR" << std::endl;
+    }
+#else
+    updateImagesThreadCall(a, b, channel, blend, action);
+#endif
+
+}    
+
+void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool blend, bool action)
+{
+    if (!stack)
+    {
+        return;
+    }
+
     updateImagesMutex.Lock();
+    stack->lock();
 
     unsigned int i;
     assert((unsigned int)b < stack->getSize() );
@@ -86,17 +147,42 @@ void deLayerProcessor::updateImages(int a, int b)
         deLayer* layer = stack->getLayer(i);
         if (layer)
         {
-            layer->updateImage();
+            if (blend)
+            {
+                deActionLayer* alayer = dynamic_cast<deActionLayer*>(layer);
+                alayer->updateImageInActionLayer(false, true, channel);
+                blend = false;
+            }                    
+
+            if (action)
+            {
+                if (channel >= 0)
+                {
+                    deActionLayer* alayer = dynamic_cast<deActionLayer*>(layer);
+                    alayer->updateImageInActionLayer(action, true, channel);
+                    channel = -1;
+                }
+                else
+                {
+                    layer->updateImageThreadCall();
+                }
+            }
         }            
     }
+
+    stack->unlock();
+    updateImagesMutex.Unlock();
+
     repaintImageInLayerProcessor(true);
 
-    updateImagesMutex.Unlock();
 }
 
 void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame)
 {
+    updateImagesMutex.Lock();
+
     channelManager.lock();
+    stack->lock();
 
     std::map<int, int> channelUsage;
     generateChannelUsage(channelUsage);
@@ -125,7 +211,7 @@ void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int v
 
         progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
 
-        layer->updateImage();
+        layer->updateImageThreadCall();
 
         if (memoryInfoFrame)
         {
@@ -146,7 +232,9 @@ void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int v
 
     progressDialog->Update(100, _T("finished"));
 
+    stack->unlock();
     channelManager.unlock();
+    updateImagesMutex.Unlock();
 }
 
 void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
@@ -163,18 +251,10 @@ void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
 
 void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 {
-    if (stack)
+    if (viewManager)
     {
-        deLayer* l = stack->getLayer(index);
-        deActionLayer* layer = dynamic_cast<deActionLayer*>(l);
-        if (layer)
-        {
-            layer->updateImageInActionLayer(true, true, channel);
-
-            updateImages(index + 1, viewManager->getView());
-
-        }
-    }
+        updateImages(index, viewManager->getView(), channel, false, true);
+    }        
 }
 
 void deLayerProcessor::markUpdateAllChannels(int index)
@@ -185,25 +265,24 @@ void deLayerProcessor::markUpdateAllChannels(int index)
         if (layer)
         {
             layer->onUpdateProperties();
-
-            updateImages(index, viewManager->getView());
-
         }        
     }        
+
+    if (viewManager)
+    {
+        updateImages(index, viewManager->getView(), -1, false, true);
+    }
 }
 
 void deLayerProcessor::markUpdateBlendAllChannels(int index)
 {
-    if (stack)
+    if (viewManager)
     {
-        deLayer* l = stack->getLayer(index);
-        deActionLayer* layer = dynamic_cast<deActionLayer*>(l);
-        if (layer)
-        {
-            layer->onBlendSet();
-
-            updateImages(index + 1, viewManager->getView());
-
-        }
+        updateImages(index, viewManager->getView(), -1, true, false);
     }
 }
+
+void deLayerProcessor::onChangeView(int a, int b)
+{
+    updateImages(a + 1, b, -1, false, true);
+}   

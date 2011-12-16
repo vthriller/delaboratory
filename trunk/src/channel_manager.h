@@ -36,8 +36,6 @@ class deChannelManager
 
         int primaryIndex;
 
-        bool locked;
-
         deChannelManager(const deChannelManager& m);
         deChannelManager& operator =(const deChannelManager& m);
         

@@ -467,7 +467,7 @@ void deBlendFrame::updateMask()
         l.disableBlendMask();
     }
 
-    l.onBlendSet();
+    //l.onBlendSet();
 
     if (maskShow->IsChecked())
     {

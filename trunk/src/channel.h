@@ -20,6 +20,7 @@
 #define _DE_CHANNEL_H
 
 #include "value.h"
+#include <wx/wx.h>
 
 class deImage;
 
@@ -28,6 +29,9 @@ class deChannel
     private:
         deImage& image;
         deValue* pixels;
+        wxSemaphore readSemaphore;
+        wxMutex writeMutex;
+        int maxReaders;
 
         deChannel(const deChannel& c);
         deChannel& operator =(const deChannel& c);
@@ -50,6 +54,14 @@ class deChannel
         void setValueClip(int pos, const deValue& value);
 
         deImage& getImage() {return image;};
+
+        void lockRead();
+        void unlockRead();
+        void lockWrite();
+        void unlockWrite();
 };
+
+void startChannelLocking();
+void finishChannelLocking();
 
 #endif

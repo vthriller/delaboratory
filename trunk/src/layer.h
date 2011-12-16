@@ -36,6 +36,8 @@ class deLayer
         deLayer& operator = (const deLayer& layer);
         std::string name;
 
+        virtual void updateImage() = 0;
+
     protected:
         deColorSpace colorSpace;
         deFrame* actionFrame;
@@ -51,7 +53,6 @@ class deLayer
 
         deColorSpace getColorSpace() const;
         virtual const deImage& getImage() const = 0;
-        virtual void updateImage() = 0;
 
         std::string getName() const;
 
@@ -87,6 +88,8 @@ class deLayer
         bool checkBlendFrame() const;
 
         void onUpdateProperties();
+
+        void updateImageThreadCall();
 
 };
 

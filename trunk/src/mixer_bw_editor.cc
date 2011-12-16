@@ -28,8 +28,6 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
 
     deColorSpace sourceColorSpace = layer.getSourceColorSpace();
 
-    int n = getColorSpaceSize(sourceColorSpace);
-
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
 
@@ -99,8 +97,6 @@ deMixerBWEditor::~deMixerBWEditor()
 void deMixerBWEditor::click(wxCommandEvent &event)
 {
     int id = event.GetId();
-
-    deValue v0 = 0.0;
 
     if (resetM->GetId() == id)
     {

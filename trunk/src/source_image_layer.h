@@ -40,6 +40,8 @@ class deSourceImageLayer:public deLayer
 
         virtual std::string getType() const {return "source_image";};
 
+        virtual void updateImage();
+
     public:
         deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deChannelManager& _sourceChannelManager);
         virtual ~deSourceImageLayer();
@@ -47,7 +49,6 @@ class deSourceImageLayer:public deLayer
         void setPrimary();
         bool isPrimary() const {return primary;};
 
-        virtual void updateImage();
 
         virtual const deImage& getImage() const;
 
