@@ -30,8 +30,8 @@
 #include "xml.h"
 #include "blend_channel.h"
 
-#define ACTION_PROCESSING_ON_THREAD 0
-#define BLEND_PROCESSING_ON_THREAD 0
+#define ACTION_PROCESSING_ON_THREAD 1
+#define BLEND_PROCESSING_ON_THREAD 1
 
 class deUpdateActionThread:public wxThread
 {
