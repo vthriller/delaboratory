@@ -31,7 +31,7 @@
 
 static wxMutex updateImagesMutex;
 
-#define LAYER_PROCESSING_ON_THREAD 0
+#define LAYER_PROCESSING_ON_THREAD 1
 
 class deUpdateImagesThread:public wxThread
 {
@@ -181,7 +181,7 @@ void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int v
 {
     updateImagesMutex.Lock();
 
-    channelManager.lock();
+//    channelManager.lock();
     stack->lock();
 
     std::map<int, int> channelUsage;
@@ -233,7 +233,7 @@ void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int v
     progressDialog->Update(100, _T("finished"));
 
     stack->unlock();
-    channelManager.unlock();
+//    channelManager.unlock();
     updateImagesMutex.Unlock();
 }
 
