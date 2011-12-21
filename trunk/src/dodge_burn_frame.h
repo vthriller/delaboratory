@@ -37,6 +37,8 @@ class deDodgeBurnFrame:public deActionFrame
         dePropertyValueSlider* burnMax;
         deLayerProcessor& layerProcessor;
 
+        wxButton* reset;
+
         void click(wxCommandEvent &event);
 
     public:
