@@ -52,6 +52,12 @@ deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLa
     burnMax = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyBurnMax(), dodgeBurnLayer, layerProcessor);
     sizer->Add(burnMax);
 
+    wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
+    sizer->Add(sizerB, 0);
+
+    reset = new wxButton(this, wxID_ANY, _T("reset"), wxDefaultPosition, wxSize(100,25));
+    sizerB->Add(reset, 0);
+
     Fit();
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deDodgeBurnFrame::click));
@@ -63,8 +69,19 @@ deDodgeBurnFrame::~deDodgeBurnFrame()
 
 void deDodgeBurnFrame::click(wxCommandEvent &event)
 {
-/*
     int id = event.GetId();
     deDodgeBurnLayer& dodgeBurnLayer = dynamic_cast<deDodgeBurnLayer&>(layer);
-*/
+
+    if (reset->GetId() == id)
+    {
+        dodgeBurnLayer.reset();
+    }      
+
+    radius->setFromProperty();
+    dodgeAmount->setFromProperty();
+    dodgeMin->setFromProperty();
+    dodgeMax->setFromProperty();
+    burnAmount->setFromProperty();
+    burnMin->setFromProperty();
+    burnMax->setFromProperty();
 }   
