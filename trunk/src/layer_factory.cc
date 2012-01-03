@@ -27,6 +27,7 @@
 #include "usm_layer.h"
 #include "source_image_layer.h"
 #include "dodge_burn_layer.h"
+#include "high_pass_layer.h"
 #include "shadows_highlights_layer.h"
 
 deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name, deChannelManager& _sourceChannelManager)
@@ -51,6 +52,11 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
     if (type == "dodge_burn")
     {
         return new deDodgeBurnLayer(colorSpace, index, source, _layerStack, _processor, _channelManager, _viewManager, name);
+    }
+
+    if (type == "high_pass")
+    {
+        return new deHighPassLayer(colorSpace, index, source, _layerStack, _processor, _channelManager, _viewManager, name);
     }
 
     if (type == "sh")
@@ -109,6 +115,7 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("mixer");
     actions.push_back("apply_image");
     actions.push_back("blur");
+    actions.push_back("high_pass");
     actions.push_back("usm");
     actions.push_back("dodge_burn");
     actions.push_back("sh");
