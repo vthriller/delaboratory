@@ -83,7 +83,6 @@ class deUpdateBlendThread:public wxThread
 
 void deActionLayer::updateActionAllChannels()
 {
-    wxStopWatch sw;
     int n = getColorSpaceSize(colorSpace);
     int i;
 
@@ -115,13 +114,11 @@ void deActionLayer::updateActionAllChannels()
         updateActionOnThread(i);
     }
 #endif
-    int t = sw.Time();
 
 }
 
 void deActionLayer::updateBlendAllChannels()
 {
-    wxStopWatch sw;
     int n = getColorSpaceSize(colorSpace);
     int i;
 
@@ -153,7 +150,6 @@ void deActionLayer::updateBlendAllChannels()
         updateBlendOnThread(i);
     }
 #endif
-    int t = sw.Time();
 
 }
 
