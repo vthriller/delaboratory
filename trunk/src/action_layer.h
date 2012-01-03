@@ -146,7 +146,6 @@ class deActionLayer:public deLayer
 
         deValue getBlendBlurRadius() const {return blendBlurRadius;};
         void setBlendBlurRadius(deValue r);
-//        void onBlendSet();
         void tryRenderBlendMask();
         bool isBlendMaskEnabled() const {return blendMask;};
         bool isBlendMaskVisible() const {return blendMaskShow;};
