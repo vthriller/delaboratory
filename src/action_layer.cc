@@ -509,13 +509,6 @@ bool deActionLayer::isBlendingEnabled() const
     return false;
 }
 
-/*
-void deActionLayer::onBlendSet()
-{
-    updateImageInActionLayer(false, true, -1);
-}
-*/
-
 void deActionLayer::setOpacity(deValue _opacity)
 {
     opacity = _opacity;
