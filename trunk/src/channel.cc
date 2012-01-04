@@ -31,6 +31,7 @@ writeMutex(wxMUTEX_RECURSIVE)
     maxReaders = 4;
     lockedRead = false;
     lockedWrite = false;
+    magicSize = -1;
 }
 
 deChannel::~deChannel()
@@ -56,18 +57,24 @@ const deValue* deChannel::getPixels() const
 deValue deChannel::getValue(int pos) const
 {
     assert(lockedRead | lockedWrite);
+    assert(pos >= 0);
+    assert(pos < magicSize);
     return pixels[pos];
 }
 
 void deChannel::setValue(int pos, const deValue& value)
 {
     assert(lockedWrite);
+    assert(pos >= 0);
+    assert(pos < magicSize);
     pixels[pos] = value;
 }
 
 void deChannel::setValueClip(int pos, const deValue& value)
 {
     assert(lockedWrite);
+    assert(pos >= 0);
+    assert(pos < magicSize);
     if (value < 0)
     {
         pixels[pos] = 0;
@@ -87,6 +94,7 @@ void deChannel::deallocate()
     assert(pixels);
     delete [] pixels;
     pixels = NULL;
+    magicSize = 0;
     unlockWrite();
 }
 
@@ -100,6 +108,7 @@ void deChannel::allocate(int size)
     {
         pixels[i] = 0.0;
     }
+    magicSize = size;
     unlockWrite();
 }
 
