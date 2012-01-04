@@ -294,3 +294,13 @@ void deLayerProcessor::onChangeView(int a, int b)
 {
     updateImages(a + 1, b, -1, false, true);
 }   
+
+void deLayerProcessor::lock()
+{
+    updateImagesMutex.Lock();
+}
+
+void deLayerProcessor::unlock()
+{
+    updateImagesMutex.Unlock();
+}

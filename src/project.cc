@@ -132,10 +132,12 @@ void deProject::onKey(int key)
 
 void deProject::init(const std::string& fileName)
 {
+    layerProcessor.lock();
     if (!openImage(fileName))
     {
         open(fileName, true);
     }
+    layerProcessor.unlock();
 }
 
 void deProject::freeImage()
