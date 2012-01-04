@@ -147,11 +147,14 @@ void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool bl
         deLayer* layer = stack->getLayer(i);
         if (layer)
         {
+            bool nextAction = false;
+
             if (blend)
             {
                 deActionLayer* alayer = dynamic_cast<deActionLayer*>(layer);
                 alayer->updateImageInActionLayer(false, true, channel);
                 blend = false;
+                nextAction = true;
             }                    
 
             if (action)
@@ -166,6 +169,11 @@ void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool bl
                 {
                     layer->updateImageThreadCall();
                 }
+            }
+
+            if (nextAction)
+            {
+                action = true;
             }
         }            
     }

@@ -51,6 +51,62 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
     deChannel* channel2 = channelManager.getChannel(image.getChannelIndex(2));
     deChannel* channel3 = channelManager.getChannel(image.getChannelIndex(3));
 
+    if (conversion4x3)
+    {
+    /*
+        if (!pixels0)
+        {
+            return;
+        }
+        if (!pixels1)
+        {
+            return;
+        }
+        if (!pixels2)
+        {
+            return;
+        }
+        if (!pixels3)
+        {
+            return;
+        }
+        */
+        channel0->lockRead();
+        channel1->lockRead();
+        channel2->lockRead();
+        channel3->lockRead();
+    }        
+    else if (conversion1x3)
+    {
+    /*
+        if (!pixels0)
+        {
+            return;
+        }
+        */
+        channel0->lockRead();
+    }        
+    else
+    {
+    /*
+        if (!pixels0)
+        {
+            return;
+        }
+        if (!pixels1)
+        {
+            return;
+        }
+        if (!pixels2)
+        {
+            return;
+        }
+        */
+        channel0->lockRead();
+        channel1->lockRead();
+        channel2->lockRead();
+    }        
+
     if (!channel0)
     {
         return;
@@ -83,27 +139,6 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
 
     if (conversion4x3)
     {
-        if (!pixels0)
-        {
-            return;
-        }
-        if (!pixels1)
-        {
-            return;
-        }
-        if (!pixels2)
-        {
-            return;
-        }
-        if (!pixels3)
-        {
-            return;
-        }
-        channel0->lockRead();
-        channel1->lockRead();
-        channel2->lockRead();
-        channel3->lockRead();
-
         const deValue* p0 = channel0->getPixels();
         const deValue* p1 = channel1->getPixels();
         const deValue* p2 = channel2->getPixels();
@@ -135,11 +170,6 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
     }
     else if (conversion1x3)
     {
-        if (!pixels0)
-        {
-            return;
-        }
-        channel0->lockRead();
         const deValue* p0 = channel0->getPixels();
         for (i = 0; i < n; i++)
         {
@@ -160,22 +190,6 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
     }
     else
     {
-        if (!pixels0)
-        {
-            return;
-        }
-        if (!pixels1)
-        {
-            return;
-        }
-        if (!pixels2)
-        {
-            return;
-        }
-        channel0->lockRead();
-        channel1->lockRead();
-        channel2->lockRead();
-
         const deValue* p0 = channel0->getPixels();
         const deValue* p1 = channel1->getPixels();
         const deValue* p2 = channel2->getPixels();

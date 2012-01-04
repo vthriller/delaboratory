@@ -29,6 +29,8 @@ writeMutex(wxMUTEX_RECURSIVE)
 {
     pixels = NULL;
     maxReaders = 4;
+    lockedRead = false;
+    lockedWrite = false;
 }
 
 deChannel::~deChannel()
@@ -41,26 +43,31 @@ deChannel::~deChannel()
 
 deValue* deChannel::getPixels()
 {
+    assert(lockedRead | lockedWrite);
     return pixels;
 }
 
 const deValue* deChannel::getPixels() const
 {
+    assert(lockedRead);
     return pixels;
 }
 
 deValue deChannel::getValue(int pos) const
 {
+    assert(lockedRead | lockedWrite);
     return pixels[pos];
 }
 
 void deChannel::setValue(int pos, const deValue& value)
 {
+    assert(lockedWrite);
     pixels[pos] = value;
 }
 
 void deChannel::setValueClip(int pos, const deValue& value)
 {
+    assert(lockedWrite);
     if (value < 0)
     {
         pixels[pos] = 0;
@@ -88,17 +95,24 @@ void deChannel::allocate(int size)
     lockWrite();
     assert(!pixels);
     pixels = new deValue [size];
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        pixels[i] = 0.0;
+    }
     unlockWrite();
 }
 
-void deChannel::lockRead()
+void deChannel::lockRead() const
 {
     readSemaphore.Wait();
+    lockedRead = true;
 }
 
-void deChannel::unlockRead()
+void deChannel::unlockRead() const
 {
     readSemaphore.Post();
+    lockedRead = false;
 }
 
 void deChannel::lockWrite()
@@ -109,6 +123,7 @@ void deChannel::lockWrite()
         readSemaphore.Wait();
     }
     writeMutex.Lock();
+    lockedWrite = true;
 }
 
 void deChannel::unlockWrite()
@@ -119,6 +134,7 @@ void deChannel::unlockWrite()
     {
         readSemaphore.Post();
     }
+    lockedWrite = false;
 }
 
 void startChannelLocking()

@@ -29,9 +29,11 @@ class deChannel
     private:
         deImage& image;
         deValue* pixels;
-        wxSemaphore readSemaphore;
+        mutable wxSemaphore readSemaphore;
         wxMutex writeMutex;
         int maxReaders;
+        mutable bool lockedRead;
+        bool lockedWrite;
 
         deChannel(const deChannel& c);
         deChannel& operator =(const deChannel& c);
@@ -55,8 +57,8 @@ class deChannel
 
         deImage& getImage() {return image;};
 
-        void lockRead();
-        void unlockRead();
+        void lockRead() const;
+        void unlockRead() const;
         void lockWrite();
         void unlockWrite();
 };

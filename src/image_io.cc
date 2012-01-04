@@ -122,6 +122,10 @@ void loadTIFF(const std::string& fileName, deChannel& channelR, deChannel& chann
         icc = false;
     }
 
+    channelR.lockWrite();
+    channelG.lockWrite();
+    channelB.lockWrite();
+
     int pos = 0;
     int y;
 
@@ -186,6 +190,11 @@ void loadTIFF(const std::string& fileName, deChannel& channelR, deChannel& chann
             pos++;
         }
     }
+
+    channelR.unlockWrite();
+    channelG.unlockWrite();
+    channelB.unlockWrite();
+
     _TIFFfree(buf);
     TIFFClose(tif);
 }
@@ -200,6 +209,10 @@ void loadJPEG(const std::string& fileName, deChannel& channelR, deChannel& chann
     int h = image.GetHeight();
 
     int pos = 0;
+
+    channelR.lockWrite();
+    channelG.lockWrite();
+    channelB.lockWrite();
 
     int y;
     for (y =0; y < h; y++)
@@ -217,6 +230,10 @@ void loadJPEG(const std::string& fileName, deChannel& channelR, deChannel& chann
         }
     }
 
+    channelR.unlockWrite();
+    channelG.unlockWrite();
+    channelB.unlockWrite();
+
 }
 
 void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size)
@@ -228,6 +245,10 @@ void saveJPEG(const std::string& fileName, const deChannel& channelR, const deCh
     image = new wxImage(w, h);
 
     image->SetOption(wxIMAGE_OPTION_QUALITY,98);
+
+    channelR.lockRead();
+    channelG.lockRead();
+    channelB.lockRead();
 
     int pos = 0;
     int y;
@@ -245,6 +266,11 @@ void saveJPEG(const std::string& fileName, const deChannel& channelR, const deCh
 
         }
     }
+
+    channelR.unlockRead();
+    channelG.unlockRead();
+    channelB.unlockRead();
+
     const char* c = fileName.c_str();
     wxString s(c, wxConvUTF8);
     image->SaveFile(s);
@@ -274,6 +300,10 @@ void saveTIFF(const std::string& fileName, const deChannel& channelR, const deCh
     buf = _TIFFmalloc(ssize);
     uint16* bb = (uint16*)(buf);
 
+    channelR.lockRead();
+    channelG.lockRead();
+    channelB.lockRead();
+
     int pos = 0;
     int y;
     for (y = 0; y < h; y++)
@@ -294,6 +324,10 @@ void saveTIFF(const std::string& fileName, const deChannel& channelR, const deCh
         }
         TIFFWriteScanline (tif, buf, y, 0);
     }
+
+    channelR.unlockRead();
+    channelG.unlockRead();
+    channelB.unlockRead();
 
     TIFFClose(tif);
 }

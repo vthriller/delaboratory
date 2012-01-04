@@ -106,21 +106,14 @@ void deConversionBWLayer::updateImage()
     sc2 = channelManager.getChannel(sourceImage.getChannelIndex(2));
 
     deChannel* dc = channelManager.getChannel(image.getChannelIndex(0));
-    if (!dc)
-    {
-        return;
-    }
+
+    dc->lockWrite();
 
     deValue* d = dc->getPixels();
-    if (!d)
-    {
-        return;
-    }
 
     sc0->lockRead();
     sc1->lockRead();
     sc2->lockRead();
-    dc->lockWrite();
 
     deValue* v0 = NULL;
     deValue* v1 = NULL;
