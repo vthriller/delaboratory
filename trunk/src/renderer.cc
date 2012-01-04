@@ -112,6 +112,7 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
         return;
     }
 
+/*
     const deValue* pixels0 = channel0->getPixels();
     const deValue* pixels1 = NULL;
     if (channel1)
@@ -128,6 +129,7 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
     {
         pixels3 = channel3->getPixels();
     }
+*/
 
     deValue rr;
     deValue gg;
