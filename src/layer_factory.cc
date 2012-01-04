@@ -59,7 +59,7 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
         return new deHighPassLayer(colorSpace, index, source, _layerStack, _processor, _channelManager, _viewManager, name);
     }
 
-    if (type == "sh")
+    if (type == "shadows_highlights")
     {
         return new deShadowsHighlightsLayer(colorSpace, index, source, _layerStack, _processor, _channelManager, _viewManager, name);
     }
