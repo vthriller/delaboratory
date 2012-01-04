@@ -30,5 +30,6 @@ class deViewManager;
 
 deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name, deChannelManager& _sourceChannelManager);
 void getSupportedActions(std::vector<std::string>& actions);
+std::string getActionDescription(const std::string& a);
 
 #endif
