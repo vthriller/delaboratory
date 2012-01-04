@@ -32,13 +32,23 @@ deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index,
 
 deLayer::~deLayer()
 {
+    assert(!actionFrame);
+    assert(!blendFrame);
+}
+
+void deLayer::closeFrames()
+{
     if (actionFrame)
     {
-        actionFrame->Close();
+        deFrame* frame = actionFrame;
+        actionFrame->beforeClose();
+        frame->Close();
     }
     if (blendFrame)
     {
-        blendFrame->Close();
+        deFrame* frame = blendFrame;
+        blendFrame->beforeClose();
+        frame->Close();
     }
 }
 

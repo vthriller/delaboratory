@@ -59,6 +59,7 @@ void deLayerStack::removeTopLayer()
     i = layers.end();    
     i--;
     deLayer* layer = *i;
+    layer->closeFrames();
     delete layer;
     layers.erase(i);
 

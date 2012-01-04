@@ -31,6 +31,8 @@ class deFrame:public wxFrame
         virtual void onKey(int key) {};
 
         virtual void onUpdateProperties() {};
+
+        virtual void beforeClose() {};
 };
 
 #endif

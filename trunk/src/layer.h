@@ -91,6 +91,8 @@ class deLayer
 
         void updateImageThreadCall();
 
+        void closeFrames();
+
 };
 
 #endif

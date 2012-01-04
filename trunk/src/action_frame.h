@@ -30,6 +30,8 @@ class deActionFrame:public deLayerFrame
         virtual ~deActionFrame();
 
         virtual void onImageClick(deValue x, deValue y) {};
+
+        virtual void beforeClose();
 };
 
 #endif
