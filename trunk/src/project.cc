@@ -136,7 +136,6 @@ void deProject::init(const std::string& fileName)
     {
         open(fileName, true);
     }
-
 }
 
 void deProject::freeImage()
@@ -628,10 +627,16 @@ bool deProject::openImage(const std::string& fileName)
 
     deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
 
+    sourceChannelManager.setChannelSize(size);
+    /*
     if (l->isPrimary())
     {
         sourceChannelManager.setChannelSize(size);
     }
+    else
+    {
+        std::cout << "source image layer is not primary" << std::endl;
+    }*/
 
     deImage& sourceImage = l->getSourceImage();
 
