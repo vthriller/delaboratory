@@ -386,11 +386,15 @@ void deCurvesPanel::paint()
 
 void deCurvesPanel::changeChannel(int _channel)
 {
+    layerProcessor.lock();
+
     channel = _channel;
     generateBackground();
     setMarker();
     layer.setHistogramChannel(channel);
     paint();
+
+    layerProcessor.unlock();
 }
 
 void deCurvesPanel::onImageClick(deValue x, deValue y)
