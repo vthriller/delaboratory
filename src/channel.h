@@ -34,6 +34,7 @@ class deChannel
         int maxReaders;
         mutable bool lockedRead;
         bool lockedWrite;
+        int magicSize;
 
         deChannel(const deChannel& c);
         deChannel& operator =(const deChannel& c);
