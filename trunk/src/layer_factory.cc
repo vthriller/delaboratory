@@ -118,7 +118,16 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("high_pass");
     actions.push_back("usm");
     actions.push_back("dodge_burn");
-    actions.push_back("sh");
-//    actions.push_back("nd");
+    actions.push_back("shadows_highlights");
+}
+
+std::string getActionDescription(const std::string& a)
+{
+    if (a == "shadows_highlights")
+    {
+        return "s / h";
+    }
+
+    return a;
 }
 

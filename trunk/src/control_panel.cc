@@ -56,7 +56,8 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
         std::vector<std::string>::iterator i;
         for (i = actions.begin(); i != actions.end(); i++)
         {
-            wxButton* b = new wxButton(actionsPanel, wxID_ANY, wxString::FromAscii((*i).c_str()));
+            std::string actionDescription = getActionDescription(*i);
+            wxButton* b = new wxButton(actionsPanel, wxID_ANY, wxString::FromAscii(actionDescription.c_str()));
             gridSizer->Add(b);
             actionButtons.push_back(b);
             actionButtonsNames[b->GetId()] = *i;
