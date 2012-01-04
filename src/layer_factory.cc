@@ -125,7 +125,22 @@ std::string getActionDescription(const std::string& a)
 {
     if (a == "shadows_highlights")
     {
-        return "s / h";
+        return "sh / high";
+    }
+
+    if (a == "apply_image")
+    {
+        return "apply image";
+    }
+
+    if (a == "high_pass")
+    {
+        return "high pass";
+    }
+
+    if (a == "dodge_burn")
+    {
+        return "d / burn";
     }
 
     return a;
