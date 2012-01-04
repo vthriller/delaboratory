@@ -57,6 +57,9 @@ class deLayerProcessor
         void updateImagesThreadCall(int a, int b, int channel, bool blend, bool action);
         void onChangeView(int a, int b);
 
+        void lock();
+        void unlock();
+
 };
 
 #endif
