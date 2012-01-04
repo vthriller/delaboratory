@@ -52,15 +52,16 @@ void convertImage3x3(const deImage& sourceImage, deImage& image, deChannelManage
     deValue* s3 = sc3->getPixels();
 
     deChannel* dc1 = channelManager.getChannel(image.getChannelIndex(0));
-    deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
     deChannel* dc2 = channelManager.getChannel(image.getChannelIndex(1));
-    deValue* d2 = channelManager.getChannel(image.getChannelIndex(1))->getPixels();
     deChannel* dc3 = channelManager.getChannel(image.getChannelIndex(2));
-    deValue* d3 = channelManager.getChannel(image.getChannelIndex(2))->getPixels();
 
     dc1->lockWrite();
     dc2->lockWrite();
     dc3->lockWrite();
+
+    deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
+    deValue* d2 = channelManager.getChannel(image.getChannelIndex(1))->getPixels();
+    deValue* d3 = channelManager.getChannel(image.getChannelIndex(2))->getPixels();
 
     int i;
 
@@ -99,15 +100,28 @@ void convertImage3x4(const deImage& sourceImage, deImage& image, deChannelManage
         return;
     }
 
-    deValue* s1 = sc1->getPixels();
-    deValue* s2 = sc2->getPixels();
-    deValue* s3 = sc3->getPixels();
+    deChannel* dc1 = channelManager.getChannel(image.getChannelIndex(0));
+    deChannel* dc2 = channelManager.getChannel(image.getChannelIndex(1));
+    deChannel* dc3 = channelManager.getChannel(image.getChannelIndex(2));
+    deChannel* dc4 = channelManager.getChannel(image.getChannelIndex(3));
 
+    dc1->lockWrite();
+    dc2->lockWrite();
+    dc3->lockWrite();
+    dc4->lockWrite();
+
+    sc1->lockRead();
+    sc2->lockRead();
+    sc3->lockRead();
 
     deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
     deValue* d2 = channelManager.getChannel(image.getChannelIndex(1))->getPixels();
     deValue* d3 = channelManager.getChannel(image.getChannelIndex(2))->getPixels();
     deValue* d4 = channelManager.getChannel(image.getChannelIndex(3))->getPixels();
+
+    deValue* s1 = sc1->getPixels();
+    deValue* s2 = sc2->getPixels();
+    deValue* s3 = sc3->getPixels();
 
     int i;
 
@@ -115,6 +129,15 @@ void convertImage3x4(const deImage& sourceImage, deImage& image, deChannelManage
     {
         conversion(s1[i], s2[i], s3[i], d1[i], d2[i], d3[i], d4[i]);
     }
+
+    dc1->unlockWrite();
+    dc2->unlockWrite();
+    dc3->unlockWrite();
+    dc4->unlockWrite();
+
+    sc1->unlockRead();
+    sc2->unlockRead();
+    sc3->unlockRead();
 
 }
 
@@ -143,10 +166,23 @@ void convertImage4x3(const deImage& sourceImage, deImage& image, deChannelManage
         return;
     }
 
+    sc1->lockRead();
+    sc2->lockRead();
+    sc3->lockRead();
+    sc4->lockRead();
+
     deValue* s1 = sc1->getPixels();
     deValue* s2 = sc2->getPixels();
     deValue* s3 = sc3->getPixels();
     deValue* s4 = sc4->getPixels();
+
+    deChannel* dc1 = channelManager.getChannel(image.getChannelIndex(0));
+    deChannel* dc2 = channelManager.getChannel(image.getChannelIndex(1));
+    deChannel* dc3 = channelManager.getChannel(image.getChannelIndex(2));
+
+    dc1->lockWrite();
+    dc2->lockWrite();
+    dc3->lockWrite();
 
     deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
     deValue* d2 = channelManager.getChannel(image.getChannelIndex(1))->getPixels();
@@ -158,6 +194,15 @@ void convertImage4x3(const deImage& sourceImage, deImage& image, deChannelManage
     {
         conversion(s1[i], s2[i], s3[i], s4[i], d1[i], d2[i], d3[i]);
     }
+
+    sc1->unlockRead();
+    sc2->unlockRead();
+    sc3->unlockRead();
+    sc4->unlockRead();
+
+    dc1->unlockWrite();
+    dc2->unlockWrite();
+    dc3->unlockWrite();
 
 }
 
@@ -171,7 +216,17 @@ void convertImage1x3(const deImage& sourceImage, deImage& image, deChannelManage
         return;
     }
 
+    sc1->lockRead();
+
     deValue* s1 = sc1->getPixels();
+
+    deChannel* dc1 = channelManager.getChannel(image.getChannelIndex(0));
+    deChannel* dc2 = channelManager.getChannel(image.getChannelIndex(1));
+    deChannel* dc3 = channelManager.getChannel(image.getChannelIndex(2));
+
+    dc1->lockWrite();
+    dc2->lockWrite();
+    dc3->lockWrite();
 
     deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
     deValue* d2 = channelManager.getChannel(image.getChannelIndex(1))->getPixels();
@@ -183,6 +238,12 @@ void convertImage1x3(const deImage& sourceImage, deImage& image, deChannelManage
     {
         conversion(s1[i], d1[i], d2[i], d3[i]);
     }
+
+    dc1->unlockWrite();
+    dc2->unlockWrite();
+    dc3->unlockWrite();
+
+    sc1->unlockRead();
 
 }
 

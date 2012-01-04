@@ -311,6 +311,7 @@ deBlendFrame::~deBlendFrame()
     deViewManager& viewManager = layer.getViewManager();
     viewManager.hideThisMask(l.getAllocatedBlendMaskChannel());
     l.hideBlendMask();
+
     layer.closeBlendFrame();
 
     layerProcessor.repaintImageInLayerProcessor(true);

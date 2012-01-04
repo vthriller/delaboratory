@@ -84,6 +84,8 @@ void deHistogram::calc(const deChannel* channel, int n)
         return;
     }
 
+    channel->lockRead();
+
     int j;
     int scale = size - 1;
     for (j = 0; j < n; j++)
@@ -95,6 +97,8 @@ void deHistogram::calc(const deChannel* channel, int n)
             bars[bar] ++;    
         }            
     }
+
+    channel->unlockRead();
 }
 
 bool deHistogram::render(unsigned char* data, int sizeW, int sizeH, unsigned char g1, unsigned char g2)
