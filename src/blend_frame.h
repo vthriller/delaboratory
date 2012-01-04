@@ -62,6 +62,8 @@ class deBlendFrame:public deLayerFrame
         deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
         virtual ~deBlendFrame();
 
+        void beforeClose();
+
 };
 
 

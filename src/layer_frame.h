@@ -31,6 +31,7 @@ class deLayerFrame:public deFrame
         virtual ~deLayerFrame();
 
         virtual void onUpdate() {};
+
 };
 
 #endif

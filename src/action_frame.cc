@@ -30,3 +30,8 @@ deActionFrame::~deActionFrame()
     layer.closeActionFrame();
 }
 
+void deActionFrame::beforeClose()
+{
+    layer.closeActionFrame();
+}
+
