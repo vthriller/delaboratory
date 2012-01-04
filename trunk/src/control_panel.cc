@@ -291,7 +291,9 @@ void deControlPanel::addActionLayer(const std::string& action)
 
     deColorSpace colorSpace = layerStack.getLayer(s)->getColorSpace();
 
-    deLayer* layer = createLayer(action, s, colorSpace, layerStack, layerProcessor, channelManager, viewManager, action, sourceChannelManager);
+    std::string actionDescription = getActionDescription(action);
+
+    deLayer* layer = createLayer(action, s, colorSpace, layerStack, layerProcessor, channelManager, viewManager, actionDescription, sourceChannelManager);
 
     if (layer)
     {
