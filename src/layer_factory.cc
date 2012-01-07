@@ -20,6 +20,7 @@
 #include "layer_stack.h"
 #include "curves_layer.h"
 #include "blur_layer.h"
+#include "vignette_layer.h"
 #include "apply_image_layer.h"
 #include "mixer_layer.h"
 #include "conversion_layer.h"
@@ -42,6 +43,11 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
     if (type == "blur")
     {
         return new deBlurLayer(colorSpace, index, source, _layerStack, _processor, _channelManager, _viewManager, name);
+    }
+
+    if (type == "vignette")
+    {
+        return new deVignetteLayer(colorSpace, index, source, _layerStack, _processor, _channelManager, _viewManager, name);
     }
 
     if (type == "usm")
@@ -119,6 +125,7 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("usm");
     actions.push_back("dodge_burn");
     actions.push_back("shadows_highlights");
+    actions.push_back("vignette");
 }
 
 std::string getActionDescription(const std::string& a)
