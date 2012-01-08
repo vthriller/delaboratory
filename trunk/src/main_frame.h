@@ -26,6 +26,7 @@ class deLayerGridPanel;
 class deControlPanel;
 class deHistogramPanel;
 class deLayerProcessor;
+class deSamplersPanel;
 
 enum
 {
@@ -60,6 +61,7 @@ private:
     wxPanel* hPanel;
     wxPanel* topPanel;
     deLayerGridPanel* layerGridPanel;
+    deSamplersPanel* samplersPanel;
     deControlPanel* controlPanel;
     wxSizer* mainSizer;
     deImageAreaPanel* imageAreaPanel;
