@@ -45,12 +45,12 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _so
 void deDodgeBurnLayer::reset()
 {
     blurRadius.set(0.1);
-    dodgeAmount.set(0.5);
-    dodgeMin.set(0.1);
-    dodgeMax.set(0.9);
-    burnAmount.set(0.5);
-    burnMin.set(0.1);
-    burnMax.set(0.9);
+    dodgeAmount.set(0.3);
+    dodgeMin.set(0.6);
+    dodgeMax.set(0.95);
+    burnAmount.set(0.3);
+    burnMin.set(0.05);
+    burnMax.set(0.4);
     int index = getIndex();
     layerProcessor.markUpdateAllChannels(index);
 }
