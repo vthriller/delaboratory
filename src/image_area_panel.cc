@@ -47,8 +47,6 @@ void deImageAreaPanel::updateSize(bool calcHistogram)
     project->setPreviewSize(fit, calcHistogram);
 
     imagePanel->SetSize(wxSize(fit.getW(), fit.getH()));
-
-    //Update();
 }
 
 

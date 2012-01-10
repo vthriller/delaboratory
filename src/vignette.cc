@@ -22,7 +22,7 @@
 
 void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue centerY, deValue radiusX, deValue radiusY)
 {
-    assert(source);
+    //assert(source);
     assert(destination);
 
     int w = size.getW();
@@ -33,7 +33,7 @@ void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue
 
     assert(w > 0);
     assert(h > 0);
-    assert(radius > 0);
+    //assert(radius > 0);
 
     int i;
     int j;

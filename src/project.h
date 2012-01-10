@@ -141,6 +141,8 @@ class deProject
 
         void setMainFrame(deMainFrame* _mainFrame);
 
+        void addRandomLayer();
+
 
 };
 

@@ -26,6 +26,7 @@ class deChannelManager;
 class wxProgressDialog;
 class deMemoryInfoFrame;
 #include <map>
+#include <wx/wx.h>
 
 class deLayerProcessor
 {
@@ -33,18 +34,30 @@ class deLayerProcessor
         deMainFrame* mainFrame;
         deLayerStack* stack;
         deViewManager* viewManager;
+        wxThread* workerThread;
+
+        int firstLayerToUpdate;
+        int lastLayerToUpdate;
+        int lastValidLayer;
+        int channelUpdate;
+        bool blendUpdate;
+        bool actionUpdate;
 
         void updateImages(int a, int b, int channel, bool blend, bool action);
+        void updateImage(int i, int& channel, bool& blend, bool& action);
+
+        void repaintImageInLayerProcessor(bool calcHistogram);
 
     public:
         deLayerProcessor();
         virtual ~deLayerProcessor();
 
+        int getLastValidLayer() const {return lastValidLayer;};
+
         void setMainFrame(deMainFrame* _mainFrame);
         void setLayerStack(deLayerStack* _layerStack);
         void setViewManager(deViewManager* _viewManager);
 
-        void repaintImageInLayerProcessor(bool calcHistogram);
         void updateAllImages(bool calcHistogram);
         void updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame);
         void generateChannelUsage(std::map<int, int>& channelUsage);
@@ -59,6 +72,18 @@ class deLayerProcessor
 
         void lock();
         void unlock();
+
+        void startWorkerThread();
+
+        void tickWork();
+
+        void onDestroyAll();
+
+        void onDeleteLayer();
+
+        void onChangeViewMode();
+
+        void onGUIUpdate();
 
 };
 

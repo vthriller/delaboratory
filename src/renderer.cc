@@ -23,8 +23,9 @@
 #include "layer.h"
 #include <iostream>
 #include "conversion_functions.h"
+#include "layer_processor.h"
 
-void renderImage(const deImage& image, unsigned char* data, deChannelManager& channelManager)
+bool renderImage(const deImage& image, unsigned char* data, deChannelManager& channelManager)
 {
     deColorSpace colorSpace = image.getColorSpace();
 
@@ -39,7 +40,7 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
             conversion1x3 = getConversion1x3(colorSpace, deColorSpaceRGB);
             if (!conversion1x3)
             {
-                return;
+                return false;
             }            
         }            
     }
@@ -53,24 +54,22 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
 
     if (conversion4x3)
     {
-    /*
-        if (!pixels0)
+        if (!channel0)
         {
-            return;
+            return false;
         }
-        if (!pixels1)
+        if (!channel1)
         {
-            return;
+            return false;
         }
-        if (!pixels2)
+        if (!channel2)
         {
-            return;
+            return false;
         }
-        if (!pixels3)
+        if (!channel3)
         {
-            return;
+            return false;
         }
-        */
         channel0->lockRead();
         channel1->lockRead();
         channel2->lockRead();
@@ -78,30 +77,26 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
     }        
     else if (conversion1x3)
     {
-    /*
-        if (!pixels0)
+        if (!channel0)
         {
-            return;
+            return false;
         }
-        */
         channel0->lockRead();
     }        
     else
     {
-    /*
-        if (!pixels0)
+        if (!channel0)
         {
-            return;
+            return false;
         }
-        if (!pixels1)
+        if (!channel1)
         {
-            return;
+            return false;
         }
-        if (!pixels2)
+        if (!channel2)
         {
-            return;
+            return false;
         }
-        */
         channel0->lockRead();
         channel1->lockRead();
         channel2->lockRead();
@@ -109,27 +104,8 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
 
     if (!channel0)
     {
-        return;
+        return false;
     }
-
-/*
-    const deValue* pixels0 = channel0->getPixels();
-    const deValue* pixels1 = NULL;
-    if (channel1)
-    {
-        pixels1 = channel1->getPixels();
-    }
-    const deValue* pixels2 = NULL;
-    if (channel2)
-    {
-        pixels2 = channel2->getPixels();
-    }
-    const deValue* pixels3 = NULL;
-    if (channel3)
-    {
-        pixels3 = channel3->getPixels();
-    }
-*/
 
     deValue rr;
     deValue gg;
@@ -219,6 +195,8 @@ void renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
         channel2->unlockRead();
     }
 
+    return true;
+
 }
 
 void renderChannel(const deImage& image, int c, unsigned char* data, deChannelManager& channelManager)
@@ -301,6 +279,7 @@ deRenderer::~deRenderer()
 
 bool deRenderer::render(wxDC& dc)
 {
+
     deChannelManager& channelManager = project->getPreviewChannelManager();
     const deSize& s = channelManager.getChannelSize();
     if (s != size)
@@ -316,7 +295,16 @@ bool deRenderer::render(wxDC& dc)
     }
 
     const deViewManager& viewManager = project->getViewManager();
-    int view = viewManager.getView();
+
+    int viewV = viewManager.getView();
+    int view = project->getLayerProcessor().getLastValidLayer();
+    if (view > viewV)
+    {
+        std::cout << "WARNING view was " << view << " while viewV was " << viewV << std::endl;
+        view = viewV;
+    }
+
+    assert(view >= 0);
 
     deLayerStack& layerStack = project->getLayerStack();
 
@@ -342,7 +330,10 @@ bool deRenderer::render(wxDC& dc)
         }
         else
         {
-            renderImage(layerImage, data, channelManager);
+            if (!renderImage(layerImage, data, channelManager))
+            {
+                std::cout << "failed renderImage" << std::endl;
+            }
         }
     }
 

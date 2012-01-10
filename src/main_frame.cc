@@ -65,6 +65,7 @@ EVT_MENU(ID_MemoryInfo, deMainFrame::onMemoryInfo)
 EVT_MENU(ID_BenchmarkBlur, deMainFrame::onBenchmarkBlur)
 EVT_MENU(ID_BenchmarkColor, deMainFrame::onBenchmarkColor)
 EVT_MENU(DE_REPAINT_EVENT, deMainFrame::onRepaintEvent)
+EVT_MENU(DE_RANDOM_EVENT, deMainFrame::onRandomEvent)
 END_EVENT_TABLE()
 
 deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor)
@@ -342,24 +343,22 @@ void deMainFrame::onRepaintEvent(wxCommandEvent& event)
     repaintMainFrame(true);
 }
 
+void deMainFrame::onRandomEvent(wxCommandEvent& event)
+{
+    project.addRandomLayer();
+}
+
 class deTestThread:public wxThread
 {
     private:
         virtual void *Entry()
         {
             int i;
-            int max = 10;
+            int max = 100;
             for (i = 0; i < max; i++)
             {
-                int j;
-                for (j = 0; j < 256 * 256 ; j++)
-                {
-                    deValue v = i * j;
-                    channel[j] = 0.5 + 0.5 * sin(v / 4323.0);
-                }
-                wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_REPAINT_EVENT );
+                wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_RANDOM_EVENT );
                 wxPostEvent( frame, event );
-
                 wxThread::Sleep(1000);
                 if (TestDestroy())
                 {
@@ -369,10 +368,10 @@ class deTestThread:public wxThread
             return NULL;
         }
         deMainFrame* frame;
-        deValue* channel;
+        deProject& project;
     public:    
-        deTestThread(deMainFrame* _frame, deValue* _channel)
-        :frame(_frame), channel(_channel)
+        deTestThread(deMainFrame* _frame, deProject& _project)
+        :frame(_frame), project(_project)
         {
         }
         virtual ~deTestThread()
@@ -384,7 +383,8 @@ void deMainFrame::test(wxCommandEvent& event)
 {
     deChannelManager& channelManager = project.getPreviewChannelManager();
     deChannel* channel = channelManager.getChannel(0);
-    deTestThread* thread = new deTestThread(this, channel->getPixels());
+
+    deTestThread* thread = new deTestThread(this, project);
 
     if ( thread->Create() != wxTHREAD_NO_ERROR )
     {

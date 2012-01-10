@@ -50,7 +50,8 @@ enum
     ID_MemoryInfo,
     ID_BenchmarkBlur,
     ID_BenchmarkColor,
-    DE_REPAINT_EVENT
+    DE_REPAINT_EVENT,
+    DE_RANDOM_EVENT
 
 };
 
@@ -89,6 +90,7 @@ private:
 	void onBenchmarkBlur(wxCommandEvent& event);
 	void onBenchmarkColor(wxCommandEvent& event);
 	void onRepaintEvent(wxCommandEvent& event);
+	void onRandomEvent(wxCommandEvent& event);
 
 	void test(wxCommandEvent& event);
 

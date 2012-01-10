@@ -307,7 +307,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
 deBlendFrame::~deBlendFrame()
 {
-    layerProcessor.repaintImageInLayerProcessor(true);
+    layerProcessor.onGUIUpdate();
 
     layer.closeBlendFrame();
 }
@@ -359,9 +359,6 @@ void deBlendFrame::check(wxCommandEvent &event)
             {
                 layer.disableChannel(i);
             }
-
-            int index = layer.getIndex();
-            layerProcessor.markUpdateBlendAllChannels(index);
 
             return;
         }

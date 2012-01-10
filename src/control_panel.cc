@@ -140,6 +140,36 @@ deControlPanel::~deControlPanel()
 {
 }
 
+bool checkConversion(deColorSpace currentColorSpace, deColorSpace colorSpace)
+{
+    if (getConversion3x3(currentColorSpace, colorSpace))
+    {
+        return true;
+    }
+
+    if (getConversion4x3(currentColorSpace, colorSpace))
+    {
+        return true;
+    }
+
+    if (getConversion3x4(currentColorSpace, colorSpace))
+    {
+        return true;
+    }
+
+    if (getConversion1x3(currentColorSpace, colorSpace))
+    {
+        return true;
+    }
+
+    if (getConversion3x1(currentColorSpace, colorSpace))
+    {
+        return true;
+    }
+
+    return false;
+}
+
 void deControlPanel::setConversions()
 {
     deViewManager& viewManager = project.getViewManager();
@@ -155,27 +185,7 @@ void deControlPanel::setConversions()
         int id = b->GetId();
         deColorSpace colorSpace = convertButtonsColorSpaces[id];
 
-        bool valid = false;
-        if (getConversion3x3(currentColorSpace, colorSpace))
-        {
-            valid = true;
-        }
-        if (getConversion4x3(currentColorSpace, colorSpace))
-        {
-            valid = true;
-        }
-        if (getConversion3x4(currentColorSpace, colorSpace))
-        {
-            valid = true;
-        }
-        if (getConversion1x3(currentColorSpace, colorSpace))
-        {
-            valid = true;
-        }
-        if (getConversion3x1(currentColorSpace, colorSpace))
-        {
-            valid = true;
-        }
+        bool valid = checkConversion(currentColorSpace, colorSpace);
 
         if ((currentColorSpace != colorSpace) && (valid))
         {
@@ -209,7 +219,6 @@ void deControlPanel::click(wxCommandEvent &event)
 
     if (deleteLayer->GetId() == id)
     {
-
         project.deleteLayer();
         updateLayerGrid();
     }
@@ -304,10 +313,66 @@ void deControlPanel::addActionLayer(const std::string& action)
     }
 }    
 
+void deControlPanel::addRandomLayer()
+{
+    deLayerStack& layerStack = project.getLayerStack();
+    int view = layerStack.getSize() - 1;
+
+    if (view > 0)
+    {
+        if (rand() % view > 3)
+        {
+            project.deleteLayer();
+            updateLayerGrid();
+            return;
+        }
+    }
+
+    if (rand() % 2 > 0)
+    {
+        std::vector<std::string> actions;
+        getSupportedActions(actions);
+
+        int n = actions.size();
+        int r = rand() % n;
+
+        std::string a = actions[r];
+        addActionLayer(a);
+    }
+    else
+    {
+        deLayer* layer = layerStack.getLayer(view);
+        if (!layer)
+        {
+            return;
+        }
+
+        deColorSpace currentColorSpace = layer->getColorSpace();
+
+        bool valid = false;
+        deColorSpace c = deColorSpaceInvalid;
+
+        while (!valid)
+        {
+            std::vector<deColorSpace> colorSpaces;
+            getSupportedColorSpaces(colorSpaces);
+
+            int n = colorSpaces.size();
+            int r = rand() % n;
+
+            c = colorSpaces[r];
+
+            valid = checkConversion(currentColorSpace, c);
+        }            
+
+        addConversionLayer(c);
+    }
+}
+
 void deControlPanel::closeSamplerManagerFrame()
 {
     samplerManagerFrame = NULL;
-    layerProcessor.repaintImageInLayerProcessor(false);
+    layerProcessor.onGUIUpdate();
 }
 
 void deControlPanel::updateSamplerManagerFrame()
@@ -328,7 +393,7 @@ void deControlPanel::updateLayerGrid()
     layerGridPanel->clearRows();
     layerGridPanel->buildRows();
     layerGridPanel->Layout();
-    layerProcessor.repaintImageInLayerProcessor(false);
+    layerProcessor.onGUIUpdate();
 }
 
 void deControlPanel::showSamplers()
@@ -337,7 +402,7 @@ void deControlPanel::showSamplers()
     {
         samplerManagerFrame = new deSamplerManagerFrame(this, project);
         samplerManagerFrame->Show();
-        layerProcessor.repaintImageInLayerProcessor(false);
+        layerProcessor.onGUIUpdate();
     }
 }        
 

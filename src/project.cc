@@ -132,12 +132,12 @@ void deProject::onKey(int key)
 
 void deProject::init(const std::string& fileName)
 {
-    layerProcessor.lock();
+//    layerProcessor.lock();
     if (!openImage(fileName))
     {
         open(fileName, true);
     }
-    layerProcessor.unlock();
+//    layerProcessor.unlock();
 }
 
 void deProject::freeImage()
@@ -382,7 +382,7 @@ void deProject::deleteLayer()
         viewManager.setView( layerStack.getSize() - 1 );
     }
     updateMemoryInfo();
-    layerProcessor.repaintImageInLayerProcessor(true);
+    layerProcessor.onDeleteLayer();
 }
 
 void deProject::setLastView()
@@ -630,15 +630,6 @@ bool deProject::openImage(const std::string& fileName)
     deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
 
     sourceChannelManager.setChannelSize(size);
-    /*
-    if (l->isPrimary())
-    {
-        sourceChannelManager.setChannelSize(size);
-    }
-    else
-    {
-        std::cout << "source image layer is not primary" << std::endl;
-    }*/
 
     deImage& sourceImage = l->getSourceImage();
 
@@ -735,6 +726,8 @@ void deProject::maxZoom()
 
 void deProject::onScaleSet()
 {
+    layerProcessor.onDestroyAll();
+
     previewChannelManager.destroyAllChannels();
 
     imageAreaPanel->updateSize(false);
@@ -744,6 +737,8 @@ void deProject::onScaleSet()
 
 void deProject::setViewOffset(deValue x, deValue y)
 {
+    layerProcessor.onDestroyAll();
+
     viewManager.setOffset(x, y);
     previewChannelManager.destroyAllChannels();
 
@@ -755,3 +750,12 @@ void deProject::setMainFrame(deMainFrame* _mainFrame)
 {
     mainFrame = _mainFrame;
 }
+
+void deProject::addRandomLayer()
+{
+    if (controlPanel)
+    {
+        controlPanel->addRandomLayer();
+    }
+}
+

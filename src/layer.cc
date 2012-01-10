@@ -57,7 +57,6 @@ deColorSpace deLayer::getColorSpace() const
     return colorSpace;
 }
 
-
 std::string deLayer::getName() const
 {
     return name;

@@ -20,6 +20,7 @@
 #include <wx/dcbuffer.h>
 #include "project.h"
 #include "layer.h"
+#include "layer_processor.h"
 
 BEGIN_EVENT_TABLE(deImagePanel, wxPanel)
 EVT_PAINT(deImagePanel::paintEvent)
@@ -86,13 +87,6 @@ bool deImagePanel::setPosition(deValue x, deValue y)
         deLayer* layer = layerStack.getLayer(view);
         bool used = layer->onImageClick(x, y);
 
-/*
-        if (!used)
-        {
-            project->showSamplers();
-        }
-        */
-
         deSamplerManager& samplerManager = project->getSamplerManager();
         samplerManager.onImageClick(x, y);
 
@@ -117,17 +111,25 @@ deImagePanel::~deImagePanel()
 
 void deImagePanel::paintEvent(wxPaintEvent & evt)
 {
-    wxBufferedPaintDC dc(this);
-    dc.Clear();
-    render(dc);
+    int view = project->getLayerProcessor().getLastValidLayer();
+    if (view >= 0)
+    {
+        wxBufferedPaintDC dc(this);
+        dc.Clear();
+        render(dc);
+    }
 }
 
 void deImagePanel::repaintImagePanel()
 {
-    wxClientDC dc(this);
-    wxBufferedDC bufferedDC(&dc);
-    bufferedDC.Clear();
-    render(bufferedDC);
+    int view = project->getLayerProcessor().getLastValidLayer();
+    if (view >= 0)
+    {
+        wxClientDC dc(this);
+        wxBufferedDC bufferedDC(&dc);
+        bufferedDC.Clear();
+        render(bufferedDC);
+    }
 }
 
 void deImagePanel::render(wxDC& dc)
