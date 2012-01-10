@@ -105,7 +105,25 @@ void deConversionBWLayer::updateImage()
     sc1 = channelManager.getChannel(sourceImage.getChannelIndex(1));
     sc2 = channelManager.getChannel(sourceImage.getChannelIndex(2));
 
+    if (!sc0)
+    {
+        return;
+    }
+    if (!sc1)
+    {
+        return;
+    }
+    if (!sc2)
+    {
+        return;
+    }
+
     deChannel* dc = channelManager.getChannel(image.getChannelIndex(0));
+
+    if (!dc)
+    {
+        return;
+    }
 
     dc->lockWrite();
 
