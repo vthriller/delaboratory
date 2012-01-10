@@ -55,6 +55,7 @@ void deSourceImageLayer::updateImage()
 
     if (!sourceChannelR)
     {
+        std::cout << "deSourceImageLayer::updateImage !sourceChannelR" << std::endl;
         return;
     }
 
@@ -149,7 +150,6 @@ void deSourceImageLayer::updateImage()
     channelR->unlockWrite();
     channelG->unlockWrite();
     channelB->unlockWrite();
-
 }
 
 const deImage& deSourceImageLayer::getImage() const

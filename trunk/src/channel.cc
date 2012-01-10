@@ -106,7 +106,7 @@ void deChannel::allocate(int size)
     int i;
     for (i = 0; i < size; i++)
     {
-        pixels[i] = 0.0;
+        pixels[i] = (i % 666) / 666.0;
     }
     magicSize = size;
     unlockWrite();

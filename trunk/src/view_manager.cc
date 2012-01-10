@@ -55,14 +55,15 @@ void deViewManager::setSingleChannel(int _channel)
     single = true;
     channel = _channel;
     project.onChangeViewMode();
-    layerProcessor.repaintImageInLayerProcessor(true);
+    layerProcessor.onChangeViewMode();
+
 }
 
 void deViewManager::setNormal()
 {
     single = false;
     project.onChangeViewMode();
-    layerProcessor.repaintImageInLayerProcessor(true);
+    layerProcessor.onChangeViewMode();
 }
 
 void deViewManager::hideMask()

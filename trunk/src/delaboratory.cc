@@ -133,6 +133,8 @@ bool deLaboratory::OnInit()
 
     processor.setMainFrame(frame);
 
+    processor.startWorkerThread();
+
 	return TRUE;
 } 
 

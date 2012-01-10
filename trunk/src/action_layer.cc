@@ -333,30 +333,50 @@ void deActionLayer::updateApply()
         return;
     }
 
+    sc1->lockRead();
+    sc2->lockRead();
+    sc3->lockRead();
+
     deValue* r1 = sc1->getPixels();
     deValue* g1 = sc2->getPixels();
     deValue* b1 = sc3->getPixels();
 
-    deValue* r2;
-    deValue* g2;
-    deValue* b2;
-     
+    deChannel* bc1 = NULL;
+    deChannel* bc2 = NULL;
+    deChannel* bc3 = NULL;
+
     if (isBlendingEnabled())
     {
-        r2 = channelManager.getChannel(imageBlendPass.getChannelIndex(0))->getPixels();
-        g2 = channelManager.getChannel(imageBlendPass.getChannelIndex(1))->getPixels();
-        b2 = channelManager.getChannel(imageBlendPass.getChannelIndex(2))->getPixels();
+        bc1 = channelManager.getChannel(imageBlendPass.getChannelIndex(0));
+        bc2 = channelManager.getChannel(imageBlendPass.getChannelIndex(1));
+        bc3 = channelManager.getChannel(imageBlendPass.getChannelIndex(2));
     }
     else
     {
-        r2 = channelManager.getChannel(imageActionPass.getChannelIndex(0))->getPixels();
-        g2 = channelManager.getChannel(imageActionPass.getChannelIndex(1))->getPixels();
-        b2 = channelManager.getChannel(imageActionPass.getChannelIndex(2))->getPixels();
+        bc1 = channelManager.getChannel(imageActionPass.getChannelIndex(0));
+        bc2 = channelManager.getChannel(imageActionPass.getChannelIndex(1));
+        bc3 = channelManager.getChannel(imageActionPass.getChannelIndex(2));
     }        
 
-    deValue* r = channelManager.getChannel(imageApplyPass.getChannelIndex(0))->getPixels();
-    deValue* g = channelManager.getChannel(imageApplyPass.getChannelIndex(1))->getPixels();
-    deValue* b = channelManager.getChannel(imageApplyPass.getChannelIndex(2))->getPixels();
+    bc1->lockRead();
+    bc2->lockRead();
+    bc3->lockRead();
+
+    deValue* r2 = bc1->getPixels();
+    deValue* g2 = bc2->getPixels();
+    deValue* b2 = bc3->getPixels();
+
+    deChannel* dc1 = channelManager.getChannel(imageApplyPass.getChannelIndex(0));
+    deChannel* dc2 = channelManager.getChannel(imageApplyPass.getChannelIndex(1));
+    deChannel* dc3 = channelManager.getChannel(imageApplyPass.getChannelIndex(2));
+
+    dc1->lockWrite();
+    dc2->lockWrite();
+    dc3->lockWrite();
+
+    deValue* r = dc1->getPixels();
+    deValue* g = dc2->getPixels();
+    deValue* b = dc3->getPixels();
 
     int i;
 
@@ -374,6 +394,18 @@ void deActionLayer::updateApply()
             applyColor(r1[i], g1[i], b1[i], r2[i], g2[i], b2[i], r[i], g[i], b[i]);
         }
     }        
+
+    sc1->unlockRead();
+    sc2->unlockRead();
+    sc3->unlockRead();
+
+    bc1->unlockRead();
+    bc2->unlockRead();
+    bc3->unlockRead();
+
+    dc1->unlockWrite();
+    dc2->unlockWrite();
+    dc3->unlockWrite();
 }
 
 void deActionLayer::setApplyMode(deApplyMode mode)

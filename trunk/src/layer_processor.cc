@@ -33,32 +33,31 @@ static wxMutex updateImagesMutex;
 
 #define LAYER_PROCESSING_ON_THREAD 1
 
-class deUpdateImagesThread:public wxThread
+class deLayerProcessorWorkerThread:public wxThread
 {
     private:
         virtual void *Entry()
         {
-            layerProcessor.updateImagesThreadCall(a, b, channel, blend, action);
+            bool w = true;
+            while (w)
+            {
+                processor.tickWork();
+                wxThread::Sleep(100);
+                if (TestDestroy())
+                {
+                    w = false;
+                }
+            }
             return NULL;
         }
-        deLayerProcessor& layerProcessor;
-        int a;
-        int b;
-        int channel;
-        bool blend;
-        bool action;
-    public:    
-        deUpdateImagesThread(deLayerProcessor& _layerProcessor, int _a, int _b, int _channel, bool _blend, bool _action)
-        :layerProcessor(_layerProcessor),
-         a(_a),
-         b(_b),
-         channel(_channel),
-         blend(_blend),
-         action(_action)
-        {
+        deLayerProcessor& processor;
 
+    public:    
+        deLayerProcessorWorkerThread(deLayerProcessor& _processor)
+        :processor(_processor)
+        {
         }
-        virtual ~deUpdateImagesThread()
+        virtual ~deLayerProcessorWorkerThread()
         {
         }
 };
@@ -69,15 +68,45 @@ deLayerProcessor::deLayerProcessor()
     mainFrame = NULL;
     stack = NULL;
     viewManager = NULL;
+
+    workerThread = NULL;
+
+    firstLayerToUpdate = 0;
+    lastLayerToUpdate = 0;
+    lastValidLayer = -1;
+
+}
+
+void deLayerProcessor::onDestroyAll()
+{
+    updateImagesMutex.Lock();
+
+    lastValidLayer = -1;
+
+    updateImagesMutex.Unlock();
 }
 
 deLayerProcessor::~deLayerProcessor()
 {
+    workerThread->Delete();
 }
 
 void deLayerProcessor::setMainFrame(deMainFrame* _mainFrame)
 {
     mainFrame = _mainFrame;
+}
+
+void deLayerProcessor::startWorkerThread()
+{
+    workerThread = new deLayerProcessorWorkerThread(*this);
+
+    if ( workerThread->Create() != wxTHREAD_NO_ERROR )
+    {
+    }
+
+    if ( workerThread->Run() != wxTHREAD_NO_ERROR )
+    {
+    }
 }
 
 void deLayerProcessor::setLayerStack(deLayerStack* _layerStack)
@@ -92,13 +121,11 @@ void deLayerProcessor::setViewManager(deViewManager* _viewManager)
 
 void deLayerProcessor::repaintImageInLayerProcessor(bool calcHistogram)
 {
-    updateImagesMutex.Lock();
     if (mainFrame)
     {
         wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_REPAINT_EVENT );
         wxPostEvent( mainFrame, event );
     }
-    updateImagesMutex.Unlock();
 }
 
 void deLayerProcessor::updateAllImages(bool calcHistogram)
@@ -113,22 +140,73 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
 void deLayerProcessor::updateImages(int a, int b, int channel, bool blend, bool action)
 {
 #if LAYER_PROCESSING_ON_THREAD 
-    deUpdateImagesThread* thread = new deUpdateImagesThread(*this, a, b, channel, blend, action);
 
-    if ( thread->Create() != wxTHREAD_NO_ERROR )
+    updateImagesMutex.Lock();
+
+    if (a < firstLayerToUpdate)
     {
-        std::cout << "creating thread... CREATE ERROR" << std::endl;
+        firstLayerToUpdate = a;
     }
 
-    if ( thread->Run() != wxTHREAD_NO_ERROR )
-    {
-        std::cout << "creating thread... RUN ERROR" << std::endl;
-    }
+    lastLayerToUpdate = b;
+
+    channelUpdate = channel;
+    blendUpdate = blend;
+    actionUpdate = action;
+
+    updateImagesMutex.Unlock();
+
 #else
     updateImagesThreadCall(a, b, channel, blend, action);
 #endif
 
 }    
+
+void deLayerProcessor::updateImage(int i, int& channel, bool& blend, bool& action)
+{
+    if (i >= firstLayerToUpdate) 
+    {
+        firstLayerToUpdate = i+1;
+    }
+
+    deLayer* layer = stack->getLayer(i);
+    if (layer)
+    {
+        bool nextAction = false;
+
+        if (blend)
+        {
+            deActionLayer* alayer = dynamic_cast<deActionLayer*>(layer);
+            if (alayer)
+            {
+                alayer->updateImageInActionLayer(false, true, channel);
+                blend = false;
+                nextAction = true;
+            }                
+        }                    
+
+        if (action)
+        {
+            if (channel >= 0)
+            {
+                deActionLayer* alayer = dynamic_cast<deActionLayer*>(layer);
+                alayer->updateImageInActionLayer(action, true, channel);
+                channel = -1;
+            }
+            else
+            {
+                layer->updateImageThreadCall();
+            }
+        }
+
+        if (nextAction)
+        {
+            action = true;
+        }
+    }            
+
+    lastValidLayer = i;
+}
 
 void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool blend, bool action)
 {
@@ -144,38 +222,7 @@ void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool bl
     assert((unsigned int)b < stack->getSize() );
     for (i = (unsigned int)a; i <= (unsigned int)b; i++)
     {
-        deLayer* layer = stack->getLayer(i);
-        if (layer)
-        {
-            bool nextAction = false;
-
-            if (blend)
-            {
-                deActionLayer* alayer = dynamic_cast<deActionLayer*>(layer);
-                alayer->updateImageInActionLayer(false, true, channel);
-                blend = false;
-                nextAction = true;
-            }                    
-
-            if (action)
-            {
-                if (channel >= 0)
-                {
-                    deActionLayer* alayer = dynamic_cast<deActionLayer*>(layer);
-                    alayer->updateImageInActionLayer(action, true, channel);
-                    channel = -1;
-                }
-                else
-                {
-                    layer->updateImageThreadCall();
-                }
-            }
-
-            if (nextAction)
-            {
-                action = true;
-            }
-        }            
+        updateImage(i, channel, blend, action);
     }
 
     stack->unlock();
@@ -304,3 +351,52 @@ void deLayerProcessor::unlock()
 {
     updateImagesMutex.Unlock();
 }
+
+void deLayerProcessor::tickWork()
+{
+    updateImagesMutex.Lock();
+
+    bool ok = true;
+
+    if (firstLayerToUpdate > lastLayerToUpdate)
+    {
+        ok = false;
+    }
+
+    if (!stack)
+    {
+        ok = false;
+    }
+
+    if (ok)
+    {
+        stack->lock();
+
+        updateImage(firstLayerToUpdate, channelUpdate, blendUpdate, actionUpdate);
+
+        stack->unlock();
+    }
+
+    updateImagesMutex.Unlock();
+
+    if (ok)
+    {
+        repaintImageInLayerProcessor(true);
+    }        
+
+}
+
+void deLayerProcessor::onDeleteLayer()
+{
+    repaintImageInLayerProcessor(true);
+}    
+
+void deLayerProcessor::onChangeViewMode()
+{
+    repaintImageInLayerProcessor(true);
+}    
+
+void deLayerProcessor::onGUIUpdate()
+{
+    repaintImageInLayerProcessor(true);
+}    
