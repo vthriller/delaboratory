@@ -19,6 +19,7 @@
 #include "samplers_panel.h"
 #include "sampler_panel.h"
 #include "project.h"
+#include "layer_processor.h"
 
 deSamplersPanel::deSamplersPanel(wxWindow* parent, deProject& _project)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition), project(_project)
@@ -31,6 +32,10 @@ deSamplersPanel::deSamplersPanel(wxWindow* parent, deProject& _project)
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
 
+    show = new wxCheckBox(this, wxID_ANY, _T("show samplers"));
+    show->SetValue(0);
+    sizer->Add(show);
+
     for (i = 0; i < n; i++)
     {
         deSampler* sampler = samplerManager.getSampler(i);
@@ -42,6 +47,8 @@ deSamplersPanel::deSamplersPanel(wxWindow* parent, deProject& _project)
             panels.push_back(panel);
         }            
     }        
+
+    Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deSamplersPanel::check));
 
 }
 
@@ -56,4 +63,11 @@ void deSamplersPanel::update()
     {
         (*i)->update();
     }
+}
+
+void deSamplersPanel::check(wxCommandEvent &event)
+{
+    bool checked = show->IsChecked();
+    project.setShowSamplers(checked);
+    project.getLayerProcessor().onGUIUpdate();
 }
