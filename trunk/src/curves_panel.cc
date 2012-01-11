@@ -414,7 +414,9 @@ void deCurvesPanel::setMarker()
     else
     {
         deChannel* c = layer.getSourceChannel(channel);
+        c->lockRead();
         marker = c->getValue(clickPosition);
+        c->unlockRead();
     }        
 }
 

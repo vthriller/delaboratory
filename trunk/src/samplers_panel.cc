@@ -17,13 +17,43 @@
 */
 
 #include "samplers_panel.h"
+#include "sampler_panel.h"
+#include "project.h"
 
 deSamplersPanel::deSamplersPanel(wxWindow* parent, deProject& _project)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition), project(_project)
 {
+    deSamplerManager& samplerManager = project.getSamplerManager();
+    unsigned int n = samplerManager.getNumberOfSamplers();
+
+    unsigned int i;
+
+    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(sizer);
+
+    for (i = 0; i < n; i++)
+    {
+        deSampler* sampler = samplerManager.getSampler(i);
+
+        if (sampler)
+        {
+            deSamplerPanel* panel = new deSamplerPanel(this, *sampler, project);
+            sizer->Add(panel);
+            panels.push_back(panel);
+        }            
+    }        
 
 }
 
 deSamplersPanel::~deSamplersPanel()
 {
+}
+
+void deSamplersPanel::update()
+{
+    std::list<deSamplerPanel*>::iterator i;
+    for (i = panels.begin(); i != panels.end(); i++)
+    {
+        (*i)->update();
+    }
 }

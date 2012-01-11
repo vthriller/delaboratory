@@ -214,15 +214,27 @@ void loadJPEG(const std::string& fileName, deChannel& channelR, deChannel& chann
     channelG.lockWrite();
     channelB.lockWrite();
 
+    unsigned char* data = image.GetData();
+
+    int p = 0;
     int y;
     for (y =0; y < h; y++)
     {   
         int x;
         for (x = 0; x < w; x++)
         {
+
+        /*
             deValue r = image.GetRed(x, y) / 255.0; 
             deValue g = image.GetGreen(x, y) / 255.0; 
             deValue b = image.GetBlue(x, y) / 255.0; 
+        */            
+            deValue r = data[p] / 255.0; 
+            p++;
+            deValue g = data[p] / 255.0; 
+            p++;
+            deValue b = data[p] / 255.0; 
+            p++;
             channelR.setValue(pos, r );
             channelG.setValue(pos, g );
             channelB.setValue(pos, b );

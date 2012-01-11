@@ -120,3 +120,31 @@ deValue deImage::getPixel(int channel, int p) const
     return c->getValue(p);
 
 }
+
+void deImage::lockRead() const
+{
+    int i;
+    int s = getColorSpaceSize(colorSpace);
+    for (i = 0; i < s; i++)
+    {
+        deChannel* c = channelManager.getChannel(channelsVisible[i]);
+        if (c)
+        {
+            c->lockRead();
+        }            
+    }        
+}
+
+void deImage::unlockRead() const
+{
+    int i;
+    int s = getColorSpaceSize(colorSpace);
+    for (i = 0; i < s; i++)
+    {
+        deChannel* c = channelManager.getChannel(channelsVisible[i]);
+        if (c)
+        {
+            c->unlockRead();
+        }            
+    }        
+}

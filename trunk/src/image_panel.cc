@@ -118,6 +118,10 @@ void deImagePanel::paintEvent(wxPaintEvent & evt)
         dc.Clear();
         render(dc);
     }
+    else
+    {
+        std::cout << "view: " << view << " in paintEvent" << std::endl;
+    }
 }
 
 void deImagePanel::repaintImagePanel()
@@ -129,6 +133,10 @@ void deImagePanel::repaintImagePanel()
         wxBufferedDC bufferedDC(&dc);
         bufferedDC.Clear();
         render(bufferedDC);
+    }
+    else
+    {
+        std::cout << "view: " << view << " in repaintImagePanel" << std::endl;
     }
 }
 

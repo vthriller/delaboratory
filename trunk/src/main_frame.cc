@@ -22,7 +22,7 @@
 #include "image_area_panel.h"
 #include "histogram_panel.h"
 #include "view_mode_panel.h"
-#include "zoom_panel.h"
+//#include "zoom_panel.h"
 #include "histogram_mode_panel.h"
 #include "help_color_spaces_frame.h"
 #include "help_color_spaces_frame2.h"
@@ -92,10 +92,12 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxPanel* viewModePanel = new deViewModePanel(topPanel, project);
     topSizer->Add(viewModePanel);
 
+/*
     wxPanel* zoomPanel = new deZoomPanel(topPanel, project);
     topSizer->Add(zoomPanel);
+    */
 
-    wxButton* testButton = new wxButton(topPanel, wxID_ANY, _T("thread test - don't touch!"));
+    wxButton* testButton = new wxButton(topPanel, wxID_ANY, _T("random layers - for crash test"));
     topSizer->Add(testButton);
 
     imageAreaPanel = new deImageAreaPanel(this, &project);
@@ -399,6 +401,7 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
 {
     imageAreaPanel->getImagePanel()->repaintImagePanel();
     controlPanel->updateSamplerManagerFrame();
+    samplersPanel->update();
     project.updateMemoryInfo();
     if (calcHistogram)
     {

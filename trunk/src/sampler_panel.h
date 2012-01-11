@@ -16,21 +16,35 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef _DE_SAMPLER_PANEL_H
+#define _DE_SAMPLER_PANEL_H
 
-#include <string>
+#include "wx/wx.h"
+#include <vector>
+#include "color_space.h"
+class deSampler;
+class deProject;
 
-std::string getApplicationName()
+class deSamplerPanel:public wxPanel
 {
-    return "delaboratory";
-}
+private:
+    deSampler& sampler;
+    deProject& project;
 
-std::string getVersion()
-{
-    return "development (unstable)";
-}
+    wxChoice* colorSpace;
+    wxStaticText* v1;
+    wxStaticText* v2;
+    wxStaticText* v3;
+    wxStaticText* v4;
 
-std::string getCopyright()
-{
-    return "(c) 2012 Jacek Poplawski";
-}
+    std::vector<deColorSpace> colorSpaces;
 
+public:
+	deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject& _project);
+	virtual ~deSamplerPanel();
+
+    void update();
+
+};
+
+#endif
