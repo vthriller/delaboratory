@@ -32,6 +32,7 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sour
  centerY("center_y")
 {
     setBlendMode(deBlendOverlay);
+    setOpacity(0.4);
 }
 
 deVignetteLayer::~deVignetteLayer()
