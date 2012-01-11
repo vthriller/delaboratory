@@ -29,6 +29,9 @@ class deSamplersPanel:public wxPanel
 private:
     deProject& project;
     std::list<deSamplerPanel*> panels;
+    wxCheckBox* show;
+
+    void check(wxCommandEvent &event);
 
 public:
 	deSamplersPanel(wxWindow* parent, deProject& _project);

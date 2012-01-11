@@ -58,6 +58,8 @@ class deProject
 
         bool receiveKeys;
 
+        bool showSamplers;
+
         deHistogramPanel* histogramPanel;
         deHistogramModePanel* histogramModePanel;
         deImageAreaPanel* imageAreaPanel;
@@ -118,7 +120,7 @@ class deProject
         deHistogramPanel* getHistogramPanel();
 
         bool samplersVisible() const;
-        void showSamplers();
+//        void showSamplers();
         void save(const std::string& fileName, bool image);
         void open(const std::string& fileName, bool image);
         bool openImage(const std::string& fileName);
@@ -142,6 +144,8 @@ class deProject
         void setMainFrame(deMainFrame* _mainFrame);
 
         void addRandomLayer();
+
+        void setShowSamplers(bool show);
 
 
 

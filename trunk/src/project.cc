@@ -56,6 +56,7 @@ deProject::deProject(deLayerProcessor& _processor)
     resetLayerStack();
     histogramPanel = NULL;
     receiveKeys = true;
+    showSamplers = false;
 
 
     layerProcessor.setLayerStack(&layerStack);
@@ -426,6 +427,10 @@ void deProject::onChangeViewMode()
 
 bool deProject::samplersVisible() const
 {
+    if (showSamplers)
+    {
+        return true;
+    }
     if (controlPanel)
     {
         return controlPanel->samplersVisible();
@@ -581,6 +586,7 @@ void deProject::newProject()
     controlPanel->updateLayerGrid();
 }
 
+/*
 void deProject::showSamplers()
 {
     if (controlPanel)
@@ -588,6 +594,7 @@ void deProject::showSamplers()
         controlPanel->showSamplers();
     }
 }
+*/
 
 void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
 {
@@ -762,3 +769,7 @@ void deProject::addRandomLayer()
     }
 }
 
+void deProject::setShowSamplers(bool show)
+{
+    showSamplers = show;
+}
