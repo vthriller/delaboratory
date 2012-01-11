@@ -53,6 +53,9 @@ class deImage
 
         deValue getPixel(int channel, int p) const;
 
+        void lockRead() const;
+        void unlockRead() const;
+
 };
 
 #endif

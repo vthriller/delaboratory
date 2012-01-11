@@ -737,13 +737,15 @@ void deProject::onScaleSet()
 
 void deProject::setViewOffset(deValue x, deValue y)
 {
-    layerProcessor.onDestroyAll();
+    if (viewManager.getScale() > 1.0)
+    {
+        layerProcessor.onDestroyAll();
 
-    viewManager.setOffset(x, y);
-    previewChannelManager.destroyAllChannels();
+        viewManager.setOffset(x, y);
+        previewChannelManager.destroyAllChannels();
 
-    layerProcessor.updateAllImages(false);
-
+        layerProcessor.updateAllImages(false);
+    }
 }
 
 void deProject::setMainFrame(deMainFrame* _mainFrame)

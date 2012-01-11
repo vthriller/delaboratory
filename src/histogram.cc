@@ -86,11 +86,14 @@ void deHistogram::calc(const deChannel* channel, int n)
 
     channel->lockRead();
 
+    const deValue* pixels = channel->getPixels();
+
     int j;
     int scale = size - 1;
     for (j = 0; j < n; j++)
     {
-        deValue value = channel->getValue(j);
+        //deValue value = channel->getValue(j);
+        deValue value = pixels[j];
         int bar = scale * value;
         if ((bar >=0) && (bar < size))
         {

@@ -21,15 +21,20 @@
 
 #include "wx/wx.h"
 class deProject;
+class deSamplerPanel;
+#include <list>
 
 class deSamplersPanel:public wxPanel
 {
 private:
     deProject& project;
+    std::list<deSamplerPanel*> panels;
 
 public:
 	deSamplersPanel(wxWindow* parent, deProject& _project);
 	virtual ~deSamplersPanel();
+
+    void update();
 
 };
 

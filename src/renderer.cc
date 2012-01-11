@@ -210,6 +210,8 @@ void renderChannel(const deImage& image, int c, unsigned char* data, deChannelMa
         return;
     }
 
+    channel->lockRead();
+
     const deValue* pixels = channel->getPixels();
 
     int n = s.getN();
@@ -228,6 +230,8 @@ void renderChannel(const deImage& image, int c, unsigned char* data, deChannelMa
         data[pos] = ss;
         pos++;
     }      
+
+    channel->unlockRead();
 
 }
 
@@ -242,6 +246,8 @@ void renderChannel(int c, unsigned char* data, deChannelManager& channelManager)
         return;
     }
 
+    channel->lockRead();
+
     const deValue* pixels = channel->getPixels();
 
     int n = s.getN();
@@ -260,6 +266,8 @@ void renderChannel(int c, unsigned char* data, deChannelManager& channelManager)
         data[pos] = ss;
         pos++;
     }      
+
+    channel->unlockRead();
 
 }
 
@@ -279,7 +287,6 @@ deRenderer::~deRenderer()
 
 bool deRenderer::render(wxDC& dc)
 {
-
     deChannelManager& channelManager = project->getPreviewChannelManager();
     const deSize& s = channelManager.getChannelSize();
     if (s != size)

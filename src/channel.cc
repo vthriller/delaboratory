@@ -59,7 +59,8 @@ deValue deChannel::getValue(int pos) const
     assert(lockedRead | lockedWrite);
     assert(pos >= 0);
     assert(pos < magicSize);
-    return pixels[pos];
+    deValue v = pixels[pos];
+    return v;
 }
 
 void deChannel::setValue(int pos, const deValue& value)

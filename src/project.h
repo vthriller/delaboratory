@@ -92,7 +92,6 @@ class deProject
 
         deSamplerManager& getSamplerManager();
 
-
         void addLAB();
         void addRGB();
 

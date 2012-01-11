@@ -24,6 +24,7 @@
 #include <sstream>
 #include <iostream>
 #include "str.h"
+#include "image.h"
 
 deSamplerManagerFrame::deSamplerManagerFrame(deControlPanel *parent, deProject& _project)
 :deFrame(parent, "samplers"), project(_project)
@@ -167,7 +168,11 @@ void deSamplerManagerFrame::update()
             deValue v3;
             deValue v4;
 
+            image.lockRead();
+
             convertPixel(image, p, colorSpace, v1, v2, v3, v4);
+
+            image.unlockRead();
 
             {
                 oss.str("");
