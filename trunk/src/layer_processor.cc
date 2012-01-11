@@ -75,6 +75,8 @@ deLayerProcessor::deLayerProcessor()
     lastLayerToUpdate = 0;
     lastValidLayer = -1;
 
+    multithreadingEnabled = true;
+
 }
 
 void deLayerProcessor::onDestroyAll()
@@ -139,27 +141,27 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
 
 void deLayerProcessor::updateImages(int a, int b, int channel, bool blend, bool action)
 {
-#if LAYER_PROCESSING_ON_THREAD 
-
-    updateImagesMutex.Lock();
-
-    if (a < firstLayerToUpdate)
+    if (isMultithreadingEnabled())
     {
-        firstLayerToUpdate = a;
+        updateImagesMutex.Lock();
+
+        if (a < firstLayerToUpdate)
+        {
+            firstLayerToUpdate = a;
+        }
+
+        lastLayerToUpdate = b;
+
+        channelUpdate = channel;
+        blendUpdate = blend;
+        actionUpdate = action;
+
+        updateImagesMutex.Unlock();
     }
-
-    lastLayerToUpdate = b;
-
-    channelUpdate = channel;
-    blendUpdate = blend;
-    actionUpdate = action;
-
-    updateImagesMutex.Unlock();
-
-#else
-    updateImagesThreadCall(a, b, channel, blend, action);
-#endif
-
+    else
+    {
+        updateImagesThreadCall(a, b, channel, blend, action);
+    }        
 }    
 
 void deLayerProcessor::updateImage(int i, int& channel, bool& blend, bool& action)

@@ -67,6 +67,7 @@ private:
     wxSizer* mainSizer;
     deImageAreaPanel* imageAreaPanel;
     deHistogramPanel* histogramPanel;
+    wxCheckBox* multithreading;
     bool full;
 
 	void onTestImageSmall(wxCommandEvent& event);
@@ -95,6 +96,8 @@ private:
 	void test(wxCommandEvent& event);
 
     void repaintMainFrame(bool calcHistogram);
+
+    void check(wxCommandEvent &event);
 
 public:
 	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor);

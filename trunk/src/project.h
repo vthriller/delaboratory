@@ -72,6 +72,7 @@ class deProject
 
         void saveImage(const std::string& filename, const deImage& image, const std::string& type);
 
+
     public:
         deProject(deLayerProcessor& _processor);
         virtual ~deProject();
@@ -141,6 +142,7 @@ class deProject
         void setMainFrame(deMainFrame* _mainFrame);
 
         void addRandomLayer();
+
 
 
 };

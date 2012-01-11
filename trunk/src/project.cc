@@ -57,6 +57,7 @@ deProject::deProject(deLayerProcessor& _processor)
     histogramPanel = NULL;
     receiveKeys = true;
 
+
     layerProcessor.setLayerStack(&layerStack);
     layerProcessor.setViewManager(&viewManager);
 }
