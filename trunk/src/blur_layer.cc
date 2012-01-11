@@ -30,6 +30,7 @@ deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer,
  blurType("blur_type")
 {
     blurRadius.setLabel("radius");
+    blurRadius.set(0.2);
     getSupportedBlurTypes(blurType.getChoices());
     blurType.set("gaussian");
     blurType.setLabel("blur type");
