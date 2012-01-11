@@ -48,6 +48,8 @@ class deLayerProcessor
 
         void repaintImageInLayerProcessor(bool calcHistogram);
 
+        bool multithreadingEnabled;
+
     public:
         deLayerProcessor();
         virtual ~deLayerProcessor();
@@ -84,6 +86,9 @@ class deLayerProcessor
         void onChangeViewMode();
 
         void onGUIUpdate();
+
+        void setMultithreadingEnabled(bool m) {multithreadingEnabled = m;};
+        bool isMultithreadingEnabled() const {return multithreadingEnabled;};
 
 };
 

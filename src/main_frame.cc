@@ -36,6 +36,7 @@
 #include "file_dialogs.h"
 #include "delaboratory.h"
 #include "samplers_panel.h"
+#include "layer_processor.h"
 
 #include "image_panel.h"
 
@@ -96,6 +97,10 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxPanel* zoomPanel = new deZoomPanel(topPanel, project);
     topSizer->Add(zoomPanel);
     */
+
+    multithreading = new wxCheckBox(topPanel, wxID_ANY, _T("multithreading"));
+    multithreading->SetValue(1);
+    topSizer->Add(multithreading);
 
     wxButton* testButton = new wxButton(topPanel, wxID_ANY, _T("random layers - for crash test"));
     topSizer->Add(testButton);
@@ -177,6 +182,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     imageAreaPanel->SetFocus();
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMainFrame::test));
+    Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deMainFrame::check));
 }
 
 void deMainFrame::hidePanels()
@@ -413,3 +419,8 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
     }
 }
 
+void deMainFrame::check(wxCommandEvent &event)
+{
+    bool checked = multithreading->IsChecked();
+    project.getLayerProcessor().setMultithreadingEnabled(checked);
+}
