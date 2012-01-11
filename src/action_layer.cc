@@ -30,9 +30,6 @@
 #include "xml.h"
 #include "blend_channel.h"
 
-#define ACTION_PROCESSING_ON_THREAD 1
-#define BLEND_PROCESSING_ON_THREAD 1
-
 class deUpdateActionThread:public wxThread
 {
     private:
@@ -86,35 +83,37 @@ void deActionLayer::updateActionAllChannels()
     int n = getColorSpaceSize(colorSpace);
     int i;
 
-#if ACTION_PROCESSING_ON_THREAD
-    wxSemaphore semaphore(0, n);
-
-    for (i = 0; i < n; i++)
+    if (layerProcessor.isMultithreadingEnabled())
     {
-        deUpdateActionThread* thread = new deUpdateActionThread(*this, i, semaphore);
+        wxSemaphore semaphore(0, n);
 
-        if ( thread->Create() != wxTHREAD_NO_ERROR )
+        for (i = 0; i < n; i++)
         {
-            std::cout << "creating thread... CREATE ERROR" << std::endl;
+            deUpdateActionThread* thread = new deUpdateActionThread(*this, i, semaphore);
+
+            if ( thread->Create() != wxTHREAD_NO_ERROR )
+            {
+                std::cout << "creating thread... CREATE ERROR" << std::endl;
+            }
+
+            if ( thread->Run() != wxTHREAD_NO_ERROR )
+            {
+                std::cout << "creating thread... RUN ERROR" << std::endl;
+            }
         }
 
-        if ( thread->Run() != wxTHREAD_NO_ERROR )
+        for (i = 0; i < n; i++)
         {
-            std::cout << "creating thread... RUN ERROR" << std::endl;
+            semaphore.Wait();
         }
     }
-
-    for (i = 0; i < n; i++)
+    else
     {
-        semaphore.Wait();
+        for (i = 0; i < n; i++)
+        {
+            updateActionOnThread(i);
+        }
     }
-#else
-    for (i = 0; i < n; i++)
-    {
-        updateActionOnThread(i);
-    }
-#endif
-
 }
 
 void deActionLayer::updateBlendAllChannels()
@@ -122,34 +121,37 @@ void deActionLayer::updateBlendAllChannels()
     int n = getColorSpaceSize(colorSpace);
     int i;
 
-#if BLEND_PROCESSING_ON_THREAD
-    wxSemaphore semaphore(0, n);
-
-    for (i = 0; i < n; i++)
+    if (layerProcessor.isMultithreadingEnabled())
     {
-        deUpdateBlendThread* thread = new deUpdateBlendThread(*this, i, semaphore);
+        wxSemaphore semaphore(0, n);
 
-        if ( thread->Create() != wxTHREAD_NO_ERROR )
+        for (i = 0; i < n; i++)
         {
-            std::cout << "creating thread... CREATE ERROR" << std::endl;
+            deUpdateBlendThread* thread = new deUpdateBlendThread(*this, i, semaphore);
+
+            if ( thread->Create() != wxTHREAD_NO_ERROR )
+            {
+                std::cout << "creating thread... CREATE ERROR" << std::endl;
+            }
+
+            if ( thread->Run() != wxTHREAD_NO_ERROR )
+            {
+                std::cout << "creating thread... RUN ERROR" << std::endl;
+            }
         }
 
-        if ( thread->Run() != wxTHREAD_NO_ERROR )
+        for (i = 0; i < n; i++)
         {
-            std::cout << "creating thread... RUN ERROR" << std::endl;
+            semaphore.Wait();
         }
     }
-
-    for (i = 0; i < n; i++)
+    else
     {
-        semaphore.Wait();
-    }
-#else
-    for (i = 0; i < n; i++)
-    {
-        updateBlendOnThread(i);
-    }
-#endif
+        for (i = 0; i < n; i++)
+        {
+            updateBlendOnThread(i);
+        }
+    }        
 
 }
 
