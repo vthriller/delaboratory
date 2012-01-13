@@ -21,6 +21,7 @@
 #include "slider.h"
 #include "gradient_panel.h"
 #include "layer_processor.h"
+#include "str.h"
 
 class deMixerSlider:public deSlider
 {
@@ -35,7 +36,9 @@ class deMixerSlider:public deSlider
         :deSlider(parent, name, range, -2.0, 2.0, 0.0), layer(_layer), s(_s), d(_d),
          layerProcessor(_layerProcessor)
         {
+            layerProcessor.log("creating mixer slider");
             setValue(layer.getWeight(s, d));
+            layerProcessor.log("created mixer slider");
         }
 
         virtual ~deMixerSlider()
@@ -88,7 +91,9 @@ deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _laye
     {
         std::string src = getChannelName(colorSpace, i);
         _layerProcessor.log("channel name: " + src);
+        _layerProcessor.log("creating mixer slider " + str(width) + " " + str(i));
         deMixerSlider* slider = new deMixerSlider(this, width, layer, i, index, src, layerProcessor);        
+        _layerProcessor.log("after creting mixer slider");
         sliders.push_back(slider);
         sizer->Add(slider);
         if (i != index)
