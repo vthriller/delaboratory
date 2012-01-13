@@ -21,8 +21,8 @@
 #include <iostream>
 #include "property_value_slider.h"
 
-deHighPassFrame::deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-:deActionFrame(parent, _layer), layerProcessor(_layerProcessor)
+deHighPassFrame::deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
+:deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);

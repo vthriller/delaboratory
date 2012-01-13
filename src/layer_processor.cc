@@ -29,9 +29,7 @@
 #include <iostream>
 #include "action_layer.h"
 
-static wxMutex updateImagesMutex;
-
-#define LAYER_PROCESSING_ON_THREAD 1
+static wxMutex updateImagesMutex(wxMUTEX_RECURSIVE);
 
 class deLayerProcessorWorkerThread:public wxThread
 {
@@ -76,6 +74,7 @@ deLayerProcessor::deLayerProcessor()
     lastValidLayer = -1;
 
     multithreadingEnabled = true;
+    //multithreadingEnabled = false;
 
 }
 
@@ -90,6 +89,8 @@ void deLayerProcessor::onDestroyAll()
 
 deLayerProcessor::~deLayerProcessor()
 {
+    lock();
+    unlock();
     workerThread->Delete();
 }
 
@@ -218,7 +219,6 @@ void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool bl
     }
 
     updateImagesMutex.Lock();
-    stack->lock();
 
     unsigned int i;
     assert((unsigned int)b < stack->getSize() );
@@ -227,7 +227,6 @@ void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool bl
         updateImage(i, channel, blend, action);
     }
 
-    stack->unlock();
     updateImagesMutex.Unlock();
 
     repaintImageInLayerProcessor(true);
@@ -237,9 +236,6 @@ void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool bl
 void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame)
 {
     updateImagesMutex.Lock();
-
-//    channelManager.lock();
-    stack->lock();
 
     std::map<int, int> channelUsage;
     generateChannelUsage(channelUsage);
@@ -289,8 +285,6 @@ void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int v
 
     progressDialog->Update(100, _T("finished"));
 
-    stack->unlock();
-//    channelManager.unlock();
     updateImagesMutex.Unlock();
 }
 
@@ -372,11 +366,7 @@ void deLayerProcessor::tickWork()
 
     if (ok)
     {
-        stack->lock();
-
         updateImage(firstLayerToUpdate, channelUpdate, blendUpdate, actionUpdate);
-
-        stack->unlock();
     }
 
     updateImagesMutex.Unlock();
@@ -388,11 +378,6 @@ void deLayerProcessor::tickWork()
 
 }
 
-void deLayerProcessor::onDeleteLayer()
-{
-    repaintImageInLayerProcessor(true);
-}    
-
 void deLayerProcessor::onChangeViewMode()
 {
     repaintImageInLayerProcessor(true);
@@ -401,4 +386,36 @@ void deLayerProcessor::onChangeViewMode()
 void deLayerProcessor::onGUIUpdate()
 {
     repaintImageInLayerProcessor(true);
+}    
+
+void deLayerProcessor::removeTopLayer()
+{
+    int index = stack->getSize() - 1;
+    if (index > 0)
+    {
+        lock();
+        stack->removeTopLayer();
+        int view = viewManager->getView();
+        if (view >= stack->getSize())
+        {
+            viewManager->setView( stack->getSize() - 1 );
+        }
+        repaintImageInLayerProcessor(true);
+        unlock();
+    }
+}    
+
+void deLayerProcessor::addLayer(deLayer* layer)
+{
+    lock();
+
+    if (stack)
+    {
+        stack->addLayer(layer);
+
+        int index = layer->getIndex();
+        markUpdateAllChannels(index);
+    }
+
+    unlock();
 }    

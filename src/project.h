@@ -23,6 +23,7 @@
 #include "sampler_manager.h"
 #include "channel_manager.h"
 #include "view_manager.h"
+#include "layer_frame_manager.h"
 #include <wx/progdlg.h>
 
 class deImagePanel;
@@ -49,6 +50,7 @@ class deProject
         deMemoryInfoFrame* memoryInfoFrame;
         deViewManager viewManager;
         deSamplerManager samplerManager;
+        deLayerFrameManager layerFrameManager;
 
         deChannelManager previewChannelManager;
         deChannelManager sourceChannelManager;
@@ -89,6 +91,7 @@ class deProject
         deLayerProcessor& getLayerProcessor();
 
         void setPreviewSize(const deSize& size, bool calcHistogram);
+        bool isSourceValid() const;
 
         const deViewManager& getViewManager() const;
         deViewManager& getViewManager();
@@ -102,7 +105,7 @@ class deProject
 
         void exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog);
 
-        void deleteLayer();
+//        void deleteLayer();
 
         void setLastView();
 
@@ -146,6 +149,8 @@ class deProject
         void addRandomLayer();
 
         void setShowSamplers(bool show);
+
+        deLayerFrameManager& getLayerFrameManager() {return layerFrameManager;};
 
 
 

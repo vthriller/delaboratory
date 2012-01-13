@@ -81,11 +81,14 @@ bool deImagePanel::setPosition(deValue x, deValue y)
 {
     if (clicked)
     {
+    /*
         deViewManager& viewManager = project->getViewManager();
         int view = viewManager.getView();
         deLayerStack& layerStack = project->getLayerStack();
         deLayer* layer = layerStack.getLayer(view);
         bool used = layer->onImageClick(x, y);
+*/
+        bool used = project->getLayerFrameManager().onImageClick(x, y);
 
         deSamplerManager& samplerManager = project->getSamplerManager();
         samplerManager.onImageClick(x, y);
@@ -111,6 +114,7 @@ deImagePanel::~deImagePanel()
 
 void deImagePanel::paintEvent(wxPaintEvent & evt)
 {
+    project->getLayerProcessor().lock();
     int view = project->getLayerProcessor().getLastValidLayer();
     if (view >= 0)
     {
@@ -122,10 +126,13 @@ void deImagePanel::paintEvent(wxPaintEvent & evt)
     {
         std::cout << "view: " << view << " in paintEvent" << std::endl;
     }
+    project->getLayerProcessor().unlock();
 }
 
 void deImagePanel::repaintImagePanel()
 {
+    project->getLayerProcessor().lock();
+
     int view = project->getLayerProcessor().getLastValidLayer();
     if (view >= 0)
     {
@@ -138,6 +145,7 @@ void deImagePanel::repaintImagePanel()
     {
         std::cout << "view: " << view << " in repaintImagePanel" << std::endl;
     }
+    project->getLayerProcessor().unlock();
 }
 
 void deImagePanel::render(wxDC& dc)

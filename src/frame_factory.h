@@ -23,7 +23,8 @@
 class deLayer;
 class deFrame;
 class deLayerProcessor;
+class deLayerFrameManager;
 
-deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerProcessor);
+deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager);
 
 #endif

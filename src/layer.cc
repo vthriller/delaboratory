@@ -17,8 +17,6 @@
 */
 
 #include "layer.h"
-#include "action_frame.h"
-#include "blend_frame.h"
 #include <sstream>
 #include "xml.h"
 #include "str.h"
@@ -26,30 +24,10 @@
 deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer)
 :name(_name), colorSpace(_colorSpace), index(_index), sourceLayer(_sourceLayer)
 {
-    actionFrame = NULL;
-    blendFrame = NULL;
 }
 
 deLayer::~deLayer()
 {
-    assert(!actionFrame);
-    assert(!blendFrame);
-}
-
-void deLayer::closeFrames()
-{
-    if (actionFrame)
-    {
-        deFrame* frame = actionFrame;
-        actionFrame->beforeClose();
-        frame->Close();
-    }
-    if (blendFrame)
-    {
-        deFrame* frame = blendFrame;
-        blendFrame->beforeClose();
-        frame->Close();
-    }
 }
 
 deColorSpace deLayer::getColorSpace() const
@@ -86,40 +64,6 @@ void deLayer::setEnabled(bool e)
 {
 }
 
-void deLayer::closeActionFrame()
-{
-    actionFrame = NULL;
-}
-
-void deLayer::setActionFrame(deFrame* frame)
-{
-    actionFrame = frame;
-}
-
-void deLayer::closeBlendFrame()
-{
-    blendFrame = NULL;
-}
-
-void deLayer::setBlendFrame(deBlendFrame* frame)
-{
-    blendFrame = frame;
-}
-
-bool deLayer::onImageClick(deValue x, deValue y)
-{
-    if (actionFrame)
-    {
-        deActionFrame* trueActionFrame = dynamic_cast<deActionFrame*>(actionFrame);
-        if (trueActionFrame)
-        {
-            trueActionFrame->onImageClick(x, y);
-            return true;    
-        }            
-    }
-    return false;
-}
-
 void deLayer::saveCommon(xmlNodePtr node)
 {
     saveChild(node, "type", getType());
@@ -129,26 +73,9 @@ void deLayer::saveCommon(xmlNodePtr node)
     saveChild(node, "color_space", getColorSpaceName(colorSpace));
 }
 
-bool deLayer::checkActionFrame() const
-{
-    return actionFrame != NULL;
-}
-
-bool deLayer::checkBlendFrame() const
-{
-    return blendFrame != NULL;
-}
-
-void deLayer::onKey(int key)
-{
-    if (actionFrame)
-    {
-        actionFrame->onKey(key);
-    }
-}
-
 void deLayer::onUpdateProperties()
 {
+/*
     if (actionFrame)
     {
         actionFrame->onUpdateProperties();
@@ -157,6 +84,7 @@ void deLayer::onUpdateProperties()
     {
         blendFrame->onUpdateProperties();
     }
+    */
 }
 
 void deLayer::updateImageThreadCall()

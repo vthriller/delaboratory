@@ -23,6 +23,7 @@
 #include <sstream>
 #include "layer.h"
 #include "image.h"
+#include "layer_processor.h"
 
 BEGIN_EVENT_TABLE(deHistogramPanel, wxPanel)
 EVT_PAINT(deHistogramPanel::paintEvent)
@@ -34,7 +35,7 @@ deHistogramPanel::deHistogramPanel(wxWindow* parent, deProject* _project)
     channel = 0;
     generated = false;
     project->setHistogramPanel(this);
-    generate();
+    //generate();
 }
 
 deHistogramPanel::~deHistogramPanel()
@@ -68,6 +69,9 @@ void deHistogramPanel::render(wxDC& dc)
 
 void deHistogramPanel::generate()
 {
+
+    project->getLayerProcessor().lock();
+
     generated = false;
     deLayerStack& layerStack = project->getLayerStack();
     deViewManager& viewManager = project->getViewManager();
@@ -75,25 +79,47 @@ void deHistogramPanel::generate()
 
     int view = viewManager.getView();
     deLayer* layer = layerStack.getLayer(view);
-    if (!layer)
+    if (layer)
     {
-        return;
-    }
-    const deImage& image = layer->getImage();
-    int channelIndex = image.getChannelIndex(channel);
-    deChannel* c = channelManager.getChannel(channelIndex);
+        const deImage& image = layer->getImage();
+        int channelIndex = image.getChannelIndex(channel);
+        deChannel* c = channelManager.getChannel(channelIndex);
 
-    int n = channelManager.getChannelSize().getN();
+        int n = channelManager.getChannelSize().getN();
 
-    histogram.clear();
-    histogram.calc(c, n);
+        if ((c) && (n > 0))
+        {
+        /*
+            static int counter = 0;
 
-    int sizeW = 256;
-    int sizeH = 200;
-    unsigned char g1 = 50;
-    unsigned char g2 = 120;
+            counter++;
 
-    generated = histogram.render(histogramImage.GetData(), sizeW, sizeH, g1, g2);
+            if (counter == 1)
+            {
+            */
+                c->lockRead();
+
+                //std::cout << "calculate HISTOGRAM for channel " << c <<  std::endl;
+
+                histogram.clear();
+                histogram.calc(c, n);
+
+                c->unlockRead();
+            //}
+        }            
+    }        
+
+    project->getLayerProcessor().unlock();
+
+    if (layer)
+    {
+        int sizeW = 256;
+        int sizeH = 200;
+        unsigned char g1 = 50;
+        unsigned char g2 = 120;
+
+        generated = histogram.render(histogramImage.GetData(), sizeW, sizeH, g1, g2);
+    }        
 }
 
 void deHistogramPanel::setChannel(int _channel)

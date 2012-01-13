@@ -22,8 +22,8 @@
 #include "curves_panel.h"
 #include "gradient_panel.h"
 
-deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-:deActionFrame(parent, _layer)
+deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
+:deActionFrame(parent, _layer, _frameManager)
 {
     deCurvesLayer& curvesLayer = dynamic_cast<deCurvesLayer&>(_layer);
 

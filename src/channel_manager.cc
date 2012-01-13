@@ -59,6 +59,7 @@ int deChannelManager::allocateNewChannel(deImage& image)
 
     if (trashed.size() > 0)
     {
+//        std::cout << "from trash allocate channel " << channelSize.getN() << std::endl;
         std::set<int>::iterator i = trashed.begin();
         int c = *i;
         trashed.erase(c);
@@ -68,6 +69,7 @@ int deChannelManager::allocateNewChannel(deImage& image)
     }
     else
     {
+//        std::cout << "allocate channel " << channelSize.getN() << std::endl;
         channels.push_back(channel);
         int c = channels.size() - 1;
         unlock();
@@ -85,6 +87,7 @@ void deChannelManager::freeChannel(int index)
 
     if (channels[index])
     {
+//        std::cout << "free channel " << index << " " << channelSize.getN() << std::endl;
         delete channels[index];
         channels[index] = NULL;
         trashed.insert(index);
@@ -159,6 +162,7 @@ void deChannelManager::tryAllocateChannel(int index)
     assert((unsigned int)index < channels.size());
     if (!channels[index]->isAllocated())
     {
+//        std::cout << " try allocate channel " << index << " " << channelSize.getN() << std::endl;
         channels[index]->allocate(channelSize.getN());
     }        
 
@@ -173,6 +177,7 @@ void deChannelManager::tryDeallocateChannel(int index)
     assert((unsigned int)index < channels.size());
     if (channels[index]->isAllocated())
     {
+//        std::cout << " try deallocate channel " << index << " " << channelSize.getN() << std::endl;
         channels[index]->deallocate();
     }        
 

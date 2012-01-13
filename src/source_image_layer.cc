@@ -49,9 +49,13 @@ void deSourceImageLayer::setPrimary()
 
 void deSourceImageLayer::updateImage()
 {
+//    std::cout << "src im update" << std::endl;
+
     deChannel* sourceChannelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
     deChannel* sourceChannelG = sourceChannelManager.getChannel(sourceImage.getChannelIndex(1));
     deChannel* sourceChannelB = sourceChannelManager.getChannel(sourceImage.getChannelIndex(2));
+
+//    std::cout << "src size:" << sourceChannelManager.getChannelSize().getN() << std::endl;
 
     if (!sourceChannelR)
     {
@@ -66,6 +70,8 @@ void deSourceImageLayer::updateImage()
     deChannel* channelR = previewChannelManager.getChannel(image.getChannelIndex(0));
     deChannel* channelG = previewChannelManager.getChannel(image.getChannelIndex(1));
     deChannel* channelB = previewChannelManager.getChannel(image.getChannelIndex(2));
+
+//    std::cout << "dst size:" << previewChannelManager.getChannelSize().getN() << std::endl;
 
     sourceChannelR->lockRead();
     sourceChannelG->lockRead();
@@ -140,6 +146,11 @@ void deSourceImageLayer::updateImage()
         maxx = maxxx;
     }
 
+/*
+    std::cout << "scaleChannel " << channelR << std::endl;
+    std::cout << "scaleChannel " << channelG << std::endl;
+    std::cout << "scaleChannel " << channelB << std::endl;
+*/
     scaleChannel(sourceChannelR->getPixels(), channelR->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, wd);
     scaleChannel(sourceChannelG->getPixels(), channelG->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, wd);
     scaleChannel(sourceChannelB->getPixels(), channelB->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, wd);

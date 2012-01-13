@@ -22,7 +22,6 @@
 #include "image_area_panel.h"
 #include "histogram_panel.h"
 #include "view_mode_panel.h"
-//#include "zoom_panel.h"
 #include "histogram_mode_panel.h"
 #include "help_color_spaces_frame.h"
 #include "help_color_spaces_frame2.h"
@@ -92,11 +91,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     wxPanel* viewModePanel = new deViewModePanel(topPanel, project);
     topSizer->Add(viewModePanel);
-
-/*
-    wxPanel* zoomPanel = new deZoomPanel(topPanel, project);
-    topSizer->Add(zoomPanel);
-    */
 
     multithreading = new wxCheckBox(topPanel, wxID_ANY, _T("multithreading"));
     multithreading->SetValue(1);
@@ -231,6 +225,7 @@ void deMainFrame::onKey(int key)
 
 void deMainFrame::onQuit(wxCommandEvent& WXUNUSED(event))
 {
+    std::cout << "onQuit" << std::endl;
 	Close(TRUE);
 }
 
@@ -367,7 +362,7 @@ class deTestThread:public wxThread
             {
                 wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_RANDOM_EVENT );
                 wxPostEvent( frame, event );
-                wxThread::Sleep(1000);
+                wxThread::Sleep(100 + rand() % 1000);
                 if (TestDestroy())
                 {
                     i = max;
@@ -405,6 +400,15 @@ void deMainFrame::test(wxCommandEvent& event)
 
 void deMainFrame::repaintMainFrame(bool calcHistogram)
 {
+    if (!project.isSourceValid())
+    {
+        std::cout << "source not valid" << std::endl;
+        return;
+    }
+//    std::cout << "source valid" << std::endl;
+
+    project.getLayerProcessor().lock();
+
     imageAreaPanel->getImagePanel()->repaintImagePanel();
     controlPanel->updateSamplerManagerFrame();
     samplersPanel->update();
@@ -417,6 +421,9 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
             histogramPanel->paint();
         }
     }
+
+    project.getLayerProcessor().unlock();
+
 }
 
 void deMainFrame::check(wxCommandEvent &event)

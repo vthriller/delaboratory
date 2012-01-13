@@ -25,6 +25,7 @@ class deViewManager;
 class deChannelManager;
 class wxProgressDialog;
 class deMemoryInfoFrame;
+class deLayer;
 #include <map>
 #include <wx/wx.h>
 
@@ -81,14 +82,15 @@ class deLayerProcessor
 
         void onDestroyAll();
 
-        void onDeleteLayer();
-
         void onChangeViewMode();
 
         void onGUIUpdate();
 
         void setMultithreadingEnabled(bool m) {multithreadingEnabled = m;};
         bool isMultithreadingEnabled() const {return multithreadingEnabled;};
+
+        void removeTopLayer();
+        void addLayer(deLayer* layer);
 
 };
 

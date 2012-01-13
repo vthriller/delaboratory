@@ -53,7 +53,7 @@ class deCurvesEditor:public deActionFrame
         wxButton* is2;
 
     public:
-        deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
+        deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deCurvesEditor();
 
         virtual void onImageClick(deValue x, deValue y);

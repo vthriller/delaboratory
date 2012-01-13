@@ -21,6 +21,7 @@
 #include "action_layer.h"
 #include "view_manager.h"
 #include "layer_processor.h"
+#include "layer_frame_manager.h"
 
 class deAlphaSlider:public deSlider
 {
@@ -142,8 +143,8 @@ class deBlendMaskMaxSlider:public deSlider
         }
 };        
 
-deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-:deLayerFrame(parent, _layer, _layer.getName()),
+deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
+:deLayerFrame(parent, _layer, _layer.getName(), _frameManager),
  layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -159,7 +160,8 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
         applyAllowed = false;
     }
 
-    layer.setBlendFrame(this);
+    //layer.setBlendFrame(this);
+    frameManager.addBlendFrame(this);
 
     getSupportedBlendModes(blendModes);
 
@@ -309,7 +311,7 @@ deBlendFrame::~deBlendFrame()
 {
     layerProcessor.onGUIUpdate();
 
-    layer.closeBlendFrame();
+    frameManager.removeBlendFrame(this);
 }
 
 void deBlendFrame::beforeClose()
@@ -319,7 +321,7 @@ void deBlendFrame::beforeClose()
     viewManager.hideThisMask(l.getAllocatedBlendMaskChannel());
     l.hideBlendMask();
 
-    layer.closeBlendFrame();
+    //layer.closeBlendFrame();
 }
 
 void deBlendFrame::choose(wxCommandEvent &event)

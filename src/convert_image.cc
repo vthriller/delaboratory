@@ -59,9 +59,9 @@ void convertImage3x3(const deImage& sourceImage, deImage& image, deChannelManage
     dc2->lockWrite();
     dc3->lockWrite();
 
-    deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
-    deValue* d2 = channelManager.getChannel(image.getChannelIndex(1))->getPixels();
-    deValue* d3 = channelManager.getChannel(image.getChannelIndex(2))->getPixels();
+    deValue* d1 = dc1->getPixels();
+    deValue* d2 = dc2->getPixels();
+    deValue* d3 = dc3->getPixels();
 
     int i;
 

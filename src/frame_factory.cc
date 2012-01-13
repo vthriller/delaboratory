@@ -31,56 +31,56 @@
 
 #include "action_layer.h"
 
-deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerProcessor)
+deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager)
 {
     const std::string type = layer.getType();
 
     if (type == "curves")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deCurvesEditor(parent, al, layerProcessor);
+        return new deCurvesEditor(parent, al, layerProcessor, frameManager);
     }        
 
     if (type == "mixer")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deMixerEditor(parent, al, layerProcessor);
+        return new deMixerEditor(parent, al, layerProcessor, frameManager);
     }        
 
     if (type == "apply_image")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deApplyImageFrame(parent, al, layerProcessor);
+        return new deApplyImageFrame(parent, al, layerProcessor, frameManager);
     }        
 
     if (type == "blur")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deBlurFrame(parent, al, layerProcessor);
+        return new deBlurFrame(parent, al, layerProcessor, frameManager);
     }        
 
     if (type == "usm")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deUSMFrame(parent, al, layerProcessor);
+        return new deUSMFrame(parent, al, layerProcessor, frameManager);
     }        
 
     if (type == "dodge_burn")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deDodgeBurnFrame(parent, al, layerProcessor);
+        return new deDodgeBurnFrame(parent, al, layerProcessor, frameManager);
     }        
 
     if (type == "high_pass")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deHighPassFrame(parent, al, layerProcessor);
+        return new deHighPassFrame(parent, al, layerProcessor, frameManager);
     }        
 
     if (type == "shadows_highlights")
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deShadowsHighlightsFrame(parent, al, layerProcessor);
+        return new deShadowsHighlightsFrame(parent, al, layerProcessor, frameManager);
     }        
 
     if (type == "conversion_bw")

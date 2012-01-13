@@ -53,14 +53,15 @@ deProject::deProject(deLayerProcessor& _processor)
 {
     imageFileName = "";
     sourceImageFileName = "";
-    resetLayerStack();
     histogramPanel = NULL;
     receiveKeys = true;
     showSamplers = false;
 
-
     layerProcessor.setLayerStack(&layerStack);
     layerProcessor.setViewManager(&viewManager);
+
+    resetLayerStack();
+
 }
 
 void deProject::disableKeys()
@@ -125,7 +126,7 @@ void deProject::onKey(int key)
         setHistogramChannel(3);
     }
 
-    layerStack.onKey(key);
+    layerFrameManager.onKey(key);
     if (controlPanel)
     {
         controlPanel->onKey(key);
@@ -192,11 +193,7 @@ void deProject::resetLayerStack()
 
 void deProject::addLayer(deLayer* layer)
 {
-    layerStack.addLayer(layer);
-    updateMemoryInfo();
-
-    int index = layer->getIndex();
-    layerProcessor.markUpdateAllChannels(index);
+    layerProcessor.addLayer(layer);
 }
 
 deChannelManager& deProject::getPreviewChannelManager() 
@@ -371,21 +368,12 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
     layerProcessor.updateAllImages(true);
 }
 
+/*
 void deProject::deleteLayer()
-{
-    if (layerStack.getSize() < 2)
-    {
-        return;
-    }
-    layerStack.removeTopLayer();
-    int view = viewManager.getView();
-    if (view >= layerStack.getSize())
-    {
-        viewManager.setView( layerStack.getSize() - 1 );
-    }
-    updateMemoryInfo();
-    layerProcessor.onDeleteLayer();
+{   
+    layerProcessor.removeTopLayer();
 }
+*/
 
 void deProject::setLastView()
 {
@@ -610,6 +598,8 @@ bool deProject::openImage(const std::string& fileName)
 {
     freeImage();
 
+    std::cout << "OPEN IMAGE" << fileName << std::endl;
+
     bool tiff = checkTIFF(fileName);
     bool jpeg = checkJPEG(fileName);
 
@@ -772,4 +762,9 @@ void deProject::addRandomLayer()
 void deProject::setShowSamplers(bool show)
 {
     showSamplers = show;
+}
+
+bool deProject::isSourceValid() const
+{
+    return (previewChannelManager.getChannelSize().getN() > 0);
 }

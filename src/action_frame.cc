@@ -18,20 +18,24 @@
 
 #include "action_frame.h"
 #include "action_layer.h"
+#include "layer_frame_manager.h"
 
-deActionFrame::deActionFrame(wxWindow *parent, deActionLayer& _layer)
-:deLayerFrame(parent, _layer, _layer.getName())
+deActionFrame::deActionFrame(wxWindow *parent, deActionLayer& _layer, deLayerFrameManager& _frameManager)
+:deLayerFrame(parent, _layer, _layer.getName(), _frameManager)
 {
-    layer.setActionFrame(this);
+    //layer.setActionFrame(this);
+    frameManager.addActionFrame(this);
 }
 
 deActionFrame::~deActionFrame()
 {
-    layer.closeActionFrame();
+    //layer.closeActionFrame();
+    frameManager.removeActionFrame(this);
 }
 
+/*
 void deActionFrame::beforeClose()
 {
-    layer.closeActionFrame();
+    //layer.closeActionFrame();
 }
-
+*/

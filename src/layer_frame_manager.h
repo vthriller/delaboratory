@@ -16,33 +16,43 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BLUR_FRAME_H
-#define _DE_BLUR_FRAME_H
+#ifndef _DE_LAYER_FRAME_MANAGER_H
+#define _DE_LAYER_FRAME_MANAGER_H
 
+#include <list>
+
+#include "value.h"
 #include "action_frame.h"
-#include <vector>
-#include "blur_type.h"
-class dePropertyValueSlider;
-class dePropertyChoiceUI;
-class deLayerProcessor;
 
-class deBlurFrame:public deActionFrame
+class deLayerFrame;
+class deFrame;
+
+class deLayerFrameManager
 {
     private:
-        dePropertyValueSlider* radius;
-        dePropertyValueSlider* threshold;
-        dePropertyChoiceUI* blurType;
-        deLayerProcessor& layerProcessor;
+        std::list<deLayerFrame*> actionFrames;
+        std::list<deLayerFrame*> blendFrames;
 
     public:
-        deBlurFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
-        virtual ~deBlurFrame();
+        deLayerFrameManager();
+        virtual ~deLayerFrameManager();
 
-        virtual void onImageClick(deValue x, deValue y) {};
+        void addActionFrame(deFrame* frame);
+        void removeActionFrame(deFrame* frame);
+        bool checkActionFrame(int index);
 
-        virtual void onUpdateProperties();
+        void addBlendFrame(deFrame* frame);
+        void removeBlendFrame(deFrame* frame);
+        bool checkBlendFrame(int index);
+
+        void onDestroyLayer(int index);
+
+        void destroyActionFrame(int index);
+        void destroyBlendFrame(int index);
+
+        bool onImageClick(deValue x, deValue y);
+        void onKey(int key);
 
 };
-
 
 #endif
