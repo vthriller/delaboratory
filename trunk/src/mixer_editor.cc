@@ -21,6 +21,7 @@
 #include "mixer_layer.h"
 #include "mixer_editor_channel.h"
 #include "layer_processor.h"
+#include "str.h"
 
 deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
 :deActionFrame(parent, _layer, _frameManager)
@@ -40,14 +41,16 @@ deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerPro
 
     int n = getColorSpaceSize(colorSpace);
 
-    _layerProcessor.log("creating mixer editor - channels");
+    _layerProcessor.log("creating mixer editor - channels: " + str(n));
     int i;
     for (i = 0; i < n; i++)
     {
+        _layerProcessor.log("creating mixer editor channel " + str(i));
         deMixerEditorChannel* mixerEditorChannel = new deMixerEditorChannel(this, mixerLayer, i, _layerProcessor);
         sizer->Add(mixerEditorChannel);
         channels.push_back(mixerEditorChannel);
     }
+    _layerProcessor.log("creating mixer editor - layout and fit");
     sizer->Layout();
 
     Fit();
