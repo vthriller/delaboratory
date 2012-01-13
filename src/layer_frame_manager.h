@@ -32,6 +32,8 @@ class deLayerFrameManager
     private:
         std::list<deLayerFrame*> actionFrames;
         std::list<deLayerFrame*> blendFrames;
+        deLayerFrameManager(const deLayerFrameManager& );
+        deLayerFrameManager& operator =(const deLayerFrameManager& );
 
     public:
         deLayerFrameManager();
