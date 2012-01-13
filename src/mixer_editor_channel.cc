@@ -57,21 +57,30 @@ class deMixerSlider:public deSlider
 deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _layer, int _index, deLayerProcessor& _layerProcessor)
 :wxPanel(parent), layer(_layer), index(_index), layerProcessor(_layerProcessor)
 {
+    _layerProcessor.log("creating mixer editor channel... ");
+
     deColorSpace colorSpace = layer.getColorSpace();
     unsigned int n = getColorSpaceSize(colorSpace);
 
     std::string name = getChannelName(colorSpace, index);
+
+    _layerProcessor.log("creating mixer editor channel, name: " + name);
+
     wxSizer* sizer = new wxStaticBoxSizer(wxVERTICAL, this,  wxString::FromAscii(name.c_str()));
     SetSizer(sizer);
 
     int barSize = 20;
     int width = 300;
 
+    _layerProcessor.log("creating mixer editor channel - gradient");
+
     deGradientPanel* gradient = new deGradientPanel(this, wxSize(width, barSize), colorSpace, index, -1, -1, -1, -1);
     sizer->Add(gradient, 0, wxCENTER);
 
     std::string src1;
     std::string src2;
+
+    _layerProcessor.log("creating mixer editor channel - sliders");
 
     unsigned int i;
     int counter = 0;
@@ -94,6 +103,8 @@ deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _laye
             }
         }            
     }
+
+    _layerProcessor.log("creating mixer editor channel - buttons");
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
     sizer->Add(sizerB, 0);
@@ -121,8 +132,12 @@ deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _laye
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMixerEditorChannel::click));
 
+    _layerProcessor.log("creating mixer editor channel - layout and fit");
+
     Layout();
     Fit();
+
+    _layerProcessor.log("created mixer editor channel... ");
 
 }
 
