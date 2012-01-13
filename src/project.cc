@@ -61,6 +61,8 @@ deProject::deProject(deLayerProcessor& _processor)
 
     logger.setFile(LOG_FILE_NAME);
 
+    log("project started");
+
     layerProcessor.setLogger(&logger);
 
     layerProcessor.setLayerStack(&layerStack);
@@ -763,6 +765,7 @@ void deProject::setViewOffset(deValue x, deValue y)
 
 void deProject::setMainFrame(deMainFrame* _mainFrame)
 {
+    log("set main frame in project");
     mainFrame = _mainFrame;
 }
 

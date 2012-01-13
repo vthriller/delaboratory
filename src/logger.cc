@@ -59,19 +59,16 @@ void deLogger::log(const std::string message)
     {
         int t = sw.Time();
 
-        wxThread* thread = wxThread::This();
-
-        bool m = thread->IsMain();
+        wxThreadIdType c_id = wxThread::GetCurrentId();
+        wxThreadIdType m_id = wxThread::GetMainId();
 
         std::string thr = "main";
 
-        if (!m)
+        if (m_id != c_id)
         {
-            wxThreadIdType id = thread->GetId();
-
             std::ostringstream oss;
             oss.str("");
-            oss << id;
+            oss << c_id;
             thr = oss.str();
         }            
 
