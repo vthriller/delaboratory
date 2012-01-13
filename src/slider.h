@@ -21,6 +21,7 @@
 
 #include <wx/wx.h>
 #include "value.h"
+class deLayerProcessor;
 
 class deSlider:public wxPanel
 {
@@ -34,6 +35,8 @@ class deSlider:public wxPanel
         deValue valueMax;
         bool integerMode;
 
+        deLayerProcessor& layerProcessor;
+
         void moveSlider(wxCommandEvent &event);
         void finishMoveSlider(wxCommandEvent &event);
 
@@ -43,7 +46,7 @@ class deSlider:public wxPanel
         void setSlider(deValue v);
 
     public:
-        deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue);
+        deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue, deLayerProcessor& _layerProcessor);
         virtual ~deSlider();
 
         void setIntegerMode();

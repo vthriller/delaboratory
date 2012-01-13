@@ -33,7 +33,7 @@ class deMixerSlider:public deSlider
 
     public:
         deMixerSlider(wxWindow *parent, int range, deMixerLayer& _layer, int _s, int _d, const std::string& name, deLayerProcessor& _layerProcessor)
-        :deSlider(parent, name, range, -2.0, 2.0, 0.0), layer(_layer), s(_s), d(_d),
+        :deSlider(parent, name, range, -2.0, 2.0, 0.0, _layerProcessor), layer(_layer), s(_s), d(_d),
          layerProcessor(_layerProcessor)
         {
             layerProcessor.log("creating mixer slider");

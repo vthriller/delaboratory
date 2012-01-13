@@ -22,7 +22,7 @@
 #include "layer_processor.h"
 
 dePropertyValueSlider::dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayer& _layer, deLayerProcessor& _layerProcessor)
-:deSlider(parent, _property.getLabel(), _sliderRange, _property.getMin(), _property.getMax(), _property.getDefault()),
+:deSlider(parent, _property.getLabel(), _sliderRange, _property.getMin(), _property.getMax(), _property.getDefault(), _layerProcessor),
 property(_property),
 layer(_layer),
 layerProcessor(_layerProcessor)
