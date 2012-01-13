@@ -46,6 +46,7 @@ void deChannelManager::setPrimary(int index)
 
 void deChannelManager::setChannelSize(const deSize& size)
 {
+//    std::cout << "deChannelManager::setChannelSize" << std::endl;
     channelSize = size;
     destroyAllChannels();
 }

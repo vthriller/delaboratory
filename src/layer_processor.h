@@ -26,6 +26,7 @@ class deChannelManager;
 class wxProgressDialog;
 class deMemoryInfoFrame;
 class deLayer;
+class deLogger;
 #include <map>
 #include <wx/wx.h>
 
@@ -36,6 +37,7 @@ class deLayerProcessor
         deLayerStack* stack;
         deViewManager* viewManager;
         wxThread* workerThread;
+        deLogger* logger;
 
         int firstLayerToUpdate;
         int lastLayerToUpdate;
@@ -54,6 +56,8 @@ class deLayerProcessor
     public:
         deLayerProcessor();
         virtual ~deLayerProcessor();
+
+        void setLogger(deLogger* _logger);
 
         int getLastValidLayer() const {return lastValidLayer;};
 
@@ -91,6 +95,8 @@ class deLayerProcessor
 
         void removeTopLayer();
         void addLayer(deLayer* layer);
+
+        void log(const std::string& message);
 
 };
 

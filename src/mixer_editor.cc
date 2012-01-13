@@ -20,10 +20,13 @@
 #include "color_space.h"
 #include "mixer_layer.h"
 #include "mixer_editor_channel.h"
+#include "layer_processor.h"
 
 deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
 :deActionFrame(parent, _layer, _frameManager)
 {
+    _layerProcessor.log("creating mixer editor");
+
     deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(_layer);
 
     deColorSpace colorSpace = layer.getColorSpace();

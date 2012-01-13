@@ -25,6 +25,23 @@ deLayerFrameManager::deLayerFrameManager()
 
 deLayerFrameManager::~deLayerFrameManager()
 {
+    destroyAllFrames();
+}
+
+void deLayerFrameManager::destroyAllFrames()
+{
+    while (actionFrames.size() > 0)
+    {
+        std::list<deLayerFrame*>::iterator i = actionFrames.begin();
+        actionFrames.remove(*i);
+        delete *i;
+    }
+    while (blendFrames.size() > 0)
+    {
+        std::list<deLayerFrame*>::iterator i = blendFrames.begin();
+        blendFrames.remove(*i);
+        delete *i;
+    }
 }
 
 void deLayerFrameManager::addActionFrame(deFrame* frame)

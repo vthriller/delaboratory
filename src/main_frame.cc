@@ -73,6 +73,8 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 {
     project.setMainFrame(this);
 
+    project.log("opening main frame");
+
     std::string s = getApplicationName() + " " + getVersion() + " " + getCopyright();
 
     Create((wxFrame *)NULL, wxID_ANY, wxString::FromAscii(s.c_str()), wxDefaultPosition, size);
@@ -188,6 +190,11 @@ void deMainFrame::hidePanels()
     mainSizer->Layout();
     full = true;
     imageAreaPanel->SetFocus();
+}
+
+deMainFrame::~deMainFrame()
+{
+    project.log("closing main frame");
 }
 
 void deMainFrame::showPanels()
@@ -400,12 +407,12 @@ void deMainFrame::test(wxCommandEvent& event)
 
 void deMainFrame::repaintMainFrame(bool calcHistogram)
 {
+//    project.log("requested repaint main frame");
     if (!project.isSourceValid())
     {
         std::cout << "source not valid" << std::endl;
         return;
     }
-//    std::cout << "source valid" << std::endl;
 
     project.getLayerProcessor().lock();
 

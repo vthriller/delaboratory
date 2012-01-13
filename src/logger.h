@@ -21,11 +21,14 @@
 
 #include <string>
 #include <fstream>
+#include <wx/wx.h>
 
 class deLogger
 {
     private:
         std::ofstream* f;
+        wxStopWatch sw;
+        wxMutex mutex;
 
     public:
         deLogger();

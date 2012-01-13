@@ -69,7 +69,6 @@ void deHistogramPanel::render(wxDC& dc)
 
 void deHistogramPanel::generate()
 {
-
     project->getLayerProcessor().lock();
 
     generated = false;
@@ -89,23 +88,12 @@ void deHistogramPanel::generate()
 
         if ((c) && (n > 0))
         {
-        /*
-            static int counter = 0;
+            c->lockRead();
 
-            counter++;
+            histogram.clear();
+            histogram.calc(c, n);
 
-            if (counter == 1)
-            {
-            */
-                c->lockRead();
-
-                //std::cout << "calculate HISTOGRAM for channel " << c <<  std::endl;
-
-                histogram.clear();
-                histogram.calc(c, n);
-
-                c->unlockRead();
-            //}
+            c->unlockRead();
         }            
     }        
 

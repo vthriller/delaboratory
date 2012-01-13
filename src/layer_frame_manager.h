@@ -53,6 +53,8 @@ class deLayerFrameManager
         bool onImageClick(deValue x, deValue y);
         void onKey(int key);
 
+        void destroyAllFrames();
+
 };
 
 #endif
