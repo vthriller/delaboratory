@@ -42,12 +42,45 @@ void deSlider::setEdit(deValue v)
 {
     std::ostringstream oss;
     oss << v;
-    labelValue->SetLabel(wxString::FromAscii(oss.str().c_str()));
+    if (labelValue)
+    {
+        std::string s = oss.str();
+        layerProcessor.log("set edit value " + s);
+        labelValue->SetLabel(wxString::FromAscii(oss.str().c_str()));
+    }
+    else
+    {   
+        layerProcessor.log("ERROR no labelValue in deSlider");
+    }
 }
 
 void deSlider::setSlider(deValue v)
 {
+    if (sliderRange == 0)
+    {
+        layerProcessor.log("ERROR slider range is 0 !!!");
+        return;
+    }
+
+    if (valueMax == valueMin)
+    {
+        layerProcessor.log("ERROR valueMax == valueMin !!!");
+        return;
+    }
+
     deValue sl = (v - valueMin) / ((valueMax-valueMin) / sliderRange);
+    {
+        std::ostringstream oss;
+        oss << sl;
+        std::string s = oss.str();
+        layerProcessor.log("set slider value " + s);
+    }
+
+    if (!slider)
+    {
+        layerProcessor.log("ERROR no slider in deSlider");
+        return;
+    }
 
     slider->SetValue(sl);
 }
