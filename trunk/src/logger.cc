@@ -18,6 +18,7 @@
 
 #include "logger.h"
 #include "str.h"
+#include <sstream>
 
 deLogger::deLogger()
 {
@@ -58,7 +59,23 @@ void deLogger::log(const std::string message)
     {
         int t = sw.Time();
 
-        (*f) << str(t) + ": " + message << std::endl;
+        wxThread* thread = wxThread::This();
+
+        bool m = thread->IsMain();
+
+        std::string thr = "main";
+
+        if (!m)
+        {
+            wxThreadIdType id = thread->GetId();
+
+            std::ostringstream oss;
+            oss.str("");
+            oss << id;
+            thr = oss.str();
+        }            
+
+        (*f) << str(t) + ": [" + thr + "] " + message << std::endl;
     }
 
     mutex.Unlock();

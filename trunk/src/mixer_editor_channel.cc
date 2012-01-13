@@ -87,6 +87,7 @@ deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _laye
     for (i = 0; i < n; i++)
     {
         std::string src = getChannelName(colorSpace, i);
+        _layerProcessor.log("channel name: " + src);
         deMixerSlider* slider = new deMixerSlider(this, width, layer, i, index, src, layerProcessor);        
         sliders.push_back(slider);
         sizer->Add(slider);
