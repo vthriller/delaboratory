@@ -27,15 +27,20 @@ deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerPro
 {
     _layerProcessor.log("creating mixer editor");
 
+    _layerProcessor.log("creating mixer editor - layer name: " + layer.getName());
+
     deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(_layer);
 
     deColorSpace colorSpace = layer.getColorSpace();
+
+    _layerProcessor.log("creating mixer editor - sizer");
 
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
 
     int n = getColorSpaceSize(colorSpace);
 
+    _layerProcessor.log("creating mixer editor - channels");
     int i;
     for (i = 0; i < n; i++)
     {
@@ -44,7 +49,10 @@ deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerPro
         channels.push_back(mixerEditorChannel);
     }
     sizer->Layout();
+
     Fit();
+
+    _layerProcessor.log("created mixer editor");
 }
 
 deMixerEditor::~deMixerEditor()
