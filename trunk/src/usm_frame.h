@@ -42,7 +42,7 @@ class deUSMFrame:public deActionFrame
         void click(wxCommandEvent &event);
 
     public:
-        deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
+        deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deUSMFrame();
 
         virtual void onImageClick(deValue x, deValue y) {};

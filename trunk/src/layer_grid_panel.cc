@@ -196,17 +196,22 @@ void deLayerGridPanel::click(wxCommandEvent &event)
     std::vector<deLayerRow>::const_iterator i;
     for (i = layerRows.begin(); i != layerRows.end(); i++)
     {
+
+        deLayerFrameManager& frameManager = project.getLayerFrameManager();
+
         const deLayerRow& row = *i;
         if (row.action->GetId() == id)
         {
             deLayer* layer = layerStack.getLayer(row.index);
 
-            if (!layer->checkActionFrame())
+            //if (!layer->checkActionFrame())
+            if (!project.getLayerFrameManager().checkActionFrame(row.index))
             {
-                deFrame* actionFrame = createFrame(this, *layer, layerProcessor);
+                deFrame* actionFrame = createFrame(this, *layer, layerProcessor, frameManager);
                 if (actionFrame)
                 {
-                    layer->setActionFrame(actionFrame);
+//                    project.getLayerFrameManager().addActionFrame(actionFrame);
+//                    layer->setActionFrame(actionFrame);
                     actionFrame->Show(true);
                 }
             }        
@@ -216,12 +221,14 @@ void deLayerGridPanel::click(wxCommandEvent &event)
         {
             deLayer* layer = layerStack.getLayer(row.index);
             deActionLayer* al = dynamic_cast<deActionLayer*>(layer);
-            if (!layer->checkBlendFrame())
+            //if (!layer->checkBlendFrame())
+            if (!frameManager.checkBlendFrame(row.index))
             {
-                deBlendFrame* blendFrame = new deBlendFrame(this, *al, layerProcessor);
+                deBlendFrame* blendFrame = new deBlendFrame(this, *al, layerProcessor, frameManager);
                 if (blendFrame)
                 {
-                    layer->setBlendFrame(blendFrame);
+                    //layer->setBlendFrame(blendFrame);
+  //                  frameManager.addBlendFrame(blendFrame);
                     blendFrame->Show(true);
                 }
             }        

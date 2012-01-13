@@ -24,7 +24,7 @@
 deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, deLayerProcessor& _layerProcessor)
 :deFrame(parent, "conversion BW"), layer( _layer), layerProcessor(_layerProcessor)
 {
-    layer.setActionFrame(this);
+    //layer.setActionFrame(this);
 
     deColorSpace sourceColorSpace = layer.getSourceColorSpace();
 
@@ -91,7 +91,7 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
 
 deMixerBWEditor::~deMixerBWEditor()
 {
-    layer.closeActionFrame();
+    //layer.closeActionFrame();
 }
 
 void deMixerBWEditor::click(wxCommandEvent &event)

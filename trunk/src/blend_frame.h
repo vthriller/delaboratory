@@ -59,7 +59,7 @@ class deBlendFrame:public deLayerFrame
         void showHide();
 
     public:
-        deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
+        deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deBlendFrame();
 
         void beforeClose();

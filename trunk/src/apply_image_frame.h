@@ -38,7 +38,7 @@ class deApplyImageFrame:public deActionFrame
         void setChannels();
 
     public:
-        deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
+        deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deApplyImageFrame();
 
         virtual void onImageClick(deValue x, deValue y) {};

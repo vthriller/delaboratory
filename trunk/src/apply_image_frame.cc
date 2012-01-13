@@ -22,8 +22,8 @@
 #include "property_boolean_ui.h"
 #include "layer_processor.h"
 
-deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-:deActionFrame(parent, _layer), layerProcessor(_layerProcessor)
+deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
+:deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
 {
     deApplyImageLayer& applyImageLayer = dynamic_cast<deApplyImageLayer&>(layer);
 

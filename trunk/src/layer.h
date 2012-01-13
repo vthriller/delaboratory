@@ -40,8 +40,6 @@ class deLayer
 
     protected:
         deColorSpace colorSpace;
-        deFrame* actionFrame;
-        deBlendFrame* blendFrame;
         unsigned int index;
         unsigned int sourceLayer;
 
@@ -63,20 +61,10 @@ class deLayer
         virtual bool isEnabled() const;
         virtual void setEnabled(bool e);
 
-        void closeActionFrame();
-        void setActionFrame(deFrame* frame);
-
-        void closeBlendFrame();
-        void setBlendFrame(deBlendFrame* frame);
-
-        virtual bool onImageClick(deValue x, deValue y);
-
         virtual void updateChannelUsage(std::map<int, int>& channelUsage) const = 0;
 
         int getIndex() const {return index;};
 
-        virtual void onKey(int key);
-       
         virtual void load(xmlNodePtr root) = 0;
         virtual void save(xmlNodePtr root) = 0;
 
@@ -84,14 +72,9 @@ class deLayer
 
         virtual std::string getType() const = 0;
 
-        bool checkActionFrame() const;
-        bool checkBlendFrame() const;
-
         void onUpdateProperties();
 
         void updateImageThreadCall();
-
-        void closeFrames();
 
 };
 

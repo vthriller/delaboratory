@@ -84,24 +84,30 @@ void deHistogram::calc(const deChannel* channel, int n)
         return;
     }
 
-    channel->lockRead();
+    static int counter = 0;
+
 
     const deValue* pixels = channel->getPixels();
 
     int j;
     int scale = size - 1;
+//    std::cout << "scale: " << scale << std::endl;
     for (j = 0; j < n; j++)
+    //for (j = 0; j < 1; j++)
     {
-        //deValue value = channel->getValue(j);
         deValue value = pixels[j];
+        counter++;
+//        std::cout << "value: " << value << std::endl;
         int bar = scale * value;
+        //std::cout << "bar: " << bar << std::endl;
         if ((bar >=0) && (bar < size))
         {
             bars[bar] ++;    
         }            
     }
 
-    channel->unlockRead();
+//    std::cout << "HISTOGRAM COUNTER PIXELS YEYEYE " << counter << std::endl;
+
 }
 
 bool deHistogram::render(unsigned char* data, int sizeW, int sizeH, unsigned char g1, unsigned char g2)

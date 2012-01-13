@@ -42,7 +42,7 @@ class deDodgeBurnFrame:public deActionFrame
         void click(wxCommandEvent &event);
 
     public:
-        deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
+        deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deDodgeBurnFrame();
 
         virtual void onImageClick(deValue x, deValue y) {};

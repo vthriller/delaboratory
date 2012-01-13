@@ -21,8 +21,8 @@
 #include "mixer_layer.h"
 #include "mixer_editor_channel.h"
 
-deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-:deActionFrame(parent, _layer)
+deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
+:deActionFrame(parent, _layer, _frameManager)
 {
     deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(_layer);
 

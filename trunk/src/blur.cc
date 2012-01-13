@@ -247,14 +247,20 @@ void blurChannel(const deValue* source, deValue* destination, deSize size, deVal
             switch (type)
             {
                 case deBoxBlur:
+                {
                     boxBlur(sourceBuffer, destinationBuffer, w, blurSizeW);
                     break;
+                }                    
                 case deGaussianBlur:
+                {
                     gaussianBlur(sourceBuffer, destinationBuffer, w, blurSizeW, weights);
                     break;
+                }                    
                 case deSurfaceBlur:
+                {
                     surfaceBlur(sourceBuffer, destinationBuffer, w, blurSizeW, weights, t);
                     break;
+                }                    
                 default:
                     break;
             }
@@ -281,14 +287,20 @@ void blurChannel(const deValue* source, deValue* destination, deSize size, deVal
             switch (type)
             {
                 case deBoxBlur:
+                {
                     boxBlur(sourceBuffer, destinationBuffer, h, blurSizeH);
                     break;
+                }                    
                 case deGaussianBlur:
+                {
                     gaussianBlur(sourceBuffer, destinationBuffer, h, blurSizeH, weights);
                     break;
+                }                        
                 case deSurfaceBlur:
+                {
                     surfaceBlur(sourceBuffer, destinationBuffer, h, blurSizeH, weights, t);
                     break;
+                }                    
                 default:
                     break;
             }

@@ -30,7 +30,7 @@ class deMixerEditor:public deActionFrame
         std::vector<deMixerEditorChannel*> channels;
 
     public:
-        deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor);
+        deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deMixerEditor();
 
         virtual void onImageClick(deValue x, deValue y);

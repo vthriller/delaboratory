@@ -26,12 +26,12 @@ class deActionFrame:public deLayerFrame
 {
     private:
     public:
-        deActionFrame(wxWindow *parent, deActionLayer& _layer);
+        deActionFrame(wxWindow *parent, deActionLayer& _layer, deLayerFrameManager& _frameManager);
         virtual ~deActionFrame();
 
         virtual void onImageClick(deValue x, deValue y) {};
 
-        virtual void beforeClose();
+//        virtual void beforeClose();
 };
 
 #endif

@@ -219,7 +219,10 @@ void deControlPanel::click(wxCommandEvent &event)
 
     if (deleteLayer->GetId() == id)
     {
-        project.deleteLayer();
+        deLayerStack& layerStack = project.getLayerStack();
+        int index = layerStack.getSize() - 1;
+        project.getLayerFrameManager().onDestroyLayer(index);
+        layerProcessor.removeTopLayer();
         updateLayerGrid();
     }
 
@@ -322,7 +325,8 @@ void deControlPanel::addRandomLayer()
     {
         if (rand() % view > 3)
         {
-            project.deleteLayer();
+            //project.deleteLayer();
+            layerProcessor.removeTopLayer();
             updateLayerGrid();
             return;
         }
@@ -363,6 +367,11 @@ void deControlPanel::addRandomLayer()
             c = colorSpaces[r];
 
             valid = checkConversion(currentColorSpace, c);
+
+            if (c == currentColorSpace)
+            {
+                valid = false;
+            }
         }            
 
         addConversionLayer(c);
