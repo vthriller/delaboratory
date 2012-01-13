@@ -53,6 +53,9 @@ class deLayerProcessor
 
         bool multithreadingEnabled;
 
+        deLayerProcessor(const deLayerProcessor&);
+        deLayerProcessor& operator = (const deLayerProcessor&);
+
     public:
         deLayerProcessor();
         virtual ~deLayerProcessor();

@@ -18,6 +18,7 @@
 
 #include "slider.h"
 #include <sstream>
+#include "layer_processor.h"
 
 void deSlider::updateValueFromSlider(bool finished)
 {
@@ -61,27 +62,41 @@ void deSlider::finishMoveSlider(wxCommandEvent &event)
     updateValueFromSlider(true);
 }
 
-deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue)
-:wxPanel(parent), sliderRange(_sliderRange), valueMin(_valueMin), valueMax(_valueMax)
+deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue, deLayerProcessor& _layerProcessor)
+:wxPanel(parent), sliderRange(_sliderRange), valueMin(_valueMin), valueMax(_valueMax), layerProcessor(_layerProcessor)
 {
+    layerProcessor.log("creating slider...");
+
     integerMode = false;
     sizer = new wxBoxSizer(wxHORIZONTAL);
+
+    layerProcessor.log("creating slider - label");
     
     label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(labelString.c_str()), wxDefaultPosition, wxSize(80, 30));
     sizer->Add(label, 0, wxCENTER);
 
+    layerProcessor.log("creating slider - slider");
     slider = new wxSlider(this, wxID_ANY, sliderRange, 0,  sliderRange, wxDefaultPosition, wxSize(sliderRange, -1), wxSL_HORIZONTAL);
     sizer->Add(slider, 0);
 
+    layerProcessor.log("creating slider - label value");
     labelValue = new wxStaticText(this, wxID_ANY, _T("inv"), wxDefaultPosition, wxSize(40, 30));
     sizer->Add(labelValue, 0, wxCENTER);
 
+    layerProcessor.log("creating slider - set sizer");
+
     SetSizer(sizer);
+
+    layerProcessor.log("creating slider - set value");
 
     setValue(defaultValue);
 
+    layerProcessor.log("creating slider - connect");
+
     Connect(wxEVT_SCROLL_THUMBTRACK, wxCommandEventHandler(deSlider::moveSlider));
     Connect(wxEVT_SCROLL_CHANGED, wxCommandEventHandler(deSlider::finishMoveSlider));
+
+    layerProcessor.log("created slider");
 }
 
 deSlider::~deSlider()
