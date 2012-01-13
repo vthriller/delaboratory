@@ -34,13 +34,16 @@ void deSlider::updateValueFromSlider(bool finished)
 
 void deSlider::setValue(deValue v)
 {
+    layerProcessor.log("set value...");
     setEdit(v);
     setSlider(v);
 }
 
 void deSlider::setEdit(deValue v)
 {
+    layerProcessor.log("set edit...");
     std::ostringstream oss;
+    oss.str();
     oss << v;
     if (labelValue)
     {
