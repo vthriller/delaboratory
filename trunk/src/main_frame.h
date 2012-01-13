@@ -101,6 +101,7 @@ private:
 
 public:
 	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor);
+	~deMainFrame();
 
     void showPanels();
     void hidePanels();

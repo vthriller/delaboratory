@@ -95,7 +95,7 @@ int deLaboratory::FilterEvent(wxEvent& event)
 
 int deLaboratory::OnExit()
 {
-    std::cout << "onExit" << std::endl;
+    project.log("OnExit");
     thread->Delete();
     return 0;
 }   

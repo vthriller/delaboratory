@@ -150,6 +150,7 @@ void deImagePanel::repaintImagePanel()
 
 void deImagePanel::render(wxDC& dc)
 {
+//    std::cout << "deImagePanel::render" << std::endl;
     renderer.render(dc);
     if (project->samplersVisible())
     {

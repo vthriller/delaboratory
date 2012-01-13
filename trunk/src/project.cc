@@ -42,6 +42,8 @@
 #include "layer_processor.h"
 #include "external_editor.h"
 
+const std::string LOG_FILE_NAME = "debug.log";
+
 deProject::deProject(deLayerProcessor& _processor)
 :layerProcessor(_processor),
  viewModePanel(NULL),
@@ -56,6 +58,10 @@ deProject::deProject(deLayerProcessor& _processor)
     histogramPanel = NULL;
     receiveKeys = true;
     showSamplers = false;
+
+    logger.setFile(LOG_FILE_NAME);
+
+    layerProcessor.setLogger(&logger);
 
     layerProcessor.setLayerStack(&layerStack);
     layerProcessor.setViewManager(&viewManager);
@@ -76,6 +82,7 @@ void deProject::enableKeys()
 
 deProject::~deProject()
 {
+    log("closing project");
     layerStack.clear();
 }
 
@@ -176,6 +183,8 @@ void deProject::setTestImage(int s)
 
 void deProject::resetLayerStack()
 {
+    logger.log("reset layer stack");
+
     layerStack.clear();
 
     deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, layerProcessor, previewChannelManager, viewManager, "source image", sourceChannelManager);
@@ -193,6 +202,7 @@ void deProject::resetLayerStack()
 
 void deProject::addLayer(deLayer* layer)
 {
+
     layerProcessor.addLayer(layer);
 }
 
@@ -218,11 +228,14 @@ deLayerProcessor& deProject::getLayerProcessor()
 
 void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
 {
+//    std::cout << "setPreviewSize...?" << std::endl;
     deSize oldSize = previewChannelManager.getChannelSize();
     if (oldSize == size)
     {
         return;
     }
+
+//    std::cout << "setPreviewSize..." << std::endl;
 
     previewChannelManager.setChannelSize(size);
 
@@ -231,6 +244,7 @@ void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
 
 void deProject::onChangeView(int a, int b)
 {
+    logger.log("change view " + str(a) + " " + str(b));
     layerProcessor.onChangeView(a, b);
 
     if (controlPanel)
@@ -599,6 +613,7 @@ bool deProject::openImage(const std::string& fileName)
     freeImage();
 
     std::cout << "OPEN IMAGE" << fileName << std::endl;
+    logger.log("open image " + fileName);
 
     bool tiff = checkTIFF(fileName);
     bool jpeg = checkJPEG(fileName);
@@ -767,4 +782,9 @@ void deProject::setShowSamplers(bool show)
 bool deProject::isSourceValid() const
 {
     return (previewChannelManager.getChannelSize().getN() > 0);
+}
+
+void deProject::log(const std::string& message)
+{
+    logger.log(message);
 }

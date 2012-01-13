@@ -28,6 +28,7 @@
 #include <wx/progdlg.h>
 #include <iostream>
 #include "action_layer.h"
+#include "logger.h"
 
 static wxMutex updateImagesMutex(wxMUTEX_RECURSIVE);
 
@@ -67,6 +68,8 @@ deLayerProcessor::deLayerProcessor()
     stack = NULL;
     viewManager = NULL;
 
+    logger = NULL;
+
     workerThread = NULL;
 
     firstLayerToUpdate = 0;
@@ -89,6 +92,7 @@ void deLayerProcessor::onDestroyAll()
 
 deLayerProcessor::~deLayerProcessor()
 {
+    log("destroying layer processor");
     lock();
     unlock();
     workerThread->Delete();
@@ -142,6 +146,8 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
 
 void deLayerProcessor::updateImages(int a, int b, int channel, bool blend, bool action)
 {
+    log("requested update images " + str(a) + " " + str(b) + " " + str(channel) + " " + str(blend) + " " + str(action));
+
     if (isMultithreadingEnabled())
     {
         updateImagesMutex.Lock();
@@ -167,6 +173,8 @@ void deLayerProcessor::updateImages(int a, int b, int channel, bool blend, bool 
 
 void deLayerProcessor::updateImage(int i, int& channel, bool& blend, bool& action)
 {
+    log("update image " + str(i) + " " + str(channel) + " " + str(blend) + " " + str(action));
+
     if (i >= firstLayerToUpdate) 
     {
         firstLayerToUpdate = i+1;
@@ -391,6 +399,7 @@ void deLayerProcessor::onGUIUpdate()
 void deLayerProcessor::removeTopLayer()
 {
     int index = stack->getSize() - 1;
+    log("requested remove top layer " + str(index));
     if (index > 0)
     {
         lock();
@@ -409,6 +418,8 @@ void deLayerProcessor::addLayer(deLayer* layer)
 {
     lock();
 
+    log("add layer " + str(layer->getIndex()) + " " +  layer->getName());
+
     if (stack)
     {
         stack->addLayer(layer);
@@ -419,3 +430,16 @@ void deLayerProcessor::addLayer(deLayer* layer)
 
     unlock();
 }    
+
+void deLayerProcessor::setLogger(deLogger* _logger)
+{
+    logger = _logger;
+}
+
+void deLayerProcessor::log(const std::string& message)
+{
+    if (logger)
+    {
+        logger->log(message);
+    }
+}

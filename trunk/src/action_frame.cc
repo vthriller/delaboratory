@@ -23,19 +23,11 @@
 deActionFrame::deActionFrame(wxWindow *parent, deActionLayer& _layer, deLayerFrameManager& _frameManager)
 :deLayerFrame(parent, _layer, _layer.getName(), _frameManager)
 {
-    //layer.setActionFrame(this);
     frameManager.addActionFrame(this);
 }
 
 deActionFrame::~deActionFrame()
 {
-    //layer.closeActionFrame();
     frameManager.removeActionFrame(this);
 }
 
-/*
-void deActionFrame::beforeClose()
-{
-    //layer.closeActionFrame();
-}
-*/

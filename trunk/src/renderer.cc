@@ -289,6 +289,12 @@ bool deRenderer::render(wxDC& dc)
 {
     deChannelManager& channelManager = project->getPreviewChannelManager();
     const deSize& s = channelManager.getChannelSize();
+
+    if ((s.getW() == 0) || (s.getH() == 0))
+    {
+        return false;
+    }
+
     if (s != size)
     {
         if (image)
@@ -340,6 +346,7 @@ bool deRenderer::render(wxDC& dc)
             if (!renderImage(layerImage, data, channelManager))
             {
                 std::cout << "failed renderImage" << std::endl;
+                project->log("render image FAILED");
             }
         }
     }

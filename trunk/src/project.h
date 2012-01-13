@@ -24,6 +24,7 @@
 #include "channel_manager.h"
 #include "view_manager.h"
 #include "layer_frame_manager.h"
+#include "logger.h"
 #include <wx/progdlg.h>
 
 class deImagePanel;
@@ -51,6 +52,7 @@ class deProject
         deViewManager viewManager;
         deSamplerManager samplerManager;
         deLayerFrameManager layerFrameManager;
+        deLogger logger;
 
         deChannelManager previewChannelManager;
         deChannelManager sourceChannelManager;
@@ -151,6 +153,8 @@ class deProject
         void setShowSamplers(bool show);
 
         deLayerFrameManager& getLayerFrameManager() {return layerFrameManager;};
+
+        void log(const std::string& message);
 
 
 

@@ -17,6 +17,7 @@
 */
 
 #include "logger.h"
+#include "str.h"
 
 deLogger::deLogger()
 {
@@ -25,26 +26,40 @@ deLogger::deLogger()
 
 deLogger::~deLogger()
 {
+    mutex.Lock();
+
     if (f)
     {
         f->close();
     }
+
+    mutex.Unlock();
 }
 
 void deLogger::setFile(const std::string& fileName)
 {
+    mutex.Lock();
+
     if (f)
     {
         f->close();
     }
 
     f = new std::ofstream(fileName.c_str());
+
+    mutex.Unlock();
 }
 
 void deLogger::log(const std::string message)
 {
+    mutex.Lock();
+
     if (f)
     {
-        (*f) << message << std::endl;
+        int t = sw.Time();
+
+        (*f) << str(t) + ": " + message << std::endl;
     }
+
+    mutex.Unlock();
 }
