@@ -95,6 +95,8 @@ private:
 	void onRepaintEvent(wxCommandEvent& event);
 	void onRandomEvent(wxCommandEvent& event);
 
+	void onCloseEvent(wxCloseEvent& event);
+
 	void test(wxCommandEvent& event);
 
     void repaintMainFrame(bool calcHistogram);
