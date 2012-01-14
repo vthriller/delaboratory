@@ -47,6 +47,7 @@ class deLayerProcessorWorkerThread:public wxThread
                     w = false;
                 }
             }
+            processor.log("worker thread finished");
             return NULL;
         }
         deLayerProcessor& processor;
@@ -107,6 +108,7 @@ void deLayerProcessor::setMainFrame(deMainFrame* _mainFrame)
 
 void deLayerProcessor::stopWorkerThread()
 {
+    log("stop worker thread");
     closing = true;
     workerThread->Delete();
 }
