@@ -84,3 +84,14 @@ void deBlurLayer::load(xmlNodePtr root)
     }        
 
 }
+
+bool deBlurLayer::randomize()
+{
+    deValue r = (deValue) rand() / RAND_MAX;
+
+    r *= 0.5;
+
+    blurRadius.set(r);
+
+    return true;
+}

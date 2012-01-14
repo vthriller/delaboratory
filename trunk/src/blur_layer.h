@@ -52,6 +52,8 @@ class deBlurLayer:public deActionLayer
         dePropertyChoice& getPropertyType() {return blurType;};
         dePropertyValue& getPropertyThreshold() {return threshold;};
 
+        bool randomize();
+
 };
 
 #endif
