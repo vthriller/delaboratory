@@ -194,6 +194,21 @@ void blurChannel(const deValue* source, deValue* destination, deSize size, deVal
     int w = size.getW();
     int h = size.getH();
 
+    if (w == 0)
+    {
+        return;
+    }
+
+    if (h == 0)
+    {
+        return;
+    }
+
+    if (radius == 0)
+    {
+        return;
+    }
+
     assert(w > 0);
     assert(h > 0);
     assert(radius > 0);
