@@ -196,6 +196,8 @@ deMainFrame::~deMainFrame()
 {
     project.log("closing main frame");
     layerProcessor.stopWorkerThread();
+    layerProcessor.lock();
+    layerProcessor.unlock();
 }
 
 void deMainFrame::showPanels()

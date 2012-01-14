@@ -96,9 +96,9 @@ void deLayerProcessor::onDestroyAll()
 deLayerProcessor::~deLayerProcessor()
 {
     log("destroying layer processor");
+    stopWorkerThread();
     lock();
     unlock();
-    stopWorkerThread();
 }
 
 void deLayerProcessor::setMainFrame(deMainFrame* _mainFrame)
