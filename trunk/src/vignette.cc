@@ -31,6 +31,16 @@ void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue
     deValue ww = w / 2.0;
     deValue hh = h / 2.0;
 
+    if (w == 0)
+    {
+        return;
+    }
+
+    if (h == 0)
+    {
+        return;
+    }
+
     assert(w > 0);
     assert(h > 0);
     //assert(radius > 0);
