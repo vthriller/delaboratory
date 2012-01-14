@@ -397,11 +397,9 @@ void deProject::deleteLayer()
 
 void deProject::setLastView()
 {
-    int a = viewManager.getView();
     int n = layerStack.getSize();
     n--;
     viewManager.setView(n);
-    onChangeView(a, n);
 }
 
 void deProject::setHistogramPanel(deHistogramPanel* _histogramPanel)
