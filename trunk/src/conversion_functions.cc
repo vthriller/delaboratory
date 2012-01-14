@@ -311,3 +311,34 @@ deConversion3x3 getConversion3x3(deColorSpace s, deColorSpace d)
 
     return NULL;
 }
+
+bool checkConversion(deColorSpace currentColorSpace, deColorSpace colorSpace)
+{
+    if (getConversion3x3(currentColorSpace, colorSpace))
+    {
+        return true;
+    }
+
+    if (getConversion4x3(currentColorSpace, colorSpace))
+    {
+        return true;
+    }
+
+    if (getConversion3x4(currentColorSpace, colorSpace))
+    {
+        return true;
+    }
+
+    if (getConversion1x3(currentColorSpace, colorSpace))
+    {
+        return true;
+    }
+
+    if (getConversion3x1(currentColorSpace, colorSpace))
+    {
+        return true;
+    }
+
+    return false;
+}
+

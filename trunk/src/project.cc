@@ -24,6 +24,7 @@
 #include "source_image_layer.h"
 #include "curves_layer.h"
 #include "conversion_layer.h"
+#include "conversion_functions.h"
 #include "image_panel.h"
 #include "str.h"
 #include "histogram_panel.h"
@@ -769,14 +770,6 @@ void deProject::setMainFrame(deMainFrame* _mainFrame)
     mainFrame = _mainFrame;
 }
 
-void deProject::addRandomLayer()
-{
-    if (controlPanel)
-    {
-        controlPanel->addRandomLayer();
-    }
-}
-
 void deProject::setShowSamplers(bool show)
 {
     showSamplers = show;
@@ -831,4 +824,63 @@ void deProject::addConversionLayer(deColorSpace colorSpace)
     }
 }        
 
+void deProject::addRandomLayer()
+{
+    int view = layerStack.getSize() - 1;
+
+    if (view > 0)
+    {
+        if (rand() % view > 3)
+        {
+            layerProcessor.removeTopLayer();
+            controlPanel->updateLayerGrid();
+            return;
+        }
+    }
+
+    if (rand() % 2 > 0)
+    {
+        std::vector<std::string> actions;
+        getSupportedActions(actions);
+
+        int n = actions.size();
+        int r = rand() % n;
+
+        std::string a = actions[r];
+        addActionLayer(a);
+    }
+    else
+    {
+        deLayer* layer = layerStack.getLayer(view);
+        if (!layer)
+        {
+            return;
+        }
+
+        deColorSpace currentColorSpace = layer->getColorSpace();
+
+        bool valid = false;
+        deColorSpace c = deColorSpaceInvalid;
+
+        while (!valid)
+        {
+            std::vector<deColorSpace> colorSpaces;
+            getSupportedColorSpaces(colorSpaces);
+
+            int n = colorSpaces.size();
+            int r = rand() % n;
+
+            c = colorSpaces[r];
+
+            valid = checkConversion(currentColorSpace, c);
+
+            if (c == currentColorSpace)
+            {
+                valid = false;
+            }
+        }            
+
+        addConversionLayer(c);
+    }
+}
 

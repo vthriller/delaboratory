@@ -140,36 +140,6 @@ deControlPanel::~deControlPanel()
 {
 }
 
-bool checkConversion(deColorSpace currentColorSpace, deColorSpace colorSpace)
-{
-    if (getConversion3x3(currentColorSpace, colorSpace))
-    {
-        return true;
-    }
-
-    if (getConversion4x3(currentColorSpace, colorSpace))
-    {
-        return true;
-    }
-
-    if (getConversion3x4(currentColorSpace, colorSpace))
-    {
-        return true;
-    }
-
-    if (getConversion1x3(currentColorSpace, colorSpace))
-    {
-        return true;
-    }
-
-    if (getConversion3x1(currentColorSpace, colorSpace))
-    {
-        return true;
-    }
-
-    return false;
-}
-
 void deControlPanel::setConversions()
 {
     deViewManager& viewManager = project.getViewManager();
@@ -265,68 +235,6 @@ void deControlPanel::click(wxCommandEvent &event)
 
     }
 
-}
-
-void deControlPanel::addRandomLayer()
-{
-    deLayerStack& layerStack = project.getLayerStack();
-    int view = layerStack.getSize() - 1;
-
-    if (view > 0)
-    {
-        if (rand() % view > 3)
-        {
-            //project.deleteLayer();
-            layerProcessor.removeTopLayer();
-            updateLayerGrid();
-            return;
-        }
-    }
-
-    if (rand() % 2 > 0)
-    {
-        std::vector<std::string> actions;
-        getSupportedActions(actions);
-
-        int n = actions.size();
-        int r = rand() % n;
-
-        std::string a = actions[r];
-        project.addActionLayer(a);
-    }
-    else
-    {
-        deLayer* layer = layerStack.getLayer(view);
-        if (!layer)
-        {
-            return;
-        }
-
-        deColorSpace currentColorSpace = layer->getColorSpace();
-
-        bool valid = false;
-        deColorSpace c = deColorSpaceInvalid;
-
-        while (!valid)
-        {
-            std::vector<deColorSpace> colorSpaces;
-            getSupportedColorSpaces(colorSpaces);
-
-            int n = colorSpaces.size();
-            int r = rand() % n;
-
-            c = colorSpaces[r];
-
-            valid = checkConversion(currentColorSpace, c);
-
-            if (c == currentColorSpace)
-            {
-                valid = false;
-            }
-        }            
-
-        project.addConversionLayer(c);
-    }
 }
 
 void deControlPanel::closeSamplerManagerFrame()

@@ -75,7 +75,6 @@ class deControlPanel:public wxPanel
 
         void onKey(int key);
 
-        void addRandomLayer();
 };
 
 

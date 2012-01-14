@@ -34,5 +34,7 @@ deConversion3x3 getConversion3x3(deColorSpace s, deColorSpace d);
 deConversion3x4 getConversion3x4(deColorSpace s, deColorSpace d);
 deConversion4x3 getConversion4x3(deColorSpace s, deColorSpace d);
 
+bool checkConversion(deColorSpace currentColorSpace, deColorSpace colorSpace);
+
 
 #endif
