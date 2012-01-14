@@ -24,7 +24,8 @@
 #include <cassert>
 
 deMixer::deMixer(int _size)
-:size(_size)
+:size(_size),
+ mutex(wxMUTEX_RECURSIVE)
 {
     weights = new deValue [size];
 }
@@ -36,6 +37,8 @@ deMixer::~deMixer()
 
 void deMixer::reset(int index)
 {
+    lock();
+
     int i;
     for (i = 0; i < size; i++)
     {
@@ -48,14 +51,21 @@ void deMixer::reset(int index)
             weights[i] = 0.0;
         }
     }
+
+    unlock();
 }
 
 deValue deMixer::getWeight(int c) const
 {
+    lock();
+
     if ((c < 0) || (c >= size))
     {
+        unlock();
         return 0.0;
     }
+
+    unlock();
     return weights[c];
 }
 
@@ -65,7 +75,12 @@ void deMixer::setWeight(int c, deValue value)
     {
         return;
     }
+
+    lock();
+
     weights[c] = value;
+
+    unlock();
 }
 
 void deMixer::process(const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& destination, int n)
@@ -81,6 +96,9 @@ void deMixer::process(const deChannel* s1, const deChannel* s2, const deChannel*
     {
         return;
     }
+
+    lock();
+
     const deValue *p1 = s1->getPixels();
     if (size == 1)
     {
@@ -89,15 +107,18 @@ void deMixer::process(const deChannel* s1, const deChannel* s2, const deChannel*
             deValue result = weights[0] * p1[i];
             destination.setValueClip(i, result);
         }
+        unlock();
         return;
     }        
 
     if (!s2)
     {
+        unlock();
         return;
     }
     if (!s3)
     {
+        unlock();
         return;
     }
     const deValue *p2 = s2->getPixels();
@@ -111,11 +132,13 @@ void deMixer::process(const deChannel* s1, const deChannel* s2, const deChannel*
             result += weights[2] * p3[i];
             destination.setValueClip(i, result);
         }
+        unlock();
         return;
     }        
 
     if (!s4)
     {
+        unlock();
         return;
     }
     const deValue *p4 = s4->getPixels();
@@ -127,6 +150,8 @@ void deMixer::process(const deChannel* s1, const deChannel* s2, const deChannel*
         result += weights[3] * p4[i];
         destination.setValueClip(i, result);
     }
+
+    unlock();
 }
 
 bool deMixer::isNeutral(int index) const
@@ -177,4 +202,14 @@ void deMixer::load(xmlNodePtr node)
 
         child = child->next;
     }
+}
+
+void deMixer::lock() const
+{
+    mutex.Lock();
+}
+
+void deMixer::unlock() const
+{
+    mutex.Unlock();
 }
