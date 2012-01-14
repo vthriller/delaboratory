@@ -20,8 +20,6 @@
 #include <string>
 #include <cassert>
 
-static wxMutex channelLockingMutex;
-
 deChannel::deChannel()
 :readSemaphore(4, 4),
 writeMutex(wxMUTEX_RECURSIVE)
@@ -144,14 +142,4 @@ void deChannel::unlockWrite()
         readSemaphore.Post();
     }
     lockedWrite = false;
-}
-
-void startChannelLocking()
-{
-    channelLockingMutex.Lock();
-}
-
-void finishChannelLocking()
-{
-    channelLockingMutex.Unlock();
 }

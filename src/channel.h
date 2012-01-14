@@ -61,7 +61,4 @@ class deChannel
         void unlockWrite();
 };
 
-void startChannelLocking();
-void finishChannelLocking();
-
 #endif

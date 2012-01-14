@@ -471,7 +471,6 @@ void deActionLayer::updateBlend(int i)
         return;
     }
 
-    startChannelLocking();
     sourceChannel->lockRead();
     channel->lockRead();
     blendChannel_->lockWrite();
@@ -492,7 +491,6 @@ void deActionLayer::updateBlend(int i)
     {
         disableBlendMaskChannel();
     }        
-    finishChannelLocking();
 
     deValue* sourcePixels = sourceChannel->getPixels();
     deValue* overlayPixels = channel->getPixels();
