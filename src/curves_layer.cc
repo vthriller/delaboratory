@@ -100,3 +100,17 @@ void deCurvesLayer::setHistogramChannel(int channel)
 {
     viewManager.setHistogramChannel(channel);
 }
+
+bool deCurvesLayer::randomize()
+{
+    int n = getColorSpaceSize(colorSpace);
+
+    int c = rand() % n;
+    
+    deValue x = (deValue) rand() / RAND_MAX;
+    deValue y = (deValue) rand() / RAND_MAX;
+
+    curves[c].addPoint(x, y);
+
+    return true;
+}

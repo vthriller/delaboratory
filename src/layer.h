@@ -76,6 +76,8 @@ class deLayer
 
         void updateImageThreadCall();
 
+        virtual bool randomize() {return false;};
+
 };
 
 #endif

@@ -882,5 +882,16 @@ void deProject::addRandomLayer()
 
         addConversionLayer(c);
     }
+
+    int n = layerStack.getSize();
+    int i;
+    for (i = 0 ; i < n ; i++)
+    {
+        deLayer* layer = layerStack.getLayer(i);
+        if (layer->randomize())
+        {
+            layerProcessor.markUpdateAllChannels(i);
+        }            
+    }
 }
 

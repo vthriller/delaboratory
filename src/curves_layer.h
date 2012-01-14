@@ -48,6 +48,8 @@ class deCurvesLayer:public deActionLayer
 
         void setHistogramChannel(int channel);
 
+        virtual bool randomize();
+
 };
 
 #endif
