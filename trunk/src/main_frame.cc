@@ -179,6 +179,8 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     imageAreaPanel->SetFocus();
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMainFrame::test));
     Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deMainFrame::check));
+
+    Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(deMainFrame::onCloseEvent));
 }
 
 void deMainFrame::hidePanels()
@@ -440,4 +442,10 @@ void deMainFrame::check(wxCommandEvent &event)
 {
     bool checked = multithreading->IsChecked();
     project.getLayerProcessor().setMultithreadingEnabled(checked);
+}
+
+void deMainFrame::onCloseEvent(wxCloseEvent& event)
+{
+    project.log("deMainFrame::onCloseEvent");
+    this->Destroy();
 }
