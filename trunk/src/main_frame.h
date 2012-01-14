@@ -68,6 +68,8 @@ private:
     deImageAreaPanel* imageAreaPanel;
     deHistogramPanel* histogramPanel;
     wxCheckBox* multithreading;
+
+    deLayerProcessor& layerProcessor;
     bool full;
 
 	void onTestImageSmall(wxCommandEvent& event);

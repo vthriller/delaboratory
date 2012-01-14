@@ -39,6 +39,8 @@ class deLayerProcessor
         wxThread* workerThread;
         deLogger* logger;
 
+        bool closing;
+
         int firstLayerToUpdate;
         int lastLayerToUpdate;
         int lastValidLayer;
@@ -100,6 +102,8 @@ class deLayerProcessor
         void addLayer(deLayer* layer);
 
         void log(const std::string& message);
+
+        void stopWorkerThread();
 
 };
 

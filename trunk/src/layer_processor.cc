@@ -79,6 +79,8 @@ deLayerProcessor::deLayerProcessor()
     multithreadingEnabled = true;
     //multithreadingEnabled = false;
 
+    closing = false;
+
 }
 
 void deLayerProcessor::onDestroyAll()
@@ -95,12 +97,18 @@ deLayerProcessor::~deLayerProcessor()
     log("destroying layer processor");
     lock();
     unlock();
-    workerThread->Delete();
+    stopWorkerThread();
 }
 
 void deLayerProcessor::setMainFrame(deMainFrame* _mainFrame)
 {
     mainFrame = _mainFrame;
+}
+
+void deLayerProcessor::stopWorkerThread()
+{
+    closing = true;
+    workerThread->Delete();
 }
 
 void deLayerProcessor::startWorkerThread()
@@ -128,6 +136,11 @@ void deLayerProcessor::setViewManager(deViewManager* _viewManager)
 
 void deLayerProcessor::repaintImageInLayerProcessor(bool calcHistogram)
 {
+    if (closing)
+    {
+        return;
+    }
+
     if (mainFrame)
     {
         wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_REPAINT_EVENT );
@@ -146,6 +159,11 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
 
 void deLayerProcessor::updateImages(int a, int b, int channel, bool blend, bool action)
 {
+    if (closing)
+    {
+        return;
+    }
+
     log("requested update images " + str(a) + " " + str(b) + " " + str(channel) + " " + str(blend) + " " + str(action));
 
     if (isMultithreadingEnabled())
