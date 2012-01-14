@@ -51,7 +51,7 @@ class deChannelManager
         void setChannelSize(const deSize& size);
         deSize getChannelSize() const;
 
-        int allocateNewChannel(deImage& image);
+        int allocateNewChannel();
         void freeChannel(int index);
 
         void tryAllocateChannel(int index);

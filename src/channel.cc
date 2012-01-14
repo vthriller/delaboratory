@@ -22,9 +22,8 @@
 
 static wxMutex channelLockingMutex;
 
-deChannel::deChannel(deImage& _image)
-:image(_image), 
-readSemaphore(4, 4),
+deChannel::deChannel()
+:readSemaphore(4, 4),
 writeMutex(wxMUTEX_RECURSIVE)
 {
     pixels = NULL;
