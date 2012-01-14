@@ -51,11 +51,11 @@ void deChannelManager::setChannelSize(const deSize& size)
     destroyAllChannels();
 }
 
-int deChannelManager::allocateNewChannel(deImage& image)
+int deChannelManager::allocateNewChannel()
 {
     lock();
 
-    deChannel* channel = new deChannel(image);
+    deChannel* channel = new deChannel();
     channel->allocate(channelSize.getN());
 
     if (trashed.size() > 0)

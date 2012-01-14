@@ -27,7 +27,6 @@ class deImage;
 class deChannel
 {
     private:
-        deImage& image;
         deValue* pixels;
         mutable wxSemaphore readSemaphore;
         wxMutex writeMutex;
@@ -39,7 +38,7 @@ class deChannel
         deChannel(const deChannel& c);
         deChannel& operator =(const deChannel& c);
     public:
-        deChannel(deImage& _image);
+        deChannel();
 
         virtual ~deChannel();
 
@@ -55,8 +54,6 @@ class deChannel
         deValue getValue(int pos) const;
         void setValue(int pos, const deValue& value);
         void setValueClip(int pos, const deValue& value);
-
-        deImage& getImage() {return image;};
 
         void lockRead() const;
         void unlockRead() const;

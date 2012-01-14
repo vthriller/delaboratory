@@ -28,7 +28,7 @@ deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelMana
     {
         if (i < s)
         {
-            channelsAllocated[i] = channelManager.allocateNewChannel(*this);
+            channelsAllocated[i] = channelManager.allocateNewChannel();
         }
         else
         {
