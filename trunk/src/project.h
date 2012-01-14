@@ -156,6 +156,9 @@ class deProject
 
         void log(const std::string& message);
 
+        void addActionLayer(const std::string& action);
+        void addConversionLayer(deColorSpace colorSpace);
+
 
 
 };

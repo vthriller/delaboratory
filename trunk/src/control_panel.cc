@@ -254,67 +254,18 @@ void deControlPanel::click(wxCommandEvent &event)
     if (c != convertButtonsColorSpaces.end())
     {
         deColorSpace colorSpace = c->second;
-        addConversionLayer(colorSpace);
+        project.addConversionLayer(colorSpace);
     }
 
     std::map<int, std::string>::iterator a = actionButtonsNames.find(id);
     if (a != actionButtonsNames.end())
     {
         std::string action = a->second;
-        addActionLayer(action);
+        project.addActionLayer(action);
 
     }
 
 }
-
-void deControlPanel::addConversionLayer(deColorSpace colorSpace)
-{
-    deLayerStack& layerStack = project.getLayerStack();
-    deLayerProcessor& layerProcessor = project.getLayerProcessor();
-    deChannelManager& channelManager = project.getPreviewChannelManager();
-    deChannelManager& sourceChannelManager = project.getSourceChannelManager();
-    deViewManager& viewManager = project.getViewManager();
-
-    int s = viewManager.getView();
-
-    std::string name = getColorSpaceName(colorSpace);
-
-    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, layerProcessor, channelManager, viewManager, name, sourceChannelManager);
-
-    if (layer)
-    {
-        project.addLayer(layer);
-        project.setLastView();
-
-        updateLayerGrid();
-        
-    }
-}        
-
-void deControlPanel::addActionLayer(const std::string& action)
-{
-    deLayerStack& layerStack = project.getLayerStack();
-    deLayerProcessor& layerProcessor = project.getLayerProcessor();
-    deChannelManager& channelManager = project.getPreviewChannelManager();
-    deChannelManager& sourceChannelManager = project.getSourceChannelManager();
-    deViewManager& viewManager = project.getViewManager();
-
-    int s = viewManager.getView();
-
-    deColorSpace colorSpace = layerStack.getLayer(s)->getColorSpace();
-
-    std::string actionDescription = getActionDescription(action);
-
-    deLayer* layer = createLayer(action, s, colorSpace, layerStack, layerProcessor, channelManager, viewManager, actionDescription, sourceChannelManager);
-
-    if (layer)
-    {
-        project.addLayer(layer);
-        project.setLastView();
-
-        updateLayerGrid();
-    }
-}    
 
 void deControlPanel::addRandomLayer()
 {
@@ -341,7 +292,7 @@ void deControlPanel::addRandomLayer()
         int r = rand() % n;
 
         std::string a = actions[r];
-        addActionLayer(a);
+        project.addActionLayer(a);
     }
     else
     {
@@ -374,7 +325,7 @@ void deControlPanel::addRandomLayer()
             }
         }            
 
-        addConversionLayer(c);
+        project.addConversionLayer(c);
     }
 }
 
@@ -419,15 +370,15 @@ void deControlPanel::onKey(int key)
 {
     if (key == 'B')
     {
-        addActionLayer("blur");
+        project.addActionLayer("blur");
     }
     if (key == 'C')
     {
-        addActionLayer("curves");
+        project.addActionLayer("curves");
     }
     if (key == 'M')
     {
-        addActionLayer("mixer");
+        project.addActionLayer("mixer");
     }
     if (key == 'S')
     {
