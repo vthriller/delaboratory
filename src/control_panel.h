@@ -56,8 +56,6 @@ class deControlPanel:public wxPanel
 
         void setConversions();
 
-        void addConversionLayer(deColorSpace colorSpace);
-        void addActionLayer(const std::string& action);
 
         void generateFinalImage(const std::string& app, const std::string& type, const std::string& name);
 

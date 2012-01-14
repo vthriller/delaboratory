@@ -791,3 +791,44 @@ void deProject::log(const std::string& message)
 {
     logger.log(message);
 }
+
+void deProject::addActionLayer(const std::string& action)
+{
+    int s = viewManager.getView();
+
+    deColorSpace colorSpace = layerStack.getLayer(s)->getColorSpace();
+
+    std::string actionDescription = getActionDescription(action);
+
+    deLayer* layer = createLayer(action, s, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, actionDescription, sourceChannelManager);
+
+    if (layer)
+    {
+        addLayer(layer);
+        setLastView();
+
+        controlPanel->updateLayerGrid();
+    }
+}    
+
+void deProject::addConversionLayer(deColorSpace colorSpace)
+{
+    int s = viewManager.getView();
+
+    std::string name = getColorSpaceName(colorSpace);
+
+    log("creating conversion to " + name + " layer");
+
+    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, name, sourceChannelManager);
+
+    if (layer)
+    {
+        addLayer(layer);
+        setLastView();
+
+        controlPanel->updateLayerGrid();
+        
+    }
+}        
+
+
