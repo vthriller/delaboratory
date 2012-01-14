@@ -267,6 +267,27 @@ void deCurvesPanel::setConst(deValue v)
     update(true);
 }
 
+void deCurvesPanel::addRandom(int n)
+{
+    deCurve* curve = layer.getCurve(channel);
+
+    if (!curve)
+    {
+        return;
+    }
+
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        deValue x = (deValue) rand() / RAND_MAX;
+        deValue y = (deValue) rand() / RAND_MAX;
+
+        curve->addPoint(x, y);
+    }
+
+    update(true);
+}
+
 void deCurvesPanel::setAngle(int a)
 {
     deCurve* curve = layer.getCurve(channel);

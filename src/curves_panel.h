@@ -88,6 +88,8 @@ public:
 
     void setMarker();
 
+    void addRandom(int n);
+
 	DECLARE_EVENT_TABLE()
 
 };
