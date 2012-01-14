@@ -838,7 +838,7 @@ void deProject::addRandomLayer()
         }
     }
 
-    if (rand() % 2 > 0)
+    if (rand() % 10 > 2)
     {
         std::vector<std::string> actions;
         getSupportedActions(actions);
