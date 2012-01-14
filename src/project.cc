@@ -86,7 +86,10 @@ void deProject::enableKeys()
 deProject::~deProject()
 {
     log("closing project");
+    layerProcessor.lock();
+    layerProcessor.unlock();
     layerStack.clear();
+    log("closed project");
 }
 
 void deProject::setHistogramChannel(int channel)
