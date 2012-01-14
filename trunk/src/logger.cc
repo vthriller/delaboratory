@@ -60,7 +60,12 @@ void deLogger::log(const std::string message)
         int t = sw.Time();
 
         wxThreadIdType c_id = wxThread::GetCurrentId();
+
+#if wxMINOR_VERSION > 8 
         wxThreadIdType m_id = wxThread::GetMainId();
+#else        
+        wxThreadIdType m_id = 0;
+#endif        
 
         std::string thr = "main";
 
