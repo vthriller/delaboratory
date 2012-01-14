@@ -129,7 +129,7 @@ deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _slider
 
     layerProcessor.log("creating slider - set value");
 
-    setValue(defaultValue);
+//    setValue(defaultValue);
 
     layerProcessor.log("creating slider - connect");
 

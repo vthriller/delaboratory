@@ -732,9 +732,10 @@ void deActionLayer::renderBlendMask()
     deValue* maskPixels = maskChannel->getPixels();
 
     deChannel* allocatedMaskChannel = channelManager.getChannel(imageBlendMask.getChannelIndex(0));
-    deValue* allocatedMaskPixels = allocatedMaskChannel->getPixels();
 
     allocatedMaskChannel->lockWrite();
+
+    deValue* allocatedMaskPixels = allocatedMaskChannel->getPixels();
 
     deBlurType type = deGaussianBlur;
     deValue t= 0.0;

@@ -309,20 +309,16 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
 deBlendFrame::~deBlendFrame()
 {
-    layerProcessor.onGUIUpdate();
-
-    frameManager.removeBlendFrame(this);
-}
-
-void deBlendFrame::beforeClose()
-{
     deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
     deViewManager& viewManager = layer.getViewManager();
     viewManager.hideThisMask(l.getAllocatedBlendMaskChannel());
     l.hideBlendMask();
 
-    //layer.closeBlendFrame();
+    layerProcessor.onGUIUpdate();
+
+    frameManager.removeBlendFrame(this);
 }
+
 
 void deBlendFrame::choose(wxCommandEvent &event)
 {
