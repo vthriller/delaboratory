@@ -43,10 +43,14 @@ void deSlider::setEdit(deValue v)
 {
     layerProcessor.log("set edit...");
     std::ostringstream oss;
+    layerProcessor.log("set edit 2");
     oss.str();
+    layerProcessor.log("set edit 3");
     oss << v;
+    layerProcessor.log("set edit 4");
     if (labelValue)
     {
+        layerProcessor.log("set edit 5");
         std::string s = oss.str();
         layerProcessor.log("set edit value " + s);
         labelValue->SetLabel(wxString::FromAscii(oss.str().c_str()));
