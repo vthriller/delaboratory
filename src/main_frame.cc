@@ -69,7 +69,7 @@ EVT_MENU(DE_RANDOM_EVENT, deMainFrame::onRandomEvent)
 END_EVENT_TABLE()
 
 deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor)
-: wxFrame() , project(_project)
+: wxFrame() , project(_project), layerProcessor(_layerProcessor)
 {
     project.setMainFrame(this);
 
@@ -195,6 +195,7 @@ void deMainFrame::hidePanels()
 deMainFrame::~deMainFrame()
 {
     project.log("closing main frame");
+    layerProcessor.stopWorkerThread();
 }
 
 void deMainFrame::showPanels()
