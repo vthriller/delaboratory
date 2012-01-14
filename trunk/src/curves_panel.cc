@@ -197,6 +197,8 @@ void deCurvesPanel::drawCurve(wxDC& dc)
 
 void deCurvesPanel::click(wxMouseEvent &event)
 {
+    layerProcessor.log("deCurvesPanel::click");
+
     deCurve* curve = layer.getCurve(channel);
 
     if (!curve)
@@ -292,6 +294,7 @@ void deCurvesPanel::setS(int a)
 
 void deCurvesPanel::update(bool finished)
 {
+    layerProcessor.log("deCurvesPanel::update");
     paint();
     if ((finished) || (realtime))
     {
