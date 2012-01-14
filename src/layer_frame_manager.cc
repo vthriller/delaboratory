@@ -80,7 +80,6 @@ void deLayerFrameManager::addBlendFrame(deFrame* frame)
     deLayerFrame* lf = dynamic_cast<deLayerFrame*>(frame);
     if (lf)
     {
-        std::cout << "add blend frame to f.m." << std::endl;
         blendFrames.push_back(lf);
     }
 }
