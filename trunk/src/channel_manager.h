@@ -38,6 +38,9 @@ class deChannelManager
 
         deChannelManager(const deChannelManager& m);
         deChannelManager& operator =(const deChannelManager& m);
+
+        void lock();
+        void unlock();
         
     public:
         deChannelManager();
@@ -56,8 +59,6 @@ class deChannelManager
 
         deChannel* getChannel(int index);
 
-        void lock();
-        void unlock();
 
         int getNumberOfAllocatedChannels() const;
 
