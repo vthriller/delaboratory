@@ -46,6 +46,11 @@ class deCurvesEditor:public deActionFrame
         wxButton* angle3;
         wxButton* angle4;
         wxButton* angle5;
+        wxButton* random1;
+        wxButton* random2;
+        wxButton* random3;
+        wxButton* random4;
+        wxButton* random5;
         wxButton* s1;
         wxButton* s2;
         wxButton* s3;

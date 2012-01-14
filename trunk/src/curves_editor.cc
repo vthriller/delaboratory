@@ -106,6 +106,17 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerP
     is2 = new wxButton(this, wxID_ANY, _T("invS 2"), wxDefaultPosition, wxSize(60,25));
     sizerB->Add(is2, 0);
 
+    random1 = new wxButton(this, wxID_ANY, _T("rnd 1"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(random1, 0);
+    random2 = new wxButton(this, wxID_ANY, _T("rnd 2"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(random2, 0);
+    random3 = new wxButton(this, wxID_ANY, _T("rnd 3"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(random3, 0);
+    random4 = new wxButton(this, wxID_ANY, _T("rnd 5"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(random4, 0);
+    random5 = new wxButton(this, wxID_ANY, _T("rnd 9"), wxDefaultPosition, wxSize(60,25));
+    sizerB->Add(random5, 0);
+
     sizer->Layout();
     Fit();
 
@@ -197,6 +208,27 @@ void deCurvesEditor::click(wxCommandEvent &event)
     if (is2->GetId() == id)
     {
         curvesPanel->setS(-2);
+    }      
+
+    if (random1->GetId() == id)
+    {
+        curvesPanel->addRandom(1);
+    }      
+    if (random2->GetId() == id)
+    {
+        curvesPanel->addRandom(2);
+    }      
+    if (random3->GetId() == id)
+    {
+        curvesPanel->addRandom(3);
+    }      
+    if (random4->GetId() == id)
+    {
+        curvesPanel->addRandom(5);
+    }      
+    if (random5->GetId() == id)
+    {
+        curvesPanel->addRandom(9);
     }      
 }
 
