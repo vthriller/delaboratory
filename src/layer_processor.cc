@@ -310,6 +310,7 @@ void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
 
 void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 {
+    log("markUpdateSingleChannel");
     if (viewManager)
     {
         updateImages(index, viewManager->getView(), channel, false, true);

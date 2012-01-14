@@ -24,6 +24,9 @@
 #include "frame_factory.h"
 #include "curves_editor.h"
 
+#include "layer_processor.h"
+#include "str.h"
+
 deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _processor, _channelManager, _viewManager) 
 {
@@ -38,6 +41,7 @@ deCurvesLayer::~deCurvesLayer()
 
 void deCurvesLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
+    layerProcessor.log("deCurvesLayer::processAction " + str(i));
     curves[i].process(sourceChannel, channel, size.getN());
 }
 

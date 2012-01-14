@@ -29,7 +29,8 @@
 #define VERTICAL_STEP 0.01
 
 deCurve::deCurve()
-:shape(256)
+:shape(256),
+ mutex(wxMUTEX_RECURSIVE)
 {
     reset();
 }
@@ -40,28 +41,43 @@ deCurve::~deCurve()
 
 void deCurve::reset()
 {
+    lock();
+
     points.clear();
     fill(1, 1, 0);
     shape.build(points);
+
+    unlock();
 }
 
 void deCurve::invert()
 {
+    lock();
+
     points.clear();
     fill(1, -1, 0);
+
     shape.build(points);
+
+    unlock();
 }
 
 void deCurve::setConst(deValue v)
 {
+    lock();
+
     points.clear();
     points.push_back(deCurvePoint(0,v));
     points.push_back(deCurvePoint(1,v));
     shape.build(points);
+
+    unlock();
 }
 
 void deCurve::setAngle(int a)
 {
+    lock();
+
     if (a < 4)
     {
         deValue p1 = a / 8.0;
@@ -81,10 +97,14 @@ void deCurve::setAngle(int a)
         points.push_back(deCurvePoint(1,p2));
     }
     shape.build(points);
+
+    unlock();
 }
 
 void deCurve::setS(int a)
 {
+    lock();
+
     deValue h = a / 16.0;
     deValue p1 = 1.0 / 4.0;
     deValue p2 = 1.0 - 1.0 / 4.0;
@@ -97,10 +117,14 @@ void deCurve::setS(int a)
 
     points.push_back(deCurvePoint(1, 1));
     shape.build(points);
+
+    unlock();
 }
 
 void deCurve::fill(int n, deValue a, deValue r)
 {
+    lock();
+
     points.clear();
     double step = 1.0 / n;
     double p = 0.0;
@@ -130,15 +154,23 @@ void deCurve::fill(int n, deValue a, deValue r)
         p+=step;
     }
     shape.build(points);
+
+    unlock();
 }
 
 deValue deCurve::calcValue(deValue value)
 {
+    lock();
+
     return shape.calc(value);
+
+    unlock();
 }
 
 void deCurve::process(const deChannel& source, deChannel& destination, int n)
 {
+    lock();
+
     const deValue* pixels = source.getPixels();
 
     int i;
@@ -149,10 +181,14 @@ void deCurve::process(const deChannel& source, deChannel& destination, int n)
 
         destination.setValueClip(i, result);
     }
+
+    unlock();
 }
 
 int deCurve::findPoint(deValue x, deValue y) const
 {
+    lock();
+
     deCurvePoints::const_iterator j;
     int i = 0;
 
@@ -163,11 +199,13 @@ int deCurve::findPoint(deValue x, deValue y) const
         float yy = y - point.getY();
         if (sqrt (xx * xx + yy * yy) < CURVE_POINT_PICK_DISTANCE)
         {
+            unlock();
             return i;
         }
         i++;
     }
 
+    unlock();
     return -1;
 }
 
@@ -182,15 +220,21 @@ int deCurve::addPoint(deValue x, deValue y)
         return -1;
     }
 
+    lock();
+
     points.push_back(deCurvePoint(x,y));
 
     shape.build(points);
+
+    unlock();
 
     return points.size() - 1;
 }
 
 void deCurve::deletePoint(int p)
 {
+    lock();
+
     deCurvePoints::iterator i = points.begin();
     while (p > 0)
     {
@@ -212,6 +256,8 @@ void deCurve::deletePoint(int p)
     }
 
     shape.build(points);
+
+    unlock();
 }
 
 void deCurve::movePoint(int p, deValue x, deValue y)
@@ -224,6 +270,8 @@ void deCurve::movePoint(int p, deValue x, deValue y)
     {
         return;
     }
+
+    lock();
 
     deCurvePoints::iterator i = points.begin();
     while (p > 0)
@@ -242,6 +290,7 @@ void deCurve::movePoint(int p, deValue x, deValue y)
     {
         if (x == 0)
         {
+            unlock();
             return;
         }
     }
@@ -254,16 +303,21 @@ void deCurve::movePoint(int p, deValue x, deValue y)
     {
         if (x == 1)
         {
+            unlock();
             return;
         }
     }
 
     (*i).move(x, y);
     shape.build(points);
+
+    unlock();
 }
 
 void deCurve::movePointVertically(int p, deValue delta)
 {
+    lock();
+
     deCurvePoints::iterator i = points.begin();
     while (p > 0)
     {
@@ -287,31 +341,46 @@ void deCurve::movePointVertically(int p, deValue delta)
 
     (*i).move(xx, yy);
     shape.build(points);
+
+    unlock();
 }
 
 const deCurvePoints& deCurve::getPoints() const
 {
+    lock();
+    unlock();
+
     return points;
 }
 
 const deCurvePoint& deCurve::getPoint(int n) const
 {
+    lock();
+
     deCurvePoints::const_iterator i = points.begin();
     while (n > 0)
     {
         i++;
         n--;
     }
+
+    unlock();
     return *i;
 }
 
 void deCurve::getControlPoints(deCurvePoints& points) const
 {
+    lock();
+    unlock();
+
     shape.getControlPoints(points);
 }
 
 void deCurve::getCurvePoints(deCurvePoints& points) const
 {
+    lock();
+    unlock();
+
     shape.getCurvePoints(points);
 }
 
@@ -387,6 +456,9 @@ void deCurve::load(xmlNodePtr node)
 
 bool deCurve::isNeutral() const
 {
+    lock();
+    unlock();
+
     if (points.size() != 2)
     {
         return false;
@@ -404,4 +476,14 @@ bool deCurve::isNeutral() const
         return false;
     }
     return true;
+}
+
+void deCurve::lock() const
+{
+    mutex.Lock();
+}
+
+void deCurve::unlock() const
+{
+    mutex.Unlock();
 }

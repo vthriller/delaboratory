@@ -23,6 +23,7 @@
 #include "curve_point.h"
 #include "curve_shape.h"
 #include <list>
+#include <wx/wx.h>
 
 class deChannel;
 
@@ -33,10 +34,15 @@ class deCurve
         deCurvePoints points;
         deCurveShape shape;
 
+        mutable wxMutex mutex;
+
         void loadPoint(xmlNodePtr node);
 
         deCurve(const deCurve& c);
         deCurve& operator=(const deCurve& c);
+
+        void lock() const; 
+        void unlock() const;
 
     public:    
         deCurve();
@@ -69,6 +75,7 @@ class deCurve
         deValue calcValue(deValue value);
 
         void movePointVertically(int p, deValue delta);
+
 
 
 };
