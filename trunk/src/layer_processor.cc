@@ -386,11 +386,13 @@ void deLayerProcessor::onChangeView(int a, int b)
 
 void deLayerProcessor::lock()
 {
+    log("layer processor lock");
     updateImagesMutex.Lock();
 }
 
 void deLayerProcessor::unlock()
 {
+    log("layer processor unlock");
     updateImagesMutex.Unlock();
 }
 
