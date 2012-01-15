@@ -35,26 +35,41 @@ static wxMutex updateImagesMutex(wxMUTEX_RECURSIVE);
 class deLayerProcessorWorkerThread:public wxThread
 {
     private:
-        virtual void *Entry()
+        void performTasks()
         {
-            bool w = true;
-            while (w)
+            while (true)
             {
-                processor.tickWork();
-                wxThread::Sleep(100);
+                processor.log("worker thread before wait");
+                semaphore.Wait();
+                processor.log("worker thread after wait");
+
                 if (TestDestroy())
                 {
-                    w = false;
+                    return;
+                }
+
+                processor.tickWork();
+
+                if (TestDestroy())
+                {
+                    return;
                 }
             }
+        }
+
+        virtual void *Entry()
+        {
+            performTasks();
             processor.log("worker thread finished");
             return NULL;
         }
         deLayerProcessor& processor;
+        wxSemaphore& semaphore;
 
     public:    
-        deLayerProcessorWorkerThread(deLayerProcessor& _processor)
-        :processor(_processor)
+        deLayerProcessorWorkerThread(deLayerProcessor& _processor, wxSemaphore& _semaphore)
+        :processor(_processor),
+         semaphore(_semaphore)
         {
         }
         virtual ~deLayerProcessorWorkerThread()
@@ -115,7 +130,7 @@ void deLayerProcessor::stopWorkerThread()
 
 void deLayerProcessor::startWorkerThread()
 {
-    workerThread = new deLayerProcessorWorkerThread(*this);
+    workerThread = new deLayerProcessorWorkerThread(*this, workerSemaphore);
 
     if ( workerThread->Create() != wxTHREAD_NO_ERROR )
     {
@@ -182,6 +197,8 @@ void deLayerProcessor::updateImages(int a, int b, int channel, bool blend, bool 
         channelUpdate = channel;
         blendUpdate = blend;
         actionUpdate = action;
+
+        checkUpdateImagesRequest();
 
         updateImagesMutex.Unlock();
     }
@@ -398,12 +415,15 @@ void deLayerProcessor::tickWork()
         updateImage(firstLayerToUpdate, channelUpdate, blendUpdate, actionUpdate);
     }
 
+    checkUpdateImagesRequest();
+
     updateImagesMutex.Unlock();
 
     if (ok)
     {
         repaintImageInLayerProcessor(true);
     }        
+
 
 }
 
@@ -463,4 +483,19 @@ void deLayerProcessor::log(const std::string& message)
     {
         logger->log(message);
     }
+}
+
+void deLayerProcessor::checkUpdateImagesRequest()
+{
+    if (firstLayerToUpdate > lastLayerToUpdate)
+    {
+        return;
+    }
+
+    if (!stack)
+    {
+        return;
+    }
+
+    workerSemaphore.Post();
 }

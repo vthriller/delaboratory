@@ -38,6 +38,7 @@ class deLayerProcessor
         deViewManager* viewManager;
         wxThread* workerThread;
         deLogger* logger;
+        wxSemaphore workerSemaphore;
 
         bool closing;
 
@@ -57,6 +58,8 @@ class deLayerProcessor
 
         deLayerProcessor(const deLayerProcessor&);
         deLayerProcessor& operator = (const deLayerProcessor&);
+
+        void checkUpdateImagesRequest();
 
     public:
         deLayerProcessor();
