@@ -20,6 +20,7 @@
 #include "project.h"
 #include <iostream>
 #include "frame_factory.h"
+#include "layer_processor.h"
 
 deMixerLayer::deMixerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _processor, _channelManager, _viewManager) 
@@ -46,7 +47,9 @@ deMixerLayer::~deMixerLayer()
 
 void deMixerLayer::processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize)
 {
+    layerProcessor.log("process mixer start");
     mixers[i]->process(s1, s2, s3, s4, channel, channelSize);
+    layerProcessor.log("process mixer end");
 }
 
 deMixer* deMixerLayer::getMixer(int index)
