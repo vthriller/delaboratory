@@ -101,11 +101,11 @@ deLayerProcessor::deLayerProcessor()
 
 void deLayerProcessor::onDestroyAll()
 {
-    updateImagesMutex.Lock();
+    lock();
 
     lastValidLayer = -1;
 
-    updateImagesMutex.Unlock();
+    unlock();
 }
 
 deLayerProcessor::~deLayerProcessor()
@@ -185,7 +185,7 @@ void deLayerProcessor::updateImages(int a, int b, int channel, bool blend, bool 
 
     if (isMultithreadingEnabled())
     {
-        updateImagesMutex.Lock();
+        lock();
 
         if (a < firstLayerToUpdate)
         {
@@ -200,7 +200,7 @@ void deLayerProcessor::updateImages(int a, int b, int channel, bool blend, bool 
 
         checkUpdateImagesRequest();
 
-        updateImagesMutex.Unlock();
+        unlock();
     }
     else
     {
@@ -263,7 +263,7 @@ void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool bl
         return;
     }
 
-    updateImagesMutex.Lock();
+    lock();
 
     unsigned int i;
     assert((unsigned int)b < stack->getSize() );
@@ -272,7 +272,7 @@ void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool bl
         updateImage(i, channel, blend, action);
     }
 
-    updateImagesMutex.Unlock();
+    unlock();
 
     repaintImageInLayerProcessor(true);
 
@@ -280,7 +280,7 @@ void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool bl
 
 void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame)
 {
-    updateImagesMutex.Lock();
+    lock();
 
     std::map<int, int> channelUsage;
     generateChannelUsage(channelUsage);
@@ -330,7 +330,7 @@ void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int v
 
     progressDialog->Update(100, _T("finished"));
 
-    updateImagesMutex.Unlock();
+    unlock();
 }
 
 void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
@@ -396,7 +396,7 @@ void deLayerProcessor::unlock()
 
 void deLayerProcessor::tickWork()
 {
-    updateImagesMutex.Lock();
+    lock();
 
     bool ok = true;
 
@@ -417,7 +417,7 @@ void deLayerProcessor::tickWork()
 
     checkUpdateImagesRequest();
 
-    updateImagesMutex.Unlock();
+    unlock();
 
     if (ok)
     {
