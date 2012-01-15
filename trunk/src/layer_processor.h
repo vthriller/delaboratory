@@ -48,7 +48,7 @@ class deLayerProcessor
         bool blendUpdate;
         bool actionUpdate;
 
-        void updateImages(int a, int b, int channel, bool blend, bool action);
+        void updateImages(int a, int channel, bool blend, bool action);
         void updateImage(int i, int& channel, bool& blend, bool& action);
 
         void repaintImageInLayerProcessor(bool calcHistogram);
@@ -83,8 +83,8 @@ class deLayerProcessor
 
         void markUpdateBlendAllChannels(int index);
 
-        void updateImagesThreadCall(int a, int b, int channel, bool blend, bool action);
-        void onChangeView(int a, int b);
+        void updateImagesThreadCall(int a, int channel, bool blend, bool action);
+        void onChangeView(int a);
 
         void lock();
         void unlock();

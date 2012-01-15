@@ -47,7 +47,7 @@ void deViewManager::setView(int v)
     hideMask();
     int old = view;
     view = v;
-    project.onChangeView(old, v);
+    project.onChangeView(old);
 }
 
 void deViewManager::setSingleChannel(int _channel)

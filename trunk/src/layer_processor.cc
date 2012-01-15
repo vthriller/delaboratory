@@ -168,19 +168,18 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
 {
     if (stack)
     {
-        int view = viewManager->getView();
-        updateImages(0, view, -1, false, true);
+        updateImages(0, -1, false, true);
     }        
 }    
 
-void deLayerProcessor::updateImages(int a, int b, int channel, bool blend, bool action)
+void deLayerProcessor::updateImages(int a, int channel, bool blend, bool action)
 {
     if (closing)
     {
         return;
     }
 
-    log("requested update images " + str(a) + " " + str(b) + " " + str(channel) + " " + str(blend) + " " + str(action));
+    log("requested update images " + str(a) + " " + str(channel) + " " + str(blend) + " " + str(action));
 
     if (isMultithreadingEnabled())
     {
@@ -201,7 +200,7 @@ void deLayerProcessor::updateImages(int a, int b, int channel, bool blend, bool 
     }
     else
     {
-        updateImagesThreadCall(a, b, channel, blend, action);
+        updateImagesThreadCall(a, channel, blend, action);
     }        
 }    
 
@@ -253,7 +252,7 @@ void deLayerProcessor::updateImage(int i, int& channel, bool& blend, bool& actio
     lastValidLayer = i;
 }
 
-void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool blend, bool action)
+void deLayerProcessor::updateImagesThreadCall(int a, int channel, bool blend, bool action)
 {
     if (!stack)
     {
@@ -263,6 +262,7 @@ void deLayerProcessor::updateImagesThreadCall(int a, int b, int channel, bool bl
     lock();
 
     unsigned int i;
+    int b = getLastLayerToUpdate();
     assert((unsigned int)b < stack->getSize() );
     for (i = (unsigned int)a; i <= (unsigned int)b; i++)
     {
@@ -345,10 +345,7 @@ void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
 void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 {
     log("markUpdateSingleChannel");
-    if (viewManager)
-    {
-        updateImages(index, viewManager->getView(), channel, false, true);
-    }        
+    updateImages(index, channel, false, true);
 }
 
 void deLayerProcessor::markUpdateAllChannels(int index)
@@ -362,23 +359,17 @@ void deLayerProcessor::markUpdateAllChannels(int index)
         }        
     }        
 
-    if (viewManager)
-    {
-        updateImages(index, viewManager->getView(), -1, false, true);
-    }
+    updateImages(index, -1, false, true);
 }
 
 void deLayerProcessor::markUpdateBlendAllChannels(int index)
 {
-    if (viewManager)
-    {
-        updateImages(index, viewManager->getView(), -1, true, false);
-    }
+    updateImages(index,  -1, true, false);
 }
 
-void deLayerProcessor::onChangeView(int a, int b)
+void deLayerProcessor::onChangeView(int a)
 {
-    updateImages(a + 1, b, -1, false, true);
+    updateImages(a + 1, -1, false, true);
 }   
 
 void deLayerProcessor::lock()
