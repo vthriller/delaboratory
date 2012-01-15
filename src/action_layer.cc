@@ -424,6 +424,12 @@ void deActionLayer::updateBlend(int i)
     }
 
     deLayer* source = layerStack.getLayer(sourceLayer);
+    
+    if (!source)
+    {
+        return;
+    }
+
     const deImage& sourceImage = source->getImage();
 
     int channelSize = channelManager.getChannelSize().getN();
