@@ -89,7 +89,6 @@ deLayerProcessor::deLayerProcessor()
     workerThread = NULL;
 
     firstLayerToUpdate = 0;
-    lastLayerToUpdate = 0;
     lastValidLayer = -1;
 
     multithreadingEnabled = true;
@@ -191,8 +190,6 @@ void deLayerProcessor::updateImages(int a, int b, int channel, bool blend, bool 
         {
             firstLayerToUpdate = a;
         }
-
-        lastLayerToUpdate = b;
 
         channelUpdate = channel;
         blendUpdate = blend;
@@ -402,7 +399,7 @@ void deLayerProcessor::tickWork()
 
     bool ok = true;
 
-    if (firstLayerToUpdate > lastLayerToUpdate)
+    if (firstLayerToUpdate > getLastLayerToUpdate())
     {
         ok = false;
     }
@@ -489,7 +486,7 @@ void deLayerProcessor::log(const std::string& message)
 
 void deLayerProcessor::checkUpdateImagesRequest()
 {
-    if (firstLayerToUpdate > lastLayerToUpdate)
+    if (firstLayerToUpdate > getLastLayerToUpdate())
     {
         return;
     }
@@ -500,4 +497,17 @@ void deLayerProcessor::checkUpdateImagesRequest()
     }
 
     workerSemaphore.Post();
+}
+
+int deLayerProcessor::getLastLayerToUpdate()
+{
+    if (!viewManager)
+    {
+        return 0;
+    }
+    else
+    {
+        int n = viewManager->getView();
+        return n;
+    }        
 }

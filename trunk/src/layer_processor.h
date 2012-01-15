@@ -43,7 +43,6 @@ class deLayerProcessor
         bool closing;
 
         int firstLayerToUpdate;
-        int lastLayerToUpdate;
         int lastValidLayer;
         int channelUpdate;
         bool blendUpdate;
@@ -60,6 +59,8 @@ class deLayerProcessor
         deLayerProcessor& operator = (const deLayerProcessor&);
 
         void checkUpdateImagesRequest();
+
+        int getLastLayerToUpdate();
 
     public:
         deLayerProcessor();
