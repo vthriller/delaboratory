@@ -22,6 +22,7 @@
 #include "str.h"
 #include "xml.h"
 #include "frame_factory.h"
+#include "layer_processor.h"
 
 deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
@@ -48,7 +49,12 @@ void deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel
     deValue r = viewManager.getRealScale() * blurRadius.get() * 200;
 
     deBlurType type = blurTypeFromString(blurType.get());
+    
+    layerProcessor.log("blur r=" + str(r));
+
     blurChannel(source, destination, size, r, type, threshold.get());
+
+    layerProcessor.log("blur done");
 }
 
 bool deBlurLayer::isChannelNeutral(int index)
