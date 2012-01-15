@@ -19,6 +19,7 @@
 #include "conversion_layer.h"
 #include "project.h"
 #include "convert_image.h"
+#include "layer_processor.h"
 
 deConversionLayer::deConversionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager)
 :deLayer("conversion", _colorSpace, _index, _sourceLayer), 
@@ -41,11 +42,15 @@ const deImage& deConversionLayer::getImage() const
 
 void deConversionLayer::updateImage()
 {
+    layerProcessor.log("conversion start");
+
     deLayer* source = layerStack.getLayer(sourceLayer);
     const deImage& sourceImage = source->getImage();
 
     image.enableAllChannels();
     convertImage(sourceImage, image, channelManager);
+
+    layerProcessor.log("conversion end");
 }
 
 void deConversionLayer::updateChannelUsage(std::map<int, int>& channelUsage) const
