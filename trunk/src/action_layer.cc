@@ -488,9 +488,11 @@ void deActionLayer::updateBlend(int i)
         if (blendMask)
         {
             deChannel* allocatedMaskChannel = channelManager.getChannel(imageBlendMask.getChannelIndex(0));
-            maskPixels = allocatedMaskChannel->getPixels();
 
             allocatedMaskChannel->lockRead();
+
+            maskPixels = allocatedMaskChannel->getPixels();
+
         }            
     }
     else
@@ -720,6 +722,8 @@ deColorSpace deActionLayer::getBlendMaskLayerColorSpace() const
 
 void deActionLayer::renderBlendMask()
 {
+    layerProcessor.log("render blend mask");
+
     enableBlendMaskChannel();
 
     deLayer* maskLayer = layerStack.getLayer(blendMaskLayer);
@@ -758,6 +762,8 @@ void deActionLayer::renderBlendMask()
 
     allocatedMaskChannel->unlockWrite();
     maskChannel->unlockRead();
+
+    layerProcessor.log("render blend mask done");
 
 }
 
