@@ -42,6 +42,8 @@ deUSMLayer::~deUSMLayer()
 
 void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
+    layerProcessor.log("usm start");
+
     int n = size.getN();
     deValue* unsharpMask = new deValue[n];
 
@@ -83,6 +85,8 @@ void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
     }
 
     delete [] unsharpMask;
+
+    layerProcessor.log("usm end");
 }
 
 
