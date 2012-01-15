@@ -26,6 +26,7 @@
 #include "copy_channel.h"
 #include "blend_channel.h"
 #include "process_linear.h"
+#include "layer_processor.h"
 
 deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
@@ -55,6 +56,8 @@ deShadowsHighlightsLayer::~deShadowsHighlightsLayer()
 
 void deShadowsHighlightsLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
+    layerProcessor.log("shadows/highlights start");
+
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
 
@@ -78,6 +81,8 @@ void deShadowsHighlightsLayer::processAction(int i, const deChannel& sourceChann
     delete [] blurMap;
     delete [] firstStage;
     delete [] secondStage;
+    
+    layerProcessor.log("shadows/highlights end");
 }
 
 
