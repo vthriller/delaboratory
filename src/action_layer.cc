@@ -300,6 +300,8 @@ deValue deActionLayer::getOpacity()
 
 void deActionLayer::updateApply()
 {
+    layerProcessor.log("update apply start");
+
     // FIXME lock channels
     if (!enabled)
     {
@@ -408,6 +410,8 @@ void deActionLayer::updateApply()
     dc1->unlockWrite();
     dc2->unlockWrite();
     dc3->unlockWrite();
+
+    layerProcessor.log("update apply end");
 }
 
 void deActionLayer::setApplyMode(deApplyMode mode)
@@ -418,6 +422,8 @@ void deActionLayer::setApplyMode(deApplyMode mode)
 
 void deActionLayer::updateBlend(int i)
 {
+    layerProcessor.log("update blend start");
+
     if (!enabled)
     {
         return;
@@ -518,6 +524,8 @@ void deActionLayer::updateBlend(int i)
         allocatedMaskChannel->unlockRead();
     }            
 
+    layerProcessor.log("update blend end");
+
 }
 
 void deActionLayer::setBlendMode(deBlendMode mode)
@@ -557,7 +565,7 @@ void deActionLayer::updateImage()
 
 void deActionLayer::updateAction(int i)
 {
-    // FIXME lock/unlock on channel disable/enable
+    layerProcessor.log("update action start");
 
     if (!enabled)
     {
@@ -667,6 +675,8 @@ void deActionLayer::updateAction(int i)
             }
         }
     }
+
+    layerProcessor.log("update action end");
 
 }
 
