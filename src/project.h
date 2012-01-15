@@ -103,7 +103,7 @@ class deProject
         void addLAB();
         void addRGB();
 
-        void onChangeView(int a, int b);
+        void onChangeView(int a);
 
         void exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog);
 
