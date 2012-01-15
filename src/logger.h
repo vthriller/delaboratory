@@ -29,6 +29,8 @@ class deLogger
         std::ofstream* f;
         wxStopWatch sw;
         wxMutex mutex;
+        wxThreadIdType main_id;
+        bool started;
 
     public:
         deLogger();

@@ -23,6 +23,7 @@
 deLogger::deLogger()
 {
     f = NULL;
+    started = false;
 }
 
 deLogger::~deLogger()
@@ -59,17 +60,18 @@ void deLogger::log(const std::string message)
     {
         int t = sw.Time();
 
+        if (!started)
+        {
+            main_id = wxThread::GetCurrentId();
+            started = true;
+        }
+
         wxThreadIdType c_id = wxThread::GetCurrentId();
 
-#if wxMINOR_VERSION > 8 
-        wxThreadIdType m_id = wxThread::GetMainId();
-#else        
-        wxThreadIdType m_id = 0;
-#endif        
 
         std::string thr = "main";
 
-        if (m_id != c_id)
+        if (main_id != c_id)
         {
             std::ostringstream oss;
             oss.str("");
