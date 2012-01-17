@@ -161,11 +161,14 @@ void deChannelManager::tryAllocateChannel(int index)
 
     assert(index >= 0);
     assert((unsigned int)index < channels.size());
-    if (!channels[index]->isAllocated())
+    if ((channels[index]))
     {
-//        std::cout << " try allocate channel " << index << " " << channelSize.getN() << std::endl;
-        channels[index]->allocate(channelSize.getN());
-    }        
+        if (!channels[index]->isAllocated())
+        {
+    //        std::cout << " try allocate channel " << index << " " << channelSize.getN() << std::endl;
+            channels[index]->allocate(channelSize.getN());
+        }
+    }
 
     unlock();
 }
@@ -176,11 +179,14 @@ void deChannelManager::tryDeallocateChannel(int index)
 
     assert(index >= 0);
     assert((unsigned int)index < channels.size());
-    if (channels[index]->isAllocated())
+    if ((channels[index]))
     {
-//        std::cout << " try deallocate channel " << index << " " << channelSize.getN() << std::endl;
-        channels[index]->deallocate();
-    }        
+        if (channels[index]->isAllocated())
+        {
+    //        std::cout << " try deallocate channel " << index << " " << channelSize.getN() << std::endl;
+            channels[index]->deallocate();
+        }
+    }
 
     unlock();
 }

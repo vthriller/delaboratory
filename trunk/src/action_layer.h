@@ -41,7 +41,6 @@ class deActionLayer:public deLayer
 {
     private:
 
-        // settings
         bool enabled;
 
         std::set<int> channels;
@@ -169,6 +168,9 @@ class deActionLayer:public deLayer
         void updateImageInActionLayer(bool action, bool blend, int channel);
         void updateActionOnThread(int i);
         void updateBlendOnThread(int i);
+
+        virtual void processChannel(int channel);
+        virtual void processBlend();
 
 
 };

@@ -22,6 +22,7 @@
 #include <vector>
 #include <map>
 #include <libxml/parser.h>
+#include <wx/wx.h>
 
 class deLayer;
 class deChannelManager;
@@ -31,15 +32,14 @@ class deLayerStack
 {
     private:
         std::vector<deLayer*> layers;
+        wxMutex mutex;
 
     public:
         deLayerStack();
         virtual ~deLayerStack();
 
-/*
         void lock();
         void unlock();
-        */
 
         void clear();
         void removeTopLayer();
@@ -49,7 +49,6 @@ class deLayerStack
         int getSize() const;
         deLayer* getLayer(int id) const;
 
-//        void onKey(int key);
 
         void save(xmlNodePtr node);
 

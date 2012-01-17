@@ -22,7 +22,8 @@
 #include "str.h"
 
 deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer)
-:name(_name), colorSpace(_colorSpace), index(_index), sourceLayer(_sourceLayer)
+:name(_name), colorSpace(_colorSpace), index(_index), sourceLayer(_sourceLayer),
+mutex(wxMUTEX_RECURSIVE)
 {
 }
 
@@ -90,4 +91,51 @@ void deLayer::onUpdateProperties()
 void deLayer::updateImageThreadCall()
 {
     updateImage();
+}
+
+void deLayer::lock()
+{
+    //log("layer " + str(index) + " lock");
+    mutex.Lock();
+}
+
+void deLayer::unlock()
+{
+    //log("layer " + str(index) + " unlock");
+    mutex.Unlock();
+}
+
+void deLayer::process(deLayerProcessType type, int channel)
+{
+    switch (type)
+    {
+        case deLayerProcessFull:
+        {
+            processFull();
+            break;
+        }
+        case deLayerProcessSingleChannel:
+        {
+            processChannel(channel);
+            break;
+        }
+        case deLayerProcessBlend:
+        {
+            processBlend();
+            break;
+        }
+    }
+}
+
+void deLayer::processFull()
+{
+    updateImageThreadCall();
+}
+
+void deLayer::processBlend()
+{
+}
+
+void deLayer::processChannel(int channel)
+{
 }

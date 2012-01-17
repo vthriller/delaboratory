@@ -36,6 +36,7 @@ class deRenderer
         virtual ~deRenderer();
 
         bool render(wxDC& dc);
+        bool prepareImage();
 };
 
 #endif

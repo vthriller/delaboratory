@@ -168,3 +168,15 @@ void deLayerFrameManager::onKey(int key)
     }
 }
 
+void deLayerFrameManager::onUpdateProperties()
+{
+    std::list<deLayerFrame*>::const_iterator i;
+    for (i = actionFrames.begin(); i != actionFrames.end(); i++)
+    {
+        deActionFrame* trueActionFrame = dynamic_cast<deActionFrame*>(*i);
+        if (trueActionFrame)
+        {
+            trueActionFrame->onUpdateProperties();
+        }            
+    }
+}

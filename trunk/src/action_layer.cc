@@ -302,7 +302,6 @@ void deActionLayer::updateApply()
 {
     layerProcessor.log("update apply start");
 
-    // FIXME lock channels
     if (!enabled)
     {
         return;
@@ -945,3 +944,15 @@ void deActionLayer::updateBlendOnThread(int i)
 {
     updateBlend(i);
 }
+
+
+void deActionLayer::processChannel(int channel)
+{
+    updateImageInActionLayer(true, true, channel);
+}    
+
+void deActionLayer::processBlend()
+{
+    updateImageInActionLayer(false, true, -1);
+}
+

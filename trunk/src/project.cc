@@ -59,6 +59,7 @@ deProject::deProject(deLayerProcessor& _processor)
     histogramPanel = NULL;
     receiveKeys = true;
     showSamplers = false;
+    renderer = NULL;
 
     logger.setFile(LOG_FILE_NAME);
 
@@ -67,6 +68,7 @@ deProject::deProject(deLayerProcessor& _processor)
     layerProcessor.setLogger(&logger);
 
     layerProcessor.setLayerStack(&layerStack);
+    layerProcessor.setLayerFrameManager(&layerFrameManager);
     layerProcessor.setViewManager(&viewManager);
 
     resetLayerStack();
@@ -148,12 +150,10 @@ void deProject::onKey(int key)
 
 void deProject::init(const std::string& fileName)
 {
-//    layerProcessor.lock();
     if (!openImage(fileName))
     {
         open(fileName, true);
     }
-//    layerProcessor.unlock();
 }
 
 void deProject::freeImage()
@@ -234,14 +234,11 @@ deLayerProcessor& deProject::getLayerProcessor()
 
 void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
 {
-//    std::cout << "setPreviewSize...?" << std::endl;
     deSize oldSize = previewChannelManager.getChannelSize();
     if (oldSize == size)
     {
         return;
     }
-
-//    std::cout << "setPreviewSize..." << std::endl;
 
     previewChannelManager.setChannelSize(size);
 
@@ -387,13 +384,6 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
     // calculate image in preview size to continue editing
     layerProcessor.updateAllImages(true);
 }
-
-/*
-void deProject::deleteLayer()
-{   
-    layerProcessor.removeTopLayer();
-}
-*/
 
 void deProject::setLastView()
 {
@@ -591,16 +581,6 @@ void deProject::newProject()
     setLastView();
     controlPanel->updateLayerGrid();
 }
-
-/*
-void deProject::showSamplers()
-{
-    if (controlPanel)
-    {
-        controlPanel->showSamplers();
-    }
-}
-*/
 
 void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
 {
@@ -896,3 +876,8 @@ void deProject::addRandomLayer()
     }
 }
 
+void deProject::setRenderer(deRenderer* _renderer)
+{
+    renderer = _renderer;
+    layerProcessor.setRenderer(renderer);
+}

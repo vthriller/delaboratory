@@ -419,12 +419,13 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
         return;
     }
 
-    project.getLayerProcessor().lock();
+//    project.getLayerProcessor().lock();
 
     imageAreaPanel->getImagePanel()->repaintImagePanel();
     controlPanel->updateSamplerManagerFrame();
     samplersPanel->update();
     project.updateMemoryInfo();
+    /*
     if (calcHistogram)
     {
         if (histogramPanel)
@@ -433,8 +434,9 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
             histogramPanel->paint();
         }
     }
+    */
 
-    project.getLayerProcessor().unlock();
+//    project.getLayerProcessor().unlock();
 
 }
 

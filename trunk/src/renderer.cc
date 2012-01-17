@@ -275,6 +275,7 @@ deRenderer::deRenderer(deProject* _project)
 :project(_project), size(0,0)
 {
     image = NULL;
+    project->setRenderer(this);
 }
 
 deRenderer::~deRenderer()
@@ -285,7 +286,7 @@ deRenderer::~deRenderer()
     }        
 }
 
-bool deRenderer::render(wxDC& dc)
+bool deRenderer::prepareImage()
 {
     deChannelManager& channelManager = project->getPreviewChannelManager();
     const deSize& s = channelManager.getChannelSize();
@@ -335,6 +336,8 @@ bool deRenderer::render(wxDC& dc)
             return false;
         }
 
+        layer->lock();
+
         const deImage& layerImage = layer->getImage();
 
         if (viewManager.isSingleChannel())
@@ -349,10 +352,24 @@ bool deRenderer::render(wxDC& dc)
                 project->log("render image FAILED");
             }
         }
+
+        layer->unlock();
     }
 
-    wxBitmap bitmap(*image);
-    dc.DrawBitmap(bitmap, 0, 0, false);
+    return true;
+}
+
+bool deRenderer::render(wxDC& dc)
+{
+    if (image)
+    {
+        wxBitmap bitmap(*image);
+        dc.DrawBitmap(bitmap, 0, 0, false);
+    }
+    else
+    {
+        return false;
+    }
 
     return true;
 }

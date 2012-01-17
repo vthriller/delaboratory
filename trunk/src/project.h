@@ -37,6 +37,7 @@ class deMemoryInfoFrame;
 class deImage;
 class deMainFrame;
 class deLayerProcessor;
+class deRenderer;
 
 class deProject
 {
@@ -53,6 +54,7 @@ class deProject
         deSamplerManager samplerManager;
         deLayerFrameManager layerFrameManager;
         deLogger logger;
+        deRenderer* renderer;
 
         deChannelManager previewChannelManager;
         deChannelManager sourceChannelManager;
@@ -107,8 +109,6 @@ class deProject
 
         void exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog);
 
-//        void deleteLayer();
-
         void setLastView();
 
         bool shouldReceiveKeys() const {return receiveKeys;};
@@ -125,7 +125,6 @@ class deProject
         deHistogramPanel* getHistogramPanel();
 
         bool samplersVisible() const;
-//        void showSamplers();
         void save(const std::string& fileName, bool image);
         void open(const std::string& fileName, bool image);
         bool openImage(const std::string& fileName);
@@ -158,6 +157,8 @@ class deProject
 
         void addActionLayer(const std::string& action);
         void addConversionLayer(deColorSpace colorSpace);
+
+        void setRenderer(deRenderer* _renderer);
 
 
 
