@@ -25,11 +25,13 @@
 #include "channel.h"
 
 class deImage;
+class deLogger;
 
 class deChannelManager
 {
     private:
         deSize channelSize;
+        deLogger& logger;
 
         std::vector<deChannel*> channels;
         std::set<int> trashed;
@@ -43,7 +45,7 @@ class deChannelManager
         void unlock();
         
     public:
-        deChannelManager();
+        deChannelManager(deLogger& _logger);
         virtual ~deChannelManager();
 
         void destroyAllChannels();
