@@ -22,9 +22,8 @@
 #include "str.h"
 #include "memory_info_frame.h"
 
-//static wxMutex layerStackMutex;
-
 deLayerStack::deLayerStack()
+:mutex(wxMUTEX_RECURSIVE)
 {
 }
 
@@ -33,17 +32,15 @@ deLayerStack::~deLayerStack()
     clear();
 }
 
-/*
 void deLayerStack::lock()
 {
-    layerStackMutex.Lock();
+    mutex.Lock();
 }
 
 void deLayerStack::unlock()
 {
-    layerStackMutex.Unlock();
+    mutex.Unlock();
 }
-*/
 
 void deLayerStack::clear()
 {
@@ -55,26 +52,28 @@ void deLayerStack::clear()
 
 void deLayerStack::removeTopLayer()
 {
-    //lock();
+    lock();
 
     std::vector<deLayer*>::iterator i;
     i = layers.end();    
     i--;
     deLayer* layer = *i;
-    //layer->closeFrames();
-    delete layer;
-    layers.erase(i);
 
-    //unlock();
+    layer->lock();
+    layers.erase(i);
+    layer->unlock();
+    delete layer;
+
+    unlock();
 }
 
 void deLayerStack::addLayer(deLayer* layer)
 {
-    //lock();
+    lock();
 
     layers.push_back(layer);
 
-    //unlock();
+    unlock();
 }
 
 int deLayerStack::getSize() const
@@ -91,19 +90,6 @@ deLayer* deLayerStack::getLayer(int id) const
     }
     return layers[i];
 }
-
-/*
-void deLayerStack::onKey(int key)
-{
-    int i;
-    int n = layers.size();
-    for (i = 0; i < n; i++)
-    {
-        deLayer* layer = layers[i];
-        layer->onKey(key);
-    }
-}
-*/
 
 void deLayerStack::save(xmlNodePtr node)
 {

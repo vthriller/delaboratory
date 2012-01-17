@@ -28,6 +28,15 @@ class deProject;
 class deFrame;
 class deBlendFrame;
 class deImage;
+class deLayerProcessor;
+
+enum deLayerProcessType
+{   
+    deLayerProcessInvalid,
+    deLayerProcessFull,
+    deLayerProcessSingleChannel,
+    deLayerProcessBlend
+};
 
 class deLayer
 {
@@ -35,6 +44,7 @@ class deLayer
         deLayer(const deLayer& layer);
         deLayer& operator = (const deLayer& layer);
         std::string name;
+        wxMutex mutex;
 
         virtual void updateImage() = 0;
 
@@ -77,6 +87,15 @@ class deLayer
         void updateImageThreadCall();
 
         virtual bool randomize() {return false;};
+
+        void lock();
+        void unlock();
+
+        void process(deLayerProcessType type, int channel);
+
+        virtual void processFull();
+        virtual void processBlend();
+        virtual void processChannel(int channel);
 
 };
 

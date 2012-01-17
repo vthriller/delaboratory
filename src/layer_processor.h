@@ -27,8 +27,11 @@ class wxProgressDialog;
 class deMemoryInfoFrame;
 class deLayer;
 class deLogger;
+class deLayerFrameManager;
+class deRenderer;
 #include <map>
 #include <wx/wx.h>
+#include "layer.h"
 
 class deLayerProcessor
 {
@@ -37,19 +40,25 @@ class deLayerProcessor
         deLayerStack* stack;
         deViewManager* viewManager;
         wxThread* workerThread;
+        wxThread* renderWorkerThread;
         deLogger* logger;
+        deLayerFrameManager* layerFrameManager;
         wxSemaphore workerSemaphore;
+        wxSemaphore renderWorkerSemaphore;
+        wxMutex layerProcessMutex;
+        deRenderer* renderer;
 
         bool closing;
 
-        int firstLayerToUpdate;
-        int lastValidLayer;
-        int channelUpdate;
-        bool blendUpdate;
-        bool actionUpdate;
+        deLayerProcessType layerProcessType;
+        int layerProcessChannel;
 
-        void updateImages(int a, int channel, bool blend, bool action);
-        void updateImage(int i, int& channel, bool& blend, bool& action);
+        int firstLayerToUpdate;
+
+        int lastValidLayer;
+
+        void updateImages(int a, int channel, bool action);
+        void updateImage();
 
         void repaintImageInLayerProcessor(bool calcHistogram);
 
@@ -62,6 +71,7 @@ class deLayerProcessor
 
         int getLastLayerToUpdate();
 
+
     public:
         deLayerProcessor();
         virtual ~deLayerProcessor();
@@ -71,6 +81,7 @@ class deLayerProcessor
         int getLastValidLayer() const {return lastValidLayer;};
 
         void setMainFrame(deMainFrame* _mainFrame);
+        void setLayerFrameManager(deLayerFrameManager* _layerFrameManager);
         void setLayerStack(deLayerStack* _layerStack);
         void setViewManager(deViewManager* _viewManager);
 
@@ -83,7 +94,6 @@ class deLayerProcessor
 
         void markUpdateBlendAllChannels(int index);
 
-        void updateImagesThreadCall(int a, int channel, bool blend, bool action);
         void onChangeView(int a);
 
         void lock();
@@ -108,6 +118,11 @@ class deLayerProcessor
         void log(const std::string& message);
 
         void stopWorkerThread();
+
+        void sendRepaintEvent();
+
+        void setRenderer(deRenderer* _renderer);
+        bool prepareImage();
 
 };
 

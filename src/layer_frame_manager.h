@@ -57,6 +57,8 @@ class deLayerFrameManager
 
         void destroyAllFrames();
 
+        void onUpdateProperties();
+
 };
 
 #endif
