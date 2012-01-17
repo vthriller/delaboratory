@@ -41,10 +41,12 @@ class deLayerProcessor
         deViewManager* viewManager;
         wxThread* workerThread;
         wxThread* renderWorkerThread;
+        wxThread* histogramWorkerThread;
         deLogger* logger;
         deLayerFrameManager* layerFrameManager;
         wxSemaphore workerSemaphore;
         wxSemaphore renderWorkerSemaphore;
+        wxSemaphore histogramWorkerSemaphore;
         wxMutex layerProcessMutex;
         deRenderer* renderer;
 
@@ -123,6 +125,10 @@ class deLayerProcessor
 
         void setRenderer(deRenderer* _renderer);
         bool prepareImage();
+
+        void generateHistogram();
+        void onGenerateHistogram();
+        void sendHistogramEvent();
 
 };
 

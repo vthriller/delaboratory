@@ -86,7 +86,9 @@ class deRenderWorkerThread:public wxThread
         {
             while (true)
             {
+                processor.log("render thread before wait");
                 semaphore.Wait();
+                processor.log("render thread after wait");
 
                 if (TestDestroy())
                 {
@@ -124,6 +126,53 @@ class deRenderWorkerThread:public wxThread
         {
         }
 };
+
+class deHistogramWorkerThread:public wxThread
+{
+    private:
+        void performTasks()
+        {
+            while (true)
+            {
+                processor.log("histogram thread before wait");
+                semaphore.Wait();
+                processor.log("histogram thread after wait");
+
+                if (TestDestroy())
+                {
+                    return;
+                }
+
+                processor.onGenerateHistogram();
+                processor.sendHistogramEvent();
+
+                if (TestDestroy())
+                {
+                    return;
+                }
+            }
+        }
+
+        virtual void *Entry()
+        {
+            performTasks();
+            return NULL;
+        }
+
+        deLayerProcessor& processor;
+        wxSemaphore& semaphore;
+
+    public:    
+        deHistogramWorkerThread(deLayerProcessor& _processor, wxSemaphore& _semaphore)
+        :processor(_processor),
+         semaphore(_semaphore)
+        {
+        }
+        virtual ~deHistogramWorkerThread()
+        {
+        }
+};
+
 
 
 deLayerProcessor::deLayerProcessor()
@@ -205,6 +254,16 @@ void deLayerProcessor::startWorkerThread()
     if ( renderWorkerThread->Run() != wxTHREAD_NO_ERROR )
     {
     }
+
+    histogramWorkerThread = new deHistogramWorkerThread(*this, histogramWorkerSemaphore);
+
+    if ( histogramWorkerThread->Create() != wxTHREAD_NO_ERROR )
+    {
+    }
+
+    if ( histogramWorkerThread->Run() != wxTHREAD_NO_ERROR )
+    {
+    }
 }
 
 void deLayerProcessor::setLayerStack(deLayerStack* _layerStack)
@@ -221,10 +280,27 @@ void deLayerProcessor::repaintImageInLayerProcessor(bool calcHistogram)
 {
     if (closing)
     {
+        log("skip repaintImage because closing");
         return;
     }
 
+    log("repaintImage post...");
+
     renderWorkerSemaphore.Post();
+    generateHistogram();
+}
+
+void deLayerProcessor::generateHistogram()
+{
+    if (closing)
+    {
+        log("skip generateHistogram because closing");
+        return;
+    }
+
+    log("generateHistogram post...");
+
+    histogramWorkerSemaphore.Post();
 }
 
 void deLayerProcessor::sendRepaintEvent()
@@ -237,6 +313,20 @@ void deLayerProcessor::sendRepaintEvent()
     if (mainFrame)
     {
         wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_REPAINT_EVENT );
+        wxPostEvent( mainFrame, event );
+    }
+}
+
+void deLayerProcessor::sendHistogramEvent()
+{
+    if (closing)
+    {
+        return;
+    }
+
+    if (mainFrame)
+    {
+        wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_HISTOGRAM_EVENT );
         wxPostEvent( mainFrame, event );
     }
 }
@@ -444,8 +534,9 @@ void deLayerProcessor::onChangeView(int a)
 
 void deLayerProcessor::lock()
 {
-    log("layer processor lock");
+    log("layer processor before lock");
     updateImagesMutex.Lock();
+    log("layer processor after lock");
 }
 
 void deLayerProcessor::unlock()
@@ -493,15 +584,20 @@ void deLayerProcessor::removeTopLayer()
     if (index > 0)
     {
         //lock();
+        log("remove top layer - step a");
         stack->removeTopLayer();
+        log("remove top layer - step b");
         int view = viewManager->getView();
+        log("remove top layer - step c");
         if (view >= stack->getSize())
         {
             viewManager->setView( stack->getSize() - 1 );
         }
+        log("remove top layer - step d");
         repaintImageInLayerProcessor(true);
         //unlock();
     }
+    log("finished remove top layer " + str(index));
 }    
 
 void deLayerProcessor::addLayer(deLayer* layer)
@@ -517,6 +613,7 @@ void deLayerProcessor::addLayer(deLayer* layer)
         int index = layer->getIndex();
         markUpdateAllChannels(index);
     }
+    log("finished add layer " + str(layer->getIndex()) + " " +  layer->getName());
 
 //    unlock();
 }    
@@ -583,6 +680,7 @@ void deLayerProcessor::setRenderer(deRenderer* _renderer)
 
 bool deLayerProcessor::prepareImage()
 {
+    log("prepare image start");
     lock();
     bool result = false;
     if (renderer)
@@ -590,5 +688,15 @@ bool deLayerProcessor::prepareImage()
         result = renderer->prepareImage();
     }
     unlock();
+    log("prepare image end");
     return result;
 }
+
+void deLayerProcessor::onGenerateHistogram()
+{
+    if (mainFrame)
+    {
+        mainFrame->generateHistogram();
+    }
+}
+

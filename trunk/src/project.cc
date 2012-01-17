@@ -54,7 +54,8 @@ deProject::deProject(deLayerProcessor& _processor)
  samplerManager(*this, _processor),
  mainFrame(NULL),
  sourceChannelManager(logger),
- previewChannelManager(logger)
+ previewChannelManager(logger),
+ layerStack(*this)
 {
     imageFileName = "";
     sourceImageFileName = "";
@@ -99,8 +100,10 @@ deProject::~deProject()
 void deProject::setHistogramChannel(int channel)
 {
     histogramPanel->setChannel(channel);
+    /*
     histogramPanel->generate();
     histogramPanel->paint();
+    */
     histogramModePanel->updateMode();
 }
 
@@ -249,7 +252,7 @@ void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
 
 void deProject::onChangeView(int a)
 {
-    logger.log("change view from " + str(a));
+    logger.log("change view from " + str(a) + " start");
     layerProcessor.onChangeView(a);
 
     if (controlPanel)
@@ -269,6 +272,7 @@ void deProject::onChangeView(int a)
     {
         mainFrame->rebuild();
     }
+    logger.log("change view from " + str(a) + " end");
 }
 
 const deViewManager& deProject::getViewManager() const
@@ -687,6 +691,7 @@ void deProject::updateMemoryInfo()
     }
 }
 
+/*
 void deProject::zoom(int a)
 {
     deValue mul = 1.0;
@@ -733,6 +738,7 @@ void deProject::onScaleSet()
 
     layerProcessor.updateAllImages(false);
 }
+*/
 
 void deProject::setViewOffset(deValue x, deValue y)
 {
@@ -775,6 +781,8 @@ void deProject::addActionLayer(const std::string& action)
     deColorSpace colorSpace = layerStack.getLayer(s)->getColorSpace();
 
     std::string actionDescription = getActionDescription(action);
+
+    log("creating action " + action + " layer");
 
     deLayer* layer = createLayer(action, s, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, actionDescription, sourceChannelManager);
 

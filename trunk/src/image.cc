@@ -110,14 +110,15 @@ void deImage::updateChannelUsage(std::map<int, int>& channelUsage, int index) co
     }        
 }
 
-deValue deImage::getPixel(int channel, int p) const
+bool deImage::getPixel(int channel, int p, deValue& result) const
 {
     deChannel* c = channelManager.getChannel(channelsVisible[channel]);
     if (!c)
     {
-        return -1;
+        return false;
     }
-    return c->getValue(p);
+    result = c->getValue(p);
+    return true;
 
 }
 

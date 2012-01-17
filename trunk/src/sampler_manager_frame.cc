@@ -170,7 +170,7 @@ void deSamplerManagerFrame::update()
 
             image.lockRead();
 
-            convertPixel(image, p, colorSpace, v1, v2, v3, v4);
+            bool result = convertPixel(image, p, colorSpace, v1, v2, v3, v4);
 
             image.unlockRead();
 

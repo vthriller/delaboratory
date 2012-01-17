@@ -51,6 +51,7 @@ enum
     ID_BenchmarkBlur,
     ID_BenchmarkColor,
     DE_REPAINT_EVENT,
+    DE_HISTOGRAM_EVENT,
     DE_RANDOM_EVENT
 
 };
@@ -94,6 +95,7 @@ private:
 	void onBenchmarkColor(wxCommandEvent& event);
 	void onRepaintEvent(wxCommandEvent& event);
 	void onRandomEvent(wxCommandEvent& event);
+    void onHistogramEvent(wxCommandEvent& event);
 
 	void onCloseEvent(wxCloseEvent& event);
 
@@ -112,6 +114,9 @@ public:
     void rebuild();
 
     void onKey(int key);
+
+    void generateHistogram();
+    void paintHistogram();
 
 
 	DECLARE_EVENT_TABLE()

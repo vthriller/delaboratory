@@ -86,7 +86,6 @@ class deActionLayer:public deLayer
 
     protected:
         deLayerStack& layerStack;
-        deLayerProcessor& layerProcessor;
 
     private:
 

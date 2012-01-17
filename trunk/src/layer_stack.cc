@@ -21,9 +21,11 @@
 #include "channel_manager.h"
 #include "str.h"
 #include "memory_info_frame.h"
+#include "project.h"
 
-deLayerStack::deLayerStack()
-:mutex(wxMUTEX_RECURSIVE)
+deLayerStack::deLayerStack(deProject& _project)
+:mutex(wxMUTEX_RECURSIVE),
+project(_project)
 {
 }
 
@@ -32,13 +34,16 @@ deLayerStack::~deLayerStack()
     clear();
 }
 
-void deLayerStack::lock()
+void deLayerStack::lock() const
 {
+    project.log("layer stack before lock");
     mutex.Lock();
+    project.log("layer stack after lock");
 }
 
-void deLayerStack::unlock()
+void deLayerStack::unlock() const
 {
+    project.log("layer stack unlock");
     mutex.Unlock();
 }
 
@@ -52,6 +57,7 @@ void deLayerStack::clear()
 
 void deLayerStack::removeTopLayer()
 {
+    project.log("layer stack remove top layer...");
     lock();
 
     std::vector<deLayer*>::iterator i;
@@ -59,16 +65,20 @@ void deLayerStack::removeTopLayer()
     i--;
     deLayer* layer = *i;
 
-    layer->lock();
     layers.erase(i);
-    layer->unlock();
-    delete layer;
-
     unlock();
+
+    layer->lock();
+    project.log("layer stack before delete layer");
+    delete layer;
+    project.log("layer stack after delete layer");
+//    layer->unlock();
+
 }
 
 void deLayerStack::addLayer(deLayer* layer)
 {
+    project.log("layer stack add layer");
     lock();
 
     layers.push_back(layer);
@@ -78,16 +88,22 @@ void deLayerStack::addLayer(deLayer* layer)
 
 int deLayerStack::getSize() const
 {
-    return layers.size();
+    lock();
+    int n = layers.size();
+    unlock();
+    return n;
 }
 
 deLayer* deLayerStack::getLayer(int id) const
 {
+    lock();
     unsigned int i = id;
     if ((i >= layers.size()) || (id < 0))
     {
+        unlock();
         return 0;
     }
+    unlock();
     return layers[i];
 }
 

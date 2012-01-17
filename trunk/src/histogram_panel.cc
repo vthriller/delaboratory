@@ -35,7 +35,6 @@ deHistogramPanel::deHistogramPanel(wxWindow* parent, deProject* _project)
     channel = 0;
     generated = false;
     project->setHistogramPanel(this);
-    //generate();
 }
 
 deHistogramPanel::~deHistogramPanel()
@@ -48,7 +47,7 @@ void deHistogramPanel::paintEvent(wxPaintEvent & evt)
 	render(dc);
 }
 
-void deHistogramPanel::paint()
+void deHistogramPanel::paintHistogram()
 {
     wxClientDC dc(this);
 	render(dc);
@@ -67,7 +66,7 @@ void deHistogramPanel::render(wxDC& dc)
     }
 }
 
-void deHistogramPanel::generate()
+void deHistogramPanel::generateHistogram()
 {
     project->getLayerProcessor().lock();
 

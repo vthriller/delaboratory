@@ -41,8 +41,8 @@ class deHistogramPanel:public wxPanel
         deHistogramPanel(wxWindow* parent, deProject* _project);
         virtual ~deHistogramPanel();
 
-        void generate();
-        void paint();
+        void generateHistogram();
+        void paintHistogram();
 
         void setChannel(int _channel);
 

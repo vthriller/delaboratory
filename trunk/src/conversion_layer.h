@@ -32,7 +32,6 @@ class deConversionLayer:public deLayer
 
     protected:        
         deLayerStack& layerStack;
-        deLayerProcessor& layerProcessor;
         deChannelManager& channelManager;
         deImage image;
 

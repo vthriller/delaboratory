@@ -24,6 +24,6 @@ class deImage;
 #include "color_space.h"
 #include "value.h"
 
-void convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue &v1, deValue& v2, deValue& v3, deValue& v4);
+bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue &v1, deValue& v2, deValue& v3, deValue& v4);
 
 #endif
