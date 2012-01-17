@@ -20,11 +20,13 @@
 #include <cassert>
 #include <iostream>
 #include <wx/wx.h>
+#include "logger.h"
 
 static wxMutex channelManagerMutex;
 
-deChannelManager::deChannelManager()
-:channelSize(0,0)
+deChannelManager::deChannelManager(deLogger& _logger)
+:channelSize(0,0),
+ logger(_logger)
 {
     primaryIndex = -1;
 }
@@ -130,11 +132,13 @@ deSize deChannelManager::getChannelSize() const
 
 void deChannelManager::lock()
 {
+    logger.log("channel manager lock");
     channelManagerMutex.Lock();
 }
 
 void deChannelManager::unlock()
 {
+    logger.log("channel manager unlock");
     channelManagerMutex.Unlock();
 }
 

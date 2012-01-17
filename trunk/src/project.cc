@@ -52,7 +52,9 @@ deProject::deProject(deLayerProcessor& _processor)
  memoryInfoFrame(NULL),
  viewManager(*this, _processor),
  samplerManager(*this, _processor),
- mainFrame(NULL)
+ mainFrame(NULL),
+ sourceChannelManager(logger),
+ previewChannelManager(logger)
 {
     imageFileName = "";
     sourceImageFileName = "";
