@@ -51,7 +51,7 @@ class deImage
 
         void updateChannelUsage(std::map<int, int>& channelUsage, int index) const;
 
-        deValue getPixel(int channel, int p) const;
+        bool getPixel(int channel, int p, deValue& result) const;
 
         void lockRead() const;
         void unlockRead() const;

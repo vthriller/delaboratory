@@ -192,9 +192,8 @@ void deActionLayer::updateImageInActionLayer(bool action, bool blend, int channe
 
 
 deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor,  deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayer(_name, _colorSpace, _index, _sourceLayer),
+:deLayer(_name, _colorSpace, _index, _sourceLayer, _processor),
  layerStack(_layerStack),
- layerProcessor(_processor),
  channelManager(_channelManager),
  viewManager(_viewManager),
  imageActionPass(_colorSpace, _channelManager), 
@@ -564,7 +563,7 @@ void deActionLayer::updateImage()
 
 void deActionLayer::updateAction(int i)
 {
-    layerProcessor.log("update action start");
+    layerProcessor.log("update action start i:" +str(i));
 
     if (!enabled)
     {
@@ -675,7 +674,7 @@ void deActionLayer::updateAction(int i)
         }
     }
 
-    layerProcessor.log("update action end");
+    layerProcessor.log("update action end i:" +str(i));
 
 }
 

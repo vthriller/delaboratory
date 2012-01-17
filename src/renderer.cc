@@ -24,6 +24,7 @@
 #include <iostream>
 #include "conversion_functions.h"
 #include "layer_processor.h"
+#include "str.h"
 
 bool renderImage(const deImage& image, unsigned char* data, deChannelManager& channelManager)
 {
@@ -330,15 +331,21 @@ bool deRenderer::prepareImage()
     }
     else
     {
+        project->log("renderer getLayer " +str(view));
         deLayer* layer = layerStack.getLayer(view);
         if (!layer)
         {
             return false;
         }
+        project->log("renderer lock layer " +str(view));
 
         layer->lock();
 
+        project->log("renderer get image from layer " +str(view));
+
         const deImage& layerImage = layer->getImage();
+
+        project->log("renderer before renderer");
 
         if (viewManager.isSingleChannel())
         {
@@ -352,6 +359,8 @@ bool deRenderer::prepareImage()
                 project->log("render image FAILED");
             }
         }
+
+        project->log("renderer unlock layer " +str(view));
 
         layer->unlock();
     }

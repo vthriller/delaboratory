@@ -48,6 +48,7 @@ deZoomPanel::~deZoomPanel()
 
 void deZoomPanel::click(wxCommandEvent &event)
 {
+/*
     int id = event.GetId();
 
     if (full->GetId() == id)
@@ -59,5 +60,6 @@ void deZoomPanel::click(wxCommandEvent &event)
     {
         project.maxZoom();
     }      
+    */
 }    
 

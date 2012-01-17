@@ -22,6 +22,7 @@
 #include "project.h"
 #include <iostream>
 #include "histogram_panel.h"
+#include "layer_processor.h"
 
 void deHistogramModePanel::select(wxCommandEvent &event)
 {
@@ -34,8 +35,7 @@ void deHistogramModePanel::select(wxCommandEvent &event)
         if (buttons[j]->GetId() == i)
         {
             histogramPanel->setChannel(j);
-            histogramPanel->generate();
-            histogramPanel->paint();
+            project.getLayerProcessor().generateHistogram();
         }
     }
 

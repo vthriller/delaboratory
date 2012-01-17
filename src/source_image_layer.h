@@ -43,7 +43,7 @@ class deSourceImageLayer:public deLayer
         virtual void updateImage();
 
     public:
-        deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deChannelManager& _sourceChannelManager);
+        deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deChannelManager& _sourceChannelManager, deLayerProcessor& _processor);
         virtual ~deSourceImageLayer();
 
         void setPrimary();

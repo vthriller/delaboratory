@@ -132,13 +132,13 @@ deSize deChannelManager::getChannelSize() const
 
 void deChannelManager::lock()
 {
-    logger.log("channel manager lock");
+    //logger.log("channel manager lock");
     channelManagerMutex.Lock();
 }
 
 void deChannelManager::unlock()
 {
-    logger.log("channel manager unlock");
+    //logger.log("channel manager unlock");
     channelManagerMutex.Unlock();
 }
 

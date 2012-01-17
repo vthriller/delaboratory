@@ -101,7 +101,7 @@ void deSamplerPanel::update()
 
         image.lockRead();
 
-        convertPixel(image, p, colorSpace, vv1, vv2, vv3, vv4);
+        bool result = convertPixel(image, p, colorSpace, vv1, vv2, vv3, vv4);
 
         image.unlockRead();
 

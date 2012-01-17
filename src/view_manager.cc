@@ -20,6 +20,7 @@
 #include "project.h"
 #include "layer.h"
 #include "layer_processor.h"
+#include "str.h"
 
 deViewManager::deViewManager(deProject& _project, deLayerProcessor& _processor)
 :project(_project), layerProcessor(_processor)
@@ -44,10 +45,14 @@ int deViewManager::getView() const
 
 void deViewManager::setView(int v)
 {
+    project.log("view manager set view " + str(v) + " start");
     hideMask();
+    project.log("view manager set view " + str(v) + " step a");
     int old = view;
     view = v;
+    project.log("view manager set view " + str(v) + " step b");
     project.onChangeView(old);
+    project.log("view manager set view " + str(v) + " end");
 }
 
 void deViewManager::setSingleChannel(int _channel)

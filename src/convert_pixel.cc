@@ -22,7 +22,7 @@
 #include "channel_manager.h"
 
 
-void convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue &v1, deValue& v2, deValue& v3, deValue& v4)
+bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue &v1, deValue& v2, deValue& v3, deValue& v4)
 {
     deColorSpace sourceColorSpace = image.getColorSpace();
     int sn = getColorSpaceSize(sourceColorSpace);
@@ -34,12 +34,24 @@ void convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue 
 
         if (conversion)
         {
-            deValue s1 = image.getPixel(0, p);
-            deValue s2 = image.getPixel(1, p);
-            deValue s3 = image.getPixel(2, p);
+            deValue s1;
+            if (!image.getPixel(0, p, s1))
+            {
+                return false;
+            }
+            deValue s2;
+            if (!image.getPixel(1, p, s2))
+            {
+                return false;
+            }
+            deValue s3;
+            if (!image.getPixel(2, p, s3))
+            {
+                return false;
+            }
             conversion(s1, s2, s3, v1, v2, v3);
             v4 = -1;
-            return;
+            return true;
         } 
     }        
 
@@ -49,11 +61,23 @@ void convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue 
 
         if (conversion)
         {
-            deValue s1 = image.getPixel(0, p);
-            deValue s2 = image.getPixel(1, p);
-            deValue s3 = image.getPixel(2, p);
+            deValue s1;
+            if (!image.getPixel(0, p, s1))
+            {
+                return false;
+            }
+            deValue s2;
+            if (!image.getPixel(1, p, s2))
+            {
+                return false;
+            }
+            deValue s3;
+            if (!image.getPixel(2, p, s3))
+            {
+                return false;
+            }
             conversion(s1, s2, s3, v1, v2, v3, v4);
-            return;
+            return true;
         } 
     }        
 }

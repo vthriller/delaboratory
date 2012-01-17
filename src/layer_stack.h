@@ -27,19 +27,21 @@
 class deLayer;
 class deChannelManager;
 class deMemoryInfoFrame;
+class deProject;
 
 class deLayerStack
 {
     private:
         std::vector<deLayer*> layers;
-        wxMutex mutex;
+        mutable wxMutex mutex;
+        deProject& project;
 
     public:
-        deLayerStack();
+        deLayerStack(deProject& _project);
         virtual ~deLayerStack();
 
-        void lock();
-        void unlock();
+        void lock() const;
+        void unlock() const;
 
         void clear();
         void removeTopLayer();

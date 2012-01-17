@@ -38,12 +38,15 @@
 
 void deLayerGridPanel::buildRows()
 {
+    project.log("build rows start");
+
     deLayerStack& layerStack = project.getLayerStack();
     int n = layerStack.getSize();
 
     int i;
     for (i = n-1; i >=0; i--)
     {
+        project.log("build rows i=" + str(i));
         deLayer* layer = layerStack.getLayer(i);
 
         layerRows.push_back(deLayerRow(i));
@@ -101,15 +104,20 @@ void deLayerGridPanel::buildRows()
         }
 
     }
+    project.log("build rows end");
 
 }
 
 void deLayerGridPanel::clearRows()
 {
+    project.log("clear rows start");
     
     std::vector<deLayerRow>::iterator i;
+    int index = 0;
     for (i = layerRows.begin(); i != layerRows.end(); i++)
     {
+        project.log("clear rows index=" + str(index));
+        index++;
         deLayerRow& row = *i;
 
         gridSizer->Detach(row.id);
@@ -134,6 +142,7 @@ void deLayerGridPanel::clearRows()
     gridSizer->Clear();
 
     layerRows.clear();
+    project.log("clear rows end");
 }
 
 deLayerGridPanel::deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor)

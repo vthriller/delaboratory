@@ -20,15 +20,19 @@
 #include <sstream>
 #include "xml.h"
 #include "str.h"
+#include "layer_processor.h"
 
-deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer)
+deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerProcessor& _processor)
 :name(_name), colorSpace(_colorSpace), index(_index), sourceLayer(_sourceLayer),
-mutex(wxMUTEX_RECURSIVE)
+mutex(wxMUTEX_RECURSIVE),
+layerProcessor(_processor)
 {
+    layerProcessor.log("creating layer " + str(index) + " " + name);
 }
 
 deLayer::~deLayer()
 {
+    layerProcessor.log("destroying layer " + str(index) + " " + name);
 }
 
 deColorSpace deLayer::getColorSpace() const

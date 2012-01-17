@@ -73,7 +73,7 @@ void deImagePanel::move(wxMouseEvent &event)
 
 void deImagePanel::wheel(wxMouseEvent &event)
 {
-    project->zoom(event.GetWheelRotation());
+    //project->zoom(event.GetWheelRotation());
 }
 
 
@@ -124,7 +124,7 @@ void deImagePanel::paintEvent(wxPaintEvent & evt)
 
 void deImagePanel::repaintImagePanel()
 {
-    project->getLayerProcessor().lock();
+//    project->getLayerProcessor().lock();
 
     int view = project->getLayerProcessor().getLastValidLayer();
     if (view >= 0)
@@ -138,7 +138,7 @@ void deImagePanel::repaintImagePanel()
     {
         std::cout << "view: " << view << " in repaintImagePanel" << std::endl;
     }
-    project->getLayerProcessor().unlock();
+//    project->getLayerProcessor().unlock();
 }
 
 void deImagePanel::render(wxDC& dc)

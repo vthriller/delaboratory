@@ -65,6 +65,7 @@ EVT_MENU(ID_MemoryInfo, deMainFrame::onMemoryInfo)
 EVT_MENU(ID_BenchmarkBlur, deMainFrame::onBenchmarkBlur)
 EVT_MENU(ID_BenchmarkColor, deMainFrame::onBenchmarkColor)
 EVT_MENU(DE_REPAINT_EVENT, deMainFrame::onRepaintEvent)
+EVT_MENU(DE_HISTOGRAM_EVENT, deMainFrame::onHistogramEvent)
 EVT_MENU(DE_RANDOM_EVENT, deMainFrame::onRandomEvent)
 END_EVENT_TABLE()
 
@@ -360,7 +361,9 @@ void deMainFrame::onRepaintEvent(wxCommandEvent& event)
 
 void deMainFrame::onRandomEvent(wxCommandEvent& event)
 {
+    project.log("random event start");
     project.addRandomLayer();
+    project.log("random event end");
 }
 
 class deTestThread:public wxThread
@@ -369,7 +372,7 @@ class deTestThread:public wxThread
         virtual void *Entry()
         {
             int i;
-            int max = 100;
+            int max = 999999;
             for (i = 0; i < max; i++)
             {
                 wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_RANDOM_EVENT );
@@ -412,6 +415,7 @@ void deMainFrame::test(wxCommandEvent& event)
 
 void deMainFrame::repaintMainFrame(bool calcHistogram)
 {
+    project.log("repaint main frame start");
 //    project.log("requested repaint main frame");
     if (!project.isSourceValid())
     {
@@ -421,9 +425,13 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
 
 //    project.getLayerProcessor().lock();
 
+    project.log("repaint main frame 1");
     imageAreaPanel->getImagePanel()->repaintImagePanel();
+    project.log("repaint main frame 2");
     controlPanel->updateSamplerManagerFrame();
+    project.log("repaint main frame 3");
     samplersPanel->update();
+    project.log("repaint main frame 4");
     project.updateMemoryInfo();
     /*
     if (calcHistogram)
@@ -437,6 +445,7 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
     */
 
 //    project.getLayerProcessor().unlock();
+    project.log("repaint main frame end");
 
 }
 
@@ -450,4 +459,20 @@ void deMainFrame::onCloseEvent(wxCloseEvent& event)
 {
     project.log("deMainFrame::onCloseEvent");
     this->Destroy();
+}
+
+void deMainFrame::generateHistogram()
+{
+    if (histogramPanel)
+    {
+        histogramPanel->generateHistogram();
+    }
+}
+
+void deMainFrame::onHistogramEvent(wxCommandEvent& event)
+{
+    if (histogramPanel)
+    {
+        histogramPanel->paintHistogram();
+    }
 }
