@@ -176,7 +176,8 @@ class deHistogramWorkerThread:public wxThread
 
 
 deLayerProcessor::deLayerProcessor()
-:layerProcessMutex(wxMUTEX_RECURSIVE)
+:layerProcessMutex(wxMUTEX_RECURSIVE),
+removeLayerMutex(wxMUTEX_RECURSIVE)
 {
     mainFrame = NULL;
     layerFrameManager = NULL;
@@ -385,6 +386,8 @@ void deLayerProcessor::updateImage()
 {
     //log("update image " + str(i) + " " + str(channel) + " " + str(blend) + " " + str(action));
 
+    removeLayerMutex.Lock();
+
     layerProcessMutex.Lock();
 
     bool ok = true;
@@ -429,6 +432,8 @@ void deLayerProcessor::updateImage()
 
         layer->unlock();
     }        
+
+    removeLayerMutex.Unlock();
 
 }
 
@@ -579,6 +584,8 @@ void deLayerProcessor::onGUIUpdate()
 
 void deLayerProcessor::removeTopLayer()
 {
+    removeLayerMutex.Lock();
+
     int index = stack->getSize() - 1;
     log("requested remove top layer " + str(index));
     if (index > 0)
@@ -598,6 +605,8 @@ void deLayerProcessor::removeTopLayer()
         //unlock();
     }
     log("finished remove top layer " + str(index));
+
+    removeLayerMutex.Unlock();
 }    
 
 void deLayerProcessor::addLayer(deLayer* layer)
@@ -680,6 +689,7 @@ void deLayerProcessor::setRenderer(deRenderer* _renderer)
 
 bool deLayerProcessor::prepareImage()
 {
+    removeLayerMutex.Lock();
     log("prepare image start");
     lock();
     bool result = false;
@@ -689,14 +699,17 @@ bool deLayerProcessor::prepareImage()
     }
     unlock();
     log("prepare image end");
+    removeLayerMutex.Unlock();
     return result;
 }
 
 void deLayerProcessor::onGenerateHistogram()
 {
+    removeLayerMutex.Lock();
     if (mainFrame)
     {
         mainFrame->generateHistogram();
     }
+    removeLayerMutex.Unlock();
 }
 

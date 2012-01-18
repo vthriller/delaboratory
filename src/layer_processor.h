@@ -48,6 +48,7 @@ class deLayerProcessor
         wxSemaphore renderWorkerSemaphore;
         wxSemaphore histogramWorkerSemaphore;
         wxMutex layerProcessMutex;
+        wxMutex removeLayerMutex;
         deRenderer* renderer;
 
         bool closing;
