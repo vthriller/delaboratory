@@ -69,6 +69,7 @@ private:
     deImageAreaPanel* imageAreaPanel;
     deHistogramPanel* histogramPanel;
     wxCheckBox* multithreading;
+    wxThread* testThread;
 
     deLayerProcessor& layerProcessor;
     bool full;
