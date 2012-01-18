@@ -137,6 +137,8 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     full = false;
 
+    testThread = NULL;
+
     wxMenu *menuFile = new wxMenu;
     menuFile->Append( ID_NewProject, _("New project") );
     menuFile->AppendSeparator();
@@ -198,6 +200,10 @@ void deMainFrame::hidePanels()
 deMainFrame::~deMainFrame()
 {
     project.log("closing main frame");
+    if (testThread)
+    {
+        testThread->Delete();
+    }     
     layerProcessor.stopWorkerThread();
     layerProcessor.lock();
     layerProcessor.unlock();
@@ -402,13 +408,13 @@ void deMainFrame::test(wxCommandEvent& event)
     deChannelManager& channelManager = project.getPreviewChannelManager();
     deChannel* channel = channelManager.getChannel(0);
 
-    deTestThread* thread = new deTestThread(this, project);
+    testThread = new deTestThread(this, project);
 
-    if ( thread->Create() != wxTHREAD_NO_ERROR )
+    if ( testThread->Create() != wxTHREAD_NO_ERROR )
     {
     }
 
-    if ( thread->Run() != wxTHREAD_NO_ERROR )
+    if ( testThread->Run() != wxTHREAD_NO_ERROR )
     {
     }
 }
