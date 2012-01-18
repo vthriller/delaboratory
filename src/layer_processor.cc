@@ -689,19 +689,20 @@ void deLayerProcessor::setRenderer(deRenderer* _renderer)
 
 bool deLayerProcessor::prepareImage()
 {
-    if (closing)
-    {
-        return false;
-    }
 
+    bool result = false;
     removeLayerMutex.Lock();
     log("prepare image start");
     lock();
-    bool result = false;
-    if (renderer)
+
+    if (!closing)
     {
-        result = renderer->prepareImage();
+        if (renderer)
+        {
+            result = renderer->prepareImage();
+        }
     }
+
     unlock();
     log("prepare image end");
     removeLayerMutex.Unlock();
@@ -710,16 +711,14 @@ bool deLayerProcessor::prepareImage()
 
 void deLayerProcessor::onGenerateHistogram()
 {
-    if (closing)
-    {
-        return;
-    }
-
     removeLayerMutex.Lock();
-    if (mainFrame)
+    if (!closing)
     {
-        mainFrame->generateHistogram();
-    }
+        if (mainFrame)
+        {
+            mainFrame->generateHistogram();
+        }
+    }        
     removeLayerMutex.Unlock();
 }
 
