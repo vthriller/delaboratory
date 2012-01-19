@@ -109,3 +109,20 @@ void deMixerLayer::load(xmlNodePtr root)
         child = child->next;
     }
 }
+
+bool deMixerLayer::randomize()
+{
+    int n = getColorSpaceSize(colorSpace);
+
+    int s = rand() % n;
+    int d = rand() % n;
+    
+    deValue v = (deValue) rand() / RAND_MAX;
+
+    v *= 1.3;
+    v -= 0.2;
+
+    mixers[d]->setWeight(s, v);
+
+    return true;
+}
