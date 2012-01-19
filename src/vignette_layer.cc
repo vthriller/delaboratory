@@ -23,6 +23,7 @@
 #include "str.h"
 #include "xml.h"
 #include "frame_factory.h"
+#include "layer_processor.h"
 
 deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
@@ -31,8 +32,13 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sour
  centerX("center_x"),
  centerY("center_y")
 {
-    setBlendMode(deBlendOverlay);
-    setOpacity(0.4);
+    radiusX.setMin(0.1);
+    radiusX.setMax(2.0);
+    radiusY.setMin(0.1);
+    radiusY.setMax(2.0);
+    centerX.setMin(-1);
+    centerY.setMin(-1);
+    reset();
 }
 
 deVignetteLayer::~deVignetteLayer()
@@ -50,6 +56,18 @@ bool deVignetteLayer::isChannelNeutral(int index)
 {
     return false;
 }    
+
+void deVignetteLayer::reset()
+{
+    setBlendMode(deBlendOverlay);
+    setOpacity(0.4);
+    radiusX.set(1.0);
+    radiusY.set(1.0);
+    centerX.set(0.0);
+    centerY.set(0.0);
+    int index = getIndex();
+    layerProcessor.markUpdateAllChannels(index);
+}
 
 void deVignetteLayer::save(xmlNodePtr root)
 {
@@ -82,4 +100,26 @@ void deVignetteLayer::load(xmlNodePtr root)
     }        
     */
 
+}
+
+bool deVignetteLayer::randomize()
+{
+    deValue r = (deValue) rand() / RAND_MAX;
+    r *= 0.5;
+    radiusX.set(r + 0.8);
+
+    deValue r2 = (deValue) rand() / RAND_MAX;
+    r2 *= 0.5;
+    radiusY.set(r2 + 0.8);
+
+    deValue r3 = (deValue) rand() / RAND_MAX;
+    r3 *= 2.0;
+    centerX.set(r3 - 1.0);
+
+    deValue r4 = (deValue) rand() / RAND_MAX;
+    r4 *= 2.0;
+    centerY.set(r4 - 1.0);
+
+
+    return true;
 }
