@@ -49,6 +49,8 @@ class deMixerLayer:public deActionLayer
 
         virtual std::string getActionName() {return "mixer";};
 
+        virtual bool randomize();
+
 
 
 };
