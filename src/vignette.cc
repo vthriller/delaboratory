@@ -22,6 +22,15 @@
 
 void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue centerY, deValue radiusX, deValue radiusY)
 {
+    if (radiusX <= 0.0)
+    {
+        return;
+    }
+    if (radiusY <= 0.0)
+    {
+        return;
+    }
+
     //assert(source);
     assert(destination);
 
@@ -52,9 +61,18 @@ void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue
     for (i = 0; i < h; i++)
     {
         deValue y = (i - hh) / hh;
+
+        y = y - centerY;
+
+        y /= radiusY;
+
         for (j = 0; j < w; j++)
         {
             deValue x = (j - ww) / ww;
+
+            x = x - centerX;
+            x /= radiusX;
+
             deValue r = sqrt(x * x + y * y) / 1.0;
             deValue v = 1.0 - r;
             if (v < 0)
