@@ -97,8 +97,8 @@ bool deUSMLayer::isChannelNeutral(int index)
 
 void deUSMLayer::reset()
 {
-    blurRadius.set(0.002);
-    amount.set(2.0);
+    blurRadius.set(0.7);
+    amount.set(0.1);
     threshold.set(0.0);
     int index = getIndex();
     layerProcessor.markUpdateAllChannels(index);
@@ -156,3 +156,19 @@ void deUSMLayer::load(xmlNodePtr root)
     }        
 }
 
+bool deUSMLayer::randomize()
+{
+    deValue r = (deValue) rand() / RAND_MAX;
+    r *= 0.5;
+    blurRadius.set(r + 0.001);
+
+    deValue r2 = (deValue) rand() / RAND_MAX;
+    r2 *= 5;
+    amount.set(r2);
+
+    deValue r3 = (deValue) rand() / RAND_MAX;
+    r3 *= 0.2;
+    threshold.set(r3);
+
+    return true;
+}
