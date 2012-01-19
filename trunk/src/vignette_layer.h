@@ -47,7 +47,15 @@ class deVignetteLayer:public deActionLayer
 
         virtual std::string getActionName() {return "setup";};
 
+        dePropertyValue& getPropertyCenterX() {return centerX;};
+        dePropertyValue& getPropertyCenterY() {return centerY;};
+
         dePropertyValue& getPropertyRadiusX() {return radiusX;};
+        dePropertyValue& getPropertyRadiusY() {return radiusY;};
+
+        void reset();
+
+        virtual bool randomize();
 
 };
 
