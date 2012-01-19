@@ -28,6 +28,12 @@ class deMixerEditor:public deActionFrame
 {
     private:
         std::vector<deMixerEditorChannel*> channels;
+        wxButton* reset;
+        wxButton* random1;
+        wxButton* random2;
+        wxButton* random3;
+
+        void click(wxCommandEvent &event);
 
     public:
         deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);

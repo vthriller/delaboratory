@@ -190,6 +190,33 @@ void deMixerEditorChannel::preset(deValue a)
     layerProcessor.markUpdateSingleChannel(l_index, index);
 }
 
+void deMixerEditorChannel::random(deValue a)
+{
+    unsigned int i;
+    for (i = 0; i < sliders.size(); i++) 
+    {
+        deValue v = 0;
+        if (i == index)
+        {
+            v = 1.0;
+        }
+
+        deValue r = (deValue) rand() / RAND_MAX;
+
+        r *= 2.0;
+        r -= 1.0;
+        r *= a;
+
+        v += r;
+
+        sliders[i]->setValue(v);
+        layer.setWeight(i, index, v);
+    }
+
+    int l_index = layer.getIndex();
+    layerProcessor.markUpdateSingleChannel(l_index, index);
+}
+
 void deMixerEditorChannel::preset2(deValue a, deValue b, deValue c)
 {
     unsigned int i;
