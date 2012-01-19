@@ -43,12 +43,14 @@ class deMixerEditorChannel:public wxPanel
         wxButton* mix4;
 
         void click(wxCommandEvent &event);
-        void preset(deValue a);
         void preset2(deValue a, deValue b, deValue c);
 
     public:
         deMixerEditorChannel(wxWindow *parent, deMixerLayer& _layer, int _index, deLayerProcessor& _layerProcessor);
         virtual ~deMixerEditorChannel();
+
+        void random(deValue a);
+        void preset(deValue a);
 
 
 
