@@ -1,3 +1,19 @@
+ifeq (${OS}, WINDOWS)
+# settings for Windows build
+
+LDFLAGS=`/opt/wxw/bin/wx-config --libs` `pkg-config --libs libxml-2.0` -L/opt/lib -ltiff
+CXXFLAGS=`/opt/wxw/bin/wx-config --cxxflags` `pkg-config --cflags libxml-2.0` -I/opt/include
+
+else
+# settings for standard build
+
+LDFLAGS=`${WXCONFIG} --libs` `xml2-config --libs` -ltiff
+CXXFLAGS=`${WXCONFIG} --cxxflags` `xml2-config --cflags`
+
+endif
+
+
+
 APP=delaboratory
 
 all: ${APP}
@@ -24,8 +40,6 @@ CXX=g++
 WXCONFIG=wx-config
 #WXCONFIG=wx-config-2.9
 
-LDFLAGS=`${WXCONFIG} --libs` `xml2-config --libs` -ltiff
-CXXFLAGS=`${WXCONFIG} --cxxflags` `xml2-config --cflags`
 
 # choose your architecture
 #OPTFLAGS=-march=i686
