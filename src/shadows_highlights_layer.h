@@ -55,6 +55,8 @@ class deShadowsHighlightsLayer:public deActionLayer
 
         void reset();
 
+        virtual bool randomize() {return false;};
+
 };
 
 #endif

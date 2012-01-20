@@ -27,17 +27,16 @@
 deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject& _project)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition), sampler(_sampler), project(_project)
 {
-    //wxSizer* sizer = new wxStaticBoxSizer(wxVERTICAL, this, _T(""));
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
-
-    wxSizer* sizerG = new wxGridSizer(3);
-    sizer->Add(sizerG);
 
     int xyWidth = 70;
     int valueWidth = 70;
 
     getSupportedColorSpaces(colorSpaces);
+
+    wxSizer* sizerT = new wxBoxSizer(wxHORIZONTAL);
+    sizer->Add(sizerT);
 
     wxString* colorSpaceStrings = new wxString [colorSpaces.size()];
     unsigned int i;
@@ -46,8 +45,13 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject&
         colorSpaceStrings[i] = wxString::FromAscii(getColorSpaceName(colorSpaces[i]).c_str());
     }        
 
-    colorSpace = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, colorSpaces.size(), colorSpaceStrings);
-    sizerG->Add(colorSpace);
+    colorSpaceChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, colorSpaces.size(), colorSpaceStrings);
+    sizerT->Add(colorSpaceChoice);
+
+    //sizerT->AddSpacer(50);
+
+    colorPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(60, 25));
+    sizerT->Add(colorPanel, 0, wxALIGN_CENTER);
 
     wxSizer* sizerS = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
     sizer->Add(sizerS);
@@ -63,14 +67,48 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject&
 
     delete []  colorSpaceStrings;
 
+    setChoice();
+
+    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deSamplerPanel::choose));
+
 }
 
 deSamplerPanel::~deSamplerPanel()
 {
 }
 
+void deSamplerPanel::setChoice()
+{
+    deColorSpace colorSpace = sampler.getColorSpace();
+    unsigned int i;
+    for (i = 0; i != colorSpaces.size(); i++)
+    {
+        if (colorSpaces[i] == colorSpace)
+        {
+            colorSpaceChoice->SetSelection(i);            
+        }
+    }
+}
+
 void deSamplerPanel::update()
 {
+    if (sampler.isEnabled())
+    {
+        colorSpaceChoice->Enable();
+        v1->Enable();
+        v2->Enable();
+        v3->Enable();
+        v4->Enable();
+    }
+    else
+    {
+        v1->Disable();
+        v2->Disable();
+        v3->Disable();
+        v4->Disable();
+        colorSpaceChoice->Disable();
+    }
+
     const deViewManager& viewManager = project.getViewManager();
     int view = viewManager.getView();
 
@@ -94,14 +132,49 @@ void deSamplerPanel::update()
         deColorSpace colorSpace = sampler.getColorSpace();
         int n = getColorSpaceSize(colorSpace);
 
+        switch (n)
+        {
+            case 1:
+            {
+                v1->Show();
+                v2->Hide();
+                v3->Hide();
+                v4->Hide();
+                break;
+            }
+            case 3:
+            {
+                v1->Show();
+                v2->Show();
+                v3->Show();
+                v4->Hide();
+                break;
+            }
+            case 4:
+            {
+                v1->Show();
+                v2->Show();
+                v3->Show();
+                v4->Show();
+                break;
+            }
+        }
+
         deValue vv1;
         deValue vv2;
         deValue vv3;
         deValue vv4;
 
+        deValue rr;
+        deValue gg;
+        deValue bb;
+
         image.lockRead();
 
+        bool result2 = convertPixel(image, p, deColorSpaceRGB, rr, gg, bb, vv4);
         bool result = convertPixel(image, p, colorSpace, vv1, vv2, vv3, vv4);
+
+        colorPanel->SetBackgroundColour(wxColour(255 * rr, 255 * gg, 255 * bb));
 
         image.unlockRead();
 
@@ -116,19 +189,28 @@ void deSamplerPanel::update()
         }            
         {
             oss.str("");
-            oss << getPresentationValue(colorSpace, 0, vv2);
+            oss << getPresentationValue(colorSpace, 1, vv2);
             v2->SetLabel(wxString::FromAscii(oss.str().c_str()));
         }            
         {
             oss.str("");
-            oss << getPresentationValue(colorSpace, 0, vv3);
+            oss << getPresentationValue(colorSpace, 2, vv3);
             v3->SetLabel(wxString::FromAscii(oss.str().c_str()));
         }            
         {
             oss.str("");
-            oss << getPresentationValue(colorSpace, 0, vv4);
+            oss << getPresentationValue(colorSpace, 3, vv4);
             v4->SetLabel(wxString::FromAscii(oss.str().c_str()));
         }            
     }
 
 }
+
+void deSamplerPanel::choose(wxCommandEvent &event)
+{
+    int c = colorSpaceChoice->GetSelection();
+    deColorSpace colorSpace = colorSpaces[c];
+    sampler.setColorSpace(colorSpace);
+    update();
+}
+

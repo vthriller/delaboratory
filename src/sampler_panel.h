@@ -31,7 +31,8 @@ private:
     deSampler& sampler;
     deProject& project;
 
-    wxChoice* colorSpace;
+    wxChoice* colorSpaceChoice;
+    wxPanel* colorPanel;
     wxStaticText* v1;
     wxStaticText* v2;
     wxStaticText* v3;
@@ -39,11 +40,14 @@ private:
 
     std::vector<deColorSpace> colorSpaces;
 
+    void choose(wxCommandEvent &event);
+
 public:
 	deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject& _project);
 	virtual ~deSamplerPanel();
 
     void update();
+    void setChoice();
 
 };
 

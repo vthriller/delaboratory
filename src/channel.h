@@ -31,8 +31,6 @@ class deChannel
         mutable wxSemaphore readSemaphore;
         wxMutex writeMutex;
         int maxReaders;
-        mutable bool lockedRead;
-        bool lockedWrite;
         int magicSize;
 
         deChannel(const deChannel& c);

@@ -60,6 +60,8 @@ class deApplyImageLayer:public deActionLayer
 
         virtual std::string getActionName() {return "setup";};
 
+        virtual bool randomize() {return false;};
+
 
 };
 

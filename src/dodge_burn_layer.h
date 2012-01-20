@@ -62,6 +62,8 @@ class deDodgeBurnLayer:public deActionLayer
 
         void reset();
 
+        virtual bool randomize() {return false;};
+
 };
 
 #endif

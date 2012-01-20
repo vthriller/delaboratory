@@ -434,7 +434,7 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
     project.log("repaint main frame 1");
     imageAreaPanel->getImagePanel()->repaintImagePanel();
     project.log("repaint main frame 2");
-    controlPanel->updateSamplerManagerFrame();
+    //controlPanel->updateSamplerManagerFrame();
     project.log("repaint main frame 3");
     samplersPanel->update();
     project.log("repaint main frame 4");

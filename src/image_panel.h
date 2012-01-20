@@ -31,15 +31,16 @@ private:
     deProject* project;
     deRenderer renderer;
     bool clicked;
-    deValue grabX;
-    deValue grabY;
 
 	void click(wxMouseEvent &event);
 	void release(wxMouseEvent &event);
 	void move(wxMouseEvent &event);
 	void wheel(wxMouseEvent &event);
 
-    bool setPosition(deValue x, deValue y);
+    bool onClick(deValue x, deValue y);
+    bool onMove(deValue x, deValue y);
+    bool onRelease();
+
     void drawSamplers(wxDC& dc);
 
 public:

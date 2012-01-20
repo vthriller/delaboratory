@@ -22,7 +22,6 @@
 #include "layer.h"
 #include "layer_factory.h"
 #include "layer_grid_panel.h"
-#include "sampler_manager_frame.h"
 #include "file_dialogs.h"
 #include "layer_processor.h"
 #include "wx/notebook.h"
@@ -32,8 +31,6 @@ const int g_txt = 220;
 deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor,  deLayerGridPanel* _layerGridPanel)
 :wxPanel(parent), project(_project), layerGridPanel(_layerGridPanel), layerProcessor(_processor)
 {
-
-    samplerManagerFrame = NULL;
 
     project.setControlPanel(this);
 
@@ -88,17 +85,6 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
 
     wxSizer* hSizer = new wxBoxSizer(wxHORIZONTAL);
     mainSizer->Add(hSizer, 0, wxCENTER);
-
-    {
-
-        wxSizer* sizerT = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T("tools"));
-        hSizer->Add(sizerT, 1, wxCENTER);
-
-        {
-            samplers = new wxButton(this, wxID_ANY, _T("samplers"));
-            sizerT->Add(samplers, 1);
-        }
-    }
 
     wxSizer* sizerD = new wxStaticBoxSizer(wxVERTICAL, this,  _T("delete"));
     hSizer->Add(sizerD, 1, wxCENTER);
@@ -196,11 +182,6 @@ void deControlPanel::click(wxCommandEvent &event)
         updateLayerGrid();
     }
 
-    if (samplers->GetId() == id)
-    {
-        showSamplers();
-    }
-
     if (exportJPEG->GetId() == id)
     {
         std::string jpegFile = getSaveFile(this, "export JPEG", "jpeg");
@@ -237,25 +218,6 @@ void deControlPanel::click(wxCommandEvent &event)
 
 }
 
-void deControlPanel::closeSamplerManagerFrame()
-{
-    samplerManagerFrame = NULL;
-    layerProcessor.onGUIUpdate();
-}
-
-void deControlPanel::updateSamplerManagerFrame()
-{
-    if (samplerManagerFrame)
-    {
-        samplerManagerFrame->update();
-    }
-}
-
-bool deControlPanel::samplersVisible() const
-{
-    return samplerManagerFrame != NULL;
-}
-
 void deControlPanel::updateLayerGrid()
 {
     layerGridPanel->clearRows();
@@ -263,16 +225,6 @@ void deControlPanel::updateLayerGrid()
     layerGridPanel->Layout();
     layerProcessor.onGUIUpdate();
 }
-
-void deControlPanel::showSamplers()
-{
-    if (!samplerManagerFrame)
-    {
-        samplerManagerFrame = new deSamplerManagerFrame(this, project);
-        samplerManagerFrame->Show();
-        layerProcessor.onGUIUpdate();
-    }
-}        
 
 void deControlPanel::onKey(int key)
 {
@@ -287,13 +239,6 @@ void deControlPanel::onKey(int key)
     if (key == 'M')
     {
         project.addActionLayer("mixer");
-    }
-    if (key == 'S')
-    {
-        if (samplerManagerFrame)
-        {
-            samplerManagerFrame->dumpColor();
-        }
     }
 }
 

@@ -21,6 +21,7 @@
 #include "project.h"
 #include "layer.h"
 #include "layer_processor.h"
+#include <iostream>
 
 BEGIN_EVENT_TABLE(deImagePanel, wxPanel)
 EVT_PAINT(deImagePanel::paintEvent)
@@ -38,16 +39,15 @@ void deImagePanel::click(wxMouseEvent &event)
 
     clicked = true;
 
-    if (!setPosition(x, y))
-    {
-        grabX = x;
-        grabY = y;
-    }
+    onClick(x,y);
+
 }
 
 void deImagePanel::release(wxMouseEvent &event)
 {
     clicked = false;
+
+    onRelease();
 }
 
 void deImagePanel::move(wxMouseEvent &event)
@@ -60,15 +60,11 @@ void deImagePanel::move(wxMouseEvent &event)
     float x = (float) ex / xx;
     float y = (float) ey / yy;
 
-    if (!setPosition(x, y))
+    if (clicked)
     {
-        if (clicked)
-        {
-            project->setViewOffset(x - grabX, y - grabY);
-            grabX = x;
-            grabY = y;
-        }
-    }
+        onMove(x,y);
+    }        
+
 }
 
 void deImagePanel::wheel(wxMouseEvent &event)
@@ -77,28 +73,51 @@ void deImagePanel::wheel(wxMouseEvent &event)
 }
 
 
-bool deImagePanel::setPosition(deValue x, deValue y)
+bool deImagePanel::onClick(deValue x, deValue y)
 {
-    if (clicked)
+    bool used = project->getLayerFrameManager().onImageClick(x, y);
+
+    if (!used)
     {
-        bool used = project->getLayerFrameManager().onImageClick(x, y);
-
         deSamplerManager& samplerManager = project->getSamplerManager();
-        samplerManager.onImageClick(x, y);
+        used = samplerManager.onClick(x, y);
+    }            
 
-        return used;
-    }
+    return used;
+}
+
+bool deImagePanel::onMove(deValue x, deValue y)
+{
+    bool used = project->getLayerFrameManager().onImageClick(x, y);
+
+    if (!used)
+    {
+        deSamplerManager& samplerManager = project->getSamplerManager();
+        used = samplerManager.onMove(x, y);
+    }            
+
+    return used;
+}
+
+bool deImagePanel::onRelease()
+{
+    bool used = false;
+
+    deSamplerManager& samplerManager = project->getSamplerManager();
+    used = samplerManager.onRelease();
+
     return false;
 }
 
 deImagePanel::deImagePanel(wxWindow* parent, deProject* _project)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), project(_project), renderer(project)
 {
+    clicked = false;
+
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deImagePanel::click));
     Connect(wxEVT_LEFT_UP, wxMouseEventHandler(deImagePanel::release));
     Connect(wxEVT_MOTION, wxMouseEventHandler(deImagePanel::move));
     Connect(wxEVT_MOUSEWHEEL, wxMouseEventHandler(deImagePanel::wheel));
-    clicked = false;
 }
 
 deImagePanel::~deImagePanel()
@@ -171,21 +190,24 @@ void deImagePanel::drawSamplers(wxDC& dc)
     for (i = 0; i < n; i++)
     {
         deSampler* sampler = samplerManager.getSampler(i);
-        if (i == selected)
+        if (sampler->isEnabled())
         {
-            dc.SetPen(penGREEN);
-        }
-        else
-        {
-            dc.SetPen(penBLACK);
-        }
-        float x = sampler->getX();
-        float y = sampler->getY();
+            if (i == selected)
+            {
+                dc.SetPen(penGREEN);
+            }
+            else
+            {
+                dc.SetPen(penBLACK);
+            }
+            float x = sampler->getX();
+            float y = sampler->getY();
 
-        if ((x >= 0) && (y >= 0) && (x <= 1) && (y<= 1))
-        {
-            dc.DrawCircle(w * x, h * y, 5);
-        }            
+            if ((x >= 0) && (y >= 0) && (x <= 1) && (y<= 1))
+            {
+                dc.DrawCircle(w * x, h * y, 5);
+            }
+        }
     }
 
 }

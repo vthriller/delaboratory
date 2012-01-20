@@ -36,6 +36,7 @@ layerProcessor(_layerProcessor)
     Connect(wxEVT_MOTION, wxMouseEventHandler(deCurvesPanel::move));
     channel = 0;
     selectedPoint = -1;
+    lastSelectedPoint = -1;
     marker = -1;
 
     backgroundBitmap = NULL;
@@ -233,6 +234,7 @@ void deCurvesPanel::click(wxMouseEvent &event)
 
 void deCurvesPanel::reset()
 {
+    lastSelectedPoint = -1;
     deCurve* curve = layer.getCurve(channel);
 
     if (!curve)
@@ -245,6 +247,7 @@ void deCurvesPanel::reset()
 
 void deCurvesPanel::invert()
 {
+    lastSelectedPoint = -1;
     deCurve* curve = layer.getCurve(channel);
 
     if (!curve)
@@ -257,6 +260,7 @@ void deCurvesPanel::invert()
 
 void deCurvesPanel::setConst(deValue v)
 {
+    lastSelectedPoint = -1;
     deCurve* curve = layer.getCurve(channel);
 
     if (!curve)
@@ -269,6 +273,7 @@ void deCurvesPanel::setConst(deValue v)
 
 void deCurvesPanel::addRandom(int n)
 {
+    lastSelectedPoint = -1;
     deCurve* curve = layer.getCurve(channel);
 
     if (!curve)
@@ -290,6 +295,7 @@ void deCurvesPanel::addRandom(int n)
 
 void deCurvesPanel::setAngle(int a)
 {
+    lastSelectedPoint = -1;
     deCurve* curve = layer.getCurve(channel);
 
     if (!curve)
@@ -302,6 +308,7 @@ void deCurvesPanel::setAngle(int a)
 
 void deCurvesPanel::setS(int a)
 {
+    lastSelectedPoint = -1;
     deCurve* curve = layer.getCurve(channel);
 
     if (!curve)
@@ -315,6 +322,7 @@ void deCurvesPanel::setS(int a)
 
 void deCurvesPanel::update(bool finished)
 {
+//    std::cout << "curves update" << std::endl;
     layerProcessor.log("deCurvesPanel::update");
     paint();
     if ((finished) || (realtime))
@@ -457,11 +465,25 @@ void deCurvesPanel::onKey(int key)
             for (i = 0; i < s; i++)
             {
                 deChannel* c = layer.getSourceChannel(i);
-                deValue m = c->getValue(clickPosition);
 
-                deCurve* curve = layer.getCurve(i);
+                if (c)
+                {
+                    c->lockRead();
 
-                curve->addPoint(m, curve->calcValue(m));
+                    deValue m = c->getValue(clickPosition);
+
+                    c->unlockRead();
+
+                    deCurve* curve = layer.getCurve(i);
+
+                    int selectedPoint = curve->addPoint(m, curve->calcValue(m));
+       
+                    if (i == channel)
+                    {
+                        lastSelectedPoint = selectedPoint;
+                    }                        
+
+                }
             }
             update(true);
         }
