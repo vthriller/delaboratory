@@ -433,10 +433,12 @@ bool deProject::samplersVisible() const
     {
         return true;
     }
+    /*
     if (controlPanel)
     {
         return controlPanel->samplersVisible();
     }
+    */
     return false;
 }
 
@@ -602,7 +604,7 @@ bool deProject::openImage(const std::string& fileName)
 {
     freeImage();
 
-    std::cout << "OPEN IMAGE" << fileName << std::endl;
+//    std::cout << "OPEN IMAGE" << fileName << std::endl;
     logger.log("open image " + fileName);
 
     bool tiff = checkTIFF(fileName);
@@ -762,6 +764,7 @@ void deProject::setMainFrame(deMainFrame* _mainFrame)
 void deProject::setShowSamplers(bool show)
 {
     showSamplers = show;
+    samplerManager.setMoving(show);
 }
 
 bool deProject::isSourceValid() const

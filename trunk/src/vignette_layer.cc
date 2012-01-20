@@ -59,8 +59,8 @@ bool deVignetteLayer::isChannelNeutral(int index)
 
 void deVignetteLayer::reset()
 {
-    setBlendMode(deBlendOverlay);
-    setOpacity(0.4);
+    setBlendMode(deBlendMultiply);
+    setOpacity(0.5);
     radiusX.set(1.0);
     radiusY.set(1.0);
     centerX.set(0.0);

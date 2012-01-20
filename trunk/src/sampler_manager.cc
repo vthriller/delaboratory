@@ -23,14 +23,17 @@
 deSamplerManager::deSamplerManager(deProject& _project, deLayerProcessor& _processor)
 :project(_project), layerProcessor(_processor)
 {
+    size = 5;
+
     int i;
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < size; i++)
     {
         deSampler s;
         samplers.push_back(s);
     }        
 
-    selected = 0;
+    selected = -1;
+    moving = false;
 }
 
 deSamplerManager::~deSamplerManager()
@@ -48,17 +51,107 @@ deSampler* deSamplerManager::getSampler(int index)
     return &(samplers[index]);
 }
 
-void deSamplerManager::onImageClick(deValue x, deValue y)
+bool deSamplerManager::select(deValue x, deValue y)
 {
-    deSampler& s = samplers[selected];
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        deSampler& s = samplers[i];
+        if (s.isEnabled())
+        {
+            deValue dx = s.getX() - x;
+            deValue dy = s.getY() - y;
+            deValue r = sqrt(dx*dx + dy*dy);
 
-    s.setPosition(x, y);
+            if (r < 0.01)
+            {
+                selected = i;
+                return true;
+            }
+        }
+    }        
 
-    layerProcessor.onGUIUpdate();
+    for (i = 0; i < size; i++)
+    {
+        deSampler& s = samplers[i];
+        if (!s.isEnabled())
+        {
+            s.enable();
+            selected = i;
+            return true;
+        }
+    }        
+
+    return false;
+}
+
+bool deSamplerManager::onClick(deValue x, deValue y)
+{
+    if (!moving)
+    {
+        return false;
+    }
+
+    if (select(x,y))
+    {
+        deSampler& s = samplers[selected];
+        s.setPosition(x, y);
+
+        layerProcessor.onGUIUpdate();
+
+        return true;
+    }
+
+    return false;
+
+}
+
+bool deSamplerManager::onMove(deValue x, deValue y)
+{
+    if (!moving)
+    {
+        return false;
+    }
+
+//    std::cout << "on move " << x << " " << y << std::endl;
+
+    if (selected >= 0)
+    {
+        deSampler& s = samplers[selected];
+
+        if ((x < -0.01) || (y < -0.01) || (x>1.01) || (y>1.01))
+        {
+//            std::cout << "disable" << std::endl;
+            s.disable();
+            selected = -1;
+        }
+        else
+        {
+            s.setPosition(x, y);
+        }            
+
+        layerProcessor.onGUIUpdate();
+
+        return true;
+    }
+
+    return false;
+}
+
+bool deSamplerManager::onRelease()
+{
+    selected = -1;
+
+    return true;
 }
 
 void deSamplerManager::setSelected(int s)
 {
     selected = s;
     layerProcessor.onGUIUpdate();
+}
+
+void deSamplerManager::setMoving(bool m)
+{
+    moving = m;
 }

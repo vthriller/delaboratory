@@ -27,6 +27,7 @@ class deSampler
         deValue x;
         deValue y;
         deColorSpace colorSpace;
+        bool enabled;
 
     public:
         deSampler();
@@ -39,6 +40,10 @@ class deSampler
 
         deColorSpace getColorSpace() const {return colorSpace;};
         void setColorSpace(deColorSpace c);
+
+        bool isEnabled() const;
+        void enable();
+        void disable();
 
 };
 

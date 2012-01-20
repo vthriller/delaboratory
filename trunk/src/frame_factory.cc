@@ -26,6 +26,7 @@
 #include "mixer_bw_editor.h"
 #include "conversion_bw_layer.h"
 #include "dodge_burn_frame.h"
+#include "vignette_frame.h"
 #include "high_pass_frame.h"
 #include "shadows_highlights_frame.h"
 
@@ -69,6 +70,12 @@ deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerPr
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
         return new deDodgeBurnFrame(parent, al, layerProcessor, frameManager);
+    }        
+
+    if (type == "vignette")
+    {
+        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        return new deVignetteFrame(parent, al, layerProcessor, frameManager);
     }        
 
     if (type == "high_pass")

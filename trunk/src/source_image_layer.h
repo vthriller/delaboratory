@@ -61,6 +61,8 @@ class deSourceImageLayer:public deLayer
 
         deImage& getSourceImage();
 
+        virtual bool randomize() {return false;};
+
 };
 
 #endif

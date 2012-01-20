@@ -353,6 +353,11 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
 
     layerProcessMutex.Lock();
 
+    if ((a == firstLayerToUpdate) && (layerProcessType == deLayerProcessSingleChannel))
+    {
+        channel = -1;
+    }
+
     if (a < firstLayerToUpdate)
     {
         firstLayerToUpdate = a;
@@ -384,11 +389,15 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
 
 void deLayerProcessor::updateImage()
 {
-    //log("update image " + str(i) + " " + str(channel) + " " + str(blend) + " " + str(action));
+    log("update image 1");
 
     removeLayerMutex.Lock();
 
+    log("update image 2");
+
     layerProcessMutex.Lock();
+
+    log("update image 3");
 
     bool ok = true;
 
@@ -402,14 +411,21 @@ void deLayerProcessor::updateImage()
     deLayerProcessType type = deLayerProcessInvalid;
     int channel = -1;
 
+    log("update image 4");
+
     stack->lock();
+
+    log("update image 5");
 
     deLayer* layer = stack->getLayer(i);
     if ((layer) && (ok))
     {
 
+        log("update image 6");
         layer->lock();
+        log("update image 7");
         stack->unlock();
+        log("update image 8");
 
         type = layerProcessType;
         channel = layerProcessChannel;
@@ -418,22 +434,32 @@ void deLayerProcessor::updateImage()
 
         lastValidLayer = i;
         firstLayerToUpdate = i + 1;
+        log("update image 9");
     }            
     else
     {
         stack->unlock();
     }
 
+    log("update image 10");
+
     layerProcessMutex.Unlock();
+
+    log("update image 11");
 
     if ((layer) && (ok))
     {
+        log("update image 12");
         layer->process(type, channel);
 
+        log("update image 13");
+
         layer->unlock();
+        log("update image 14");
     }        
 
     removeLayerMutex.Unlock();
+    log("update image 15");
 
 }
 

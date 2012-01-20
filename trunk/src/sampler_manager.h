@@ -32,6 +32,11 @@ class deSamplerManager
         std::vector<deSampler> samplers;
 
         int selected;
+        int size;
+
+        bool moving;
+
+        bool select(deValue x, deValue y);
 
         
     public:
@@ -41,9 +46,15 @@ class deSamplerManager
         int getNumberOfSamplers() const {return samplers.size();};
         deSampler* getSampler(int index);
 
-        void onImageClick(deValue x, deValue y);
+        //bool onImageClick(deValue x, deValue y);
+        bool onClick(deValue x, deValue y);
+        bool onMove(deValue x, deValue y);
+        bool onRelease();
+
         void setSelected(int s);
         int getSelected() const {return selected;};
+
+        void setMoving(bool m);
 };
 
 #endif

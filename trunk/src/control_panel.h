@@ -25,7 +25,6 @@
 #include "color_space.h"
 class deProject;
 class deLayerGridPanel;
-class deSamplerManagerFrame;
 class deLayerProcessor;
 
 class deControlPanel:public wxPanel
@@ -35,10 +34,6 @@ class deControlPanel:public wxPanel
         deLayerGridPanel* layerGridPanel;
         deLayerProcessor& layerProcessor;
         wxSizer* mainSizer;
-
-        deSamplerManagerFrame* samplerManagerFrame;
-
-        wxButton* samplers;
 
         wxButton* exportJPEG;
         wxButton* exportTIFF;
@@ -65,13 +60,7 @@ class deControlPanel:public wxPanel
 
         void onChangeView();
 
-        void closeSamplerManagerFrame();
-        void updateSamplerManagerFrame();
-
-        bool samplersVisible() const;
-
         void updateLayerGrid();
-        void showSamplers();
 
         void onKey(int key);
 

@@ -23,6 +23,7 @@ deSampler::deSampler()
     x = -1;
     y = -1;
     colorSpace = deColorSpaceCMYK;
+    enabled = false;
 }
 
 deSampler::~deSampler()
@@ -38,4 +39,19 @@ void deSampler::setPosition(deValue _x, deValue _y)
 void deSampler::setColorSpace(deColorSpace c)
 {
     colorSpace = c;
+}
+
+bool deSampler::isEnabled() const
+{
+    return enabled;
+}
+
+void deSampler::enable()
+{
+    enabled = true;
+}
+
+void deSampler::disable()
+{
+    enabled = false;
 }

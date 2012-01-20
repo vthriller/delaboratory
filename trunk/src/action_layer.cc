@@ -570,7 +570,12 @@ void deActionLayer::updateAction(int i)
         return;
     }
 
+    layerProcessor.log("update action 2 i:" +str(i));
+
     deLayer* source = layerStack.getLayer(sourceLayer);
+
+    layerProcessor.log("update action 3 i:" +str(i));
+
     const deImage& sourceImage = source->getImage();
 
     int channelSize = channelManager.getChannelSize().getN();
@@ -583,8 +588,11 @@ void deActionLayer::updateAction(int i)
         return;
     }
 
+    layerProcessor.log("update action 4 i:" +str(i));
+
     if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
     {
+        layerProcessor.log("update action 4a i:" +str(i));
         deChannel* sourceChannel = channelManager.getChannel(s);
         sourceChannel->lockRead();
         sourceChannel->unlockRead();
@@ -595,17 +603,22 @@ void deActionLayer::updateAction(int i)
 
         if (singleChannelProcessing())
         {
+            layerProcessor.log("update action 5 i:" +str(i));
             deChannel* sourceChannel = channelManager.getChannel(s);
             if (sourceChannel)
             {
                 imageActionPass.enableChannel(i);
                 int c = imageActionPass.getChannelIndex(i);
                 deChannel* channel = channelManager.getChannel(c);
+                layerProcessor.log("update action 6 i:" +str(i));
 
                 if (channel)
                 {
+                    layerProcessor.log("update action 7 i:" +str(i));
                     channel->lockWrite();
+                    layerProcessor.log("update action 8 i:" +str(i));
                     sourceChannel->lockRead();
+                    layerProcessor.log("update action 9 i:" +str(i));
 
                     processAction(i, *sourceChannel, *channel, channelManager.getChannelSize());
 
@@ -616,6 +629,7 @@ void deActionLayer::updateAction(int i)
         }
         else
         {
+            layerProcessor.log("update action 999 i:" +str(i));
             int s1 = sourceImage.getChannelIndex(0);
             int s2 = sourceImage.getChannelIndex(1);
             int s3 = sourceImage.getChannelIndex(2);
