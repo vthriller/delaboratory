@@ -395,7 +395,8 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
 
     lockLayers();
 
-    if ((a == firstLayerToUpdate) && (layerProcessType == deLayerProcessSingleChannel))
+    //if ((a == firstLayerToUpdate) && (layerProcessType == deLayerProcessSingleChannel))
+    if (a == firstLayerToUpdate)
     {
         channel = -1;
     }
