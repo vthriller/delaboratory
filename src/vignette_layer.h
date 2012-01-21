@@ -29,6 +29,7 @@ class deVignetteLayer:public deActionLayer
         dePropertyValue centerY;
         dePropertyValue radiusX;
         dePropertyValue radiusY;
+        dePropertyValue light;
 
     protected:
         virtual bool singleChannelProcessing() const {return true;};
@@ -52,6 +53,8 @@ class deVignetteLayer:public deActionLayer
 
         dePropertyValue& getPropertyRadiusX() {return radiusX;};
         dePropertyValue& getPropertyRadiusY() {return radiusY;};
+
+        dePropertyValue& getPropertyLight() {return light;};
 
         void reset();
 
