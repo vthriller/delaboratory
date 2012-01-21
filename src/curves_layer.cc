@@ -24,11 +24,10 @@
 #include "frame_factory.h"
 #include "curves_editor.h"
 
-#include "layer_processor.h"
 #include "str.h"
 
-deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _processor, _channelManager, _viewManager) 
+deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack,  _channelManager, _viewManager) 
 {
     int n = getColorSpaceSize(colorSpace);
     curves = new deCurve[n];

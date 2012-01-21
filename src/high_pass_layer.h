@@ -32,7 +32,7 @@ class deHighPassLayer:public deActionLayer
         virtual std::string getType() const {return "high_pass";};
 
     public:
-        deHighPassLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deHighPassLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
         virtual ~deHighPassLayer();
 
         virtual bool isChannelNeutral(int index);

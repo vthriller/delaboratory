@@ -25,8 +25,8 @@
 #include "frame_factory.h"
 #include "layer_processor.h"
 
-deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
+deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
  blurRadius("blur_radius"),
  amount("amount"),
  threshold("threshold")
@@ -100,8 +100,6 @@ void deUSMLayer::reset()
     blurRadius.set(0.7);
     amount.set(0.1);
     threshold.set(0.0);
-    int index = getIndex();
-    layerProcessor.markUpdateAllChannels(index);
 }
 
 void deUSMLayer::sharp()
@@ -109,8 +107,6 @@ void deUSMLayer::sharp()
     blurRadius.set(0.001);
     amount.set(4.0);
     threshold.set(0.0);
-    int index = getIndex();
-    layerProcessor.markUpdateAllChannels(index);
 }
 
 void deUSMLayer::hiraloam1()
@@ -118,8 +114,6 @@ void deUSMLayer::hiraloam1()
     blurRadius.set(0.8);
     amount.set(0.1);
     threshold.set(0.0);
-    int index = getIndex();
-    layerProcessor.markUpdateAllChannels(index);
 }
 
 void deUSMLayer::hiraloam2()
@@ -127,8 +121,6 @@ void deUSMLayer::hiraloam2()
     blurRadius.set(0.8);
     amount.set(0.2);
     threshold.set(0.0);
-    int index = getIndex();
-    layerProcessor.markUpdateAllChannels(index);
 }
 
 void deUSMLayer::save(xmlNodePtr root)

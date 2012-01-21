@@ -20,6 +20,7 @@
 #include "high_pass_layer.h"
 #include <iostream>
 #include "property_value_slider.h"
+#include "layer_processor.h"
 
 deHighPassFrame::deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
 :deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
@@ -60,4 +61,7 @@ void deHighPassFrame::click(wxCommandEvent &event)
     }      
 
     radius->setFromProperty();
+
+    int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(index);
 }   

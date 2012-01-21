@@ -28,8 +28,8 @@
 #include "process_linear.h"
 #include "layer_processor.h"
 
-deHighPassLayer::deHighPassLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
+deHighPassLayer::deHighPassLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
  blurRadius("blur_radius")
 {
     blurRadius.setLabel("radius");
@@ -39,8 +39,6 @@ deHighPassLayer::deHighPassLayer(deColorSpace _colorSpace, int _index, int _sour
 void deHighPassLayer::reset()
 {
     blurRadius.set(0.1);
-    int index = getIndex();
-    layerProcessor.markUpdateAllChannels(index);
 }
 
 deHighPassLayer::~deHighPassLayer()

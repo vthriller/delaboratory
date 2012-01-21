@@ -22,7 +22,6 @@
 #include "layer.h"
 #include "image.h"
 class deLayerStack;
-class deLayerProcessor;
 class deChannelManager;
 
 class deConversionLayer:public deLayer
@@ -36,7 +35,7 @@ class deConversionLayer:public deLayer
         deImage image;
 
     public:
-        deConversionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager);
+        deConversionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
         virtual ~deConversionLayer();
 
         virtual const deImage& getImage() const;

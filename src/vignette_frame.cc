@@ -20,6 +20,7 @@
 #include "vignette_layer.h"
 #include <iostream>
 #include "property_value_slider.h"
+#include "layer_processor.h"
 
 deVignetteFrame::deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
 :deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
@@ -77,4 +78,7 @@ void deVignetteFrame::click(wxCommandEvent &event)
     radiusY->setFromProperty();
     centerX->setFromProperty();
     centerY->setFromProperty();
+
+    int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(index);
 }   

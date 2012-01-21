@@ -20,6 +20,7 @@
 #include "dodge_burn_layer.h"
 #include <iostream>
 #include "property_value_slider.h"
+#include "layer_processor.h"
 
 deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
 :deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
@@ -84,4 +85,7 @@ void deDodgeBurnFrame::click(wxCommandEvent &event)
     burnAmount->setFromProperty();
     burnMin->setFromProperty();
     burnMax->setFromProperty();
+
+    int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(index);
 }   

@@ -36,7 +36,7 @@ class deVignetteLayer:public deActionLayer
         virtual std::string getType() const {return "vignette";};
 
     public:
-        deVignetteLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deVignetteLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
         virtual ~deVignetteLayer();
 
         virtual bool isChannelNeutral(int index);
