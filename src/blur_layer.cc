@@ -50,11 +50,11 @@ void deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel
 
     deBlurType type = blurTypeFromString(blurType.get());
     
-    layerProcessor.log("blur r=" + str(r));
+    logMessage("blur r=" + str(r));
 
     blurChannel(source, destination, size, r, type, threshold.get());
 
-    layerProcessor.log("blur done");
+    logMessage("blur done");
 }
 
 bool deBlurLayer::isChannelNeutral(int index)

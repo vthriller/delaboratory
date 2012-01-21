@@ -83,14 +83,12 @@ class deLayer
 
         virtual std::string getType() const = 0;
 
-        void onUpdateProperties();
-
         void updateImageThreadCall();
 
         virtual bool randomize() = 0;
 
-        void lock();
-        void unlock();
+        void lockLayer();
+        void unlockLayer();
 
         void process(deLayerProcessType type, int channel);
 

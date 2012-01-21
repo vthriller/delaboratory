@@ -34,7 +34,7 @@ class deSourceImageLayer:public deLayer
         bool primary;
 
         deImage image;
-        deImage sourceImage;
+        deImage& sourceImage;
 
         deChannelManager& sourceChannelManager;
 
@@ -43,7 +43,7 @@ class deSourceImageLayer:public deLayer
         virtual void updateImage();
 
     public:
-        deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deChannelManager& _sourceChannelManager, deLayerProcessor& _processor);
+        deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deChannelManager& _sourceChannelManager, deLayerProcessor& _processor, deImage& _sourceImage);
         virtual ~deSourceImageLayer();
 
         void setPrimary();

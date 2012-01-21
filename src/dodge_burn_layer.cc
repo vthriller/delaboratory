@@ -61,7 +61,7 @@ deDodgeBurnLayer::~deDodgeBurnLayer()
 
 void deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
-    layerProcessor.log("dodge/burn start");
+    logMessage("dodge/burn start");
 
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
@@ -95,7 +95,7 @@ void deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
     delete [] burnMap;
     delete [] firstStage;
 
-    layerProcessor.log("dodge/burn end");
+    logMessage("dodge/burn end");
 }
 
 

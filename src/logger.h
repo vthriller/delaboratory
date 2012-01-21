@@ -27,18 +27,30 @@ class deLogger
 {
     private:
         std::ofstream* f;
+        std::ofstream* fl;
         wxStopWatch sw;
         wxMutex mutex;
         wxThreadIdType main_id;
         bool started;
 
-    public:
+        std::string getThreadName();
+
         deLogger();
+
+    public:
+        static deLogger& getLogger();
         virtual ~deLogger();
 
         void setFile(const std::string& fileName);
+        void setLocksFile(const std::string& fileName);
 
-        void log(const std::string message);
+        void log(const std::string& message);
+        void logLock(const std::string& message, int t);
+
+        int getTime() const;
 };
+
+void logMessage(const std::string& message);
+void lockWithLog(wxMutex& mutex, const std::string& message);
 
 #endif

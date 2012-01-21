@@ -56,7 +56,7 @@ deShadowsHighlightsLayer::~deShadowsHighlightsLayer()
 
 void deShadowsHighlightsLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
-    layerProcessor.log("shadows/highlights start");
+    logMessage("shadows/highlights start");
 
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
@@ -82,7 +82,7 @@ void deShadowsHighlightsLayer::processAction(int i, const deChannel& sourceChann
     delete [] firstStage;
     delete [] secondStage;
     
-    layerProcessor.log("shadows/highlights end");
+    logMessage("shadows/highlights end");
 }
 
 

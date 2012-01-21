@@ -42,13 +42,15 @@ class deLayerProcessor
         wxThread* workerThread;
         wxThread* renderWorkerThread;
         wxThread* histogramWorkerThread;
-        deLogger* logger;
         deLayerFrameManager* layerFrameManager;
         wxSemaphore workerSemaphore;
         wxSemaphore renderWorkerSemaphore;
         wxSemaphore histogramWorkerSemaphore;
         wxMutex layerProcessMutex;
-        wxMutex removeLayerMutex;
+        wxMutex histogramMutex;
+        wxMutex prepareImageMutex;
+        wxMutex updateImageMutex;
+        wxMutex updateImagesMutex;
         deRenderer* renderer;
 
         bool closing;
@@ -74,12 +76,22 @@ class deLayerProcessor
 
         int getLastLayerToUpdate();
 
+        void lockLayers();
+        void unlockLayers();
+
+        void lockHistogram();
+        void unlockHistogram();
+
+        void lockPrepareImage();
+        void unlockPrepareImage();
+
+        void lockUpdateImage();
+        void unlockUpdateImage();
+
 
     public:
         deLayerProcessor();
         virtual ~deLayerProcessor();
-
-        void setLogger(deLogger* _logger);
 
         int getLastValidLayer() const {return lastValidLayer;};
 
@@ -117,8 +129,6 @@ class deLayerProcessor
 
         void removeTopLayer();
         void addLayer(deLayer* layer);
-
-        void log(const std::string& message);
 
         void stopWorkerThread();
 

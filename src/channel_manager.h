@@ -31,7 +31,6 @@ class deChannelManager
 {
     private:
         deSize channelSize;
-        deLogger& logger;
 
         std::vector<deChannel*> channels;
         std::set<int> trashed;
@@ -45,7 +44,7 @@ class deChannelManager
         void unlock();
         
     public:
-        deChannelManager(deLogger& _logger);
+        deChannelManager();
         virtual ~deChannelManager();
 
         void destroyAllChannels();

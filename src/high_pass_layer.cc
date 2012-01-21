@@ -49,7 +49,7 @@ deHighPassLayer::~deHighPassLayer()
 
 void deHighPassLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
-    layerProcessor.log("high pass start");
+    logMessage("high pass start");
 
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
@@ -64,7 +64,7 @@ void deHighPassLayer::processAction(int i, const deChannel& sourceChannel, deCha
 
     delete [] blurMap;
 
-    layerProcessor.log("high pass end");
+    logMessage("high pass end");
 }
 
 

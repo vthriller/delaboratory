@@ -41,7 +41,7 @@ const deImage& deConversionLayer::getImage() const
 
 void deConversionLayer::updateImage()
 {
-    layerProcessor.log("conversion start");
+    logMessage("conversion start");
 
     deLayer* source = layerStack.getLayer(sourceLayer);
     const deImage& sourceImage = source->getImage();
@@ -49,7 +49,7 @@ void deConversionLayer::updateImage()
     image.enableAllChannels();
     convertImage(sourceImage, image, channelManager);
 
-    layerProcessor.log("conversion end");
+    logMessage("conversion end");
 }
 
 void deConversionLayer::updateChannelUsage(std::map<int, int>& channelUsage) const
