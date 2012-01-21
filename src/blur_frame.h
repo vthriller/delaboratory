@@ -38,8 +38,6 @@ class deBlurFrame:public deActionFrame
         deBlurFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deBlurFrame();
 
-        virtual void onImageClick(deValue x, deValue y) {};
-
         virtual void onUpdateProperties();
 
 };

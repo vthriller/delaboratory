@@ -148,8 +148,7 @@ bool deLayerFrameManager::onImageClick(deValue x, deValue y)
         deActionFrame* trueActionFrame = dynamic_cast<deActionFrame*>(*i);
         if (trueActionFrame)
         {
-            trueActionFrame->onImageClick(x, y);
-            return true;    
+            return trueActionFrame->onImageClick(x, y);
         }            
     }
     return false;

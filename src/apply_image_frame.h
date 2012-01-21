@@ -41,8 +41,6 @@ class deApplyImageFrame:public deActionFrame
         deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deApplyImageFrame();
 
-        virtual void onImageClick(deValue x, deValue y) {};
-
         virtual void onUpdateProperties();
 
 };

@@ -39,7 +39,6 @@ class deHighPassFrame:public deActionFrame
         deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deHighPassFrame();
 
-        virtual void onImageClick(deValue x, deValue y) {};
 
 };
 

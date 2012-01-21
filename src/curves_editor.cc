@@ -232,9 +232,10 @@ void deCurvesEditor::click(wxCommandEvent &event)
     }      
 }
 
-void deCurvesEditor::onImageClick(deValue x, deValue y)
+bool deCurvesEditor::onImageClick(deValue x, deValue y)
 {
     curvesPanel->onImageClick(x, y);
+    return true;
 }
 
 void deCurvesEditor::onKey(int key)
