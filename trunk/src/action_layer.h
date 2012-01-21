@@ -25,7 +25,6 @@
 #include "image.h"
 #include "channel.h"
 class deLayerStack;
-class deLayerProcessor;
 class deChannelManager;
 class deViewManager;
 #include <set>
@@ -115,7 +114,7 @@ class deActionLayer:public deLayer
         virtual void updateImage();
 
     public:
-        deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deActionLayer();
 
         deChannel* getSourceChannel(int index);

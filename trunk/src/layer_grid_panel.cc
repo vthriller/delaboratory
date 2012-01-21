@@ -180,6 +180,8 @@ void deLayerGridPanel::check(wxCommandEvent &event)
             deLayerStack& layerStack = project.getLayerStack();
             deLayer* layer = layerStack.getLayer(row.index);
             layer->setEnabled(checked);
+            int index = row.index;
+            layerProcessor.markUpdateAllChannels(index);
             layerProcessor.onChangeViewMode();
         }
     }

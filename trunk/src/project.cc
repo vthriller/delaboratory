@@ -201,7 +201,7 @@ void deProject::resetLayerStack()
 
     layerStack.clear();
 
-    deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, layerProcessor, previewChannelManager, viewManager, "source image", sourceChannelManager, sourceImage);
+    deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, previewChannelManager, viewManager, "source image", sourceChannelManager, sourceImage);
     deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layer);
     l->setPrimary();
 
@@ -511,7 +511,7 @@ void deProject::loadLayer(xmlNodePtr root)
         child = child->next;
     }
        
-    deLayer* layer = createLayer(type, source, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, name, sourceChannelManager, sourceImage);
+    deLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, name, sourceChannelManager, sourceImage);
 
     if (layer)
     {
@@ -802,7 +802,7 @@ void deProject::addActionLayer(const std::string& action)
 
     log("creating action " + action + " layer");
 
-    deLayer* layer = createLayer(action, s, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, actionDescription, sourceChannelManager, sourceImage);
+    deLayer* layer = createLayer(action, s, colorSpace, layerStack, previewChannelManager, viewManager, actionDescription, sourceChannelManager, sourceImage);
 
     if (layer)
     {
@@ -821,7 +821,7 @@ void deProject::addConversionLayer(deColorSpace colorSpace)
 
     log("creating conversion to " + name + " layer");
 
-    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, name, sourceChannelManager, sourceImage);
+    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, previewChannelManager, viewManager, name, sourceChannelManager, sourceImage);
 
     if (layer)
     {

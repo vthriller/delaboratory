@@ -27,8 +27,8 @@
 #include "layer_processor.h"
 #include "logger.h"
 
-deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, int n)
-:deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager),
+deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int n)
+:deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _channelManager),
  add0("add_0"),
  add1("add_1"),
  add2("add_2"),

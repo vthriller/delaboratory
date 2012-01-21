@@ -28,7 +28,6 @@ class deProject;
 class deFrame;
 class deBlendFrame;
 class deImage;
-class deLayerProcessor;
 
 enum deLayerProcessType
 {   
@@ -49,7 +48,6 @@ class deLayer
         virtual void updateImage() = 0;
 
     protected:
-        deLayerProcessor& layerProcessor;
         deColorSpace colorSpace;
         unsigned int index;
         unsigned int sourceLayer;
@@ -57,7 +55,7 @@ class deLayer
         void saveCommon(xmlNodePtr node);
 
     public:
-        deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerProcessor& _processor);
+        deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer);
         virtual ~deLayer();
 
         deColorSpace getColorSpace() const;

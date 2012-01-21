@@ -28,8 +28,8 @@
 #include "process_linear.h"
 #include "layer_processor.h"
 
-deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager, _viewManager),
+deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
  blurRadius("blur_radius"),
  dodgeAmount("dodge_amount"),
  dodgeMin("dodge_min"),
@@ -51,8 +51,6 @@ void deDodgeBurnLayer::reset()
     burnAmount.set(0.3);
     burnMin.set(0.05);
     burnMax.set(0.4);
-    int index = getIndex();
-    layerProcessor.markUpdateAllChannels(index);
 }
 
 deDodgeBurnLayer::~deDodgeBurnLayer()

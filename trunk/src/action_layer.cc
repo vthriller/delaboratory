@@ -172,8 +172,8 @@ void deActionLayer::updateImageInActionLayer(bool action, bool blend, int channe
 }
 
 
-deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _processor,  deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayer(_name, _colorSpace, _index, _sourceLayer, _processor),
+deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deLayer(_name, _colorSpace, _index, _sourceLayer),
  layerStack(_layerStack),
  channelManager(_channelManager),
  viewManager(_viewManager),
@@ -237,8 +237,6 @@ bool deActionLayer::isEnabled() const
 void deActionLayer::setEnabled(bool e)
 {
     enabled = e;
-    int index = getIndex();
-    layerProcessor.markUpdateAllChannels(index);
 }
 
 deChannel* deActionLayer::getSourceChannel(int index)
@@ -798,17 +796,11 @@ bool deActionLayer::isChannelEnabled(int index) const
 void deActionLayer::enableChannel(int index)
 {
     channels.insert(index);
-
-    int l_index = getIndex();
-    layerProcessor.markUpdateSingleChannel(l_index, index);
 }
 
 void deActionLayer::disableChannel(int index)
 {
     channels.erase(index);
-
-    int l_index = getIndex();
-    layerProcessor.markUpdateSingleChannel(l_index, index);
 }
 
 void deActionLayer::saveBlend(xmlNodePtr root)

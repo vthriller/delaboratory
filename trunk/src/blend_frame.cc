@@ -358,6 +358,9 @@ void deBlendFrame::check(wxCommandEvent &event)
                 layer.disableChannel(i);
             }
 
+            int l_index = layer.getIndex();   
+            layerProcessor.markUpdateSingleChannel(l_index, i);
+
             return;
         }
     }

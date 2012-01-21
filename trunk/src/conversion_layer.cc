@@ -21,8 +21,8 @@
 #include "convert_image.h"
 #include "layer_processor.h"
 
-deConversionLayer::deConversionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager)
-:deLayer("conversion", _colorSpace, _index, _sourceLayer, _layerProcessor), 
+deConversionLayer::deConversionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
+:deLayer("conversion", _colorSpace, _index, _sourceLayer), 
  layerStack(_layerStack),
  channelManager(_channelManager),
  image(_colorSpace, _channelManager) 

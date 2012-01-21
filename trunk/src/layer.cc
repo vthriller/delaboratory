@@ -23,10 +23,9 @@
 #include "layer_processor.h"
 #include "logger.h"
 
-deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerProcessor& _processor)
+deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer)
 :name(_name), colorSpace(_colorSpace), index(_index), sourceLayer(_sourceLayer),
-mutex(wxMUTEX_RECURSIVE),
-layerProcessor(_processor)
+mutex(wxMUTEX_RECURSIVE)
 {
     logMessage("creating layer " + str(index) + " " + name);
 }

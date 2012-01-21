@@ -35,7 +35,7 @@ class deShadowsHighlightsLayer:public deActionLayer
         virtual std::string getType() const {return "shadows_highlights";};
 
     public:
-        deShadowsHighlightsLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deShadowsHighlightsLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
         virtual ~deShadowsHighlightsLayer();
 
         virtual bool isChannelNeutral(int index);
