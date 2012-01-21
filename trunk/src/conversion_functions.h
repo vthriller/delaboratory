@@ -24,11 +24,13 @@
 
 typedef void (*deConversion3x1)(deValue s1, deValue s2, deValue s3, deValue& d1);
 typedef void (*deConversion1x3)(deValue s1, deValue& d1, deValue& d2, deValue& d3);
+typedef void (*deConversion1x4)(deValue s1, deValue& d1, deValue& d2, deValue& d3, deValue& d4);
 typedef void (*deConversion3x3)(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3);
 typedef void (*deConversion4x3)(deValue s0, deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3);
 typedef void (*deConversion3x4)(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3, deValue& d4);
 
 deConversion1x3 getConversion1x3(deColorSpace s, deColorSpace d);
+deConversion1x4 getConversion1x4(deColorSpace s, deColorSpace d);
 deConversion3x1 getConversion3x1(deColorSpace s, deColorSpace d);
 deConversion3x3 getConversion3x3(deColorSpace s, deColorSpace d);
 deConversion3x4 getConversion3x4(deColorSpace s, deColorSpace d);
