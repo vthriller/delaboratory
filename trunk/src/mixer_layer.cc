@@ -47,9 +47,9 @@ deMixerLayer::~deMixerLayer()
 
 void deMixerLayer::processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize)
 {
-    layerProcessor.log("process mixer start");
+    logMessage("process mixer start");
     mixers[i]->process(s1, s2, s3, s4, channel, channelSize);
-    layerProcessor.log("process mixer end");
+    logMessage("process mixer end");
 }
 
 deMixer* deMixerLayer::getMixer(int index)

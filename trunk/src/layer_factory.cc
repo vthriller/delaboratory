@@ -31,7 +31,7 @@
 #include "high_pass_layer.h"
 #include "shadows_highlights_layer.h"
 
-deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name, deChannelManager& _sourceChannelManager)
+deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deLayerProcessor& _processor, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name, deChannelManager& _sourceChannelManager, deImage& sourceImage)
 {
     int index = _layerStack.getSize();
 
@@ -109,7 +109,7 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
 
     if (type == "source_image")
     {
-        return new deSourceImageLayer(index,  _channelManager, _viewManager, _sourceChannelManager, _processor);
+        return new deSourceImageLayer(index,  _channelManager, _viewManager, _sourceChannelManager, _processor, sourceImage);
     }
 
     return NULL;

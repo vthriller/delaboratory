@@ -25,6 +25,7 @@
 #include "frame_factory.h"
 #include "blend_mode.h"
 #include "layer_processor.h"
+#include "logger.h"
 
 deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deLayerProcessor& _layerProcessor, deChannelManager& _channelManager, deViewManager& _viewManager, int n)
 :deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _layerProcessor, _channelManager),
@@ -91,7 +92,7 @@ void deConversionBWLayer::presetM(int c)
 
 void deConversionBWLayer::updateImage()
 {
-    layerProcessor.log("conversion BW start");
+    logMessage("conversion BW start");
 
     deLayer* source = layerStack.getLayer(sourceLayer);
     const deImage& sourceImage = source->getImage();
@@ -205,7 +206,7 @@ void deConversionBWLayer::updateImage()
     sc2->unlockRead();
     dc->unlockWrite();
 
-    layerProcessor.log("conversion BW end");
+    logMessage("conversion BW end");
 }
 
 deColorSpace deConversionBWLayer::getSourceColorSpace() const

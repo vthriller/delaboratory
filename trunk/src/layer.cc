@@ -21,18 +21,19 @@
 #include "xml.h"
 #include "str.h"
 #include "layer_processor.h"
+#include "logger.h"
 
 deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerProcessor& _processor)
 :name(_name), colorSpace(_colorSpace), index(_index), sourceLayer(_sourceLayer),
 mutex(wxMUTEX_RECURSIVE),
 layerProcessor(_processor)
 {
-    layerProcessor.log("creating layer " + str(index) + " " + name);
+    logMessage("creating layer " + str(index) + " " + name);
 }
 
 deLayer::~deLayer()
 {
-    layerProcessor.log("destroying layer " + str(index) + " " + name);
+    logMessage("destroying layer " + str(index) + " " + name);
 }
 
 deColorSpace deLayer::getColorSpace() const
@@ -78,32 +79,17 @@ void deLayer::saveCommon(xmlNodePtr node)
     saveChild(node, "color_space", getColorSpaceName(colorSpace));
 }
 
-void deLayer::onUpdateProperties()
-{
-/*
-    if (actionFrame)
-    {
-        actionFrame->onUpdateProperties();
-    }
-    if (blendFrame)
-    {
-        blendFrame->onUpdateProperties();
-    }
-    */
-}
-
 void deLayer::updateImageThreadCall()
 {
     updateImage();
 }
 
-void deLayer::lock()
+void deLayer::lockLayer()
 {
-    //log("layer " + str(index) + " lock");
-    mutex.Lock();
+    lockWithLog(mutex, "layer mutex");
 }
 
-void deLayer::unlock()
+void deLayer::unlockLayer()
 {
     //log("layer " + str(index) + " unlock");
     mutex.Unlock();

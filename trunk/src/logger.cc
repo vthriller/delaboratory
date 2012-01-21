@@ -20,9 +20,18 @@
 #include "str.h"
 #include <sstream>
 
+#define LOCK_THRESHOLD 100
+
+deLogger& deLogger::getLogger()
+{
+    static deLogger logger;
+    return logger;
+}
+
 deLogger::deLogger()
 {
     f = NULL;
+    fl = NULL;
     started = false;
 }
 
@@ -33,6 +42,11 @@ deLogger::~deLogger()
     if (f)
     {
         f->close();
+    }
+
+    if (fl)
+    {
+        fl->close();
     }
 
     mutex.Unlock();
@@ -52,35 +66,93 @@ void deLogger::setFile(const std::string& fileName)
     mutex.Unlock();
 }
 
-void deLogger::log(const std::string message)
+void deLogger::setLocksFile(const std::string& fileName)
+{
+    mutex.Lock();
+
+    if (fl)
+    {
+        fl->close();
+    }
+
+    fl = new std::ofstream(fileName.c_str());
+
+    mutex.Unlock();
+}
+
+std::string deLogger::getThreadName()
+{
+    if (!started)
+    {
+        main_id = wxThread::GetCurrentId();
+        started = true;
+    }
+
+    wxThreadIdType c_id = wxThread::GetCurrentId();
+
+    std::string thr = "main";
+
+    if (main_id != c_id)
+    {
+        std::ostringstream oss;
+        oss.str("");
+        oss << c_id;
+        thr = oss.str();
+    }            
+
+    return thr;
+}
+
+void deLogger::log(const std::string& message)
 {
     mutex.Lock();
 
     if (f)
     {
         int t = sw.Time();
-
-        if (!started)
-        {
-            main_id = wxThread::GetCurrentId();
-            started = true;
-        }
-
-        wxThreadIdType c_id = wxThread::GetCurrentId();
-
-
-        std::string thr = "main";
-
-        if (main_id != c_id)
-        {
-            std::ostringstream oss;
-            oss.str("");
-            oss << c_id;
-            thr = oss.str();
-        }            
-
-        (*f) << str(t) + ": [" + thr + "] " + message << std::endl;
+            
+        (*f) << t << ": [" << getThreadName() << "] " << message << std::endl;
     }
 
     mutex.Unlock();
 }
+
+void deLogger::logLock(const std::string& message, int dt)
+{
+    if (dt < LOCK_THRESHOLD)
+    {
+        return;
+    }
+
+    mutex.Lock();
+
+    if (f)
+    {
+        int t = sw.Time();
+            
+        (*fl) << t << ": [" << getThreadName() << "] [" << dt << "ms] " << message << std::endl;
+    }
+
+    mutex.Unlock();
+}
+
+int deLogger::getTime() const
+{
+    int t = sw.Time();
+    return t;
+}
+
+void logMessage(const std::string& message)
+{
+    deLogger::getLogger().log(message);
+}
+
+void lockWithLog(wxMutex& mutex, const std::string& message)
+{
+    deLogger& logger = deLogger::getLogger();
+    int t1 = logger.getTime();
+    logger.log(message + " lock");
+    mutex.Lock();
+    int t2 = logger.getTime();
+    logger.logLock(message, t2-t1);
+}    

@@ -32,7 +32,6 @@
 #include "logger.h"
 #include "renderer.h"
 
-static wxMutex updateImagesMutex(wxMUTEX_RECURSIVE);
 
 class deLayerProcessorWorkerThread:public wxThread
 {
@@ -41,9 +40,9 @@ class deLayerProcessorWorkerThread:public wxThread
         {
             while (true)
             {
-                processor.log("worker thread before wait");
+                logMessage("worker thread before wait");
                 semaphore.Wait();
-                processor.log("worker thread after wait");
+                logMessage("worker thread after wait");
 
                 if (TestDestroy())
                 {
@@ -62,7 +61,7 @@ class deLayerProcessorWorkerThread:public wxThread
         virtual void *Entry()
         {
             performTasks();
-            processor.log("worker thread finished");
+            logMessage("worker thread finished");
             return NULL;
         }
         deLayerProcessor& processor;
@@ -86,9 +85,9 @@ class deRenderWorkerThread:public wxThread
         {
             while (true)
             {
-                processor.log("render thread before wait");
+                logMessage("render thread before wait");
                 semaphore.Wait();
-                processor.log("render thread after wait");
+                logMessage("render thread after wait");
 
                 if (TestDestroy())
                 {
@@ -134,9 +133,9 @@ class deHistogramWorkerThread:public wxThread
         {
             while (true)
             {
-                processor.log("histogram thread before wait");
+                logMessage("histogram thread before wait");
                 semaphore.Wait();
-                processor.log("histogram thread after wait");
+                logMessage("histogram thread after wait");
 
                 if (TestDestroy())
                 {
@@ -177,14 +176,15 @@ class deHistogramWorkerThread:public wxThread
 
 deLayerProcessor::deLayerProcessor()
 :layerProcessMutex(wxMUTEX_RECURSIVE),
-removeLayerMutex(wxMUTEX_RECURSIVE)
+histogramMutex(wxMUTEX_RECURSIVE),
+prepareImageMutex(wxMUTEX_RECURSIVE),
+updateImageMutex(wxMUTEX_RECURSIVE),
+updateImagesMutex(wxMUTEX_RECURSIVE)
 {
     mainFrame = NULL;
     layerFrameManager = NULL;
     stack = NULL;
     viewManager = NULL;
-
-    logger = NULL;
 
     workerThread = NULL;
     renderWorkerThread = NULL;
@@ -213,7 +213,7 @@ void deLayerProcessor::onDestroyAll()
 
 deLayerProcessor::~deLayerProcessor()
 {
-    log("destroying layer processor");
+    logMessage("destroying layer processor");
     /*
     stopWorkerThread();
     lock();
@@ -228,7 +228,7 @@ void deLayerProcessor::setMainFrame(deMainFrame* _mainFrame)
 
 void deLayerProcessor::stopWorkerThread()
 {
-    log("stop worker thread");
+    logMessage("stop worker thread");
     closing = true;
     workerThread->Delete();
     renderWorkerThread->Delete();
@@ -281,11 +281,11 @@ void deLayerProcessor::repaintImageInLayerProcessor(bool calcHistogram)
 {
     if (closing)
     {
-        log("skip repaintImage because closing");
+        logMessage("skip repaintImage because closing");
         return;
     }
 
-    log("repaintImage post...");
+    logMessage("repaintImage post...");
 
     renderWorkerSemaphore.Post();
     generateHistogram();
@@ -295,11 +295,11 @@ void deLayerProcessor::generateHistogram()
 {
     if (closing)
     {
-        log("skip generateHistogram because closing");
+        logMessage("skip generateHistogram because closing");
         return;
     }
 
-    log("generateHistogram post...");
+    logMessage("generateHistogram post...");
 
     histogramWorkerSemaphore.Post();
 }
@@ -340,6 +340,50 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
     }        
 }    
 
+void deLayerProcessor::lockLayers()
+{
+    lockWithLog(layerProcessMutex, "layer process mutex");
+}
+
+void deLayerProcessor::unlockLayers()
+{
+    logMessage("unlockLayers");
+    layerProcessMutex.Unlock();
+}
+
+void deLayerProcessor::lockHistogram()
+{
+    lockWithLog(histogramMutex, "histogram mutex");
+}
+
+void deLayerProcessor::unlockHistogram()
+{
+    logMessage("unlockHistogram");
+    histogramMutex.Unlock();
+}
+
+void deLayerProcessor::lockUpdateImage()
+{
+    lockWithLog(updateImageMutex, "update image mutex");
+}
+
+void deLayerProcessor::unlockUpdateImage()
+{
+    logMessage("unlockUpdateImage");
+    updateImageMutex.Unlock();
+}
+
+void deLayerProcessor::lockPrepareImage()
+{
+    lockWithLog(prepareImageMutex, "prepare image mutex");
+}
+
+void deLayerProcessor::unlockPrepareImage()
+{
+    logMessage("unlockPrepare");
+    prepareImageMutex.Unlock();
+}
+
 void deLayerProcessor::updateImages(int a, int channel, bool action)
 {
     if (closing)
@@ -351,7 +395,7 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
 
     //lock();
 
-    layerProcessMutex.Lock();
+    lockLayers();
 
     if ((a == firstLayerToUpdate) && (layerProcessType == deLayerProcessSingleChannel))
     {
@@ -380,7 +424,7 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
         }
     }
 
-    layerProcessMutex.Unlock();
+    unlockLayers();
 
     checkUpdateImagesRequest();
 
@@ -389,15 +433,9 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
 
 void deLayerProcessor::updateImage()
 {
-    log("update image 1");
+    lockUpdateImage();
 
-    removeLayerMutex.Lock();
-
-    log("update image 2");
-
-    layerProcessMutex.Lock();
-
-    log("update image 3");
+    lockLayers();
 
     bool ok = true;
 
@@ -411,21 +449,14 @@ void deLayerProcessor::updateImage()
     deLayerProcessType type = deLayerProcessInvalid;
     int channel = -1;
 
-    log("update image 4");
-
     stack->lock();
-
-    log("update image 5");
 
     deLayer* layer = stack->getLayer(i);
     if ((layer) && (ok))
     {
 
-        log("update image 6");
-        layer->lock();
-        log("update image 7");
+        layer->lockLayer();
         stack->unlock();
-        log("update image 8");
 
         type = layerProcessType;
         channel = layerProcessChannel;
@@ -434,32 +465,22 @@ void deLayerProcessor::updateImage()
 
         lastValidLayer = i;
         firstLayerToUpdate = i + 1;
-        log("update image 9");
     }            
     else
     {
         stack->unlock();
     }
 
-    log("update image 10");
-
-    layerProcessMutex.Unlock();
-
-    log("update image 11");
+    unlockLayers();
 
     if ((layer) && (ok))
     {
-        log("update image 12");
         layer->process(type, channel);
 
-        log("update image 13");
-
-        layer->unlock();
-        log("update image 14");
+        layer->unlockLayer();
     }        
 
-    removeLayerMutex.Unlock();
-    log("update image 15");
+    unlockUpdateImage();
 
 }
 
@@ -532,7 +553,7 @@ void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
 
 void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 {
-    log("markUpdateSingleChannel");
+    logMessage("markUpdateSingleChannel");
     updateImages(index, channel, true);
 }
 
@@ -565,14 +586,13 @@ void deLayerProcessor::onChangeView(int a)
 
 void deLayerProcessor::lock()
 {
-    log("layer processor before lock");
-    updateImagesMutex.Lock();
-    log("layer processor after lock");
+    logMessage("layer processor lock");
+    lockWithLog(updateImagesMutex, "update images mutex");
 }
 
 void deLayerProcessor::unlock()
 {
-    log("layer processor unlock");
+    logMessage("layer processor unlock");
     updateImagesMutex.Unlock();
 }
 
@@ -610,36 +630,35 @@ void deLayerProcessor::onGUIUpdate()
 
 void deLayerProcessor::removeTopLayer()
 {
-    removeLayerMutex.Lock();
+    lockHistogram();
+    lockPrepareImage();
+    lockUpdateImage();
 
     int index = stack->getSize() - 1;
-    log("requested remove top layer " + str(index));
+    logMessage("requested remove top layer " + str(index));
     if (index > 0)
     {
         //lock();
-        log("remove top layer - step a");
         stack->removeTopLayer();
-        log("remove top layer - step b");
         int view = viewManager->getView();
-        log("remove top layer - step c");
         if (view >= stack->getSize())
         {
             viewManager->setView( stack->getSize() - 1 );
         }
-        log("remove top layer - step d");
         repaintImageInLayerProcessor(true);
         //unlock();
     }
-    log("finished remove top layer " + str(index));
 
-    removeLayerMutex.Unlock();
+    unlockUpdateImage();
+    unlockPrepareImage();
+    unlockHistogram();
 }    
 
 void deLayerProcessor::addLayer(deLayer* layer)
 {
 //    lock();
 
-    log("add layer " + str(layer->getIndex()) + " " +  layer->getName());
+    logMessage("add layer " + str(layer->getIndex()) + " " +  layer->getName());
 
     if (stack)
     {
@@ -648,27 +667,13 @@ void deLayerProcessor::addLayer(deLayer* layer)
         int index = layer->getIndex();
         markUpdateAllChannels(index);
     }
-    log("finished add layer " + str(layer->getIndex()) + " " +  layer->getName());
 
 //    unlock();
 }    
 
-void deLayerProcessor::setLogger(deLogger* _logger)
-{
-    logger = _logger;
-}
-
-void deLayerProcessor::log(const std::string& message)
-{
-    if (logger)
-    {
-        logger->log(message);
-    }
-}
-
 void deLayerProcessor::checkUpdateImagesRequest()
 {
-    layerProcessMutex.Lock();
+    lockLayers();
 
     bool ok = true;
 
@@ -687,7 +692,7 @@ void deLayerProcessor::checkUpdateImagesRequest()
         workerSemaphore.Post();
     }        
 
-    layerProcessMutex.Unlock();
+    unlockLayers();
 }
 
 int deLayerProcessor::getLastLayerToUpdate()
@@ -717,8 +722,8 @@ bool deLayerProcessor::prepareImage()
 {
 
     bool result = false;
-    removeLayerMutex.Lock();
-    log("prepare image start");
+    lockPrepareImage();
+    logMessage("prepare image start");
     lock();
 
     if (!closing)
@@ -730,14 +735,15 @@ bool deLayerProcessor::prepareImage()
     }
 
     unlock();
-    log("prepare image end");
-    removeLayerMutex.Unlock();
+    logMessage("prepare image end");
+    unlockPrepareImage();
     return result;
 }
 
 void deLayerProcessor::onGenerateHistogram()
 {
-    removeLayerMutex.Lock();
+    lockHistogram();
+
     if (!closing)
     {
         if (mainFrame)
@@ -745,6 +751,7 @@ void deLayerProcessor::onGenerateHistogram()
             mainFrame->generateHistogram();
         }
     }        
-    removeLayerMutex.Unlock();
+
+    unlockHistogram();
 }
 

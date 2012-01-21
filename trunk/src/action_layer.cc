@@ -29,6 +29,7 @@
 #include "str.h"
 #include "xml.h"
 #include "blend_channel.h"
+#include "logger.h"
 
 class deUpdateActionThread:public wxThread
 {
@@ -299,7 +300,7 @@ deValue deActionLayer::getOpacity()
 
 void deActionLayer::updateApply()
 {
-    layerProcessor.log("update apply start");
+    logMessage("update apply start");
 
     if (!enabled)
     {
@@ -409,7 +410,7 @@ void deActionLayer::updateApply()
     dc2->unlockWrite();
     dc3->unlockWrite();
 
-    layerProcessor.log("update apply end");
+    logMessage("update apply end");
 }
 
 void deActionLayer::setApplyMode(deApplyMode mode)
@@ -420,7 +421,7 @@ void deActionLayer::setApplyMode(deApplyMode mode)
 
 void deActionLayer::updateBlend(int i)
 {
-    layerProcessor.log("update blend start");
+    logMessage("update blend start");
 
     if (!enabled)
     {
@@ -522,7 +523,7 @@ void deActionLayer::updateBlend(int i)
         allocatedMaskChannel->unlockRead();
     }            
 
-    layerProcessor.log("update blend end");
+    logMessage("update blend end");
 
 }
 
@@ -563,18 +564,18 @@ void deActionLayer::updateImage()
 
 void deActionLayer::updateAction(int i)
 {
-    layerProcessor.log("update action start i:" +str(i));
+    logMessage("update action start i:" +str(i));
 
     if (!enabled)
     {
         return;
     }
 
-    layerProcessor.log("update action 2 i:" +str(i));
+    logMessage("update action 2 i:" +str(i));
 
     deLayer* source = layerStack.getLayer(sourceLayer);
 
-    layerProcessor.log("update action 3 i:" +str(i));
+    logMessage("update action 3 i:" +str(i));
 
     const deImage& sourceImage = source->getImage();
 
@@ -588,11 +589,11 @@ void deActionLayer::updateAction(int i)
         return;
     }
 
-    layerProcessor.log("update action 4 i:" +str(i));
+    logMessage("update action 4 i:" +str(i));
 
     if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
     {
-        layerProcessor.log("update action 4a i:" +str(i));
+        logMessage("update action 4a i:" +str(i));
         deChannel* sourceChannel = channelManager.getChannel(s);
         sourceChannel->lockRead();
         sourceChannel->unlockRead();
@@ -603,22 +604,22 @@ void deActionLayer::updateAction(int i)
 
         if (singleChannelProcessing())
         {
-            layerProcessor.log("update action 5 i:" +str(i));
+            logMessage("update action 5 i:" +str(i));
             deChannel* sourceChannel = channelManager.getChannel(s);
             if (sourceChannel)
             {
                 imageActionPass.enableChannel(i);
                 int c = imageActionPass.getChannelIndex(i);
                 deChannel* channel = channelManager.getChannel(c);
-                layerProcessor.log("update action 6 i:" +str(i));
+                logMessage("update action 6 i:" +str(i));
 
                 if (channel)
                 {
-                    layerProcessor.log("update action 7 i:" +str(i));
+                    logMessage("update action 7 i:" +str(i));
                     channel->lockWrite();
-                    layerProcessor.log("update action 8 i:" +str(i));
+                    logMessage("update action 8 i:" +str(i));
                     sourceChannel->lockRead();
-                    layerProcessor.log("update action 9 i:" +str(i));
+                    logMessage("update action 9 i:" +str(i));
 
                     processAction(i, *sourceChannel, *channel, channelManager.getChannelSize());
 
@@ -629,7 +630,7 @@ void deActionLayer::updateAction(int i)
         }
         else
         {
-            layerProcessor.log("update action 999 i:" +str(i));
+            logMessage("update action 999 i:" +str(i));
             int s1 = sourceImage.getChannelIndex(0);
             int s2 = sourceImage.getChannelIndex(1);
             int s3 = sourceImage.getChannelIndex(2);
@@ -688,7 +689,7 @@ void deActionLayer::updateAction(int i)
         }
     }
 
-    layerProcessor.log("update action end i:" +str(i));
+    logMessage("update action end i:" +str(i));
 
 }
 
@@ -744,7 +745,7 @@ deColorSpace deActionLayer::getBlendMaskLayerColorSpace() const
 
 void deActionLayer::renderBlendMask()
 {
-    layerProcessor.log("render blend mask");
+    logMessage("render blend mask");
 
     enableBlendMaskChannel();
 
@@ -785,7 +786,7 @@ void deActionLayer::renderBlendMask()
     allocatedMaskChannel->unlockWrite();
     maskChannel->unlockRead();
 
-    layerProcessor.log("render blend mask done");
+    logMessage("render blend mask done");
 
 }
 

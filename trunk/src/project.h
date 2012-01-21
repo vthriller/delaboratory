@@ -25,6 +25,7 @@
 #include "view_manager.h"
 #include "layer_frame_manager.h"
 #include "logger.h"
+#include "image.h"
 #include <wx/progdlg.h>
 
 class deImagePanel;
@@ -34,7 +35,6 @@ class deViewModePanel;
 class deHistogramModePanel;
 class deImageAreaPanel;
 class deMemoryInfoFrame;
-class deImage;
 class deMainFrame;
 class deLayerProcessor;
 class deRenderer;
@@ -53,11 +53,12 @@ class deProject
         deViewManager viewManager;
         deSamplerManager samplerManager;
         deLayerFrameManager layerFrameManager;
-        deLogger logger;
         deRenderer* renderer;
 
         deChannelManager previewChannelManager;
         deChannelManager sourceChannelManager;
+
+        deImage sourceImage;
 
         std::string imageFileName;
         std::string sourceImageFileName;

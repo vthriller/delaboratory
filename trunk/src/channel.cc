@@ -19,6 +19,7 @@
 #include "channel.h"
 #include <string>
 #include <cassert>
+#include "logger.h"
 
 deChannel::deChannel()
 :readSemaphore(4, 4),
@@ -115,7 +116,7 @@ void deChannel::lockWrite()
     {
         readSemaphore.Wait();
     }
-    writeMutex.Lock();
+    lockWithLog(writeMutex, "channel write mutex");
 }
 
 void deChannel::unlockWrite()

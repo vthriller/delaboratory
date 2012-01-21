@@ -36,6 +36,7 @@ class deLayerStack
         mutable wxMutex mutex;
         deProject& project;
 
+
     public:
         deLayerStack(deProject& _project);
         virtual ~deLayerStack();

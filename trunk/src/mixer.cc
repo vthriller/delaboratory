@@ -22,6 +22,7 @@
 #include "xml.h"
 #include <sstream>
 #include <cassert>
+#include "logger.h"
 
 deMixer::deMixer(int _size)
 :size(_size),
@@ -206,7 +207,7 @@ void deMixer::load(xmlNodePtr node)
 
 void deMixer::lock() const
 {
-    mutex.Lock();
+    lockWithLog(mutex, "mixer mutex");
 }
 
 void deMixer::unlock() const

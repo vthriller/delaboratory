@@ -44,6 +44,7 @@
 #include "external_editor.h"
 
 const std::string LOG_FILE_NAME = "debug.log";
+const std::string LOG_LOCKS_FILE_NAME = "locks.log";
 
 deProject::deProject(deLayerProcessor& _processor)
 :layerProcessor(_processor),
@@ -53,8 +54,7 @@ deProject::deProject(deLayerProcessor& _processor)
  viewManager(*this, _processor),
  samplerManager(*this, _processor),
  mainFrame(NULL),
- sourceChannelManager(logger),
- previewChannelManager(logger),
+ sourceImage(deColorSpaceRGB, sourceChannelManager),
  layerStack(*this)
 {
     imageFileName = "";
@@ -64,11 +64,14 @@ deProject::deProject(deLayerProcessor& _processor)
     showSamplers = false;
     renderer = NULL;
 
-    logger.setFile(LOG_FILE_NAME);
+    sourceImage.enableChannel(0);
+    sourceImage.enableChannel(1);
+    sourceImage.enableChannel(2);
+
+    deLogger::getLogger().setFile(LOG_FILE_NAME);
+    deLogger::getLogger().setLocksFile(LOG_LOCKS_FILE_NAME);
 
     log("project started");
-
-    layerProcessor.setLogger(&logger);
 
     layerProcessor.setLayerStack(&layerStack);
     layerProcessor.setLayerFrameManager(&layerFrameManager);
@@ -172,7 +175,7 @@ void deProject::setTestImage(int s)
     deSize size(s, s);
 
     deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
-    deImage& sourceImage = l->getSourceImage();
+//    deImage& sourceImage = l->getSourceImage();
 
     if (l->isPrimary())
     {
@@ -194,11 +197,11 @@ void deProject::setTestImage(int s)
 
 void deProject::resetLayerStack()
 {
-    logger.log("reset layer stack");
+    logMessage("reset layer stack");
 
     layerStack.clear();
 
-    deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, layerProcessor, previewChannelManager, viewManager, "source image", sourceChannelManager);
+    deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, layerProcessor, previewChannelManager, viewManager, "source image", sourceChannelManager, sourceImage);
     deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layer);
     l->setPrimary();
 
@@ -252,7 +255,7 @@ void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
 
 void deProject::onChangeView(int a)
 {
-    logger.log("change view from " + str(a) + " start");
+    logMessage("change view from " + str(a) + " start");
     layerProcessor.onChangeView(a);
 
     if (controlPanel)
@@ -272,7 +275,7 @@ void deProject::onChangeView(int a)
     {
         mainFrame->rebuild();
     }
-    logger.log("change view from " + str(a) + " end");
+    logMessage("change view from " + str(a) + " end");
 }
 
 const deViewManager& deProject::getViewManager() const
@@ -508,7 +511,7 @@ void deProject::loadLayer(xmlNodePtr root)
         child = child->next;
     }
        
-    deLayer* layer = createLayer(type, source, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, name, sourceChannelManager);
+    deLayer* layer = createLayer(type, source, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, name, sourceChannelManager, sourceImage);
 
     if (layer)
     {
@@ -541,6 +544,8 @@ void deProject::loadLayers(xmlNodePtr root)
 
 void deProject::open(const std::string& fileName, bool image)
 {
+//    std::cout << "open " << fileName << std::endl;
+
     xmlDocPtr doc = xmlParseFile(fileName.c_str());
 
     if (!doc)
@@ -605,7 +610,7 @@ bool deProject::openImage(const std::string& fileName)
     freeImage();
 
 //    std::cout << "OPEN IMAGE" << fileName << std::endl;
-    logger.log("open image " + fileName);
+    logMessage("open image " + fileName);
 
     bool tiff = checkTIFF(fileName);
     bool jpeg = checkJPEG(fileName);
@@ -636,11 +641,21 @@ bool deProject::openImage(const std::string& fileName)
 
     sourceChannelManager.setChannelSize(size);
 
-    deImage& sourceImage = l->getSourceImage();
-
     deChannel* channelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
+    if (!channelR)
+    {
+        return false;
+    }
     deChannel* channelG = sourceChannelManager.getChannel(sourceImage.getChannelIndex(1));
+    if (!channelG)
+    {
+        return false;
+    }
     deChannel* channelB = sourceChannelManager.getChannel(sourceImage.getChannelIndex(2));
+    if (!channelB)
+    {
+        return false;
+    }
 
     bool status = false;
 
@@ -774,7 +789,7 @@ bool deProject::isSourceValid() const
 
 void deProject::log(const std::string& message)
 {
-    logger.log(message);
+    logMessage(message);
 }
 
 void deProject::addActionLayer(const std::string& action)
@@ -787,7 +802,7 @@ void deProject::addActionLayer(const std::string& action)
 
     log("creating action " + action + " layer");
 
-    deLayer* layer = createLayer(action, s, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, actionDescription, sourceChannelManager);
+    deLayer* layer = createLayer(action, s, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, actionDescription, sourceChannelManager, sourceImage);
 
     if (layer)
     {
@@ -806,7 +821,7 @@ void deProject::addConversionLayer(deColorSpace colorSpace)
 
     log("creating conversion to " + name + " layer");
 
-    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, name, sourceChannelManager);
+    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, layerProcessor, previewChannelManager, viewManager, name, sourceChannelManager, sourceImage);
 
     if (layer)
     {

@@ -22,18 +22,14 @@
 #include <iostream>
 #include "view_manager.h"
 
-deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deChannelManager& _sourceChannelManager, deLayerProcessor& _processor)
+deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deChannelManager& _sourceChannelManager, deLayerProcessor& _processor, deImage& _sourceImage)
 :deLayer("source image", deColorSpaceRGB, _index, -1, _processor), 
 previewChannelManager(_previewChannelManager),
 viewManager(_viewManager),
 image(deColorSpaceRGB, _previewChannelManager),
-sourceImage(deColorSpaceRGB, _sourceChannelManager),
+sourceImage(_sourceImage),
 sourceChannelManager(_sourceChannelManager)
 {
-    sourceImage.enableChannel(0);
-    sourceImage.enableChannel(1);
-    sourceImage.enableChannel(2);
-
     primary = false;
 }
 

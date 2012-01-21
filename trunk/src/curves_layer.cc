@@ -41,7 +41,7 @@ deCurvesLayer::~deCurvesLayer()
 
 void deCurvesLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
-    layerProcessor.log("deCurvesLayer::processAction " + str(i));
+    logMessage("deCurvesLayer::processAction " + str(i));
     curves[i].process(sourceChannel, channel, size.getN());
 }
 
@@ -106,11 +106,8 @@ bool deCurvesLayer::randomize()
     int n = getColorSpaceSize(colorSpace);
 
     int c = rand() % n;
-    
-    deValue x = (deValue) rand() / RAND_MAX;
-    deValue y = (deValue) rand() / RAND_MAX;
 
-    curves[c].addPoint(x, y);
+    curves[c].addRandom();
 
     return true;
 }

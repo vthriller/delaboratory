@@ -36,9 +36,7 @@ deLayerStack::~deLayerStack()
 
 void deLayerStack::lock() const
 {
-    project.log("layer stack before lock");
-    mutex.Lock();
-    project.log("layer stack after lock");
+    lockWithLog(mutex, "layer stack mutex");
 }
 
 void deLayerStack::unlock() const
@@ -68,7 +66,7 @@ void deLayerStack::removeTopLayer()
     layers.erase(i);
     unlock();
 
-    layer->lock();
+    layer->lockLayer();
     project.log("layer stack before delete layer");
     delete layer;
     project.log("layer stack after delete layer");

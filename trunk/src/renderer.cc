@@ -339,7 +339,7 @@ bool deRenderer::prepareImage()
         }
         project->log("renderer lock layer " +str(view));
 
-        layer->lock();
+        layer->lockLayer();
 
         project->log("renderer get image from layer " +str(view));
 
@@ -362,7 +362,7 @@ bool deRenderer::prepareImage()
 
         project->log("renderer unlock layer " +str(view));
 
-        layer->unlock();
+        layer->unlockLayer();
     }
 
     return true;

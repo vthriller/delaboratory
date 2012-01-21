@@ -24,9 +24,8 @@
 
 static wxMutex channelManagerMutex;
 
-deChannelManager::deChannelManager(deLogger& _logger)
-:channelSize(0,0),
- logger(_logger)
+deChannelManager::deChannelManager()
+:channelSize(0,0)
 {
     primaryIndex = -1;
 }
@@ -75,6 +74,7 @@ int deChannelManager::allocateNewChannel()
 //        std::cout << "allocate channel " << channelSize.getN() << std::endl;
         channels.push_back(channel);
         int c = channels.size() - 1;
+//        std::cout << "c: " << c << std::endl;
         unlock();
         return c;
     }        
@@ -133,7 +133,7 @@ deSize deChannelManager::getChannelSize() const
 void deChannelManager::lock()
 {
     //logger.log("channel manager lock");
-    channelManagerMutex.Lock();
+    lockWithLog(channelManagerMutex, "channel manager mutex");
 }
 
 void deChannelManager::unlock()
@@ -162,6 +162,9 @@ int deChannelManager::getNumberOfAllocatedChannels() const
 void deChannelManager::tryAllocateChannel(int index)
 {
     lock();
+
+//    std::cout << "tryAllocateChannel " << index << std::endl;
+//    std::cout << "channels.size(): " << channels.size() << std::endl;
 
     assert(index >= 0);
     assert((unsigned int)index < channels.size());

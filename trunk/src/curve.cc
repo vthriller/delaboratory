@@ -24,6 +24,7 @@
 #include <ctime>
 #include "str.h"
 #include "xml.h"
+#include "logger.h"
 
 #define CURVE_POINT_PICK_DISTANCE 0.03
 #define VERTICAL_STEP 0.01
@@ -497,10 +498,26 @@ bool deCurve::isNeutral() const
 
 void deCurve::lock() const
 {
-    mutex.Lock();
+    lockWithLog(mutex, "curve mutex");
 }
 
 void deCurve::unlock() const
 {
     mutex.Unlock();
 }
+
+void deCurve::addRandom()
+{
+    deValue x = (deValue) rand() / RAND_MAX;
+
+    deValue v = calcValue(x);
+
+    deValue y = (deValue) rand() / RAND_MAX;
+
+    y *= 0.4;
+    y -= 0.2;
+
+    y += v;
+
+    addPoint(x, y);
+}        

@@ -26,7 +26,6 @@
 deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
 :deActionFrame(parent, _layer, _frameManager)
 {
-    _layerProcessor.log("creating mixer editor - layer name: " + layer.getName());
 
     deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(_layer);
 
@@ -40,7 +39,6 @@ deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerPro
     int i;
     for (i = 0; i < n; i++)
     {
-        _layerProcessor.log("creating mixer editor channel " + str(i));
         deMixerEditorChannel* mixerEditorChannel = new deMixerEditorChannel(this, mixerLayer, i, _layerProcessor);
         sizer->Add(mixerEditorChannel);
         channels.push_back(mixerEditorChannel);
@@ -64,7 +62,6 @@ deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerPro
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMixerEditor::click));
 
-    _layerProcessor.log("created mixer editor");
 }
 
 deMixerEditor::~deMixerEditor()

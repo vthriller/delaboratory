@@ -50,7 +50,6 @@ void deSlider::setEdit(deValue v)
     }
     else
     {   
-        layerProcessor.log("ERROR no labelValue in deSlider");
     }
 }
 
@@ -58,13 +57,11 @@ void deSlider::setSlider(deValue v)
 {
     if (sliderRange == 0)
     {
-        layerProcessor.log("ERROR slider range is 0 !!!");
         return;
     }
 
     if (valueMax == valueMin)
     {
-        layerProcessor.log("ERROR valueMax == valueMin !!!");
         return;
     }
 
@@ -72,7 +69,6 @@ void deSlider::setSlider(deValue v)
 
     if (!slider)
     {
-        layerProcessor.log("ERROR no slider in deSlider");
         return;
     }
 

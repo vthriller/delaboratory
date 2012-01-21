@@ -20,6 +20,7 @@
 #include <wx/dcbuffer.h>
 #include "curves_layer.h"
 #include "layer_processor.h"
+#include "logger.h"
 
 BEGIN_EVENT_TABLE(deCurvesPanel, wxPanel)
 EVT_PAINT(deCurvesPanel::paintEvent)
@@ -198,7 +199,7 @@ void deCurvesPanel::drawCurve(wxDC& dc)
 
 void deCurvesPanel::click(wxMouseEvent &event)
 {
-    layerProcessor.log("deCurvesPanel::click");
+    logMessage("deCurvesPanel::click");
 
     deCurve* curve = layer.getCurve(channel);
 
@@ -284,10 +285,8 @@ void deCurvesPanel::addRandom(int n)
     int i;
     for (i = 0; i < n; i++)
     {
-        deValue x = (deValue) rand() / RAND_MAX;
-        deValue y = (deValue) rand() / RAND_MAX;
+        curve->addRandom();
 
-        curve->addPoint(x, y);
     }
 
     update(true);
@@ -323,7 +322,7 @@ void deCurvesPanel::setS(int a)
 void deCurvesPanel::update(bool finished)
 {
 //    std::cout << "curves update" << std::endl;
-    layerProcessor.log("deCurvesPanel::update");
+    logMessage("deCurvesPanel::update");
     paint();
     if ((finished) || (realtime))
     {

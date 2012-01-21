@@ -76,6 +76,8 @@ class deCurve
 
         void movePointVertically(int p, deValue delta);
 
+        void addRandom();
+
 
 
 };
