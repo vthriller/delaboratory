@@ -95,10 +95,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxPanel* viewModePanel = new deViewModePanel(topPanel, project);
     topSizer->Add(viewModePanel);
 
-    multithreading = new wxCheckBox(topPanel, wxID_ANY, _T("multithreading"));
-    multithreading->SetValue(1);
-    topSizer->Add(multithreading);
-
     wxButton* testButton = new wxButton(topPanel, wxID_ANY, _T("random layers - for crash test"));
     topSizer->Add(testButton);
 
@@ -457,8 +453,6 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
 
 void deMainFrame::check(wxCommandEvent &event)
 {
-    bool checked = multithreading->IsChecked();
-    project.getLayerProcessor().setMultithreadingEnabled(checked);
 }
 
 void deMainFrame::onCloseEvent(wxCloseEvent& event)

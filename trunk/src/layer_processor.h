@@ -67,8 +67,6 @@ class deLayerProcessor
 
         void repaintImageInLayerProcessor(bool calcHistogram);
 
-        bool multithreadingEnabled;
-
         deLayerProcessor(const deLayerProcessor&);
         deLayerProcessor& operator = (const deLayerProcessor&);
 
@@ -123,9 +121,6 @@ class deLayerProcessor
         void onChangeViewMode();
 
         void onGUIUpdate();
-
-        void setMultithreadingEnabled(bool m) {multithreadingEnabled = m;};
-        bool isMultithreadingEnabled() const {return multithreadingEnabled;};
 
         void removeTopLayer();
         void addLayer(deLayer* layer);

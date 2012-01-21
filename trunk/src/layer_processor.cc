@@ -196,8 +196,6 @@ updateImagesMutex(wxMUTEX_RECURSIVE)
 
     layerProcessType = deLayerProcessInvalid;
 
-    multithreadingEnabled = true;
-
     closing = false;
 
 }

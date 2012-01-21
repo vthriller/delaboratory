@@ -68,7 +68,6 @@ private:
     wxSizer* mainSizer;
     deImageAreaPanel* imageAreaPanel;
     deHistogramPanel* histogramPanel;
-    wxCheckBox* multithreading;
     wxThread* testThread;
 
     deLayerProcessor& layerProcessor;
