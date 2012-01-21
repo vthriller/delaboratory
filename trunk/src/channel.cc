@@ -21,6 +21,8 @@
 #include <cassert>
 #include "logger.h"
 
+#define CHANNEL_LOCKING 0
+
 deChannel::deChannel()
 :readSemaphore(4, 4),
 writeMutex(wxMUTEX_RECURSIVE)
@@ -101,30 +103,38 @@ void deChannel::allocate(int size)
 
 void deChannel::lockRead() const
 {
+#if CHANNEL_LOCKING
     readSemaphore.Wait();
+#endif    
 }
 
 void deChannel::unlockRead() const
 {
+#if CHANNEL_LOCKING
     readSemaphore.Post();
+#endif    
 }
 
 void deChannel::lockWrite()
 {
+#if CHANNEL_LOCKING
     int i;
     for (i = 0; i < maxReaders; i++)
     {
         readSemaphore.Wait();
     }
     lockWithLog(writeMutex, "channel write mutex");
+#endif    
 }
 
 void deChannel::unlockWrite()
 {
+#if CHANNEL_LOCKING
     writeMutex.Unlock();
     int i;
     for (i = 0; i < maxReaders; i++)
     {
         readSemaphore.Post();
     }
+#endif    
 }
