@@ -55,6 +55,32 @@ bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue 
         } 
     }        
 
+    if ((sn == 3) && (tn == 1))
+    {
+        deConversion3x1 conversion = getConversion3x1(sourceColorSpace, colorSpace);
+
+        if (conversion)
+        {
+            deValue s1;
+            if (!image.getPixel(0, p, s1))
+            {
+                return false;
+            }
+            deValue s2;
+            if (!image.getPixel(1, p, s2))
+            {
+                return false;
+            }
+            deValue s3;
+            if (!image.getPixel(2, p, s3))
+            {
+                return false;
+            }
+            conversion(s1, s2, s3, v1);
+            return true;
+        } 
+    }        
+
     if ((sn == 3) && (tn == 4))
     {
         deConversion3x4 conversion = getConversion3x4(sourceColorSpace, colorSpace);
@@ -80,5 +106,110 @@ bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue 
             return true;
         } 
     }        
+
+    if ((sn == 4) && (tn == 4))
+    {
+        deValue s1;
+        if (!image.getPixel(0, p, s1))
+        {
+            return false;
+        }
+        deValue s2;
+        if (!image.getPixel(1, p, s2))
+        {
+            return false;
+        }
+        deValue s3;
+        if (!image.getPixel(2, p, s3))
+        {
+            return false;
+        }
+        deValue s4;
+        if (!image.getPixel(3, p, s4))
+        {
+            return false;
+        }
+        v1 = s1;
+        v2 = s2;
+        v3 = s3;
+        v4 = s4;
+        return true;
+    }        
+
+    if ((sn == 4) && (tn == 3))
+    {
+        deConversion4x3 conversion = getConversion4x3(sourceColorSpace, colorSpace);
+
+        if (conversion)
+        {
+            deValue s1;
+            if (!image.getPixel(0, p, s1))
+            {
+                return false;
+            }
+            deValue s2;
+            if (!image.getPixel(1, p, s2))
+            {
+                return false;
+            }
+            deValue s3;
+            if (!image.getPixel(2, p, s3))
+            {
+                return false;
+            }
+            deValue s4;
+            if (!image.getPixel(3, p, s4))
+            {
+                return false;
+            }
+            conversion(s1, s2, s3, s4, v1, v2, v3);
+            return true;
+        } 
+    }        
+
+    if ((sn == 1) && (tn == 3))
+    {
+        deConversion1x3 conversion = getConversion1x3(sourceColorSpace, colorSpace);
+
+        if (conversion)
+        {
+            deValue s1;
+            if (!image.getPixel(0, p, s1))
+            {
+                return false;
+            }
+            conversion(s1, v1, v2, v3);
+            return true;
+        } 
+    }        
+
+    if ((sn == 1) && (tn == 4))
+    {
+        deConversion1x4 conversion = getConversion1x4(sourceColorSpace, colorSpace);
+
+        if (conversion)
+        {
+            deValue s1;
+            if (!image.getPixel(0, p, s1))
+            {
+                return false;
+            }
+            conversion(s1, v1, v2, v3, v4);
+            return true;
+        } 
+    }        
+
+    if ((sn == 1) && (tn == 1))
+    {
+        deValue s1;
+        if (!image.getPixel(0, p, s1))
+        {
+            return false;
+        }
+        v1 = s1;
+        return true;
+    }        
+
+    return false;
 }
 

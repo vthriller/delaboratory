@@ -110,6 +110,28 @@ void rgb2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deVa
     cmy2cmyk(c, m, y, d1, d2, d3, d4);
 }    
 
+void bw2cmyk(deValue s1, deValue& d1, deValue& d2, deValue& d3, deValue& d4)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    bw2rgb(s1, r, g, b);
+
+    rgb2cmyk(r, g, b, d1, d2, d3, d4);
+}    
+
+void bw2lab(deValue s1, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    bw2rgb(s1, r, g, b);
+
+    rgb2lab(r, g, b, d1, d2, d3);
+}    
+
 void lab2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3, deValue& d4)
 {
     deValue x;
@@ -217,6 +239,21 @@ deConversion1x3 getConversion1x3(deColorSpace s, deColorSpace d)
     if ((s == deColorSpaceBW) && (d == deColorSpaceRGB))
     {
         return bw2rgb;
+    }
+
+    if ((s == deColorSpaceBW) && (d == deColorSpaceLAB))
+    {
+        return bw2lab;
+    }
+
+    return NULL;
+}
+
+deConversion1x4 getConversion1x4(deColorSpace s, deColorSpace d)
+{
+    if ((s == deColorSpaceBW) && (d == deColorSpaceCMYK))
+    {
+        return bw2cmyk;
     }
 
     return NULL;
