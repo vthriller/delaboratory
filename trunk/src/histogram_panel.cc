@@ -24,6 +24,7 @@
 #include "layer.h"
 #include "image.h"
 #include "layer_processor.h"
+#include <wx/dcbuffer.h>
 
 BEGIN_EVENT_TABLE(deHistogramPanel, wxPanel)
 EVT_PAINT(deHistogramPanel::paintEvent)
@@ -43,14 +44,15 @@ deHistogramPanel::~deHistogramPanel()
 
 void deHistogramPanel::paintEvent(wxPaintEvent & evt)
 {
-	wxPaintDC dc(this);
+    wxBufferedPaintDC dc(this);
 	render(dc);
 }
 
 void deHistogramPanel::paintHistogram()
 {
     wxClientDC dc(this);
-	render(dc);
+    wxBufferedDC bufferedDC(&dc);
+	render(bufferedDC);
 }
 
 void deHistogramPanel::render(wxDC& dc)
