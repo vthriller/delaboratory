@@ -624,7 +624,7 @@ void deLayerProcessor::onChangeViewMode()
 
 void deLayerProcessor::onGUIUpdate()
 {
-    repaintImageInLayerProcessor(true);
+    sendRepaintEvent();
 }    
 
 void deLayerProcessor::removeTopLayer()
