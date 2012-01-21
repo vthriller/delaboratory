@@ -45,7 +45,6 @@ class deDodgeBurnFrame:public deActionFrame
         deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deDodgeBurnFrame();
 
-        virtual void onImageClick(deValue x, deValue y) {};
 
 };
 

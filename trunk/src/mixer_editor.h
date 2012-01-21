@@ -39,7 +39,6 @@ class deMixerEditor:public deActionFrame
         deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deMixerEditor();
 
-        virtual void onImageClick(deValue x, deValue y);
 
 };
 

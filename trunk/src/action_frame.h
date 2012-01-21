@@ -29,7 +29,7 @@ class deActionFrame:public deLayerFrame
         deActionFrame(wxWindow *parent, deActionLayer& _layer, deLayerFrameManager& _frameManager);
         virtual ~deActionFrame();
 
-        virtual void onImageClick(deValue x, deValue y) {};
+        virtual bool onImageClick(deValue x, deValue y) {return false;};
 
 };
 

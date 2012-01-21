@@ -68,10 +68,6 @@ deMixerEditor::~deMixerEditor()
 {
 }
 
-void deMixerEditor::onImageClick(deValue x, deValue y)
-{
-}
-
 void deMixerEditor::click(wxCommandEvent &event)
 {
     int id = event.GetId();
