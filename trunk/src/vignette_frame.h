@@ -32,6 +32,7 @@ class deVignetteFrame:public deActionFrame
         dePropertyValueSlider* radiusY;
         dePropertyValueSlider* centerX;
         dePropertyValueSlider* centerY;
+        dePropertyValueSlider* light;
         deLayerProcessor& layerProcessor;
 
         wxButton* reset;

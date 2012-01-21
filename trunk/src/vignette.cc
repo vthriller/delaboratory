@@ -20,7 +20,7 @@
 #include <cmath>
 #include <cassert>
 
-void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue centerY, deValue radiusX, deValue radiusY)
+void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue centerY, deValue radiusX, deValue radiusY, deValue light)
 {
     if (radiusX <= 0.0)
     {
@@ -54,6 +54,11 @@ void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue
     assert(h > 0);
     //assert(radius > 0);
 
+    deValue s = 3;
+
+    radiusX *= s;
+    radiusY *= s;
+
     int i;
     int j;
 
@@ -73,11 +78,19 @@ void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue
             x = x - centerX;
             x /= radiusX;
 
-            deValue r = sqrt(x * x + y * y) / 1.0;
-            deValue v = 1.0 - r;
+            deValue r = sqrt(x * x + y * y);
+            deValue v = light;
+            if (r > 0)
+            {
+                v = light - r;
+            }
             if (v < 0)
             {
                 v = 0;
+            }
+            if (v > 1)
+            {
+                v = 1;
             }
             destination[p] = v;
             p++;

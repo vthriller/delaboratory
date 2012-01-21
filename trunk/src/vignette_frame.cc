@@ -31,17 +31,21 @@ deVignetteFrame::deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLaye
 
     int range = 400;
 
-    radiusX = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyRadiusX(), vignetteLayer, layerProcessor);
-    sizer->Add(radiusX);
-
-    radiusY = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyRadiusY(), vignetteLayer, layerProcessor);
-    sizer->Add(radiusY);
+    light = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyLight(), vignetteLayer, layerProcessor);
+    sizer->Add(light);
 
     centerX = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyCenterX(), vignetteLayer, layerProcessor);
     sizer->Add(centerX);
 
     centerY = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyCenterY(), vignetteLayer, layerProcessor);
     sizer->Add(centerY);
+
+    radiusX = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyRadiusX(), vignetteLayer, layerProcessor);
+    sizer->Add(radiusX);
+
+    radiusY = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyRadiusY(), vignetteLayer, layerProcessor);
+    sizer->Add(radiusY);
+
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
     sizer->Add(sizerB, 0);
@@ -68,6 +72,7 @@ void deVignetteFrame::click(wxCommandEvent &event)
         vignetteLayer.reset();
     }      
 
+    light->setFromProperty();
     radiusX->setFromProperty();
     radiusY->setFromProperty();
     centerX->setFromProperty();

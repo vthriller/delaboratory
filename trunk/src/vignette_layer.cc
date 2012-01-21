@@ -30,7 +30,8 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sour
  radiusX("radius_x"),
  radiusY("radius_y"),
  centerX("center_x"),
- centerY("center_y")
+ centerY("center_y"),
+ light("light")
 {
     radiusX.setMin(0.1);
     radiusX.setMax(2.0);
@@ -38,6 +39,8 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sour
     radiusY.setMax(2.0);
     centerX.setMin(-1);
     centerY.setMin(-1);
+    light.setMin(0.1);
+    light.setMax(1.0);
     reset();
 }
 
@@ -49,7 +52,7 @@ void deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deCha
 {
     deValue* destination = channel.getPixels();
 
-    vignetteChannel(destination, size, centerX.get(), centerY.get(), radiusX.get(), radiusY.get());
+    vignetteChannel(destination, size, centerX.get(), centerY.get(), radiusX.get(), radiusY.get(), light.get());
 }
 
 bool deVignetteLayer::isChannelNeutral(int index)
@@ -59,12 +62,13 @@ bool deVignetteLayer::isChannelNeutral(int index)
 
 void deVignetteLayer::reset()
 {
-    setBlendMode(deBlendMultiply);
+    setBlendMode(deBlendOverlay);
     setOpacity(0.5);
     radiusX.set(1.0);
     radiusY.set(1.0);
     centerX.set(0.0);
     centerY.set(0.0);
+    light.set(0.5);
     int index = getIndex();
     layerProcessor.markUpdateAllChannels(index);
 }
