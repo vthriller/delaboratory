@@ -128,3 +128,8 @@ void deLayer::processBlend()
 void deLayer::processChannel(int channel)
 {
 }
+
+std::string deLayer::getLabel() const 
+{
+    return getType();
+}    

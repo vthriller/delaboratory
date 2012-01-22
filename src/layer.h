@@ -62,6 +62,7 @@ class deLayer
         virtual const deImage& getImage() const = 0;
 
         std::string getName() const;
+        virtual std::string getLabel() const;
 
         virtual bool hasAction() const;
         virtual bool hasBlending() const;
