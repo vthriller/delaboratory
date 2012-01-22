@@ -46,9 +46,17 @@ class deDodgeBurnFrame:public deActionFrame
         wxButton* dodgeMedium;
         wxButton* dodgeHigh;
 
+        wxButton* dodgeNarrow;
+        wxButton* dodgeAverage;
+        wxButton* dodgeWide;
+
         wxButton* burnLow;
         wxButton* burnMedium;
         wxButton* burnHigh;
+
+        wxButton* burnNarrow;
+        wxButton* burnAverage;
+        wxButton* burnWide;
 
         void click(wxCommandEvent &event);
 
