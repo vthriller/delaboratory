@@ -35,23 +35,34 @@ deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLa
     radius = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyRadius(), dodgeBurnLayer, layerProcessor);
     sizer->Add(radius);
 
+
+
+    wxSizer* sizerDodge = new wxStaticBoxSizer(wxVERTICAL, this, _T("dodge"));
+    sizer->Add(sizerDodge);
+
     dodgeAmount = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyDodgeAmount(), dodgeBurnLayer, layerProcessor);
-    sizer->Add(dodgeAmount);
+    sizerDodge->Add(dodgeAmount);
 
     dodgeMin = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyDodgeMin(), dodgeBurnLayer, layerProcessor);
-    sizer->Add(dodgeMin);
+    sizerDodge->Add(dodgeMin);
 
     dodgeMax = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyDodgeMax(), dodgeBurnLayer, layerProcessor);
-    sizer->Add(dodgeMax);
+    sizerDodge->Add(dodgeMax);
+
+
+
+    wxSizer* sizerBurn = new wxStaticBoxSizer(wxVERTICAL, this, _T("burn"));
+    sizer->Add(sizerBurn);
 
     burnAmount = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyBurnAmount(), dodgeBurnLayer, layerProcessor);
-    sizer->Add(burnAmount);
+    sizerBurn->Add(burnAmount);
 
     burnMin = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyBurnMin(), dodgeBurnLayer, layerProcessor);
-    sizer->Add(burnMin);
+    sizerBurn->Add(burnMin);
 
     burnMax = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyBurnMax(), dodgeBurnLayer, layerProcessor);
-    sizer->Add(burnMax);
+    sizerBurn->Add(burnMax);
+
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
     sizer->Add(sizerB, 0);
