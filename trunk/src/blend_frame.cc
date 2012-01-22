@@ -314,7 +314,7 @@ deBlendFrame::~deBlendFrame()
     viewManager.hideThisMask(l.getAllocatedBlendMaskChannel());
     l.hideBlendMask();
 
-    layerProcessor.onGUIUpdate();
+    layerProcessor.onChangeViewMode();
 
     frameManager.removeBlendFrame(this);
 }
