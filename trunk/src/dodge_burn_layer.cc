@@ -39,6 +39,14 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _so
  burnMax("burn_max")
 {
     blurRadius.setLabel("radius");
+
+    dodgeAmount.setLabel("amount");
+    dodgeMin.setLabel("min");
+    dodgeMax.setLabel("max");
+
+    burnAmount.setLabel("amount");
+    burnMin.setLabel("min");
+    burnMax.setLabel("max");
     reset();
 }
 
