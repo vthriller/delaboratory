@@ -61,6 +61,8 @@ class deDodgeBurnLayer:public deActionLayer
         dePropertyValue& getPropertyBurnMax() {return burnMax;};
 
         void reset();
+        void setDodge(deValue v);
+        void setBurn(deValue v);
 
         virtual bool randomize() {return false;};
 

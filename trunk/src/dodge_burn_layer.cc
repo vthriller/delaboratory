@@ -53,12 +53,22 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _so
 void deDodgeBurnLayer::reset()
 {
     blurRadius.set(0.1);
-    dodgeAmount.set(0.3);
+    dodgeAmount.set(0.4);
     dodgeMin.set(0.6);
     dodgeMax.set(0.95);
-    burnAmount.set(0.3);
+    burnAmount.set(0.4);
     burnMin.set(0.05);
     burnMax.set(0.4);
+}
+
+void deDodgeBurnLayer::setDodge(deValue v)
+{
+    dodgeAmount.set(v);
+}
+
+void deDodgeBurnLayer::setBurn(deValue v)
+{
+    burnAmount.set(v);
 }
 
 deDodgeBurnLayer::~deDodgeBurnLayer()
