@@ -36,6 +36,7 @@ class deDodgeBurnLayer:public deActionLayer
     protected:
         virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "dodge_burn";};
+        virtual std::string getLabel() const {return "dodge / burn";};
 
     public:
         deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
