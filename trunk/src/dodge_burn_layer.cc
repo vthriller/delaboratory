@@ -71,6 +71,18 @@ void deDodgeBurnLayer::setBurn(deValue v)
     burnAmount.set(v);
 }
 
+void deDodgeBurnLayer::setDodgeRange(deValue min, deValue max)
+{
+    dodgeMin.set(min);
+    dodgeMax.set(max);
+}
+
+void deDodgeBurnLayer::setBurnRange(deValue min, deValue max)
+{
+    burnMin.set(min);
+    burnMax.set(max);
+}
+
 deDodgeBurnLayer::~deDodgeBurnLayer()
 {
 }

@@ -63,6 +63,8 @@ class deDodgeBurnLayer:public deActionLayer
         void reset();
         void setDodge(deValue v);
         void setBurn(deValue v);
+        void setDodgeRange(deValue min, deValue max);
+        void setBurnRange(deValue min, deValue max);
 
         virtual bool randomize() {return false;};
 

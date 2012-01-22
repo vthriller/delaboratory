@@ -64,6 +64,15 @@ deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLa
     dodgeHigh = new wxButton(this, wxID_ANY, _T("high"), wxDefaultPosition, wxSize(w,h));
     sizerDB->Add(dodgeHigh, 0);
 
+    dodgeNarrow = new wxButton(this, wxID_ANY, _T("narrow"), wxDefaultPosition, wxSize(w,h));
+    sizerDB->Add(dodgeNarrow, 0);
+
+    dodgeAverage = new wxButton(this, wxID_ANY, _T("average"), wxDefaultPosition, wxSize(w,h));
+    sizerDB->Add(dodgeAverage, 0);
+
+    dodgeWide = new wxButton(this, wxID_ANY, _T("wide"), wxDefaultPosition, wxSize(w,h));
+    sizerDB->Add(dodgeWide, 0);
+
 
 
     wxSizer* sizerBurn = new wxStaticBoxSizer(wxVERTICAL, this, _T("burn"));
@@ -89,6 +98,15 @@ deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLa
 
     burnHigh = new wxButton(this, wxID_ANY, _T("high"), wxDefaultPosition, wxSize(w,h));
     sizerBB->Add(burnHigh, 0);
+
+    burnNarrow = new wxButton(this, wxID_ANY, _T("narrow"), wxDefaultPosition, wxSize(w,h));
+    sizerBB->Add(burnNarrow, 0);
+
+    burnAverage = new wxButton(this, wxID_ANY, _T("average"), wxDefaultPosition, wxSize(w,h));
+    sizerBB->Add(burnAverage, 0);
+
+    burnWide = new wxButton(this, wxID_ANY, _T("wide"), wxDefaultPosition, wxSize(w,h));
+    sizerBB->Add(burnWide, 0);
 
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
@@ -131,6 +149,21 @@ void deDodgeBurnFrame::click(wxCommandEvent &event)
         dodgeBurnLayer.setDodge(0.9);
     }      
 
+    if (dodgeNarrow->GetId() == id)
+    {
+        dodgeBurnLayer.setDodgeRange(0.7, 0.95);
+    }      
+
+    if (dodgeAverage->GetId() == id)
+    {
+        dodgeBurnLayer.setDodgeRange(0.5, 0.95);
+    }      
+
+    if (dodgeWide->GetId() == id)
+    {
+        dodgeBurnLayer.setDodgeRange(0.2, 0.95);
+    }      
+
     if (burnLow->GetId() == id)
     {
         dodgeBurnLayer.setBurn(0.3);
@@ -144,6 +177,21 @@ void deDodgeBurnFrame::click(wxCommandEvent &event)
     if (burnHigh->GetId() == id)
     {
         dodgeBurnLayer.setBurn(0.9);
+    }      
+
+    if (burnNarrow->GetId() == id)
+    {
+        dodgeBurnLayer.setBurnRange(0.05, 0.3);
+    }      
+
+    if (burnAverage->GetId() == id)
+    {
+        dodgeBurnLayer.setBurnRange(0.05, 0.5);
+    }      
+
+    if (burnWide->GetId() == id)
+    {
+        dodgeBurnLayer.setBurnRange(0.05, 0.8);
     }      
 
 
