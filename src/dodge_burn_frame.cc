@@ -36,6 +36,9 @@ deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLa
     sizer->Add(radius);
 
 
+    int w = 80;
+    int h = 25;
+
 
     wxSizer* sizerDodge = new wxStaticBoxSizer(wxVERTICAL, this, _T("dodge"));
     sizer->Add(sizerDodge);
@@ -48,6 +51,18 @@ deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLa
 
     dodgeMax = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyDodgeMax(), dodgeBurnLayer, layerProcessor);
     sizerDodge->Add(dodgeMax);
+
+    wxSizer* sizerDB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
+    sizerDodge->Add(sizerDB, 0);
+
+    dodgeLow = new wxButton(this, wxID_ANY, _T("low"), wxDefaultPosition, wxSize(w,h));
+    sizerDB->Add(dodgeLow, 0);
+
+    dodgeMedium = new wxButton(this, wxID_ANY, _T("medium"), wxDefaultPosition, wxSize(w,h));
+    sizerDB->Add(dodgeMedium, 0);
+
+    dodgeHigh = new wxButton(this, wxID_ANY, _T("high"), wxDefaultPosition, wxSize(w,h));
+    sizerDB->Add(dodgeHigh, 0);
 
 
 
@@ -62,6 +77,18 @@ deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLa
 
     burnMax = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyBurnMax(), dodgeBurnLayer, layerProcessor);
     sizerBurn->Add(burnMax);
+
+    wxSizer* sizerBB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
+    sizerBurn->Add(sizerBB, 0);
+
+    burnLow = new wxButton(this, wxID_ANY, _T("low"), wxDefaultPosition, wxSize(w,h));
+    sizerBB->Add(burnLow, 0);
+
+    burnMedium = new wxButton(this, wxID_ANY, _T("medium"), wxDefaultPosition, wxSize(w,h));
+    sizerBB->Add(burnMedium, 0);
+
+    burnHigh = new wxButton(this, wxID_ANY, _T("high"), wxDefaultPosition, wxSize(w,h));
+    sizerBB->Add(burnHigh, 0);
 
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
@@ -88,6 +115,37 @@ void deDodgeBurnFrame::click(wxCommandEvent &event)
     {
         dodgeBurnLayer.reset();
     }      
+
+    if (dodgeLow->GetId() == id)
+    {
+        dodgeBurnLayer.setDodge(0.3);
+    }      
+
+    if (dodgeMedium->GetId() == id)
+    {
+        dodgeBurnLayer.setDodge(0.6);
+    }      
+
+    if (dodgeHigh->GetId() == id)
+    {
+        dodgeBurnLayer.setDodge(0.9);
+    }      
+
+    if (burnLow->GetId() == id)
+    {
+        dodgeBurnLayer.setBurn(0.3);
+    }      
+
+    if (burnMedium->GetId() == id)
+    {
+        dodgeBurnLayer.setBurn(0.6);
+    }      
+
+    if (burnHigh->GetId() == id)
+    {
+        dodgeBurnLayer.setBurn(0.9);
+    }      
+
 
     radius->setFromProperty();
     dodgeAmount->setFromProperty();
