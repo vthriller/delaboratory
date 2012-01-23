@@ -754,3 +754,20 @@ void deLayerProcessor::onGenerateHistogram()
     unlockHistogram();
 }
 
+void deLayerProcessor::setPreviewSize(deChannelManager& channelManager, const deSize& size)
+{
+    lockHistogram();
+    lockPrepareImage();
+    lockUpdateImage();
+
+    logMessage("set preview size");
+
+    channelManager.setChannelSize(size);
+
+    updateAllImages(false);
+
+    unlockUpdateImage();
+    unlockPrepareImage();
+    unlockHistogram();
+}
+
