@@ -32,6 +32,7 @@ class deRenderer;
 #include <map>
 #include <wx/wx.h>
 #include "layer.h"
+#include "size.h"
 
 class deLayerProcessor
 {
@@ -135,6 +136,8 @@ class deLayerProcessor
         void generateHistogram();
         void onGenerateHistogram();
         void sendHistogramEvent();
+
+        void setPreviewSize(deChannelManager& channelManager, const deSize& size);
 
 };
 

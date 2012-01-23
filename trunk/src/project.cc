@@ -248,9 +248,7 @@ void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
         return;
     }
 
-    previewChannelManager.setChannelSize(size);
-
-    layerProcessor.updateAllImages(false);
+    layerProcessor.setPreviewSize(previewChannelManager, size);
 }
 
 void deProject::onChangeView(int a)
