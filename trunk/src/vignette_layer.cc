@@ -73,19 +73,17 @@ void deVignetteLayer::reset()
 
 void deVignetteLayer::save(xmlNodePtr root)
 {
-/*
     saveCommon(root);
     saveBlend(root);
-
-    blurRadius.save(root);
-    blurType.save(root);
-    threshold.save(root);
-    */
+    radiusX.save(root);
+    radiusY.save(root);
+    centerX.save(root);
+    centerY.save(root);
+    light.save(root);
 }
 
 void deVignetteLayer::load(xmlNodePtr root)
 {
-/*
     loadBlend(root);
 
     xmlNodePtr child = root->xmlChildrenNode;
@@ -93,14 +91,15 @@ void deVignetteLayer::load(xmlNodePtr root)
     while (child)
     {
 
-        blurRadius.load(child);
-        blurType.load(child);
-        threshold.load(child);
+        radiusX.load(child);
+        radiusY.load(child);
+        centerX.load(child);
+        centerY.load(child);
+        light.load(child);
 
         child = child->next;
 
     }        
-    */
 
 }
 

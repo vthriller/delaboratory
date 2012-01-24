@@ -68,7 +68,7 @@ private:
     wxSizer* mainSizer;
     deImageAreaPanel* imageAreaPanel;
     deHistogramPanel* histogramPanel;
-    wxThread* testThread;
+//    wxThread* testThread;
 
     deLayerProcessor& layerProcessor;
     bool full;
@@ -99,7 +99,7 @@ private:
 
 	void onCloseEvent(wxCloseEvent& event);
 
-	void test(wxCommandEvent& event);
+//	void test(wxCommandEvent& event);
 
     void repaintMainFrame(bool calcHistogram);
 

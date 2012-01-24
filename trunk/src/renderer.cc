@@ -315,7 +315,7 @@ bool deRenderer::prepareImage()
     int view = project->getLayerProcessor().getLastValidLayer();
     if (view > viewV)
     {
-        std::cout << "WARNING view was " << view << " while viewV was " << viewV << std::endl;
+//        std::cout << "WARNING view was " << view << " while viewV was " << viewV << std::endl;
         view = viewV;
     }
 
