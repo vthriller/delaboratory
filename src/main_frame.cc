@@ -198,15 +198,12 @@ void deMainFrame::hidePanels()
 deMainFrame::~deMainFrame()
 {
     project.log("closing main frame");
-    /*
-    if (testThread)
-    {
-        testThread->Delete();
-    }  
-    */
     layerProcessor.stopWorkerThread();
+    project.log("closing main frame lock layerProcessor...");
     layerProcessor.lock();
+    project.log("closing main frame unlock layerProcessor...");
     layerProcessor.unlock();
+    project.log("closing main frame done");
 }
 
 void deMainFrame::showPanels()
