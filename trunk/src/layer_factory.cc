@@ -25,6 +25,7 @@
 #include "mixer_layer.h"
 #include "conversion_layer.h"
 #include "conversion_bw_layer.h"
+#include "conversion_bw2hue_layer.h"
 #include "usm_layer.h"
 #include "source_image_layer.h"
 #include "dodge_burn_layer.h"
@@ -81,6 +82,7 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
     }
     
     bool cbw = false;
+    bool cbwhue = false;
 
     if (type == "conversion")
     {
@@ -89,6 +91,27 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
             cbw = true;
         }
         else
+        {
+            deLayer* sourceLayer = _layerStack.getLayer(source);
+            deColorSpace sourceColorSpace = sourceLayer->getColorSpace();
+            if (sourceColorSpace == deColorSpaceBW)
+            {
+                switch (colorSpace)
+                {
+                    case deColorSpaceHSL:
+                    case deColorSpaceHSV:
+                    case deColorSpaceLCH:
+                    {
+                        cbwhue = true;
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+        }
+
+        if ((!cbw) && (!cbwhue))
         {
             return new deConversionLayer(colorSpace, index, source, _layerStack, _channelManager);
         }
@@ -105,6 +128,11 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
         deColorSpace sourceColorSpace = sourceLayer->getColorSpace();
         int n = getColorSpaceSize(sourceColorSpace);
         return new deConversionBWLayer(index, source, _layerStack, _channelManager, n);
+    }
+
+    if (cbwhue)
+    {
+        return new deConversionBW2HueLayer(index, source, _layerStack, _channelManager, colorSpace);
     }
 
     if (type == "source_image")
