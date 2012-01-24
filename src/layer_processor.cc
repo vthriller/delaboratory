@@ -109,6 +109,7 @@ class deRenderWorkerThread:public wxThread
         virtual void *Entry()
         {
             performTasks();
+            logMessage("render thread finished");
             return NULL;
         }
 
