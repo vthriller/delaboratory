@@ -96,6 +96,9 @@ void deShadowsHighlightsLayer::save(xmlNodePtr root)
     saveCommon(root);
     saveBlend(root);
     blurRadius.save(root);
+    shadowsHighlightsAmount.save(root);
+    darkenAmount.save(root);
+    lightenAmount.save(root);
 }
 
 void deShadowsHighlightsLayer::load(xmlNodePtr root)
@@ -107,6 +110,9 @@ void deShadowsHighlightsLayer::load(xmlNodePtr root)
     while (child)
     {
         blurRadius.load(child);
+        shadowsHighlightsAmount.load(child);
+        darkenAmount.load(child);
+        lightenAmount.load(child);
 
         child = child->next;
     }        
