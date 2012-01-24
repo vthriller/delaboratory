@@ -104,7 +104,7 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
         deLayer* sourceLayer = _layerStack.getLayer(source);
         deColorSpace sourceColorSpace = sourceLayer->getColorSpace();
         int n = getColorSpaceSize(sourceColorSpace);
-        return new deConversionBWLayer(index, source, _layerStack, _channelManager, _viewManager, n);
+        return new deConversionBWLayer(index, source, _layerStack, _channelManager, n);
     }
 
     if (type == "source_image")

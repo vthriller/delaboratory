@@ -37,13 +37,12 @@ class deConversionBWLayer:public deConversionLayer
         dePropertyValue overlay3;
 
         // from project
-        deViewManager& viewManager;
 
         virtual bool hasAction() const {return true;};
 
         virtual std::string getType() const {return "conversion_bw";};
     public:
-        deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int n);
+        deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, int n);
         virtual ~deConversionBWLayer();
 
         virtual void updateImage();
