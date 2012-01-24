@@ -39,8 +39,8 @@ class deConversionBW2HueLayer:public deConversionLayer
 
         virtual void updateImage();
 
-        dePropertyValue& getHue() {return hue;};
-        dePropertyValue& getSaturation() {return saturation;};
+        dePropertyValue& getPropertyHue() {return hue;};
+        dePropertyValue& getPropertySaturation() {return saturation;};
 
         virtual std::string getActionName() {return "setup";};
 
