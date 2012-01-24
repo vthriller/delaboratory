@@ -81,6 +81,18 @@ void deConversionBW2HueLayer::updateImage()
             fill(p1, n, saturation.get());
             break;
         }
+        case deColorSpaceHSV:
+        {
+            fill(p0, n, hue.get());
+            fill(p1, n, saturation.get());
+            break;
+        }
+        case deColorSpaceLCH:
+        {
+            fill(p2, n, hue.get());
+            fill(p1, n, saturation.get());
+            break;
+        }
         default:
             break;
     }

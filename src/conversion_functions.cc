@@ -99,6 +99,17 @@ void cmyk2lab(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deVal
     rgb2lab(r, g, b, d1, d2, d3);
 }   
 
+void rgb2lch(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue l;
+    deValue a;
+    deValue b;
+
+    rgb2lab(s1, s2, s3, l, a, b);
+
+    lab2lch(l, a, b, d1, d2, d3);
+}
+
 void rgb2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3, deValue& d4)
 {
     deValue c;
@@ -143,6 +154,29 @@ void bw2hsl(deValue s1, deValue& d1, deValue& d2, deValue& d3)
     rgb2hsl(r, g, b, d1, d2, d3);
 }    
 
+void bw2hsv(deValue s1, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    bw2rgb(s1, r, g, b);
+
+    rgb2hsv(r, g, b, d1, d2, d3);
+}    
+
+void bw2lch(deValue s1, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    bw2rgb(s1, r, g, b);
+
+    rgb2lch(r, g, b, d1, d2, d3);
+}    
+
+
 void lab2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3, deValue& d4)
 {
     deValue x;
@@ -168,16 +202,6 @@ void lab2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deVa
 
 
 
-void rgb2lch(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
-{
-    deValue l;
-    deValue a;
-    deValue b;
-
-    rgb2lab(s1, s2, s3, l, a, b);
-
-    lab2lch(l, a, b, d1, d2, d3);
-}
 
 void lch2rgb(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
 {
@@ -260,6 +284,16 @@ deConversion1x3 getConversion1x3(deColorSpace s, deColorSpace d)
     if ((s == deColorSpaceBW) && (d == deColorSpaceHSL))
     {
         return bw2hsl;
+    }
+
+    if ((s == deColorSpaceBW) && (d == deColorSpaceHSV))
+    {
+        return bw2hsv;
+    }
+
+    if ((s == deColorSpaceBW) && (d == deColorSpaceLCH))
+    {
+        return bw2lch;
     }
 
     return NULL;
