@@ -44,7 +44,7 @@ deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int
 
 void deShadowsHighlightsLayer::reset()
 {
-    blurRadius.set(0.3);
+    blurRadius.set(0.1);
     shadowsHighlightsAmount.set(0.3);
     darkenAmount.set(0.0);
     lightenAmount.set(0.0);
