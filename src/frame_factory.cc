@@ -29,8 +29,10 @@
 #include "vignette_frame.h"
 #include "high_pass_frame.h"
 #include "shadows_highlights_frame.h"
+#include "hue_saturation_frame.h"
 
 #include "action_layer.h"
+#include "conversion_bw2hue_layer.h"
 
 deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager)
 {
@@ -95,6 +97,13 @@ deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerPr
         deConversionBWLayer& bwl = dynamic_cast<deConversionBWLayer&>(layer);
         return new deMixerBWEditor(parent, bwl, layerProcessor);
     }        
+
+    if (type == "conversion_bw2hue")
+    {
+        deConversionBW2HueLayer& bwl = dynamic_cast<deConversionBW2HueLayer&>(layer);
+        return new deHueSaturationFrame(parent, bwl, layerProcessor);
+    }        
+
 
     return NULL;
 }        
