@@ -103,11 +103,8 @@ deProject::~deProject()
 void deProject::setHistogramChannel(int channel)
 {
     histogramPanel->setChannel(channel);
-    /*
-    histogramPanel->generate();
-    histogramPanel->paint();
-    */
     histogramModePanel->updateMode();
+    layerProcessor.generateHistogram();
 }
 
 void deProject::onKey(int key)
