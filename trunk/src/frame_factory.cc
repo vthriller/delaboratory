@@ -95,13 +95,13 @@ deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerPr
     if (type == "conversion_bw")
     {
         deConversionBWLayer& bwl = dynamic_cast<deConversionBWLayer&>(layer);
-        return new deMixerBWEditor(parent, bwl, layerProcessor);
+        return new deMixerBWEditor(parent, bwl, layerProcessor, frameManager);
     }        
 
     if (type == "conversion_bw2hue")
     {
         deConversionBW2HueLayer& bwl = dynamic_cast<deConversionBW2HueLayer&>(layer);
-        return new deHueSaturationFrame(parent, bwl, layerProcessor);
+        return new deHueSaturationFrame(parent, bwl, layerProcessor, frameManager);
     }        
 
 

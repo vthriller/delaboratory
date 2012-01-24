@@ -172,12 +172,8 @@ void deProject::setTestImage(int s)
     deSize size(s, s);
 
     deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
-//    deImage& sourceImage = l->getSourceImage();
 
-    if (l->isPrimary())
-    {
-        sourceChannelManager.setChannelSize(size);
-    }
+    sourceChannelManager.setChannelSize(size);
 
     deChannel* channelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
     deChannel* channelG = sourceChannelManager.getChannel(sourceImage.getChannelIndex(1));
@@ -200,7 +196,6 @@ void deProject::resetLayerStack()
 
     deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, previewChannelManager, viewManager, "source image", sourceChannelManager, sourceImage);
     deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layer);
-    l->setPrimary();
 
     if (layer)
     {
@@ -604,7 +599,6 @@ bool deProject::openImage(const std::string& fileName)
 {
     freeImage();
 
-//    std::cout << "OPEN IMAGE" << fileName << std::endl;
     logMessage("open image " + fileName);
 
     bool tiff = checkTIFF(fileName);

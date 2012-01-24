@@ -165,7 +165,9 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
     getSupportedBlendModes(blendModes);
 
-    deBlendMode currentBlendMode = layer.getBlendMode();
+    deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
+
+    deBlendMode currentBlendMode = l.getBlendMode();
 
     wxString* blendModeStrings = new wxString [blendModes.size()];
     unsigned int i;
@@ -186,7 +188,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
     sizer->Add(choice, 0);
 
-    alphaSlider = new deAlphaSlider(this, 100, layer, layerProcessor);
+    alphaSlider = new deAlphaSlider(this, 100, l, layerProcessor);
     sizer->Add(alphaSlider, 0);
 
     wxSizer* sizerLC = new wxStaticBoxSizer(wxVERTICAL, this,  _T("luminance / color"));
@@ -201,7 +203,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
         sizerLC->Add(b2, 0);
         b3 = new wxRadioButton(this, wxID_ANY, _T("apply color"));
         sizerLC->Add(b3, 0);
-        deApplyMode applyMode = layer.getApplyMode();
+        deApplyMode applyMode = l.getApplyMode();
         if (applyMode == deApplyLuminance)
         {
             b2->SetValue(1);
@@ -225,7 +227,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
     for (i = 0; i < nc; i++)
     {
         wxCheckBox* cb = new wxCheckBox(this, wxID_ANY, wxString::FromAscii(getChannelName(colorSpace, i).c_str()));
-        cb->SetValue(layer.isChannelEnabled(i));
+        cb->SetValue(l.isChannelEnabled(i));
         sizerC->Add(cb, 0);
         channels.push_back(cb);
     }
@@ -238,7 +240,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
     maskEnable = new wxCheckBox(this, wxID_ANY, _T("enable"));
     sizerMC->Add(maskEnable, 0);
-    if (layer.isBlendMaskEnabled())
+    if (l.isBlendMaskEnabled())
     {
         maskEnable->SetValue(1);
     }
@@ -246,9 +248,9 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
     maskShow = new wxCheckBox(this, wxID_ANY, _T("show"));
     sizerMC->Add(maskShow, 0);
 
-    deViewManager& viewManager = layer.getViewManager();
+    deViewManager& viewManager = l.getViewManager();
 
-    if ((layer.isBlendMaskVisible()) && (viewManager.maskVisible()))
+    if ((l.isBlendMaskVisible()) && (viewManager.maskVisible()))
     {
         maskShow->SetValue(1);
     }
@@ -265,11 +267,11 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
     delete [] layerStrings;
 
-    maskLayerChoice->SetSelection(layer.getBlendMaskLayer());
+    maskLayerChoice->SetSelection(l.getBlendMaskLayer());
 
     sizerM->Add(maskLayerChoice, 0);
 
-    unsigned int s = layer.getBlendMaskChannel();
+    unsigned int s = l.getBlendMaskChannel();
 
     for (i = 0; i < 4; i++)
     {
@@ -287,13 +289,13 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
         }
     }
 
-    blurRadiusSlider = new deBlurRadiusSlider(this, 100, layer, layerProcessor);
+    blurRadiusSlider = new deBlurRadiusSlider(this, 100, l, layerProcessor);
     sizerM->Add(blurRadiusSlider, 0);
 
-    blendMaskMinSlider = new deBlendMaskMinSlider(this, 100, layer, layerProcessor);
+    blendMaskMinSlider = new deBlendMaskMinSlider(this, 100, l, layerProcessor);
     sizerM->Add(blendMaskMinSlider, 0);
 
-    blendMaskMaxSlider = new deBlendMaskMaxSlider(this, 100, layer, layerProcessor);
+    blendMaskMaxSlider = new deBlendMaskMaxSlider(this, 100, l, layerProcessor);
     sizerM->Add(blendMaskMaxSlider, 0);
 
     setChannels();
@@ -310,7 +312,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 deBlendFrame::~deBlendFrame()
 {
     deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
-    deViewManager& viewManager = layer.getViewManager();
+    deViewManager& viewManager = l.getViewManager();
     viewManager.hideThisMask(l.getAllocatedBlendMaskChannel());
     l.hideBlendMask();
 
@@ -341,6 +343,7 @@ void deBlendFrame::choose(wxCommandEvent &event)
 
 void deBlendFrame::check(wxCommandEvent &event)
 {
+    deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
     int id = event.GetId();
     deColorSpace colorSpace = layer.getColorSpace();
     int n = getColorSpaceSize(colorSpace);
@@ -351,11 +354,11 @@ void deBlendFrame::check(wxCommandEvent &event)
         {
             if (channels[i]->IsChecked())
             {
-                layer.enableChannel(i);
+                l.enableChannel(i);
             }
             else
             {
-                layer.disableChannel(i);
+                l.disableChannel(i);
             }
 
             int l_index = layer.getIndex();   
@@ -491,8 +494,9 @@ void deBlendFrame::updateMask()
 
 void deBlendFrame::showHide()
 {
+    deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
     int i;
-    if (layer.isBlendMaskEnabled())
+    if (l.isBlendMaskEnabled())
     {
         maskLayerChoice->Enable();
         for (i = 0; i < 4; i++)

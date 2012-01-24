@@ -31,6 +31,7 @@
 deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
  blurRadius("blur_radius"),
+ alternate("alternate"),
  dodgeAmount("dodge_amount"),
  dodgeMin("dodge_min"),
  dodgeMax("dodge_max"),
@@ -47,6 +48,9 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _so
     burnAmount.setLabel("amount");
     burnMin.setLabel("min");
     burnMax.setLabel("max");
+
+    alternate.setLabel("use screen / multiply instead dodge / burn");
+
     reset();
 }
 
@@ -59,6 +63,7 @@ void deDodgeBurnLayer::reset()
     burnAmount.set(0.4);
     burnMin.set(0.05);
     burnMax.set(0.4);
+    alternate.set(false);
 }
 
 void deDodgeBurnLayer::setDodge(deValue v)
@@ -91,6 +96,15 @@ void deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
 {
     logMessage("dodge/burn start");
 
+    deBlendMode mode1 = deBlendDodge;
+    deBlendMode mode2 = deBlendBurn;
+
+    if (alternate.get())
+    {
+        mode1 = deBlendScreen;
+        mode2 = deBlendMultiply;
+    }
+
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
 
@@ -109,14 +123,14 @@ void deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
     processLinear(blurMap, dodgeMap, size.getN(), dmin, dmax, false);
 
     deValue da = dodgeAmount.get(); 
-    blendChannel(source, source, firstStage, dodgeMap, deBlendScreen, da, size.getN());
+    blendChannel(source, source, firstStage, dodgeMap, mode1, da, size.getN());
 
     deValue bmin = burnMin.get();
     deValue bmax = burnMax.get();
     processLinear(blurMap, burnMap, size.getN(), bmin, bmax, true);
 
     deValue ba = burnAmount.get(); 
-    blendChannel(firstStage, firstStage, destination, burnMap, deBlendMultiply, ba, size.getN());
+    blendChannel(firstStage, firstStage, destination, burnMap, mode2, ba, size.getN());
 
     delete [] blurMap;
     delete [] dodgeMap;

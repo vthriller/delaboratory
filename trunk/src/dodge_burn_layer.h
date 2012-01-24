@@ -21,11 +21,13 @@
 
 #include "action_layer.h"
 #include "property_value.h"
+#include "property_boolean.h"
 
 class deDodgeBurnLayer:public deActionLayer
 {
     private:
         dePropertyValue blurRadius;
+        dePropertyBoolean alternate;
         dePropertyValue dodgeAmount;
         dePropertyValue dodgeMin;
         dePropertyValue dodgeMax;
@@ -52,6 +54,7 @@ class deDodgeBurnLayer:public deActionLayer
         virtual std::string getActionName() {return "d/b";};
 
         dePropertyValue& getPropertyRadius() {return blurRadius;};
+        dePropertyBoolean& getPropertyAlternate() {return alternate;};
 
         dePropertyValue& getPropertyDodgeAmount() {return dodgeAmount;};
         dePropertyValue& getPropertyDodgeMin() {return dodgeMin;};

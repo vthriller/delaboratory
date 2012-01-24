@@ -21,20 +21,20 @@
 
 #include "frame.h"
 class deActionLayer;
+class deLayer;
 class deLayerFrameManager;
 
 class deLayerFrame:public deFrame
 {
     protected:
-        deActionLayer& layer;
+        deLayer& layer;
         deLayerFrameManager& frameManager;
     public:
-        deLayerFrame(wxWindow *parent, deActionLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager);
+        //deLayerFrame(wxWindow *parent, deActionLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager);
+        deLayerFrame(wxWindow *parent, deLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager);
         virtual ~deLayerFrame();
 
         bool checkIndex(int index);
-
-//        virtual void onUpdate() {};
 
 };
 

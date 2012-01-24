@@ -31,8 +31,6 @@ class deSourceImageLayer:public deLayer
         deChannelManager& previewChannelManager;
         deViewManager& viewManager;
 
-        bool primary;
-
         deImage image;
         deImage& sourceImage;
 
@@ -45,10 +43,6 @@ class deSourceImageLayer:public deLayer
     public:
         deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deChannelManager& _sourceChannelManager, deImage& _sourceImage);
         virtual ~deSourceImageLayer();
-
-        void setPrimary();
-        bool isPrimary() const {return primary;};
-
 
         virtual const deImage& getImage() const;
 

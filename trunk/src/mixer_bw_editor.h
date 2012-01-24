@@ -19,12 +19,12 @@
 #ifndef _DE_MIXER_BW_EDITOR_H
 #define _DE_MIXER_BW_EDITOR_H
 
-#include "frame.h"
+#include "layer_frame.h"
 class deConversionBWLayer;
 class dePropertyValueSlider;
 class deLayerProcessor;
 
-class deMixerBWEditor:public deFrame
+class deMixerBWEditor:public deLayerFrame
 {
     private:
         deConversionBWLayer& layer;
@@ -47,7 +47,7 @@ class deMixerBWEditor:public deFrame
         void click(wxCommandEvent &event);
 
     public:
-        deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, deLayerProcessor& _layerProcessor);
+        deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deMixerBWEditor();
 
 };

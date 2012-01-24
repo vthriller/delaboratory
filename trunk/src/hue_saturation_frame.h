@@ -19,14 +19,14 @@
 #ifndef _DE_HUE_SATURATION_FRAME_H
 #define _DE_HUE_SATURATION_FRAME_H
 
-#include "action_frame.h"
+#include "layer_frame.h"
 #include "slider.h"
 
 class dePropertyValueSlider;
 class deLayerProcessor;
 class deConversionBW2HueLayer;
 
-class deHueSaturationFrame:public deFrame
+class deHueSaturationFrame:public deLayerFrame
 {
     private:
         dePropertyValueSlider* hue;
@@ -39,7 +39,7 @@ class deHueSaturationFrame:public deFrame
         void click(wxCommandEvent &event);
 
     public:
-        deHueSaturationFrame(wxWindow *parent, deConversionBW2HueLayer& _layer, deLayerProcessor& _layerProcessor);
+        deHueSaturationFrame(wxWindow *parent, deConversionBW2HueLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deHueSaturationFrame();
 
 

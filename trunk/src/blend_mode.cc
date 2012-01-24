@@ -35,8 +35,10 @@ std::string getBlendModeName(deBlendMode mode)
             return "overlay invert";
         case deBlendAdd:
             return "add";
-        case deBlendAddInvert:
-            return "add invert";
+        case deBlendGrainExtract:
+            return "graint extract";
+        case deBlendGrainMerge:
+            return "graint merge";
         case deBlendSub:
             return "sub";
         case deBlendDifference:
@@ -45,6 +47,10 @@ std::string getBlendModeName(deBlendMode mode)
             return "darken";
         case deBlendLighten:
             return "lighten";
+        case deBlendDodge:
+            return "dodge";
+        case deBlendBurn:
+            return "burn";
         default:
             return "unknown";
     }
@@ -82,9 +88,14 @@ deBlendMode blendModeFromString(const std::string& s)
         return deBlendAdd;
     }
 
-    if (s == "add invert")
+    if (s == "grain extract")
     {
-        return deBlendAddInvert;
+        return deBlendGrainExtract;
+    }
+
+    if (s == "grain merge")
+    {
+        return deBlendGrainMerge;
     }
 
     if (s == "sub")
@@ -106,6 +117,16 @@ deBlendMode blendModeFromString(const std::string& s)
     {
         return deBlendLighten;
     }
+
+    if (s == "dodge")
+    {
+        return deBlendDodge;
+    }
+
+    if (s == "burn")
+    {
+        return deBlendBurn;
+    }
     
     return deBlendInvalid;
 
@@ -119,11 +140,14 @@ void getSupportedBlendModes(std::vector<deBlendMode>& result)
     result.push_back(deBlendOverlay);
     result.push_back(deBlendOverlayInvert);
     result.push_back(deBlendAdd);
-    result.push_back(deBlendAddInvert);
+    result.push_back(deBlendGrainExtract);
+    result.push_back(deBlendGrainMerge);
     result.push_back(deBlendSub);
     result.push_back(deBlendDifference);
     result.push_back(deBlendDarken);
     result.push_back(deBlendLighten);
+    result.push_back(deBlendDodge);
+    result.push_back(deBlendBurn);
 }
 
 deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode)
@@ -173,9 +197,23 @@ deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode)
             return v;
             break;
         }            
-        case deBlendAddInvert:                   
+        case deBlendGrainExtract:                   
         {
             deValue v = 0.5 + src - v2;
+            if (v < 0)
+            {
+                return 0;
+            }
+            if (v > 1)
+            {
+                return 1;
+            }
+            return v;
+            break;
+        }            
+        case deBlendGrainMerge:                   
+        {
+            deValue v = src + v2 - 0.5;
             if (v < 0)
             {
                 return 0;
@@ -224,6 +262,45 @@ deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode)
                 return v2;
             }                
             break;
+        case deBlendDodge:
+        {
+            deValue d = 1 - v2;
+            if (d == 0)
+            {
+                return 1.0;
+            }
+            else
+            {
+                deValue r = src / d;
+                if ( r > 1)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return r;
+                }
+            }
+            break;
+        }         
+        case deBlendBurn:
+        {
+            if (v2 == 0)
+            {
+                return 0.0;
+            }
+            else
+            {
+                deValue v = (1 - src) / v2;
+                if (v > 1)
+                {
+                    v = 1;
+                }
+                deValue r = 1 - v;
+                return r;
+            }
+            break;
+        }         
         default:
             return 0;
     }                    
