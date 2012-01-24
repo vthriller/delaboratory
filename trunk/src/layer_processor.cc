@@ -228,8 +228,11 @@ void deLayerProcessor::stopWorkerThread()
 {
     logMessage("stop worker thread");
     closing = true;
+    logMessage("stop worker thread - workerThread delete");
     workerThread->Delete();
+    logMessage("stop worker thread - renderWorkerThread delete");
     renderWorkerThread->Delete();
+    logMessage("stop worker thread done");
 }
 
 void deLayerProcessor::startWorkerThread()
