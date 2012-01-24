@@ -21,7 +21,7 @@
 #include <cassert>
 #include "logger.h"
 
-#define CHANNEL_LOCKING 0
+#define CHANNEL_LOCKING 1
 
 deChannel::deChannel()
 :readSemaphore(4, 4),
