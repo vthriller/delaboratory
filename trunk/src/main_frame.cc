@@ -240,7 +240,6 @@ void deMainFrame::onKey(int key)
 
 void deMainFrame::onQuit(wxCommandEvent& WXUNUSED(event))
 {
-    std::cout << "onQuit" << std::endl;
 	Close(TRUE);
 }
 
