@@ -151,6 +151,13 @@ void deDodgeBurnLayer::save(xmlNodePtr root)
     saveCommon(root);
     saveBlend(root);
     blurRadius.save(root);
+    alternate.save(root);
+    dodgeAmount.save(root);
+    dodgeMin.save(root);
+    dodgeMax.save(root);
+    burnAmount.save(root);
+    burnMin.save(root);
+    burnMax.save(root);
 }
 
 void deDodgeBurnLayer::load(xmlNodePtr root)
@@ -162,6 +169,13 @@ void deDodgeBurnLayer::load(xmlNodePtr root)
     while (child)
     {
         blurRadius.load(child);
+        alternate.load(child);
+        dodgeAmount.load(child);
+        dodgeMin.load(child);
+        dodgeMax.load(child);
+        burnAmount.load(child);
+        burnMin.load(child);
+        burnMax.load(child);
 
         child = child->next;
     }        
