@@ -31,14 +31,19 @@ deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer,
  blurType("blur_type")
 {
     blurRadius.setLabel("radius");
-    blurRadius.set(0.2);
     getSupportedBlurTypes(blurType.getChoices());
-    blurType.set("gaussian");
     blurType.setLabel("blur type");
+    reset();
 }
 
 deBlurLayer::~deBlurLayer()
 {
+}
+
+void deBlurLayer::reset()
+{
+    blurRadius.set(0.1);
+    blurType.set("gaussian");
 }
 
 void deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)

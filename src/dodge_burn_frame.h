@@ -23,12 +23,14 @@
 #include "slider.h"
 
 class dePropertyValueSlider;
+class dePropertyBooleanUI;
 class deLayerProcessor;
 
 class deDodgeBurnFrame:public deActionFrame
 {
     private:
         dePropertyValueSlider* radius;
+        dePropertyBooleanUI* alternate;
 
         dePropertyValueSlider* dodgeAmount;
         dePropertyValueSlider* dodgeMin;

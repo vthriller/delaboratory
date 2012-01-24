@@ -20,11 +20,12 @@
 #include "conversion_bw_layer.h"
 #include "property_value_slider.h"
 #include "layer_processor.h"
+#include "layer_frame_manager.h"
 
-deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, deLayerProcessor& _layerProcessor)
-:deFrame(parent, "conversion BW"), layer( _layer), layerProcessor(_layerProcessor)
+deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
+:deLayerFrame(parent, _layer, "conversion BW", _frameManager), layer( _layer), layerProcessor(_layerProcessor)
 {
-    //layer.setActionFrame(this);
+    frameManager.addActionFrame(this);
 
     deColorSpace sourceColorSpace = layer.getSourceColorSpace();
 
@@ -60,11 +61,6 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
     preset2M = new wxButton(this, wxID_ANY, wxString::FromAscii(getChannelName(sourceColorSpace, 2).c_str()), wxDefaultPosition, wxSize(60,25));
     sizerBM->Add(preset2M, 0);
 
-/*
-    add3 = new dePropertyValueSlider(this, range, layer.getAdd3(), layer);
-    sizer->Add(add3);
-    */
-
     wxSizer* sizerO = new wxStaticBoxSizer(wxVERTICAL, this,  _T("overlay"));
     sizer->Add(sizerO);
 
@@ -77,11 +73,6 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
     overlay2 = new dePropertyValueSlider(this, range, layer.getOverlay2(), layer, layerProcessor);
     sizerO->Add(overlay2);
 
-/*
-    overlay3 = new dePropertyValueSlider(this, range, layer.getOverlay3(), layer);
-    sizer->Add(overlay3);
-    */
-
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMixerBWEditor::click));
 
     Layout();
@@ -91,7 +82,7 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
 
 deMixerBWEditor::~deMixerBWEditor()
 {
-    //layer.closeActionFrame();
+    frameManager.removeActionFrame(this);
 }
 
 void deMixerBWEditor::click(wxCommandEvent &event)
@@ -122,7 +113,6 @@ void deMixerBWEditor::click(wxCommandEvent &event)
     add1->setFromProperty();
     add2->setFromProperty();
 
-    //layer.updateAll();
     int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(index);
 

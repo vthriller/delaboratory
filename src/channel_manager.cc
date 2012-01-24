@@ -27,7 +27,7 @@ static wxMutex channelManagerMutex;
 deChannelManager::deChannelManager()
 :channelSize(0,0)
 {
-    primaryIndex = -1;
+    //primaryIndex = -1;
 }
 
 deChannelManager::~deChannelManager()
@@ -39,15 +39,16 @@ deChannelManager::~deChannelManager()
     }
 }
 
+/*
 void deChannelManager::setPrimary(int index)
 {
     assert(primaryIndex < 0);
     primaryIndex = index;
 }
+*/
 
 void deChannelManager::setChannelSize(const deSize& size)
 {
-//    std::cout << "deChannelManager::setChannelSize" << std::endl;
     channelSize = size;
     destroyAllChannels();
 }
@@ -61,7 +62,6 @@ int deChannelManager::allocateNewChannel()
 
     if (trashed.size() > 0)
     {
-//        std::cout << "from trash allocate channel " << channelSize.getN() << std::endl;
         std::set<int>::iterator i = trashed.begin();
         int c = *i;
         trashed.erase(c);
@@ -71,10 +71,8 @@ int deChannelManager::allocateNewChannel()
     }
     else
     {
-//        std::cout << "allocate channel " << channelSize.getN() << std::endl;
         channels.push_back(channel);
         int c = channels.size() - 1;
-//        std::cout << "c: " << c << std::endl;
         unlock();
         return c;
     }        
@@ -90,7 +88,6 @@ void deChannelManager::freeChannel(int index)
 
     if (channels[index])
     {
-//        std::cout << "free channel " << index << " " << channelSize.getN() << std::endl;
         delete channels[index];
         channels[index] = NULL;
         trashed.insert(index);
@@ -132,13 +129,11 @@ deSize deChannelManager::getChannelSize() const
 
 void deChannelManager::lock()
 {
-    //logger.log("channel manager lock");
     lockWithLog(channelManagerMutex, "channel manager mutex");
 }
 
 void deChannelManager::unlock()
 {
-    //logger.log("channel manager unlock");
     channelManagerMutex.Unlock();
 }
 
@@ -163,16 +158,12 @@ void deChannelManager::tryAllocateChannel(int index)
 {
     lock();
 
-//    std::cout << "tryAllocateChannel " << index << std::endl;
-//    std::cout << "channels.size(): " << channels.size() << std::endl;
-
     assert(index >= 0);
     assert((unsigned int)index < channels.size());
     if ((channels[index]))
     {
         if (!channels[index]->isAllocated())
         {
-    //        std::cout << " try allocate channel " << index << " " << channelSize.getN() << std::endl;
             channels[index]->allocate(channelSize.getN());
         }
     }
@@ -190,7 +181,6 @@ void deChannelManager::tryDeallocateChannel(int index)
     {
         if (channels[index]->isAllocated())
         {
-    //        std::cout << " try deallocate channel " << index << " " << channelSize.getN() << std::endl;
             channels[index]->deallocate();
         }
     }

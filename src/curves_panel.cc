@@ -282,11 +282,12 @@ void deCurvesPanel::addRandom(int n)
         return;
     }
 
+    curve->reset();
+
     int i;
     for (i = 0; i < n; i++)
     {
         curve->addRandom();
-
     }
 
     update(true);

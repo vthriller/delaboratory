@@ -20,6 +20,7 @@
 #include "dodge_burn_layer.h"
 #include <iostream>
 #include "property_value_slider.h"
+#include "property_boolean_ui.h"
 #include "layer_processor.h"
 
 deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
@@ -30,10 +31,16 @@ deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLa
 
     deDodgeBurnLayer& dodgeBurnLayer = dynamic_cast<deDodgeBurnLayer&>(_layer);
 
+    wxSizer* sizerTop = new wxStaticBoxSizer(wxVERTICAL, this, _T(""));
+    sizer->Add(sizerTop);
+
     int range = 400;
 
     radius = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyRadius(), dodgeBurnLayer, layerProcessor);
-    sizer->Add(radius);
+    sizerTop->Add(radius);
+
+    alternate = new dePropertyBooleanUI(this, dodgeBurnLayer.getPropertyAlternate(), dodgeBurnLayer, layerProcessor);
+    sizerTop->Add(alternate);
 
 
     int w = 80;
@@ -196,6 +203,7 @@ void deDodgeBurnFrame::click(wxCommandEvent &event)
 
 
     radius->setFromProperty();
+    alternate->setFromProperty();
     dodgeAmount->setFromProperty();
     dodgeMin->setFromProperty();
     dodgeMax->setFromProperty();

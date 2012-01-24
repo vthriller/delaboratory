@@ -58,7 +58,7 @@ void deHighPassLayer::processAction(int i, const deChannel& sourceChannel, deCha
     deBlurType type = deGaussianBlur;
     blurChannel(source, blurMap, size, r, type, 0.0);
 
-    blendChannel(source, blurMap, destination, NULL, deBlendAddInvert, 1.0, size.getN());
+    blendChannel(source, blurMap, destination, NULL, deBlendGrainExtract, 1.0, size.getN());
 
     delete [] blurMap;
 

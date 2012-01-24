@@ -35,7 +35,7 @@ class deChannelManager
         std::vector<deChannel*> channels;
         std::set<int> trashed;
 
-        int primaryIndex;
+//        int primaryIndex;
 
         deChannelManager(const deChannelManager& m);
         deChannelManager& operator =(const deChannelManager& m);

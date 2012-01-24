@@ -21,10 +21,13 @@
 #include <iostream>
 #include "property_value_slider.h"
 #include "layer_processor.h"
+#include "layer_frame_manager.h"
 
-deHueSaturationFrame::deHueSaturationFrame(wxWindow *parent, deConversionBW2HueLayer& _layer, deLayerProcessor& _layerProcessor)
-:deFrame(parent, "BW -> hue/saturation"), layerProcessor(_layerProcessor), layer(_layer)
+deHueSaturationFrame::deHueSaturationFrame(wxWindow *parent, deConversionBW2HueLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
+:deLayerFrame(parent, _layer, "BW -> hue/saturation", _frameManager), layerProcessor(_layerProcessor), layer(_layer)
 {
+    frameManager.addActionFrame(this);
+
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
 
@@ -52,6 +55,7 @@ deHueSaturationFrame::deHueSaturationFrame(wxWindow *parent, deConversionBW2HueL
 
 deHueSaturationFrame::~deHueSaturationFrame()
 {
+    frameManager.removeActionFrame(this);
 }
 
 void deHueSaturationFrame::click(wxCommandEvent &event)

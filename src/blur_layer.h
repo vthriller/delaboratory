@@ -39,6 +39,8 @@ class deBlurLayer:public deActionLayer
         deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
         virtual ~deBlurLayer();
 
+        void reset();
+
         virtual bool isChannelNeutral(int index);
 
         virtual void processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
