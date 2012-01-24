@@ -95,8 +95,10 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxPanel* viewModePanel = new deViewModePanel(topPanel, project);
     topSizer->Add(viewModePanel);
 
+/*
     wxButton* testButton = new wxButton(topPanel, wxID_ANY, _T("random layers - for crash test"));
     topSizer->Add(testButton);
+    */
 
     imageAreaPanel = new deImageAreaPanel(this, &project);
     imageAreaPanel->SetSize(300,300);
@@ -133,7 +135,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     full = false;
 
-    testThread = NULL;
+//    testThread = NULL;
 
     wxMenu *menuFile = new wxMenu;
     menuFile->Append( ID_NewProject, _("New project") );
@@ -176,7 +178,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     Layout();
 
     imageAreaPanel->SetFocus();
-    Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMainFrame::test));
+    //Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMainFrame::test));
     Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deMainFrame::check));
 
     Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(deMainFrame::onCloseEvent));
@@ -196,10 +198,12 @@ void deMainFrame::hidePanels()
 deMainFrame::~deMainFrame()
 {
     project.log("closing main frame");
+    /*
     if (testThread)
     {
         testThread->Delete();
-    }     
+    }  
+    */
     layerProcessor.stopWorkerThread();
     layerProcessor.lock();
     layerProcessor.unlock();
@@ -398,10 +402,12 @@ class deTestThread:public wxThread
         }
 };
 
+/*
 void deMainFrame::test(wxCommandEvent& event)
 {
     deChannelManager& channelManager = project.getPreviewChannelManager();
     deChannel* channel = channelManager.getChannel(0);
+
 
     testThread = new deTestThread(this, project);
 
@@ -413,6 +419,7 @@ void deMainFrame::test(wxCommandEvent& event)
     {
     }
 }
+    */
 
 void deMainFrame::repaintMainFrame(bool calcHistogram)
 {
