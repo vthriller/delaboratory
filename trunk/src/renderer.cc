@@ -25,6 +25,7 @@
 #include "conversion_functions.h"
 #include "layer_processor.h"
 #include "str.h"
+#include "logger.h"
 
 bool renderImage(const deImage& image, unsigned char* data, deChannelManager& channelManager)
 {
@@ -272,11 +273,11 @@ void renderChannel(int c, unsigned char* data, deChannelManager& channelManager)
 
 }
 
-deRenderer::deRenderer(deProject* _project)
+deRenderer::deRenderer(deProject& _project)
 :project(_project), size(0,0)
 {
     image = NULL;
-    project->setRenderer(this);
+    project.setRenderer(this);
 }
 
 deRenderer::~deRenderer()
@@ -289,7 +290,7 @@ deRenderer::~deRenderer()
 
 bool deRenderer::prepareImage()
 {
-    deChannelManager& channelManager = project->getPreviewChannelManager();
+    deChannelManager& channelManager = project.getPreviewChannelManager();
     const deSize& s = channelManager.getChannelSize();
 
     if ((s.getW() == 0) || (s.getH() == 0))
@@ -309,10 +310,10 @@ bool deRenderer::prepareImage()
         size = s;
     }
 
-    const deViewManager& viewManager = project->getViewManager();
+    const deViewManager& viewManager = project.getViewManager();
 
     int viewV = viewManager.getView();
-    int view = project->getLayerProcessor().getLastValidLayer();
+    int view = project.getLayerProcessor().getLastValidLayer();
     if (view > viewV)
     {
 //        std::cout << "WARNING view was " << view << " while viewV was " << viewV << std::endl;
@@ -321,7 +322,7 @@ bool deRenderer::prepareImage()
 
     assert(view >= 0);
 
-    deLayerStack& layerStack = project->getLayerStack();
+    deLayerStack& layerStack = project.getLayerStack();
 
     unsigned char* data = image->GetData();
 
@@ -331,21 +332,21 @@ bool deRenderer::prepareImage()
     }
     else
     {
-        project->log("renderer getLayer " +str(view));
+        logMessage("renderer getLayer " +str(view));
         deLayer* layer = layerStack.getLayer(view);
         if (!layer)
         {
             return false;
         }
-        project->log("renderer lock layer " +str(view));
+        logMessage("renderer lock layer " +str(view));
 
         layer->lockLayer();
 
-        project->log("renderer get image from layer " +str(view));
+        logMessage("renderer get image from layer " +str(view));
 
         const deImage& layerImage = layer->getImage();
 
-        project->log("renderer before renderer");
+        logMessage("renderer before renderer");
 
         if (viewManager.isSingleChannel())
         {
@@ -356,11 +357,11 @@ bool deRenderer::prepareImage()
             if (!renderImage(layerImage, data, channelManager))
             {
                 std::cout << "failed renderImage" << std::endl;
-                project->log("render image FAILED");
+                logMessage("render image FAILED");
             }
         }
 
-        project->log("renderer unlock layer " +str(view));
+        logMessage("renderer unlock layer " +str(view));
 
         layer->unlockLayer();
     }

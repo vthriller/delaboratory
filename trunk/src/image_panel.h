@@ -28,7 +28,7 @@ class deImagePanel:public wxPanel
 {
 private:
 	
-    deProject* project;
+    deProject& project;
     deRenderer renderer;
     bool clicked;
 
@@ -44,7 +44,7 @@ private:
     void drawSamplers(wxDC& dc);
 
 public:
-	deImagePanel(wxWindow* parent, deProject* _project);
+	deImagePanel(wxWindow* parent, deProject& _project);
 	virtual ~deImagePanel();
 
 	void paintEvent(wxPaintEvent & evt);
