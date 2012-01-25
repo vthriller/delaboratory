@@ -46,7 +46,6 @@ class deProject
         deProject& operator =(const deProject& project);
 
         deLayerProcessor& layerProcessor;
-        deLayerStack layerStack;
         deViewModePanel* viewModePanel;
         deControlPanel* controlPanel;
         deMemoryInfoFrame* memoryInfoFrame;
@@ -58,7 +57,6 @@ class deProject
         deChannelManager previewChannelManager;
         deChannelManager sourceChannelManager;
 
-        deImage sourceImage;
 
         std::string imageFileName;
         std::string sourceImageFileName;
@@ -71,6 +69,10 @@ class deProject
         deHistogramModePanel* histogramModePanel;
         deImageAreaPanel* imageAreaPanel;
         deMainFrame* mainFrame;
+
+        deImage sourceImage;
+
+        deLayerStack layerStack;
 
         void loadLayers(xmlNodePtr root);
         void loadLayer(xmlNodePtr root);

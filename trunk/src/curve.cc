@@ -268,7 +268,13 @@ void deCurve::deletePoint(int p)
 
 void deCurve::movePoint(int p, deValue x, deValue y)
 {
-    if (p >= points.size())
+    if (p < 0)
+    {
+        std::cout << "ERROR p = " << p << std::endl;
+        return;
+    }
+
+    if ((unsigned int)p >= points.size())
     {
         std::cout << "ERROR p = " << p << " points.size() = " << points.size() << std::endl;
         return;
@@ -328,7 +334,13 @@ void deCurve::movePoint(int p, deValue x, deValue y)
 
 void deCurve::movePointVertically(int p, deValue delta)
 {
-    if (p >= points.size())
+    if (p < 0)
+    {
+        std::cout << "ERROR p = " << p << std::endl;
+        return;
+    }
+
+    if ((unsigned int)p >= points.size())
     {
         std::cout << "ERROR p = " << p << " points.size() = " << points.size() << std::endl;
         return;

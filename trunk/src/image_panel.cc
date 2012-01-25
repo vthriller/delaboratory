@@ -101,10 +101,8 @@ bool deImagePanel::onMove(deValue x, deValue y)
 
 bool deImagePanel::onRelease()
 {
-    bool used = false;
-
     deSamplerManager& samplerManager = project.getSamplerManager();
-    used = samplerManager.onRelease();
+    samplerManager.onRelease();
 
     return false;
 }

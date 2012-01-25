@@ -25,10 +25,10 @@
 class deVignetteLayer:public deActionLayer
 {
     private:
-        dePropertyValue centerX;
-        dePropertyValue centerY;
         dePropertyValue radiusX;
         dePropertyValue radiusY;
+        dePropertyValue centerX;
+        dePropertyValue centerY;
         dePropertyValue light;
 
     protected:
