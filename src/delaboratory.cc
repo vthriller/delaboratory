@@ -22,7 +22,9 @@
 #include "str.h"
 #include "rgb2xyz2lab.h"
 #include "layer_processor.h"
+#include "logger.h"
 
+/*
 class deThread:public wxThread
 {
     private:
@@ -47,6 +49,7 @@ class deThread:public wxThread
         {
         }
 };
+*/
 
 class deLaboratory: public wxApp
 {	
@@ -68,7 +71,7 @@ class deLaboratory: public wxApp
         deLayerProcessor processor;
         deProject project;
 
-        deThread* thread;
+        //deThread* thread;
 
         virtual int FilterEvent(wxEvent& event);
 
@@ -96,12 +99,14 @@ int deLaboratory::FilterEvent(wxEvent& event)
 int deLaboratory::OnExit()
 {
     project.log("OnExit");
-    thread->Delete();
+    //thread->Delete();
     return 0;
 }   
 
 bool deLaboratory::OnInit()
 {
+    logMessage("deLaboratory::OnInit");
+
     wxInitAllImageHandlers();
 
 	//int width = 1024;
@@ -122,6 +127,7 @@ bool deLaboratory::OnInit()
 
     initLAB();
 
+/*
     thread = new deThread();
 
     if ( thread->Create() != wxTHREAD_NO_ERROR )
@@ -131,10 +137,17 @@ bool deLaboratory::OnInit()
     if ( thread->Run() != wxTHREAD_NO_ERROR )
     {
     }
+    */
+
+    logMessage("setMainFrame...");
 
     processor.setMainFrame(frame);
 
+    logMessage("startWorkerThread...");
+
     processor.startWorkerThread();
+
+    logMessage("OnInit done");
 
 	return TRUE;
 } 

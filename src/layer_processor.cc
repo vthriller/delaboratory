@@ -176,7 +176,7 @@ class deHistogramWorkerThread:public wxThread
         virtual void *Entry()
         {
             performTasks();
-            logMessage("histgroam thread finished");
+            logMessage("histogram thread finished");
             return NULL;
         }
 
