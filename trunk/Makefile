@@ -43,8 +43,8 @@ WXCONFIG=wx-config
 
 
 # choose your architecture
-#OPTFLAGS=-march=i686
-OPTFLAGS=-march=core2
+OPTFLAGS=-march=i686
+#OPTFLAGS=-march=core2
 
 # debug stuff
 #CXXFLAGS+=-g -Wall -pedantic 
