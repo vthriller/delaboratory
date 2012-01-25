@@ -378,6 +378,7 @@ bool deRenderer::render(wxDC& dc)
     }
     else
     {
+        logMessage("renderer - no image");
         return false;
     }
 
