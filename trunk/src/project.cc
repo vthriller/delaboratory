@@ -43,6 +43,8 @@
 #include "layer_processor.h"
 #include "external_editor.h"
 
+#define ICC_MESSAGE 0
+
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
 
@@ -652,10 +654,12 @@ bool deProject::openImage(const std::string& fileName)
     {
         bool icc;
         loadTIFF(fileName, *channelR, *channelG, *channelB, icc);
+#if ICC_MESSAGE
         if (icc)
         {
             wxMessageBox( _T("Warning! this TIFF file contains ICC profile which is ignored by delaboratory\n\ndelaboratory expects sRGB - colors may be not accurate\n\nThis problem happens (for instance) when tiff is created by dcraw\nyou can fix it by calling tifficc command, by default it converts tiff to sRGB"), _T("ICC profile ignored"), wxOK | wxICON_INFORMATION, NULL );
         }
+#endif        
         status = true;
     }
 
