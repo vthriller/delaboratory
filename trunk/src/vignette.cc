@@ -19,9 +19,13 @@
 #include "vignette.h"
 #include <cmath>
 #include <cassert>
+#include "logger.h"
+#include "str.h"
 
 void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue centerY, deValue radiusX, deValue radiusY, deValue light)
 {
+    logMessage("vignette channel cx: " + str(centerX) + " cy: " + str(centerY) + " rx: " + str(radiusX) + " ry: " + str(radiusY) + " l: " + str(light));
+
     if (radiusX <= 0.0)
     {
         return;
@@ -63,6 +67,9 @@ void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue
     int j;
 
     int p = 0;
+
+    logMessage("before vignette fill");
+
     for (i = 0; i < h; i++)
     {
         deValue y = (i - hh) / hh;
@@ -96,6 +103,8 @@ void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue
             p++;
         }
     }
+
+    logMessage("after vignette fill");
 
 }
 
