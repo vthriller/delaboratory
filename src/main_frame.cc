@@ -100,7 +100,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     topSizer->Add(testButton);
     */
 
-    imageAreaPanel = new deImageAreaPanel(this, &project);
+    imageAreaPanel = new deImageAreaPanel(this, project);
     imageAreaPanel->SetSize(300,300);
     leftSizer->Add(imageAreaPanel, 1, wxEXPAND);
 

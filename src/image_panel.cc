@@ -69,17 +69,16 @@ void deImagePanel::move(wxMouseEvent &event)
 
 void deImagePanel::wheel(wxMouseEvent &event)
 {
-    //project->zoom(event.GetWheelRotation());
 }
 
 
 bool deImagePanel::onClick(deValue x, deValue y)
 {
-    bool used = project->getLayerFrameManager().onImageClick(x, y);
+    bool used = project.getLayerFrameManager().onImageClick(x, y);
 
     if (!used)
     {
-        deSamplerManager& samplerManager = project->getSamplerManager();
+        deSamplerManager& samplerManager = project.getSamplerManager();
         used = samplerManager.onClick(x, y);
     }            
 
@@ -88,11 +87,11 @@ bool deImagePanel::onClick(deValue x, deValue y)
 
 bool deImagePanel::onMove(deValue x, deValue y)
 {
-    bool used = project->getLayerFrameManager().onImageClick(x, y);
+    bool used = project.getLayerFrameManager().onImageClick(x, y);
 
     if (!used)
     {
-        deSamplerManager& samplerManager = project->getSamplerManager();
+        deSamplerManager& samplerManager = project.getSamplerManager();
         used = samplerManager.onMove(x, y);
     }            
 
@@ -103,13 +102,13 @@ bool deImagePanel::onRelease()
 {
     bool used = false;
 
-    deSamplerManager& samplerManager = project->getSamplerManager();
+    deSamplerManager& samplerManager = project.getSamplerManager();
     used = samplerManager.onRelease();
 
     return false;
 }
 
-deImagePanel::deImagePanel(wxWindow* parent, deProject* _project)
+deImagePanel::deImagePanel(wxWindow* parent, deProject& _project)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), project(_project), renderer(project)
 {
     clicked = false;
@@ -126,8 +125,8 @@ deImagePanel::~deImagePanel()
 
 void deImagePanel::paintEvent(wxPaintEvent & evt)
 {
-    project->getLayerProcessor().lock();
-    int view = project->getLayerProcessor().getLastValidLayer();
+    project.getLayerProcessor().lock();
+    int view = project.getLayerProcessor().getLastValidLayer();
     if (view >= 0)
     {
         wxBufferedPaintDC dc(this);
@@ -138,14 +137,12 @@ void deImagePanel::paintEvent(wxPaintEvent & evt)
     {
         std::cout << "view: " << view << " in paintEvent" << std::endl;
     }
-    project->getLayerProcessor().unlock();
+    project.getLayerProcessor().unlock();
 }
 
 void deImagePanel::repaintImagePanel()
 {
-//    project->getLayerProcessor().lock();
-
-    int view = project->getLayerProcessor().getLastValidLayer();
+    int view = project.getLayerProcessor().getLastValidLayer();
     if (view >= 0)
     {
         wxClientDC dc(this);
@@ -157,7 +154,6 @@ void deImagePanel::repaintImagePanel()
     {
         std::cout << "view: " << view << " in repaintImagePanel" << std::endl;
     }
-//    project->getLayerProcessor().unlock();
 }
 
 void deImagePanel::render(wxDC& dc)
@@ -165,7 +161,7 @@ void deImagePanel::render(wxDC& dc)
 //    std::cout << "deImagePanel::render" << std::endl;
 //    renderer.prepareImage();
     renderer.render(dc);
-    if (project->samplersVisible())
+    if (project.samplersVisible())
     {
         drawSamplers(dc);
     }        
@@ -178,7 +174,7 @@ void deImagePanel::drawSamplers(wxDC& dc)
     int h;
     GetSize(&w, &h);
 
-    deSamplerManager& samplerManager = project->getSamplerManager();
+    deSamplerManager& samplerManager = project.getSamplerManager();
     int n = samplerManager.getNumberOfSamplers();
     int selected = samplerManager.getSelected();
 

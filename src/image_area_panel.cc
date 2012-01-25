@@ -37,28 +37,28 @@ void deImageAreaPanel::updateSize(bool calcHistogram)
 
     const deSize ps(s.GetWidth(), s.GetHeight());
     
-    const deSize& ss = project->getSourceChannelManager().getChannelSize();
+    const deSize& ss = project.getSourceChannelManager().getChannelSize();
 
     if (ss.getN() <= 0)
     {
         return;
     }
 
-    deViewManager& viewManager = project->getViewManager();
+    deViewManager& viewManager = project.getViewManager();
 
     deSize fit = fitInside(ps, ss, viewManager.getScale());
 
-    project->setPreviewSize(fit, calcHistogram);
+    project.setPreviewSize(fit, calcHistogram);
 
     imagePanel->SetSize(wxSize(fit.getW(), fit.getH()));
 }
 
 
-deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject* _project)
+deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject& _project)
 :wxPanel(parent), project(_project)
 {   
     imagePanel = new deImagePanel(this, project);
-    project->setImageAreaPanel(this);
+    project.setImageAreaPanel(this);
 
     Connect(wxEVT_SIZE, wxSizeEventHandler(deImageAreaPanel::resize));
 }

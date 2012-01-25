@@ -28,12 +28,12 @@ class deImageAreaPanel:public wxPanel
     private:
         void resize(wxSizeEvent &event);
         void paint(wxPaintEvent& event);
-        deProject* project;
+        deProject& project;
 
         deImagePanel* imagePanel;
 
     public:
-        deImageAreaPanel(wxWindow* parent, deProject* _project);
+        deImageAreaPanel(wxWindow* parent, deProject& _project);
         virtual ~deImageAreaPanel();
         
         void updateSize(bool calcHistogram);

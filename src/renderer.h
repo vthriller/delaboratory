@@ -28,11 +28,11 @@ class deRenderer
 {
     private:
         wxImage* image;
-        deProject* project;
+        deProject& project;
         deSize size;
 
     public:
-        deRenderer(deProject* _project);
+        deRenderer(deProject& _project);
         virtual ~deRenderer();
 
         bool render(wxDC& dc);
