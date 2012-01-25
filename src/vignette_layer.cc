@@ -50,9 +50,13 @@ deVignetteLayer::~deVignetteLayer()
 
 void deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
+    logMessage("deVignetteLayer::processAction i=" + str(i));
+
     deValue* destination = channel.getPixels();
 
     vignetteChannel(destination, size, centerX.get(), centerY.get(), radiusX.get(), radiusY.get(), light.get());
+
+    logMessage("deVignetteLayer::processAction i=" + str(i) + " done");
 }
 
 bool deVignetteLayer::isChannelNeutral(int index)
