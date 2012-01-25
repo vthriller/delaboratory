@@ -78,6 +78,7 @@ class deLayerProcessorWorkerThread:public wxThread
         :processor(_processor),
          semaphore(_semaphore)
         {
+            logMessage("worker thread created");
         }
         virtual ~deLayerProcessorWorkerThread()
         {
@@ -133,6 +134,7 @@ class deRenderWorkerThread:public wxThread
         :processor(_processor),
          semaphore(_semaphore)
         {
+            logMessage("render thread created");
         }
         virtual ~deRenderWorkerThread()
         {
@@ -186,6 +188,7 @@ class deHistogramWorkerThread:public wxThread
         :processor(_processor),
          semaphore(_semaphore)
         {
+            logMessage("histogram thread created");
         }
         virtual ~deHistogramWorkerThread()
         {
@@ -269,6 +272,8 @@ void deLayerProcessor::stopWorkerThread()
 
 void deLayerProcessor::startWorkerThread()
 {
+    logMessage("starting worker threads...");
+
     workerThread = new deLayerProcessorWorkerThread(*this, workerSemaphore);
 
     if ( workerThread->Create() != wxTHREAD_NO_ERROR )
