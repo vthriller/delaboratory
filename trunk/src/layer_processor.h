@@ -139,6 +139,8 @@ class deLayerProcessor
 
         void setPreviewSize(deChannelManager& channelManager, const deSize& size);
 
+        bool isClosing() const {return closing;};
+
 };
 
 #endif

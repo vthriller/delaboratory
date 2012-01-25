@@ -40,6 +40,11 @@ class deLayerProcessorWorkerThread:public wxThread
         {
             while (true)
             {
+                if (processor.isClosing())
+                {
+                    return;
+                }
+
                 logMessage("worker thread before wait");
                 semaphore.Wait();
                 logMessage("worker thread after wait");
@@ -86,6 +91,11 @@ class deRenderWorkerThread:public wxThread
         {
             while (true)
             {
+                if (processor.isClosing())
+                {
+                    return;
+                }
+
                 logMessage("render thread before wait");
                 semaphore.Wait();
                 logMessage("render thread after wait");
@@ -136,9 +146,15 @@ class deHistogramWorkerThread:public wxThread
         {
             while (true)
             {
+                if (processor.isClosing())
+                {
+                    return;
+                }
+
                 logMessage("histogram thread before wait");
                 semaphore.Wait();
                 logMessage("histogram thread after wait");
+                Sleep(10);
 
                 if (TestDestroy())
                 {
@@ -158,6 +174,7 @@ class deHistogramWorkerThread:public wxThread
         virtual void *Entry()
         {
             performTasks();
+            logMessage("histgroam thread finished");
             return NULL;
         }
 
@@ -241,6 +258,12 @@ void deLayerProcessor::stopWorkerThread()
     renderWorkerSemaphore.Post();
     logMessage("stop worker thread - renderWorkerThread delete");
     renderWorkerThread->Delete();
+
+    logMessage("histogram worker thread post before delete");
+    histogramWorkerSemaphore.Post();
+    logMessage("stop worker thread - histogramWorkerThread delete");
+    histogramWorkerThread->Delete();
+
     logMessage("stop worker thread done");
 }
 
