@@ -24,8 +24,11 @@
 #include "logger.h"
 
 deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer)
-:name(_name), colorSpace(_colorSpace), index(_index), sourceLayer(_sourceLayer),
-mutex(wxMUTEX_RECURSIVE)
+:name(_name), 
+mutex(wxMUTEX_RECURSIVE),
+colorSpace(_colorSpace), 
+index(_index), 
+sourceLayer(_sourceLayer)
 {
     logMessage("creating layer " + str(index) + " " + name);
 }
@@ -113,6 +116,8 @@ void deLayer::process(deLayerProcessType type, int channel)
             processBlend();
             break;
         }
+        default:
+            break;
     }
 }
 
