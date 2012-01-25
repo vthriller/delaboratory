@@ -43,6 +43,7 @@ class deLayerProcessorWorkerThread:public wxThread
                 logMessage("worker thread before wait");
                 semaphore.Wait();
                 logMessage("worker thread after wait");
+                Sleep(10);
 
                 if (TestDestroy())
                 {
@@ -88,6 +89,7 @@ class deRenderWorkerThread:public wxThread
                 logMessage("render thread before wait");
                 semaphore.Wait();
                 logMessage("render thread after wait");
+                Sleep(10);
 
                 if (TestDestroy())
                 {
@@ -229,8 +231,14 @@ void deLayerProcessor::stopWorkerThread()
 {
     logMessage("stop worker thread");
     closing = true;
+
+    logMessage("worker thread post before delete");
+    workerSemaphore.Post();
     logMessage("stop worker thread - workerThread delete");
     workerThread->Delete();
+
+    logMessage("render worker thread post before delete");
+    renderWorkerSemaphore.Post();
     logMessage("stop worker thread - renderWorkerThread delete");
     renderWorkerThread->Delete();
     logMessage("stop worker thread done");
