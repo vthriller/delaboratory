@@ -44,6 +44,7 @@ deHistogramPanel::~deHistogramPanel()
 
 void deHistogramPanel::paintEvent(wxPaintEvent & evt)
 {
+    logMessage("paintEvent in deHistogramPanel");
     wxBufferedPaintDC dc(this);
 	render(dc);
 }

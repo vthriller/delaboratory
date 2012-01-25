@@ -22,6 +22,7 @@
 #include "layer.h"
 #include "layer_processor.h"
 #include <iostream>
+#include "str.h"
 
 BEGIN_EVENT_TABLE(deImagePanel, wxPanel)
 EVT_PAINT(deImagePanel::paintEvent)
@@ -125,8 +126,10 @@ deImagePanel::~deImagePanel()
 
 void deImagePanel::paintEvent(wxPaintEvent & evt)
 {
+    logMessage("paintEvent in deImagePanel");
     project.getLayerProcessor().lock();
     int view = project.getLayerProcessor().getLastValidLayer();
+    logMessage("paintEvent view: " + str(view));
     if (view >= 0)
     {
         wxBufferedPaintDC dc(this);
