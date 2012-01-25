@@ -601,6 +601,8 @@ void deActionLayer::updateAction(int i)
 
                     processAction(i, *sourceChannel, *channel, channelManager.getChannelSize());
 
+                    logMessage("update action 10 i:" +str(i));
+
                     sourceChannel->unlockRead();
                     channel->unlockWrite();
                 }
