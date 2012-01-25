@@ -173,8 +173,6 @@ void deProject::setTestImage(int s)
 
     deSize size(s, s);
 
-    deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
-
     sourceChannelManager.setChannelSize(size);
 
     deChannel* channelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
@@ -197,7 +195,6 @@ void deProject::resetLayerStack()
     layerStack.clear();
 
     deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, previewChannelManager, viewManager, "source image", sourceChannelManager, sourceImage);
-    deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layer);
 
     if (layer)
     {
@@ -627,8 +624,6 @@ bool deProject::openImage(const std::string& fileName)
     {
         size = getJPEGSize(fileName);
     }
-
-    deSourceImageLayer* l = dynamic_cast<deSourceImageLayer*>(layerStack.getLayer(0));
 
     sourceChannelManager.setChannelSize(size);
 

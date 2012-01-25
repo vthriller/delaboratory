@@ -30,7 +30,6 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject&
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
 
-    int xyWidth = 70;
     int valueWidth = 70;
 
     getSupportedColorSpaces(colorSpaces);
@@ -171,8 +170,8 @@ void deSamplerPanel::update()
 
         image.lockRead();
 
-        bool result2 = convertPixel(image, p, deColorSpaceRGB, rr, gg, bb, vv4);
-        bool result = convertPixel(image, p, colorSpace, vv1, vv2, vv3, vv4);
+        convertPixel(image, p, deColorSpaceRGB, rr, gg, bb, vv4);
+        convertPixel(image, p, colorSpace, vv1, vv2, vv3, vv4);
 
         colorPanel->SetBackgroundColour(wxColour(255 * rr, 255 * gg, 255 * bb));
 
