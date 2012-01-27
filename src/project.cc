@@ -202,17 +202,11 @@ void deProject::resetLayerStack()
 
     if (layer)
     {
-        addLayer(layer);
+        layerProcessor.addLayer(layer);
     }        
 
     previewChannelManager.destroyAllChannels();
     layerProcessor.updateAllImages(true);
-}
-
-void deProject::addLayer(deLayer* layer)
-{
-
-    layerProcessor.addLayer(layer);
 }
 
 deChannelManager& deProject::getPreviewChannelManager() 
@@ -490,7 +484,7 @@ void deProject::loadLayer(xmlNodePtr root)
 
     if (layer)
     {
-        addLayer(layer);
+        layerProcessor.addLayer(layer);
         layer->load(root);
     }        
 
@@ -718,7 +712,7 @@ void deProject::addActionLayer(const std::string& action)
 
     if (layer)
     {
-        addLayer(layer);
+        layerProcessor.addLayer(layer);
         setLastView();
 
         controlPanel->updateLayerGrid();
@@ -737,7 +731,7 @@ void deProject::addConversionLayer(deColorSpace colorSpace)
 
     if (layer)
     {
-        addLayer(layer);
+        layerProcessor.addLayer(layer);
         setLastView();
 
         controlPanel->updateLayerGrid();
