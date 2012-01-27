@@ -19,24 +19,26 @@
 #ifndef _DE_RENDERER_H
 #define _DE_RENDERER_H
 
-class deProject;
 class wxDC;
 class wxImage;
+class deChannelManager;
+class deViewManager;
+class deLayerProcessor;
+class deLayerStack;
 #include "size.h"
 
 class deRenderer
 {
     private:
         wxImage* image;
-        deProject& project;
         deSize size;
 
     public:
-        deRenderer(deProject& _project);
+        deRenderer();
         virtual ~deRenderer();
 
         bool render(wxDC& dc);
-        bool prepareImage();
+        bool prepareImage(deChannelManager& channelManager, const deViewManager& viewManager, deLayerProcessor& layerProcessor, deLayerStack& layerStack);
 };
 
 #endif

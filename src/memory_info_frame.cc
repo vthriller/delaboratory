@@ -20,6 +20,7 @@
 #include "project.h"
 #include <sstream>
 #include "str.h"
+#include "channel_manager.h"
 
 int generateInfo(deChannelManager& channelManager, wxWindow* parent, wxSizer* sizer, wxString name)
 {

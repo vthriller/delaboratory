@@ -197,12 +197,13 @@ class deHistogramWorkerThread:public wxThread
 
 
 
-deLayerProcessor::deLayerProcessor()
+deLayerProcessor::deLayerProcessor(deChannelManager& _previewChannelManager)
 :layerProcessMutex(wxMUTEX_RECURSIVE),
 histogramMutex(wxMUTEX_RECURSIVE),
 prepareImageMutex(wxMUTEX_RECURSIVE),
 updateImageMutex(wxMUTEX_RECURSIVE),
-updateImagesMutex(wxMUTEX_RECURSIVE)
+updateImagesMutex(wxMUTEX_RECURSIVE),
+previewChannelManager(_previewChannelManager)
 {
     mainFrame = NULL;
     layerFrameManager = NULL;
@@ -211,8 +212,6 @@ updateImagesMutex(wxMUTEX_RECURSIVE)
 
     workerThread = NULL;
     renderWorkerThread = NULL;
-
-    renderer = NULL;
 
     firstLayerToUpdate = 0;
     lastValidLayer = -1;
@@ -523,7 +522,7 @@ void deLayerProcessor::updateImage()
 
 }
 
-void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame)
+void deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame)
 {
     lock();
 
@@ -544,7 +543,7 @@ void deLayerProcessor::updateImagesSmart(deChannelManager& channelManager, int v
                 int l = i->second;
                 if (l == previous)
                 {
-                    channelManager.tryDeallocateChannel(c);
+                    previewChannelManager.tryDeallocateChannel(c);
                 }
             }
         }
@@ -752,11 +751,6 @@ void deLayerProcessor::setLayerFrameManager(deLayerFrameManager* _layerFrameMana
     layerFrameManager = _layerFrameManager;
 }
 
-void deLayerProcessor::setRenderer(deRenderer* _renderer)
-{
-    renderer = _renderer;
-}
-
 bool deLayerProcessor::prepareImage()
 {
 
@@ -767,9 +761,9 @@ bool deLayerProcessor::prepareImage()
 
     if (!closing)
     {
-        if (renderer)
+        if ((viewManager) && (stack))
         {
-            result = renderer->prepareImage();
+            result = renderer.prepareImage(previewChannelManager, *viewManager, *this, *stack);
         }
     }
 
@@ -794,7 +788,7 @@ void deLayerProcessor::onGenerateHistogram()
     unlockHistogram();
 }
 
-void deLayerProcessor::setPreviewSize(deChannelManager& channelManager, const deSize& size)
+void deLayerProcessor::setPreviewSize(const deSize& size)
 {
     lockHistogram();
     lockPrepareImage();
@@ -802,7 +796,7 @@ void deLayerProcessor::setPreviewSize(deChannelManager& channelManager, const de
 
     logMessage("set preview size");
 
-    channelManager.setChannelSize(size);
+    previewChannelManager.setChannelSize(size);
 
     updateAllImages(false);
 
@@ -811,3 +805,7 @@ void deLayerProcessor::setPreviewSize(deChannelManager& channelManager, const de
     unlockHistogram();
 }
 
+void deLayerProcessor::render(wxDC& dc)
+{
+    renderer.render(dc);
+}

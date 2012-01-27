@@ -28,11 +28,11 @@ class deMemoryInfoFrame;
 class deLayer;
 class deLogger;
 class deLayerFrameManager;
-class deRenderer;
 #include <map>
 #include <wx/wx.h>
 #include "layer.h"
 #include "size.h"
+#include "renderer.h"
 
 class deLayerProcessor
 {
@@ -52,7 +52,8 @@ class deLayerProcessor
         wxMutex prepareImageMutex;
         wxMutex updateImageMutex;
         wxMutex updateImagesMutex;
-        deRenderer* renderer;
+        deRenderer renderer;
+        deChannelManager& previewChannelManager;
 
         bool closing;
 
@@ -89,7 +90,7 @@ class deLayerProcessor
 
 
     public:
-        deLayerProcessor();
+        deLayerProcessor(deChannelManager& _previewChannelManager);
         virtual ~deLayerProcessor();
 
         int getLastValidLayer() const {return lastValidLayer;};
@@ -100,7 +101,7 @@ class deLayerProcessor
         void setViewManager(deViewManager* _viewManager);
 
         void updateAllImages(bool calcHistogram);
-        void updateImagesSmart(deChannelManager& channelManager, int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame);
+        void updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame);
         void generateChannelUsage(std::map<int, int>& channelUsage);
 
         void markUpdateSingleChannel(int index, int channel);
@@ -130,16 +131,17 @@ class deLayerProcessor
 
         void sendRepaintEvent();
 
-        void setRenderer(deRenderer* _renderer);
         bool prepareImage();
 
         void generateHistogram();
         void onGenerateHistogram();
         void sendHistogramEvent();
 
-        void setPreviewSize(deChannelManager& channelManager, const deSize& size);
+        void setPreviewSize(const deSize& size);
 
         bool isClosing() const {return closing;};
+
+        void render(wxDC& dc);
 
 };
 

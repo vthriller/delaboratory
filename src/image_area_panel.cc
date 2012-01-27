@@ -20,6 +20,7 @@
 #include "size.h"
 #include "project.h"
 #include "image_panel.h"
+#include "channel_manager.h"
 
 void deImageAreaPanel::paint(wxPaintEvent& event)
 {

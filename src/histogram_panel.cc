@@ -25,6 +25,7 @@
 #include "image.h"
 #include "layer_processor.h"
 #include <wx/dcbuffer.h>
+#include "channel_manager.h"
 
 BEGIN_EVENT_TABLE(deHistogramPanel, wxPanel)
 EVT_PAINT(deHistogramPanel::paintEvent)

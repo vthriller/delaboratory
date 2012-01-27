@@ -26,6 +26,7 @@
 #include "layer_processor.h"
 #include "str.h"
 #include "logger.h"
+#include "channel_manager.h"
 
 bool renderImage(const deImage& image, unsigned char* data, deChannelManager& channelManager)
 {
@@ -273,11 +274,10 @@ void renderChannel(int c, unsigned char* data, deChannelManager& channelManager)
 
 }
 
-deRenderer::deRenderer(deProject& _project)
-:project(_project), size(0,0)
+deRenderer::deRenderer()
+:size(0,0)
 {
     image = NULL;
-    project.getLayerProcessor().setRenderer(this);
 }
 
 deRenderer::~deRenderer()
@@ -288,9 +288,8 @@ deRenderer::~deRenderer()
     }        
 }
 
-bool deRenderer::prepareImage()
+bool deRenderer::prepareImage(deChannelManager& channelManager, const deViewManager& viewManager, deLayerProcessor& layerProcessor, deLayerStack& layerStack)
 {
-    deChannelManager& channelManager = project.getPreviewChannelManager();
     const deSize& s = channelManager.getChannelSize();
 
     if ((s.getW() == 0) || (s.getH() == 0))
@@ -310,10 +309,8 @@ bool deRenderer::prepareImage()
         size = s;
     }
 
-    const deViewManager& viewManager = project.getViewManager();
-
     int viewV = viewManager.getView();
-    int view = project.getLayerProcessor().getLastValidLayer();
+    int view = layerProcessor.getLastValidLayer();
     if (view > viewV)
     {
 //        std::cout << "WARNING view was " << view << " while viewV was " << viewV << std::endl;
@@ -321,8 +318,6 @@ bool deRenderer::prepareImage()
     }
 
     assert(view >= 0);
-
-    deLayerStack& layerStack = project.getLayerStack();
 
     unsigned char* data = image->GetData();
 

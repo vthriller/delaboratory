@@ -23,6 +23,7 @@
 #include "rgb2xyz2lab.h"
 #include "layer_processor.h"
 #include "logger.h"
+#include "channel_manager.h"
 
 /*
 class deThread:public wxThread
@@ -56,7 +57,8 @@ class deLaboratory: public wxApp
     public:
         deLaboratory()
         :wxApp(),
-         project(processor)
+         processor(previewChannelManager),
+         project(processor, previewChannelManager, sourceChannelManager)
         {
         }
 
@@ -68,6 +70,8 @@ class deLaboratory: public wxApp
     	virtual bool OnInit();
     	virtual int OnExit();
         deMainFrame* frame;
+        deChannelManager previewChannelManager;
+        deChannelManager sourceChannelManager;
         deLayerProcessor processor;
         deProject project;
 
