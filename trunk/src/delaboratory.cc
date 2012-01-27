@@ -24,6 +24,7 @@
 #include "layer_processor.h"
 #include "logger.h"
 #include "channel_manager.h"
+#include "layer_stack.h"
 
 /*
 class deThread:public wxThread
@@ -57,8 +58,8 @@ class deLaboratory: public wxApp
     public:
         deLaboratory()
         :wxApp(),
-         processor(previewChannelManager),
-         project(processor, previewChannelManager, sourceChannelManager)
+         processor(previewChannelManager, layerStack),
+         project(processor, previewChannelManager, sourceChannelManager, layerStack)
         {
         }
 
@@ -70,6 +71,7 @@ class deLaboratory: public wxApp
     	virtual bool OnInit();
     	virtual int OnExit();
         deMainFrame* frame;
+        deLayerStack layerStack;
         deChannelManager previewChannelManager;
         deChannelManager sourceChannelManager;
         deLayerProcessor processor;

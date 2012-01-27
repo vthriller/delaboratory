@@ -19,7 +19,6 @@
 #ifndef _DE_PROJECT_H
 #define _DE_PROJECT_H
 
-#include "layer_stack.h"
 #include "sampler_manager.h"
 #include "view_manager.h"
 #include "layer_frame_manager.h"
@@ -27,6 +26,7 @@
 #include "image.h"
 #include <wx/progdlg.h>
 #include "size.h"
+#include <libxml/parser.h>
 
 class deImagePanel;
 class deHistogramPanel;
@@ -37,6 +37,7 @@ class deImageAreaPanel;
 class deMemoryInfoFrame;
 class deMainFrame;
 class deLayerProcessor;
+class deLayerStack;
 
 class deProject
 {
@@ -69,7 +70,7 @@ class deProject
 
         deImage sourceImage;
 
-        deLayerStack layerStack;
+        deLayerStack& layerStack;
 
         void loadLayers(xmlNodePtr root);
         void loadLayer(xmlNodePtr root);
@@ -82,7 +83,7 @@ class deProject
 
 
     public:
-        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager);
+        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager, deLayerStack& _layerStack);
         virtual ~deProject();
         void onKey(int key);
         void init(const std::string& fileName);

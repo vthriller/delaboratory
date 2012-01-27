@@ -23,9 +23,8 @@
 #include "memory_info_frame.h"
 #include "project.h"
 
-deLayerStack::deLayerStack(deProject& _project)
-:mutex(wxMUTEX_RECURSIVE),
-project(_project)
+deLayerStack::deLayerStack()
+:mutex(wxMUTEX_RECURSIVE)
 {
 }
 
@@ -41,7 +40,7 @@ void deLayerStack::lock() const
 
 void deLayerStack::unlock() const
 {
-    project.log("layer stack unlock");
+    logMessage("layer stack unlock");
     mutex.Unlock();
 }
 
@@ -55,7 +54,7 @@ void deLayerStack::clear()
 
 void deLayerStack::removeTopLayer()
 {
-    project.log("layer stack remove top layer...");
+    logMessage("layer stack remove top layer...");
     lock();
 
     std::vector<deLayer*>::iterator i;
@@ -67,16 +66,16 @@ void deLayerStack::removeTopLayer()
     unlock();
 
     layer->lockLayer();
-    project.log("layer stack before delete layer");
+    logMessage("layer stack before delete layer");
     delete layer;
-    project.log("layer stack after delete layer");
+    logMessage("layer stack after delete layer");
 //    layer->unlock();
 
 }
 
 void deLayerStack::addLayer(deLayer* layer)
 {
-    project.log("layer stack add layer");
+    logMessage("layer stack add layer");
     lock();
 
     layers.push_back(layer);
