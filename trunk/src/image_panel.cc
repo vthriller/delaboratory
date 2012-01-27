@@ -23,6 +23,7 @@
 #include "layer_processor.h"
 #include <iostream>
 #include "str.h"
+#include "layer_frame_manager.h"
 
 BEGIN_EVENT_TABLE(deImagePanel, wxPanel)
 EVT_PAINT(deImagePanel::paintEvent)

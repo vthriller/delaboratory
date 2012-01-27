@@ -34,6 +34,9 @@ class deLayerStack
         std::vector<deLayer*> layers;
         mutable wxMutex mutex;
 
+        deLayerStack(const deLayerStack& );
+        deLayerStack& operator = (const deLayerStack& );
+
     public:
         deLayerStack();
         virtual ~deLayerStack();
@@ -48,7 +51,6 @@ class deLayerStack
 
         int getSize() const;
         deLayer* getLayer(int id) const;
-
 
         void save(xmlNodePtr node);
 

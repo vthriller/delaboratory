@@ -26,6 +26,7 @@
 #include "layer_processor.h"
 #include "wx/notebook.h"
 #include "layer_stack.h"
+#include "layer_frame_manager.h"
 
 const int g_txt = 220;
 

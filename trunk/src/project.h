@@ -21,7 +21,6 @@
 
 #include "sampler_manager.h"
 #include "view_manager.h"
-#include "layer_frame_manager.h"
 #include "logger.h"
 #include "image.h"
 #include <wx/progdlg.h>
@@ -38,6 +37,8 @@ class deMemoryInfoFrame;
 class deMainFrame;
 class deLayerProcessor;
 class deLayerStack;
+class deLayerFrameManager;
+class deLayer;
 
 class deProject
 {
@@ -51,7 +52,7 @@ class deProject
         deMemoryInfoFrame* memoryInfoFrame;
         deViewManager viewManager;
         deSamplerManager samplerManager;
-        deLayerFrameManager layerFrameManager;
+        deLayerFrameManager& layerFrameManager;
 
         deChannelManager& previewChannelManager;
         deChannelManager& sourceChannelManager;
@@ -83,7 +84,7 @@ class deProject
 
 
     public:
-        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager, deLayerStack& _layerStack);
+        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager);
         virtual ~deProject();
         void onKey(int key);
         void init(const std::string& fileName);

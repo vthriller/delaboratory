@@ -43,7 +43,7 @@ class deLayerProcessor
         wxThread* workerThread;
         wxThread* renderWorkerThread;
         wxThread* histogramWorkerThread;
-        deLayerFrameManager* layerFrameManager;
+        deLayerFrameManager& layerFrameManager;
         wxSemaphore workerSemaphore;
         wxSemaphore renderWorkerSemaphore;
         wxSemaphore histogramWorkerSemaphore;
@@ -90,7 +90,7 @@ class deLayerProcessor
 
 
     public:
-        deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack);
+        deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager);
         virtual ~deLayerProcessor();
 
         int getLastValidLayer() const {return lastValidLayer;};
