@@ -304,7 +304,7 @@ void deLayerProcessor::setViewManager(deViewManager* _viewManager)
     viewManager = _viewManager;
 }
 
-void deLayerProcessor::repaintImageInLayerProcessor(bool calcHistogram)
+void deLayerProcessor::repaintImageInLayerProcessor()
 {
     if (closing)
     {
@@ -627,13 +627,13 @@ void deLayerProcessor::tickWork()
 
     if (ok)
     {
-        repaintImageInLayerProcessor(true);
+        repaintImageInLayerProcessor();
     }        
 }
 
 void deLayerProcessor::onChangeViewMode()
 {
-    repaintImageInLayerProcessor(true);
+    repaintImageInLayerProcessor();
 }    
 
 void deLayerProcessor::onGUIUpdate()
@@ -658,7 +658,7 @@ void deLayerProcessor::removeTopLayer()
         {
             viewManager->setView( layerStack.getSize() - 1 );
         }
-        repaintImageInLayerProcessor(true);
+        repaintImageInLayerProcessor();
         //unlock();
     }
 
