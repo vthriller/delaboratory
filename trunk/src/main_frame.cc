@@ -74,7 +74,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 {
     project.setMainFrame(this);
 
-    project.log("opening main frame");
+    project.log("creating main frame");
 
     std::string s = getApplicationName() + " " + getVersion() + " " + getCopyright();
 
@@ -182,6 +182,8 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deMainFrame::check));
 
     Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(deMainFrame::onCloseEvent));
+
+    project.log("main frame created");
 }
 
 void deMainFrame::hidePanels()
