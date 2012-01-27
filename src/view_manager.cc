@@ -47,14 +47,14 @@ int deViewManager::getView() const
 
 void deViewManager::setView(int v)
 {
-    project.log("view manager set view " + str(v) + " start");
+    logMessage("view manager set view " + str(v) + " start");
     hideMask();
-    project.log("view manager set view " + str(v) + " step a");
+    logMessage("view manager set view " + str(v) + " step a");
     int old = view;
     view = v;
-    project.log("view manager set view " + str(v) + " step b");
+    logMessage("view manager set view " + str(v) + " step b");
     project.onChangeView(old);
-    project.log("view manager set view " + str(v) + " end");
+    logMessage("view manager set view " + str(v) + " end");
 }
 
 void deViewManager::setSingleChannel(int _channel)

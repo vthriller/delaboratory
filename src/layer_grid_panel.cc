@@ -38,6 +38,8 @@
 
 #include "layer_stack.h"
 
+#include "layer_frame_manager.h"
+
 void deLayerGridPanel::buildRows()
 {
     project.log("build rows start");

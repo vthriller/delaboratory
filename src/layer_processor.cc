@@ -197,17 +197,17 @@ class deHistogramWorkerThread:public wxThread
 
 
 
-deLayerProcessor::deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack)
+deLayerProcessor::deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager)
 :layerProcessMutex(wxMUTEX_RECURSIVE),
 histogramMutex(wxMUTEX_RECURSIVE),
 prepareImageMutex(wxMUTEX_RECURSIVE),
 updateImageMutex(wxMUTEX_RECURSIVE),
 updateImagesMutex(wxMUTEX_RECURSIVE),
 previewChannelManager(_previewChannelManager),
-layerStack(_layerStack)
+layerStack(_layerStack),
+layerFrameManager(_layerFrameManager)
 {
     mainFrame = NULL;
-    layerFrameManager = NULL;
     viewManager = NULL;
 
     workerThread = NULL;
@@ -592,10 +592,7 @@ void deLayerProcessor::markUpdateAllChannels(int index)
     deLayer* layer = layerStack.getLayer(index);
     if (layer)
     {
-        if (layerFrameManager)
-        {
-            layerFrameManager->onUpdateProperties();
-        }                
+        layerFrameManager.onUpdateProperties();
     }        
 
     updateImages(index, -1, true);
@@ -720,11 +717,6 @@ int deLayerProcessor::getLastLayerToUpdate()
         int n = viewManager->getView();
         return n;
     }        
-}
-
-void deLayerProcessor::setLayerFrameManager(deLayerFrameManager* _layerFrameManager)
-{
-    layerFrameManager = _layerFrameManager;
 }
 
 bool deLayerProcessor::prepareImage()

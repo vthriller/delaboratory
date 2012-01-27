@@ -27,7 +27,6 @@ static wxMutex channelManagerMutex;
 deChannelManager::deChannelManager()
 :channelSize(0,0)
 {
-    //primaryIndex = -1;
 }
 
 deChannelManager::~deChannelManager()
@@ -38,14 +37,6 @@ deChannelManager::~deChannelManager()
         freeChannel(i);
     }
 }
-
-/*
-void deChannelManager::setPrimary(int index)
-{
-    assert(primaryIndex < 0);
-    primaryIndex = index;
-}
-*/
 
 void deChannelManager::setChannelSize(const deSize& size)
 {
