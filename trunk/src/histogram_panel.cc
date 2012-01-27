@@ -27,6 +27,7 @@
 #include <wx/dcbuffer.h>
 #include "channel_manager.h"
 #include "layer_stack.h"
+#include "str.h"
 
 BEGIN_EVENT_TABLE(deHistogramPanel, wxPanel)
 EVT_PAINT(deHistogramPanel::paintEvent)
@@ -92,9 +93,22 @@ void deHistogramPanel::generateHistogram()
     {
         const deImage& image = layer->getImage();
         int channelIndex = image.getChannelIndex(channel);
+
+        logMessage("generate histogram for channel " + str(channelIndex));
+
         deChannel* c = channelManager.getChannel(channelIndex);
 
+        if (!c)
+        {
+            logMessage("generate histogram - NULL channel");
+        }            
+
         int n = channelManager.getChannelSize().getN();
+
+        if (n <= 0)
+        {
+            logMessage("generate histogram - n: " + str(n));
+        }
 
         if ((c) && (n > 0))
         {

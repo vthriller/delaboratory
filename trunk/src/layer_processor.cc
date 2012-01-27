@@ -326,7 +326,7 @@ void deLayerProcessor::generateHistogram()
         return;
     }
 
-    logMessage("generateHistogram post...");
+    logMessage("generate histogram post...");
 
     histogramWorkerSemaphore.Post();
 }
