@@ -88,7 +88,6 @@ class deProject
         virtual ~deProject();
         void onKey(int key);
         void init(const std::string& fileName);
-        void addLayer(deLayer* layer);
         void resetLayerStack();
 
         deChannelManager& getPreviewChannelManager();
