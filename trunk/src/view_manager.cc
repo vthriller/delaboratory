@@ -31,9 +31,6 @@ deViewManager::deViewManager(deProject& _project, deLayerProcessor& _processor)
     showBlendMask = false;
     single = false;
     blendMaskChannel = 0;
-    scale = 1;
-    offsetX = 0;
-    offsetY = 0;
 }
 
 deViewManager::~deViewManager()
@@ -123,54 +120,6 @@ void deViewManager::setHistogramChannel(int channel)
     project.setHistogramChannel(channel);
 }
 
-void deViewManager::setScale(deValue _scale)
-{
-    scale = _scale;
-}
-
-deValue deViewManager::getScale() const
-{
-    return scale;
-}
-
-void deViewManager::setOffset(deValue x, deValue y)
-{
-    deValue s = 2.0 / scale;
-
-    offsetX += -s * x;
-    offsetY += -s * y;
-
-    if (offsetX < -1)
-    {
-        offsetX = -1;
-    }
-
-    if (offsetX > 1)
-    {
-        offsetX = 1;
-    }
-
-    if (offsetY < -1)
-    {
-        offsetY = -1;
-    }
-
-    if (offsetY > 1)
-    {
-        offsetY = 1;
-    }
-}
-
-deValue deViewManager::getOffsetX() const
-{
-    return offsetX;
-}
-
-deValue deViewManager::getOffsetY() const
-{
-    return offsetY;
-}
-
 deValue deViewManager::getRealScale() const
 {
     deSize ps = project.getPreviewChannelManager().getChannelSize();
@@ -185,7 +134,6 @@ deValue deViewManager::getRealScale() const
         s = sy;
     }
 
-    s *= scale;
     return s;
 }
 

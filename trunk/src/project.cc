@@ -363,7 +363,6 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
 
     // calculate final image in full size
     int view = viewManager.getView();
-    viewManager.setScale(1.0);
     previewChannelManager.setChannelSize(sourceChannelManager.getChannelSize());
     layerProcessor.updateImagesSmart(view, progressDialog, memoryInfoFrame);
 
@@ -429,12 +428,6 @@ bool deProject::samplersVisible() const
     {
         return true;
     }
-    /*
-    if (controlPanel)
-    {
-        return controlPanel->samplersVisible();
-    }
-    */
     return false;
 }
 
@@ -697,68 +690,6 @@ void deProject::updateMemoryInfo()
     if (memoryInfoFrame)
     {
         memoryInfoFrame->update();
-    }
-}
-
-/*
-void deProject::zoom(int a)
-{
-    deValue mul = 1.0;
-    if (a > 0)
-    {
-        mul = 1.0 + 0.005 * a;
-    }
-    else
-    {
-        mul = 1.0 + 0.002 * a;
-    }
-    deValue scale = viewManager.getScale() * mul;
-    if (scale < 1.0)
-    {
-        scale = 1.0;
-    }
-    if (scale > 100.0)
-    {
-        scale = 100.0;
-    }
-    viewManager.setScale(scale);
-    onScaleSet();
-}    
-
-void deProject::fullZoomOut()
-{
-    viewManager.setScale(1.0);
-    onScaleSet();
-}
-
-void deProject::maxZoom()
-{
-    viewManager.setScale(10);
-    onScaleSet();
-}
-
-void deProject::onScaleSet()
-{
-    layerProcessor.onDestroyAll();
-
-    previewChannelManager.destroyAllChannels();
-
-    imageAreaPanel->updateSize(false);
-
-    layerProcessor.updateAllImages(false);
-}
-*/
-
-void deProject::setViewOffset(deValue x, deValue y)
-{
-    if (viewManager.getScale() > 1.0)
-    {
-        layerProcessor.onDestroyAll();
-
-        viewManager.setOffset(x, y);
-        previewChannelManager.destroyAllChannels();
-
-        layerProcessor.updateAllImages(false);
     }
 }
 
