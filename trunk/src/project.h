@@ -96,7 +96,6 @@ class deProject
         deLayerStack& getLayerStack();
         deLayerProcessor& getLayerProcessor();
 
-        void setPreviewSize(const deSize& size, bool calcHistogram);
         bool isSourceValid() const;
 
         const deViewManager& getViewManager() const;

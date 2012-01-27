@@ -752,6 +752,12 @@ void deLayerProcessor::onGenerateHistogram()
 
 void deLayerProcessor::setPreviewSize(const deSize& size)
 {
+    deSize oldSize = previewChannelManager.getChannelSize();
+    if (oldSize == size)
+    {
+        return;
+    }
+
     lockHistogram();
     lockPrepareImage();
     lockUpdateImage();

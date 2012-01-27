@@ -21,6 +21,7 @@
 #include "project.h"
 #include "image_panel.h"
 #include "channel_manager.h"
+#include "layer_processor.h"
 
 void deImageAreaPanel::paint(wxPaintEvent& event)
 {
@@ -49,7 +50,7 @@ void deImageAreaPanel::updateSize(bool calcHistogram)
 
     deSize fit = fitInside(ps, ss, 1.0);
 
-    project.setPreviewSize(fit, calcHistogram);
+    project.getLayerProcessor().setPreviewSize(fit);
 
     imagePanel->SetSize(wxSize(fit.getW(), fit.getH()));
 }

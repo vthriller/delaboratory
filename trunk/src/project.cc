@@ -235,17 +235,6 @@ deLayerProcessor& deProject::getLayerProcessor()
     return layerProcessor;
 }
 
-void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
-{
-    deSize oldSize = previewChannelManager.getChannelSize();
-    if (oldSize == size)
-    {
-        return;
-    }
-
-    layerProcessor.setPreviewSize(size);
-}
-
 void deProject::onChangeView(int a)
 {
     logMessage("change view from " + str(a) + " start");
