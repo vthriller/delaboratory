@@ -277,7 +277,7 @@ deRenderer::deRenderer(deProject& _project)
 :project(_project), size(0,0)
 {
     image = NULL;
-    project.setRenderer(this);
+    project.getLayerProcessor().setRenderer(this);
 }
 
 deRenderer::~deRenderer()

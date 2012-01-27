@@ -37,7 +37,6 @@ class deImageAreaPanel;
 class deMemoryInfoFrame;
 class deMainFrame;
 class deLayerProcessor;
-class deRenderer;
 
 class deProject
 {
@@ -52,11 +51,9 @@ class deProject
         deViewManager viewManager;
         deSamplerManager samplerManager;
         deLayerFrameManager layerFrameManager;
-        deRenderer* renderer;
 
         deChannelManager previewChannelManager;
         deChannelManager sourceChannelManager;
-
 
         std::string imageFileName;
         std::string sourceImageFileName;
@@ -160,10 +157,6 @@ class deProject
 
         void addActionLayer(const std::string& action);
         void addConversionLayer(deColorSpace colorSpace);
-
-        void setRenderer(deRenderer* _renderer);
-
-
 
 };
 
