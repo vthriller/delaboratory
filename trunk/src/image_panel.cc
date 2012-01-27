@@ -108,7 +108,7 @@ bool deImagePanel::onRelease()
 }
 
 deImagePanel::deImagePanel(wxWindow* parent, deProject& _project)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), project(_project), renderer(project)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), project(_project)
 {
     clicked = false;
 
@@ -159,9 +159,7 @@ void deImagePanel::repaintImagePanel()
 
 void deImagePanel::render(wxDC& dc)
 {
-//    std::cout << "deImagePanel::render" << std::endl;
-//    renderer.prepareImage();
-    renderer.render(dc);
+    project.getLayerProcessor().render(dc);
     if (project.samplersVisible())
     {
         drawSamplers(dc);

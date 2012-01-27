@@ -42,14 +42,17 @@
 #include "main_frame.h"
 #include "layer_processor.h"
 #include "external_editor.h"
+#include "channel_manager.h"
 
 #define ICC_MESSAGE 0
 
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
 
-deProject::deProject(deLayerProcessor& _processor)
+deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager)
 :layerProcessor(_processor),
+ previewChannelManager(_previewChannelManager),
+ sourceChannelManager(_sourceChannelManager),
  viewModePanel(NULL),
  controlPanel(NULL),
  memoryInfoFrame(NULL),
@@ -239,7 +242,7 @@ void deProject::setPreviewSize(const deSize& size, bool calcHistogram)
         return;
     }
 
-    layerProcessor.setPreviewSize(previewChannelManager, size);
+    layerProcessor.setPreviewSize(size);
 }
 
 void deProject::onChangeView(int a)
@@ -361,7 +364,7 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
     int view = viewManager.getView();
     viewManager.setScale(1.0);
     previewChannelManager.setChannelSize(sourceChannelManager.getChannelSize());
-    layerProcessor.updateImagesSmart(previewChannelManager, view, progressDialog, memoryInfoFrame);
+    layerProcessor.updateImagesSmart(view, progressDialog, memoryInfoFrame);
 
     // take the final image
     deLayer* layer = layerStack.getLayer(view);

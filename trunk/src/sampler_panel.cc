@@ -23,6 +23,7 @@
 #include "convert_pixel.h"
 #include "image.h"
 #include <sstream>
+#include "channel_manager.h"
 
 deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject& _project)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition), sampler(_sampler), project(_project)
@@ -46,8 +47,6 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject&
 
     colorSpaceChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, colorSpaces.size(), colorSpaceStrings);
     sizerT->Add(colorSpaceChoice);
-
-    //sizerT->AddSpacer(50);
 
     colorPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(60, 25));
     sizerT->Add(colorPanel, 0, wxALIGN_CENTER);

@@ -21,12 +21,12 @@
 
 #include "layer_stack.h"
 #include "sampler_manager.h"
-#include "channel_manager.h"
 #include "view_manager.h"
 #include "layer_frame_manager.h"
 #include "logger.h"
 #include "image.h"
 #include <wx/progdlg.h>
+#include "size.h"
 
 class deImagePanel;
 class deHistogramPanel;
@@ -52,8 +52,8 @@ class deProject
         deSamplerManager samplerManager;
         deLayerFrameManager layerFrameManager;
 
-        deChannelManager previewChannelManager;
-        deChannelManager sourceChannelManager;
+        deChannelManager& previewChannelManager;
+        deChannelManager& sourceChannelManager;
 
         std::string imageFileName;
         std::string sourceImageFileName;
@@ -82,7 +82,7 @@ class deProject
 
 
     public:
-        deProject(deLayerProcessor& _processor);
+        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager);
         virtual ~deProject();
         void onKey(int key);
         void init(const std::string& fileName);

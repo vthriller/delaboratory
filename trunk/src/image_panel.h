@@ -29,7 +29,6 @@ class deImagePanel:public wxPanel
 private:
 	
     deProject& project;
-    deRenderer renderer;
     bool clicked;
 
 	void click(wxMouseEvent &event);
