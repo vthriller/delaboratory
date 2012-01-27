@@ -96,7 +96,6 @@ class deLayerProcessor
         int getLastValidLayer() const {return lastValidLayer;};
 
         void setMainFrame(deMainFrame* _mainFrame);
-        void setLayerFrameManager(deLayerFrameManager* _layerFrameManager);
         void setViewManager(deViewManager* _viewManager);
 
         void updateAllImages(bool calcHistogram);

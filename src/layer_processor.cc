@@ -234,11 +234,6 @@ void deLayerProcessor::onDestroyAll()
 deLayerProcessor::~deLayerProcessor()
 {
     logMessage("destroying layer processor");
-    /*
-    stopWorkerThread();
-    lock();
-    unlock();
-    */
 }
 
 void deLayerProcessor::setMainFrame(deMainFrame* _mainFrame)
@@ -426,7 +421,6 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
 
     lockLayers();
 
-    //if ((a == firstLayerToUpdate) && (layerProcessType == deLayerProcessSingleChannel))
     if (a == firstLayerToUpdate)
     {
         channel = -1;

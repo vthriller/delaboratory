@@ -47,7 +47,7 @@ void deImageAreaPanel::updateSize(bool calcHistogram)
 
     deViewManager& viewManager = project.getViewManager();
 
-    deSize fit = fitInside(ps, ss, viewManager.getScale());
+    deSize fit = fitInside(ps, ss, 1.0);
 
     project.setPreviewSize(fit, calcHistogram);
 

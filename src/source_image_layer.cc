@@ -66,9 +66,9 @@ void deSourceImageLayer::updateImage()
     const deSize ss = sourceChannelManager.getChannelSize();
     const deSize ds = previewChannelManager.getChannelSize();
 
-    deValue scale = viewManager.getScale();
-    deValue offsetX = viewManager.getOffsetX();
-    deValue offsetY = viewManager.getOffsetY();
+    deValue scale = 1.0;
+    deValue offsetX = 0.0;
+    deValue offsetY = 0.0;
 
     deValue centerX = (offsetX + 1.0) / 2.0;
     deValue centerY = (offsetY + 1.0) / 2.0;

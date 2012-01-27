@@ -141,11 +141,11 @@ class deProject
         void updateMemoryInfo();
 
         void setHistogramChannel(int channel);
-        void zoom(int a);
-        void setViewOffset(deValue x, deValue y);
+//        void zoom(int a);
+//        void setViewOffset(deValue x, deValue y);
 
-        void fullZoomOut();
-        void maxZoom();
+//        void fullZoomOut();
+//        void maxZoom();
 
         void setMainFrame(deMainFrame* _mainFrame);
 
