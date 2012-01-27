@@ -64,7 +64,6 @@ deProject::deProject(deLayerProcessor& _processor)
     histogramPanel = NULL;
     receiveKeys = true;
     showSamplers = false;
-    renderer = NULL;
 
     sourceImage.enableChannel(0);
     sourceImage.enableChannel(1);
@@ -893,8 +892,3 @@ void deProject::addRandomLayer()
     }
 }
 
-void deProject::setRenderer(deRenderer* _renderer)
-{
-    renderer = _renderer;
-    layerProcessor.setRenderer(renderer);
-}
