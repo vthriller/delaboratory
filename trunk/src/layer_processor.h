@@ -67,7 +67,7 @@ class deLayerProcessor
         void updateImages(int a, int channel, bool action);
         void updateImage();
 
-        void repaintImageInLayerProcessor(bool calcHistogram);
+        void repaintImageInLayerProcessor();
 
         deLayerProcessor(const deLayerProcessor&);
         deLayerProcessor& operator = (const deLayerProcessor&);
