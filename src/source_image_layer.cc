@@ -21,6 +21,7 @@
 #include "scale_channel.h"
 #include <iostream>
 #include "view_manager.h"
+#include "logger.h"
 
 deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deChannelManager& _sourceChannelManager, deImage& _sourceImage)
 :deLayer("source image", deColorSpaceRGB, _index, -1),
@@ -38,6 +39,8 @@ deSourceImageLayer::~deSourceImageLayer()
 
 void deSourceImageLayer::updateImage()
 {
+    logMessage("source image layer update image start");
+
     deChannel* sourceChannelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
     deChannel* sourceChannelG = sourceChannelManager.getChannel(sourceImage.getChannelIndex(1));
     deChannel* sourceChannelB = sourceChannelManager.getChannel(sourceImage.getChannelIndex(2));
@@ -139,6 +142,8 @@ void deSourceImageLayer::updateImage()
     channelR->unlockWrite();
     channelG->unlockWrite();
     channelB->unlockWrite();
+
+    logMessage("source image layer update image end");
 }
 
 const deImage& deSourceImageLayer::getImage() const

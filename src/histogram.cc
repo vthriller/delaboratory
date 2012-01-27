@@ -19,6 +19,7 @@
 #include "histogram.h"
 #include <iostream>
 #include "channel.h"
+#include "logger.h"
 
 deHistogram::deHistogram(int _size)
 :size(_size)
@@ -84,6 +85,8 @@ void deHistogram::calc(const deChannel* channel, int n)
         return;
     }
 
+    logMessage("histogram calc start");
+
     static int counter = 0;
 
     channel->lockRead();
@@ -103,6 +106,8 @@ void deHistogram::calc(const deChannel* channel, int n)
         }            
     }
     channel->unlockRead();
+
+    logMessage("histogram calc end");
 
 
 }
