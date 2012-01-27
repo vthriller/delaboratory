@@ -24,6 +24,7 @@
 #include "image.h"
 #include <sstream>
 #include "channel_manager.h"
+#include "layer_stack.h"
 
 deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject& _project)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition), sampler(_sampler), project(_project)

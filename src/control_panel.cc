@@ -25,6 +25,7 @@
 #include "file_dialogs.h"
 #include "layer_processor.h"
 #include "wx/notebook.h"
+#include "layer_stack.h"
 
 const int g_txt = 220;
 

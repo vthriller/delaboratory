@@ -197,17 +197,17 @@ class deHistogramWorkerThread:public wxThread
 
 
 
-deLayerProcessor::deLayerProcessor(deChannelManager& _previewChannelManager)
+deLayerProcessor::deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack)
 :layerProcessMutex(wxMUTEX_RECURSIVE),
 histogramMutex(wxMUTEX_RECURSIVE),
 prepareImageMutex(wxMUTEX_RECURSIVE),
 updateImageMutex(wxMUTEX_RECURSIVE),
 updateImagesMutex(wxMUTEX_RECURSIVE),
-previewChannelManager(_previewChannelManager)
+previewChannelManager(_previewChannelManager),
+layerStack(_layerStack)
 {
     mainFrame = NULL;
     layerFrameManager = NULL;
-    stack = NULL;
     viewManager = NULL;
 
     workerThread = NULL;
@@ -304,11 +304,6 @@ void deLayerProcessor::startWorkerThread()
     }
 }
 
-void deLayerProcessor::setLayerStack(deLayerStack* _layerStack)
-{
-    stack = _layerStack;
-}
-
 void deLayerProcessor::setViewManager(deViewManager* _viewManager)
 {
     viewManager = _viewManager;
@@ -371,10 +366,7 @@ void deLayerProcessor::sendHistogramEvent()
 
 void deLayerProcessor::updateAllImages(bool calcHistogram)
 {
-    if (stack)
-    {
-        updateImages(0, -1, true);
-    }        
+    updateImages(0, -1, true);
 }    
 
 void deLayerProcessor::lockLayers()
@@ -487,14 +479,14 @@ void deLayerProcessor::updateImage()
     deLayerProcessType type = deLayerProcessInvalid;
     int channel = -1;
 
-    stack->lock();
+    layerStack.lock();
 
-    deLayer* layer = stack->getLayer(i);
+    deLayer* layer = layerStack.getLayer(i);
     if ((layer) && (ok))
     {
 
         layer->lockLayer();
-        stack->unlock();
+        layerStack.unlock();
 
         type = layerProcessType;
         channel = layerProcessChannel;
@@ -506,7 +498,7 @@ void deLayerProcessor::updateImage()
     }            
     else
     {
-        stack->unlock();
+        layerStack.unlock();
     }
 
     unlockLayers();
@@ -548,7 +540,7 @@ void deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
             }
         }
 
-        deLayer* layer = stack->getLayer(index);
+        deLayer* layer = layerStack.getLayer(index);
         std::string label = str(index) + " " + layer->getName();
 
         progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
@@ -581,10 +573,10 @@ void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
 {
     channelUsage.clear();
     int i;
-    int n = stack->getSize();
+    int n = layerStack.getSize();
     for (i = 0; i < n; i++)
     {
-        deLayer* layer = stack->getLayer(i);
+        deLayer* layer = layerStack.getLayer(i);
         layer->updateChannelUsage(channelUsage);
     }
 }
@@ -597,16 +589,13 @@ void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 
 void deLayerProcessor::markUpdateAllChannels(int index)
 {
-    if (stack)
+    deLayer* layer = layerStack.getLayer(index);
+    if (layer)
     {
-        deLayer* layer = stack->getLayer(index);
-        if (layer)
+        if (layerFrameManager)
         {
-            if (layerFrameManager)
-            {
-                layerFrameManager->onUpdateProperties();
-            }                
-        }        
+            layerFrameManager->onUpdateProperties();
+        }                
     }        
 
     updateImages(index, -1, true);
@@ -638,11 +627,6 @@ void deLayerProcessor::tickWork()
 {
     bool ok = true;
 
-    if (!stack)
-    {
-        ok = false;
-    }
-
     if (ok)
     {
         updateImage();
@@ -672,16 +656,16 @@ void deLayerProcessor::removeTopLayer()
     lockPrepareImage();
     lockUpdateImage();
 
-    int index = stack->getSize() - 1;
+    int index = layerStack.getSize() - 1;
     logMessage("requested remove top layer " + str(index));
     if (index > 0)
     {
         //lock();
-        stack->removeTopLayer();
+        layerStack.removeTopLayer();
         int view = viewManager->getView();
-        if (view >= stack->getSize())
+        if (view >= layerStack.getSize())
         {
-            viewManager->setView( stack->getSize() - 1 );
+            viewManager->setView( layerStack.getSize() - 1 );
         }
         repaintImageInLayerProcessor(true);
         //unlock();
@@ -698,13 +682,10 @@ void deLayerProcessor::addLayer(deLayer* layer)
 
     logMessage("add layer " + str(layer->getIndex()) + " " +  layer->getName());
 
-    if (stack)
-    {
-        stack->addLayer(layer);
+    layerStack.addLayer(layer);
 
-        int index = layer->getIndex();
-        markUpdateAllChannels(index);
-    }
+    int index = layer->getIndex();
+    markUpdateAllChannels(index);
 
 //    unlock();
 }    
@@ -716,11 +697,6 @@ void deLayerProcessor::checkUpdateImagesRequest()
     bool ok = true;
 
     if (firstLayerToUpdate > getLastLayerToUpdate())
-    {
-        ok = false;
-    }
-
-    if (!stack)
     {
         ok = false;
     }
@@ -761,9 +737,9 @@ bool deLayerProcessor::prepareImage()
 
     if (!closing)
     {
-        if ((viewManager) && (stack))
+        if (viewManager) 
         {
-            result = renderer.prepareImage(previewChannelManager, *viewManager, *this, *stack);
+            result = renderer.prepareImage(previewChannelManager, *viewManager, *this, layerStack);
         }
     }
 

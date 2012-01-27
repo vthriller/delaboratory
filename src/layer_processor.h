@@ -38,7 +38,7 @@ class deLayerProcessor
 {
     private:
         deMainFrame* mainFrame;
-        deLayerStack* stack;
+        deLayerStack& layerStack;
         deViewManager* viewManager;
         wxThread* workerThread;
         wxThread* renderWorkerThread;
@@ -90,14 +90,13 @@ class deLayerProcessor
 
 
     public:
-        deLayerProcessor(deChannelManager& _previewChannelManager);
+        deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack);
         virtual ~deLayerProcessor();
 
         int getLastValidLayer() const {return lastValidLayer;};
 
         void setMainFrame(deMainFrame* _mainFrame);
         void setLayerFrameManager(deLayerFrameManager* _layerFrameManager);
-        void setLayerStack(deLayerStack* _layerStack);
         void setViewManager(deViewManager* _viewManager);
 
         void updateAllImages(bool calcHistogram);

@@ -20,6 +20,7 @@
 #include "project.h"
 #include "convert_image.h"
 #include "layer_processor.h"
+#include "layer_stack.h"
 
 deConversionLayer::deConversionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
 :deLayer("conversion", _colorSpace, _index, _sourceLayer), 

@@ -27,6 +27,7 @@
 #include "str.h"
 #include "logger.h"
 #include "channel_manager.h"
+#include "layer_stack.h"
 
 bool renderImage(const deImage& image, unsigned char* data, deChannelManager& channelManager)
 {

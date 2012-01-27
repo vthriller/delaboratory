@@ -43,13 +43,14 @@
 #include "layer_processor.h"
 #include "external_editor.h"
 #include "channel_manager.h"
+#include "layer_stack.h"
 
 #define ICC_MESSAGE 0
 
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
 
-deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager)
+deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager, deLayerStack& _layerStack)
 :layerProcessor(_processor),
  previewChannelManager(_previewChannelManager),
  sourceChannelManager(_sourceChannelManager),
@@ -60,7 +61,7 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
  samplerManager(*this, _processor),
  mainFrame(NULL),
  sourceImage(deColorSpaceRGB, sourceChannelManager),
- layerStack(*this)
+ layerStack(_layerStack)
 {
     imageFileName = "";
     sourceImageFileName = "";
@@ -77,7 +78,6 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
 
     log("project started");
 
-    layerProcessor.setLayerStack(&layerStack);
     layerProcessor.setLayerFrameManager(&layerFrameManager);
     layerProcessor.setViewManager(&viewManager);
 

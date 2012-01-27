@@ -22,6 +22,7 @@
 #include "layer_processor.h"
 #include "str.h"
 #include "channel_manager.h"
+#include "layer_stack.h"
 
 deViewManager::deViewManager(deProject& _project, deLayerProcessor& _processor)
 :project(_project), layerProcessor(_processor)

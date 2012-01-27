@@ -36,6 +36,8 @@
 
 #include "str.h"
 
+#include "layer_stack.h"
+
 void deLayerGridPanel::buildRows()
 {
     project.log("build rows start");
