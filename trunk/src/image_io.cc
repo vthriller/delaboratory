@@ -21,19 +21,24 @@
 #include <wx/wx.h>
 #include "channel.h"
 #include "conversion_functions.h"
+#include "logger.h"
 
 bool checkTIFF(const std::string& fileName)
 {
     wxLogNull noerrormessages;
 
+    logMessage("checkTIFF " + fileName);
+
     TIFF* tif = TIFFOpen(fileName.c_str(), "r");
     if (!tif)
     {
+        logMessage(fileName + " is not valid TIFF");
         return false;
     }
     else
     {
         TIFFClose(tif);
+        logMessage(fileName + " is valid TIFF");
         return true;
     }
 }    
@@ -42,12 +47,23 @@ bool checkJPEG(const std::string& fileName)
 {
     wxLogNull noerrormessages;
 
+    logMessage("checkJPEG " + fileName);
+
     wxImage image;
 
     const char* c = fileName.c_str();
     wxString s(c, wxConvUTF8);
 
     bool result = image.LoadFile(s, wxBITMAP_TYPE_JPEG);
+
+    if (result)
+    {
+        logMessage(fileName + " is valid JPEG");
+    }
+    else
+    {
+        logMessage(fileName + " is not valid JPEG");
+    }
 
     return result;
 }   
@@ -88,6 +104,8 @@ deSize getJPEGSize( const std::string& fileName)
 
 void loadTIFF(const std::string& fileName, deChannel& channelR, deChannel& channelG, deChannel& channelB, bool& icc)
 {
+    logMessage("loadTIFF " + fileName);
+
     TIFF* tif = TIFFOpen(fileName.c_str(), "r");
     if (!tif)
     {
@@ -197,10 +215,13 @@ void loadTIFF(const std::string& fileName, deChannel& channelR, deChannel& chann
 
     _TIFFfree(buf);
     TIFFClose(tif);
+    logMessage("loadTIFF " + fileName + " done");
 }
 
 void loadJPEG(const std::string& fileName, deChannel& channelR, deChannel& channelG, deChannel& channelB)
 {
+    logMessage("loadJPEG " + fileName);
+
     const char* c = fileName.c_str();
     wxString s(c, wxConvUTF8);
     wxImage image;
@@ -224,11 +245,6 @@ void loadJPEG(const std::string& fileName, deChannel& channelR, deChannel& chann
         for (x = 0; x < w; x++)
         {
 
-        /*
-            deValue r = image.GetRed(x, y) / 255.0; 
-            deValue g = image.GetGreen(x, y) / 255.0; 
-            deValue b = image.GetBlue(x, y) / 255.0; 
-        */            
             deValue r = data[p] / 255.0; 
             p++;
             deValue g = data[p] / 255.0; 
@@ -245,6 +261,8 @@ void loadJPEG(const std::string& fileName, deChannel& channelR, deChannel& chann
     channelR.unlockWrite();
     channelG.unlockWrite();
     channelB.unlockWrite();
+
+    logMessage("loadJPEG " + fileName + " done");
 
 }
 
