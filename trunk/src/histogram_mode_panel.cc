@@ -27,7 +27,6 @@
 void deHistogramModePanel::select(wxCommandEvent &event)
 {
     int i = event.GetId();
-    deHistogramPanel* histogramPanel = project.getHistogramPanel();
 
     int j;
     for (j = 0; j < 4; j++)
@@ -41,8 +40,8 @@ void deHistogramModePanel::select(wxCommandEvent &event)
 
 }
 
-deHistogramModePanel::deHistogramModePanel(wxWindow* parent, deProject& _project)
-:wxPanel(parent), project(_project)
+deHistogramModePanel::deHistogramModePanel(wxWindow* parent, deProject& _project, deHistogramPanel* _histogramPanel)
+:wxPanel(parent), project(_project), histogramPanel(_histogramPanel)
 {
     project.setHistogramModePanel(this);
 
@@ -59,7 +58,7 @@ deHistogramModePanel::deHistogramModePanel(wxWindow* parent, deProject& _project
     }        
 
     updateNames();
-    updateMode();
+    updateMode(0);
 
     Connect(wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler(deHistogramModePanel::select));
 }
@@ -96,12 +95,9 @@ void deHistogramModePanel::updateNames()
     SetFocus();
 }
 
-void deHistogramModePanel::updateMode()
+void deHistogramModePanel::updateMode(int c)
 {
-    deHistogramPanel* histogramPanel = project.getHistogramPanel();
-
-    int c = histogramPanel->getChannel();
-
+    histogramPanel->setChannel(c);
     buttons[c]->SetValue(1);
 }
 

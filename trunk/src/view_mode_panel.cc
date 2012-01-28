@@ -21,6 +21,7 @@
 #include "color_space.h"
 #include "project.h"
 #include <iostream>
+#include "logger.h"
 
 void deViewModePanel::select(wxCommandEvent &event)
 {
@@ -78,6 +79,8 @@ deViewModePanel::~deViewModePanel()
 
 void deViewModePanel::updateNames()
 {
+    logMessage("update names in view mode panel");
+
     deViewManager& viewManager = project.getViewManager();
 
     deColorSpace colorSpace = viewManager.getColorSpace();
@@ -116,6 +119,8 @@ void deViewModePanel::updateNames()
 
 void deViewModePanel::updateMode()
 {
+    logMessage("update mode in view mode panel");
+
     deViewManager& viewManager = project.getViewManager();
 
     if (viewManager.isSingleChannel())

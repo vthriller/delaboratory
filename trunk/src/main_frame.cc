@@ -112,7 +112,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     histogramPanel = new deHistogramPanel(hPanel, &project);
     sizerH->Add(histogramPanel, 0, wxCENTER);
 
-    deHistogramModePanel* histogramModePanel = new deHistogramModePanel(hPanel, project);
+    deHistogramModePanel* histogramModePanel = new deHistogramModePanel(hPanel, project, histogramPanel);
     sizerH->Add(histogramModePanel, 0, wxLEFT);
 
     rightSizer->Add(hPanel, 0, wxEXPAND);

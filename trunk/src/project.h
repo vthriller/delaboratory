@@ -64,7 +64,6 @@ class deProject
 
         bool showSamplers;
 
-        deHistogramPanel* histogramPanel;
         deHistogramModePanel* histogramModePanel;
         deImageAreaPanel* imageAreaPanel;
         deMainFrame* mainFrame;
@@ -116,13 +115,10 @@ class deProject
         void disableKeys();
         void enableKeys();
 
-        void setHistogramPanel(deHistogramPanel* _histogramPanel);
         void setViewModePanel(deViewModePanel* _viewModePanel);
         void setHistogramModePanel(deHistogramModePanel* _histogramModePanel);
         void setControlPanel(deControlPanel* _controlPanel);
         void onChangeViewMode();
-
-        deHistogramPanel* getHistogramPanel();
 
         bool samplersVisible() const;
         void save(const std::string& fileName, bool image);

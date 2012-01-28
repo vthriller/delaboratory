@@ -51,9 +51,11 @@ void deSourceImageLayer::updateImage()
         return;
     }
 
+    logMessage("enabling channels...");
     image.enableChannel(0);
     image.enableChannel(1);
     image.enableChannel(2);
+    logMessage("enabled channels");
 
     deChannel* channelR = previewChannelManager.getChannel(image.getChannelIndex(0));
     deChannel* channelG = previewChannelManager.getChannel(image.getChannelIndex(1));
