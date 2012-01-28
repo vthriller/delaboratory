@@ -21,11 +21,11 @@
 #include <iostream>
 #include <wx/wx.h>
 #include "logger.h"
-
-static wxMutex channelManagerMutex;
+#include "str.h"
 
 deChannelManager::deChannelManager()
-:channelSize(0,0)
+:channelSize(0,0),
+mutex(wxMUTEX_RECURSIVE)
 {
 }
 
@@ -40,8 +40,12 @@ deChannelManager::~deChannelManager()
 
 void deChannelManager::setChannelSize(const deSize& size)
 {
+    lock();
+
     channelSize = size;
     destroyAllChannels();
+
+    unlock();
 }
 
 int deChannelManager::allocateNewChannel()
@@ -57,6 +61,7 @@ int deChannelManager::allocateNewChannel()
         int c = *i;
         trashed.erase(c);
         channels[c] = channel;
+        logMessage("reused trashed channel " + str(c));
         unlock();
         return c;
     }
@@ -64,6 +69,7 @@ int deChannelManager::allocateNewChannel()
     {
         channels.push_back(channel);
         int c = channels.size() - 1;
+        logMessage("added channel " + str(c));
         unlock();
         return c;
     }        
@@ -96,13 +102,17 @@ deChannel* deChannelManager::getChannel(int index)
     {
         return NULL;
     }
+    lock();
     assert((unsigned int)index < channels.size());
     tryAllocateChannel(index);
-    return channels[index];
+    deChannel* c = channels[index];
+    unlock();
+    return c;
 }
 
 void deChannelManager::destroyAllChannels()
 {
+    lock();
     unsigned int i;
     for (i = 0; i < channels.size(); i++)
     {
@@ -111,6 +121,7 @@ void deChannelManager::destroyAllChannels()
             tryDeallocateChannel(i);
         }            
     }
+    unlock();
 }
 
 deSize deChannelManager::getChannelSize() const
@@ -118,18 +129,19 @@ deSize deChannelManager::getChannelSize() const
     return channelSize;
 }
 
-void deChannelManager::lock()
+void deChannelManager::lock() const
 {
-    lockWithLog(channelManagerMutex, "channel manager mutex");
+    lockWithLog(mutex, "channel manager mutex");
 }
 
-void deChannelManager::unlock()
+void deChannelManager::unlock() const
 {
-    channelManagerMutex.Unlock();
+    mutex.Unlock();
 }
 
 int deChannelManager::getNumberOfAllocatedChannels() const
 {
+    lock();
     int n = 0;
     unsigned int i;
     for (i = 0; i < channels.size(); i++)
@@ -142,6 +154,7 @@ int deChannelManager::getNumberOfAllocatedChannels() const
             }
         }
     }
+    unlock();
     return n;
 }
 
@@ -155,6 +168,7 @@ void deChannelManager::tryAllocateChannel(int index)
     {
         if (!channels[index]->isAllocated())
         {
+            logMessage("allocate channel " + str(index));
             channels[index]->allocate(channelSize.getN());
         }
     }
@@ -172,6 +186,7 @@ void deChannelManager::tryDeallocateChannel(int index)
     {
         if (channels[index]->isAllocated())
         {
+            logMessage("deallocate channel " + str(index));
             channels[index]->deallocate();
         }
     }

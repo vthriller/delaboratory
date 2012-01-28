@@ -23,6 +23,7 @@
 #include <vector>
 #include <set>
 #include "channel.h"
+#include <wx/wx.h>
 
 class deImage;
 class deLogger;
@@ -31,6 +32,7 @@ class deChannelManager
 {
     private:
         deSize channelSize;
+        mutable wxMutex mutex;
 
         std::vector<deChannel*> channels;
         std::set<int> trashed;
@@ -38,8 +40,8 @@ class deChannelManager
         deChannelManager(const deChannelManager& m);
         deChannelManager& operator =(const deChannelManager& m);
 
-        void lock();
-        void unlock();
+        void lock() const;
+        void unlock() const;
         
     public:
         deChannelManager();

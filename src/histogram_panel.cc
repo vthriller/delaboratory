@@ -38,7 +38,6 @@ deHistogramPanel::deHistogramPanel(wxWindow* parent, deProject* _project)
 {
     channel = 0;
     generated = false;
-    project->setHistogramPanel(this);
 }
 
 deHistogramPanel::~deHistogramPanel()

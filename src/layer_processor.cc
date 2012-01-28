@@ -210,6 +210,7 @@ layerFrameManager(_layerFrameManager)
     mainFrame = NULL;
     viewManager = NULL;
 
+    histogramWorkerThread = NULL;
     workerThread = NULL;
     renderWorkerThread = NULL;
 
@@ -217,6 +218,7 @@ layerFrameManager(_layerFrameManager)
     lastValidLayer = -1;
 
     layerProcessType = deLayerProcessInvalid;
+    layerProcessChannel = -1;
 
     closing = false;
 

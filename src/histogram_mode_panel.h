@@ -23,20 +23,22 @@
 #include <vector>
 
 class deProject;
+class deHistogramPanel;
 
 class deHistogramModePanel:public wxPanel
 {
     private:
         std::vector<wxRadioButton*> buttons;
         deProject& project;
+        deHistogramPanel* histogramPanel;
 
         void select(wxCommandEvent &event);
     public:
-        deHistogramModePanel(wxWindow* parent, deProject& _project);
+        deHistogramModePanel(wxWindow* parent, deProject& _project, deHistogramPanel* _histogramPanel);
         virtual ~deHistogramModePanel();
 
         void updateNames();
-        void updateMode();
+        void updateMode(int c);
 
 };
 

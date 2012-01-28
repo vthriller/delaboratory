@@ -67,7 +67,6 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
 {
     imageFileName = "";
     sourceImageFileName = "";
-    histogramPanel = NULL;
     receiveKeys = true;
     showSamplers = false;
 
@@ -107,8 +106,7 @@ deProject::~deProject()
 
 void deProject::setHistogramChannel(int channel)
 {
-    histogramPanel->setChannel(channel);
-    histogramModePanel->updateMode();
+    histogramModePanel->updateMode(channel);
     layerProcessor.generateHistogram();
 }
 
@@ -376,11 +374,6 @@ void deProject::setLastView()
     viewManager.setView(n);
 }
 
-void deProject::setHistogramPanel(deHistogramPanel* _histogramPanel)
-{
-    histogramPanel = _histogramPanel;
-}
-
 void deProject::setViewModePanel(deViewModePanel* _viewModePanel)
 {
     viewModePanel = _viewModePanel;
@@ -567,11 +560,6 @@ void deProject::newProject()
 void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
 {
     imageAreaPanel = _imageAreaPanel;
-}
-
-deHistogramPanel* deProject::getHistogramPanel()
-{
-    return histogramPanel;
 }
 
 bool deProject::openImage(const std::string& fileName)
