@@ -64,7 +64,10 @@ void deImagePanel::move(wxMouseEvent &event)
 
     if (clicked)
     {
-        onMove(x,y);
+        if (onMove(x,y))
+        {
+            project.getLayerProcessor().onGUIUpdate();
+        }
     }        
 
 }
@@ -82,6 +85,10 @@ bool deImagePanel::onClick(deValue x, deValue y)
     {
         deSamplerManager& samplerManager = project.getSamplerManager();
         used = samplerManager.onClick(x, y);
+        if (used)
+        {
+            project.getLayerProcessor().onGUIUpdate();
+        }
     }            
 
     return used;

@@ -19,8 +19,7 @@
 #include "sampler_manager.h"
 #include "layer_processor.h"
 
-deSamplerManager::deSamplerManager(deLayerProcessor& _processor)
-:layerProcessor(_processor)
+deSamplerManager::deSamplerManager()
 {
     size = 5;
 
@@ -96,8 +95,6 @@ bool deSamplerManager::onClick(deValue x, deValue y)
         deSampler& s = samplers[selected];
         s.setPosition(x, y);
 
-        layerProcessor.onGUIUpdate();
-
         return true;
     }
 
@@ -112,15 +109,12 @@ bool deSamplerManager::onMove(deValue x, deValue y)
         return false;
     }
 
-//    std::cout << "on move " << x << " " << y << std::endl;
-
     if (selected >= 0)
     {
         deSampler& s = samplers[selected];
 
         if ((x < -0.01) || (y < -0.01) || (x>1.01) || (y>1.01))
         {
-//            std::cout << "disable" << std::endl;
             s.disable();
             selected = -1;
         }
@@ -128,8 +122,6 @@ bool deSamplerManager::onMove(deValue x, deValue y)
         {
             s.setPosition(x, y);
         }            
-
-        layerProcessor.onGUIUpdate();
 
         return true;
     }
@@ -142,12 +134,6 @@ bool deSamplerManager::onRelease()
     selected = -1;
 
     return true;
-}
-
-void deSamplerManager::setSelected(int s)
-{
-    selected = s;
-    layerProcessor.onGUIUpdate();
 }
 
 void deSamplerManager::setMoving(bool m)
