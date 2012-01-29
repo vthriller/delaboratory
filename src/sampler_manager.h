@@ -33,6 +33,9 @@ class deSamplerManager
         bool moving;
 
         bool select(deValue x, deValue y);
+
+        deSamplerManager(const deSamplerManager&);
+        deSamplerManager& operator =(const deSamplerManager&);
         
     public:
         deSamplerManager();

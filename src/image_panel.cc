@@ -83,7 +83,6 @@ bool deImagePanel::onClick(deValue x, deValue y)
 
     if (!used)
     {
-        deSamplerManager& samplerManager = project.getSamplerManager();
         used = samplerManager.onClick(x, y);
         if (used)
         {
@@ -100,7 +99,6 @@ bool deImagePanel::onMove(deValue x, deValue y)
 
     if (!used)
     {
-        deSamplerManager& samplerManager = project.getSamplerManager();
         used = samplerManager.onMove(x, y);
     }            
 
@@ -109,14 +107,13 @@ bool deImagePanel::onMove(deValue x, deValue y)
 
 bool deImagePanel::onRelease()
 {
-    deSamplerManager& samplerManager = project.getSamplerManager();
     samplerManager.onRelease();
 
     return false;
 }
 
-deImagePanel::deImagePanel(wxWindow* parent, deProject& _project)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), project(_project)
+deImagePanel::deImagePanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), project(_project), samplerManager(_samplerManager)
 {
     clicked = false;
 
@@ -181,7 +178,6 @@ void deImagePanel::drawSamplers(wxDC& dc)
     int h;
     GetSize(&w, &h);
 
-    deSamplerManager& samplerManager = project.getSamplerManager();
     int n = samplerManager.getNumberOfSamplers();
     int selected = samplerManager.getSelected();
 

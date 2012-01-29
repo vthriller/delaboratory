@@ -123,7 +123,7 @@ bool deLaboratory::OnInit()
 	int width = 1200;
 	int height = 960;
 
-	frame = new deMainFrame( wxSize(width,height), project, processor);
+	frame = new deMainFrame( wxSize(width,height), project, processor, samplerManager);
 
     if (argc > 1)
     {

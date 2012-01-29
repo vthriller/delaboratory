@@ -69,7 +69,7 @@ EVT_MENU(DE_HISTOGRAM_EVENT, deMainFrame::onHistogramEvent)
 EVT_MENU(DE_RANDOM_EVENT, deMainFrame::onRandomEvent)
 END_EVENT_TABLE()
 
-deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor)
+deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager)
 : wxFrame() , project(_project), layerProcessor(_layerProcessor)
 {
     project.setMainFrame(this);
@@ -100,7 +100,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     topSizer->Add(testButton);
     */
 
-    imageAreaPanel = new deImageAreaPanel(this, project);
+    imageAreaPanel = new deImageAreaPanel(this, project, _samplerManager);
     imageAreaPanel->SetSize(300,300);
     leftSizer->Add(imageAreaPanel, 1, wxEXPAND);
 
@@ -123,7 +123,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     layerGridPanel = new deLayerGridPanel(notebook, project, _layerProcessor);
 
     notebook->AddPage(layerGridPanel, _T("layers"));
-    samplersPanel = new deSamplersPanel(notebook, project);
+    samplersPanel = new deSamplersPanel(notebook, project, _samplerManager);
     notebook->AddPage(samplersPanel, _T("samplers"));
 
     controlPanel = new deControlPanel(this, project, _layerProcessor, layerGridPanel);

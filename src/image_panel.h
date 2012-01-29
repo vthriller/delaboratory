@@ -23,6 +23,7 @@
 #include "renderer.h"
 #include "value.h"
 class deProject;
+class deSamplerManager;
 
 class deImagePanel:public wxPanel
 {
@@ -30,6 +31,7 @@ private:
 	
     deProject& project;
     bool clicked;
+    deSamplerManager& samplerManager;
 
 	void click(wxMouseEvent &event);
 	void release(wxMouseEvent &event);
@@ -43,7 +45,7 @@ private:
     void drawSamplers(wxDC& dc);
 
 public:
-	deImagePanel(wxWindow* parent, deProject& _project);
+	deImagePanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager);
 	virtual ~deImagePanel();
 
 	void paintEvent(wxPaintEvent & evt);
