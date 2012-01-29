@@ -95,11 +95,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxPanel* viewModePanel = new deViewModePanel(topPanel, project);
     topSizer->Add(viewModePanel);
 
-/*
-    wxButton* testButton = new wxButton(topPanel, wxID_ANY, _T("random layers - for crash test"));
-    topSizer->Add(testButton);
-    */
-
     imageAreaPanel = new deImageAreaPanel(this, project, _samplerManager);
     imageAreaPanel->SetSize(300,300);
     leftSizer->Add(imageAreaPanel, 1, wxEXPAND);
@@ -134,8 +129,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     SetSizer(mainSizer);
 
     full = false;
-
-//    testThread = NULL;
 
     wxMenu *menuFile = new wxMenu;
     menuFile->Append( ID_NewProject, _("New project") );
@@ -178,7 +171,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     Layout();
 
     imageAreaPanel->SetFocus();
-    //Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMainFrame::test));
     Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deMainFrame::check));
 
     Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(deMainFrame::onCloseEvent));
@@ -401,57 +393,22 @@ class deTestThread:public wxThread
         }
 };
 
-/*
-void deMainFrame::test(wxCommandEvent& event)
-{
-    deChannelManager& channelManager = project.getPreviewChannelManager();
-    deChannel* channel = channelManager.getChannel(0);
-
-
-    testThread = new deTestThread(this, project);
-
-    if ( testThread->Create() != wxTHREAD_NO_ERROR )
-    {
-    }
-
-    if ( testThread->Run() != wxTHREAD_NO_ERROR )
-    {
-    }
-}
-    */
-
 void deMainFrame::repaintMainFrame(bool calcHistogram)
 {
     project.log("repaint main frame start");
-//    project.log("requested repaint main frame");
     if (!project.isSourceValid())
     {
         std::cout << "source not valid" << std::endl;
         return;
     }
 
-//    project.getLayerProcessor().lock();
-
     project.log("repaint main frame 1");
     imageAreaPanel->getImagePanel()->repaintImagePanel();
     project.log("repaint main frame 2");
-    //controlPanel->updateSamplerManagerFrame();
     project.log("repaint main frame 3");
     samplersPanel->update();
     project.log("repaint main frame 4");
     project.updateMemoryInfo();
-    /*
-    if (calcHistogram)
-    {
-        if (histogramPanel)
-        {
-            histogramPanel->generate();
-            histogramPanel->paint();
-        }
-    }
-    */
-
-//    project.getLayerProcessor().unlock();
     project.log("repaint main frame end");
 
 }

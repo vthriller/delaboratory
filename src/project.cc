@@ -67,7 +67,6 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
     imageFileName = "";
     sourceImageFileName = "";
     receiveKeys = true;
-    showSamplers = false;
 
     sourceImage.enableChannel(0);
     sourceImage.enableChannel(1);

@@ -61,8 +61,6 @@ class deProject
 
         bool receiveKeys;
 
-        bool showSamplers;
-
         deHistogramModePanel* histogramModePanel;
         deImageAreaPanel* imageAreaPanel;
         deMainFrame* mainFrame;
