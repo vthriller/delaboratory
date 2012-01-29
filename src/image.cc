@@ -18,10 +18,13 @@
 
 #include "image.h"
 #include "channel_manager.h"
+#include "logger.h"
+#include "str.h"
 
 deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelManager)
 :colorSpace(_colorSpace), channelManager(_channelManager)
 {
+    logMessage("create new image");
     int i;
     int s = getColorSpaceSize(colorSpace);
     for (i = 0; i < 4; i++)
@@ -40,6 +43,7 @@ deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelMana
 
 deImage::~deImage()
 {
+    logMessage("destroy image");
     int i;
     int s = getColorSpaceSize(colorSpace);
     for (i = 0; i < s; i++)
@@ -51,6 +55,7 @@ deImage::~deImage()
 
 void deImage::enableChannel(int n)
 {
+    logMessage("enable channel " + str(n) + " in image");
     assert(n >= 0);
     assert(n < 4);
     assert (channelsAllocated[n] >= 0);
@@ -60,6 +65,7 @@ void deImage::enableChannel(int n)
 
 void deImage::disableChannel(int n, int c)
 {
+    logMessage("disable channel " + str(n) + " in image, replace with " +str(c));
     assert(n >= 0);
     assert(n < 4);
     channelsVisible[n] = c;
