@@ -140,3 +140,8 @@ void deSamplerManager::setMoving(bool m)
 {
     moving = m;
 }
+
+bool deSamplerManager::getMoving() const
+{
+    return moving;
+}
