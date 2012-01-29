@@ -81,6 +81,8 @@ class deUpdateBlendThread:public wxThread
 
 void deActionLayer::updateActionAllChannels()
 {
+    logMessage("update action all channels start");
+
     int n = getColorSpaceSize(colorSpace);
     int i;
 
@@ -107,10 +109,14 @@ void deActionLayer::updateActionAllChannels()
         logMessage("waiting for update action thread for channel " + str(i));
         semaphore.Wait();
     }
+
+    logMessage("update action all channels end");
 }
 
 void deActionLayer::updateBlendAllChannels()
 {
+    logMessage("update blend all channels start");
+
     int n = getColorSpaceSize(colorSpace);
     int i;
 
@@ -135,6 +141,8 @@ void deActionLayer::updateBlendAllChannels()
     {
         semaphore.Wait();
     }
+
+    logMessage("update blend all channels end");
 
 }
 
