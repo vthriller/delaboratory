@@ -51,6 +51,8 @@ class deSamplerManager
         int getSelected() const {return selected;};
 
         void setMoving(bool m);
+
+        bool getMoving() const;
 };
 
 #endif

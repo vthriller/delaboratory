@@ -51,7 +51,7 @@
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
 
-deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deSamplerManager& _samplerManager)
+deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager)
 :layerProcessor(_processor),
  previewChannelManager(_previewChannelManager),
  sourceChannelManager(_sourceChannelManager),
@@ -59,7 +59,6 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
  controlPanel(NULL),
  memoryInfoFrame(NULL),
  viewManager(*this, _processor),
- samplerManager(_samplerManager),
  mainFrame(NULL),
  sourceImage(deColorSpaceRGB, sourceChannelManager),
  layerStack(_layerStack),
@@ -393,6 +392,7 @@ void deProject::onChangeViewMode()
     }
 }
 
+/*
 bool deProject::samplersVisible() const
 {
     if (showSamplers)
@@ -401,6 +401,7 @@ bool deProject::samplersVisible() const
     }
     return false;
 }
+*/
 
 void deProject::save(const std::string& fileName, bool image)
 {
@@ -665,11 +666,13 @@ void deProject::setMainFrame(deMainFrame* _mainFrame)
     mainFrame = _mainFrame;
 }
 
+/*
 void deProject::setShowSamplers(bool show)
 {
     showSamplers = show;
     samplerManager.setMoving(show);
 }
+*/
 
 bool deProject::isSourceValid() const
 {

@@ -165,7 +165,7 @@ void deImagePanel::repaintImagePanel()
 void deImagePanel::render(wxDC& dc)
 {
     project.getLayerProcessor().render(dc);
-    if (project.samplersVisible())
+    if (samplerManager.getMoving())
     {
         drawSamplers(dc);
     }        

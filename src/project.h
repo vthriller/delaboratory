@@ -51,7 +51,6 @@ class deProject
         deControlPanel* controlPanel;
         deMemoryInfoFrame* memoryInfoFrame;
         deViewManager viewManager;
-        deSamplerManager& samplerManager;
         deLayerFrameManager& layerFrameManager;
 
         deChannelManager& previewChannelManager;
@@ -83,7 +82,7 @@ class deProject
 
 
     public:
-        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deSamplerManager& _samplerManager);
+        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager);
         virtual ~deProject();
         void onKey(int key);
         void init(const std::string& fileName);
@@ -118,7 +117,7 @@ class deProject
         void setControlPanel(deControlPanel* _controlPanel);
         void onChangeViewMode();
 
-        bool samplersVisible() const;
+//        bool samplersVisible() const;
         void save(const std::string& fileName, bool image);
         void open(const std::string& fileName, bool image);
         bool openImage(const std::string& fileName);
@@ -138,7 +137,7 @@ class deProject
 
         void addRandomLayer();
 
-        void setShowSamplers(bool show);
+//        void setShowSamplers(bool show);
 
         deLayerFrameManager& getLayerFrameManager() {return layerFrameManager;};
 

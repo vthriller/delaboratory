@@ -67,6 +67,7 @@ void deSamplersPanel::update()
 void deSamplersPanel::check(wxCommandEvent &event)
 {
     bool checked = show->IsChecked();
-    project.setShowSamplers(checked);
+//    project.setShowSamplers(checked);
+    samplerManager.setMoving(checked);
     project.getLayerProcessor().onGUIUpdate();
 }
