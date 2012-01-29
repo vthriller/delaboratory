@@ -88,6 +88,7 @@ void deActionLayer::updateActionAllChannels()
 
     for (i = 0; i < n; i++)
     {
+        logMessage("creating update action thread for channel " + str(i));
         deUpdateActionThread* thread = new deUpdateActionThread(*this, i, semaphore);
 
         if ( thread->Create() != wxTHREAD_NO_ERROR )
@@ -103,6 +104,7 @@ void deActionLayer::updateActionAllChannels()
 
     for (i = 0; i < n; i++)
     {
+        logMessage("waiting for update action thread for channel " + str(i));
         semaphore.Wait();
     }
 }
