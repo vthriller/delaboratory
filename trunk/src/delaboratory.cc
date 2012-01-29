@@ -60,7 +60,7 @@ class deLaboratory: public wxApp
         deLaboratory()
         :wxApp(),
          processor(previewChannelManager, layerStack, layerFrameManager),
-         project(processor, previewChannelManager, sourceChannelManager, layerStack, layerFrameManager)
+         project(processor, previewChannelManager, sourceChannelManager, layerStack, layerFrameManager, samplerManager)
         {
         }
 
@@ -72,6 +72,7 @@ class deLaboratory: public wxApp
     	virtual bool OnInit();
     	virtual int OnExit();
         deMainFrame* frame;
+        deSamplerManager samplerManager;
         deLayerStack layerStack;
         deLayerFrameManager layerFrameManager;
         deChannelManager previewChannelManager;
