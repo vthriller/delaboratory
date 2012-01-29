@@ -262,11 +262,6 @@ deViewManager& deProject::getViewManager()
     return viewManager;
 }
 
-deSamplerManager& deProject::getSamplerManager() 
-{
-    return samplerManager;
-}
-
 void deProject::saveImage(const std::string& fileName, const deImage& image, const std::string& type)
 {
     if (image.getColorSpace() == deColorSpaceRGB)

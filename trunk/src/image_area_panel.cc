@@ -56,10 +56,10 @@ void deImageAreaPanel::updateSize(bool calcHistogram)
 }
 
 
-deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject& _project)
+deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager)
 :wxPanel(parent), project(_project)
 {   
-    imagePanel = new deImagePanel(this, project);
+    imagePanel = new deImagePanel(this, project, _samplerManager);
     project.setImageAreaPanel(this);
 
     Connect(wxEVT_SIZE, wxSizeEventHandler(deImageAreaPanel::resize));

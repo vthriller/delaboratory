@@ -22,6 +22,7 @@
 #include <wx/wx.h>
 class deProject;
 class deImagePanel;
+class deSamplerManager;
 
 class deImageAreaPanel:public wxPanel
 {
@@ -33,7 +34,7 @@ class deImageAreaPanel:public wxPanel
         deImagePanel* imagePanel;
 
     public:
-        deImageAreaPanel(wxWindow* parent, deProject& _project);
+        deImageAreaPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager);
         virtual ~deImageAreaPanel();
         
         void updateSize(bool calcHistogram);

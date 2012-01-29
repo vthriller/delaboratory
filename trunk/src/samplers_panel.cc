@@ -21,10 +21,9 @@
 #include "project.h"
 #include "layer_processor.h"
 
-deSamplersPanel::deSamplersPanel(wxWindow* parent, deProject& _project)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition), project(_project)
+deSamplersPanel::deSamplersPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition), project(_project), samplerManager(_samplerManager)
 {
-    deSamplerManager& samplerManager = project.getSamplerManager();
     unsigned int n = samplerManager.getNumberOfSamplers();
 
     unsigned int i;

@@ -22,6 +22,7 @@
 #include "wx/wx.h"
 class deProject;
 class deSamplerPanel;
+class deSamplerManager;
 #include <list>
 
 class deSamplersPanel:public wxPanel
@@ -30,11 +31,12 @@ private:
     deProject& project;
     std::list<deSamplerPanel*> panels;
     wxCheckBox* show;
+    deSamplerManager& samplerManager;
 
     void check(wxCommandEvent &event);
 
 public:
-	deSamplersPanel(wxWindow* parent, deProject& _project);
+	deSamplersPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager);
 	virtual ~deSamplersPanel();
 
     void update();

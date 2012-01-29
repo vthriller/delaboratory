@@ -27,6 +27,7 @@ class deControlPanel;
 class deHistogramPanel;
 class deLayerProcessor;
 class deSamplersPanel;
+class deSamplerManager;
 
 enum
 {
@@ -106,7 +107,7 @@ private:
     void check(wxCommandEvent &event);
 
 public:
-	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor);
+	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager);
 	~deMainFrame();
 
     void showPanels();

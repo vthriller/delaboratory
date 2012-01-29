@@ -99,8 +99,6 @@ class deProject
         const deViewManager& getViewManager() const;
         deViewManager& getViewManager();
 
-        deSamplerManager& getSamplerManager();
-
         void addLAB();
         void addRGB();
 
@@ -135,11 +133,6 @@ class deProject
         void updateMemoryInfo();
 
         void setHistogramChannel(int channel);
-//        void zoom(int a);
-//        void setViewOffset(deValue x, deValue y);
-
-//        void fullZoomOut();
-//        void maxZoom();
 
         void setMainFrame(deMainFrame* _mainFrame);
 
