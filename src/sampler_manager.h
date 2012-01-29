@@ -19,15 +19,12 @@
 #ifndef _DE_SAMPLER_MANAGER_H
 #define _DE_SAMPLER_MANAGER_H
 
-class deProject;
-class deLayerProcessor;
 #include "sampler.h"
 #include <vector>
 
 class deSamplerManager
 {
     private:
-        deLayerProcessor& layerProcessor;
         std::vector<deSampler> samplers;
 
         int selected;
@@ -36,21 +33,18 @@ class deSamplerManager
         bool moving;
 
         bool select(deValue x, deValue y);
-
         
     public:
-        deSamplerManager(deLayerProcessor& _processor);
+        deSamplerManager();
         virtual ~deSamplerManager();
 
         int getNumberOfSamplers() const {return samplers.size();};
         deSampler* getSampler(int index);
 
-        //bool onImageClick(deValue x, deValue y);
         bool onClick(deValue x, deValue y);
         bool onMove(deValue x, deValue y);
         bool onRelease();
 
-        void setSelected(int s);
         int getSelected() const {return selected;};
 
         void setMoving(bool m);

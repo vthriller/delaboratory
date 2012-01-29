@@ -59,7 +59,7 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
  controlPanel(NULL),
  memoryInfoFrame(NULL),
  viewManager(*this, _processor),
- samplerManager(_processor),
+ samplerManager(),
  mainFrame(NULL),
  sourceImage(deColorSpaceRGB, sourceChannelManager),
  layerStack(_layerStack),
