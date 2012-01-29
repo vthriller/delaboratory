@@ -54,6 +54,12 @@ void deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deCha
 
     deValue* destination = channel.getPixels();
 
+    if (!destination)
+    {
+        logMessage("ERROR channel pixels are NULL");
+        return;
+    }
+
     vignetteChannel(destination, size, centerX.get(), centerY.get(), radiusX.get(), radiusY.get(), light.get());
 
     logMessage("deVignetteLayer::processAction i=" + str(i) + " done");
