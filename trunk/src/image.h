@@ -34,6 +34,7 @@ class deImage
         deImage(const deImage& i);
         deImage& operator = (const deImage& i);
 
+
     public:
         deImage(const deColorSpace& _colorSpace, deChannelManager& _channelManager);
 
@@ -55,6 +56,7 @@ class deImage
 
         void lockRead() const;
         void unlockRead() const;
+
 
 };
 
