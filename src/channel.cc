@@ -104,6 +104,7 @@ void deChannel::allocate(int size)
 void deChannel::lockRead() const
 {
 #if CHANNEL_LOCKING
+    logMessage("channel read semaphore wait");
     readSemaphore.Wait();
 #endif    
 }
@@ -111,6 +112,7 @@ void deChannel::lockRead() const
 void deChannel::unlockRead() const
 {
 #if CHANNEL_LOCKING
+    logMessage("channel read semaphore post");
     readSemaphore.Post();
 #endif    
 }
@@ -118,6 +120,7 @@ void deChannel::unlockRead() const
 void deChannel::lockWrite()
 {
 #if CHANNEL_LOCKING
+    logMessage("channel read semaphore multiple wait");
     int i;
     for (i = 0; i < maxReaders; i++)
     {
