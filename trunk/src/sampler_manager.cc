@@ -17,11 +17,10 @@
 */
 
 #include "sampler_manager.h"
-#include "project.h"
 #include "layer_processor.h"
 
-deSamplerManager::deSamplerManager(deProject& _project, deLayerProcessor& _processor)
-:project(_project), layerProcessor(_processor)
+deSamplerManager::deSamplerManager(deLayerProcessor& _processor)
+:layerProcessor(_processor)
 {
     size = 5;
 
