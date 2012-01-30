@@ -35,6 +35,9 @@ class deHueSaturationFrame:public deLayerFrame
         deConversionBW2HueLayer& layer;
 
         wxButton* reset;
+        wxButton* preset1;
+        wxButton* preset2;
+        wxButton* preset3;
 
         void click(wxCommandEvent &event);
 

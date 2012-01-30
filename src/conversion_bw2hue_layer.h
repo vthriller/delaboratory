@@ -45,6 +45,7 @@ class deConversionBW2HueLayer:public deConversionLayer
         virtual std::string getActionName() {return "setup";};
 
         void reset();
+        void preset(deValue h);
 
 };
 

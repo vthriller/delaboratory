@@ -48,6 +48,15 @@ deHueSaturationFrame::deHueSaturationFrame(wxWindow *parent, deConversionBW2HueL
     reset = new wxButton(this, wxID_ANY, _T("reset"), wxDefaultPosition, wxSize(100,25));
     sizerB->Add(reset, 0);
 
+    preset1 = new wxButton(this, wxID_ANY, _T("sepia"), wxDefaultPosition, wxSize(100,25));
+    sizerB->Add(preset1, 0);
+
+    preset2 = new wxButton(this, wxID_ANY, _T("platine"), wxDefaultPosition, wxSize(100,25));
+    sizerB->Add(preset2, 0);
+
+    preset3 = new wxButton(this, wxID_ANY, _T("silver"), wxDefaultPosition, wxSize(100,25));
+    sizerB->Add(preset3, 0);
+
     Fit();
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deHueSaturationFrame::click));
@@ -66,6 +75,21 @@ void deHueSaturationFrame::click(wxCommandEvent &event)
     if (reset->GetId() == id)
     {
         hsLayer.reset();
+    }      
+
+    if (preset1->GetId() == id)
+    {
+        hsLayer.preset(0.075);
+    }      
+
+    if (preset2->GetId() == id)
+    {
+        hsLayer.preset(0.16);
+    }      
+
+    if (preset3->GetId() == id)
+    {
+        hsLayer.preset(0.6);
     }      
 
     hue->setFromProperty();
