@@ -62,7 +62,9 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
  mainFrame(NULL),
  sourceImage(deColorSpaceRGB, sourceChannelManager),
  layerStack(_layerStack),
- layerFrameManager(_layerFrameManager)
+ layerFrameManager(_layerFrameManager),
+ histogramModePanel(NULL),
+ imageAreaPanel(NULL)
 {
     imageFileName = "";
     sourceImageFileName = "";
@@ -104,7 +106,10 @@ deProject::~deProject()
 
 void deProject::setHistogramChannel(int channel)
 {
-    histogramModePanel->updateMode(channel);
+    if (histogramModePanel)
+    {
+        histogramModePanel->updateMode(channel);
+    }            
     layerProcessor.generateHistogram();
 }
 
@@ -184,7 +189,10 @@ void deProject::setTestImage(int s)
     imageFileName = "delaboratory_test_image";
 
     previewChannelManager.destroyAllChannels();
-    imageAreaPanel->updateSize(true);
+    if (imageAreaPanel)
+    {
+        imageAreaPanel->updateSize(true);
+    }        
     layerProcessor.updateAllImages(true);
 }
 
@@ -501,8 +509,6 @@ void deProject::loadLayers(xmlNodePtr root)
 
 void deProject::open(const std::string& fileName, bool image)
 {
-//    std::cout << "open " << fileName << std::endl;
-
     xmlDocPtr doc = xmlParseFile(fileName.c_str());
 
     if (!doc)
@@ -542,14 +548,20 @@ void deProject::open(const std::string& fileName, bool image)
     }        
 
     setLastView();
-    controlPanel->updateLayerGrid();
+    if (controlPanel)
+    {
+        controlPanel->updateLayerGrid();
+    }        
 }
 
 void deProject::newProject()
 {
     resetLayerStack();
     setLastView();
-    controlPanel->updateLayerGrid();
+    if (controlPanel)
+    {
+        controlPanel->updateLayerGrid();
+    }        
 }
 
 void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
@@ -631,7 +643,10 @@ bool deProject::openImage(const std::string& fileName)
     sourceImageFileName = fileName;
 
     previewChannelManager.destroyAllChannels();
-    imageAreaPanel->updateSize(true);
+    if (imageAreaPanel)
+    {
+        imageAreaPanel->updateSize(true);
+    }        
     layerProcessor.updateAllImages(true);
 
     return status;
@@ -700,7 +715,10 @@ void deProject::addActionLayer(const std::string& action)
         layerProcessor.addLayer(layer);
         setLastView();
 
-        controlPanel->updateLayerGrid();
+        if (controlPanel)
+        {
+            controlPanel->updateLayerGrid();
+        }                
     }
 }    
 
@@ -719,7 +737,10 @@ void deProject::addConversionLayer(deColorSpace colorSpace)
         layerProcessor.addLayer(layer);
         setLastView();
 
-        controlPanel->updateLayerGrid();
+        if (controlPanel)
+        {
+            controlPanel->updateLayerGrid();
+        }            
         
     }
 }        
@@ -733,7 +754,10 @@ void deProject::addRandomLayer()
         if (rand() % view > 3)
         {
             layerProcessor.removeTopLayer();
-            controlPanel->updateLayerGrid();
+            if (controlPanel)
+            {
+                controlPanel->updateLayerGrid();
+            }                
             return;
         }
     }
