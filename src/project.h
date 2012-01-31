@@ -115,7 +115,6 @@ class deProject
         void setControlPanel(deControlPanel* _controlPanel);
         void onChangeViewMode();
 
-//        bool samplersVisible() const;
         void save(const std::string& fileName, bool image);
         void open(const std::string& fileName, bool image);
         bool openImage(const std::string& fileName);
@@ -134,8 +133,6 @@ class deProject
         void setMainFrame(deMainFrame* _mainFrame);
 
         void addRandomLayer();
-
-//        void setShowSamplers(bool show);
 
         deLayerFrameManager& getLayerFrameManager() {return layerFrameManager;};
 
