@@ -22,8 +22,6 @@
 #include "value.h"
 #include <wx/wx.h>
 
-class deImage;
-
 class deChannel
 {
     private:

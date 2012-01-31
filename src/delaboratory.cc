@@ -26,12 +26,14 @@
 #include "channel_manager.h"
 #include "layer_stack.h"
 #include "layer_frame_manager.h"
+#include "static_image.h"
 
 class deLaboratory: public wxApp
 {	
     public:
         deLaboratory()
         :wxApp(),
+         sourceImage(deColorSpaceRGB),
          processor(previewChannelManager, layerStack, layerFrameManager),
          project(processor, previewChannelManager, sourceChannelManager, layerStack, layerFrameManager)
         {
@@ -51,6 +53,7 @@ class deLaboratory: public wxApp
         deLayerFrameManager layerFrameManager;
         deChannelManager previewChannelManager;
         deChannelManager sourceChannelManager;
+        deStaticImage sourceImage;
         deLayerProcessor processor;
         deProject project;
 
