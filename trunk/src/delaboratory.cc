@@ -27,33 +27,6 @@
 #include "layer_stack.h"
 #include "layer_frame_manager.h"
 
-/*
-class deThread:public wxThread
-{
-    private:
-        virtual void *Entry()
-        {
-            bool w = true;
-            while (w)
-            {
-                wxThread::Sleep(1000);
-                if (TestDestroy())
-                {
-                    w = false;
-                }
-            }
-            return NULL;
-        }
-    public:    
-        deThread()
-        {
-        }
-        virtual ~deThread()
-        {
-        }
-};
-*/
-
 class deLaboratory: public wxApp
 {	
     public:
@@ -62,6 +35,7 @@ class deLaboratory: public wxApp
          processor(previewChannelManager, layerStack, layerFrameManager),
          project(processor, previewChannelManager, sourceChannelManager, layerStack, layerFrameManager)
         {
+            frame = NULL;
         }
 
         ~deLaboratory()
@@ -80,8 +54,6 @@ class deLaboratory: public wxApp
         deLayerProcessor processor;
         deProject project;
 
-        //deThread* thread;
-
         virtual int FilterEvent(wxEvent& event);
 
 };
@@ -96,7 +68,10 @@ int deLaboratory::FilterEvent(wxEvent& event)
         if  (event.GetEventType()==wxEVT_KEY_DOWN )
         {
              project.onKey(((wxKeyEvent&)event).GetKeyCode());
-             frame->onKey(((wxKeyEvent&)event).GetKeyCode());
+             if (frame)
+             {
+                 frame->onKey(((wxKeyEvent&)event).GetKeyCode());
+             }                 
              return true;
         }
     }
@@ -108,7 +83,6 @@ int deLaboratory::FilterEvent(wxEvent& event)
 int deLaboratory::OnExit()
 {
     project.log("OnExit");
-    //thread->Delete();
     return 0;
 }   
 
@@ -118,8 +92,6 @@ bool deLaboratory::OnInit()
 
     wxInitAllImageHandlers();
 
-	//int width = 1024;
-	//int height = 880;
 	int width = 1200;
 	int height = 960;
 
@@ -135,18 +107,6 @@ bool deLaboratory::OnInit()
 	SetTopWindow(frame);
 
     initLAB();
-
-/*
-    thread = new deThread();
-
-    if ( thread->Create() != wxTHREAD_NO_ERROR )
-    {
-    }
-
-    if ( thread->Run() != wxTHREAD_NO_ERROR )
-    {
-    }
-    */
 
     logMessage("setMainFrame...");
 
