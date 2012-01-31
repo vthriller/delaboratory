@@ -399,17 +399,6 @@ void deProject::onChangeViewMode()
     }
 }
 
-/*
-bool deProject::samplersVisible() const
-{
-    if (showSamplers)
-    {
-        return true;
-    }
-    return false;
-}
-*/
-
 void deProject::save(const std::string& fileName, bool image)
 {
     std::string f = fileName;
@@ -679,14 +668,6 @@ void deProject::setMainFrame(deMainFrame* _mainFrame)
     log("set main frame in project");
     mainFrame = _mainFrame;
 }
-
-/*
-void deProject::setShowSamplers(bool show)
-{
-    showSamplers = show;
-    samplerManager.setMoving(show);
-}
-*/
 
 bool deProject::isSourceValid() const
 {
