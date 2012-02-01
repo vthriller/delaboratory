@@ -31,16 +31,19 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sour
  radiusY("radius_y"),
  centerX("center_x"),
  centerY("center_y"),
- light("light")
+ light("light"),
+ darkness("darkness")
 {
-    radiusX.setMin(0.1);
-    radiusX.setMax(2.0);
-    radiusY.setMin(0.1);
-    radiusY.setMax(2.0);
+    radiusX.setMin(0.01);
+    radiusX.setMax(0.7);
+    radiusY.setMin(0.01);
+    radiusY.setMax(0.7);
     centerX.setMin(-1);
     centerY.setMin(-1);
-    light.setMin(0.1);
+    light.setMin(0.0);
     light.setMax(1.0);
+    darkness.setMin(0.0);
+    darkness.setMax(1.0);
     reset();
 }
 
@@ -60,7 +63,7 @@ void deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deCha
         return;
     }
 
-    vignetteChannel(destination, size, centerX.get(), centerY.get(), radiusX.get(), radiusY.get(), light.get());
+    vignetteChannel(destination, size, centerX.get(), centerY.get(), radiusX.get(), radiusY.get(), light.get(), darkness.get());
 
     logMessage("deVignetteLayer::processAction i=" + str(i) + " done");
 }
@@ -73,12 +76,13 @@ bool deVignetteLayer::isChannelNeutral(int index)
 void deVignetteLayer::reset()
 {
     setBlendMode(deBlendOverlay);
-    setOpacity(0.5);
-    radiusX.set(1.0);
-    radiusY.set(1.0);
+    setOpacity(1.0);
+    radiusX.set(0.3);
+    radiusY.set(0.3);
     centerX.set(0.0);
     centerY.set(0.0);
-    light.set(0.5);
+    light.set(0.7);
+    darkness.set(0.2);
 }
 
 void deVignetteLayer::save(xmlNodePtr root)

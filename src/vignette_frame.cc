@@ -35,6 +35,9 @@ deVignetteFrame::deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLaye
     light = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyLight(), vignetteLayer, layerProcessor);
     sizer->Add(light);
 
+    darkness = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyDarkness(), vignetteLayer, layerProcessor);
+    sizer->Add(darkness);
+
     centerX = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyCenterX(), vignetteLayer, layerProcessor);
     sizer->Add(centerX);
 
@@ -74,6 +77,7 @@ void deVignetteFrame::click(wxCommandEvent &event)
     }      
 
     light->setFromProperty();
+    darkness->setFromProperty();
     radiusX->setFromProperty();
     radiusY->setFromProperty();
     centerX->setFromProperty();

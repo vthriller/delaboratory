@@ -22,7 +22,7 @@
 #include "logger.h"
 #include "str.h"
 
-void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue centerY, deValue radiusX, deValue radiusY, deValue light)
+void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue centerY, deValue radiusX, deValue radiusY, deValue light, deValue darkness)
 {
     logMessage("vignette channel cx: " + str(centerX) + " cy: " + str(centerY) + " rx: " + str(radiusX) + " ry: " + str(radiusY) + " l: " + str(light));
 
@@ -86,11 +86,8 @@ void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue
             x /= radiusX;
 
             deValue r = sqrt(x * x + y * y);
-            deValue v = light;
-            if (r > 0)
-            {
-                v = light - r;
-            }
+
+            deValue v = 1.0 - r;
             if (v < 0)
             {
                 v = 0;
@@ -99,7 +96,18 @@ void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue
             {
                 v = 1;
             }
-            destination[p] = v;
+
+            deValue vv = darkness + (light - darkness) * v;
+            if (vv < 0)
+            {
+                vv = 0;
+            }
+            if (vv > 1)
+            {
+                vv = 1;
+            }
+
+            destination[p] = vv;
             p++;
         }
     }
