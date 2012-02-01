@@ -22,6 +22,6 @@
 #include "value.h"
 #include "size.h"
 
-void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue centerY, deValue radiusX, deValue radiusY, deValue light);
+void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue centerY, deValue radiusX, deValue radiusY, deValue light, deValue darkness);
 
 #endif    
