@@ -54,6 +54,7 @@ deLogger::~deLogger()
 
 void deLogger::setFile(const std::string& fileName)
 {
+#ifdef LOGGING    
     mutex.Lock();
 
     if (f)
@@ -64,10 +65,12 @@ void deLogger::setFile(const std::string& fileName)
     f = new std::ofstream(fileName.c_str());
 
     mutex.Unlock();
+#endif    
 }
 
 void deLogger::setLocksFile(const std::string& fileName)
 {
+#ifdef LOGGING    
     mutex.Lock();
 
     if (fl)
@@ -78,6 +81,7 @@ void deLogger::setLocksFile(const std::string& fileName)
     fl = new std::ofstream(fileName.c_str());
 
     mutex.Unlock();
+#endif    
 }
 
 std::string deLogger::getThreadName()
@@ -144,15 +148,21 @@ int deLogger::getTime() const
 
 void logMessage(const std::string& message)
 {
+#ifdef LOGGING    
     deLogger::getLogger().log(message);
+#endif    
 }
 
 void lockWithLog(wxMutex& mutex, const std::string& message)
 {
+#ifdef LOGGING    
     deLogger& logger = deLogger::getLogger();
     int t1 = logger.getTime();
     logger.log(message + " lock");
     mutex.Lock();
     int t2 = logger.getTime();
     logger.logLock(message, t2-t1);
+#else    
+    mutex.Lock();
+#endif    
 }    

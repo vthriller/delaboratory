@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 #include "wx/wx.h"
 #include "project.h"
 #include "main_frame.h"
@@ -28,6 +29,10 @@
 #include "layer_frame_manager.h"
 #include "static_image.h"
 
+const std::string LOG_FILE_NAME = "debug.log";
+const std::string LOG_LOCKS_FILE_NAME = "locks.log";
+
+
 class deLaboratory: public wxApp
 {	
     public:
@@ -38,6 +43,9 @@ class deLaboratory: public wxApp
          project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage)
         {
             frame = NULL;
+            deLogger::getLogger().setFile(LOG_FILE_NAME);
+            deLogger::getLogger().setLocksFile(LOG_LOCKS_FILE_NAME);
+
         }
 
         ~deLaboratory()
