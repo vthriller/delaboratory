@@ -35,7 +35,7 @@ class deLaboratory: public wxApp
         :wxApp(),
          sourceImage(deColorSpaceRGB),
          processor(previewChannelManager, layerStack, layerFrameManager),
-         project(processor, previewChannelManager, sourceChannelManager, layerStack, layerFrameManager)
+         project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage)
         {
             frame = NULL;
         }
@@ -52,7 +52,6 @@ class deLaboratory: public wxApp
         deLayerStack layerStack;
         deLayerFrameManager layerFrameManager;
         deChannelManager previewChannelManager;
-        deChannelManager sourceChannelManager;
         deStaticImage sourceImage;
         deLayerProcessor processor;
         deProject project;

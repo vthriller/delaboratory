@@ -20,6 +20,7 @@
 #define _DE_STATIC_IMAGE_H
 
 #include "color_space.h"
+#include "size.h"
 class deChannel;
 
 class deStaticImage
@@ -27,10 +28,10 @@ class deStaticImage
     private:
         const deColorSpace colorSpace;
         std::vector<deChannel*> channels;
+        deSize size;
         
         deStaticImage(const deStaticImage& i);
         deStaticImage& operator = (const deStaticImage& i);
-
 
     public:
         deStaticImage(const deColorSpace& _colorSpace);
@@ -38,6 +39,11 @@ class deStaticImage
         virtual ~deStaticImage();
 
         deColorSpace getColorSpace() const;
+
+        deChannel* getChannel(int index);
+
+        void setSize(const deSize& _size);
+        deSize getSize() const;
 };
 
 #endif

@@ -68,6 +68,7 @@ void deMemoryInfoFrame::update()
         std::string s = str(m1) + "MB";
         previewMemory->SetLabel(wxString::FromAscii(s.c_str()));
     }        
+    /*
     {
         deChannelManager& channelManager = project.getSourceChannelManager();
         int size = sizeof(deValue) * channelManager.getChannelSize().getN();
@@ -83,6 +84,7 @@ void deMemoryInfoFrame::update()
     int m = m1 + m2;
     std::string s = str(m) + "MB";
     totalMemory->SetLabel(wxString::FromAscii(s.c_str()));
+    */
 
     Layout();
     Fit();
@@ -113,7 +115,8 @@ deMemoryInfoFrame::deMemoryInfoFrame(wxWindow *parent, deProject& _project)
         sizer->Add(l);
         previewMemory = new wxStaticText(this, wxID_ANY, _T(""));
         sizer->Add(previewMemory);
-    }        
+    }   
+    /*
     {
         wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("allocated source channels:"));
         sizer->Add(l);
@@ -137,7 +140,8 @@ deMemoryInfoFrame::deMemoryInfoFrame(wxWindow *parent, deProject& _project)
         sizer->Add(l);
         totalMemory = new wxStaticText(this, wxID_ANY, _T(""));
         sizer->Add(totalMemory);
-    }        
+    } 
+    */
 
     update();
 

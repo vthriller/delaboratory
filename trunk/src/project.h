@@ -39,6 +39,7 @@ class deLayerProcessor;
 class deLayerStack;
 class deLayerFrameManager;
 class deLayer;
+class deStaticImage;
 
 class deProject
 {
@@ -54,7 +55,6 @@ class deProject
         deLayerFrameManager& layerFrameManager;
 
         deChannelManager& previewChannelManager;
-        deChannelManager& sourceChannelManager;
 
         std::string imageFileName;
         std::string sourceImageFileName;
@@ -65,7 +65,7 @@ class deProject
         deImageAreaPanel* imageAreaPanel;
         deMainFrame* mainFrame;
 
-        deImage sourceImage;
+        deStaticImage& sourceImage;
 
         deLayerStack& layerStack;
 
@@ -80,14 +80,14 @@ class deProject
 
 
     public:
-        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager);
+        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage);
         virtual ~deProject();
         void onKey(int key);
         void init(const std::string& fileName);
         void resetLayerStack();
 
         deChannelManager& getPreviewChannelManager();
-        deChannelManager& getSourceChannelManager();
+        deSize getSourceImageSize();
         deLayerStack& getLayerStack();
         deLayerProcessor& getLayerProcessor();
 

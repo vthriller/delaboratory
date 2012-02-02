@@ -24,6 +24,7 @@ class deProject;
 #include "image.h"
 class deChannelManager;
 class deViewManager;
+class deStaticImage;
 
 class deSourceImageLayer:public deLayer
 {
@@ -32,16 +33,14 @@ class deSourceImageLayer:public deLayer
         deViewManager& viewManager;
 
         deImage image;
-        deImage& sourceImage;
-
-        deChannelManager& sourceChannelManager;
+        deStaticImage& sourceImage;
 
         virtual std::string getType() const {return "source_image";};
 
         virtual void updateImage();
 
     public:
-        deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deChannelManager& _sourceChannelManager, deImage& _sourceImage);
+        deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage);
         virtual ~deSourceImageLayer();
 
         virtual const deImage& getImage() const;
@@ -52,8 +51,6 @@ class deSourceImageLayer:public deLayer
         virtual void save(xmlNodePtr root) {saveCommon(root);};
 
         void setOffset(deValue x, deValue y);
-
-        deImage& getSourceImage();
 
         virtual bool randomize() {return false;};
 
