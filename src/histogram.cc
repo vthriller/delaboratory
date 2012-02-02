@@ -105,6 +105,7 @@ void deHistogram::calc(const deChannel* channel, int n)
             bars[bar] ++;    
         }            
     }
+
     channel->unlockRead();
 
     logMessage("histogram calc end");

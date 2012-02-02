@@ -111,12 +111,8 @@ void deHistogramPanel::generateHistogram()
 
         if ((c) && (n > 0))
         {
-            c->lockRead();
-
             histogram.clear();
             histogram.calc(c, n);
-
-            c->unlockRead();
         }            
     }        
 

@@ -275,8 +275,10 @@ void renderChannel(int c, unsigned char* data, deChannelManager& channelManager)
 
 }
 
-deRenderer::deRenderer()
-:size(0,0)
+deRenderer::deRenderer(deChannelManager& _channelManager)
+:size(0,0),
+ channelManager(_channelManager),
+ mutex(wxMUTEX_RECURSIVE)
 {
     image = NULL;
 }
@@ -289,7 +291,30 @@ deRenderer::~deRenderer()
     }        
 }
 
-bool deRenderer::prepareImage(deChannelManager& channelManager, const deViewManager& viewManager, deLayerProcessor& layerProcessor, deLayerStack& layerStack)
+unsigned char* deRenderer::getCurrentImageData()
+{
+    const deSize& s = channelManager.getChannelSize();
+
+    if (s != size)
+    {
+        if (image)
+        {
+            logMessage("delete image");
+            delete image;
+        }            
+        int w = s.getW();
+        int h = s.getH();
+        logMessage("create image " + str(w) + "x" + str(h));
+        image = new wxImage(w,h);
+        size = s;
+    }
+
+    unsigned char* data = image->GetData();
+
+    return data;
+}
+
+bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor& layerProcessor, deLayerStack& layerStack)
 {
     const deSize& s = channelManager.getChannelSize();
 
@@ -298,17 +323,7 @@ bool deRenderer::prepareImage(deChannelManager& channelManager, const deViewMana
         return false;
     }
 
-    if (s != size)
-    {
-        if (image)
-        {
-            delete image;
-        }            
-        int w = s.getW();
-        int h = s.getH();
-        image = new wxImage(w,h);
-        size = s;
-    }
+    lockWithLog(mutex, "renderer mutex");
 
     int viewV = viewManager.getView();
     int view = layerProcessor.getLastValidLayer();
@@ -320,11 +335,10 @@ bool deRenderer::prepareImage(deChannelManager& channelManager, const deViewMana
 
     assert(view >= 0);
 
-    unsigned char* data = image->GetData();
-
     if (viewManager.maskVisible())
     {
-        renderChannel(viewManager.getMaskChannel(), data, channelManager);
+        renderChannel(viewManager.getMaskChannel(), getCurrentImageData(), channelManager);
+
     }
     else
     {
@@ -332,6 +346,9 @@ bool deRenderer::prepareImage(deChannelManager& channelManager, const deViewMana
         deLayer* layer = layerStack.getLayer(view);
         if (!layer)
         {
+            logMessage("ERROR no layer");
+            logMessage("unlock renderer mutex");
+            mutex.Unlock();
             return false;
         }
         logMessage("renderer lock layer " +str(view));
@@ -346,11 +363,11 @@ bool deRenderer::prepareImage(deChannelManager& channelManager, const deViewMana
 
         if (viewManager.isSingleChannel())
         {
-            renderChannel(layerImage, viewManager.getChannel(), data, channelManager);
+            renderChannel(layerImage, viewManager.getChannel(), getCurrentImageData(), channelManager);
         }
         else
         {
-            if (!renderImage(layerImage, data, channelManager))
+            if (!renderImage(layerImage, getCurrentImageData(), channelManager))
             {
                 std::cout << "failed renderImage" << std::endl;
                 logMessage("render image FAILED");
@@ -362,22 +379,32 @@ bool deRenderer::prepareImage(deChannelManager& channelManager, const deViewMana
         layer->unlockLayer();
     }
 
+    logMessage("unlock renderer mutex");
+    mutex.Unlock();
+
     return true;
 }
 
 bool deRenderer::render(wxDC& dc)
 {
+    lockWithLog(mutex, "renderer mutex");
+
+    bool result = false;
+
     if (image)
     {
         wxBitmap bitmap(*image);
         dc.DrawBitmap(bitmap, 0, 0, false);
+        result = true;
     }
     else
     {
         logMessage("renderer - no image");
-        return false;
     }
 
-    return true;
+    logMessage("unlock renderer mutex");
+    mutex.Unlock();
+
+    return result;
 }
 
