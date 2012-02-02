@@ -99,14 +99,23 @@ bool deLaboratory::OnInit()
 
 	frame = new deMainFrame( wxSize(width,height), project, processor, samplerManager);
 
+    logMessage("main frame created");
+
     if (argc > 1)
     {
         wxString a = argv[1];
         project.init(str(a));
     }
 
+    logMessage("show main frame");
+
 	frame->Show(TRUE);
+
+    logMessage("set top level");
+
 	SetTopWindow(frame);
+
+    logMessage("initLAB");
 
     initLAB();
 

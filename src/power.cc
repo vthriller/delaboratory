@@ -18,12 +18,16 @@
 
 #include "power.h"
 #include <cmath>
+#include "logger.h"
+#include "str.h"
 
 dePower::dePower(double _power, int s)
 {
     power = _power;
 
     scale = (POWER_CACHE_SIZE - 1.0) / s;
+
+    logMessage("create dePower power: " + str((float)power) + " scale: " +str((float)scale));
 
     int i;
     for (i = 0; i < POWER_CACHE_SIZE; i++)
@@ -36,6 +40,7 @@ dePower::dePower(double _power, int s)
     
 dePower::~dePower()
 {
+    logMessage("destroy dePower power: " + str((float)power) + " scale: " +str((float)scale));
 }
 
 double dePower::get(double v)
