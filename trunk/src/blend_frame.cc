@@ -73,7 +73,7 @@ class deBlurRadiusSlider:public deSlider
 
         virtual void onValueChange(deValue value, bool finished)
         {
-            if (finished)
+            if ((finished) || (layerProcessor.isRealtime()))
             {
                 layer.setBlendBlurRadius(value);
 
@@ -103,7 +103,7 @@ class deBlendMaskMinSlider:public deSlider
 
         virtual void onValueChange(deValue value, bool finished)
         {
-            if (finished)
+            if ((finished) || (layerProcessor.isRealtime()))
             {
                 layer.setBlendMaskMin(value);
 
@@ -133,7 +133,7 @@ class deBlendMaskMaxSlider:public deSlider
 
         virtual void onValueChange(deValue value, bool finished)
         {
-            if (finished)
+            if ((finished) || (layerProcessor.isRealtime()))
             {
                 layer.setBlendMaskMax(value);
 
