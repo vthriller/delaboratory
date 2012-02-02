@@ -49,9 +49,6 @@
 
 #define ICC_MESSAGE 0
 
-const std::string LOG_FILE_NAME = "debug.log";
-const std::string LOG_LOCKS_FILE_NAME = "locks.log";
-
 deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage)
 :layerProcessor(_processor),
  previewChannelManager(_previewChannelManager),
@@ -69,9 +66,6 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
     imageFileName = "";
     sourceImageFileName = "";
     receiveKeys = true;
-
-    deLogger::getLogger().setFile(LOG_FILE_NAME);
-    deLogger::getLogger().setLocksFile(LOG_LOCKS_FILE_NAME);
 
     log("project started");
 

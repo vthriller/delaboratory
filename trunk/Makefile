@@ -46,6 +46,9 @@ WXCONFIG=wx-config
 OPTFLAGS=-march=i686
 #OPTFLAGS=-march=core2
 
+# logging
+CXXFLAGS+=-DLOGGING
+
 # debug stuff
 #CXXFLAGS+=-g -Wall -pedantic 
 
