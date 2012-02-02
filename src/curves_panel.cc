@@ -43,8 +43,6 @@ layerProcessor(_layerProcessor)
     backgroundBitmap = NULL;
     clickPosition = -1;
 
-    realtime = false;
-
     generateBackground();
 }
 
@@ -325,7 +323,7 @@ void deCurvesPanel::update(bool finished)
 //    std::cout << "curves update" << std::endl;
     logMessage("deCurvesPanel::update");
     paint();
-    if ((finished) || (realtime))
+    if ((finished) || (layerProcessor.isRealtime()))
     {
         int index = layer.getIndex();
         layerProcessor.markUpdateSingleChannel(index, channel);
@@ -499,11 +497,6 @@ void deCurvesPanel::onKey(int key)
     if (key == 'Z')
     {
         delta = -1.0;
-    }
-
-    if (key == 'R')
-    {
-        realtime = !realtime;
     }
 
     if (delta != 0.0)

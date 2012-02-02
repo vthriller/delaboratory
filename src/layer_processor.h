@@ -55,6 +55,8 @@ class deLayerProcessor
         deRenderer renderer;
         deChannelManager& previewChannelManager;
 
+        bool realtime;
+
         bool closing;
 
         deLayerProcessType layerProcessType;
@@ -140,6 +142,9 @@ class deLayerProcessor
         bool isClosing() const {return closing;};
 
         void render(wxDC& dc);
+
+        bool isRealtime() const;
+        void setRealtime(bool r);
 
 };
 

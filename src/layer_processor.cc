@@ -223,6 +223,8 @@ renderer(_previewChannelManager)
 
     closing = false;
 
+    realtime = true;
+
 }
 
 void deLayerProcessor::onDestroyAll()
@@ -779,4 +781,14 @@ void deLayerProcessor::setPreviewSize(const deSize& size)
 void deLayerProcessor::render(wxDC& dc)
 {
     renderer.render(dc);
+}
+
+bool deLayerProcessor::isRealtime() const
+{
+    return realtime;
+}
+
+void deLayerProcessor::setRealtime(bool r)
+{
+    realtime = r;
 }
