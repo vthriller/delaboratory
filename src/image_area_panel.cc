@@ -39,7 +39,8 @@ void deImageAreaPanel::updateSize(bool calcHistogram)
 
     const deSize ps(s.GetWidth(), s.GetHeight());
     
-    const deSize& ss = project.getSourceChannelManager().getChannelSize();
+    //const deSize& ss = project.getSourceChannelManager().getChannelSize();
+    const deSize& ss = project.getSourceImageSize();
 
     if (ss.getN() <= 0)
     {

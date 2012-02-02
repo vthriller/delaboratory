@@ -760,11 +760,10 @@ void deLayerProcessor::setPreviewSize(const deSize& size)
         return;
     }
 
+    logMessage("set preview size...");
     lockHistogram();
     lockPrepareImage();
     lockUpdateImage();
-
-    logMessage("set preview size");
 
     previewChannelManager.setChannelSize(size);
 
@@ -773,6 +772,7 @@ void deLayerProcessor::setPreviewSize(const deSize& size)
     unlockUpdateImage();
     unlockPrepareImage();
     unlockHistogram();
+    logMessage("set preview size done");
 }
 
 void deLayerProcessor::render(wxDC& dc)

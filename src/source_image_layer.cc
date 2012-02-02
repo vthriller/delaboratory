@@ -22,14 +22,14 @@
 #include <iostream>
 #include "view_manager.h"
 #include "logger.h"
+#include "static_image.h"
 
-deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deChannelManager& _sourceChannelManager, deImage& _sourceImage)
+deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage)
 :deLayer("source image", deColorSpaceRGB, _index, -1),
 previewChannelManager(_previewChannelManager),
 viewManager(_viewManager),
 image(deColorSpaceRGB, _previewChannelManager),
-sourceImage(_sourceImage),
-sourceChannelManager(_sourceChannelManager)
+sourceImage(_sourceImage)
 {
 }
 
@@ -41,9 +41,10 @@ void deSourceImageLayer::updateImage()
 {
     logMessage("source image layer update image start");
 
-    deChannel* sourceChannelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
-    deChannel* sourceChannelG = sourceChannelManager.getChannel(sourceImage.getChannelIndex(1));
-    deChannel* sourceChannelB = sourceChannelManager.getChannel(sourceImage.getChannelIndex(2));
+    deChannel* sourceChannelR = sourceImage.getChannel(0);
+    deChannel* sourceChannelG = sourceImage.getChannel(1);
+    deChannel* sourceChannelB = sourceImage.getChannel(2);
+
 
     if (!sourceChannelR)
     {
@@ -68,7 +69,8 @@ void deSourceImageLayer::updateImage()
     channelG->lockWrite();
     channelB->lockWrite();
 
-    const deSize ss = sourceChannelManager.getChannelSize();
+    const deSize ss = sourceImage.getSize();
+
     const deSize ds = previewChannelManager.getChannelSize();
 
     deValue scale = 1.0;
@@ -158,7 +160,3 @@ void deSourceImageLayer::updateChannelUsage(std::map<int, int>& channelUsage) co
     image.updateChannelUsage(channelUsage, index);
 }
 
-deImage& deSourceImageLayer::getSourceImage()
-{
-    return sourceImage;
-}

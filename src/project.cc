@@ -45,22 +45,22 @@
 #include "channel_manager.h"
 #include "layer_stack.h"
 #include "layer_frame_manager.h"
+#include "static_image.h"
 
 #define ICC_MESSAGE 0
 
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
 
-deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deChannelManager& _sourceChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager)
+deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage)
 :layerProcessor(_processor),
  previewChannelManager(_previewChannelManager),
- sourceChannelManager(_sourceChannelManager),
  viewModePanel(NULL),
  controlPanel(NULL),
  memoryInfoFrame(NULL),
  viewManager(*this, _processor),
  mainFrame(NULL),
- sourceImage(deColorSpaceRGB, sourceChannelManager),
+ sourceImage(_sourceImage),
  layerStack(_layerStack),
  layerFrameManager(_layerFrameManager),
  histogramModePanel(NULL),
@@ -69,10 +69,6 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
     imageFileName = "";
     sourceImageFileName = "";
     receiveKeys = true;
-
-    sourceImage.enableChannel(0);
-    sourceImage.enableChannel(1);
-    sourceImage.enableChannel(2);
 
     deLogger::getLogger().setFile(LOG_FILE_NAME);
     deLogger::getLogger().setLocksFile(LOG_LOCKS_FILE_NAME);
@@ -178,13 +174,12 @@ void deProject::setTestImage(int s)
 
     deSize size(s, s);
 
-    sourceChannelManager.setChannelSize(size);
+    sourceImage.setSize(size);
+    deChannel* channelRR = sourceImage.getChannel(0);
+    deChannel* channelGG = sourceImage.getChannel(1);
+    deChannel* channelBB = sourceImage.getChannel(2);
 
-    deChannel* channelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
-    deChannel* channelG = sourceChannelManager.getChannel(sourceImage.getChannelIndex(1));
-    deChannel* channelB = sourceChannelManager.getChannel(sourceImage.getChannelIndex(2));
-
-    generateFractal(channelR->getPixels(), channelG->getPixels(), channelB->getPixels(), size);
+    generateFractal(channelRR->getPixels(), channelGG->getPixels(), channelBB->getPixels(), size);
 
     imageFileName = "delaboratory_test_image";
 
@@ -202,7 +197,7 @@ void deProject::resetLayerStack()
 
     layerStack.clear();
 
-    deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, previewChannelManager, viewManager, "source image", sourceChannelManager, sourceImage);
+    deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, previewChannelManager, viewManager, "source image", sourceImage);
 
     if (layer)
     {
@@ -218,9 +213,9 @@ deChannelManager& deProject::getPreviewChannelManager()
     return previewChannelManager;
 }
 
-deChannelManager& deProject::getSourceChannelManager() 
+deSize deProject::getSourceImageSize() 
 {
-    return sourceChannelManager;
+    return sourceImage.getSize();
 }
 
 deLayerStack& deProject::getLayerStack()
@@ -345,7 +340,10 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
 
     // calculate final image in full size
     int view = viewManager.getView();
-    previewChannelManager.setChannelSize(sourceChannelManager.getChannelSize());
+
+    //previewChannelManager.setChannelSize(sourceChannelManager.getChannelSize());
+    previewChannelManager.setChannelSize(sourceImage.getSize());
+
     layerProcessor.updateImagesSmart(view, progressDialog, memoryInfoFrame);
 
     // take the final image
@@ -465,7 +463,7 @@ void deProject::loadLayer(xmlNodePtr root)
         child = child->next;
     }
        
-    deLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, name, sourceChannelManager, sourceImage);
+    deLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, name, sourceImage);
 
     if (layer)
     {
@@ -589,30 +587,18 @@ bool deProject::openImage(const std::string& fileName)
         size = getJPEGSize(fileName);
     }
 
-    sourceChannelManager.setChannelSize(size);
+    sourceImage.setSize(size);
 
-    deChannel* channelR = sourceChannelManager.getChannel(sourceImage.getChannelIndex(0));
-    if (!channelR)
-    {
-        return false;
-    }
-    deChannel* channelG = sourceChannelManager.getChannel(sourceImage.getChannelIndex(1));
-    if (!channelG)
-    {
-        return false;
-    }
-    deChannel* channelB = sourceChannelManager.getChannel(sourceImage.getChannelIndex(2));
-    if (!channelB)
-    {
-        return false;
-    }
+    deChannel* channelRR = sourceImage.getChannel(0);
+    deChannel* channelGG = sourceImage.getChannel(1);
+    deChannel* channelBB = sourceImage.getChannel(2);
 
     bool status = false;
 
     if (tiff)
     {
         bool icc;
-        loadTIFF(fileName, *channelR, *channelG, *channelB, icc);
+        loadTIFF(fileName, *channelRR, *channelGG, *channelBB, icc);
 #if ICC_MESSAGE
         if (icc)
         {
@@ -624,7 +610,7 @@ bool deProject::openImage(const std::string& fileName)
 
     if (jpeg)
     {
-        loadJPEG(fileName, *channelR, *channelG, *channelB);
+        loadJPEG(fileName, *channelRR, *channelGG, *channelBB);
         status = true;
     }
 
@@ -689,7 +675,7 @@ void deProject::addActionLayer(const std::string& action)
 
     log("creating action " + action + " layer");
 
-    deLayer* layer = createLayer(action, s, colorSpace, layerStack, previewChannelManager, viewManager, actionDescription, sourceChannelManager, sourceImage);
+    deLayer* layer = createLayer(action, s, colorSpace, layerStack, previewChannelManager, viewManager, actionDescription, sourceImage);
 
     if (layer)
     {
@@ -711,7 +697,7 @@ void deProject::addConversionLayer(deColorSpace colorSpace)
 
     log("creating conversion to " + name + " layer");
 
-    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, previewChannelManager, viewManager, name, sourceChannelManager, sourceImage);
+    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, previewChannelManager, viewManager, name, sourceImage);
 
     if (layer)
     {
