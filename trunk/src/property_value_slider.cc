@@ -36,7 +36,7 @@ dePropertyValueSlider::~dePropertyValueSlider()
 
 void dePropertyValueSlider::onValueChange(deValue value, bool finished)
 {
-    if (finished)
+    if ((finished) || (layerProcessor.isRealtime()))
     {
         property.set(value);
 

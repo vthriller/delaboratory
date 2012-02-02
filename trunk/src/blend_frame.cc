@@ -43,7 +43,7 @@ class deAlphaSlider:public deSlider
 
         virtual void onValueChange(deValue value, bool finished)
         {
-            if (finished)
+            //if (finished)
             {
                 layer.setOpacity(value);
 

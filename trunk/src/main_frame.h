@@ -70,6 +70,8 @@ private:
     deImageAreaPanel* imageAreaPanel;
     deHistogramPanel* histogramPanel;
 
+    wxCheckBox* realtime;
+
     deLayerProcessor& layerProcessor;
     bool full;
 
