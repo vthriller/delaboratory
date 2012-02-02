@@ -205,7 +205,8 @@ updateImageMutex(wxMUTEX_RECURSIVE),
 updateImagesMutex(wxMUTEX_RECURSIVE),
 previewChannelManager(_previewChannelManager),
 layerStack(_layerStack),
-layerFrameManager(_layerFrameManager)
+layerFrameManager(_layerFrameManager),
+renderer(_previewChannelManager)
 {
     mainFrame = NULL;
     viewManager = NULL;
@@ -727,7 +728,7 @@ bool deLayerProcessor::prepareImage()
     {
         if (viewManager) 
         {
-            result = renderer.prepareImage(previewChannelManager, *viewManager, *this, layerStack);
+            result = renderer.prepareImage(*viewManager, *this, layerStack);
         }
     }
 

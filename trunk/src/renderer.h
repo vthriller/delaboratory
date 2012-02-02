@@ -25,6 +25,7 @@ class deChannelManager;
 class deViewManager;
 class deLayerProcessor;
 class deLayerStack;
+#include <wx/wx.h>
 #include "size.h"
 
 class deRenderer
@@ -32,13 +33,17 @@ class deRenderer
     private:
         wxImage* image;
         deSize size;
+        deChannelManager& channelManager;
+        wxMutex mutex;
+
+        unsigned char* getCurrentImageData();
 
     public:
-        deRenderer();
+        deRenderer(deChannelManager& _channelManager);
         virtual ~deRenderer();
 
         bool render(wxDC& dc);
-        bool prepareImage(deChannelManager& channelManager, const deViewManager& viewManager, deLayerProcessor& layerProcessor, deLayerStack& layerStack);
+        bool prepareImage(const deViewManager& viewManager, deLayerProcessor& layerProcessor, deLayerStack& layerStack);
 };
 
 #endif
