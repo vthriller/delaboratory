@@ -86,7 +86,7 @@ void deMixerEditor::click(wxCommandEvent &event)
     {
         for (i = channels.begin(); i != channels.end(); i++)
         {
-            (*i)->random(0.3);
+            (*i)->random(0.15);
         }
     }      
 
@@ -94,7 +94,7 @@ void deMixerEditor::click(wxCommandEvent &event)
     {
         for (i = channels.begin(); i != channels.end(); i++)
         {
-            (*i)->random(0.6);
+            (*i)->random(0.3);
         }
     }      
 
@@ -102,7 +102,7 @@ void deMixerEditor::click(wxCommandEvent &event)
     {
         for (i = channels.begin(); i != channels.end(); i++)
         {
-            (*i)->random(0.9);
+            (*i)->random(0.45);
         }
     }      
 }   
