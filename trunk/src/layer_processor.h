@@ -34,6 +34,18 @@ class deLayerFrameManager;
 #include "size.h"
 #include "renderer.h"
 
+enum
+{
+    DE_PROCESSING_START,
+    DE_PROCESSING_END,
+    DE_RENDERING_START,
+    DE_RENDERING_END,
+    DE_HISTOGRAM_START,
+    DE_HISTOGRAM_END,
+    DE_DEBUG_START,
+    DE_DEBUG_END
+};
+
 class deLayerProcessor
 {
     private:
@@ -67,7 +79,7 @@ class deLayerProcessor
         int lastValidLayer;
 
         void updateImages(int a, int channel, bool action);
-        void updateImage();
+        bool updateImage();
 
         void repaintImageInLayerProcessor();
 
@@ -89,6 +101,8 @@ class deLayerProcessor
 
         void lockUpdateImage();
         void unlockUpdateImage();
+
+        void sendInfoEvent(int i);
 
 
     public:

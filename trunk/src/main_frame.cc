@@ -67,6 +67,7 @@ EVT_MENU(ID_BenchmarkColor, deMainFrame::onBenchmarkColor)
 EVT_MENU(DE_REPAINT_EVENT, deMainFrame::onRepaintEvent)
 EVT_MENU(DE_HISTOGRAM_EVENT, deMainFrame::onHistogramEvent)
 EVT_MENU(DE_RANDOM_EVENT, deMainFrame::onRandomEvent)
+EVT_MENU(DE_INFO_EVENT, deMainFrame::onInfoEvent)
 END_EVENT_TABLE()
 
 deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager)
@@ -94,6 +95,23 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     wxPanel* viewModePanel = new deViewModePanel(topPanel, project);
     topSizer->Add(viewModePanel);
+
+    wxSizer* sizerP = new wxStaticBoxSizer(wxHORIZONTAL, topPanel,  _T("threads"));
+    topSizer->Add(sizerP, 0, wxEXPAND);
+
+    processingInfo = new wxStaticText(topPanel, wxID_ANY, _T("[processing]"), wxDefaultPosition);
+    sizerP->Add(processingInfo, 0, wxEXPAND);
+
+    renderingInfo = new wxStaticText(topPanel, wxID_ANY, _T("[rendering]"), wxDefaultPosition);
+    sizerP->Add(renderingInfo, 0, wxEXPAND);
+
+    histogramInfo = new wxStaticText(topPanel, wxID_ANY, _T("[histogram]"), wxDefaultPosition);
+    sizerP->Add(histogramInfo, 0, wxEXPAND);
+
+/*
+    debugInfo = new wxStaticText(topPanel, wxID_ANY, _T("[debug]"), wxDefaultPosition);
+    sizerP->Add(debugInfo, 0, wxEXPAND);
+    */
 
     imageAreaPanel = new deImageAreaPanel(this, project, _samplerManager);
     imageAreaPanel->SetSize(300,300);
@@ -360,6 +378,58 @@ void deMainFrame::onRandomEvent(wxCommandEvent& event)
     project.log("random event start");
     project.addRandomLayer();
     project.log("random event end");
+}
+
+void deMainFrame::onInfoEvent(wxCommandEvent& event)
+{
+    int i = event.GetInt();
+    int e = 50;
+    int d = 150;
+    switch (i)
+    {
+        case DE_PROCESSING_START:
+        {
+            processingInfo->SetForegroundColour(wxColour(e, e, e));
+            break;
+        }
+        case DE_PROCESSING_END:
+        {
+            processingInfo->SetForegroundColour(wxColour(d, d, d));
+            break;
+        }
+        case DE_RENDERING_START:
+        {
+            renderingInfo->SetForegroundColour(wxColour(e, e, e));
+            break;
+        }
+        case DE_RENDERING_END:
+        {
+            renderingInfo->SetForegroundColour(wxColour(d, d, d));
+            break;
+        }
+        case DE_HISTOGRAM_START:
+        {
+            histogramInfo->SetForegroundColour(wxColour(e, e, e));
+            break;
+        }
+        case DE_HISTOGRAM_END:
+        {
+            histogramInfo->SetForegroundColour(wxColour(d, d, d));
+            break;
+        }
+        /*
+        case DE_DEBUG_START:
+        {
+            debugInfo->SetForegroundColour(wxColour(e, e, e));
+            break;
+        }
+        case DE_DEBUG_END:
+        {
+            debugInfo->SetForegroundColour(wxColour(d, d, d));
+            break;
+        }
+        */
+    }
 }
 
 class deTestThread:public wxThread

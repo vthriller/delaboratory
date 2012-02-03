@@ -333,7 +333,11 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
         view = viewV;
     }
 
-    assert(view >= 0);
+    if (view < 0)
+    {
+        mutex.Unlock();
+        return false;
+    }
 
     if (viewManager.maskVisible())
     {

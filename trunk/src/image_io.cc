@@ -144,6 +144,10 @@ void loadTIFF(const std::string& fileName, deChannel& channelR, deChannel& chann
     channelG.lockWrite();
     channelB.lockWrite();
 
+    deValue* pixelsR = channelR.getPixels();
+    deValue* pixelsG = channelG.getPixels();
+    deValue* pixelsB = channelB.getPixels();
+
     int pos = 0;
     int y;
 
@@ -202,9 +206,10 @@ void loadTIFF(const std::string& fileName, deChannel& channelR, deChannel& chann
                 conversionLAB(_l, _a, _b, r, g, b);
             }
 
-            channelR.setValue(pos, r );
-            channelG.setValue(pos, g );
-            channelB.setValue(pos, b );
+            pixelsR[pos] = r;
+            pixelsG[pos] = g;
+            pixelsB[pos] = b;
+
             pos++;
         }
     }
