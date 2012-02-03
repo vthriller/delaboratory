@@ -1,13 +1,22 @@
 You can download binary packages for Windows from project website.
 Packages for Linux distributions are also available (see "Installation" on Wiki).
 
-COMPILATION
------------
+--------------------------------
+        COMPILATION
+--------------------------------
+
+---------------------------
+requirements
+---------------------------
 
 you need:
   - wxGTK 
   - libtiff
   - libxml2
+
+---------------------------
+make
+---------------------------
 
 to compile just type:
 
@@ -16,3 +25,28 @@ make
 if you want to install in /usr/local/bin, type (from root):
 
 make install
+
+---------------------------
+debug
+---------------------------
+
+to compile debug version use:
+
+make DEBUG=YES
+
+
+before changing build type you should clean the build:
+
+make clean
+
+---------------------------
+architecture (optimization)
+---------------------------
+
+please set your architecture in Makefile correctly
+
+# choose your architecture
+OPTFLAGS=-march=i686
+#OPTFLAGS=-march=core2
+
+(as you can see default is i686, and it won't work on 64-bit systems)

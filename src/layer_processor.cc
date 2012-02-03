@@ -32,7 +32,6 @@
 #include "logger.h"
 #include "renderer.h"
 
-
 class deLayerProcessorWorkerThread:public wxThread
 {
     private:
@@ -196,7 +195,6 @@ class deHistogramWorkerThread:public wxThread
 };
 
 
-
 deLayerProcessor::deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager)
 :layerProcessMutex(wxMUTEX_RECURSIVE),
 histogramMutex(wxMUTEX_RECURSIVE),
@@ -206,7 +204,9 @@ updateImagesMutex(wxMUTEX_RECURSIVE),
 previewChannelManager(_previewChannelManager),
 layerStack(_layerStack),
 layerFrameManager(_layerFrameManager),
-renderer(_previewChannelManager)
+renderer(_previewChannelManager),
+renderWorkerSemaphore(1, 1),
+histogramWorkerSemaphore(1, 1)
 {
     mainFrame = NULL;
     viewManager = NULL;
@@ -258,6 +258,7 @@ void deLayerProcessor::stopWorkerThread()
 
     logMessage("render worker thread post before delete");
     renderWorkerSemaphore.Post();
+
     logMessage("stop worker thread - renderWorkerThread delete");
     renderWorkerThread->Delete();
 
@@ -311,6 +312,7 @@ void deLayerProcessor::setViewManager(deViewManager* _viewManager)
 
 void deLayerProcessor::repaintImageInLayerProcessor()
 {
+
     if (closing)
     {
         logMessage("skip repaintImage because closing");
@@ -321,6 +323,7 @@ void deLayerProcessor::repaintImageInLayerProcessor()
 
     renderWorkerSemaphore.Post();
     generateHistogram();
+
 }
 
 void deLayerProcessor::generateHistogram()
@@ -346,6 +349,21 @@ void deLayerProcessor::sendRepaintEvent()
     if (mainFrame)
     {
         wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_REPAINT_EVENT );
+        wxPostEvent( mainFrame, event );
+    }
+}
+
+void deLayerProcessor::sendInfoEvent(int i)
+{
+    if (closing)
+    {
+        return;
+    }
+
+    if (mainFrame)
+    {
+        wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_INFO_EVENT );
+        event.SetInt(i);
         wxPostEvent( mainFrame, event );
     }
 }
@@ -460,13 +478,14 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
 //    unlock();
 }    
 
-void deLayerProcessor::updateImage()
+bool deLayerProcessor::updateImage()
 {
     lockUpdateImage();
 
     lockLayers();
 
     bool ok = true;
+    bool result = false;
 
     if (firstLayerToUpdate > getLastLayerToUpdate())
     {
@@ -507,9 +526,13 @@ void deLayerProcessor::updateImage()
         layer->process(type, channel);
 
         layer->unlockLayer();
+
+        result = true;
     }        
 
     unlockUpdateImage();
+
+    return result;
 
 }
 
@@ -621,19 +644,18 @@ void deLayerProcessor::unlock()
 
 void deLayerProcessor::tickWork()
 {
-    bool ok = true;
+    sendInfoEvent(DE_PROCESSING_START);
 
-    if (ok)
+    bool result = updateImage();
+
+    if (result)
     {
-        updateImage();
-    }
+        checkUpdateImagesRequest();
 
-    checkUpdateImagesRequest();
-
-    if (ok)
-    {
         repaintImageInLayerProcessor();
     }        
+
+    sendInfoEvent(DE_PROCESSING_END);
 }
 
 void deLayerProcessor::onChangeViewMode()
@@ -720,6 +742,7 @@ int deLayerProcessor::getLastLayerToUpdate()
 
 bool deLayerProcessor::prepareImage()
 {
+    sendInfoEvent(DE_RENDERING_START);
 
     bool result = false;
     lockPrepareImage();
@@ -737,11 +760,16 @@ bool deLayerProcessor::prepareImage()
     unlock();
     logMessage("prepare image end");
     unlockPrepareImage();
+
+    sendInfoEvent(DE_RENDERING_END);
+
     return result;
 }
 
 void deLayerProcessor::onGenerateHistogram()
 {
+    sendInfoEvent(DE_HISTOGRAM_START);
+
     lockHistogram();
 
     if (!closing)
@@ -753,6 +781,8 @@ void deLayerProcessor::onGenerateHistogram()
     }        
 
     unlockHistogram();
+
+    sendInfoEvent(DE_HISTOGRAM_END);
 }
 
 void deLayerProcessor::setPreviewSize(const deSize& size)

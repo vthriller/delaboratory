@@ -443,7 +443,6 @@ int deBlendFrame::getBlendChannel()
             return i;
         }
     }
-    assert(false);
     return -1;
 }
 

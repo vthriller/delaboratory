@@ -53,7 +53,8 @@ enum
     ID_BenchmarkColor,
     DE_REPAINT_EVENT,
     DE_HISTOGRAM_EVENT,
-    DE_RANDOM_EVENT
+    DE_RANDOM_EVENT,
+    DE_INFO_EVENT
 
 };
 
@@ -69,6 +70,10 @@ private:
     wxSizer* mainSizer;
     deImageAreaPanel* imageAreaPanel;
     deHistogramPanel* histogramPanel;
+    wxStaticText* processingInfo;
+    wxStaticText* renderingInfo;
+    wxStaticText* histogramInfo;
+    wxStaticText* debugInfo;
 
     wxCheckBox* realtime;
 
@@ -97,6 +102,7 @@ private:
 	void onBenchmarkColor(wxCommandEvent& event);
 	void onRepaintEvent(wxCommandEvent& event);
 	void onRandomEvent(wxCommandEvent& event);
+	void onInfoEvent(wxCommandEvent& event);
     void onHistogramEvent(wxCommandEvent& event);
 
 	void onCloseEvent(wxCloseEvent& event);
