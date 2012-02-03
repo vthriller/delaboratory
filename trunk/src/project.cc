@@ -51,8 +51,8 @@
 
 deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage)
 :layerProcessor(_processor),
- previewChannelManager(_previewChannelManager),
  viewModePanel(NULL),
+ previewChannelManager(_previewChannelManager),
  controlPanel(NULL),
  memoryInfoFrame(NULL),
  viewManager(*this, _processor),
