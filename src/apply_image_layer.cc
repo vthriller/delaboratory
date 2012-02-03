@@ -38,7 +38,7 @@ applySingleChannel("apply_single_channel")
         choices.push_back(str(i));
     }
 
-    appliedLayer.setIndex(0);
+    appliedLayer.setIndex(index - 1);
 
 }
 
