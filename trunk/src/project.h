@@ -49,12 +49,19 @@ class deProject
 
         deLayerProcessor& layerProcessor;
         deViewModePanel* viewModePanel;
+        deChannelManager& previewChannelManager;
+
         deControlPanel* controlPanel;
         deMemoryInfoFrame* memoryInfoFrame;
         deViewManager viewManager;
-        deLayerFrameManager& layerFrameManager;
 
-        deChannelManager& previewChannelManager;
+        deMainFrame* mainFrame;
+
+        deStaticImage& sourceImage;
+
+        deLayerStack& layerStack;
+
+        deLayerFrameManager& layerFrameManager;
 
         std::string imageFileName;
         std::string sourceImageFileName;
@@ -63,11 +70,8 @@ class deProject
 
         deHistogramModePanel* histogramModePanel;
         deImageAreaPanel* imageAreaPanel;
-        deMainFrame* mainFrame;
 
-        deStaticImage& sourceImage;
 
-        deLayerStack& layerStack;
 
         void loadLayers(xmlNodePtr root);
         void loadLayer(xmlNodePtr root);
