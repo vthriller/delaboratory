@@ -56,7 +56,7 @@ int generateInfo(deChannelManager& channelManager, wxWindow* parent, wxSizer* si
 void deMemoryInfoFrame::update()
 {
     int m1;
-    int m2;
+    //int m2;
     {
         deChannelManager& channelManager = project.getPreviewChannelManager();
         int size = sizeof(deValue) * channelManager.getChannelSize().getN();
