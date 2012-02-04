@@ -399,7 +399,7 @@ void deMainFrame::onRandomEvent(wxCommandEvent& event)
 void deMainFrame::onInfoEvent(wxCommandEvent& event)
 {
     int i = event.GetInt();
-    int e = 50;
+    int e = 100;
     int d = 150;
     switch (i)
     {
