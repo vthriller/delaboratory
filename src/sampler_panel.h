@@ -38,6 +38,8 @@ private:
     wxStaticText* v3;
     wxStaticText* v4;
 
+    wxStaticBoxSizer* sizerS;
+
     std::vector<deColorSpace> colorSpaces;
 
     void choose(wxCommandEvent &event);

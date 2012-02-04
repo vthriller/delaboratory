@@ -52,7 +52,7 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject&
     colorPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(60, 25));
     sizerT->Add(colorPanel, 0, wxALIGN_CENTER);
 
-    wxSizer* sizerS = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
+    sizerS = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
     sizer->Add(sizerS);
 
     v1 = new wxStaticText(this, wxID_ANY, _T("v1"), wxDefaultPosition, wxSize(valueWidth, -1));
@@ -107,6 +107,15 @@ void deSamplerPanel::update()
         v4->Disable();
         colorSpaceChoice->Disable();
     }
+
+    int g = 240;
+
+    if (sampler.isSelected())
+    {
+        g = 200;
+    }
+
+    sizerS->GetStaticBox()->SetBackgroundColour(wxColour(g, g, g));
 
     const deViewManager& viewManager = project.getViewManager();
     int view = viewManager.getView();

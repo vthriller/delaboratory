@@ -52,6 +52,13 @@ deSampler* deSamplerManager::getSampler(int index)
 bool deSamplerManager::select(deValue x, deValue y)
 {
     int i;
+
+    for (i = 0; i < size; i++)
+    {
+        deSampler& s = samplers[i];
+        s.setSelected(false);
+    }        
+
     for (i = 0; i < size; i++)
     {
         deSampler& s = samplers[i];
@@ -64,6 +71,7 @@ bool deSamplerManager::select(deValue x, deValue y)
             if (r < 0.01)
             {
                 selected = i;
+                s.setSelected(true);
                 return true;
             }
         }
@@ -76,6 +84,7 @@ bool deSamplerManager::select(deValue x, deValue y)
         {
             s.enable();
             selected = i;
+            s.setSelected(true);
             return true;
         }
     }        
@@ -117,6 +126,7 @@ bool deSamplerManager::onMove(deValue x, deValue y)
         {
             s.disable();
             selected = -1;
+            s.setSelected(false);
         }
         else
         {
@@ -131,6 +141,14 @@ bool deSamplerManager::onMove(deValue x, deValue y)
 
 bool deSamplerManager::onRelease()
 {
+    int i;
+
+    for (i = 0; i < size; i++)
+    {
+        deSampler& s = samplers[i];
+        s.setSelected(false);
+    }        
+
     selected = -1;
 
     return true;
