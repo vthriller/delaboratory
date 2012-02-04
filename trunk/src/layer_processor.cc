@@ -196,17 +196,18 @@ class deHistogramWorkerThread:public wxThread
 
 
 deLayerProcessor::deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager)
-:layerProcessMutex(wxMUTEX_RECURSIVE),
+:
+layerStack(_layerStack),
+layerFrameManager(_layerFrameManager),
+renderWorkerSemaphore(1, 1),
+histogramWorkerSemaphore(1, 1),
+layerProcessMutex(wxMUTEX_RECURSIVE),
 histogramMutex(wxMUTEX_RECURSIVE),
 prepareImageMutex(wxMUTEX_RECURSIVE),
 updateImageMutex(wxMUTEX_RECURSIVE),
 updateImagesMutex(wxMUTEX_RECURSIVE),
-previewChannelManager(_previewChannelManager),
-layerStack(_layerStack),
-layerFrameManager(_layerFrameManager),
 renderer(_previewChannelManager),
-renderWorkerSemaphore(1, 1),
-histogramWorkerSemaphore(1, 1)
+previewChannelManager(_previewChannelManager)
 {
     mainFrame = NULL;
     viewManager = NULL;
