@@ -45,6 +45,7 @@ STRIP=strip
 
 # choose your architecture
 OPTFLAGS=-march=i686
+#OPTFLAGS=-march=x86-64
 #OPTFLAGS=-march=core2
 
 ifeq (${DEBUG}, YES)
