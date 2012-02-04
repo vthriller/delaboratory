@@ -108,6 +108,22 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     histogramInfo = new wxStaticText(topPanel, wxID_ANY, _T("[histogram]"), wxDefaultPosition);
     sizerP->Add(histogramInfo, 0, wxEXPAND);
 
+    wxSizer* sizerR = new wxStaticBoxSizer(wxHORIZONTAL, topPanel,  _T("options"));
+    topSizer->Add(sizerR, 0, wxEXPAND);
+
+    realtime = new wxCheckBox(topPanel, wxID_ANY, _T("real time"));
+    sizerR->Add(realtime);
+
+    bool r = layerProcessor.isRealtime();
+    if (r)
+    {
+        realtime->SetValue(1);
+    }
+    else
+    {
+        realtime->SetValue(0);
+    }
+
 /*
     debugInfo = new wxStaticText(topPanel, wxID_ANY, _T("[debug]"), wxDefaultPosition);
     sizerP->Add(debugInfo, 0, wxEXPAND);
@@ -485,6 +501,8 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
 
 void deMainFrame::check(wxCommandEvent &event)
 {
+    bool checked = realtime->IsChecked();
+    layerProcessor.setRealtime(checked);
 }
 
 void deMainFrame::onCloseEvent(wxCloseEvent& event)
