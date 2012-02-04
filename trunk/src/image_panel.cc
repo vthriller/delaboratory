@@ -50,6 +50,8 @@ void deImagePanel::release(wxMouseEvent &event)
     clicked = false;
 
     onRelease();
+
+    project.getLayerProcessor().onGUIUpdate();
 }
 
 void deImagePanel::move(wxMouseEvent &event)
