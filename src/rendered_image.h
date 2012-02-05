@@ -27,6 +27,7 @@ class deRenderedImage
     private:
         wxImage* image;
         wxBitmap* renderedBitmap;
+        unsigned char* internalData;
         
         deRenderedImage(const deRenderedImage& i);
         deRenderedImage& operator = (const deRenderedImage& i);
@@ -41,6 +42,7 @@ class deRenderedImage
 
         void setSize(const deSize& _size);
         unsigned char* getCurrentImageData();
+        unsigned char* getCurrentBitmapData();
         bool render(wxDC& dc);
 };
 

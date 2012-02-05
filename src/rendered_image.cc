@@ -19,11 +19,35 @@
 #include "rendered_image.h"
 #include "logger.h"
 #include "str.h"
+#include <wx/rawbmp.h>
 
 void deRenderedImage::setSize(const deSize& _size)
 {
     requestedSize = _size;
 }
+
+/*
+unsigned char* deRenderedImage::getCurrentBitmapData()
+{
+    int w = size.getW();
+    int h = size.getH();
+    if (renderedBitmap)
+    {
+        delete renderedBitmap;
+    }            
+    renderedBitmap = new wxBitmap(w,h, 24);
+
+    wxNativePixelData bitmapData(*renderedBitmap);
+    if (bitmapData)
+    {
+        std::cout << "OK" << std::endl;
+    }
+    else
+    {
+        std::cout << "failure" << std::endl;
+    }
+}
+*/
 
 unsigned char* deRenderedImage::getCurrentImageData()
 {
@@ -34,16 +58,16 @@ unsigned char* deRenderedImage::getCurrentImageData()
             logMessage("delete image");
             delete image;
         }            
-        if (renderedBitmap)
+        if (internalData)
         {
-            delete renderedBitmap;
-        }            
+            delete [] internalData;
+        }
         size = requestedSize;
         int w = size.getW();
         int h = size.getH();
         logMessage("create image " + str(w) + "x" + str(h));
         image = new wxImage(w,h);
-        renderedBitmap = new wxBitmap(w,h, 32);
+        internalData = new unsigned char [ 3 * w * h ];
     }
 
     unsigned char* data = image->GetData();
@@ -58,6 +82,7 @@ requestedSize(0,0)
 {
     image = NULL;
     renderedBitmap = NULL;
+    internalData = NULL;
 }
 
 deRenderedImage::~deRenderedImage()
@@ -70,6 +95,10 @@ deRenderedImage::~deRenderedImage()
     {
         delete renderedBitmap;
     }            
+    if (internalData)
+    {
+        delete [] internalData;
+    }
 }
 
 bool deRenderedImage::render(wxDC& dc)
