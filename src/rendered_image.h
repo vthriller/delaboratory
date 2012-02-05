@@ -33,6 +33,7 @@ class deRenderedImage
         deRenderedImage& operator = (const deRenderedImage& i);
 
         deSize size;
+        deSize bitmapSize;
         deSize requestedSize;
 
     public:

@@ -29,13 +29,6 @@ void deRenderedImage::setSize(const deSize& _size)
 /*
 unsigned char* deRenderedImage::getCurrentBitmapData()
 {
-    int w = size.getW();
-    int h = size.getH();
-    if (renderedBitmap)
-    {
-        delete renderedBitmap;
-    }            
-    renderedBitmap = new wxBitmap(w,h, 24);
 
     wxNativePixelData bitmapData(*renderedBitmap);
     if (bitmapData)
@@ -78,7 +71,8 @@ unsigned char* deRenderedImage::getCurrentImageData()
 
 deRenderedImage::deRenderedImage()
 :size(0,0), 
-requestedSize(0,0)
+requestedSize(0,0),
+bitmapSize(0,0)
 {
     image = NULL;
     renderedBitmap = NULL;
@@ -103,6 +97,18 @@ deRenderedImage::~deRenderedImage()
 
 bool deRenderedImage::render(wxDC& dc)
 {
+    if (bitmapSize != size)
+    {
+        int w = size.getW();
+        int h = size.getH();
+        if (renderedBitmap)
+        {
+            delete renderedBitmap;
+        }            
+        renderedBitmap = new wxBitmap(w,h, 24);
+        bitmapSize = size;
+    }
+
     if (image)
     {
         wxBitmap bitmap(*image);
