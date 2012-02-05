@@ -26,31 +26,10 @@ void deRenderedImage::setSize(const deSize& _size)
     requestedSize = _size;
 }
 
-/*
-unsigned char* deRenderedImage::getCurrentBitmapData()
-{
-
-    wxNativePixelData bitmapData(*renderedBitmap);
-    if (bitmapData)
-    {
-        std::cout << "OK" << std::endl;
-    }
-    else
-    {
-        std::cout << "failure" << std::endl;
-    }
-}
-*/
-
 unsigned char* deRenderedImage::getCurrentImageData()
 {
     if (requestedSize != size)
     {
-        if (image)
-        {
-            logMessage("delete image");
-            delete image;
-        }            
         if (internalData)
         {
             delete [] internalData;
@@ -58,14 +37,10 @@ unsigned char* deRenderedImage::getCurrentImageData()
         size = requestedSize;
         int w = size.getW();
         int h = size.getH();
-        logMessage("create image " + str(w) + "x" + str(h));
-        image = new wxImage(w,h);
         internalData = new unsigned char [ 3 * w * h ];
     }
 
-    unsigned char* data = image->GetData();
-
-    return data;
+    return internalData;
 }
 
 
@@ -74,17 +49,14 @@ deRenderedImage::deRenderedImage()
 requestedSize(0,0),
 bitmapSize(0,0)
 {
-    image = NULL;
+    logMessage("create rendered image");
     renderedBitmap = NULL;
     internalData = NULL;
 }
 
 deRenderedImage::~deRenderedImage()
 {
-    if (image)
-    {
-        delete image;
-    }        
+    logMessage("destroy rendered image");
     if (renderedBitmap)
     {
         delete renderedBitmap;
@@ -97,27 +69,68 @@ deRenderedImage::~deRenderedImage()
 
 bool deRenderedImage::render(wxDC& dc)
 {
+    if (!internalData)
+    {
+        logMessage("ERROR can't render - no internal data");
+        return false;
+    }
+
+    int w = size.getW();
+    int h = size.getH();
+
     if (bitmapSize != size)
     {
-        int w = size.getW();
-        int h = size.getH();
         if (renderedBitmap)
         {
             delete renderedBitmap;
         }            
-        renderedBitmap = new wxBitmap(w,h, 24);
+        renderedBitmap = new wxBitmap(w, h, 24);
         bitmapSize = size;
     }
 
-    if (image)
+    if (!renderedBitmap)
     {
-        wxBitmap bitmap(*image);
-        dc.DrawBitmap(bitmap, 0, 0, false);
-        return true;
-    }
-    else
-    {
-        logMessage("renderer - no image");
+        logMessage("ERROR can't render - no rendered bitmap");
         return false;
     }
+
+    wxNativePixelData bitmapData(*renderedBitmap);
+    if (!bitmapData)
+    {
+        logMessage("ERROR can't render - wxNativePixelData doesn't work");
+        return false;
+    }
+
+    wxNativePixelData::Iterator p(bitmapData);
+
+    p.Offset(bitmapData, 0, 0);
+    
+    int x;
+    int y;
+    int pos = 0;
+    int n = w * h;
+    for (y = 0; y < h; y++)
+    {
+        wxNativePixelData::Iterator rowStart = p;
+
+        for (x = 0; x < w; x++)
+        {
+            unsigned char r = internalData[pos];
+            p.Red() = r;
+            pos++;
+            unsigned char g = internalData[pos];
+            p.Green() = g;
+            pos++;
+            unsigned char b = internalData[pos];
+            p.Blue() = b;
+            pos++;
+            p++;
+        }            
+
+        p = rowStart;
+        p.OffsetY(bitmapData, 1);
+    }
+
+    dc.DrawBitmap(*renderedBitmap, 0, 0, false);
+    return true;
 }   

@@ -367,6 +367,11 @@ bool deRenderer::render(wxDC& dc)
 
     bool result = renderedImage.render(dc);
 
+    if (!result)
+    {
+        dc.Clear();
+    }
+
     logMessage("unlock renderer mutex");
     mutex.Unlock();
 
