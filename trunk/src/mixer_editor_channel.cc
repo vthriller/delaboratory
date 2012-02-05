@@ -45,7 +45,7 @@ class deMixerSlider:public deSlider
 
         virtual void onValueChange(deValue value, bool finished)
         {
-            if (finished)
+            if ((finished) || (layerProcessor.isRealtime()))
             {
                 layer.setWeight(s, d, value);
 
