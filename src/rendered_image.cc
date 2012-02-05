@@ -34,11 +34,16 @@ unsigned char* deRenderedImage::getCurrentImageData()
             logMessage("delete image");
             delete image;
         }            
+        if (renderedBitmap)
+        {
+            delete renderedBitmap;
+        }            
         size = requestedSize;
         int w = size.getW();
         int h = size.getH();
         logMessage("create image " + str(w) + "x" + str(h));
         image = new wxImage(w,h);
+        renderedBitmap = new wxBitmap(w,h, 32);
     }
 
     unsigned char* data = image->GetData();
@@ -48,9 +53,11 @@ unsigned char* deRenderedImage::getCurrentImageData()
 
 
 deRenderedImage::deRenderedImage()
-:size(0,0), requestedSize(0,0)
+:size(0,0), 
+requestedSize(0,0)
 {
     image = NULL;
+    renderedBitmap = NULL;
 }
 
 deRenderedImage::~deRenderedImage()
@@ -59,6 +66,10 @@ deRenderedImage::~deRenderedImage()
     {
         delete image;
     }        
+    if (renderedBitmap)
+    {
+        delete renderedBitmap;
+    }            
 }
 
 bool deRenderedImage::render(wxDC& dc)

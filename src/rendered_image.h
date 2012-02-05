@@ -26,6 +26,7 @@ class deRenderedImage
 {
     private:
         wxImage* image;
+        wxBitmap* renderedBitmap;
         
         deRenderedImage(const deRenderedImage& i);
         deRenderedImage& operator = (const deRenderedImage& i);
