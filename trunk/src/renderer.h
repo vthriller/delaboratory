@@ -20,7 +20,6 @@
 #define _DE_RENDERER_H
 
 class wxDC;
-class wxImage;
 class deChannelManager;
 class deViewManager;
 class deLayerProcessor;
@@ -33,7 +32,6 @@ class deRenderer
 {
     private:
         deRenderedImage renderedImage;
-        wxImage* image;
         deSize size;
         deChannelManager& channelManager;
         wxMutex mutex;
