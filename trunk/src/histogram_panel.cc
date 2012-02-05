@@ -34,10 +34,11 @@ EVT_PAINT(deHistogramPanel::paintEvent)
 END_EVENT_TABLE()
 
 deHistogramPanel::deHistogramPanel(wxWindow* parent, deProject* _project)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(256, 200)), project(_project), histogram(256), histogramImage(256, 200)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(256, 200)), project(_project), histogram(256)
 {
     channel = 0;
     generated = false;
+    renderedImage.setSize(deSize(256, 256));
 }
 
 deHistogramPanel::~deHistogramPanel()
@@ -62,8 +63,7 @@ void deHistogramPanel::render(wxDC& dc)
 {
     if (generated)
     {
-        wxBitmap* bitmap = new wxBitmap(histogramImage);
-        dc.DrawBitmap(*bitmap, 0, 0, false);
+        renderedImage.render(dc);
     }       
     else
     {
@@ -125,7 +125,7 @@ void deHistogramPanel::generateHistogram()
         unsigned char g1 = 50;
         unsigned char g2 = 120;
 
-        generated = histogram.render(histogramImage.GetData(), sizeW, sizeH, g1, g2);
+        generated = histogram.render(renderedImage.getCurrentImageData(), sizeW, sizeH, g1, g2);
     }        
 }
 

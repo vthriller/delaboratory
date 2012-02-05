@@ -22,13 +22,14 @@
 #include <wx/wx.h>
 #include "histogram.h"
 class deProject;
+#include "rendered_image.h"
 
 class deHistogramPanel:public wxPanel
 {
     private:
         deProject* project;
         deHistogram histogram;
-        wxImage histogramImage;
+        deRenderedImage renderedImage;
         int channel;
         bool generated;
 
