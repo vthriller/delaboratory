@@ -17,12 +17,61 @@
 */
 
 #include "rendered_image.h"
+#include "logger.h"
+#include "str.h"
+
+void deRenderedImage::setSize(const deSize& _size)
+{
+    requestedSize = _size;
+}
+
+unsigned char* deRenderedImage::getCurrentImageData()
+{
+    if (requestedSize != size)
+    {
+        if (image)
+        {
+            logMessage("delete image");
+            delete image;
+        }            
+        size = requestedSize;
+        int w = size.getW();
+        int h = size.getH();
+        logMessage("create image " + str(w) + "x" + str(h));
+        image = new wxImage(w,h);
+    }
+
+    unsigned char* data = image->GetData();
+
+    return data;
+}
+
 
 deRenderedImage::deRenderedImage()
+:size(0,0), requestedSize(0,0)
 {
+    image = NULL;
 }
 
 deRenderedImage::~deRenderedImage()
 {
+    if (image)
+    {
+        delete image;
+    }        
 }
 
+bool deRenderedImage::render(wxDC& dc)
+{
+    if (image)
+    {
+        wxBitmap bitmap(*image);
+        dc.DrawBitmap(bitmap, 0, 0, false);
+        return true;
+    }
+    else
+    {
+        logMessage("renderer - no image");
+        return false;
+    }
+}   

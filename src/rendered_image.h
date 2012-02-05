@@ -19,17 +19,28 @@
 #ifndef _DE_RENDERED_IMAGE_H
 #define _DE_RENDERED_IMAGE_H
 
+#include <wx/wx.h>
+#include "size.h"
+
 class deRenderedImage
 {
     private:
+        wxImage* image;
         
         deRenderedImage(const deRenderedImage& i);
         deRenderedImage& operator = (const deRenderedImage& i);
+
+        deSize size;
+        deSize requestedSize;
 
     public:
         deRenderedImage();
 
         virtual ~deRenderedImage();
+
+        void setSize(const deSize& _size);
+        unsigned char* getCurrentImageData();
+        bool render(wxDC& dc);
 };
 
 #endif

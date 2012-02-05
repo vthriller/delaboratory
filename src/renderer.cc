@@ -280,38 +280,10 @@ deRenderer::deRenderer(deChannelManager& _channelManager)
  channelManager(_channelManager),
  mutex(wxMUTEX_RECURSIVE)
 {
-    image = NULL;
 }
 
 deRenderer::~deRenderer()
 {
-    if (image)
-    {
-        delete image;
-    }        
-}
-
-unsigned char* deRenderer::getCurrentImageData()
-{
-    const deSize& s = channelManager.getChannelSize();
-
-    if (s != size)
-    {
-        if (image)
-        {
-            logMessage("delete image");
-            delete image;
-        }            
-        int w = s.getW();
-        int h = s.getH();
-        logMessage("create image " + str(w) + "x" + str(h));
-        image = new wxImage(w,h);
-        size = s;
-    }
-
-    unsigned char* data = image->GetData();
-
-    return data;
 }
 
 bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor& layerProcessor, deLayerStack& layerStack)
@@ -393,18 +365,7 @@ bool deRenderer::render(wxDC& dc)
 {
     lockWithLog(mutex, "renderer mutex");
 
-    bool result = false;
-
-    if (image)
-    {
-        wxBitmap bitmap(*image);
-        dc.DrawBitmap(bitmap, 0, 0, false);
-        result = true;
-    }
-    else
-    {
-        logMessage("renderer - no image");
-    }
+    bool result = renderedImage.render(dc);
 
     logMessage("unlock renderer mutex");
     mutex.Unlock();
@@ -412,3 +373,9 @@ bool deRenderer::render(wxDC& dc)
     return result;
 }
 
+unsigned char* deRenderer::getCurrentImageData()
+{
+    const deSize& s = channelManager.getChannelSize();
+    renderedImage.setSize(s);
+    return renderedImage.getCurrentImageData();
+}    
