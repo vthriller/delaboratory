@@ -25,7 +25,6 @@
 class deRenderedImage
 {
     private:
-        wxImage* image;
         wxBitmap* renderedBitmap;
         unsigned char* internalData;
         
