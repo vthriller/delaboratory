@@ -71,7 +71,7 @@ class deProject
         deHistogramModePanel* histogramModePanel;
         deImageAreaPanel* imageAreaPanel;
 
-
+        void onImageNameUpdate();
 
         void loadLayers(xmlNodePtr root);
         void loadLayer(xmlNodePtr root);
