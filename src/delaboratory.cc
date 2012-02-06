@@ -77,12 +77,19 @@ int deLaboratory::FilterEvent(wxEvent& event)
     {
         if  (event.GetEventType()==wxEVT_KEY_DOWN )
         {
-             project.onKey(((wxKeyEvent&)event).GetKeyCode());
-             if (frame)
-             {
-                 frame->onKey(((wxKeyEvent&)event).GetKeyCode());
-             }                 
-             return true;
+            int key = ((wxKeyEvent&)event).GetKeyCode();
+            if (key == WXK_RETURN)
+            {
+                logMessage("WXK_RETURN detected");
+                return true;
+            }
+
+            project.onKey(key);
+            if (frame)
+            {
+                frame->onKey(key);
+            }                 
+            return true;
         }
     }
 
