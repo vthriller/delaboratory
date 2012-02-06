@@ -22,14 +22,12 @@
 #include <string>
 #include "size.h"
 #include "channel.h"
+class deStaticImage;
 
-bool checkTIFF(const std::string& fileName);
-bool checkJPEG(const std::string& fileName);
-deSize getTIFFSize(const std::string& fileName);
-deSize getJPEGSize( const std::string& fileName);
-void loadTIFF(const std::string& fileName, deChannel& channelR, deChannel& channelG, deChannel& channelB, bool& icc);
-void loadJPEG(const std::string& fileName, deChannel& channelR, deChannel& channelG, deChannel& channelB);
 void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size);
 void saveTIFF(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size);
+
+bool loadTIFF(const std::string& fileName, deStaticImage& image);
+bool loadJPEG(const std::string& fileName, deStaticImage& image);
 
 #endif

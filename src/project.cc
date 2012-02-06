@@ -176,6 +176,7 @@ void deProject::setTestImage(int s)
     generateFractal(channelRR->getPixels(), channelGG->getPixels(), channelBB->getPixels(), size);
 
     imageFileName = "delaboratory_test_image";
+    onImageNameUpdate();
 
     previewChannelManager.destroyAllChannels();
     if (imageAreaPanel)
@@ -556,59 +557,22 @@ bool deProject::openImage(const std::string& fileName)
 
     logMessage("open image " + fileName);
 
-    bool tiff = checkTIFF(fileName);
-    bool jpeg = checkJPEG(fileName);
-
-    if ((!tiff) && (!jpeg))
-    {
-        return false;
-    }
-
-    if ((tiff) && (jpeg))
-    {
-        assert(false);
-    }
-
-    deSize size(0,0);
-
-    if (tiff)
-    {
-        size = getTIFFSize(fileName);
-    }
-
-    if (jpeg)
-    {
-        size = getJPEGSize(fileName);
-    }
-
-    sourceImage.setSize(size);
-
-    deChannel* channelRR = sourceImage.getChannel(0);
-    deChannel* channelGG = sourceImage.getChannel(1);
-    deChannel* channelBB = sourceImage.getChannel(2);
-
     bool status = false;
 
-    if (tiff)
+    if (loadTIFF(fileName, sourceImage))
     {
-        bool icc;
-        loadTIFF(fileName, *channelRR, *channelGG, *channelBB, icc);
-#if ICC_MESSAGE
-        if (icc)
-        {
-            wxMessageBox( _T("Warning! this TIFF file contains ICC profile which is ignored by delaboratory\n\ndelaboratory expects sRGB - colors may be not accurate\n\nThis problem happens (for instance) when tiff is created by dcraw\nyou can fix it by calling tifficc command, by default it converts tiff to sRGB"), _T("ICC profile ignored"), wxOK | wxICON_INFORMATION, NULL );
-        }
-#endif        
         status = true;
     }
-
-    if (jpeg)
+    else
     {
-        loadJPEG(fileName, *channelRR, *channelGG, *channelBB);
-        status = true;
+        if (loadJPEG(fileName, sourceImage))
+        {
+            status = true;
+        }
     }
 
     imageFileName = removePathAndExtension(fileName);
+    onImageNameUpdate();
     sourceImageFileName = fileName;
 
     previewChannelManager.destroyAllChannels();
@@ -780,3 +744,10 @@ void deProject::addRandomLayer()
     }
 }
 
+void deProject::onImageNameUpdate()
+{
+    if (mainFrame)
+    {
+        //mainFrame->setImageName(imageFileName, sourceImage.getSize());
+    }
+}

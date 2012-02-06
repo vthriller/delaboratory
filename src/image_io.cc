@@ -22,257 +22,12 @@
 #include "channel.h"
 #include "conversion_functions.h"
 #include "logger.h"
-
-bool checkTIFF(const std::string& fileName)
-{
-    wxLogNull noerrormessages;
-
-    logMessage("checkTIFF " + fileName);
-
-    TIFF* tif = TIFFOpen(fileName.c_str(), "r");
-    if (!tif)
-    {
-        logMessage(fileName + " is not valid TIFF");
-        return false;
-    }
-    else
-    {
-        TIFFClose(tif);
-        logMessage(fileName + " is valid TIFF");
-        return true;
-    }
-}    
-
-bool checkJPEG(const std::string& fileName)
-{
-    wxLogNull noerrormessages;
-
-    logMessage("checkJPEG " + fileName);
-
-    wxImage image;
-
-    const char* c = fileName.c_str();
-    wxString s(c, wxConvUTF8);
-
-    bool result = image.LoadFile(s, wxBITMAP_TYPE_JPEG);
-
-    if (result)
-    {
-        logMessage(fileName + " is valid JPEG");
-    }
-    else
-    {
-        logMessage(fileName + " is not valid JPEG");
-    }
-
-    return result;
-}   
-
-deSize getTIFFSize(const std::string& fileName)
-{
-    TIFF* tif = TIFFOpen(fileName.c_str(), "r");
-    deSize size(0,0);
-
-    if (tif)
-    {
-        int w;
-        int h;
-        TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
-        TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
-        size = deSize(w,h);
-    }
-
-    return size;
-}    
-
-deSize getJPEGSize( const std::string& fileName)
-{
-    wxImage image;
-    deSize size(0,0);
-
-    const char* c = fileName.c_str();
-    wxString s(c, wxConvUTF8);
-    if (image.LoadFile(s, wxBITMAP_TYPE_JPEG))
-    {
-        int w = image.GetWidth();
-        int h = image.GetHeight();
-        size = deSize(w,h);
-    }
-
-    return size;
-}    
-
-void loadTIFF(const std::string& fileName, deChannel& channelR, deChannel& channelG, deChannel& channelB, bool& icc)
-{
-    logMessage("loadTIFF " + fileName);
-
-    TIFF* tif = TIFFOpen(fileName.c_str(), "r");
-    if (!tif)
-    {
-        return;
-    }
-    tdata_t buf;
-
-    int w;
-    int h;
-    uint16 bps;
-    uint16 spp;
-
-    uint16 photometric;
-
-    TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric);
-
-    deConversion3x3 conversionLAB = getConversion3x3(deColorSpaceLAB, deColorSpaceRGB);
-
-    TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
-    TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
-    TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bps);
-    TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &spp);
-
-    uint32* count;
-    void** profile;
-    if (TIFFGetField(tif, TIFFTAG_ICCPROFILE, &count, &profile))
-    {
-        icc = true;
-    }        
-    else
-    {
-        icc = false;
-    }
-
-    channelR.lockWrite();
-    channelG.lockWrite();
-    channelB.lockWrite();
-
-    deValue* pixelsR = channelR.getPixels();
-    deValue* pixelsG = channelG.getPixels();
-    deValue* pixelsB = channelB.getPixels();
-
-    int pos = 0;
-    int y;
-
-    int ssize = TIFFScanlineSize(tif);
-    buf = _TIFFmalloc(ssize);
-
-    for (y = 0; y < h; y++)
-    {
-        TIFFReadScanline(tif, buf, y);
-        int x;
-        for (x = 0; x < w; x++)
-        {
-            deValue r;
-            deValue g;
-            deValue b;
-            if (bps == 16)
-            {
-                uint16* bb = (uint16*)(buf);
-                uint16 u1 = bb[spp*x+0];
-                uint16 u2 = bb[spp*x+1];
-                uint16 u3 = bb[spp*x+2];
-                deValue d = (256 * 256) - 1;
-                r = u1 / d;
-                g = u2 / d;
-                b = u3 / d;
-            }         
-            else
-            {
-                uint8* bb = (uint8*)(buf);
-                uint8 u1 = bb[spp*x+0];
-                uint8 u2 = bb[spp*x+1];
-                uint8 u3 = bb[spp*x+2];
-                deValue d = 256 - 1;
-                r = u1 / d;
-                g = u2 / d;
-                b = u3 / d;
-            }
-
-            if (photometric == PHOTOMETRIC_CIELAB)
-            {
-                deValue _l = r;
-                deValue _a = g;
-                deValue _b = b;
-                _a+= 0.5;
-                _b+= 0.5;
-
-                if (_a > 1.0)
-                {
-                    _a-= 1.0;
-                }
-                if (_b > 1.0)
-                {
-                    _b-= 1.0;
-                }
-
-                conversionLAB(_l, _a, _b, r, g, b);
-            }
-
-            pixelsR[pos] = r;
-            pixelsG[pos] = g;
-            pixelsB[pos] = b;
-
-            pos++;
-        }
-    }
-
-    channelR.unlockWrite();
-    channelG.unlockWrite();
-    channelB.unlockWrite();
-
-    _TIFFfree(buf);
-    TIFFClose(tif);
-    logMessage("loadTIFF " + fileName + " done");
-}
-
-void loadJPEG(const std::string& fileName, deChannel& channelR, deChannel& channelG, deChannel& channelB)
-{
-    logMessage("loadJPEG " + fileName);
-
-    const char* c = fileName.c_str();
-    wxString s(c, wxConvUTF8);
-    wxImage image;
-    image.LoadFile(s, wxBITMAP_TYPE_JPEG);
-    int w = image.GetWidth();
-    int h = image.GetHeight();
-
-    int pos = 0;
-
-    channelR.lockWrite();
-    channelG.lockWrite();
-    channelB.lockWrite();
-
-    unsigned char* data = image.GetData();
-
-    int p = 0;
-    int y;
-    for (y =0; y < h; y++)
-    {   
-        int x;
-        for (x = 0; x < w; x++)
-        {
-
-            deValue r = data[p] / 255.0; 
-            p++;
-            deValue g = data[p] / 255.0; 
-            p++;
-            deValue b = data[p] / 255.0; 
-            p++;
-            channelR.setValue(pos, r );
-            channelG.setValue(pos, g );
-            channelB.setValue(pos, b );
-            pos++;
-        }
-    }
-
-    channelR.unlockWrite();
-    channelG.unlockWrite();
-    channelB.unlockWrite();
-
-    logMessage("loadJPEG " + fileName + " done");
-
-}
+#include "static_image.h"
+#include "str.h"
 
 void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size)
 {
+
     wxImage* image;
     int w = size.getW();
     int h = size.getH();
@@ -314,10 +69,17 @@ void saveJPEG(const std::string& fileName, const deChannel& channelR, const deCh
 
 void saveTIFF(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size)
 {
+    logMessage("save TIFF " + fileName);
     int w = size.getW();
     int h = size.getH();
 
     TIFF* tif = TIFFOpen(fileName.c_str(), "w");
+
+    if (!tif)
+    {
+        logMessage("ERROR writing " + fileName);
+        return;
+    }
 
     TIFFSetField (tif, TIFFTAG_SOFTWARE, "delaboratory");
     TIFFSetField (tif, TIFFTAG_IMAGEWIDTH, w);
@@ -365,4 +127,197 @@ void saveTIFF(const std::string& fileName, const deChannel& channelR, const deCh
     channelB.unlockRead();
 
     TIFFClose(tif);
+
+    logMessage("saved TIFF " + fileName);
+}
+
+bool loadJPEG(const std::string& fileName, deStaticImage& image)
+{
+    wxLogNull noerrormessages;
+
+    logMessage("loadJPEG " + fileName);
+
+    const char* c = fileName.c_str();
+    wxString s(c, wxConvUTF8);
+    wxImage fileImage;
+    fileImage.LoadFile(s, wxBITMAP_TYPE_JPEG);
+    int w = fileImage.GetWidth();
+    int h = fileImage.GetHeight();
+
+    deSize size(w, h);
+    image.setSize(size);
+
+    deChannel* channelRR = image.getChannel(0);
+    if (!channelRR)
+    {
+        return false;
+    }
+    deChannel& channelR = *channelRR;
+
+    deChannel* channelGG = image.getChannel(1);
+    if (!channelGG)
+    {
+        return false;
+    }
+    deChannel& channelG = *channelGG;
+
+    deChannel* channelBB = image.getChannel(2);
+    if (!channelBB)
+    {
+        return false;
+    }
+    deChannel& channelB = *channelBB;
+
+    int pos = 0;
+
+    channelR.lockWrite();
+    channelG.lockWrite();
+    channelB.lockWrite();
+
+    unsigned char* data = fileImage.GetData();
+
+    int p = 0;
+    int y;
+    for (y =0; y < h; y++)
+    {   
+        int x;
+        for (x = 0; x < w; x++)
+        {
+
+            deValue r = data[p] / 255.0; 
+            p++;
+            deValue g = data[p] / 255.0; 
+            p++;
+            deValue b = data[p] / 255.0; 
+            p++;
+            channelR.setValue(pos, r );
+            channelG.setValue(pos, g );
+            channelB.setValue(pos, b );
+            pos++;
+        }
+    }
+
+    channelR.unlockWrite();
+    channelG.unlockWrite();
+    channelB.unlockWrite();
+
+    logMessage("loadJPEG " + fileName + " done");
+
+    return true;
+}
+
+
+
+bool loadTIFF(const std::string& fileName, deStaticImage& image)
+{
+    wxLogNull noerrormessages;
+
+    logMessage("load TIFF " + fileName);
+
+    TIFF* tif = TIFFOpen(fileName.c_str(), "r");
+    if (!tif)
+    {
+        return false;
+    }
+    tdata_t buf;
+
+    int w;
+    int h;
+    uint16 bps;
+    uint16 spp;
+
+    TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
+    TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
+    TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bps);
+    TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &spp);
+
+    logMessage("found TIFF " + str(w) + "x" + str(h) + " bps: " + str(bps) + " spp: " + str(spp));
+
+    deSize size(w, h);
+    image.setSize(size);
+
+    deChannel* channelRR = image.getChannel(0);
+    if (!channelRR)
+    {
+        return false;
+    }
+    deChannel& channelR = *channelRR;
+
+    deChannel* channelGG = image.getChannel(1);
+    if (!channelGG)
+    {
+        return false;
+    }
+    deChannel& channelG = *channelGG;
+
+    deChannel* channelBB = image.getChannel(2);
+    if (!channelBB)
+    {
+        return false;
+    }
+    deChannel& channelB = *channelBB;
+
+    channelR.lockWrite();
+    channelG.lockWrite();
+    channelB.lockWrite();
+
+    deValue* pixelsR = channelR.getPixels();
+    deValue* pixelsG = channelG.getPixels();
+    deValue* pixelsB = channelB.getPixels();
+
+    int pos = 0;
+    int y;
+
+    int ssize = TIFFScanlineSize(tif);
+    buf = _TIFFmalloc(ssize);
+
+    for (y = 0; y < h; y++)
+    {
+        TIFFReadScanline(tif, buf, y);
+        int x;
+        for (x = 0; x < w; x++)
+        {
+            deValue r;
+            deValue g;
+            deValue b;
+            if (bps == 16)
+            {
+                uint16* bb = (uint16*)(buf);
+                uint16 u1 = bb[spp*x+0];
+                uint16 u2 = bb[spp*x+1];
+                uint16 u3 = bb[spp*x+2];
+                deValue d = (256 * 256) - 1;
+                r = u1 / d;
+                g = u2 / d;
+                b = u3 / d;
+            }         
+            else
+            {
+                uint8* bb = (uint8*)(buf);
+                uint8 u1 = bb[spp*x+0];
+                uint8 u2 = bb[spp*x+1];
+                uint8 u3 = bb[spp*x+2];
+                deValue d = 256 - 1;
+                r = u1 / d;
+                g = u2 / d;
+                b = u3 / d;
+            }
+
+            pixelsR[pos] = r;
+            pixelsG[pos] = g;
+            pixelsB[pos] = b;
+
+            pos++;
+        }
+    }
+
+    channelR.unlockWrite();
+    channelG.unlockWrite();
+    channelB.unlockWrite();
+
+    _TIFFfree(buf);
+    TIFFClose(tif);
+    logMessage("loadTIFF " + fileName + " done");
+
+    return true;
 }
