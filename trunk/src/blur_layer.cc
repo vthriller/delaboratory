@@ -31,6 +31,8 @@ deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer,
  blurType("blur_type")
 {
     blurRadius.setLabel("radius");
+    blurRadius.setMin(0);
+    blurRadius.setMax(50);
     getSupportedBlurTypes(blurType.getChoices());
     blurType.setLabel("blur type");
     reset();
@@ -42,7 +44,7 @@ deBlurLayer::~deBlurLayer()
 
 void deBlurLayer::reset()
 {
-    blurRadius.set(0.1);
+    blurRadius.set(5);
     blurType.set("gaussian");
 }
 
@@ -51,13 +53,13 @@ void deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
 
-    deValue r = viewManager.getRealScale() * blurRadius.get() * 200;
+    deValue r = viewManager.getRealScale() * blurRadius.get();
 
     deBlurType type = blurTypeFromString(blurType.get());
     
     logMessage("blur r=" + str(r));
 
-    blurChannel(source, destination, size, r, type, threshold.get());
+    blurChannel(source, destination, size, r, r, type, threshold.get());
 
     logMessage("blur done");
 }

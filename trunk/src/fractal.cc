@@ -95,10 +95,10 @@ void generateFractal(deValue* r, deValue* g, deValue* b, deSize size)
 
     deValue* tmp = new deValue[size.getN()];
 
-    blurChannel(r, tmp, size, r1, deGaussianBlur, 0);
+    blurChannel(r, tmp, size, r1, r1, deGaussianBlur, 0);
     copyChannel(tmp, r, size);
 
-    blurChannel(b, tmp, size, r2, deGaussianBlur, 0);
+    blurChannel(b, tmp, size, r2, r2, deGaussianBlur, 0);
     copyChannel(tmp, b, size);
 
     delete [] tmp;

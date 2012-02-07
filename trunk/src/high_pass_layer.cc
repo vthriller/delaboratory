@@ -33,12 +33,14 @@ deHighPassLayer::deHighPassLayer(deColorSpace _colorSpace, int _index, int _sour
  blurRadius("blur_radius")
 {
     blurRadius.setLabel("radius");
+    blurRadius.setMin(1);
+    blurRadius.setMax(50);
     reset();
 }
 
 void deHighPassLayer::reset()
 {
-    blurRadius.set(0.1);
+    blurRadius.set(5);
 }
 
 deHighPassLayer::~deHighPassLayer()
@@ -54,9 +56,9 @@ void deHighPassLayer::processAction(int i, const deChannel& sourceChannel, deCha
 
     deValue* blurMap = new deValue [size.getN()];
 
-    deValue r = viewManager.getRealScale() * blurRadius.get() * 200;
+    deValue r = viewManager.getRealScale() * blurRadius.get();
     deBlurType type = deGaussianBlur;
-    blurChannel(source, blurMap, size, r, type, 0.0);
+    blurChannel(source, blurMap, size, r, r, type, 0.0);
 
     blendChannel(source, blurMap, destination, NULL, deBlendGrainExtract, 1.0, size.getN());
 

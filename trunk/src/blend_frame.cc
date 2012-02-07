@@ -61,7 +61,7 @@ class deBlurRadiusSlider:public deSlider
 
     public:
         deBlurRadiusSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-        :deSlider(parent, "blur radius", range, 0.0, 0.2, 0.0, _layerProcessor), layer(_layer),
+        :deSlider(parent, "blur radius", range, 0.0, 50, 0.0, _layerProcessor), layer(_layer),
          layerProcessor(_layerProcessor)
         {
             setValue(layer.getBlendBlurRadius());

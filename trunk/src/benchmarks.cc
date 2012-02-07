@@ -37,7 +37,7 @@ int benchmarkBlur(deSize size, deValue radius, deBlurType type)
     {
         wxStopWatch sw;
 
-        blurChannel(channel1, channel2, size, radius, type, 0.1);
+        blurChannel(channel1, channel2, size, radius, radius, type, 0.1);
 
         t = sw.Time();
     }

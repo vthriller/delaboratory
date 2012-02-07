@@ -31,6 +31,8 @@ deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, d
  amount("amount"),
  threshold("threshold")
 {
+    blurRadius.setMin(1);
+    blurRadius.setMax(200);
     reset();
     amount.setMax(5);
     blurRadius.setLabel("radius");
@@ -52,9 +54,9 @@ void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
     deBlurType type = deGaussianBlur;
     deValue t = 0.0;
 
-    deValue r = viewManager.getRealScale() * blurRadius.get() * 200;
+    deValue r = viewManager.getRealScale() * blurRadius.get();
 
-    blurChannel(source, unsharpMask, size, r, type, t);
+    blurChannel(source, unsharpMask, size, r, r, type, t);
 
     for (i = 0; i < n; i ++)
     {
@@ -97,28 +99,28 @@ bool deUSMLayer::isChannelNeutral(int index)
 
 void deUSMLayer::reset()
 {
-    blurRadius.set(0.7);
+    blurRadius.set(5);
     amount.set(0.1);
     threshold.set(0.0);
 }
 
 void deUSMLayer::sharp()
 {
-    blurRadius.set(0.001);
-    amount.set(4.0);
+    blurRadius.set(3);
+    amount.set(3.0);
     threshold.set(0.0);
 }
 
 void deUSMLayer::hiraloam1()
 {
-    blurRadius.set(0.8);
+    blurRadius.set(100);
     amount.set(0.1);
     threshold.set(0.0);
 }
 
 void deUSMLayer::hiraloam2()
 {
-    blurRadius.set(0.8);
+    blurRadius.set(150);
     amount.set(0.2);
     threshold.set(0.0);
 }

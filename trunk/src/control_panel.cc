@@ -27,12 +27,14 @@
 #include "wx/notebook.h"
 #include "layer_stack.h"
 #include "layer_frame_manager.h"
+#include "frame_factory.h"
 
 const int g_txt = 220;
 
 deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor,  deLayerGridPanel* _layerGridPanel)
 :wxPanel(parent), project(_project), layerGridPanel(_layerGridPanel), layerProcessor(_processor)
 {
+    autoUI = false;
 
     project.setControlPanel(this);
 
@@ -208,6 +210,7 @@ void deControlPanel::click(wxCommandEvent &event)
     {
         deColorSpace colorSpace = c->second;
         project.addConversionLayer(colorSpace);
+        onAddLayer();
     }
 
     std::map<int, std::string>::iterator a = actionButtonsNames.find(id);
@@ -215,7 +218,7 @@ void deControlPanel::click(wxCommandEvent &event)
     {
         std::string action = a->second;
         project.addActionLayer(action);
-
+        onAddLayer();
     }
 
 }
@@ -244,3 +247,31 @@ void deControlPanel::onKey(int key)
     }
 }
 
+
+void deControlPanel::onAddLayer()
+{
+    if (autoUI)
+    {
+        deLayerFrameManager& frameManager = project.getLayerFrameManager();
+        deLayerStack& layerStack = project.getLayerStack();
+        int n = layerStack.getSize() - 1;
+        deLayer* layer = layerStack.getLayer(n);
+        project.log("auto UI - creating action frame");
+        deFrame* actionFrame = createFrame(this, *layer, layerProcessor, frameManager);
+        if (actionFrame)
+        {
+            project.log("auto UI - created action frame");
+            actionFrame->Show(true);
+        }
+    }
+}
+
+bool deControlPanel::getAutoUI() const
+{
+    return autoUI;
+}
+
+void deControlPanel::setAutoUI(bool a)
+{
+    autoUI = a;
+}

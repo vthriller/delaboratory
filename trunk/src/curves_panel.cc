@@ -362,6 +362,12 @@ void deCurvesPanel::release(wxMouseEvent &event)
 
 void deCurvesPanel::move(wxMouseEvent &event)
 {
+    if (!event.ButtonIsDown(wxMOUSE_BTN_LEFT))
+    {
+        selectedPoint = -1;
+        return;
+    }
+
     deCurve* curve = layer.getCurve(channel);
 
     if (!curve)

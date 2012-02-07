@@ -81,7 +81,7 @@ void deVignetteLayer::reset()
     radiusY.set(0.3);
     centerX.set(0.0);
     centerY.set(0.0);
-    light.set(0.7);
+    light.set(0.5);
     darkness.set(0.2);
 }
 
