@@ -23,6 +23,7 @@
 #include "view_manager.h"
 #include "logger.h"
 #include "static_image.h"
+#include "copy_channel.h"
 
 deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage)
 :deLayer("source image", deColorSpaceRGB, _index, -1),
@@ -73,72 +74,82 @@ void deSourceImageLayer::updateImage()
 
     const deSize ds = previewChannelManager.getChannelSize();
 
-    deValue scale = 1.0;
-    deValue offsetX = 0.0;
-    deValue offsetY = 0.0;
-
-    deValue centerX = (offsetX + 1.0) / 2.0;
-    deValue centerY = (offsetY + 1.0) / 2.0;
-
-    int ws = ss.getW();
-    int hs = ss.getH();
-    deValue sAspect = ss.getAspect();
-    deValue dAspect = ds.getAspect();
-
-    centerX *= ws;
-    centerY *= hs;
-
-    int wd = ds.getW();
-    int hd = ds.getH();
-
-    float scaleW = (float) ws / wd;
-    float scaleH = (float) hs / hd;
-
-    scaleH *= (sAspect / dAspect);
-
-    scaleW /= scale;
-    scaleH /= scale;
-
-    int ox = centerX - scaleW * (wd / 2);
-    int oy = centerY - scaleH * (hd / 2);
-
-    int maxox = ws - scaleW * ( wd - 1);
-    int maxoy = hs - scaleH * ( hd - 1);
-
-    if (ox > maxox)
+    if (ss == ds)
     {
-        ox = maxox;
+        copyChannel(sourceChannelR->getPixels(), channelR->getPixels(), ss);
+        copyChannel(sourceChannelG->getPixels(), channelG->getPixels(), ss);
+        copyChannel(sourceChannelB->getPixels(), channelB->getPixels(), ss);
     }
-    if (oy > maxoy)
+    else
     {
-        oy = maxoy;
-    }
-    if (ox < 0)
-    {
-        ox = 0;
-    }
-    if (oy < 0)
-    {
-        oy = 0;
-    }
 
-    int maxy = hd;
-    int maxyy = (hs - oy) / scaleH;
-    if (maxyy < maxy)
-    {
-        maxy = maxyy;
-    }
+        deValue scale = 1.0;
+        deValue offsetX = 0.0;
+        deValue offsetY = 0.0;
 
-    int maxx = wd;
-    int maxxx = (ws - ox) / scaleW;
-    if (maxxx < maxx)
-    {
-        maxx = maxxx;
-    }
+        deValue centerX = (offsetX + 1.0) / 2.0;
+        deValue centerY = (offsetY + 1.0) / 2.0;
 
-    scaleChannel(sourceChannelR->getPixels(), channelR->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, hs, wd);
-    scaleChannel(sourceChannelG->getPixels(), channelG->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, hs, wd);
-    scaleChannel(sourceChannelB->getPixels(), channelB->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, hs, wd);
+        int ws = ss.getW();
+        int hs = ss.getH();
+        deValue sAspect = ss.getAspect();
+        deValue dAspect = ds.getAspect();
+
+        centerX *= ws;
+        centerY *= hs;
+
+        int wd = ds.getW();
+        int hd = ds.getH();
+
+        float scaleW = (float) ws / wd;
+        float scaleH = (float) hs / hd;
+
+        scaleH *= (sAspect / dAspect);
+
+        scaleW /= scale;
+        scaleH /= scale;
+
+        int ox = centerX - scaleW * (wd / 2);
+        int oy = centerY - scaleH * (hd / 2);
+
+        int maxox = ws - scaleW * ( wd - 1);
+        int maxoy = hs - scaleH * ( hd - 1);
+
+        if (ox > maxox)
+        {
+            ox = maxox;
+        }
+        if (oy > maxoy)
+        {
+            oy = maxoy;
+        }
+        if (ox < 0)
+        {
+            ox = 0;
+        }
+        if (oy < 0)
+        {
+            oy = 0;
+        }
+
+        int maxy = hd;
+        int maxyy = (hs - oy) / scaleH;
+        if (maxyy < maxy)
+        {
+            maxy = maxyy;
+        }
+
+        int maxx = wd;
+        int maxxx = (ws - ox) / scaleW;
+        if (maxxx < maxx)
+        {
+            maxx = maxxx;
+        }
+
+        scaleChannel(sourceChannelR->getPixels(), channelR->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, hs, wd);
+        scaleChannel(sourceChannelG->getPixels(), channelG->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, hs, wd);
+        scaleChannel(sourceChannelB->getPixels(), channelB->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, hs, wd);
+    }
 
     sourceChannelR->unlockRead();
     sourceChannelG->unlockRead();
