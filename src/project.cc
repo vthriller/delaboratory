@@ -748,6 +748,6 @@ void deProject::onImageNameUpdate()
 {
     if (mainFrame)
     {
-        //mainFrame->setImageName(imageFileName, sourceImage.getSize());
+        mainFrame->setImageName(imageFileName, sourceImage.getSize());
     }
 }

@@ -71,15 +71,17 @@ EVT_MENU(DE_INFO_EVENT, deMainFrame::onInfoEvent)
 END_EVENT_TABLE()
 
 deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager)
-: wxFrame() , project(_project), layerProcessor(_layerProcessor)
+: wxFrame() , project(_project), layerProcessor(_layerProcessor), imageSize(0,0)
 {
     project.setMainFrame(this);
 
     project.log("creating main frame");
 
-    std::string s = getApplicationName() + " " + getVersion() + " " + getCopyright();
+    imageName = "";
 
-    Create((wxFrame *)NULL, wxID_ANY, wxString::FromAscii(s.c_str()), wxDefaultPosition, size);
+    Create((wxFrame *)NULL, wxID_ANY, _T("main frame"), wxDefaultPosition, size, wxDEFAULT_FRAME_STYLE | wxMAXIMIZE);
+
+    updateTitle();
 
     mainSizer = new wxBoxSizer(wxHORIZONTAL);
 
@@ -114,6 +116,9 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     realtime = new wxCheckBox(topPanel, wxID_ANY, _T("real time"));
     sizerR->Add(realtime);
 
+    autoUI = new wxCheckBox(topPanel, wxID_ANY, _T("auto UI"));
+    sizerR->Add(autoUI);
+
     bool r = layerProcessor.isRealtime();
     if (r)
     {
@@ -123,6 +128,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     {
         realtime->SetValue(0);
     }
+
 
 /*
     debugInfo = new wxStaticText(topPanel, wxID_ANY, _T("[debug]"), wxDefaultPosition);
@@ -157,6 +163,16 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     controlPanel = new deControlPanel(this, project, _layerProcessor, layerGridPanel);
     rightSizer->Add(controlPanel, 0, wxEXPAND);
+
+    bool a = controlPanel->getAutoUI();
+    if (a)
+    {
+        autoUI->SetValue(1);
+    }
+    else
+    {
+        autoUI->SetValue(0);
+    }
 
     mainSizer->Add(rightSizer, 0, wxEXPAND);
 
@@ -501,8 +517,11 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
 
 void deMainFrame::check(wxCommandEvent &event)
 {
-    bool checked = realtime->IsChecked();
-    layerProcessor.setRealtime(checked);
+    bool r = realtime->IsChecked();
+    layerProcessor.setRealtime(r);
+
+    bool aui = autoUI->IsChecked();
+    controlPanel->setAutoUI(aui);
 }
 
 void deMainFrame::onCloseEvent(wxCloseEvent& event)
@@ -526,3 +545,18 @@ void deMainFrame::onHistogramEvent(wxCommandEvent& event)
         histogramPanel->paintHistogram();
     }
 }
+
+void deMainFrame::updateTitle()
+{
+    std::string s = imageName + " " + str(imageSize.getW()) + "x" + str(imageSize.getH()) + " - " + getApplicationName() + " " + getVersion() + " " + getCopyright();
+
+    SetTitle(wxString::FromAscii(s.c_str()));
+}
+
+void deMainFrame::setImageName(const std::string& _imageName, const deSize& _size)
+{
+    imageName = _imageName;
+    imageSize = _size;
+    updateTitle();
+}    
+    

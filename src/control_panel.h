@@ -35,6 +35,8 @@ class deControlPanel:public wxPanel
         deLayerProcessor& layerProcessor;
         wxSizer* mainSizer;
 
+        bool autoUI;
+
         wxButton* exportJPEG;
         wxButton* exportTIFF;
         wxButton* externalEditor;
@@ -51,8 +53,9 @@ class deControlPanel:public wxPanel
 
         void setConversions();
 
-
         void generateFinalImage(const std::string& app, const std::string& type, const std::string& name);
+
+        void onAddLayer();
 
     public:
         deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deLayerGridPanel* _layerGridPanel);
@@ -63,6 +66,9 @@ class deControlPanel:public wxPanel
         void updateLayerGrid();
 
         void onKey(int key);
+
+        bool getAutoUI() const;
+        void setAutoUI(bool a);
 
 };
 

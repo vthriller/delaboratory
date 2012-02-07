@@ -36,6 +36,8 @@ deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int
  lightenAmount("lighten_amount")
 {
     blurRadius.setLabel("radius");
+    blurRadius.setMin(1);
+    blurRadius.setMax(50);
     shadowsHighlightsAmount.setLabel("sh/hi");
     darkenAmount.setLabel("darken");
     lightenAmount.setLabel("lighten");
@@ -44,7 +46,7 @@ deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int
 
 void deShadowsHighlightsLayer::reset()
 {
-    blurRadius.set(0.1);
+    blurRadius.set(5);
     shadowsHighlightsAmount.set(0.3);
     darkenAmount.set(0.0);
     lightenAmount.set(0.0);
@@ -65,9 +67,9 @@ void deShadowsHighlightsLayer::processAction(int i, const deChannel& sourceChann
     deValue* firstStage = new deValue [size.getN()];
     deValue* secondStage = new deValue [size.getN()];
 
-    deValue r = viewManager.getRealScale() * blurRadius.get() * 200;
+    deValue r = viewManager.getRealScale() * blurRadius.get();
     deBlurType type = deGaussianBlur;
-    blurChannel(source, blurMap, size, r, type, 0.0);
+    blurChannel(source, blurMap, size, r, r, type, 0.0);
 
     deValue sha = shadowsHighlightsAmount.get();
     blendChannel(source, blurMap, firstStage, NULL, deBlendOverlayInvert, sha, size.getN());

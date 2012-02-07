@@ -767,8 +767,8 @@ void deActionLayer::renderBlendMask()
     }
     else
     {
-        deValue r = viewManager.getRealScale() * blendBlurRadius * 1000;
-        blurChannel(maskPixels, allocatedMaskPixels, channelManager.getChannelSize(), r, type, t);
+        deValue r = viewManager.getRealScale() * blendBlurRadius;
+        blurChannel(maskPixels, allocatedMaskPixels, channelManager.getChannelSize(), r, r, type, t);
     }       
 
     processLinear(allocatedMaskPixels, allocatedMaskPixels, channelManager.getChannelSize().getN(), blendMaskMin, blendMaskMax, false);

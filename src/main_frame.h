@@ -28,6 +28,7 @@ class deHistogramPanel;
 class deLayerProcessor;
 class deSamplersPanel;
 class deSamplerManager;
+#include "size.h"
 
 enum
 {
@@ -76,6 +77,10 @@ private:
     wxStaticText* debugInfo;
 
     wxCheckBox* realtime;
+    wxCheckBox* autoUI;
+
+    std::string imageName;
+    deSize imageSize;
 
     deLayerProcessor& layerProcessor;
     bool full;
@@ -111,6 +116,8 @@ private:
 
     void check(wxCommandEvent &event);
 
+    void updateTitle();
+
 public:
 	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager);
 	~deMainFrame();
@@ -123,6 +130,8 @@ public:
 
     void generateHistogram();
     void paintHistogram();
+
+    void setImageName(const std::string& _imageName, const deSize& _size);
 
 
 	DECLARE_EVENT_TABLE()

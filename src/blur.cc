@@ -186,7 +186,7 @@ void fillWeightsGaussian(deValue* weights, int blurSize)
     }
 }    
 
-void blurChannel(const deValue* source, deValue* destination, deSize size, deValue radius, deBlurType type, deValue t)
+void blurChannel(const deValue* source, deValue* destination, deSize size, deValue radiusX, deValue radiusY, deBlurType type, deValue t)
 {
     assert(source);
     assert(destination);
@@ -204,21 +204,20 @@ void blurChannel(const deValue* source, deValue* destination, deSize size, deVal
         return;
     }
 
-    if (radius == 0)
+    if ((radiusX <= 0) || (radiusY <= 0))
     {
         return;
     }
 
     assert(w > 0);
     assert(h > 0);
-    assert(radius > 0);
 
-    int blurSizeW = radius;
+    int blurSizeW = radiusX;
     if (blurSizeW < 1)
     {
         blurSizeW = 1;
     }
-    int blurSizeH = radius;
+    int blurSizeH = radiusY;
     if (blurSizeH < 1)
     {
         blurSizeH = 1;
