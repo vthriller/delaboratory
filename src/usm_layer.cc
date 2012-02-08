@@ -42,12 +42,26 @@ deUSMLayer::~deUSMLayer()
 {
 }
 
-void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
+bool deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
     logMessage("usm start");
 
     int n = size.getN();
-    deValue* unsharpMask = new deValue[n];
+
+    deValue* unsharpMask = NULL;
+    try
+    {
+        unsharpMask = new deValue [size.getN()];
+    }
+    catch (std::bad_alloc)
+    {
+        logMessage("ERROR allocating memory in high pass");
+        if (unsharpMask)
+        {
+            delete [] unsharpMask;
+        }
+        return false;
+    }
 
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
@@ -56,7 +70,7 @@ void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
 
     deValue r = viewManager.getRealScale() * blurRadius.get();
 
-    blurChannel(source, unsharpMask, size, r, r, type, t);
+    bool result = blurChannel(source, unsharpMask, size, r, r, type, t);
 
     for (i = 0; i < n; i ++)
     {
@@ -89,6 +103,8 @@ void deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
     delete [] unsharpMask;
 
     logMessage("usm end");
+
+    return result;
 }
 
 

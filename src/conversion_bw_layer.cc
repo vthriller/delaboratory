@@ -89,7 +89,7 @@ void deConversionBWLayer::presetM(int c)
     }
 }
 
-void deConversionBWLayer::updateImage()
+bool deConversionBWLayer::updateImage()
 {
     logMessage("conversion BW start");
 
@@ -110,22 +110,22 @@ void deConversionBWLayer::updateImage()
 
     if (!sc0)
     {
-        return;
+        return false;
     }
     if (!sc1)
     {
-        return;
+        return false;
     }
     if (!sc2)
     {
-        return;
+        return false;
     }
 
     deChannel* dc = channelManager.getChannel(image.getChannelIndex(0));
 
     if (!dc)
     {
-        return;
+        return false;
     }
 
     dc->lockWrite();
@@ -206,6 +206,8 @@ void deConversionBWLayer::updateImage()
     dc->unlockWrite();
 
     logMessage("conversion BW end");
+
+    return true;
 }
 
 deColorSpace deConversionBWLayer::getSourceColorSpace() const

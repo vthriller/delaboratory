@@ -51,7 +51,7 @@ deVignetteLayer::~deVignetteLayer()
 {
 }
 
-void deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
+bool deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
     logMessage("deVignetteLayer::processAction i=" + str(i));
 
@@ -60,12 +60,14 @@ void deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deCha
     if (!destination)
     {
         logMessage("ERROR channel pixels are NULL");
-        return;
+        return false;
     }
 
     vignetteChannel(destination, size, centerX.get(), centerY.get(), radiusX.get(), radiusY.get(), light.get(), darkness.get());
 
     logMessage("deVignetteLayer::processAction i=" + str(i) + " done");
+
+    return true;
 }
 
 bool deVignetteLayer::isChannelNeutral(int index)

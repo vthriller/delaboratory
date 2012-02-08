@@ -56,20 +56,44 @@ deShadowsHighlightsLayer::~deShadowsHighlightsLayer()
 {
 }
 
-void deShadowsHighlightsLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
+bool deShadowsHighlightsLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
     logMessage("shadows/highlights start");
 
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
 
-    deValue* blurMap = new deValue [size.getN()];
-    deValue* firstStage = new deValue [size.getN()];
-    deValue* secondStage = new deValue [size.getN()];
+    deValue* blurMap = NULL;
+    deValue* firstStage = NULL;
+    deValue* secondStage = NULL;
+
+    try
+    {
+        blurMap = new deValue [size.getN()];
+        firstStage = new deValue [size.getN()];
+        secondStage = new deValue [size.getN()];
+    }
+    catch (std::bad_alloc)
+    {
+        logMessage("ERROR allocating memory in shadows/highlights");
+        if (blurMap)
+        {
+            delete [] blurMap;
+        }
+        if (firstStage)
+        {
+            delete [] firstStage;
+        }
+        if (secondStage)
+        {
+            delete [] secondStage;
+        }
+        return false;
+    }
 
     deValue r = viewManager.getRealScale() * blurRadius.get();
     deBlurType type = deGaussianBlur;
-    blurChannel(source, blurMap, size, r, r, type, 0.0);
+    bool result = blurChannel(source, blurMap, size, r, r, type, 0.0);
 
     deValue sha = shadowsHighlightsAmount.get();
     blendChannel(source, blurMap, firstStage, NULL, deBlendOverlayInvert, sha, size.getN());
@@ -85,6 +109,8 @@ void deShadowsHighlightsLayer::processAction(int i, const deChannel& sourceChann
     delete [] secondStage;
     
     logMessage("shadows/highlights end");
+
+    return result;
 }
 
 

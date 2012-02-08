@@ -46,13 +46,13 @@ deApplyImageLayer::~deApplyImageLayer()
 {
 }
 
-void deApplyImageLayer::processAction(int i)
+bool deApplyImageLayer::processAction(int i)
 {
     int a = getInt(appliedLayer.get());
     deLayer* applied = layerStack.getLayer(a);
     if (!applied)
     {
-        return;
+        return false;
     }
     const deImage& appliedImage = applied->getImage();
     int n = getColorSpaceSize(appliedImage.getColorSpace());
@@ -76,6 +76,8 @@ void deApplyImageLayer::processAction(int i)
     }        
 
     imageActionPass.disableChannel(i, c);
+
+    return true;
 }
 
 deColorSpace deApplyImageLayer::getAppliedColorSpace()

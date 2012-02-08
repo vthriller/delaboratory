@@ -53,7 +53,7 @@ class deControlPanel:public wxPanel
 
         void setConversions();
 
-        void generateFinalImage(const std::string& app, const std::string& type, const std::string& name);
+        bool generateFinalImage(const std::string& app, const std::string& type, const std::string& name);
 
         void onAddLayer();
 

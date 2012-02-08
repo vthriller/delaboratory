@@ -48,7 +48,7 @@ void deBlurLayer::reset()
     blurType.set("gaussian");
 }
 
-void deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
+bool deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
@@ -59,9 +59,11 @@ void deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel
     
     logMessage("blur r=" + str(r));
 
-    blurChannel(source, destination, size, r, r, type, threshold.get());
+    bool result = blurChannel(source, destination, size, r, r, type, threshold.get());
 
     logMessage("blur done");
+
+    return result;
 }
 
 bool deBlurLayer::isChannelNeutral(int index)

@@ -537,8 +537,10 @@ bool deLayerProcessor::updateImage()
 
 }
 
-void deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame)
+bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame)
 {
+    bool result = true;
+
     lock();
 
     std::map<int, int> channelUsage;
@@ -568,7 +570,13 @@ void deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
 
         progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
 
-        layer->updateImageThreadCall();
+        bool r = layer->updateImageThreadCall();
+        if (!r)
+        {
+            result = false;
+            // stop loop
+            index = view + 1;
+        }
 
         if (memoryInfoFrame)
         {
@@ -590,6 +598,8 @@ void deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
     progressDialog->Update(100, _T("finished"));
 
     unlock();
+
+    return result;
 }
 
 void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)

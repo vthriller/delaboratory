@@ -38,10 +38,11 @@ deCurvesLayer::~deCurvesLayer()
     delete [] curves;
 }
 
-void deCurvesLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
+bool deCurvesLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
     logMessage("deCurvesLayer::processAction " + str(i));
     curves[i].process(sourceChannel, channel, size.getN());
+    return true;
 }
 
 deCurve* deCurvesLayer::getCurve(int index)

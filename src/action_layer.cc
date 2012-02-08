@@ -36,7 +36,12 @@ class deUpdateActionThread:public wxThread
     private:
         virtual void *Entry()
         {
-            layer.updateActionOnThread(channel);
+            bool result = layer.updateActionOnThread(channel);
+            if (!result)
+            {
+                logError("update action failed");
+                layer.setError();
+            }
             semaphore.Post();
             return NULL;
         }
@@ -79,7 +84,7 @@ class deUpdateBlendThread:public wxThread
         }
 };
 
-void deActionLayer::updateActionAllChannels()
+bool deActionLayer::updateActionAllChannels()
 {
     logMessage("update action all channels start");
 
@@ -87,6 +92,8 @@ void deActionLayer::updateActionAllChannels()
     int i;
 
     wxSemaphore semaphore(0, n);
+
+    errorOnUpdate = false;
 
     for (i = 0; i < n; i++)
     {
@@ -111,9 +118,18 @@ void deActionLayer::updateActionAllChannels()
     }
 
     logMessage("update action all channels end");
+
+    if (errorOnUpdate)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
-void deActionLayer::updateBlendAllChannels()
+bool deActionLayer::updateBlendAllChannels()
 {
     logMessage("update blend all channels start");
 
@@ -144,20 +160,27 @@ void deActionLayer::updateBlendAllChannels()
 
     logMessage("update blend all channels end");
 
+    return true;
+
 }
 
-void deActionLayer::updateImageInActionLayer(bool action, bool blend, int channel)
+bool deActionLayer::updateImageInActionLayer(bool action, bool blend, int channel)
 {
-
     if (action)
     {
         if (channel >= 0)
         {
-            updateAction(channel);
+            if (!updateAction(channel))
+            {
+                return false;
+            }
         }
         else
         {
-            updateActionAllChannels();
+            if (!updateActionAllChannels())
+            {
+                return false;
+            }
         }
     }        
 
@@ -165,20 +188,34 @@ void deActionLayer::updateImageInActionLayer(bool action, bool blend, int channe
     {
         if ((blendMask) || (blendMaskShow))
         {
-            renderBlendMask();
+            if (!renderBlendMask())
+            {
+                return false;
+            }
         }
 
         if (channel >= 0)
         {
-            updateBlend(channel);
+            if (!updateBlend(channel))
+            {
+                return false;
+            }
         }
         else
-        {
-            updateBlendAllChannels();
+        {   
+            if (!updateBlendAllChannels())
+            {
+                return false;
+            }
         }            
     }    
 
-    updateApply();
+    if (!updateApply())
+    {
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -286,19 +323,19 @@ deValue deActionLayer::getOpacity()
     return opacity;
 }
 
-void deActionLayer::updateApply()
+bool deActionLayer::updateApply()
 {
     logMessage("update apply start");
 
     if (!enabled)
     {
-        return;
+        return true;
     }
 
     if (applyMode == deApplyLuminanceAndColor)
     {
         imageApplyPass.disableAllChannels();
-        return;
+        return true;
     }
 
     imageApplyPass.enableAllChannels();
@@ -311,17 +348,17 @@ void deActionLayer::updateApply()
     deChannel* sc1 = channelManager.getChannel(sourceImage.getChannelIndex(0));
     if (!sc1)
     {
-        return;
+        return false;
     }
     deChannel* sc2 = channelManager.getChannel(sourceImage.getChannelIndex(1));
     if (!sc2)
     {
-        return;
+        return false;
     }
     deChannel* sc3 = channelManager.getChannel(sourceImage.getChannelIndex(2));
     if (!sc3)
     {
-        return;
+        return false;
     }
 
     sc1->lockRead();
@@ -399,6 +436,8 @@ void deActionLayer::updateApply()
     dc3->unlockWrite();
 
     logMessage("update apply end");
+
+    return true;
 }
 
 void deActionLayer::setApplyMode(deApplyMode mode)
@@ -407,20 +446,20 @@ void deActionLayer::setApplyMode(deApplyMode mode)
 }
 
 
-void deActionLayer::updateBlend(int i)
+bool deActionLayer::updateBlend(int i)
 {
     logMessage("update blend start");
 
     if (!enabled)
     {
-        return;
+        return true;
     }
 
     deLayer* source = layerStack.getLayer(sourceLayer);
     
     if (!source)
     {
-        return;
+        return false;
     }
 
     const deImage& sourceImage = source->getImage();
@@ -431,7 +470,7 @@ void deActionLayer::updateBlend(int i)
 
     if (!isBlendingEnabled())
     {
-        return;
+        return true;
     }
 
     if (isChannelNeutral(i))
@@ -439,27 +478,27 @@ void deActionLayer::updateBlend(int i)
         if (blendMode == deBlendNormal)
         {
             imageBlendPass.disableChannel(i, s);
-            return;
+            return true;
         }
     }
 
     if (!isChannelEnabled(i))
     {
         imageBlendPass.disableChannel(i, s);
-        return;
+        return true;
     }
 
     deChannel* sourceChannel = channelManager.getChannel(s);
     if (!sourceChannel)
     {
-        return;
+        return false;
     }
 
     int c = imageActionPass.getChannelIndex(i);
     deChannel* channel = channelManager.getChannel(c);
     if (!channel)
     {
-        return;
+        return false;
     }
 
     imageBlendPass.enableChannel(i);
@@ -467,7 +506,7 @@ void deActionLayer::updateBlend(int i)
     deChannel* blendChannel_ = channelManager.getChannel(b);
     if (!blendChannel_)
     {
-        return;
+        return false;
     }
 
     sourceChannel->lockRead();
@@ -513,6 +552,8 @@ void deActionLayer::updateBlend(int i)
 
     logMessage("update blend end");
 
+    return true;
+
 }
 
 void deActionLayer::setBlendMode(deBlendMode mode)
@@ -545,18 +586,20 @@ void deActionLayer::setOpacity(deValue _opacity)
     opacity = _opacity;
 }
 
-void deActionLayer::updateImage()
+bool deActionLayer::updateImage()
 {
-    updateImageInActionLayer(true, true, -1);
+    return updateImageInActionLayer(true, true, -1);
 }
 
-void deActionLayer::updateAction(int i)
+bool deActionLayer::updateAction(int i)
 {
+    bool actionResult = false;
+
     logMessage("update action start i:" +str(i));
 
     if (!enabled)
     {
-        return;
+        return true;
     }
 
     logMessage("update action 2 i:" +str(i));
@@ -573,8 +616,7 @@ void deActionLayer::updateAction(int i)
 
     if (simpleActionProcessing())
     {
-        processAction(i);
-        return;
+        return processAction(i);
     }
 
     logMessage("update action 4 i:" +str(i));
@@ -586,10 +628,10 @@ void deActionLayer::updateAction(int i)
         sourceChannel->lockRead();
         sourceChannel->unlockRead();
         imageActionPass.disableChannel(i, s);
+        return true;
     }
     else
     {
-
         if (singleChannelProcessing())
         {
             logMessage("update action 5 i:" +str(i));
@@ -609,7 +651,7 @@ void deActionLayer::updateAction(int i)
                     sourceChannel->lockRead();
                     logMessage("update action 9 i:" +str(i));
 
-                    processAction(i, *sourceChannel, *channel, channelManager.getChannelSize());
+                    actionResult = processAction(i, *sourceChannel, *channel, channelManager.getChannelSize());
 
                     logMessage("update action 10 i:" +str(i));
 
@@ -655,7 +697,7 @@ void deActionLayer::updateAction(int i)
                 }                    
                 channel->lockWrite();
 
-                processAction4(i, sc1, sc2, sc3, sc4, *channel, channelSize);
+                actionResult = processAction4(i, sc1, sc2, sc3, sc4, *channel, channelSize);
 
                 channel->unlockWrite();
 
@@ -680,6 +722,8 @@ void deActionLayer::updateAction(int i)
     }
 
     logMessage("update action end i:" +str(i));
+
+    return actionResult;
 
 }
 
@@ -733,7 +777,7 @@ deColorSpace deActionLayer::getBlendMaskLayerColorSpace() const
     return maskImage.getColorSpace();
 }
 
-void deActionLayer::renderBlendMask()
+bool deActionLayer::renderBlendMask()
 {
     logMessage("render blend mask");
 
@@ -745,7 +789,7 @@ void deActionLayer::renderBlendMask()
     deChannel* maskChannel = channelManager.getChannel(m);
     if (!maskChannel)
     {
-        return;
+        return true;
     }
 
     maskChannel->lockRead();
@@ -768,7 +812,11 @@ void deActionLayer::renderBlendMask()
     else
     {
         deValue r = viewManager.getRealScale() * blendBlurRadius;
-        blurChannel(maskPixels, allocatedMaskPixels, channelManager.getChannelSize(), r, r, type, t);
+        bool result = blurChannel(maskPixels, allocatedMaskPixels, channelManager.getChannelSize(), r, r, type, t);
+        if (!result)
+        {
+            return false;
+        }
     }       
 
     processLinear(allocatedMaskPixels, allocatedMaskPixels, channelManager.getChannelSize().getN(), blendMaskMin, blendMaskMax, false);
@@ -777,6 +825,8 @@ void deActionLayer::renderBlendMask()
     maskChannel->unlockRead();
 
     logMessage("render blend mask done");
+
+    return true;
 
 }
 
@@ -933,9 +983,9 @@ void deActionLayer::loadBlend(xmlNodePtr root)
 
 }
 
-void deActionLayer::updateActionOnThread(int i)
+bool deActionLayer::updateActionOnThread(int i)
 {
-    updateAction(i);
+    return updateAction(i);
 }
 
 void deActionLayer::updateBlendOnThread(int i)
@@ -954,3 +1004,7 @@ void deActionLayer::processBlend()
     updateImageInActionLayer(false, true, -1);
 }
 
+void deActionLayer::setError()
+{
+    errorOnUpdate = true;
+}

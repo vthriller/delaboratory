@@ -59,7 +59,7 @@ void fill(deValue* pixels, int n, deValue v)
     }
 }
 
-void deConversionBW2HueLayer::updateImage()
+bool deConversionBW2HueLayer::updateImage()
 {
     logMessage("conversion start");
 
@@ -104,5 +104,7 @@ void deConversionBW2HueLayer::updateImage()
     }
 
     logMessage("conversion end");
+
+    return true;
 }
 

@@ -38,7 +38,7 @@ deSourceImageLayer::~deSourceImageLayer()
 {
 }
 
-void deSourceImageLayer::updateImage()
+bool deSourceImageLayer::updateImage()
 {
     logMessage("source image layer update image start");
 
@@ -50,7 +50,7 @@ void deSourceImageLayer::updateImage()
     if (!sourceChannelR)
     {
         std::cout << "deSourceImageLayer::updateImage !sourceChannelR" << std::endl;
-        return;
+        return false;
     }
 
     logMessage("enabling channels...");
@@ -159,6 +159,8 @@ void deSourceImageLayer::updateImage()
     channelB->unlockWrite();
 
     logMessage("source image layer update image end");
+
+    return true;
 }
 
 const deImage& deSourceImageLayer::getImage() const

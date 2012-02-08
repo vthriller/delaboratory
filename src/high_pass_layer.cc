@@ -47,24 +47,39 @@ deHighPassLayer::~deHighPassLayer()
 {
 }
 
-void deHighPassLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
+bool deHighPassLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
     logMessage("high pass start");
 
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
 
-    deValue* blurMap = new deValue [size.getN()];
+    deValue* blurMap = NULL;
+    try
+    {
+        blurMap = new deValue [size.getN()];
+    }
+    catch (std::bad_alloc)
+    {
+        logMessage("ERROR allocating memory in high pass");
+        if (blurMap)
+        {
+            delete [] blurMap;
+        }
+        return false;
+    }
 
     deValue r = viewManager.getRealScale() * blurRadius.get();
     deBlurType type = deGaussianBlur;
-    blurChannel(source, blurMap, size, r, r, type, 0.0);
+    bool result = blurChannel(source, blurMap, size, r, r, type, 0.0);
 
     blendChannel(source, blurMap, destination, NULL, deBlendGrainExtract, 1.0, size.getN());
 
     delete [] blurMap;
 
     logMessage("high pass end");
+
+    return result;
 }
 
 

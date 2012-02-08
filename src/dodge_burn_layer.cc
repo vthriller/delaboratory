@@ -94,7 +94,7 @@ deDodgeBurnLayer::~deDodgeBurnLayer()
 {
 }
 
-void deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
+bool deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
     logMessage("dodge/burn start");
 
@@ -110,14 +110,43 @@ void deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
 
-    deValue* blurMap = new deValue [size.getN()];
-    deValue* dodgeMap = new deValue [size.getN()];
-    deValue* burnMap = new deValue [size.getN()];
-    deValue* firstStage = new deValue [size.getN()];
+    deValue* blurMap = NULL;
+    deValue* dodgeMap = NULL;
+    deValue* burnMap = NULL;
+    deValue* firstStage = NULL;
+
+    try
+    {
+        blurMap = new deValue [size.getN()];
+        dodgeMap = new deValue [size.getN()];
+        burnMap = new deValue [size.getN()];
+        firstStage = new deValue [size.getN()];
+    }
+    catch (std::bad_alloc)
+    {
+        logError("ERROR allocating memory in dodge/burn");
+        if (blurMap)
+        {
+            delete [] blurMap;
+        }
+        if (dodgeMap)
+        {
+            delete [] dodgeMap;
+        }
+        if (burnMap)
+        {
+            delete [] burnMap;
+        }
+        if (firstStage)
+        {
+            delete [] firstStage;
+        }
+        return false;
+    }
 
     deValue r = viewManager.getRealScale() * blurRadius.get();
     deBlurType type = deGaussianBlur;
-    blurChannel(source, blurMap, size, r, r, type, 0.0);
+    bool result = blurChannel(source, blurMap, size, r, r, type, 0.0);
 
     deValue dmin = dodgeMin.get();
     deValue dmax = dodgeMax.get();
@@ -140,6 +169,8 @@ void deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
     delete [] firstStage;
 
     logMessage("dodge/burn end");
+
+    return result;
 }
 
 

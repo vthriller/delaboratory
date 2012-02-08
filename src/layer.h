@@ -45,7 +45,7 @@ class deLayer
         std::string name;
         wxMutex mutex;
 
-        virtual void updateImage() = 0;
+        virtual bool updateImage() = 0;
 
     protected:
         deColorSpace colorSpace;
@@ -82,7 +82,7 @@ class deLayer
 
         virtual std::string getType() const = 0;
 
-        void updateImageThreadCall();
+        bool updateImageThreadCall();
 
         virtual bool randomize() = 0;
 
