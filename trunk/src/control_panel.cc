@@ -190,16 +190,30 @@ void deControlPanel::click(wxCommandEvent &event)
 
     if (exportJPEG->GetId() == id)
     {
-        std::string jpegFile = getSaveFile(this, "export JPEG", "jpeg");
+        std::string f = getSaveFile(this, "export JPEG", "jpeg");
 
-        bool result = generateFinalImage("", "jpeg", jpegFile);
+        bool ok = false;
+
+        if (f.rfind(".jpg") != f.size() - 4)
+        {
+            f += ".jpg";
+        }
+
+        bool result = generateFinalImage("", "jpeg", f);
     }
 
     if (exportTIFF->GetId() == id)
     {
-        std::string tiffFile = getSaveFile(this, "export TIFF", "tiff");
+        std::string f = getSaveFile(this, "export TIFF", "tiff");
 
-        bool result = generateFinalImage("", "tiff", tiffFile);
+        bool ok = false;
+
+        if (f.rfind(".tiff") != f.size() - 5)
+        {
+            f += ".tiff";
+        }
+
+        bool result = generateFinalImage("", "tiff", f);
     }
 
     if (externalEditor->GetId() == id)
