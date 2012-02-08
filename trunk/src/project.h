@@ -105,7 +105,7 @@ class deProject
 
         void onChangeView(int a);
 
-        void exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog);
+        bool exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog);
 
         void setLastView();
 

@@ -39,7 +39,7 @@ class deMixerLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual void processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize);
+        virtual bool processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize);
 
         void setWeight(int s, int d, deValue value);
         deValue getWeight(int s, int d);

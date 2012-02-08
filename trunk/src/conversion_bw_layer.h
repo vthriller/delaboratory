@@ -45,7 +45,7 @@ class deConversionBWLayer:public deConversionLayer
         deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, int n);
         virtual ~deConversionBWLayer();
 
-        virtual void updateImage();
+        virtual bool updateImage();
 
         deColorSpace getSourceColorSpace() const;
 

@@ -40,7 +40,7 @@ class deUSMLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual void processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
+        virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
 
         void reset();
         void sharp();

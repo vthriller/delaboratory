@@ -294,14 +294,14 @@ void deProject::saveImage(const std::string& fileName, const deImage& image, con
     }
 }
 
-void deProject::exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog)
+bool deProject::exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog)
 {
     // name is taken from file dialog, it can be empty when we are exporting to external editor
     // but in this case we need correct imageFileName
     if ((name == "") && (imageFileName == ""))
     {
         wxMessageBox( _T("exporting final image failed - no file name set"));
-        return;
+        return false;
     }
 
     std::string fileName;
@@ -339,26 +339,38 @@ void deProject::exportFinalImage(const std::string& app, const std::string& type
     //previewChannelManager.setChannelSize(sourceChannelManager.getChannelSize());
     previewChannelManager.setChannelSize(sourceImage.getSize());
 
-    layerProcessor.updateImagesSmart(view, progressDialog, memoryInfoFrame);
+    bool result = layerProcessor.updateImagesSmart(view, progressDialog, memoryInfoFrame);
 
-    // take the final image
-    deLayer* layer = layerStack.getLayer(view);
-    const deImage& image = layer->getImage();
+    if (result)
+    {
+        // take the final image
+        deLayer* layer = layerStack.getLayer(view);
+        const deImage& image = layer->getImage();
 
-    // save it
-    saveImage(fileName, image, type);
+        // save it
+        saveImage(fileName, image, type);
+    }        
+    else
+    {
+        wxMessageBox( _T("exporting final image failed - error during update images\n(probably out of memory)"));
+    }
 
     // bring back original size of preview
     previewChannelManager.setChannelSize(originalSize);
 
-    // execute external editor
-    if (app.size() > 0)
+    if (result)
     {
-        executeExternalEditor(fileName, app);
+        // execute external editor
+        if (app.size() > 0)
+        {
+            executeExternalEditor(fileName, app);
+        }
     }
 
     // calculate image in preview size to continue editing
     layerProcessor.updateAllImages(true);
+
+    return result;
 }
 
 void deProject::setLastView()

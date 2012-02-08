@@ -153,6 +153,17 @@ void logMessage(const std::string& message)
 #endif    
 }
 
+void logError(const std::string& message)
+{
+    static wxMutex mutex;
+    mutex.Lock();
+    std::cout << message << std::endl;
+    mutex.Unlock();
+#ifdef LOGGING    
+    deLogger::getLogger().log(message);
+#endif    
+}
+
 void lockWithLog(wxMutex& mutex, const std::string& message)
 {
 #ifdef LOGGING    

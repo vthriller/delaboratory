@@ -38,7 +38,7 @@ class deHighPassLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual void processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
+        virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
 
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);

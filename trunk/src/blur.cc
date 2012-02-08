@@ -19,6 +19,7 @@
 #include "blur.h"
 #include <cmath>
 #include <cassert>
+#include "logger.h"
 
 void boxBlur(deValue* source, deValue* destination, int n, int s)
 {
@@ -186,7 +187,7 @@ void fillWeightsGaussian(deValue* weights, int blurSize)
     }
 }    
 
-void blurChannel(const deValue* source, deValue* destination, deSize size, deValue radiusX, deValue radiusY, deBlurType type, deValue t)
+bool blurChannel(const deValue* source, deValue* destination, deSize size, deValue radiusX, deValue radiusY, deBlurType type, deValue t)
 {
     assert(source);
     assert(destination);
@@ -196,17 +197,17 @@ void blurChannel(const deValue* source, deValue* destination, deSize size, deVal
 
     if (w == 0)
     {
-        return;
+        return false;
     }
 
     if (h == 0)
     {
-        return;
+        return false;
     }
 
     if ((radiusX <= 0) || (radiusY <= 0))
     {
-        return;
+        return false;
     }
 
     assert(w > 0);
@@ -235,7 +236,21 @@ void blurChannel(const deValue* source, deValue* destination, deSize size, deVal
         max = h;
     }
 
-    deValue* tmp = new deValue[size.getN()];
+    deValue* tmp = NULL;
+
+    try
+    {
+        tmp = new deValue[size.getN()];
+    }
+    catch (std::bad_alloc)
+    {
+        logMessage("ERROR allocating memory in blur");
+        if (tmp)
+        {
+            delete [] tmp;
+        }
+        return false;
+    }
 
     deValue* sourceBuffer = new deValue[max];
     deValue* destinationBuffer = new deValue[max];
@@ -243,7 +258,6 @@ void blurChannel(const deValue* source, deValue* destination, deSize size, deVal
 
     int i;
     int j;
-
 
     {
         if (type != deBoxBlur)
@@ -330,5 +344,6 @@ void blurChannel(const deValue* source, deValue* destination, deSize size, deVal
     delete [] destinationBuffer;
     delete [] sourceBuffer;
 
+    return true;
 }
 

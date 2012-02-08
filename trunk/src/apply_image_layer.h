@@ -43,7 +43,7 @@ class deApplyImageLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual void processAction(int i);
+        virtual bool processAction(int i);
 
         bool isSingleChannel() const;
 

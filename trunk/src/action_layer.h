@@ -59,6 +59,8 @@ class deActionLayer:public deLayer
         deValue blendMaskMin;
         deValue blendMaskMax;
 
+        bool errorOnUpdate;
+
         virtual bool hasAction() const {return true;};
         virtual bool hasBlending() const {return true;};
         virtual bool canDisable() const {return true;};
@@ -74,14 +76,14 @@ class deActionLayer:public deLayer
 
         virtual bool isChannelNeutral(int index) = 0;
 
-        void updateAction(int i);
+        bool updateAction(int i);
 
-        void renderBlendMask();
+        bool renderBlendMask();
 
         bool isBlendingEnabled() const;
 
-        void updateActionAllChannels();
-        void updateBlendAllChannels();
+        bool updateActionAllChannels();
+        bool updateBlendAllChannels();
 
     protected:
         deLayerStack& layerStack;
@@ -102,16 +104,16 @@ class deActionLayer:public deLayer
 
         deImage imageBlendPass;
 
-        void updateBlend(int i);
-        virtual void updateApply();
+        bool updateBlend(int i);
+        bool updateApply();
 
-        virtual void processAction(int i) {};
-        virtual void processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size) {};
-        virtual void processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize) {};
+        virtual bool processAction(int i) {return false;};
+        virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size) {return false;};
+        virtual bool processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize) {return false;};
 
         virtual bool singleChannelProcessing() const = 0;
 
-        virtual void updateImage();
+        virtual bool updateImage();
 
     public:
         deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
@@ -163,12 +165,14 @@ class deActionLayer:public deLayer
         virtual void loadBlend(xmlNodePtr root);
         virtual void saveBlend(xmlNodePtr root);
 
-        void updateImageInActionLayer(bool action, bool blend, int channel);
-        void updateActionOnThread(int i);
+        bool updateImageInActionLayer(bool action, bool blend, int channel);
+        bool updateActionOnThread(int i);
         void updateBlendOnThread(int i);
 
         virtual void processChannel(int channel);
         virtual void processBlend();
+
+        void setError();
 
 
 };

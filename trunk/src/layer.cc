@@ -81,9 +81,9 @@ void deLayer::saveCommon(xmlNodePtr node)
     saveChild(node, "color_space", getColorSpaceName(colorSpace));
 }
 
-void deLayer::updateImageThreadCall()
+bool deLayer::updateImageThreadCall()
 {
-    updateImage();
+    return updateImage();
 }
 
 void deLayer::lockLayer()

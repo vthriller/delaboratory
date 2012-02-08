@@ -108,7 +108,6 @@ bool deRenderedImage::render(wxDC& dc)
     int x;
     int y;
     int pos = 0;
-    int n = w * h;
     for (y = 0; y < h; y++)
     {
         wxNativePixelData::Iterator rowStart = p;

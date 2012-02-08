@@ -40,7 +40,7 @@ const deImage& deConversionLayer::getImage() const
     return image;
 }
 
-void deConversionLayer::updateImage()
+bool deConversionLayer::updateImage()
 {
     logMessage("conversion start");
 
@@ -51,6 +51,8 @@ void deConversionLayer::updateImage()
     convertImage(sourceImage, image, channelManager);
 
     logMessage("conversion end");
+
+    return true;
 }
 
 void deConversionLayer::updateChannelUsage(std::map<int, int>& channelUsage) const

@@ -115,7 +115,7 @@ class deLayerProcessor
         void setViewManager(deViewManager* _viewManager);
 
         void updateAllImages(bool calcHistogram);
-        void updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame);
+        bool updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame);
         void generateChannelUsage(std::map<int, int>& channelUsage);
 
         void markUpdateSingleChannel(int index, int channel);

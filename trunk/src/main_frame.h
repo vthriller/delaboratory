@@ -80,9 +80,11 @@ private:
     wxCheckBox* autoUI;
 
     std::string imageName;
-    deSize imageSize;
 
     deLayerProcessor& layerProcessor;
+
+    deSize imageSize;
+
     bool full;
 
 	void onTestImageSmall(wxCommandEvent& event);

@@ -50,6 +50,7 @@ class deLogger
         int getTime() const;
 };
 
+void logError(const std::string& message);
 void logMessage(const std::string& message);
 void lockWithLog(wxMutex& mutex, const std::string& message);
 

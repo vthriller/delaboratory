@@ -37,7 +37,7 @@ class deSourceImageLayer:public deLayer
 
         virtual std::string getType() const {return "source_image";};
 
-        virtual void updateImage();
+        virtual bool updateImage();
 
     public:
         deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage);

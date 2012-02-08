@@ -39,7 +39,7 @@ class deConversionLayer:public deLayer
         virtual ~deConversionLayer();
 
         virtual const deImage& getImage() const;
-        virtual void updateImage();
+        virtual bool updateImage();
 
         virtual void updateChannelUsage(std::map<int, int>& channelUsage) const;
 

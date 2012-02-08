@@ -87,6 +87,7 @@ void deChannel::deallocate()
 {
     lockWrite();
     assert(pixels);
+    logMessage("deallocate channel");
     delete [] pixels;
     pixels = NULL;
     magicSize = 0;
@@ -97,8 +98,18 @@ void deChannel::allocate(int size)
 {
     lockWrite();
     assert(!pixels);
-    pixels = new deValue [size];
-    magicSize = size;
+    try
+    {
+        pixels = new deValue [size];
+        magicSize = size;
+    }
+    catch (std::bad_alloc)
+    {
+        logMessage("ERROR allocating channel");
+        pixels = NULL;
+        magicSize = 0;
+    }
+
     unlockWrite();
 }
 

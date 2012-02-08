@@ -44,11 +44,13 @@ deMixerLayer::~deMixerLayer()
     }
 }
 
-void deMixerLayer::processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize)
+bool deMixerLayer::processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize)
 {
     logMessage("process mixer start");
     mixers[i]->process(s1, s2, s3, s4, channel, channelSize);
     logMessage("process mixer end");
+
+    return true;
 }
 
 deMixer* deMixerLayer::getMixer(int index)
