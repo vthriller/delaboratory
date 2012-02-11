@@ -96,11 +96,6 @@ void deCurvesLayer::load(xmlNodePtr root)
     }
 }
 
-void deCurvesLayer::setHistogramChannel(int channel)
-{
-    viewManager.setHistogramChannel(channel);
-}
-
 bool deCurvesLayer::randomize()
 {
     int n = getColorSpaceSize(colorSpace);

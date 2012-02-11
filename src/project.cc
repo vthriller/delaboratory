@@ -336,7 +336,6 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
     // calculate final image in full size
     int view = viewManager.getView();
 
-    //previewChannelManager.setChannelSize(sourceChannelManager.getChannelSize());
     previewChannelManager.setChannelSize(sourceImage.getSize());
 
     bool result = layerProcessor.updateImagesSmart(view, progressDialog, memoryInfoFrame);

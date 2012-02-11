@@ -1008,3 +1008,9 @@ void deActionLayer::setError()
 {
     errorOnUpdate = true;
 }
+
+void deActionLayer::setHistogramChannel(int channel)
+{
+    viewManager.setHistogramChannel(channel);
+}
+
