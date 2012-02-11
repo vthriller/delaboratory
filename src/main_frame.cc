@@ -214,7 +214,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, _("&File") );
     menuBar->Append( menuInfo, _("&Info") );
-    menuBar->Append( menuHelp, _("&Help") );
+    menuBar->Append( menuHelp, _("&Channels") );
 
     SetMenuBar( menuBar );
 
