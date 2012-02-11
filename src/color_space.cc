@@ -242,8 +242,9 @@ wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
             }                    
         }            
         case deColorSpaceCMYK:
+        case deColorSpaceCMY:
         {
-            int g = 200;
+            int g = 240;
             int g2 = 50;
             switch (channel)
             {
@@ -257,14 +258,12 @@ wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
                     return wxColour(g2, g2, g2);
             }                    
         }            
-        case deColorSpaceLAB:
+        default:
         {
+            // in any other cases just use dark gray
             int g = 50;
             return wxColour(g, g, g);
         }            
-        default:
-            // in any other cases just use pure white
-            return wxColour(255, 255, 255);
     }
 
 }
