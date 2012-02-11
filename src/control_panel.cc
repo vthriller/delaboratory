@@ -112,7 +112,7 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
             sizerE->Add(exportTIFF, 0);
         }
         {
-            externalEditor = new wxButton(this, wxID_ANY, _T("external editor"));
+            externalEditor = new wxButton(this, wxID_ANY, _T("send to GIMP"));
             sizerE->Add(externalEditor, 0);
         }
     }
