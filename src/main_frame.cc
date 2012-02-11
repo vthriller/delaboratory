@@ -98,7 +98,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxPanel* viewModePanel = new deViewModePanel(topPanel, project);
     topSizer->Add(viewModePanel);
 
-    wxSizer* sizerP = new wxStaticBoxSizer(wxHORIZONTAL, topPanel,  _T("threads"));
+    wxSizer* sizerP = new wxStaticBoxSizer(wxHORIZONTAL, topPanel,  _T("thread activity"));
     topSizer->Add(sizerP, 0, wxEXPAND);
 
     processingInfo = new wxStaticText(topPanel, wxID_ANY, _T("[processing]"), wxDefaultPosition);
