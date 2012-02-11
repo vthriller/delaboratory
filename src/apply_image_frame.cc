@@ -39,7 +39,12 @@ deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, de
     int i;
     for (i = 0; i < 4; i++)
     {
-        wxRadioButton* b = new wxRadioButton(this, wxID_ANY, _T(""));
+        int style = 0;
+        if (i == 0)
+        {
+            style = wxRB_GROUP;
+        }
+        wxRadioButton* b = new wxRadioButton(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, style);
         mainSizer->Add(b, 0);
         channels[i] = b;
     }

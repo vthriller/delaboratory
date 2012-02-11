@@ -51,7 +51,12 @@ deHistogramModePanel::deHistogramModePanel(wxWindow* parent, deProject& _project
     int i;
     for (i = 0; i < 4; i++)
     {
-        wxRadioButton* b = new wxRadioButton(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize);
+        int style = 0;
+        if (i == 0)
+        {
+            style = wxRB_GROUP;
+        }
+        wxRadioButton* b = new wxRadioButton(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, style);
         sizer->Add(b);
         buttons.push_back(b);
 

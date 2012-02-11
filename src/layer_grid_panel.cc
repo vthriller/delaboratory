@@ -61,8 +61,14 @@ void deLayerGridPanel::buildRows()
 
         row.id = new wxStaticText(this, wxID_ANY, wxString::FromAscii(oss.str().c_str()), wxDefaultPosition, wxSize(18, -1));
         gridSizer->Add(row.id, 0, wxALIGN_CENTER);
+
+        int style = 0;
+        if (i == n-1)
+        {
+            style = wxRB_GROUP;
+        }
         
-        row.view = new wxRadioButton(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize);
+        row.view = new wxRadioButton(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, style);
         gridSizer->Add(row.view, 0, wxALIGN_CENTER);
 
         row.name = new wxStaticText(this, wxID_ANY, wxString::FromAscii(layer->getName().c_str()), wxDefaultPosition, wxSize(100, -1));

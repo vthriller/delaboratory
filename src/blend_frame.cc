@@ -194,7 +194,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
     wxSizer* sizerLC = new wxStaticBoxSizer(wxVERTICAL, this,  _T("luminance / color"));
     sizer->Add(sizerLC, 0);
 
-    b1 = new wxRadioButton(this, wxID_ANY, _T("apply luminance and color"));
+    b1 = new wxRadioButton(this, wxID_ANY, _T("apply luminance and color"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
     sizerLC->Add(b1, 0);
 
     if (applyAllowed)
