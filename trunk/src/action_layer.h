@@ -174,6 +174,8 @@ class deActionLayer:public deLayer
 
         void setError();
 
+        void setHistogramChannel(int channel);
+
 
 };
 
