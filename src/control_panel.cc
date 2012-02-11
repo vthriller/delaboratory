@@ -192,33 +192,35 @@ void deControlPanel::click(wxCommandEvent &event)
     {
         std::string f = getSaveFile(this, "export JPEG", "jpeg");
 
-        bool ok = false;
-
-        if (f.rfind(".jpg") != f.size() - 4)
+        if (!f.empty())
         {
-            f += ".jpg";
-        }
+            if (f.rfind(".jpg") != f.size() - 4)
+            {
+                f += ".jpg";
+            }
 
-        bool result = generateFinalImage("", "jpeg", f);
+            generateFinalImage("", "jpeg", f);
+        }
     }
 
     if (exportTIFF->GetId() == id)
     {
         std::string f = getSaveFile(this, "export TIFF", "tiff");
 
-        bool ok = false;
-
-        if (f.rfind(".tiff") != f.size() - 5)
+        if (!f.empty())
         {
-            f += ".tiff";
-        }
+            if (f.rfind(".tiff") != f.size() - 5)
+            {
+                f += ".tiff";
+            }
 
-        bool result = generateFinalImage("", "tiff", f);
+            generateFinalImage("", "tiff", f);
+        }            
     }
 
     if (externalEditor->GetId() == id)
     {
-        bool result = generateFinalImage("gimp", "tiff", "");
+        generateFinalImage("gimp", "tiff", "");
     }
 
     std::map<int, deColorSpace>::iterator c = convertButtonsColorSpaces.find(id);
