@@ -23,29 +23,31 @@
 deHelpColorSpacesFrame2::deHelpColorSpacesFrame2(wxWindow *parent)
 :deHelpFrame(parent, "mix of channels")
 {
-    wxSizer* sizer = new wxGridSizer(2);
-    SetSizer(sizer);
+    wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(mainSizer);
+
+    wxSizer* sizer1 = new wxGridSizer(2);
+    mainSizer->Add(sizer1);
 
     std::vector<deColorSpace> colorSpaces;
     getSupportedColorSpaces(colorSpaces);
 
-    //int width = 128;
-    //int barSize = 128;
     int width = 140;
     int barSize = 140;
 
     std::vector<deColorSpace>::iterator i;
+
     for (i = colorSpaces.begin(); i != colorSpaces.end(); i++)
     {
         deColorSpace c = *i;
 
         int n = getColorSpaceSize(c);
 
-        if (n > 1)
+        if (n == 3)
         {
 
             wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this,  wxString::FromAscii(getColorSpaceName(c).c_str()));
-            sizer->Add(sizerB);
+            sizer1->Add(sizerB);
 
             int j;
             for (j = 0; j < n; j++)
@@ -62,6 +64,39 @@ deHelpColorSpacesFrame2::deHelpColorSpacesFrame2(wxWindow *parent)
 
                 deGradientPanel* gradient = new deGradientPanel(this, wxSize(width, barSize), c, j, k, -1, -1, -1);
                 sizerBC->Add(gradient, 0, wxCENTER);
+            }
+
+        }
+    }
+
+    wxSizer* sizer2 = new wxBoxSizer(wxHORIZONTAL);
+    mainSizer->Add(sizer2);
+
+    for (i = colorSpaces.begin(); i != colorSpaces.end(); i++)
+    {
+        deColorSpace c = *i;
+
+        int n = getColorSpaceSize(c);
+
+        if (n == 4)
+        {
+
+            wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this,  wxString::FromAscii(getColorSpaceName(c).c_str()));
+            sizer2->Add(sizerB);
+
+            int j;
+            for (j = 0; j < n; j++)
+            {
+                int k;
+                for (k = j + 1; k < n; k++)
+                {
+                    std::string s = getChannelName(c, j) + " / " + getChannelName(c, k);
+                    wxSizer* sizerBC= new wxStaticBoxSizer(wxHORIZONTAL, this,  wxString::FromAscii(s.c_str()));
+                    sizerB->Add(sizerBC);
+
+                    deGradientPanel* gradient = new deGradientPanel(this, wxSize(width, barSize), c, j, k, -1, -1, -1);
+                    sizerBC->Add(gradient, 0, wxCENTER);
+                }                    
             }
 
         }
