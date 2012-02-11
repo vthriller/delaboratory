@@ -244,6 +244,7 @@ wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
         case deColorSpaceCMYK:
         {
             int g = 200;
+            int g2 = 50;
             switch (channel)
             {
                 case DE_CHANNEL_CYAN:
@@ -253,7 +254,7 @@ wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
                 case DE_CHANNEL_YELLOW:
                     return wxColour(g, g, 0);
                 case DE_CHANNEL_KEY:
-                    return wxColour(g, g, g);
+                    return wxColour(g2, g2, g2);
             }                    
         }            
         case deColorSpaceLAB:
