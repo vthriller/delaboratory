@@ -63,6 +63,9 @@ class deConversionBWLayer:public deConversionLayer
         void resetM();
         void presetM(int c);
 
+        virtual void load(xmlNodePtr root);
+        virtual void save(xmlNodePtr root);
+
 };
 
 #endif
