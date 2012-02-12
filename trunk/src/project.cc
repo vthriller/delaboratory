@@ -582,16 +582,19 @@ bool deProject::openImage(const std::string& fileName)
         }
     }
 
-    imageFileName = removePathAndExtension(fileName);
-    onImageNameUpdate();
-    sourceImageFileName = fileName;
-
-    previewChannelManager.destroyAllChannels();
-    if (imageAreaPanel)
+    if (status)
     {
-        imageAreaPanel->updateSize(true);
-    }        
-    layerProcessor.updateAllImages(true);
+        imageFileName = removePathAndExtension(fileName);
+        onImageNameUpdate();
+        sourceImageFileName = fileName;
+
+        previewChannelManager.destroyAllChannels();
+        if (imageAreaPanel)
+        {
+            imageAreaPanel->updateSize(true);
+        }        
+        layerProcessor.updateAllImages(true);
+    }
 
     return status;
 }

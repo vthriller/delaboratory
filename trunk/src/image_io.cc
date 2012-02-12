@@ -140,7 +140,11 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image)
     const char* c = fileName.c_str();
     wxString s(c, wxConvUTF8);
     wxImage fileImage;
-    fileImage.LoadFile(s, wxBITMAP_TYPE_JPEG);
+    bool result = fileImage.LoadFile(s, wxBITMAP_TYPE_JPEG);
+    if (!result)
+    {
+        return false;
+    }
     int w = fileImage.GetWidth();
     int h = fileImage.GetHeight();
 
