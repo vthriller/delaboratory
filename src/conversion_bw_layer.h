@@ -36,8 +36,6 @@ class deConversionBWLayer:public deConversionLayer
         dePropertyValue overlay2;
         dePropertyValue overlay3;
 
-        // from project
-
         virtual bool hasAction() const {return true;};
 
         virtual std::string getType() const {return "conversion_bw";};

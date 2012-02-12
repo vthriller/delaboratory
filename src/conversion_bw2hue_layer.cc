@@ -108,3 +108,22 @@ bool deConversionBW2HueLayer::updateImage()
     return true;
 }
 
+void deConversionBW2HueLayer::save(xmlNodePtr root)
+{
+    saveCommon(root);
+    hue.save(root);
+    saturation.save(root);
+}
+
+void deConversionBW2HueLayer::load(xmlNodePtr root)
+{
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    while (child)
+    {
+        hue.load(child);
+        saturation.load(child);
+
+        child = child->next;
+    }        
+}

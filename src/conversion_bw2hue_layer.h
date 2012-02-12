@@ -47,6 +47,9 @@ class deConversionBW2HueLayer:public deConversionLayer
         void reset();
         void preset(deValue h);
 
+        virtual void load(xmlNodePtr root);
+        virtual void save(xmlNodePtr root);
+
 };
 
 #endif
