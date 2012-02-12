@@ -122,6 +122,11 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
         cbw = true;
     }
 
+    if (type == "conversion_bw2hue")
+    {
+        cbwhue = true;
+    }
+
     if (cbw)
     {
         deLayer* sourceLayer = _layerStack.getLayer(source);
