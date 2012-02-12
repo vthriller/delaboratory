@@ -216,3 +216,34 @@ deColorSpace deConversionBWLayer::getSourceColorSpace() const
     return source->getColorSpace();
 }
 
+void deConversionBWLayer::save(xmlNodePtr root)
+{
+    saveCommon(root);
+    add0.save(root);
+    add1.save(root);
+    add2.save(root);
+    add3.save(root);
+    overlay0.save(root);
+    overlay1.save(root);
+    overlay2.save(root);
+    overlay3.save(root);
+}
+
+void deConversionBWLayer::load(xmlNodePtr root)
+{
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    while (child)
+    {
+        add0.load(child);
+        add1.load(child);
+        add2.load(child);
+        add3.load(child);
+        overlay0.load(child);
+        overlay1.load(child);
+        overlay2.load(child);
+        overlay3.load(child);
+
+        child = child->next;
+    }        
+}
