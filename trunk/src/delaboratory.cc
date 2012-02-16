@@ -28,6 +28,7 @@
 #include "layer_stack.h"
 #include "layer_frame_manager.h"
 #include "static_image.h"
+#include "dcraw_support.h"
 
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
@@ -45,6 +46,7 @@ class deLaboratory: public wxApp
             frame = NULL;
             deLogger::getLogger().setFile(LOG_FILE_NAME);
             deLogger::getLogger().setLocksFile(LOG_LOCKS_FILE_NAME);
+            dcraw_version = "";
 
         }
 
@@ -63,6 +65,7 @@ class deLaboratory: public wxApp
         deStaticImage sourceImage;
         deLayerProcessor processor;
         deProject project;
+        std::string dcraw_version;
 
         virtual int FilterEvent(wxEvent& event);
 
@@ -107,12 +110,23 @@ bool deLaboratory::OnInit()
 {
     logMessage("deLaboratory::OnInit");
 
+    dcraw_version = checkDcraw();
+
+    if (dcraw_version == "")
+    {
+        dcraw_version = "dcraw not found";
+    }
+    else
+    {
+        dcraw_version = "dcraw version " + dcraw_version;
+    }
+
     wxInitAllImageHandlers();
 
 	int width = 1200;
 	int height = 960;
 
-	frame = new deMainFrame( wxSize(width,height), project, processor, samplerManager);
+	frame = new deMainFrame( wxSize(width,height), project, processor, samplerManager, dcraw_version);
 
     logMessage("main frame created");
 
