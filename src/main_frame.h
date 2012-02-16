@@ -75,6 +75,7 @@ private:
     wxStaticText* renderingInfo;
     wxStaticText* histogramInfo;
     wxStaticText* debugInfo;
+    wxStaticText* dcrawInfo;
 
     wxCheckBox* realtime;
     wxCheckBox* autoUI;
@@ -121,7 +122,7 @@ private:
     void updateTitle();
 
 public:
-	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager);
+	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, const std::string& dcrawVersion);
 	~deMainFrame();
 
     void showPanels();

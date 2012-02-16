@@ -70,7 +70,7 @@ EVT_MENU(DE_RANDOM_EVENT, deMainFrame::onRandomEvent)
 EVT_MENU(DE_INFO_EVENT, deMainFrame::onInfoEvent)
 END_EVENT_TABLE()
 
-deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager)
+deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, const std::string& dcraw_version)
 : wxFrame() , project(_project), layerProcessor(_layerProcessor), imageSize(0,0)
 {
     project.setMainFrame(this);
@@ -109,6 +109,9 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     histogramInfo = new wxStaticText(topPanel, wxID_ANY, _T("[histogram]"), wxDefaultPosition);
     sizerP->Add(histogramInfo, 0, wxEXPAND);
+
+    dcrawInfo = new wxStaticText(topPanel, wxID_ANY, wxString::FromAscii(dcraw_version.c_str()), wxDefaultPosition);
+    sizerP->Add(dcrawInfo, 0, wxEXPAND);
 
     wxSizer* sizerR = new wxStaticBoxSizer(wxHORIZONTAL, topPanel,  _T("options"));
     topSizer->Add(sizerR, 0, wxEXPAND);
