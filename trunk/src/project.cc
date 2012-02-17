@@ -583,11 +583,11 @@ bool deProject::openImage(const std::string& fileName, bool possibleRaw)
 
     raw = false;
 
-    if (loadPPM(fileName, sourceImage, deColorSpaceLAB))
+    /*if (loadPPM(fileName, sourceImage, deColorSpaceLAB))
     {
         status = true;
     }
-    else if ((possibleRaw) && ((rawModule.loadRAW(fileName, sourceImage))))
+    else*/ if ((possibleRaw) && ((rawModule.loadRAW(fileName, sourceImage))))
     {
         status = true;
         raw = true;
