@@ -121,3 +121,18 @@ std::string str(wxString& ws)
 
     return cstring;
 }    
+
+
+std::string getTmp()
+{
+    wxString temp;
+    if (wxGetEnv(_T("TEMP"), &temp))
+    {
+        // on Windows $TEMP should be set
+        return str(temp);
+    }
+    else
+    {
+        return "/tmp/";
+    }            
+}        
