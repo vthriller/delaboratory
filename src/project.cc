@@ -330,7 +330,7 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
         std::string path = getTmp();
 
         // we save file in the temporary directory
-        fileName = path + imageFileName + "." + type;
+        fileName = path + "/" + imageFileName + "." + type;
     }        
     else
     {
