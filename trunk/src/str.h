@@ -42,4 +42,6 @@ deValue getValue(const std::string& s);
 int getInt(const std::string& s);
 bool getBool(const std::string& s);
 
+std::string getTmp();
+
 #endif
