@@ -22,6 +22,7 @@
 #include <string>
 #include "size.h"
 #include "channel.h"
+#include "color_space.h"
 class deStaticImage;
 
 void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size);
@@ -29,5 +30,7 @@ void saveTIFF(const std::string& fileName, const deChannel& channelR, const deCh
 
 bool loadTIFF(const std::string& fileName, deStaticImage& image);
 bool loadJPEG(const std::string& fileName, deStaticImage& image);
+
+bool loadPPM(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
 
 #endif

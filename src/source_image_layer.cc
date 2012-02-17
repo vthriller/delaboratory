@@ -25,11 +25,11 @@
 #include "static_image.h"
 #include "copy_channel.h"
 
-deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage)
-:deLayer("source image", deColorSpaceRGB, _index, -1),
+deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace)
+:deLayer("source image", _colorSpace, _index, -1),
 previewChannelManager(_previewChannelManager),
 viewManager(_viewManager),
-image(deColorSpaceRGB, _previewChannelManager),
+image(_colorSpace, _previewChannelManager),
 sourceImage(_sourceImage)
 {
 }

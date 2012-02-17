@@ -40,6 +40,7 @@ class deLayerStack;
 class deLayerFrameManager;
 class deLayer;
 class deStaticImage;
+class deRawModule;
 
 class deProject
 {
@@ -63,13 +64,18 @@ class deProject
 
         deLayerFrameManager& layerFrameManager;
 
+
         std::string imageFileName;
         std::string sourceImageFileName;
 
         bool receiveKeys;
 
+        bool raw;
+
         deHistogramModePanel* histogramModePanel;
         deImageAreaPanel* imageAreaPanel;
+
+        deRawModule& rawModule;
 
         void onImageNameUpdate();
 
@@ -84,11 +90,11 @@ class deProject
 
 
     public:
-        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage);
+        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule);
         virtual ~deProject();
         void onKey(int key);
         void init(const std::string& fileName);
-        void resetLayerStack();
+        void resetLayerStack(deColorSpace colorSpace);
 
         deChannelManager& getPreviewChannelManager();
         deSize getSourceImageSize();
@@ -121,7 +127,7 @@ class deProject
 
         void save(const std::string& fileName, bool image);
         void open(const std::string& fileName, bool image);
-        bool openImage(const std::string& fileName);
+        bool openImage(const std::string& fileName, bool possibleRaw);
         void newProject();
         void setTestImage(int s);
 

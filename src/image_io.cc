@@ -24,6 +24,8 @@
 #include "logger.h"
 #include "static_image.h"
 #include "str.h"
+#include "dcraw_support.h"
+#include "rgb2xyz2lab.h"
 
 void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size)
 {
@@ -322,6 +324,142 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image)
     _TIFFfree(buf);
     TIFFClose(tif);
     logMessage("loadTIFF " + fileName + " done");
+
+    return true;
+}
+
+void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixels2, int w, int h, deValue scale)
+{
+
+    int pos = 0;
+    int y;
+
+
+    char c;
+    unsigned char cc1;
+    unsigned char cc2;
+    f.get(c);
+
+    for (y = 0; y < h; y++)
+    {
+        int x;
+    
+        for (x = 0; x < w; x++)
+        {
+            deValue r;
+            deValue g;
+            deValue b;
+
+            f.get(c);
+            cc1 = (unsigned char)(c);
+            f.get(c);
+            cc2 = (unsigned char)(c);
+            r = (256 * cc1 + cc2) * scale;
+
+            f.get(c);
+            cc1 = (unsigned char)(c);
+            f.get(c);
+            cc2 = (unsigned char)(c);
+            g = (256 * cc1 + cc2) * scale;
+
+            f.get(c);
+            cc1 = (unsigned char)(c);
+            f.get(c);
+            cc2 = (unsigned char)(c);
+            b = (256 * cc1 + cc2) * scale;
+
+            deValue v1;
+            deValue v2;
+            deValue v3;
+            xyz2lab_pure(r, g, b, v1, v2, v3);
+
+            pixels0[pos] = v1;
+            pixels1[pos] = v2;
+            pixels2[pos] = v3;
+
+            pos++;
+        }
+    }
+
+}    
+
+bool loadPPM(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
+{
+    logMessage("load PPM " + fileName);
+
+    char buffer[256];
+    int bufsize = 256;
+
+    std::ifstream f(fileName.c_str());
+
+    std::string id;
+
+    f >> id;
+
+    if (id != "P6")
+    {
+        logMessage("broken PPM file, id should be P6 but it's: " + id);
+        return false;
+    }
+
+    int w;
+    int h;
+    int max;
+
+    f >> w;
+    f >> h;
+    f >> max;
+
+    if (max < 256)
+    {
+        logMessage("PPM is not 16-bit");
+        return false;
+    }
+
+    logMessage("found PPM " + str(w) + "x" + str(h) + " max: " + str(max));
+
+    deSize size(w, h);
+    image.setSize(size);
+
+    deChannel* channelRR = image.getChannel(0);
+    if (!channelRR)
+    {
+        return false;
+    }
+    deChannel& channelR = *channelRR;
+
+    deChannel* channelGG = image.getChannel(1);
+    if (!channelGG)
+    {
+        return false;
+    }
+    deChannel& channelG = *channelGG;
+
+    deChannel* channelBB = image.getChannel(2);
+    if (!channelBB)
+    {
+        return false;
+    }
+    deChannel& channelB = *channelBB;
+
+    channelR.lockWrite();
+    channelG.lockWrite();
+    channelB.lockWrite();
+
+    deValue* pixels0 = channelR.getPixels();
+    deValue* pixels1 = channelG.getPixels();
+    deValue* pixels2 = channelB.getPixels();
+
+    deValue scale = 1.0 / max;
+
+    if (colorSpace == deColorSpaceLAB)
+    {
+        loadLAB(f, pixels0, pixels1, pixels2, w, h, scale);
+    }        
+
+    channelR.unlockWrite();
+    channelG.unlockWrite();
+    channelB.unlockWrite();
 
     return true;
 }

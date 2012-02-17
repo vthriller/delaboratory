@@ -705,6 +705,25 @@ void deLayerProcessor::removeTopLayer()
     unlockHistogram();
 }    
 
+void deLayerProcessor::removeAllLayers()
+{
+    lockHistogram();
+    lockPrepareImage();
+    lockUpdateImage();
+
+    while (layerStack.getSize() > 0)
+    {
+        int index = layerStack.getSize() - 1;
+        layerStack.removeTopLayer();
+    }
+
+    repaintImageInLayerProcessor();
+
+    unlockUpdateImage();
+    unlockPrepareImage();
+    unlockHistogram();
+}    
+
 void deLayerProcessor::addLayer(deLayer* layer)
 {
 //    lock();

@@ -49,6 +49,7 @@ EVT_MENU(ID_NewProject, deMainFrame::onNewProject)
 EVT_MENU(ID_TestImageSmall, deMainFrame::onTestImageSmall)
 EVT_MENU(ID_TestImageBig, deMainFrame::onTestImageBig)
 EVT_MENU(ID_OpenImage, deMainFrame::onOpenImage)
+EVT_MENU(ID_OpenRawImage, deMainFrame::onOpenRawImage)
 EVT_MENU(ID_OpenProject, deMainFrame::onOpenProject)
 EVT_MENU(ID_SaveProject, deMainFrame::onSaveProject)
 EVT_MENU(ID_OpenLayerStack, deMainFrame::onOpenLayerStack)
@@ -186,7 +187,9 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxMenu *menuFile = new wxMenu;
     menuFile->Append( ID_NewProject, _("New project") );
     menuFile->AppendSeparator();
-    menuFile->Append( ID_OpenImage, _("Open image") );
+    menuFile->Append( ID_OpenRawImage, _("Open RAW image") );
+    menuFile->Append( ID_OpenImage, _("Open TIFF/JPG image") );
+    menuFile->AppendSeparator();
     menuFile->Append( ID_TestImageSmall, _("Generate test image (small)") );
     menuFile->Append( ID_TestImageBig, _("Generate test image (big, slow)") );
     menuFile->AppendSeparator();
@@ -333,7 +336,13 @@ void deMainFrame::onTestImageBig(wxCommandEvent& WXUNUSED(event))
 void deMainFrame::onOpenImage(wxCommandEvent& WXUNUSED(event))
 {
     std::string fileName = getOpenFile(this, "load source image", "image");
-    project.openImage(fileName);
+    project.openImage(fileName, false);
+}
+
+void deMainFrame::onOpenRawImage(wxCommandEvent& WXUNUSED(event))
+{
+    std::string fileName = getOpenFile(this, "load source image", "raw");
+    project.openImage(fileName, true);
 }
 
 void deMainFrame::onHelpColorSpaces(wxCommandEvent& event)

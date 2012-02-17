@@ -28,7 +28,7 @@
 #include "layer_stack.h"
 #include "layer_frame_manager.h"
 #include "static_image.h"
-#include "dcraw_support.h"
+#include "raw_module.h"
 
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
@@ -41,12 +41,11 @@ class deLaboratory: public wxApp
         :wxApp(),
          sourceImage(deColorSpaceRGB),
          processor(previewChannelManager, layerStack, layerFrameManager),
-         project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage)
+         project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage, rawModule)
         {
             frame = NULL;
             deLogger::getLogger().setFile(LOG_FILE_NAME);
             deLogger::getLogger().setLocksFile(LOG_LOCKS_FILE_NAME);
-            dcraw_version = "";
 
         }
 
@@ -65,7 +64,7 @@ class deLaboratory: public wxApp
         deStaticImage sourceImage;
         deLayerProcessor processor;
         deProject project;
-        std::string dcraw_version;
+        deRawModule rawModule;
 
         virtual int FilterEvent(wxEvent& event);
 
@@ -110,7 +109,9 @@ bool deLaboratory::OnInit()
 {
     logMessage("deLaboratory::OnInit");
 
-    dcraw_version = checkDcraw();
+    rawModule.onInit();
+
+    std::string dcraw_version = rawModule.getVersion();
 
     if (dcraw_version == "")
     {
