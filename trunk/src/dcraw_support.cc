@@ -18,6 +18,7 @@
 
 #include "dcraw_support.h"
 #include <wx/wx.h>
+#include <wx/progdlg.h>
 
 #define DCRAW_EXECUTABLE "dcraw"
 
@@ -44,4 +45,18 @@ std::string checkDcraw()
     return vs;
 
 }
+
+bool execDcraw(const std::string& f, const std::string& tmp)
+{
+    wxProgressDialog* progressDialog = new wxProgressDialog(_T("dcraw processing"), _T("dcraw processing"), 100, NULL, wxPD_AUTO_HIDE);
+
+    std::string c = std::string(DCRAW_EXECUTABLE) + " -w -c -6 -o 5 " + f + " >" + tmp;
+
+    delete progressDialog;
+
+    system(c.c_str());
+
+    return true;
+}
+
 

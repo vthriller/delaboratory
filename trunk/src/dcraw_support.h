@@ -22,5 +22,6 @@
 #include <string>
 
 std::string checkDcraw();
+bool execDcraw(const std::string& f, const std::string& tmp);
 
 #endif

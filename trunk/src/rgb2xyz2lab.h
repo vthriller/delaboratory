@@ -28,6 +28,9 @@ void lab2xyz(deValue l, deValue a, deValue b, deValue &x, deValue &y, deValue& z
 void lab2lch(deValue l, deValue a, deValue b, deValue &_l, deValue &_c, deValue& _h);
 void lch2lab(deValue l, deValue c, deValue h, deValue &_l, deValue &_a, deValue& _b);
 
+void xyz2rgb_pure(deValue x, deValue y, deValue z, deValue &r, deValue &g, deValue& b);
+void xyz2lab_pure(deValue x, deValue y, deValue z, deValue &l, deValue &a, deValue& b);
+
 /* for benchmarks only */
 void initLAB();
 

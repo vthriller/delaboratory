@@ -61,7 +61,7 @@ std::string getColorSpaceName(deColorSpace colorSpace)
         case deColorSpaceBW:
             return "BW";
         case deColorSpaceRGB:
-            return "RGB";
+            return "sRGB";
         case deColorSpaceHSL:
             return "HSL";
         case deColorSpaceHSV:

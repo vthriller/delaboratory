@@ -142,7 +142,7 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
 
     if (type == "source_image")
     {
-        return new deSourceImageLayer(index,  _channelManager, _viewManager, sourceImage);
+        return new deSourceImageLayer(index,  _channelManager, _viewManager, sourceImage, colorSpace);
     }
 
     return NULL;

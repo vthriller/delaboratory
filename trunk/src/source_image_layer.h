@@ -40,7 +40,7 @@ class deSourceImageLayer:public deLayer
         virtual bool updateImage();
 
     public:
-        deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage);
+        deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace);
         virtual ~deSourceImageLayer();
 
         virtual const deImage& getImage() const;

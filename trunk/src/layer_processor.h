@@ -160,6 +160,8 @@ class deLayerProcessor
         bool isRealtime() const;
         void setRealtime(bool r);
 
+        void removeAllLayers();
+
 };
 
 #endif

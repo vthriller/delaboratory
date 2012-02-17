@@ -25,6 +25,10 @@ wxString getFileType(const std::string& t)
     {
         return _T("TIFF / JPEG (*.tiff;*.tif;*.jpeg;*.jpg) | ;*.tiff;*.tif;*.jpeg;*.jpg");
     }
+    if (t == "raw")
+    {
+        return _T("RAW (*.*) | ;*.*;");
+    }
     if (t == "tiff")
     {
         return _T("TIFF (*.tiff;*.tif) | ;*.tiff;*.tif");

@@ -46,10 +46,11 @@
 #include "layer_stack.h"
 #include "layer_frame_manager.h"
 #include "static_image.h"
+#include "raw_module.h"
 
 #define ICC_MESSAGE 0
 
-deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage)
+deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule)
 :layerProcessor(_processor),
  viewModePanel(NULL),
  previewChannelManager(_previewChannelManager),
@@ -61,8 +62,10 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
  layerStack(_layerStack),
  layerFrameManager(_layerFrameManager),
  histogramModePanel(NULL),
- imageAreaPanel(NULL)
+ imageAreaPanel(NULL),
+ rawModule(_rawModule)
 {
+    raw = false;
     imageFileName = "";
     sourceImageFileName = "";
     receiveKeys = true;
@@ -71,7 +74,7 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
 
     layerProcessor.setViewManager(&viewManager);
 
-    resetLayerStack();
+    resetLayerStack(deColorSpaceRGB);
 
 }
 
@@ -152,7 +155,10 @@ void deProject::onKey(int key)
 void deProject::init(const std::string& fileName)
 {
     logMessage("project init " + fileName);
-    if (!openImage(fileName))
+    if (openImage(fileName, true))
+    {
+    }
+    else
     {
         open(fileName, true);
     }
@@ -186,13 +192,16 @@ void deProject::setTestImage(int s)
     layerProcessor.updateAllImages(true);
 }
 
-void deProject::resetLayerStack()
+void deProject::resetLayerStack(deColorSpace colorSpace)
 {
+
     logMessage("reset layer stack");
 
-    layerStack.clear();
+    layerProcessor.removeAllLayers();
 
-    deLayer* layer = createLayer("source_image", -1, deColorSpaceRGB, layerStack, previewChannelManager, viewManager, "source image", sourceImage);
+
+    deLayer* layer = createLayer("source_image", -1, colorSpace, layerStack, previewChannelManager, viewManager, "source image", sourceImage);
+
 
     if (layer)
     {
@@ -201,6 +210,14 @@ void deProject::resetLayerStack()
 
     previewChannelManager.destroyAllChannels();
     layerProcessor.updateAllImages(true);
+
+    if (controlPanel)
+    {
+        controlPanel->updateLayerGrid();
+    }        
+
+    setLastView();
+
 }
 
 deChannelManager& deProject::getPreviewChannelManager() 
@@ -225,6 +242,7 @@ deLayerProcessor& deProject::getLayerProcessor()
 
 void deProject::onChangeView(int a)
 {
+
     logMessage("change view from " + str(a) + " start");
     layerProcessor.onChangeView(a);
 
@@ -309,18 +327,8 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
     if (name == "")
     {
         // path is a directory for temporary save, used only when exporting to external editor
-        std::string path = "";
+        std::string path = getTmp();
 
-        wxString temp;
-        if (wxGetEnv(_T("TEMP"), &temp))
-        {
-            // on Windows $TEMP should be set
-            path = str(temp);
-        }
-        else
-        {
-            path = "/tmp/";
-        }            
         // we save file in the temporary directory
         fileName = path + imageFileName + "." + type;
     }        
@@ -537,7 +545,7 @@ void deProject::open(const std::string& fileName, bool image)
 
     if (image)
     {
-        openImage(imageFile);
+        openImage(imageFile, true);
     }        
 
     setLastView();
@@ -549,7 +557,7 @@ void deProject::open(const std::string& fileName, bool image)
 
 void deProject::newProject()
 {
-    resetLayerStack();
+    resetLayerStack(deColorSpaceRGB);
     setLastView();
     if (controlPanel)
     {
@@ -562,24 +570,40 @@ void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
     imageAreaPanel = _imageAreaPanel;
 }
 
-bool deProject::openImage(const std::string& fileName)
+bool deProject::openImage(const std::string& fileName, bool possibleRaw)
 {
+
+    bool oldRaw = raw;
+
     freeImage();
 
     logMessage("open image " + fileName);
 
     bool status = false;
 
-    if (loadTIFF(fileName, sourceImage))
+    raw = false;
+
+    if (loadPPM(fileName, sourceImage, deColorSpaceLAB))
     {
         status = true;
     }
-    else
+    else if ((possibleRaw) && ((rawModule.loadRAW(fileName, sourceImage))))
     {
-        if (loadJPEG(fileName, sourceImage))
-        {
-            status = true;
-        }
+        status = true;
+        raw = true;
+    }
+    else if (loadTIFF(fileName, sourceImage))
+    {
+        status = true;
+    }
+    else if (loadJPEG(fileName, sourceImage))
+    {
+        status = true;
+    }
+
+    if (!status)
+    {
+        raw = oldRaw;
     }
 
     if (status)
@@ -594,6 +618,19 @@ bool deProject::openImage(const std::string& fileName)
             imageAreaPanel->updateSize(true);
         }        
         layerProcessor.updateAllImages(true);
+    }
+
+    if (raw != oldRaw)
+    {
+        if (raw)
+        {
+            resetLayerStack(deColorSpaceLAB);
+        }
+        else
+        {
+            resetLayerStack(deColorSpaceRGB);
+        }
+        onChangeView(0);
     }
 
     return status;
@@ -641,7 +678,13 @@ void deProject::addActionLayer(const std::string& action)
 {
     int s = viewManager.getView();
 
-    deColorSpace colorSpace = layerStack.getLayer(s)->getColorSpace();
+    deLayer* vLayer = layerStack.getLayer(s);
+    if (!vLayer)
+    {
+        return;
+    }
+
+    deColorSpace colorSpace = vLayer->getColorSpace();
 
     std::string actionDescription = getActionDescription(action);
 

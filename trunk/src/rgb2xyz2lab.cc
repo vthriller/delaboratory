@@ -112,6 +112,38 @@ void xyz2rgb(deValue x, deValue y, deValue z, deValue &r, deValue &g, deValue& b
     }
 }
 
+void xyz2rgb_pure(deValue x, deValue y, deValue z, deValue &r, deValue &g, deValue& b)
+{
+    r =  3.2410 * x - 1.5374 * y - 0.4986 * z;
+    g = -0.9692 * x + 1.8760 * y + 0.0416 * z;
+    b =  0.0556 * x - 0.2040 * y + 1.0570 * z;
+
+    if (r < 0)
+    {
+        r = 0;
+    }
+    else if (r > 1)
+    {
+        r = 1;
+    }
+    if (g < 0)
+    {
+        g = 0;
+    }
+    else if (g > 1)
+    {
+        g = 1;
+    }
+    if (b < 0)
+    {
+        b = 0;
+    }
+    else if (b > 1)
+    {
+        b = 1;
+    }
+}
+
 void lab2lch(deValue l, deValue a, deValue b, deValue &_l, deValue &_c, deValue& _h)
 {
     _l = l;
@@ -240,14 +272,89 @@ void xyz2lab(deValue x, deValue y, deValue z, deValue &l, deValue &a, deValue& b
     assert(b <= 1);
 }
 
+void xyz2lab_pure(deValue x, deValue y, deValue z, deValue &l, deValue &a, deValue& b)
+{
+    static dePower power(1.0 / 3.0, 2);
+
+    deValue xx = x / Xn;    
+    deValue yy = y / Yn;    
+    deValue zz = z / Zn;    
+
+    deValue fx;
+    deValue fy;
+    deValue fz;
+
+    if (xx > c6_29_3)
+    {
+        fx = power.get(xx);
+    }
+    else
+    {
+        fx = 1.0 / 3.0 * c29_6_2 * xx + c4_29;
+    }
+
+    if (yy > c6_29_3)
+    {
+        fy = power.get(yy);
+    }
+    else
+    {
+        fy = 1.0 / 3.0 * c29_6_2 * yy + c4_29;
+    }
+
+    if (zz > c6_29_3)
+    {
+        fz = power.get(zz);
+    }
+    else
+    {
+        fz = 1.0 / 3.0 * c29_6_2 * zz + c4_29;
+    }
+
+    l = 116.0 * fy - 16.0;
+    a = 500.0 * (fx - fy);
+    b = 200.0 * (fy - fz);
+
+    l /= 100.0;
+    a += 100.0;
+    b += 100.0;
+    a /= 200.0;
+    b /= 200.0;
+
+    if (l < 0)
+    {
+        l = 0;
+    }
+
+    if (a < 0)
+    {
+        a = 0;
+    }
+    if (b < 0)
+    {
+        b = 0;
+    }
+
+/*
+    assert(l >= 0);
+    assert(a >= 0);
+    assert(b >= 0);
+    assert(l <= 1);
+    assert(a <= 1);
+    assert(b <= 1);
+    */
+}
+
 void lab2xyz(deValue l, deValue a, deValue b, deValue &x, deValue &y, deValue& z)
 {
+/*
     assert( l >= 0);
     assert( l <= 1);
     assert( a >= 0);
     assert( a <= 1);
     assert( b >= 0);
     assert( b <= 1);
+    */
 
     l *= 100.0;
     a *= 200.0;
