@@ -461,5 +461,7 @@ bool loadPPM(const std::string& fileName, deStaticImage& image, deColorSpace col
     channelG.unlockWrite();
     channelB.unlockWrite();
 
+    logMessage("finished loading PPM");
+
     return true;
 }

@@ -133,6 +133,6 @@ std::string getTmp()
     }
     else
     {
-        return "/tmp/";
+        return "/tmp";
     }            
 }        
