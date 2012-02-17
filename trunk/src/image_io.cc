@@ -330,15 +330,12 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image)
 
 void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixels2, int w, int h, deValue scale)
 {
-
     int pos = 0;
     int y;
-
 
     char c;
     unsigned char cc1;
     unsigned char cc2;
-    f.get(c);
 
     for (y = 0; y < h; y++)
     {
@@ -392,23 +389,26 @@ bool loadPPM(const std::string& fileName, deStaticImage& image, deColorSpace col
 
     std::ifstream f(fileName.c_str());
 
-    std::string id;
+    f.getline(buffer, bufsize);
 
-    f >> id;
-
-    if (id != "P6")
+    if ((buffer[0] != 'P') || (buffer[1] != '6'))
     {
-        logMessage("broken PPM file, id should be P6 but it's: " + id);
+        logMessage("broken PPM file, id should be P6 but it's: " + std::string(buffer));
         return false;
     }
 
-    int w;
-    int h;
-    int max;
+    f.getline(buffer, bufsize);
 
-    f >> w;
-    f >> h;
-    f >> max;
+    int w = 0;
+    int h = 0;
+
+    sscanf(buffer, "%i %i", &w, &h);
+
+    f.getline(buffer, bufsize);
+
+    int max = 0;
+
+    sscanf(buffer, "%i", &max);
 
     if (max < 256)
     {
