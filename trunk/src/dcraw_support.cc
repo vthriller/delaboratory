@@ -19,6 +19,7 @@
 #include "dcraw_support.h"
 #include <wx/wx.h>
 #include <wx/progdlg.h>
+#include "logger.h"
 
 #define DCRAW_EXECUTABLE "dcraw"
 
@@ -53,6 +54,8 @@ bool execDcraw(const std::string& f, const std::string& tmp)
     std::string c = std::string(DCRAW_EXECUTABLE) + " -w -c -6 -o 5 -W " + f + " >" + tmp;
 
     delete progressDialog;
+
+    logMessage("calling: " + c);
 
     system(c.c_str());
 
