@@ -136,6 +136,12 @@ void deControlPanel::setConversions()
     int view = viewManager.getView();
     deLayerStack& layerStack = project.getLayerStack();
     deLayer* layer = layerStack.getLayer(view);
+
+    if (!layer)
+    {
+        return;
+    }
+
     deColorSpace currentColorSpace = layer->getColorSpace();
 
     std::vector<wxButton*>::iterator i;
