@@ -123,6 +123,11 @@ void deSamplerPanel::update()
     deLayerStack& layerStack = project.getLayerStack();
     deLayer* layer = layerStack.getLayer(view);
 
+    if (!layer)
+    {
+        return;
+    }
+
     const deImage& image = layer->getImage();
 
     deChannelManager& channelManager = project.getPreviewChannelManager();
