@@ -42,7 +42,7 @@ std::string deRawModule::getVersion() const
 
 bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image)
 {
-    std::string tmp = getTmp() + "delaboratory.ppm";
+    std::string tmp = getTmp() + "/delaboratory.ppm";
 
     if (!execDcraw(fileName, tmp))
     {
