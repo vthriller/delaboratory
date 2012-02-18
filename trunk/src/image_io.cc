@@ -1,4 +1,5 @@
 /*
+
     delaboratory - color correction utility
     Copyright (C) 2011 Jacek Poplawski
 
@@ -354,7 +355,8 @@ void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixe
 
         if (!f.good())
         {
-            logMessage("file is not good :(");
+            logMessage("file is not good :( y was " + str(y));
+            delete [] buffer;
             return;
         }
 
