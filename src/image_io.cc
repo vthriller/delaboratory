@@ -330,12 +330,18 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image)
 
 void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixels2, int w, int h, deValue scale)
 {
+    logMessage("loadLAB start...");
+
     int pos = 0;
     int y;
 
     char c;
     unsigned char cc1;
     unsigned char cc2;
+
+    deValue max0 = 0;
+    deValue max1 = 0;
+    deValue max2 = 0;
 
     for (y = 0; y < h; y++)
     {
@@ -353,17 +359,32 @@ void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixe
             cc2 = (unsigned char)(c);
             r = (256 * cc1 + cc2) * scale;
 
+            if (r > max0)
+            {
+                max0 = r;
+            }
+
             f.get(c);
             cc1 = (unsigned char)(c);
             f.get(c);
             cc2 = (unsigned char)(c);
             g = (256 * cc1 + cc2) * scale;
 
+            if (g > max1)
+            {
+                max1 = g;
+            }
+
             f.get(c);
             cc1 = (unsigned char)(c);
             f.get(c);
             cc2 = (unsigned char)(c);
             b = (256 * cc1 + cc2) * scale;
+
+            if (b > max2)
+            {
+                max2 = b;
+            }
 
             deValue v1;
             deValue v2;
@@ -377,6 +398,11 @@ void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixe
             pos++;
         }
     }
+
+    logMessage("loadLAB finished");
+    logMessage("loadLAB max0 was: " + str(max0));
+    logMessage("loadLAB max1 was: " + str(max1));
+    logMessage("loadLAB max2 was: " + str(max2));
 
 }    
 
