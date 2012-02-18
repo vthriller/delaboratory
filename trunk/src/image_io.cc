@@ -436,7 +436,7 @@ bool loadPPM(const std::string& fileName, deStaticImage& image, deColorSpace col
     char buffer[256];
     int bufsize = 256;
 
-    std::ifstream f(fileName.c_str());
+    std::ifstream f(fileName.c_str(), std::ios::binary);
 
     f.getline(buffer, bufsize);
 
