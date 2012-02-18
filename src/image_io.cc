@@ -330,7 +330,7 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image)
 
 void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixels2, int w, int h, deValue scale)
 {
-    logMessage("loadLAB start...");
+    logMessage("loadLAB w: " + str(w) + " h: " + str(h) + " scale: " + str(scale));
 
     int pos = 0;
     int y;
@@ -343,19 +343,34 @@ void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixe
     deValue max1 = 0;
     deValue max2 = 0;
 
+    char* buffer;
+    buffer = new char[w*6];
+
     for (y = 0; y < h; y++)
     {
         int x;
-    
+   
+        f.read(buffer, w*6);
+
+        if (!f.good())
+        {
+            logMessage("file is not good :(");
+            return;
+        }
+
+        int p = 0;
+
         for (x = 0; x < w; x++)
         {
             deValue r;
             deValue g;
             deValue b;
 
-            f.get(c);
+            c = buffer[p];
+            p++;
             cc1 = (unsigned char)(c);
-            f.get(c);
+            c = buffer[p];
+            p++;
             cc2 = (unsigned char)(c);
             r = (256 * cc1 + cc2) * scale;
 
@@ -364,9 +379,11 @@ void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixe
                 max0 = r;
             }
 
-            f.get(c);
+            c = buffer[p];
+            p++;
             cc1 = (unsigned char)(c);
-            f.get(c);
+            c = buffer[p];
+            p++;
             cc2 = (unsigned char)(c);
             g = (256 * cc1 + cc2) * scale;
 
@@ -375,9 +392,11 @@ void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixe
                 max1 = g;
             }
 
-            f.get(c);
+            c = buffer[p];
+            p++;
             cc1 = (unsigned char)(c);
-            f.get(c);
+            c = buffer[p];
+            p++;
             cc2 = (unsigned char)(c);
             b = (256 * cc1 + cc2) * scale;
 
@@ -398,6 +417,8 @@ void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixe
             pos++;
         }
     }
+
+    delete [] buffer;
 
     logMessage("loadLAB finished");
     logMessage("loadLAB max0 was: " + str(max0));
@@ -486,6 +507,11 @@ bool loadPPM(const std::string& fileName, deStaticImage& image, deColorSpace col
     channelR.unlockWrite();
     channelG.unlockWrite();
     channelB.unlockWrite();
+
+    if (f.eof())
+    {
+        logMessage("eof detected");
+    }
 
     logMessage("finished loading PPM");
 
