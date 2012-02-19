@@ -25,14 +25,6 @@
 const deValue lch_hue_shift = 1.0/8.0;
 //const deValue lch_hue_shift = 0;
 
-/* fit XYZ into 0..1 */
-static const deValue Xscale  = 200.0 / 100.0;
-static const deValue Yscale  = 100.0 / 100.0;
-static const deValue Zscale  = 400.0 / 100.0;
-static const deValue Xoffset  = 0.02;
-static const deValue Yoffset  = 0;
-static const deValue Zoffset  = 0.05;
-
 /* almost same for conversion */
 static const deValue Xn  = 0.951;
 static const deValue Yn  = 1.0;
@@ -58,13 +50,6 @@ void rgb2xyz(deValue r, deValue g, deValue b, deValue &x, deValue &y, deValue& z
     y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
     z = 0.0193 * r + 0.1192 * g + 0.9505 * b;
 
-    x /= Xscale;
-    y /= Yscale;
-    z /= Zscale;
-    x += Xoffset;
-    y += Yoffset;
-    z += Zoffset;
-
     assert(x >= 0);
     assert(y >= 0);
     assert(z >= 0);
@@ -75,13 +60,6 @@ void rgb2xyz(deValue r, deValue g, deValue b, deValue &x, deValue &y, deValue& z
 
 void xyz2rgb(deValue x, deValue y, deValue z, deValue &r, deValue &g, deValue& b)
 {
-    x -= Xoffset;
-    y -= Yoffset;
-    z -= Zoffset;
-    x *= Xscale;
-    y *= Yscale;
-    z *= Zscale;
-
     r =  3.2410 * x - 1.5374 * y - 0.4986 * z;
     g = -0.9692 * x + 1.8760 * y + 0.0416 * z;
     b =  0.0556 * x - 0.2040 * y + 1.0570 * z;
@@ -112,12 +90,27 @@ void xyz2rgb(deValue x, deValue y, deValue z, deValue &r, deValue &g, deValue& b
     }
 }
 
-void xyz2rgb_pure(deValue x, deValue y, deValue z, deValue &r, deValue &g, deValue& b)
+void rgb2prophoto(deValue r, deValue g, deValue b, deValue &pr, deValue &pg, deValue& pb)
 {
-    r =  3.2410 * x - 1.5374 * y - 0.4986 * z;
-    g = -0.9692 * x + 1.8760 * y + 0.0416 * z;
-    b =  0.0556 * x - 0.2040 * y + 1.0570 * z;
+    assert(r >= 0);
+    assert(g >= 0);
+    assert(b >= 0);
+    assert(r <= 1);
+    assert(g <= 1);
+    assert(b <= 1);
+    pr = 0.529 * r + 0.330 * g + 0.141 * b;
+    pg = 0.098 * r + 0.873 * g + 0.028 * b;
+    pb = 0.017 * r + 0.118 * g + 0.865 * b;
 
+}
+
+void prophoto2rgb(deValue pr, deValue pg, deValue pb, deValue &r, deValue &g, deValue& b)
+{
+    r =  2.034 * pr - 0.727 * pg - 0.307 * pb;
+    g = -0.229 * pr + 1.232 * pg - 0.003 * pb;
+    b = -0.009 * pr - 0.153 * pg + 1.162 * pb;
+
+/*
     if (r < 0)
     {
         r = 0;
@@ -142,6 +135,7 @@ void xyz2rgb_pure(deValue x, deValue y, deValue z, deValue &r, deValue &g, deVal
     {
         b = 1;
     }
+    */
 }
 
 void lab2lch(deValue l, deValue a, deValue b, deValue &_l, deValue &_c, deValue& _h)
@@ -198,13 +192,6 @@ void xyz2lab(deValue x, deValue y, deValue z, deValue &l, deValue &a, deValue& b
 {
     static dePower power(1.0 / 3.0, 2);
 
-    x -= Xoffset;
-    y -= Yoffset;
-    z -= Zoffset;
-    x *= Xscale;
-    y *= Yscale;
-    z *= Zscale;
-
     deValue xx = x / Xn;    
     deValue yy = y / Yn;    
     deValue zz = z / Zn;    
@@ -270,79 +257,6 @@ void xyz2lab(deValue x, deValue y, deValue z, deValue &l, deValue &a, deValue& b
     assert(l <= 1);
     assert(a <= 1);
     assert(b <= 1);
-}
-
-void xyz2lab_pure(deValue x, deValue y, deValue z, deValue &l, deValue &a, deValue& b)
-{
-    static dePower power(1.0 / 3.0, 2);
-
-    deValue xx = x / Xn;    
-    deValue yy = y / Yn;    
-    deValue zz = z / Zn;    
-
-    deValue fx;
-    deValue fy;
-    deValue fz;
-
-    if (xx > c6_29_3)
-    {
-        fx = power.get(xx);
-    }
-    else
-    {
-        fx = 1.0 / 3.0 * c29_6_2 * xx + c4_29;
-    }
-
-    if (yy > c6_29_3)
-    {
-        fy = power.get(yy);
-    }
-    else
-    {
-        fy = 1.0 / 3.0 * c29_6_2 * yy + c4_29;
-    }
-
-    if (zz > c6_29_3)
-    {
-        fz = power.get(zz);
-    }
-    else
-    {
-        fz = 1.0 / 3.0 * c29_6_2 * zz + c4_29;
-    }
-
-    l = 116.0 * fy - 16.0;
-    a = 500.0 * (fx - fy);
-    b = 200.0 * (fy - fz);
-
-    l /= 100.0;
-    a += 100.0;
-    b += 100.0;
-    a /= 200.0;
-    b /= 200.0;
-
-    if (l < 0)
-    {
-        l = 0;
-    }
-
-    if (a < 0)
-    {
-        a = 0;
-    }
-    if (b < 0)
-    {
-        b = 0;
-    }
-
-/*
-    assert(l >= 0);
-    assert(a >= 0);
-    assert(b >= 0);
-    assert(l <= 1);
-    assert(a <= 1);
-    assert(b <= 1);
-    */
 }
 
 void lab2xyz(deValue l, deValue a, deValue b, deValue &x, deValue &y, deValue& z)
@@ -400,13 +314,6 @@ void lab2xyz(deValue l, deValue a, deValue b, deValue &x, deValue &y, deValue& z
     x = Xn * ffx;
     y = Yn * ffy;
     z = Zn * ffz;
-
-    x /= Xscale;
-    y /= Yscale;
-    z /= Zscale;
-    x += Xoffset;
-    y += Yoffset;
-    z += Zoffset;
 
     assert(x >= 0);
     assert(y >= 0);

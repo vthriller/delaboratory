@@ -51,8 +51,7 @@ bool execDcraw(const std::string& f, const std::string& tmp)
 {
     wxProgressDialog* progressDialog = new wxProgressDialog(_T("dcraw processing"), _T("dcraw processing"), 100, NULL, wxPD_AUTO_HIDE);
 
-    std::string c = std::string(DCRAW_EXECUTABLE) + " -w -c -6 -o 1 -W " + f + " >" + tmp;
-    //std::string c = std::string(DCRAW_EXECUTABLE) + " -a -c -6 -o 5 -W " + f + " >" + tmp;
+    std::string c = std::string(DCRAW_EXECUTABLE) + " -w -c -6 -o 4 -W " + f + " >" + tmp;
 
     delete progressDialog;
 
