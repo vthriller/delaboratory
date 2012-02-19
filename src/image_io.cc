@@ -411,8 +411,11 @@ void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixe
             deValue v1;
             deValue v2;
             deValue v3;
-            //xyz2lab_pure(r, g, b, v1, v2, v3);
-            rgb2lab(r, g, b, v1, v2, v3);
+            deValue vv1;
+            deValue vv2;
+            deValue vv3;
+            prophoto2rgb(r, g, b, vv1, vv2, vv3);
+            rgb2lab(vv1, vv2, vv3, v1, v2, v3);
 
             pixels0[pos] = v1;
             pixels1[pos] = v2;
