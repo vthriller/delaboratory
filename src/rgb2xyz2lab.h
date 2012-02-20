@@ -33,5 +33,6 @@ void initLAB();
 
 void rgb2prophoto(deValue r, deValue g, deValue b, deValue &pr, deValue &pg, deValue& pb);
 void prophoto2rgb(deValue pr, deValue pg, deValue pb, deValue &r, deValue &g, deValue& b);
+void prophoto2xyz(deValue pr, deValue pg, deValue pb, deValue &x, deValue &y, deValue& z);
 
 #endif
