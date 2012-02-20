@@ -132,6 +132,40 @@ void prophoto2rgb(deValue pr, deValue pg, deValue pb, deValue &r, deValue &g, de
 
 }
 
+void prophoto2xyz(deValue pr, deValue pg, deValue pb, deValue &x, deValue &y, deValue& z)
+{
+
+    /*
+
+    octave:7> z
+    z =
+
+       2.0341926  -0.7274198  -0.3067655
+      -0.2288108   1.2317292  -0.0029216
+      -0.0085649  -0.1532726   1.1618390
+
+    octave:8> y
+    y =
+
+       0.412400   0.357600   0.180500
+       0.212600   0.715200   0.072200
+       0.019300   0.119200   0.950500
+
+    octave:10> y * z
+    ans =
+
+       0.7555323   0.1128127   0.0821571
+       0.2682055   0.7152170   0.0165769
+       0.0038447  -0.0129027   1.0980591
+
+    */
+
+    x = 0.7555323 * pr + 0.1128127* pg + 0.0821571* pb;
+    y = 0.2682055 * pr + 0.7152170* pg + 0.0165769* pb;
+    z = 0.0038447 * pr -0.0129027 * pg + 1.0980591* pb;
+
+}
+
 void lab2lch(deValue l, deValue a, deValue b, deValue &_l, deValue &_c, deValue& _h)
 {
     _l = l;
