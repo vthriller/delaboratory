@@ -28,6 +28,7 @@ enum deColorSpace
 {
     deColorSpaceInvalid,
     deColorSpaceRGB,
+    deColorSpaceProPhoto,
     deColorSpaceBW,
     deColorSpaceLAB,
     deColorSpaceCMY,

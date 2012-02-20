@@ -32,7 +32,7 @@ deRawModule::~deRawModule()
 
 void deRawModule::onInit()
 {
-    dcraw_version = checkDcraw();
+    dcraw_version = getDcrawVersion();
 }    
 
 std::string deRawModule::getVersion() const
@@ -42,6 +42,7 @@ std::string deRawModule::getVersion() const
 
 bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image)
 {
+/*
     std::string tmp = getTmp() + "/delaboratory.ppm";
 
     if (!execDcraw(fileName, tmp))
@@ -49,5 +50,7 @@ bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image)
         return false;
     }
 
-    return loadPPM(tmp, image, deColorSpaceLAB);
+    return loadPPM(tmp, image, deColorSpaceLAB);*/
+
+    return execDcrawProcess(fileName, image);
 }
