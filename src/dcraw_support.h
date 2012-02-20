@@ -20,8 +20,11 @@
 #define _DE_DCRAW_SUPPORT_H
 
 #include <string>
+class deStaticImage;
 
-std::string checkDcraw();
-bool execDcraw(const std::string& f, const std::string& tmp);
+//std::string checkDcraw();
+//bool execDcraw(const std::string& f, const std::string& tmp);
+bool execDcrawProcess(const std::string& f, deStaticImage& image);
+std::string getDcrawVersion();
 
 #endif

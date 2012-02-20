@@ -130,6 +130,31 @@ void prophoto2rgb(deValue pr, deValue pg, deValue pb, deValue &r, deValue &g, de
     g = -0.2288108 * pr + 1.2317292 * pg -0.0029216 * pb;
     b = -0.0085649 * pr -0.1532726  * pg + 1.1618390 * pb;
 
+    if (r < 0)
+    {
+        r = 0;
+    }
+    else if (r > 1)
+    {
+        r = 1;
+    }
+    if (g < 0)
+    {
+        g = 0;
+    }
+    else if (g > 1)
+    {
+        g = 1;
+    }
+    if (b < 0)
+    {
+        b = 0;
+    }
+    else if (b > 1)
+    {
+        b = 1;
+    }
+
 }
 
 void prophoto2xyz(deValue pr, deValue pg, deValue pb, deValue &x, deValue &y, deValue& z)
@@ -163,6 +188,28 @@ void prophoto2xyz(deValue pr, deValue pg, deValue pb, deValue &x, deValue &y, de
     x = 0.7555323 * pr + 0.1128127* pg + 0.0821571* pb;
     y = 0.2682055 * pr + 0.7152170* pg + 0.0165769* pb;
     z = 0.0038447 * pr -0.0129027 * pg + 1.0980591* pb;
+
+}
+
+void xyz2prophoto(deValue x, deValue y, deValue z, deValue &pr, deValue &pg, deValue& pb)
+{
+    /*
+
+    x = [0.7555323, 0.1128127, 0.0821571; 0.2682055, 0.7152170, 0.0165769; 0.0038447, -0.0129027, 1.0980591]
+
+    octave:2> inv(x)
+    ans =
+
+       1.403314  -0.223181  -0.101627
+      -0.525984   1.481448   0.016990
+      -0.011094   0.018189   0.911253
+
+    */
+
+
+    pr = 1.403314* x -0.223181* y -0.101627* z;
+    pg = -0.525984* x + 1.481448* y + 0.016990* z;
+    pb = -0.011094* x + 0.018189* y + 0.911253* z;
 
 }
 

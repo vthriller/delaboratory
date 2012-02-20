@@ -40,6 +40,18 @@ void rgb2lab(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deVal
     xyz2lab(x, y, z, d1, d2, d3);
 }
 
+void prophoto2lab(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue x;
+    deValue y;
+    deValue z;
+
+    prophoto2xyz(s1, s2, s3, x, y, z);
+
+    xyz2lab(x, y, z, d1, d2, d3);
+}
+
+
 void lab2rgb(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
 {
     deValue x;
@@ -52,6 +64,20 @@ void lab2rgb(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deVal
 
 
 }
+
+void lab2prophoto(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue x;
+    deValue y;
+    deValue z;
+
+    lab2xyz(s1, s2, s3, x, y, z);
+
+    xyz2prophoto(x, y, z, d1, d2, d3);
+
+
+}
+
 
 void cmyk2rgb(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deValue& d2, deValue& d3)
 {
@@ -324,6 +350,36 @@ deConversion3x3 getConversion3x3(deColorSpace s, deColorSpace d)
     if ((s == deColorSpaceRGB) && (d == deColorSpaceXYZ))
     {
         return rgb2xyz;
+    }
+
+    if ((s == deColorSpaceProPhoto) && (d == deColorSpaceXYZ))
+    {
+        return prophoto2xyz;
+    }
+
+    if ((s == deColorSpaceProPhoto) && (d == deColorSpaceLAB))
+    {
+        return prophoto2lab;
+    }
+
+    if ((d == deColorSpaceProPhoto) && (s == deColorSpaceXYZ))
+    {
+        return xyz2prophoto;
+    }
+
+    if ((d == deColorSpaceProPhoto) && (s == deColorSpaceLAB))
+    {
+        return lab2prophoto;
+    }
+
+    if ((s == deColorSpaceRGB) && (d == deColorSpaceProPhoto))
+    {
+        return rgb2prophoto;
+    }
+
+    if ((d == deColorSpaceRGB) && (s == deColorSpaceProPhoto))
+    {
+        return prophoto2rgb;
     }
 
     if ((s == deColorSpaceXYZ) && (d == deColorSpaceLAB))

@@ -28,11 +28,14 @@ void lab2xyz(deValue l, deValue a, deValue b, deValue &x, deValue &y, deValue& z
 void lab2lch(deValue l, deValue a, deValue b, deValue &_l, deValue &_c, deValue& _h);
 void lch2lab(deValue l, deValue c, deValue h, deValue &_l, deValue &_a, deValue& _b);
 
+void rgb2prophoto(deValue r, deValue g, deValue b, deValue &pr, deValue &pg, deValue& pb);
+void prophoto2rgb(deValue pr, deValue pg, deValue pb, deValue &r, deValue &g, deValue& b);
+
+void prophoto2xyz(deValue pr, deValue pg, deValue pb, deValue &x, deValue &y, deValue& z);
+void xyz2prophoto(deValue x, deValue y, deValue z, deValue &pr, deValue &pg, deValue& pb);
+
 /* for benchmarks only */
 void initLAB();
 
-void rgb2prophoto(deValue r, deValue g, deValue b, deValue &pr, deValue &pg, deValue& pb);
-void prophoto2rgb(deValue pr, deValue pg, deValue pb, deValue &r, deValue &g, deValue& b);
-void prophoto2xyz(deValue pr, deValue pg, deValue pb, deValue &x, deValue &y, deValue& z);
 
 #endif

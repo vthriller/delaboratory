@@ -27,6 +27,8 @@ int getColorSpaceSize(const deColorSpace& colorSpace)
             return 1;
         case deColorSpaceRGB:
             return 3;
+        case deColorSpaceProPhoto:
+            return 3;
         case deColorSpaceHSL:
             return 3;
         case deColorSpaceHSV:
@@ -62,6 +64,8 @@ std::string getColorSpaceName(deColorSpace colorSpace)
             return "BW";
         case deColorSpaceRGB:
             return "sRGB";
+        case deColorSpaceProPhoto:
+            return "ProPhoto";
         case deColorSpaceHSL:
             return "HSL";
         case deColorSpaceHSV:
@@ -83,9 +87,13 @@ std::string getColorSpaceName(deColorSpace colorSpace)
 
 deColorSpace colorSpaceFromString(const std::string& name)
 {
-    if (name == "RGB")
+    if (name == "sRGB")
     {
         return deColorSpaceRGB;
+    }
+    if (name == "ProPhoto")
+    {
+        return deColorSpaceProPhoto;
     }
     if (name == "LAB")
     {
@@ -132,6 +140,7 @@ std::string getChannelName(deColorSpace colorSpace, int channel)
         case deColorSpaceBW:
             return "BW";
         case deColorSpaceRGB:
+        case deColorSpaceProPhoto:
         {
             switch (channel)
             {
@@ -214,11 +223,12 @@ std::string getChannelName(deColorSpace colorSpace, int channel)
 void getSupportedColorSpaces(std::vector<deColorSpace>& result)
 {
     result.push_back(deColorSpaceRGB);
-    result.push_back(deColorSpaceLAB);
+    result.push_back(deColorSpaceProPhoto);
     result.push_back(deColorSpaceBW);
+    result.push_back(deColorSpaceLAB);
+    result.push_back(deColorSpaceLCH);
     result.push_back(deColorSpaceHSL);
     result.push_back(deColorSpaceHSV);
-    result.push_back(deColorSpaceLCH);
 //    result.push_back(deColorSpaceXYZ);
     result.push_back(deColorSpaceCMY);
     result.push_back(deColorSpaceCMYK);
@@ -229,6 +239,7 @@ wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
     switch (colorSpace)
     {
         case deColorSpaceRGB:
+        case deColorSpaceProPhoto:
         {
             int g = 200;
             switch (channel)
@@ -282,6 +293,10 @@ deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v)
         }
     }
     if (colorSpace == deColorSpaceRGB)
+    {
+        return 255 * v;
+    }
+    if (colorSpace == deColorSpaceProPhoto)
     {
         return 255 * v;
     }
