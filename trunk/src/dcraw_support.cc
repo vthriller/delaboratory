@@ -220,11 +220,13 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image)
 
             p += input->LastRead();
 
+/*
             if (p < w * 6)
             {
 //                std::cout << "wait for more data" << std::endl;
                 wxThread::Sleep(10);
             }                
+            */
         }            
 
         if (input->Eof())
