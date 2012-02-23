@@ -205,42 +205,42 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image)
     unsigned char cc2;
 
     char* buffer;
-    buffer = new char[w*6];
+
+    int bufsize=500000;
+
+    logMessage("allocating buffer of size " + str(bufsize));
+
+    buffer = new char[bufsize];
 
     bool error = false;
 
-    int y;
-    for (y = 0; y < h; y++)
+    int n = w * h;
+
+    int offset = 0;
+
+    int steps = 0;
+
+    int maxRead = 0;
+
+    while ((pos < n) && (!input->Eof()))
     {
-        int p = 0;
+        steps++;
 
-        while (p < w * 6)
+//        logMessage("pos: " + str(pos) + " n: " + str(n) + " offset: " + str(offset));
+        input->Read(buffer + offset, bufsize - offset);
+
+        int r = input->LastRead();
+        if (r > maxRead)
         {
-            input->Read(buffer + p, w * 6 - p);
-
-            p += input->LastRead();
-
-/*
-            if (p < w * 6)
-            {
-//                std::cout << "wait for more data" << std::endl;
-                wxThread::Sleep(10);
-            }                
-            */
-        }            
-
-        if (input->Eof())
-        {
-            std::cout << "eof" << std::endl;
-            error = true;
+            maxRead = r;
         }
 
-        p = 0;
+//        logMessage("read " + str(r) + " bytes into buffer");
+        r += offset;
 
-        int x;
-        for (x = 0; x < w; x++)
+        int p = 0;
+        while (p + 6 <= r)
         {
-
             deValue r;
             deValue g;
             deValue b;
@@ -285,8 +285,23 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image)
             pos++;
         }
 
+        int left = r - p;
+        int i;
+        for (i = 0; i < left; i++)
+        {
+            buffer[i] = buffer[p + i];
+        }
+        offset = left;
+
     }
 
+    logMessage("pos: " + str(pos) + " n: " + str(n) + " steps: " + str(steps) + " maxRead: " + str(maxRead));
+    if (input->Eof())
+    {
+        logMessage("input stream EOF");
+    }
+
+    logMessage("deallocating buffer");
     delete [] buffer;
 
     channelR.unlockWrite();
@@ -298,6 +313,7 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image)
         return false;
     }
 
+    logMessage("loading ppm done");
     return true;
 }
 
