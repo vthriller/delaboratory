@@ -5,7 +5,7 @@ each action layer in delaboratory is available in each colorspace, and in each c
 delaboratory supports 9 color spaces:
 
   * sRGB http://en.wikipedia.org/wiki/SRGB
-  * ProPhoto http://en.wikipedia.org/wiki/ProPhoto
+  * !ProPhoto http://en.wikipedia.org/wiki/ProPhoto
   * BW http://en.wikipedia.org/wiki/Grayscale
   * LAB http://en.wikipedia.org/wiki/Lab_color_space
   * LCH http://www.colourphil.co.uk/lab_lch_colour_space.html
@@ -29,4 +29,3 @@ CMYK is the only colorspace which has 4 channels, that's why it's special and th
 CMY is just reversed RGB, it's like CMYK but without K
 
 HSV/HCL are old colorspaces which separate luminance from color, but they don't make it so well as LAB/LCH, but they are quite famous so they are available
-
