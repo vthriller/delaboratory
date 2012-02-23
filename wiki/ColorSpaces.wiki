@@ -1,54 +1,34 @@
 #summary ColorSpaces
 
-= RGB =
+each action layer in delaboratory is available in each colorspace, and in each case it will work differently, if you want to explore delaboratory it's a good idea to try each colorspace and see how they can be used
 
-http://en.wikipedia.org/wiki/Rgb
+delaboratory supports 9 color spaces:
 
-RGB color space is the one which is most popular. Every application supports it, because computers and digital cameras work in RGB. 
+  * sRGB http://en.wikipedia.org/wiki/SRGB
+  * ProPhoto http://en.wikipedia.org/wiki/ProPhoto
+  * BW http://en.wikipedia.org/wiki/Grayscale
+  * LAB http://en.wikipedia.org/wiki/Lab_color_space
+  * LCH http://www.colourphil.co.uk/lab_lch_colour_space.html
+  * CMYK http://en.wikipedia.org/wiki/Cmyk
+  * CMY 
+  * HSV http://en.wikipedia.org/wiki/HSL_and_HSV
+  * HSL http://en.wikipedia.org/wiki/HSL_and_HSV
 
-This is *worst colorspace for correcting color with curves*. It's good for special effects (like cross processing http://www.gimpforphotos.com/tutorial-intermediate/cross-processing.html) but it's very difficult to fix some color problems with RGB curves.
+sRGB is the most popular color space, every color is a mix of Red, Green and Blue
 
-= BW = 
+ProPhoto is similar to sRGB but has wider gamut, it means that some colors outside sRGB colorspace can be presented in ProPhoto, this is important when you open RAW file and it's colors are clipped in sRGB but are not in ProPhoto - during the edit you can save the details in highlights or shadows
 
-http://en.wikipedia.org/wiki/Grayscale
+BW is just single channel grayscale representation of image, it's very important to control the process of color -> BW conversion and understand how BW image can be used to improve the final color image, there are multiple books on this subject
 
-BW colorspace has only one channel: grayscale. 
+LAB is famous colorspace which separates luminance from color, many applications fully work in LAB colorspace inside, because it's so good in post processing
 
-There are long (really long) articles, tutorials even books about converting photo to Black and White, there are many methods for that. Even if you are going to produce color photo you still should know how to use BW image to blend it or to create masks.
+LCH is similar to LAB, but instead "not so user friendly" A/B channels there is a chroma (saturation) and hue, so if you want to play with saturation without changing balance of colors - it's better than LAB
 
-= CMYK = 
+CMYK is the only colorspace which has 4 channels, that's why it's special and that's why it's so powerful, most people don't understand why this colorspace can be used in post processing and they just associate CMYK with printing, that's why it's not available in many Free Software projects at all
 
-http://en.wikipedia.org/wiki/Cmyk
+CMY is just reversed RGB, it's like CMYK but without K
 
-CMYK is different than other color spaces because it has 4 channels. CMY colorspace is just reversed RGB, but CMYK adds new channel: *key*. Working with 4 channels instead 3 gives more possibilities in retouching.
+HSV/HCL are old colorspaces which separate luminance from color, but they don't make it so well as LAB/LCH, but they are quite famous so they are available
 
-The most common reason for using CMYK colorspace is to prepare images for printing. But the true reason why CMYK is interesting for photos is that it's *very good colorspace for correcting skin tones*. So if you have photos with people on them - it's worth trying.
 
-= LAB = 
 
-http://en.wikipedia.org/wiki/Lab_color_space
-
-LAB colorspace separates color from contrast. Channel *L* is for *lightness*, channel *A* is for *green-magenta* colors and channel *B* is for *blue-yellow* colors. 
-
-This is *best colorspace for correcting color casts*. It's also very good in creating *masks*, for instance if you want to separate some objects. It's very easy to *boost colors* by increasing contrast of A and B channels, so one can put life into dull photos.
-
-= HSV/HSL = 
-
-http://en.wikipedia.org/wiki/HSL_and_HSV
-
-HSV and HSL colorspaces have *hue* and *saturation* values in their channels. 
-
-Wikipedia has nice comparision of the third channel.
-
-= original image =
-http://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Fire_breathing_2_Luc_Viatour.jpg/800px-Fire_breathing_2_Luc_Viatour.jpg
-(source: http://www.lucnix.be/main.php)
-
-= L channel from LAB =
-http://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Fire-breather_CIELAB_L%2A.jpg/800px-Fire-breather_CIELAB_L%2A.jpg
-
-= V channel from HSV = 
-http://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Fire-breather_HSV_V.jpg/800px-Fire-breather_HSV_V.jpg
-
-= L channel from HSL =
-http://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Fire-breather_HSL_L.jpg/800px-Fire-breather_HSL_L.jpg
