@@ -16,11 +16,11 @@ delaboratory supports 9 color spaces:
 
 sRGB is the most popular color space, every color is a mix of Red, Green and Blue
 
-!ProPhoto is similar to sRGB but has wider gamut, it means that some colors outside sRGB colorspace can be presented in !ProPhoto, this is important when you open RAW file and it's colors are clipped in sRGB but are not in !ProPhoto - during the edit you can save the details in highlights or shadows
+!ProPhoto is similar to sRGB but has wider gamut, it means that some colors outside sRGB colorspace can be presented in !ProPhoto, this is important when you open RAW file and its colors are clipped in sRGB but are not in !ProPhoto - during the edit you can save the details in highlights or shadows
 
 BW is just single channel grayscale representation of image, it's very important to control the process of color -> BW conversion and understand how BW image can be used to improve the final color image, there are multiple books on this subject
 
-LAB is famous colorspace which separates luminance from color, many applications fully work in LAB colorspace inside, because it's so good in post processing
+LAB is famous colorspace which separates luminance from color, many applications fully work in LAB colorspace inside, because it's so good in post processing, LAB is also very wide colorspace (wider than !ProPhoto)
 
 LCH is similar to LAB, but instead "not so user friendly" A/B channels there is a chroma (saturation) and hue, so if you want to play with saturation without changing balance of colors - it's better than LAB
 
