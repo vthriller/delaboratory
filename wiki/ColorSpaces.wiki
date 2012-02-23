@@ -16,7 +16,7 @@ delaboratory supports 9 color spaces:
 
 sRGB is the most popular color space, every color is a mix of Red, Green and Blue
 
-ProPhoto is similar to sRGB but has wider gamut, it means that some colors outside sRGB colorspace can be presented in ProPhoto, this is important when you open RAW file and it's colors are clipped in sRGB but are not in ProPhoto - during the edit you can save the details in highlights or shadows
+!ProPhoto is similar to sRGB but has wider gamut, it means that some colors outside sRGB colorspace can be presented in !ProPhoto, this is important when you open RAW file and it's colors are clipped in sRGB but are not in !ProPhoto - during the edit you can save the details in highlights or shadows
 
 BW is just single channel grayscale representation of image, it's very important to control the process of color -> BW conversion and understand how BW image can be used to improve the final color image, there are multiple books on this subject
 
@@ -29,6 +29,4 @@ CMYK is the only colorspace which has 4 channels, that's why it's special and th
 CMY is just reversed RGB, it's like CMYK but without K
 
 HSV/HCL are old colorspaces which separate luminance from color, but they don't make it so well as LAB/LCH, but they are quite famous so they are available
-
-
 
