@@ -42,6 +42,8 @@ deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int
     darkenAmount.setLabel("darken");
     lightenAmount.setLabel("lighten");
     reset();
+
+    disableNotLuminance();
 }
 
 void deShadowsHighlightsLayer::reset()

@@ -70,6 +70,8 @@ class deCurve
         void invert();
         void fill(int n, deValue a, deValue r);
 
+        void setContrastBrightness(deValue contrast, deValue brightness);
+
         bool isNeutral() const;
 
         deValue calcValue(deValue value);

@@ -95,6 +95,8 @@ class deLayer
         virtual void processBlend();
         virtual void processChannel(int channel);
 
+        virtual void onUpdateProperties() {};
+
 };
 
 #endif

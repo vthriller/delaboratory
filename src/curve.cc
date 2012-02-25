@@ -122,6 +122,31 @@ void deCurve::setS(int a)
     unlock();
 }
 
+void deCurve::setContrastBrightness(deValue contrast, deValue brightness)
+{
+    lock();
+
+    deValue p1 = 1.0 / 4.0;
+    deValue p2 = 1.0 - 1.0 / 4.0;
+
+    deValue h0 = brightness + 0.0  + (-0.5 * contrast);
+    deValue h1 = brightness + p1   + (p1 - 0.5) * contrast;
+    deValue h2 = brightness + p2   + (1.0 - p2) * contrast;
+    deValue h3 = brightness + 1.0  + 0.5 * contrast;
+
+    points.clear();
+    points.push_back(deCurvePoint(0, h0));
+
+    points.push_back(deCurvePoint(p1, h1));
+    points.push_back(deCurvePoint(p2, h2));
+
+    points.push_back(deCurvePoint(1, h3));
+    shape.build(points);
+
+    unlock();
+}
+
+
 void deCurve::fill(int n, deValue a, deValue r)
 {
     lock();

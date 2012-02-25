@@ -83,6 +83,7 @@ void deLayer::saveCommon(xmlNodePtr node)
 
 bool deLayer::updateImageThreadCall()
 {
+//    std::cout << "updateImageThreadCall :(" << std::endl;
     return updateImage();
 }
 
@@ -123,6 +124,7 @@ void deLayer::process(deLayerProcessType type, int channel)
 
 void deLayer::processFull()
 {
+//    std::cout << "processFull :(" << std::endl;
     updateImageThreadCall();
 }
 

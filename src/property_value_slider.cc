@@ -27,6 +27,7 @@ property(_property),
 layer(_layer),
 layerProcessor(_layerProcessor)
 {
+    channel = property.getChannel();
     setFromProperty();
 }
 
@@ -41,7 +42,14 @@ void dePropertyValueSlider::onValueChange(deValue value, bool finished)
         property.set(value);
 
         int index = layer.getIndex();
-        layerProcessor.markUpdateAllChannels(index);
+        if (channel >= 0)
+        {
+            layerProcessor.markUpdateSingleChannel(index, channel);
+        }
+        else
+        {
+            layerProcessor.markUpdateAllChannels(index);
+        }
     }                
 }
 
@@ -50,3 +58,9 @@ void dePropertyValueSlider::setFromProperty()
     setValue(property.get());
 }
 
+/*
+void dePropertyValueSlider::setChannel(int _channel)
+{
+    channel = _channel;
+}
+*/

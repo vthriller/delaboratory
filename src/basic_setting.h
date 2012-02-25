@@ -16,32 +16,38 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_VALUE_SLIDER_H
-#define _DE_PROPERTY_VALUE_SLIDER_H
+#ifndef _DE_BASIC_SETTING_H
+#define _DE_BASIC_SETTING_H
 
-#include "slider.h"
-class deLayer;
-class dePropertyValue;
-class deLayerProcessor;
+#include <set>
+#include <string>
 
-class dePropertyValueSlider:public deSlider
+class deBasicSetting
 {
     private:
-        dePropertyValue& property;
-        deLayer& layer;
-        deLayerProcessor& layerProcessor;
+        std::string name;
+        std::set<int> channels;
+        bool contrast;
+        bool brightness;
+        bool shift;
+    public:    
+        deBasicSetting(const std::string& _name);
+        virtual ~deBasicSetting();
 
-        int channel;
+        void setContrast();
+        void setBrightness();
+        void setShift();
 
-    public:
-        dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayer& _layer, deLayerProcessor& _layerProcessor);
-        virtual ~dePropertyValueSlider();
+        void addChannel(int c);
 
-        virtual void onValueChange(deValue value, bool finished);
+        std::string getName() const {return name;};
+        bool affects(int c) const;
 
-        void setFromProperty();
+        bool isContrast() const {return contrast;};
+        bool isBrightness() const {return brightness;};
+        bool isShift() const {return shift;};
 
-//        void setChannel(int _index);
-};        
+        int getChannel() const;
+};
 
 #endif

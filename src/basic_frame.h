@@ -16,32 +16,33 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_VALUE_SLIDER_H
-#define _DE_PROPERTY_VALUE_SLIDER_H
+#ifndef _DE_BASIC_FRAME_H
+#define _DE_BASIC_FRAME_H
 
+#include "action_frame.h"
 #include "slider.h"
-class deLayer;
-class dePropertyValue;
+#include <vector>
+
+class dePropertyValueSlider;
 class deLayerProcessor;
 
-class dePropertyValueSlider:public deSlider
+class deBasicFrame:public deActionFrame
 {
     private:
-        dePropertyValue& property;
-        deLayer& layer;
+        std::vector<dePropertyValueSlider*> basicSliders;
+
         deLayerProcessor& layerProcessor;
 
-        int channel;
+        wxButton* reset;
+
+        void click(wxCommandEvent &event);
 
     public:
-        dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayer& _layer, deLayerProcessor& _layerProcessor);
-        virtual ~dePropertyValueSlider();
+        deBasicFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
+        virtual ~deBasicFrame();
 
-        virtual void onValueChange(deValue value, bool finished);
 
-        void setFromProperty();
+};
 
-//        void setChannel(int _index);
-};        
 
 #endif

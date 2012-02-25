@@ -72,3 +72,23 @@ void processLinear(const deValue* src, deValue* dst,  int n, deValue min, deValu
         }
     }
 }
+
+void shiftChannel(const deValue* src, deValue* dst, deValue shift, int n)
+{
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        deValue v = src[i];
+        v += shift;
+        if (v < 0.0)
+        {
+            v += 1.0;
+        }
+        if (v > 1.0)
+        {
+            v -= 1.0;
+        }
+        dst[i] = v;
+    }
+}

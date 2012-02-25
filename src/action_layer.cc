@@ -166,6 +166,7 @@ bool deActionLayer::updateBlendAllChannels()
 
 bool deActionLayer::updateImageInActionLayer(bool action, bool blend, int channel)
 {
+//    std::cout << "updateImageInActionLayer " << channel << std::endl;
     if (action)
     {
         if (channel >= 0)
@@ -252,6 +253,19 @@ deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace,
 deActionLayer::~deActionLayer()
 {
     disableBlendMaskChannel();
+}
+
+void deActionLayer::disableNotLuminance()
+{
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        if (!isChannelLuminance(colorSpace, i))
+        {
+            channels.erase(i);
+        }            
+    }
 }
 
 void deActionLayer::enableBlendMaskChannel()
@@ -588,12 +602,15 @@ void deActionLayer::setOpacity(deValue _opacity)
 
 bool deActionLayer::updateImage()
 {
+//    std::cout << "updateImage :(" << std::endl;
     return updateImageInActionLayer(true, true, -1);
 }
 
 bool deActionLayer::updateAction(int i)
 {
     bool actionResult = false;
+
+//    std::cout << "updateAction " << i << std::endl;
 
     logMessage("update action start i:" +str(i));
 
@@ -628,6 +645,7 @@ bool deActionLayer::updateAction(int i)
         sourceChannel->lockRead();
         sourceChannel->unlockRead();
         imageActionPass.disableChannel(i, s);
+//        std::cout << "imageActionPass.disableChannel " << i << std::endl;
         return true;
     }
     else
@@ -639,6 +657,7 @@ bool deActionLayer::updateAction(int i)
             if (sourceChannel)
             {
                 imageActionPass.enableChannel(i);
+//                std::cout << "imageActionPass.enableChannel " << i << std::endl;
                 int c = imageActionPass.getChannelIndex(i);
                 deChannel* channel = channelManager.getChannel(c);
                 logMessage("update action 6 i:" +str(i));
@@ -1001,6 +1020,7 @@ void deActionLayer::processChannel(int channel)
 
 void deActionLayer::processBlend()
 {
+//    std::cout << "processBlend :(" << std::endl;
     updateImageInActionLayer(false, true, -1);
 }
 

@@ -54,6 +54,8 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _so
     alternate.setLabel("use screen / multiply instead dodge / burn");
 
     reset();
+
+    disableNotLuminance();
 }
 
 void deDodgeBurnLayer::reset()
