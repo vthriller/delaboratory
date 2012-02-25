@@ -91,7 +91,7 @@ deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _slider
     integerMode = false;
     sizer = new wxBoxSizer(wxHORIZONTAL);
 
-    label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(labelString.c_str()), wxDefaultPosition, wxSize(80, 30));
+    label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(labelString.c_str()), wxDefaultPosition, wxSize(120, 30));
     sizer->Add(label, 0, wxCENTER);
 
     slider = new wxSlider(this, wxID_ANY, sliderRange, 0,  sliderRange, wxDefaultPosition, wxSize(sliderRange, -1), wxSL_HORIZONTAL);

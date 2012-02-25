@@ -31,6 +31,7 @@
 #include "dodge_burn_layer.h"
 #include "high_pass_layer.h"
 #include "shadows_highlights_layer.h"
+#include "basic_layer.h"
 
 deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name, deStaticImage& sourceImage)
 {
@@ -54,6 +55,11 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
     if (type == "usm")
     {
         return new deUSMLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
+    }
+
+    if (type == "basic")
+    {
+        return new deBasicLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
     }
 
     if (type == "dodge_burn")
@@ -150,6 +156,7 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
 
 void getSupportedActions(std::vector<std::string>& actions)
 {
+    actions.push_back("basic");
     actions.push_back("curves");
     actions.push_back("mixer");
     actions.push_back("apply_image");

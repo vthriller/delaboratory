@@ -27,6 +27,8 @@ dePropertyValue::dePropertyValue(const std::string& _name)
     max = 1.0;
     defaultValue = 0.0;
 
+    channel = -1;
+
     value = defaultValue;
 }
 
@@ -38,7 +40,6 @@ void dePropertyValue::set(deValue _value)
 {
     value = _value;
 }
-
 
 deValue dePropertyValue::get() const
 {
@@ -81,4 +82,9 @@ void dePropertyValue::setMax(deValue _max)
 void dePropertyValue::setMin(deValue _min)
 {
     min = _min;
+}
+
+void dePropertyValue::setChannel(int _channel)
+{
+    channel = _channel;
 }

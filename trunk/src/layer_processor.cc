@@ -439,6 +439,8 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
         return;
     }
 
+//    std::cout << "updateImages " << channel << std::endl;
+
 //    log("requested update images " + str(a) + " " + str(channel) + " " + str(blend) + " " + str(action));
 
     //lock();
@@ -447,7 +449,10 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
 
     if (a == firstLayerToUpdate)
     {
-        channel = -1;
+        if (layerProcessChannel != channel)
+        {
+            channel = -1;
+        }            
     }
 
     if (a < firstLayerToUpdate)
@@ -488,8 +493,11 @@ bool deLayerProcessor::updateImage()
     bool ok = true;
     bool result = false;
 
+//    std::cout << "updateImage" << std::endl;
+
     if (firstLayerToUpdate > getLastLayerToUpdate())
     {
+//        std::cout << "updateImage :(" << std::endl;
         ok = false;
     }
 
@@ -503,6 +511,7 @@ bool deLayerProcessor::updateImage()
     deLayer* layer = layerStack.getLayer(i);
     if ((layer) && (ok))
     {
+//        std::cout << "updateImage !" << std::endl;
 
         layer->lockLayer();
         layerStack.unlock();
@@ -524,6 +533,7 @@ bool deLayerProcessor::updateImage()
 
     if ((layer) && (ok))
     {
+//        std::cout << "updateImage process..." << std::endl;
         layer->process(type, channel);
 
         layer->unlockLayer();
@@ -616,6 +626,14 @@ void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
 
 void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 {
+//    std::cout << "markUpdateSingleChannel " << index << " " << channel << std::endl;
+    deLayer* layer = layerStack.getLayer(index);
+    if (layer)
+    {
+//        layerFrameManager.onUpdateProperties();
+        layer->onUpdateProperties();
+    }        
+
     logMessage("markUpdateSingleChannel");
     updateImages(index, channel, true);
 }
@@ -626,6 +644,7 @@ void deLayerProcessor::markUpdateAllChannels(int index)
     if (layer)
     {
         layerFrameManager.onUpdateProperties();
+        layer->onUpdateProperties();
     }        
 
     updateImages(index, -1, true);
@@ -713,7 +732,7 @@ void deLayerProcessor::removeAllLayers()
 
     while (layerStack.getSize() > 0)
     {
-        int index = layerStack.getSize() - 1;
+        //int index = layerStack.getSize() - 1;
         layerStack.removeTopLayer();
     }
 

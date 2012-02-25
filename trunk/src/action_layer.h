@@ -99,6 +99,8 @@ class deActionLayer:public deLayer
 
         deImage imageBlendMask;
 
+        void disableNotLuminance();
+
     private:        
         deImage imageApplyPass;
 

@@ -23,6 +23,7 @@
 #include "apply_image_frame.h"
 #include "blur_frame.h"
 #include "usm_frame.h"
+#include "basic_frame.h"
 #include "mixer_bw_editor.h"
 #include "conversion_bw_layer.h"
 #include "dodge_burn_frame.h"
@@ -66,6 +67,12 @@ deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerPr
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
         return new deUSMFrame(parent, al, layerProcessor, frameManager);
+    }        
+
+    if (type == "basic")
+    {
+        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        return new deBasicFrame(parent, al, layerProcessor, frameManager);
     }        
 
     if (type == "dodge_burn")

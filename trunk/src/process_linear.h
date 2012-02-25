@@ -22,5 +22,6 @@
 #include "value.h"
 
 void processLinear(const deValue* src, deValue* dst, int n, deValue min, deValue max, bool invert);
+void shiftChannel(const deValue* src, deValue* dst, deValue shift, int n);
 
 #endif

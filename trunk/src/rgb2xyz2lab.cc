@@ -326,12 +326,14 @@ void xyz2lab(deValue x, deValue y, deValue z, deValue &l, deValue &a, deValue& b
         b = 0;
     }
 
+/*
     assert(l >= 0);
     assert(a >= 0);
     assert(b >= 0);
     assert(l <= 1);
     assert(a <= 1);
     assert(b <= 1);
+    */
 }
 
 void lab2xyz(deValue l, deValue a, deValue b, deValue &x, deValue &y, deValue& z)
@@ -390,12 +392,14 @@ void lab2xyz(deValue l, deValue a, deValue b, deValue &x, deValue &y, deValue& z
     y = Yn * ffy;
     z = Zn * ffz;
 
+/*
     assert(x >= 0);
     assert(y >= 0);
     assert(z >= 0);
     assert(x <= 1);
     assert(y <= 1);
     assert(z <= 1);
+    */
 
 }
 

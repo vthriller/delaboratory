@@ -45,6 +45,8 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sour
     darkness.setMin(0.0);
     darkness.setMax(1.0);
     reset();
+
+    disableNotLuminance();
 }
 
 deVignetteLayer::~deVignetteLayer()

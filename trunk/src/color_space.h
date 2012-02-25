@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include <wx/wx.h>
+#include "basic_setting.h"
 
 enum deColorSpace
 {
@@ -51,5 +52,9 @@ void getSupportedConversions(const deColorSpace& colorSpace, std::vector<deColor
 wxColour getChannelwxColour(deColorSpace colorSpace, int channel);
 
 deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v);
+
+void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& settings);
+
+bool isChannelLuminance(deColorSpace colorSpace, int channel);
 
 #endif

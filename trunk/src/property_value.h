@@ -30,6 +30,8 @@ class dePropertyValue:public deProperty
         deValue min;
         deValue max;
         deValue defaultValue;
+
+        int channel;
     public:
         dePropertyValue(const std::string& _name);
         virtual ~dePropertyValue();
@@ -46,6 +48,9 @@ class dePropertyValue:public deProperty
 
         void setMin(deValue _min);
         void setMax(deValue _max);
+
+        void setChannel(int _channel);
+        int getChannel() const {return channel;};
 };
 
 #endif
