@@ -178,6 +178,8 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image)
 
     int pos = 0;
 
+    image.setColorSpace(deColorSpaceRGB);
+
     channelR.lockWrite();
     channelG.lockWrite();
     channelB.lockWrite();
@@ -265,6 +267,8 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image)
     }
     deChannel& channelB = *channelBB;
 
+    image.setColorSpace(deColorSpaceRGB);
+
     channelR.lockWrite();
     channelG.lockWrite();
     channelB.lockWrite();
@@ -330,197 +334,3 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image)
     return true;
 }
 
-void loadLAB(std::ifstream& f, deValue* pixels0, deValue* pixels1, deValue* pixels2, int w, int h, deValue scale)
-{
-    logMessage("loadLAB w: " + str(w) + " h: " + str(h) + " scale: " + str(scale));
-
-    int pos = 0;
-    int y;
-
-    char c;
-    unsigned char cc1;
-    unsigned char cc2;
-
-    deValue max0 = 0;
-    deValue max1 = 0;
-    deValue max2 = 0;
-
-    char* buffer;
-    buffer = new char[w*6];
-
-    for (y = 0; y < h; y++)
-    {
-        int x;
-   
-        f.read(buffer, w*6);
-
-        if (!f.good())
-        {
-            logMessage("file is not good :( y was " + str(y));
-            delete [] buffer;
-            return;
-        }
-
-        int p = 0;
-
-        for (x = 0; x < w; x++)
-        {
-            deValue r;
-            deValue g;
-            deValue b;
-
-            c = buffer[p];
-            p++;
-            cc1 = (unsigned char)(c);
-            c = buffer[p];
-            p++;
-            cc2 = (unsigned char)(c);
-            r = (256 * cc1 + cc2) * scale;
-
-            if (r > max0)
-            {
-                max0 = r;
-            }
-
-            c = buffer[p];
-            p++;
-            cc1 = (unsigned char)(c);
-            c = buffer[p];
-            p++;
-            cc2 = (unsigned char)(c);
-            g = (256 * cc1 + cc2) * scale;
-
-            if (g > max1)
-            {
-                max1 = g;
-            }
-
-            c = buffer[p];
-            p++;
-            cc1 = (unsigned char)(c);
-            c = buffer[p];
-            p++;
-            cc2 = (unsigned char)(c);
-            b = (256 * cc1 + cc2) * scale;
-
-            if (b > max2)
-            {
-                max2 = b;
-            }
-
-            deValue v1;
-            deValue v2;
-            deValue v3;
-            deValue vv1;
-            deValue vv2;
-            deValue vv3;
-            prophoto2xyz(r, g, b, vv1, vv2, vv3);
-            xyz2lab(vv1, vv2, vv3, v1, v2, v3);
-
-            pixels0[pos] = v1;
-            pixels1[pos] = v2;
-            pixels2[pos] = v3;
-
-            pos++;
-        }
-    }
-
-    delete [] buffer;
-
-    logMessage("loadLAB finished");
-    logMessage("loadLAB max0 was: " + str(max0));
-    logMessage("loadLAB max1 was: " + str(max1));
-    logMessage("loadLAB max2 was: " + str(max2));
-
-}    
-
-bool loadPPM(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
-{
-    logMessage("load PPM " + fileName);
-
-    char buffer[256];
-    int bufsize = 256;
-
-    std::ifstream f(fileName.c_str(), std::ios::binary);
-
-    f.getline(buffer, bufsize);
-
-    if ((buffer[0] != 'P') || (buffer[1] != '6'))
-    {
-        logMessage("broken PPM file, id should be P6 but it's: " + std::string(buffer));
-        return false;
-    }
-
-    f.getline(buffer, bufsize);
-
-    int w = 0;
-    int h = 0;
-
-    sscanf(buffer, "%i %i", &w, &h);
-
-    f.getline(buffer, bufsize);
-
-    int max = 0;
-
-    sscanf(buffer, "%i", &max);
-
-    if (max < 256)
-    {
-        logMessage("PPM is not 16-bit");
-        return false;
-    }
-
-    logMessage("found PPM " + str(w) + "x" + str(h) + " max: " + str(max));
-
-    deSize size(w, h);
-    image.setSize(size);
-
-    deChannel* channelRR = image.getChannel(0);
-    if (!channelRR)
-    {
-        return false;
-    }
-    deChannel& channelR = *channelRR;
-
-    deChannel* channelGG = image.getChannel(1);
-    if (!channelGG)
-    {
-        return false;
-    }
-    deChannel& channelG = *channelGG;
-
-    deChannel* channelBB = image.getChannel(2);
-    if (!channelBB)
-    {
-        return false;
-    }
-    deChannel& channelB = *channelBB;
-
-    channelR.lockWrite();
-    channelG.lockWrite();
-    channelB.lockWrite();
-
-    deValue* pixels0 = channelR.getPixels();
-    deValue* pixels1 = channelG.getPixels();
-    deValue* pixels2 = channelB.getPixels();
-
-    deValue scale = 1.0 / max;
-
-    if (colorSpace == deColorSpaceLAB)
-    {
-        loadLAB(f, pixels0, pixels1, pixels2, w, h, scale);
-    }        
-
-    channelR.unlockWrite();
-    channelG.unlockWrite();
-    channelB.unlockWrite();
-
-    if (f.eof())
-    {
-        logMessage("eof detected");
-    }
-
-    logMessage("finished loading PPM");
-
-    return true;
-}

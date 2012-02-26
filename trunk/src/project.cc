@@ -65,7 +65,6 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
  imageAreaPanel(NULL),
  rawModule(_rawModule)
 {
-    raw = false;
     imageFileName = "";
     sourceImageFileName = "";
     receiveKeys = true;
@@ -573,24 +572,17 @@ void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
 bool deProject::openImage(const std::string& fileName, bool possibleRaw)
 {
 
-    bool oldRaw = raw;
-
     freeImage();
 
     logMessage("open image " + fileName);
 
     bool status = false;
 
-    raw = false;
+    deColorSpace oldColorSpace = sourceImage.getColorSpace();
 
-    /*if (loadPPM(fileName, sourceImage, deColorSpaceLAB))
+    if ((possibleRaw) && ((rawModule.loadRAW(fileName, sourceImage))))
     {
         status = true;
-    }
-    else*/ if ((possibleRaw) && ((rawModule.loadRAW(fileName, sourceImage))))
-    {
-        status = true;
-        raw = true;
     }
     else if (loadTIFF(fileName, sourceImage))
     {
@@ -599,11 +591,6 @@ bool deProject::openImage(const std::string& fileName, bool possibleRaw)
     else if (loadJPEG(fileName, sourceImage))
     {
         status = true;
-    }
-
-    if (!status)
-    {
-        raw = oldRaw;
     }
 
     if (status)
@@ -620,16 +607,11 @@ bool deProject::openImage(const std::string& fileName, bool possibleRaw)
         layerProcessor.updateAllImages(true);
     }
 
-    if (raw != oldRaw)
+    deColorSpace newColorSpace = sourceImage.getColorSpace();
+
+    if (oldColorSpace != newColorSpace)
     {
-        if (raw)
-        {
-            resetLayerStack(deColorSpaceLAB);
-        }
-        else
-        {
-            resetLayerStack(deColorSpaceRGB);
-        }
+        resetLayerStack(newColorSpace);
         onChangeView(0);
     }
 

@@ -19,11 +19,11 @@
 #include "static_image.h"
 #include "channel.h"
 
-deStaticImage::deStaticImage(const deColorSpace& _colorSpace)
-:colorSpace(_colorSpace),
+deStaticImage::deStaticImage()
+:colorSpace(deColorSpaceInvalid),
  size(0,0)
 {
-    int n = getColorSpaceSize(colorSpace);
+    int n = 3;
     int i;
     for (i = 0; i < n; i++)
     {
@@ -32,6 +32,14 @@ deStaticImage::deStaticImage(const deColorSpace& _colorSpace)
         channels[i]->allocate(size.getN());
     }
 }
+
+void deStaticImage::setColorSpace(deColorSpace c)
+{
+    if (getColorSpaceSize(c) == 3)
+    {
+        colorSpace = c;
+    }
+}    
 
 deStaticImage::~deStaticImage()
 {
@@ -55,7 +63,8 @@ deChannel* deStaticImage::getChannel(int index)
     {
         return NULL;
     }
-    int n = getColorSpaceSize(colorSpace);
+    //int n = getColorSpaceSize(colorSpace);
+    int n = 3;
     if (index >= n)
     {
         return NULL;
@@ -66,7 +75,8 @@ deChannel* deStaticImage::getChannel(int index)
 void deStaticImage::setSize(const deSize& _size)
 {
     size = _size;
-    int n = getColorSpaceSize(colorSpace);
+    //int n = getColorSpaceSize(colorSpace);
+    int n = 3;
     int i;
     for (i = 0; i < n; i++)
     {
