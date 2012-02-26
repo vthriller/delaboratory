@@ -37,7 +37,8 @@ enum
     ID_TestImageSmall,
     ID_TestImageBig,
     ID_OpenImage,
-    ID_OpenRawImage,
+    ID_OpenRawImageLAB,
+    ID_OpenRawImageProPhoto,
     ID_OpenProject,
     ID_SaveProject,
     ID_OpenLayerStack,
@@ -92,7 +93,8 @@ private:
 	void onTestImageSmall(wxCommandEvent& event);
 	void onTestImageBig(wxCommandEvent& event);
 	void onOpenImage(wxCommandEvent& event);
-	void onOpenRawImage(wxCommandEvent& event);
+	void onOpenRawImageLAB(wxCommandEvent& event);
+	void onOpenRawImageProPhoto(wxCommandEvent& event);
 	void onQuit(wxCommandEvent& event);
 	void onNewProject(wxCommandEvent& event);
 	void onOpenProject(wxCommandEvent& event);
