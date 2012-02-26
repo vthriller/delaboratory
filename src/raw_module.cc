@@ -40,7 +40,7 @@ std::string deRawModule::getVersion() const
     return dcraw_version;
 }
 
-bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image)
+bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
 {
-    return execDcrawProcess(fileName, image);
+    return execDcrawProcess(fileName, image, colorSpace);
 }

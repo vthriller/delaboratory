@@ -135,9 +135,14 @@ void saveTIFF(const std::string& fileName, const deChannel& channelR, const deCh
     logMessage("saved TIFF " + fileName);
 }
 
-bool loadJPEG(const std::string& fileName, deStaticImage& image)
+bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
 {
     wxLogNull noerrormessages;
+
+    if (colorSpace != deColorSpaceRGB)
+    {
+        return false;
+    }
 
     logMessage("loadJPEG " + fileName);
 
@@ -218,9 +223,14 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image)
 
 
 
-bool loadTIFF(const std::string& fileName, deStaticImage& image)
+bool loadTIFF(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
 {
     wxLogNull noerrormessages;
+
+    if (colorSpace != deColorSpaceRGB)
+    {
+        return false;
+    }
 
     logMessage("load TIFF " + fileName);
 

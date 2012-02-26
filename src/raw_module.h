@@ -21,6 +21,7 @@
 
 #include <string>
 class deStaticImage;
+#include "color_space.h"
 
 class deRawModule
 {
@@ -37,7 +38,7 @@ class deRawModule
         void onInit();
 
         std::string getVersion() const;
-        bool loadRAW(const std::string& fileName, deStaticImage& image);
+        bool loadRAW(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
 
 
 };

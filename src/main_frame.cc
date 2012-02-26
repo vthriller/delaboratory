@@ -336,13 +336,13 @@ void deMainFrame::onTestImageBig(wxCommandEvent& WXUNUSED(event))
 void deMainFrame::onOpenImage(wxCommandEvent& WXUNUSED(event))
 {
     std::string fileName = getOpenFile(this, "load source image", "image");
-    project.openImage(fileName, false);
+    project.openImage(fileName, false, deColorSpaceRGB);
 }
 
 void deMainFrame::onOpenRawImage(wxCommandEvent& WXUNUSED(event))
 {
     std::string fileName = getOpenFile(this, "load source image", "raw");
-    project.openImage(fileName, true);
+    project.openImage(fileName, true, deColorSpaceLAB);
 }
 
 void deMainFrame::onHelpColorSpaces(wxCommandEvent& event)
