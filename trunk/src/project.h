@@ -125,7 +125,7 @@ class deProject
 
         void save(const std::string& fileName, bool image);
         void open(const std::string& fileName, bool image);
-        bool openImage(const std::string& fileName, bool raw);
+        bool openImage(const std::string& fileName, bool raw, deColorSpace colorSpace);
         void newProject();
         void setTestImage(int s);
 

@@ -154,11 +154,11 @@ void deProject::onKey(int key)
 void deProject::init(const std::string& fileName)
 {
     logMessage("project init " + fileName);
-    if (openImage(fileName, true))
+    if (openImage(fileName, true, deColorSpaceLAB))
     {
         return;
     }
-    if (openImage(fileName, false));
+    if (openImage(fileName, false, deColorSpaceRGB));
     {
         return;
     }
@@ -547,9 +547,9 @@ void deProject::open(const std::string& fileName, bool image)
 
     if (image)
     {
-        if (!openImage(imageFile, true))
+        if (!openImage(imageFile, true, deColorSpaceLAB))   // FIXME
         {
-            openImage(imageFile, false);
+            openImage(imageFile, false, deColorSpaceRGB);
         }
     }        
 
@@ -575,7 +575,7 @@ void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
     imageAreaPanel = _imageAreaPanel;
 }
 
-bool deProject::openImage(const std::string& fileName, bool raw)
+bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace colorSpace)
 {
 
     freeImage();
@@ -588,16 +588,16 @@ bool deProject::openImage(const std::string& fileName, bool raw)
 
     if (raw)
     { 
-        if ((!rawModule.loadRAW(fileName, sourceImage)))
+        if ((!rawModule.loadRAW(fileName, sourceImage, colorSpace)))
         {
             return false;
         }
     }
     else
     {
-        if (!loadTIFF(fileName, sourceImage))
+        if (!loadTIFF(fileName, sourceImage, colorSpace))
         {
-            if (!loadJPEG(fileName, sourceImage))
+            if (!loadJPEG(fileName, sourceImage, colorSpace))
             {
                 return false;
             }

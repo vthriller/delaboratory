@@ -62,35 +62,7 @@ std::string getDcrawVersion()
     return vs;
 }
 
-/*
-std::string checkDcraw()
-{
-    checkDcrawProcess();
-
-    const wxString command = wxString::FromAscii(DCRAW_EXECUTABLE);
-    wxArrayString output;
-    wxExecute(command, output);
-
-    int c = output.GetCount();
-
-    if (c < 2)
-    {
-        return "";
-    }
-
-    wxString line1 = output.Item(1);
-    std::string l1(line1.ToAscii());
-
-    int p = l1.rfind("v");
-
-    std::string vs = l1.substr(p + 1);
-
-    return vs;
-}
-*/
-
-
-bool execDcrawProcess(const std::string& f, deStaticImage& image)
+bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace colorSpace)
 {
     wxProgressDialog* progressDialog = new wxProgressDialog(_T("dcraw processing"), _T("dcraw processing"), 100, NULL, wxPD_AUTO_HIDE);
 

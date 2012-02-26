@@ -28,8 +28,8 @@ class deStaticImage;
 void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size);
 void saveTIFF(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size);
 
-bool loadTIFF(const std::string& fileName, deStaticImage& image);
-bool loadJPEG(const std::string& fileName, deStaticImage& image);
+bool loadTIFF(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
+bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
 
 bool loadPPM(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
 

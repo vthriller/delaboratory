@@ -22,9 +22,7 @@
 #include <string>
 class deStaticImage;
 
-//std::string checkDcraw();
-//bool execDcraw(const std::string& f, const std::string& tmp);
-bool execDcrawProcess(const std::string& f, deStaticImage& image);
+bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace colorSpace);
 std::string getDcrawVersion();
 
 #endif
