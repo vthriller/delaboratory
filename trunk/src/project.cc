@@ -156,11 +156,13 @@ void deProject::init(const std::string& fileName)
     logMessage("project init " + fileName);
     if (openImage(fileName, true))
     {
+        return;
     }
-    else
+    if (openImage(fileName, false));
     {
-        open(fileName, true);
+        return;
     }
+    open(fileName, true);
 }
 
 void deProject::freeImage()
@@ -545,7 +547,10 @@ void deProject::open(const std::string& fileName, bool image)
 
     if (image)
     {
-        openImage(imageFile, true);
+        if (!openImage(imageFile, true))
+        {
+            openImage(imageFile, false);
+        }
     }        
 
     setLastView();
@@ -570,7 +575,7 @@ void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
     imageAreaPanel = _imageAreaPanel;
 }
 
-bool deProject::openImage(const std::string& fileName, bool possibleRaw)
+bool deProject::openImage(const std::string& fileName, bool raw)
 {
 
     freeImage();
@@ -581,32 +586,34 @@ bool deProject::openImage(const std::string& fileName, bool possibleRaw)
 
     deColorSpace oldColorSpace = sourceImage.getColorSpace();
 
-    if ((possibleRaw) && ((rawModule.loadRAW(fileName, sourceImage))))
-    {
-        status = true;
-    }
-    else if (loadTIFF(fileName, sourceImage))
-    {
-        status = true;
-    }
-    else if (loadJPEG(fileName, sourceImage))
-    {
-        status = true;
-    }
-
-    if (status)
-    {
-        imageFileName = removePathAndExtension(fileName);
-        onImageNameUpdate();
-        sourceImageFileName = fileName;
-
-        previewChannelManager.destroyAllChannels();
-        if (imageAreaPanel)
+    if (raw)
+    { 
+        if ((!rawModule.loadRAW(fileName, sourceImage)))
         {
-            imageAreaPanel->updateSize(true);
-        }        
-        layerProcessor.updateAllImages(true);
+            return false;
+        }
     }
+    else
+    {
+        if (!loadTIFF(fileName, sourceImage))
+        {
+            if (!loadJPEG(fileName, sourceImage))
+            {
+                return false;
+            }
+        }
+    }            
+
+    imageFileName = removePathAndExtension(fileName);
+    onImageNameUpdate();
+    sourceImageFileName = fileName;
+
+    previewChannelManager.destroyAllChannels();
+    if (imageAreaPanel)
+    {
+        imageAreaPanel->updateSize(true);
+    }        
+    layerProcessor.updateAllImages(true);
 
     deColorSpace newColorSpace = sourceImage.getColorSpace();
 
@@ -616,7 +623,7 @@ bool deProject::openImage(const std::string& fileName, bool possibleRaw)
         onChangeView(0);
     }
 
-    return status;
+    return true;
 }
 
 void deProject::openMemoryInfoFrame(wxWindow* parent)
