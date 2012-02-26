@@ -194,12 +194,14 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
 
     int maxRead = 0;
 
-    bool lab = true;
+    bool lab = false;
 
-    if (lab)
+    if (colorSpace == deColorSpaceLAB)
     {
-        image.setColorSpace(deColorSpaceLAB);
+        lab = true;
     }
+
+    image.setColorSpace(colorSpace);
 
     while ((pos < n) && (!input->Eof()))
     {
@@ -262,6 +264,12 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
                 pixels0[pos] = v1;
                 pixels1[pos] = v2;
                 pixels2[pos] = v3;
+            }
+            else
+            {
+                pixels0[pos] = r;
+                pixels1[pos] = g;
+                pixels2[pos] = b;
             }
 
             pos++;
