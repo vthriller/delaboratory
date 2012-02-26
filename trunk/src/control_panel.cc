@@ -44,6 +44,19 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
     wxNotebook* notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("notebook"));
     mainSizer->Add(notebook, 1, wxEXPAND);
 
+    std::vector<std::string> actionGroups;
+    getSupportedActionGroups(actionGroups);
+
+    std::vector<std::string>::iterator i;
+    for (i = actionGroups.begin(); i != actionGroups.end(); i++)
+    {
+        std::string n = *i;
+
+        wxPanel* actionsPanel = new wxPanel(notebook);
+        notebook->AddPage(actionsPanel, wxString::FromAscii(n.c_str()));
+        
+    }
+
     {
         wxPanel* actionsPanel = new wxPanel(notebook);
         notebook->AddPage(actionsPanel, _T("actions"));
