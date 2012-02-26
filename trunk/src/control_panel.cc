@@ -47,6 +47,9 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
     std::vector<std::string> actionGroups;
     getSupportedActionGroups(actionGroups);
 
+    std::vector<std::string> actions;
+    getSupportedActions(actions);
+
     std::vector<std::string>::iterator i;
     for (i = actionGroups.begin(); i != actionGroups.end(); i++)
     {
@@ -54,33 +57,29 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
 
         wxPanel* actionsPanel = new wxPanel(notebook);
         notebook->AddPage(actionsPanel, wxString::FromAscii(n.c_str()));
-        
-    }
-
-    {
-        wxPanel* actionsPanel = new wxPanel(notebook);
-        notebook->AddPage(actionsPanel, _T("actions"));
-
-        std::vector<std::string> actions;
-        getSupportedActions(actions);
 
         wxSizer* gridSizer = new wxGridSizer(3);
         actionsPanel->SetSizer(gridSizer);
 
-        std::vector<std::string>::iterator i;
-        for (i = actions.begin(); i != actions.end(); i++)
+        std::vector<std::string>::iterator j;
+        for (j = actions.begin(); j != actions.end(); j++)
         {
-            std::string actionDescription = getActionDescription(*i);
-            wxButton* b = new wxButton(actionsPanel, wxID_ANY, wxString::FromAscii(actionDescription.c_str()));
-            gridSizer->Add(b);
-            actionButtons.push_back(b);
-            actionButtonsNames[b->GetId()] = *i;
+            std::string an = getActionGroup(*j);
+            if (an == n)
+            {
+                std::string actionDescription = getActionDescription(*j);
+                wxButton* b = new wxButton(actionsPanel, wxID_ANY, wxString::FromAscii(actionDescription.c_str()));
+                gridSizer->Add(b);
+                actionButtons.push_back(b);
+                actionButtonsNames[b->GetId()] = *j;
+            }
         }
+        
     }
 
     {
         wxPanel* conversionsPanel = new wxPanel(notebook);
-        notebook->AddPage(conversionsPanel, _T("conversions"));
+        notebook->AddPage(conversionsPanel, _T("colorspace"));
 
         std::vector<deColorSpace> colorSpaces;
         getSupportedColorSpaces(colorSpaces);

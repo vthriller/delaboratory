@@ -161,12 +161,14 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("curves");
     actions.push_back("mixer");
     actions.push_back("apply_image");
+
+    actions.push_back("vignette");
     actions.push_back("dodge_burn");
     actions.push_back("shadows_highlights");
-    actions.push_back("vignette");
-    actions.push_back("blur");
-    actions.push_back("high_pass");
+
     actions.push_back("usm");
+    actions.push_back("high_pass");
+    actions.push_back("blur");
 }
 
 std::string getActionGroup(const std::string n)
