@@ -42,15 +42,5 @@ std::string deRawModule::getVersion() const
 
 bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image)
 {
-/*
-    std::string tmp = getTmp() + "/delaboratory.ppm";
-
-    if (!execDcraw(fileName, tmp))
-    {
-        return false;
-    }
-
-    return loadPPM(tmp, image, deColorSpaceLAB);*/
-
     return execDcrawProcess(fileName, image);
 }

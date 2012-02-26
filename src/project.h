@@ -70,8 +70,6 @@ class deProject
 
         bool receiveKeys;
 
-        bool raw;
-
         deHistogramModePanel* histogramModePanel;
         deImageAreaPanel* imageAreaPanel;
 

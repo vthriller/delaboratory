@@ -222,6 +222,13 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image)
 
     int maxRead = 0;
 
+    bool lab = true;
+
+    if (lab)
+    {
+        image.setColorSpace(deColorSpaceLAB);
+    }
+
     while ((pos < n) && (!input->Eof()))
     {
         steps++;
@@ -269,18 +276,21 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image)
             cc2 = (unsigned char)(c);
             b = (256 * cc1 + cc2) * scale;
 
-            deValue v1;
-            deValue v2;
-            deValue v3;
-            deValue vv1;
-            deValue vv2;
-            deValue vv3;
-            prophoto2xyz(r, g, b, vv1, vv2, vv3);
-            xyz2lab(vv1, vv2, vv3, v1, v2, v3);
+            if (lab)
+            {
+                deValue v1;
+                deValue v2;
+                deValue v3;
+                deValue vv1;
+                deValue vv2;
+                deValue vv3;
+                prophoto2xyz(r, g, b, vv1, vv2, vv3);
+                xyz2lab(vv1, vv2, vv3, v1, v2, v3);
 
-            pixels0[pos] = v1;
-            pixels1[pos] = v2;
-            pixels2[pos] = v3;
+                pixels0[pos] = v1;
+                pixels1[pos] = v2;
+                pixels2[pos] = v3;
+            }
 
             pos++;
         }

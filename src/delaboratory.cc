@@ -39,7 +39,7 @@ class deLaboratory: public wxApp
     public:
         deLaboratory()
         :wxApp(),
-         sourceImage(deColorSpaceRGB),
+         sourceImage(),
          processor(previewChannelManager, layerStack, layerFrameManager),
          project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage, rawModule)
         {

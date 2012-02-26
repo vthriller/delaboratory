@@ -26,7 +26,7 @@ class deChannel;
 class deStaticImage
 {
     private:
-        const deColorSpace colorSpace;
+        deColorSpace colorSpace;
         std::vector<deChannel*> channels;
         deSize size;
         
@@ -34,10 +34,11 @@ class deStaticImage
         deStaticImage& operator = (const deStaticImage& i);
 
     public:
-        deStaticImage(const deColorSpace& _colorSpace);
+        deStaticImage();
 
         virtual ~deStaticImage();
 
+        void setColorSpace(deColorSpace c);
         deColorSpace getColorSpace() const;
 
         deChannel* getChannel(int index);
