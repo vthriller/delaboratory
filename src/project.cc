@@ -173,6 +173,7 @@ void deProject::setTestImage(int s)
 
     deSize size(s, s);
 
+    sourceImage.setColorSpace(deColorSpaceRGB);
     sourceImage.setSize(size);
     deChannel* channelRR = sourceImage.getChannel(0);
     deChannel* channelGG = sourceImage.getChannel(1);
