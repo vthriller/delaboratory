@@ -32,6 +32,7 @@
 #include "high_pass_layer.h"
 #include "shadows_highlights_layer.h"
 #include "basic_layer.h"
+#include <algorithm>
 
 deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name, deStaticImage& sourceImage)
 {
@@ -160,13 +161,45 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("curves");
     actions.push_back("mixer");
     actions.push_back("apply_image");
-    actions.push_back("blur");
-    actions.push_back("high_pass");
-    actions.push_back("usm");
     actions.push_back("dodge_burn");
     actions.push_back("shadows_highlights");
     actions.push_back("vignette");
+    actions.push_back("blur");
+    actions.push_back("high_pass");
+    actions.push_back("usm");
 }
+
+std::string getActionGroup(const std::string n)
+{
+    if ((n == "vignette") || (n == "dodge_burn") || (n == "shadows_highlights"))
+    {
+        return "light";
+    }
+
+    if ((n == "blur") || (n == "high_pass") || (n == "usm"))
+    {
+        return "sharp";
+    }
+
+    return "gen";
+}
+
+void getSupportedActionGroups(std::vector<std::string>& names)
+{
+    std::vector<std::string> actions;
+    getSupportedActions(actions);
+    std::vector<std::string>::const_iterator i;
+    for (i = actions.begin(); i != actions.end(); i++)
+    {
+        std::string n = getActionGroup(*i);
+        std::vector<std::string>::iterator j = find(names.begin(), names.end(), n);
+        if (j == names.end())
+        {
+            names.push_back(n);
+        }
+    }
+}
+
 
 std::string getActionDescription(const std::string& a)
 {

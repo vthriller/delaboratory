@@ -33,5 +33,7 @@ class deStaticImage;
 deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& name, deStaticImage& sourceImage);
 void getSupportedActions(std::vector<std::string>& actions);
 std::string getActionDescription(const std::string& a);
+void getSupportedActionGroups(std::vector<std::string>& actions);
+std::string getActionGroup(const std::string n);
 
 #endif
