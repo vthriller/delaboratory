@@ -24,6 +24,9 @@
 #include <iostream>
 #include "str.h"
 #include "layer_frame_manager.h"
+#include "zoom_manager.h"
+#include "zoom_panel.h"
+#include "image_area_panel.h"
 
 BEGIN_EVENT_TABLE(deImagePanel, wxPanel)
 EVT_PAINT(deImagePanel::paintEvent)
@@ -81,6 +84,13 @@ void deImagePanel::wheel(wxMouseEvent &event)
 
 bool deImagePanel::onClick(deValue x, deValue y)
 {
+    if (zoomManager.isInSelectionMode())
+    {
+        bool result = zoomManager.onClick(x, y);
+        zoomPanel->updateButtons();
+        return result;
+    }
+
     bool used = project.getLayerFrameManager().onImageClick(x, y);
 
     if (!used)
@@ -97,6 +107,13 @@ bool deImagePanel::onClick(deValue x, deValue y)
 
 bool deImagePanel::onMove(deValue x, deValue y)
 {
+    if (zoomManager.isInSelectionMode())
+    {
+        bool result = zoomManager.onMove(x, y);
+        zoomPanel->updateButtons();
+        return result;
+    }
+
     bool used = project.getLayerFrameManager().onImageClick(x, y);
 
     if (!used)
@@ -109,13 +126,22 @@ bool deImagePanel::onMove(deValue x, deValue y)
 
 bool deImagePanel::onRelease()
 {
+    if (zoomManager.isInSelectionMode())
+    {
+        bool result = zoomManager.onRelease();
+        zoomPanel->updateButtons();
+        area->updateSize(true);
+        return result;
+    }
+
     samplerManager.onRelease();
+    
 
     return false;
 }
 
-deImagePanel::deImagePanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), project(_project), samplerManager(_samplerManager)
+deImagePanel::deImagePanel(deImageAreaPanel* _area, deProject& _project, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, deZoomPanel* _zoomPanel)
+:wxPanel(_area, wxID_ANY, wxDefaultPosition, wxDefaultSize), area(_area), project(_project), samplerManager(_samplerManager), zoomManager(_zoomManager), zoomPanel(_zoomPanel)
 {
     clicked = false;
 
@@ -171,6 +197,10 @@ void deImagePanel::render(wxDC& dc)
     {
         drawSamplers(dc);
     }        
+    if (zoomManager.isInSelectionMode())
+    {
+        drawSelection(dc);
+    }        
 }
 
 
@@ -210,6 +240,34 @@ void deImagePanel::drawSamplers(wxDC& dc)
             }
         }
     }
+
+}
+
+void deImagePanel::drawSelection(wxDC& dc)
+{
+    int w;
+    int h;
+    GetSize(&w, &h);
+
+    deValue x1;
+    deValue y1;
+    deValue x2;
+    deValue y2;
+
+    zoomManager.getSelection(x1, y1, x2, y2);
+
+    int xx1 = w * x1;
+    int yy1 = h * y1;
+    int xx2 = w * x2;
+    int yy2 = h * y2;
+
+    wxPen pen(*wxWHITE);
+    dc.SetPen(pen);
+
+    dc.DrawLine(xx1, yy1, xx2, yy1);
+    dc.DrawLine(xx1, yy2, xx2, yy2);
+    dc.DrawLine(xx1, yy1, xx1, yy2);
+    dc.DrawLine(xx2, yy1, xx2, yy2);
 
 }
 

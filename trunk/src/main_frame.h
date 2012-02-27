@@ -28,6 +28,7 @@ class deHistogramPanel;
 class deLayerProcessor;
 class deSamplersPanel;
 class deSamplerManager;
+class deZoomManager;
 #include "size.h"
 
 enum
@@ -126,7 +127,7 @@ private:
     void updateTitle();
 
 public:
-	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, const std::string& dcrawVersion);
+	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcrawVersion);
 	~deMainFrame();
 
     void showPanels();

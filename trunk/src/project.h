@@ -41,6 +41,7 @@ class deLayerFrameManager;
 class deLayer;
 class deStaticImage;
 class deRawModule;
+class deZoomManager;
 
 class deProject
 {
@@ -64,7 +65,6 @@ class deProject
 
         deLayerFrameManager& layerFrameManager;
 
-
         std::string imageFileName;
         std::string sourceImageFileName;
 
@@ -74,6 +74,8 @@ class deProject
         deImageAreaPanel* imageAreaPanel;
 
         deRawModule& rawModule;
+
+        deZoomManager& zoomManager;
 
         void onImageNameUpdate();
 
@@ -88,7 +90,8 @@ class deProject
 
 
     public:
-        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule);
+        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager);
+
         virtual ~deProject();
         void onKey(int key);
         void init(const std::string& fileName);

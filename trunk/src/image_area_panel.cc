@@ -22,6 +22,7 @@
 #include "image_panel.h"
 #include "channel_manager.h"
 #include "layer_processor.h"
+#include "zoom_panel.h"
 
 void deImageAreaPanel::paint(wxPaintEvent& event)
 {
@@ -39,15 +40,12 @@ void deImageAreaPanel::updateSize(bool calcHistogram)
 
     const deSize ps(s.GetWidth(), s.GetHeight());
     
-    //const deSize& ss = project.getSourceChannelManager().getChannelSize();
     const deSize& ss = project.getSourceImageSize();
 
     if (ss.getN() <= 0)
     {
         return;
     }
-
-    //deViewManager& viewManager = project.getViewManager();
 
     deSize fit = fitInside(ps, ss, 1.0);
 
@@ -57,11 +55,13 @@ void deImageAreaPanel::updateSize(bool calcHistogram)
 }
 
 
-deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager)
+deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, deZoomPanel* zoomPanel)
 :wxPanel(parent), project(_project)
 {   
-    imagePanel = new deImagePanel(this, project, _samplerManager);
+    imagePanel = new deImagePanel(this, project, _samplerManager, _zoomManager, zoomPanel);
     project.setImageAreaPanel(this);
+
+    zoomPanel->setImageAreaPanel(this);
 
     Connect(wxEVT_SIZE, wxSizeEventHandler(deImageAreaPanel::resize));
 }

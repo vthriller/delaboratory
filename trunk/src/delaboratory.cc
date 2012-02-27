@@ -29,6 +29,7 @@
 #include "layer_frame_manager.h"
 #include "static_image.h"
 #include "raw_module.h"
+#include "zoom_manager.h"
 
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
@@ -41,7 +42,7 @@ class deLaboratory: public wxApp
         :wxApp(),
          sourceImage(),
          processor(previewChannelManager, layerStack, layerFrameManager),
-         project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage, rawModule)
+         project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage, rawModule, zoomManager)
         {
             frame = NULL;
             deLogger::getLogger().setFile(LOG_FILE_NAME);
@@ -65,6 +66,7 @@ class deLaboratory: public wxApp
         deLayerProcessor processor;
         deProject project;
         deRawModule rawModule;
+        deZoomManager zoomManager;
 
         virtual int FilterEvent(wxEvent& event);
 
@@ -127,7 +129,7 @@ bool deLaboratory::OnInit()
 	int width = 1200;
 	int height = 960;
 
-	frame = new deMainFrame( wxSize(width,height), project, processor, samplerManager, dcraw_version);
+	frame = new deMainFrame( wxSize(width,height), project, processor, samplerManager, zoomManager, dcraw_version);
 
     logMessage("main frame created");
 

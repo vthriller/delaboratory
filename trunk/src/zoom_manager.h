@@ -16,33 +16,43 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_CENTER_PANEL_H
-#define _DE_CENTER_PANEL_H
+#ifndef _DE_ZOOM_MANAGER_H
+#define _DE_ZOOM_MANAGER_H
 
-#include <wx/wx.h>
-class deProject;
-class deImagePanel;
-class deSamplerManager;
-class deZoomManager;
-class deZoomPanel;
+#include "value.h"
 
-class deImageAreaPanel:public wxPanel
+class deZoomManager
 {
     private:
-        void resize(wxSizeEvent &event);
-        void paint(wxPaintEvent& event);
-        deProject& project;
+        bool selectionMode;
 
-        deImagePanel* imagePanel;
+        deValue s_x1;
+        deValue s_y1;
+        deValue s_x2;
+        deValue s_y2;
+
+        deValue z_x1;
+        deValue z_y1;
+        deValue z_x2;
+        deValue z_y2;
 
     public:
-        deImageAreaPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, deZoomPanel* zoomPanel);
-        virtual ~deImageAreaPanel();
-        
-        void updateSize(bool calcHistogram);
+        deZoomManager();
+        virtual ~deZoomManager();
 
-        deImagePanel* getImagePanel();
+        bool isInSelectionMode() const;
+        void enableSelectionMode();
 
+        bool onClick(deValue x, deValue y);
+        bool onMove(deValue x, deValue y);
+        bool onRelease();
+
+        void getSelection(deValue& _x1, deValue& _y1, deValue& _x2, deValue& _y2);
+        void getZoom(deValue& _x1, deValue& _y1, deValue& _x2, deValue& _y2);
+
+        void fullZoomOut();
+
+        bool isZoomed() const;
 };
 
 #endif

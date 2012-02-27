@@ -74,6 +74,22 @@ bool deSourceImageLayer::updateImage()
 
     const deSize ds = previewChannelManager.getChannelSize();
 
+    deValue z_x1;
+    deValue z_y1;
+    deValue z_x2;
+    deValue z_y2;
+    viewManager.getZoom(z_x1, z_y1, z_x2, z_y2);
+
+    int x1 = ss.getW() * z_x1;
+    int y1 = ss.getH() * z_y1;
+    int x2 = ss.getW() * z_x2;
+    int y2 = ss.getH() * z_y2;
+
+    int w = ds.getW();
+    int h = ds.getH();
+
+    int ws = ss.getW();
+
     if (ss == ds)
     {
         copyChannel(sourceChannelR->getPixels(), channelR->getPixels(), ss);
@@ -82,6 +98,11 @@ bool deSourceImageLayer::updateImage()
     }
     else
     {
+        scaleChannel(sourceChannelR->getPixels(), channelR->getPixels(), x1, y1, x2, y2, w, h, ws);
+        scaleChannel(sourceChannelG->getPixels(), channelG->getPixels(), x1, y1, x2, y2, w, h, ws);
+        scaleChannel(sourceChannelB->getPixels(), channelB->getPixels(), x1, y1, x2, y2, w, h, ws);
+
+        /*
 
         deValue scale = 1.0;
         deValue offsetX = 0.0;
@@ -149,6 +170,8 @@ bool deSourceImageLayer::updateImage()
         scaleChannel(sourceChannelR->getPixels(), channelR->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, hs, wd);
         scaleChannel(sourceChannelG->getPixels(), channelG->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, hs, wd);
         scaleChannel(sourceChannelB->getPixels(), channelB->getPixels(), maxx, ox, scaleW, maxy, oy, scaleH, ws, hs, wd);
+
+        */
     }
 
     sourceChannelR->unlockRead();

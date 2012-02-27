@@ -23,9 +23,10 @@
 #include "str.h"
 #include "channel_manager.h"
 #include "layer_stack.h"
+#include "zoom_manager.h"
 
-deViewManager::deViewManager(deProject& _project, deLayerProcessor& _processor)
-:project(_project), layerProcessor(_processor)
+deViewManager::deViewManager(deProject& _project, deLayerProcessor& _processor, deZoomManager& _zoomManager)
+:project(_project), layerProcessor(_processor), zoomManager(_zoomManager)
 {
     view = 0;
     showBlendMask = false;
@@ -122,6 +123,18 @@ void deViewManager::setHistogramChannel(int channel)
 
 deValue deViewManager::getRealScale() const
 {
+/*
+    deValue x1;
+    deValue y1;
+    deValue x2;
+    deValue y2;
+
+    zoomManager.getZoom(x1, y1, x2, y2);
+
+    deValue w = x2 - x1;
+    deValue h = y2 - y1;
+    */
+
     deSize ps = project.getPreviewChannelManager().getChannelSize();
 
     deSize ss = project.getSourceImageSize();
@@ -138,3 +151,7 @@ deValue deViewManager::getRealScale() const
     return s;
 }
 
+void deViewManager::getZoom(deValue& _x1, deValue& _y1, deValue& _x2, deValue& _y2)
+{
+    return zoomManager.getZoom(_x1, _y1, _x2, _y2);
+}

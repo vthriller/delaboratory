@@ -24,14 +24,21 @@
 #include "value.h"
 class deProject;
 class deSamplerManager;
+class deZoomManager;
+class deZoomPanel;
+class deImageAreaPanel;
 
 class deImagePanel:public wxPanel
 {
 private:
 	
+    deImageAreaPanel* area;
+
     deProject& project;
     bool clicked;
     deSamplerManager& samplerManager;
+    deZoomManager& zoomManager;
+    deZoomPanel* zoomPanel;
 
 	void click(wxMouseEvent &event);
 	void release(wxMouseEvent &event);
@@ -43,9 +50,10 @@ private:
     bool onRelease();
 
     void drawSamplers(wxDC& dc);
+    void drawSelection(wxDC& dc);
 
 public:
-	deImagePanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager);
+	deImagePanel(deImageAreaPanel* _area, deProject& _project, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, deZoomPanel* _zoomPanel);
 	virtual ~deImagePanel();
 
 	void paintEvent(wxPaintEvent & evt);
