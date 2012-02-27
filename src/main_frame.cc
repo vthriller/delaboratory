@@ -36,6 +36,7 @@
 #include "delaboratory.h"
 #include "samplers_panel.h"
 #include "layer_processor.h"
+#include "zoom_panel.h"
 
 #include "image_panel.h"
 
@@ -72,7 +73,7 @@ EVT_MENU(DE_RANDOM_EVENT, deMainFrame::onRandomEvent)
 EVT_MENU(DE_INFO_EVENT, deMainFrame::onInfoEvent)
 END_EVENT_TABLE()
 
-deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, const std::string& dcraw_version)
+deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcraw_version)
 : wxFrame() , project(_project), layerProcessor(_layerProcessor), imageSize(0,0)
 {
     project.setMainFrame(this);
@@ -134,13 +135,16 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
         realtime->SetValue(0);
     }
 
+    deZoomPanel* zoomPanel = new deZoomPanel(topPanel, _zoomManager);
+    topSizer->Add(zoomPanel);
+
 
 /*
     debugInfo = new wxStaticText(topPanel, wxID_ANY, _T("[debug]"), wxDefaultPosition);
     sizerP->Add(debugInfo, 0, wxEXPAND);
     */
 
-    imageAreaPanel = new deImageAreaPanel(this, project, _samplerManager);
+    imageAreaPanel = new deImageAreaPanel(this, project, _samplerManager, _zoomManager, zoomPanel);
     imageAreaPanel->SetSize(300,300);
     leftSizer->Add(imageAreaPanel, 1, wxEXPAND);
 

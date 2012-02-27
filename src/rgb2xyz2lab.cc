@@ -50,12 +50,14 @@ void rgb2xyz(deValue r, deValue g, deValue b, deValue &x, deValue &y, deValue& z
     y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
     z = 0.0193 * r + 0.1192 * g + 0.9505 * b;
 
+/*
     assert(x >= 0);
     assert(y >= 0);
     assert(z >= 0);
     assert(x <= 1);
     assert(y <= 1);
     assert(z <= 1);
+    */
 }
 
 void xyz2rgb(deValue x, deValue y, deValue z, deValue &r, deValue &g, deValue& b)

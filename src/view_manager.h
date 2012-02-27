@@ -21,6 +21,7 @@
 
 class deProject;
 class deLayerProcessor;
+class deZoomManager;
 #include "color_space.h"
 
 class deViewManager
@@ -29,6 +30,7 @@ class deViewManager
         int view;
         deProject& project;
         deLayerProcessor& layerProcessor;
+        deZoomManager& zoomManager;
         bool single;
         int channel;
         bool showBlendMask;
@@ -36,7 +38,7 @@ class deViewManager
 
 
     public:
-        deViewManager(deProject& _project, deLayerProcessor& _processor);
+        deViewManager(deProject& _project, deLayerProcessor& _processor, deZoomManager& _zoomManager);
         virtual ~deViewManager();
 
         void setView(int v);
@@ -60,6 +62,8 @@ class deViewManager
         void setHistogramChannel(int channel);
 
         deValue getRealScale() const;
+
+        void getZoom(deValue& _x1, deValue& _y1, deValue& _x2, deValue& _y2);
 
 };
 

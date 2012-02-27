@@ -47,23 +47,25 @@
 #include "layer_frame_manager.h"
 #include "static_image.h"
 #include "raw_module.h"
+#include "zoom_manager.h"
 
 #define ICC_MESSAGE 0
 
-deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule)
+deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager)
 :layerProcessor(_processor),
  viewModePanel(NULL),
  previewChannelManager(_previewChannelManager),
  controlPanel(NULL),
  memoryInfoFrame(NULL),
- viewManager(*this, _processor),
+ viewManager(*this, _processor, _zoomManager),
  mainFrame(NULL),
  sourceImage(_sourceImage),
  layerStack(_layerStack),
  layerFrameManager(_layerFrameManager),
  histogramModePanel(NULL),
  imageAreaPanel(NULL),
- rawModule(_rawModule)
+ rawModule(_rawModule),
+ zoomManager(_zoomManager)
 {
     imageFileName = "";
     sourceImageFileName = "";
@@ -196,14 +198,11 @@ void deProject::setTestImage(int s)
 
 void deProject::resetLayerStack(deColorSpace colorSpace)
 {
-
     logMessage("reset layer stack");
 
     layerProcessor.removeAllLayers();
 
-
     deLayer* layer = createLayer("source_image", -1, colorSpace, layerStack, previewChannelManager, viewManager, "source image", sourceImage);
-
 
     if (layer)
     {
@@ -229,7 +228,19 @@ deChannelManager& deProject::getPreviewChannelManager()
 
 deSize deProject::getSourceImageSize() 
 {
-    return sourceImage.getSize();
+    deSize size = sourceImage.getSize();
+
+    deValue x1;
+    deValue y1;
+    deValue x2;
+    deValue y2;
+
+    zoomManager.getZoom(x1, y1, x2, y2);
+
+    deValue w = size.getW() * (x2 - x1);
+    deValue h = size.getH() * (y2 - y1);
+
+    return deSize(w, h);
 }
 
 deLayerStack& deProject::getLayerStack()
@@ -581,8 +592,6 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
     freeImage();
 
     logMessage("open image " + fileName);
-
-    bool status = false;
 
     deColorSpace oldColorSpace = sourceImage.getColorSpace();
 

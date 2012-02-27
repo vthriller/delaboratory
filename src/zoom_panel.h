@@ -16,14 +16,32 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_SCALE_CHANNEL_H
-#define _DE_SCALE_CHANNEL_H
+#ifndef _DE_ZOOM_PANEL_H
+#define _DE_ZOOM_PANEL_H
 
-#include "size.h"
-#include "value.h"
+#include <wx/wx.h>
+class deZoomManager;
+class deImageAreaPanel;
 
-void scaleChannel(deValue* src, deValue* dst, int maxx, int ox, deValue scaleW, int maxy, int oy, deValue scaleH, int ws, int hs, int wd);
+class deZoomPanel:public wxPanel
+{
+    private:
+        deZoomManager& zoomManager;
+        deImageAreaPanel* imageAreaPanel;
 
-void scaleChannel(deValue* src, deValue* dst, int x1, int y1, int x2, int y2, int w, int h, int ws);
+        wxButton* zoomIn;
+        wxButton* zoomOut;
+
+        void click(wxCommandEvent &event);
+
+
+    public:
+        deZoomPanel(wxWindow* parent, deZoomManager& _zoomManager);
+        virtual ~deZoomPanel();
+
+        void updateButtons();
+
+        void setImageAreaPanel(deImageAreaPanel* _imageAreaPanel);
+};
 
 #endif

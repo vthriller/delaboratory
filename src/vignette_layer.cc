@@ -65,7 +65,33 @@ bool deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deCha
         return false;
     }
 
-    vignetteChannel(destination, size, centerX.get(), centerY.get(), radiusX.get(), radiusY.get(), light.get(), darkness.get());
+    deValue x1;
+    deValue y1;
+    deValue x2;
+    deValue y2;
+
+    viewManager.getZoom(x1, y1, x2, y2);
+
+
+
+    deValue w = x2 - x1;
+    deValue h = y2 - y1;
+
+    deValue rx = radiusX.get() / w;
+    deValue ry = radiusY.get() / h;
+
+    // 0..1
+    deValue ccx = (centerX.get() + 1.0) / 2.0;
+    deValue ccy = (centerY.get() + 1.0) / 2.0;
+
+    deValue cccx = (ccx - x1) / w;
+    deValue cccy = (ccy - y1) / h;
+
+    // -1..1
+    deValue cx = cccx * 2.0 - 1.0;
+    deValue cy = cccy * 2.0 - 1.0;
+
+    vignetteChannel(destination, size, cx, cy, rx, ry, light.get(), darkness.get());
 
     logMessage("deVignetteLayer::processAction i=" + str(i) + " done");
 

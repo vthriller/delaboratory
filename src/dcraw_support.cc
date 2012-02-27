@@ -39,6 +39,8 @@ std::string getDcrawVersion()
 
     std::string vs = "";
 
+    int counter = 0;
+
     char c = ' ';
     char c2 = ' ';
 
@@ -46,6 +48,11 @@ std::string getDcrawVersion()
     {
         c2 = c;
         c = input->GetC();
+        counter++;
+        if (counter > 40)
+        {
+            return "";
+        }
     }
     while ((c2 != ' ') || (c != 'v'));
 
@@ -103,7 +110,6 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     {
         return false;
     }
-
 
     std::string hs = "";
     do
