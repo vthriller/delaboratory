@@ -119,6 +119,7 @@ private:
 	void onRandomEvent(wxCommandEvent& event);
 	void onInfoEvent(wxCommandEvent& event);
     void onHistogramEvent(wxCommandEvent& event);
+    void onTimerEvent(wxTimerEvent& event);
 
 	void onCloseEvent(wxCloseEvent& event);
 

@@ -22,11 +22,14 @@
 #include <string>
 class deStaticImage;
 #include "color_space.h"
+#include "dcraw_support.h"
 
 class deRawModule
 {
     private:
         mutable wxMutex mutex;
+
+        deRawLoader* loader;
 
         deRawModule(const deRawModule&);
         deRawModule& operator =(const deRawModule&);
@@ -41,6 +44,8 @@ class deRawModule
 
         std::string getVersion() const;
         bool loadRAW(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace, bool half);
+
+        bool update(bool& failure);
 
 
 };

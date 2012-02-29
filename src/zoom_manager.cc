@@ -79,10 +79,17 @@ bool deZoomManager::onMove(deValue x, deValue y)
 
 bool deZoomManager::onRelease()
 {
-    z_x1 = s_x1;
-    z_x2 = s_x2;
-    z_y1 = s_y1;
-    z_y2 = s_y2;
+    if ((s_x1 < s_x2) && (s_y1 < s_y2))
+    {
+        z_x1 = s_x1;
+        z_x2 = s_x2;
+        z_y1 = s_y1;
+        z_y2 = s_y2;
+    }
+    else
+    {
+        fullZoomOut();
+    }
 
     selectionMode = false;
 }

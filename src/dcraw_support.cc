@@ -69,10 +69,9 @@ std::string getDcrawVersion()
     return vs;
 }
 
-bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace colorSpace, bool half)
+deRawLoader::deRawLoader(const std::string& f, deStaticImage& _image, deColorSpace _colorSpace, bool _half)
+:filename(f), image(_image), colorSpace(_colorSpace), half(_half)
 {
-    //wxProgressDialog* progressDialog = new wxProgressDialog(_T("dcraw processing"), _T("dcraw processing"), 100, NULL, wxPD_AUTO_HIDE);
-
     std::string options = "-w -c -6 -o 4 -W";
     if (half)
     {
@@ -86,23 +85,42 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     std::string command = std::string(DCRAW_EXECUTABLE) + " " + options + " " + f + " >abc ";
     logMessage("calling: " + command);
 
-    wxProcess* process = wxProcess::Open(wxString::FromAscii(command.c_str()));
+    process = wxProcess::Open(wxString::FromAscii(command.c_str()));
 
-    wxInputStream* input = process->GetInputStream();
+    input = process->GetInputStream();
+}
 
-//    delete progressDialog;
+deRawLoader::~deRawLoader()
+{
+}
+
+
+bool deRawLoader::load(bool& failure)
+{
+    if (!input->CanRead())
+    {
+        return false;
+    }
+
+    logMessage("deRawLoader::load() - CanRead");
 
     char c1 = input->GetC();
     char c2 = input->GetC();
 
     if (c1 != 'P') 
     {
+        logMessage("first character not P");
+        failure = true;
         return false;
     }
     if (c2 != '6') 
     {
+        logMessage("second character not 6");
+        failure = true;
         return false;
     }
+
+    logMessage("P6 loaded");
 
     char c;
 
@@ -118,6 +136,7 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     int w = getInt(ws);
     if (w <= 0)
     {
+        failure = true;
         return false;
     }
 
@@ -133,6 +152,7 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     int h = getInt(hs);
     if (h <= 0)
     {
+        failure = true;
         return false;
     }
 
@@ -149,6 +169,7 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     int max = getInt(ms);
     if (max <= 256)
     {
+        failure = true;
         return false;
     }
 
@@ -171,6 +192,7 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     if (!channelRR)
     {
         image.unlock();
+        failure = true;
         return false;
     }
     deChannel& channelR = *channelRR;
@@ -179,6 +201,7 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     if (!channelGG)
     {
         image.unlock();
+        failure = true;
         return false;
     }
     deChannel& channelG = *channelGG;
@@ -187,6 +210,7 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     if (!channelBB)
     {
         image.unlock();
+        failure = true;
         return false;
     }
     deChannel& channelB = *channelBB;
@@ -249,7 +273,6 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     {
         steps++;
 
-//        logMessage("pos: " + str(pos) + " n: " + str(n) + " offset: " + str(offset));
         input->Read(buffer + offset, bufsize - offset);
 
         int r = input->LastRead();
@@ -258,7 +281,6 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
             maxRead = r;
         }
 
-//        logMessage("read " + str(r) + " bytes into buffer");
         r += offset;
 
         int p = 0;
@@ -399,6 +421,7 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     
     if (error)
     {
+        failure = true;
         return false;
     }
 
@@ -406,19 +429,15 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     return true;
 }
 
-/*
-bool execDcraw(const std::string& f, const std::string& tmp)
+bool deRawLoader::getStatus()
 {
-    wxProgressDialog* progressDialog = new wxProgressDialog(_T("dcraw processing"), _T("dcraw processing"), 100, NULL, wxPD_AUTO_HIDE);
-
-    std::string c = std::string(DCRAW_EXECUTABLE) + " -w -c -6 -o 4 -W " + f + " >" + tmp;
-
-    delete progressDialog;
-
-    logMessage("calling: " + c);
-
-    system(c.c_str());
-
+    if (!process)
+    {
+        return false;
+    }
+    if (!input)
+    {
+        return false;
+    }
     return true;
 }
-*/

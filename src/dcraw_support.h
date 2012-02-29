@@ -23,7 +23,25 @@
 class deStaticImage;
 #include "color_space.h"
 
-bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace colorSpace, bool half);
 std::string getDcrawVersion();
+
+class deRawLoader
+{
+    private:
+        wxProcess* process;
+        wxInputStream* input;
+        const std::string& filename;
+        deStaticImage& image;
+        deColorSpace colorSpace;
+        bool half;
+    public:        
+        
+        deRawLoader(const std::string& f, deStaticImage& image, deColorSpace colorSpace, bool half);
+        virtual ~deRawLoader();
+
+        bool load(bool& failure);
+        bool getStatus();
+
+};
 
 #endif

@@ -26,6 +26,7 @@ deRawModule::deRawModule()
 :mutex(wxMUTEX_RECURSIVE)
 {
     dcraw_version = "";
+    loader = NULL;
 }
 
 deRawModule::~deRawModule()
@@ -44,9 +45,38 @@ std::string deRawModule::getVersion() const
 
 bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace, bool half)
 {
+    if (loader)
+    {
+        return false;
+    }
+
+    bool status = false;
+
     lockWithLog(mutex, "raw module mutex");
-    bool result = execDcrawProcess(fileName, image, colorSpace, half);
+
+    loader = new deRawLoader(fileName, image, colorSpace, half);
+
+    status = loader->getStatus();
+
     mutex.Unlock();
+
+    return status;
+}
+
+bool deRawModule::update(bool& failure)
+{
+    if (!loader)
+    {
+        return false;
+    }
+
+    bool result = loader->load(failure);
+
+    if ((result) || (failure))
+    {
+        delete loader;
+        loader = NULL;
+    }
 
     return result;
 }

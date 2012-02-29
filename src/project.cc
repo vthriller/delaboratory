@@ -51,46 +51,6 @@
 
 #define ICC_MESSAGE 0
 
-class deLoadRAWThread:public wxThread
-{
-    private:
-        void sendInfoEvent(int i)
-        {
-            wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_INFO_EVENT );
-            event.SetInt(i);
-            wxPostEvent( frame, event );
-        }
-
-        virtual void *Entry()
-        {
-            sendInfoEvent(DE_DCRAW_START);
-            bool result = rawModule.loadRAW(fileName, sourceImage, colorSpace, false);
-            sendInfoEvent(DE_DCRAW_END);
-            wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_IMAGE_LOAD_EVENT );
-            wxPostEvent( frame, event );
-
-            return NULL;
-        }
-
-        deRawModule& rawModule;
-        const std::string fileName;
-        deStaticImage& sourceImage;
-        deColorSpace colorSpace;
-        deMainFrame* frame;
-    public:    
-        deLoadRAWThread(deRawModule& _rawModule, const std::string& _fileName, deStaticImage& _sourceImage, deColorSpace _colorSpace, deMainFrame* _frame)
-        :rawModule(_rawModule),
-         fileName(_fileName),
-         sourceImage(_sourceImage),
-         colorSpace(_colorSpace),
-         frame(_frame)
-        {
-        }
-        virtual ~deLoadRAWThread()
-        {
-        }
-};
-
 deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager)
 :layerProcessor(_processor),
  viewModePanel(NULL),
@@ -639,27 +599,29 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
 
     if (raw)
     { 
-        bool half = true;
         layerProcessor.sendInfoEvent(DE_DCRAW_START);
-        if ((rawModule.loadRAW(fileName, sourceImage, colorSpace, half)))
+        if ((rawModule.loadRAW(fileName, sourceImage, colorSpace, true)))
         {
-            layerProcessor.sendInfoEvent(DE_DCRAW_END);
-
-            deLoadRAWThread* thread = new deLoadRAWThread(rawModule, fileName, sourceImage, colorSpace, mainFrame);
-
-            if ( thread->Create() != wxTHREAD_NO_ERROR )
+            logMessage("found RAW " + fileName);
+            bool failure = false;
+            while (!rawModule.update(failure))
             {
-                std::cout << "creating thread... CREATE ERROR" << std::endl;
+                wxThread::Sleep(200);
+                if (failure)
+                {
+                    logMessage("failed RAW load " + fileName);
+                    layerProcessor.sendInfoEvent(DE_DCRAW_END);
+                    return false;
+                }
             }
+            bool result = rawModule.loadRAW(fileName, sourceImage, colorSpace, false);
 
-            if ( thread->Run() != wxTHREAD_NO_ERROR )
-            {
-                std::cout << "creating thread... RUN ERROR" << std::endl;
-            }
-            
+            rawTimer->Start(500);
+
         }
         else
         {
+            logMessage("failed RAW " + fileName);
             layerProcessor.sendInfoEvent(DE_DCRAW_END);
             return false;
         }
@@ -723,6 +685,8 @@ void deProject::setMainFrame(deMainFrame* _mainFrame)
 {
     log("set main frame in project");
     mainFrame = _mainFrame;
+
+    rawTimer = new wxTimer(mainFrame, wxID_ANY);
 }
 
 bool deProject::isSourceValid() const
@@ -868,4 +832,23 @@ void deProject::onImageNameUpdate()
     {
         mainFrame->setImageName(imageFileName, sourceImage.getSize());
     }
+}
+
+void deProject::onTimerUpdate()
+{
+    bool failure = false;
+
+    bool result = rawModule.update(failure);
+
+    if ((result) || (failure))
+    {
+        layerProcessor.sendInfoEvent(DE_DCRAW_END);
+        rawTimer->Stop();
+    }
+    if (result)
+    {
+        wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_IMAGE_LOAD_EVENT );
+        wxPostEvent( mainFrame, event );
+    }
+
 }
