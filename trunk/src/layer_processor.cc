@@ -857,6 +857,21 @@ void deLayerProcessor::setPreviewSize(const deSize& size)
     logMessage("set preview size done");
 }
 
+void deLayerProcessor::onImageLoad()
+{
+    logMessage("on image load...");
+    lockHistogram();
+    lockPrepareImage();
+    lockUpdateImage();
+
+    updateAllImages(false);
+
+    unlockUpdateImage();
+    unlockPrepareImage();
+    unlockHistogram();
+    logMessage("on image load done...");
+}
+
 void deLayerProcessor::render(wxDC& dc)
 {
     renderer.render(dc);

@@ -26,6 +26,8 @@ class deStaticImage;
 class deRawModule
 {
     private:
+        mutable wxMutex mutex;
+
         deRawModule(const deRawModule&);
         deRawModule& operator =(const deRawModule&);
 
@@ -38,7 +40,7 @@ class deRawModule
         void onInit();
 
         std::string getVersion() const;
-        bool loadRAW(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
+        bool loadRAW(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace, bool half);
 
 
 };

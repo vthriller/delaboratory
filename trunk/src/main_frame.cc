@@ -68,6 +68,7 @@ EVT_MENU(ID_MemoryInfo, deMainFrame::onMemoryInfo)
 EVT_MENU(ID_BenchmarkBlur, deMainFrame::onBenchmarkBlur)
 EVT_MENU(ID_BenchmarkColor, deMainFrame::onBenchmarkColor)
 EVT_MENU(DE_REPAINT_EVENT, deMainFrame::onRepaintEvent)
+EVT_MENU(DE_IMAGE_LOAD_EVENT, deMainFrame::onImageLoadEvent)
 EVT_MENU(DE_HISTOGRAM_EVENT, deMainFrame::onHistogramEvent)
 EVT_MENU(DE_RANDOM_EVENT, deMainFrame::onRandomEvent)
 EVT_MENU(DE_INFO_EVENT, deMainFrame::onInfoEvent)
@@ -113,7 +114,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     histogramInfo = new wxStaticText(topPanel, wxID_ANY, _T("[histogram]"), wxDefaultPosition);
     sizerP->Add(histogramInfo, 0, wxEXPAND);
 
-    dcrawInfo = new wxStaticText(topPanel, wxID_ANY, wxString::FromAscii(dcraw_version.c_str()), wxDefaultPosition);
+    dcrawInfo = new wxStaticText(topPanel, wxID_ANY, _T("[dcraw]"), wxDefaultPosition);
     sizerP->Add(dcrawInfo, 0, wxEXPAND);
 
     wxSizer* sizerR = new wxStaticBoxSizer(wxHORIZONTAL, topPanel,  _T("options"));
@@ -238,6 +239,8 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(deMainFrame::onCloseEvent));
 
     project.log("main frame created");
+
+    setInfoColor(DE_DCRAW_END);
 }
 
 void deMainFrame::hidePanels()
@@ -429,6 +432,11 @@ void deMainFrame::onRepaintEvent(wxCommandEvent& event)
     repaintMainFrame(true);
 }
 
+void deMainFrame::onImageLoadEvent(wxCommandEvent& event)
+{
+    layerProcessor.onImageLoad();
+}
+
 void deMainFrame::onRandomEvent(wxCommandEvent& event)
 {
     project.log("random event start");
@@ -436,10 +444,10 @@ void deMainFrame::onRandomEvent(wxCommandEvent& event)
     project.log("random event end");
 }
 
-void deMainFrame::onInfoEvent(wxCommandEvent& event)
+void deMainFrame::setInfoColor(int i)
 {
-    int i = event.GetInt();
     int e = 100;
+    int e2 = 50;
     int d = 150;
     switch (i)
     {
@@ -473,6 +481,16 @@ void deMainFrame::onInfoEvent(wxCommandEvent& event)
             histogramInfo->SetForegroundColour(wxColour(d, d, d));
             break;
         }
+        case DE_DCRAW_START:
+        {
+            dcrawInfo->SetForegroundColour(wxColour(e2, e2, e2));
+            break;
+        }
+        case DE_DCRAW_END:
+        {
+            dcrawInfo->SetForegroundColour(wxColour(d, d, d));
+            break;
+        }
         /*
         case DE_DEBUG_START:
         {
@@ -486,6 +504,12 @@ void deMainFrame::onInfoEvent(wxCommandEvent& event)
         }
         */
     }
+}
+
+void deMainFrame::onInfoEvent(wxCommandEvent& event)
+{
+    int i = event.GetInt();
+    setInfoColor(i);
 }
 
 class deTestThread:public wxThread

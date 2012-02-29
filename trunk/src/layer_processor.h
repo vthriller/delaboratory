@@ -42,6 +42,8 @@ enum
     DE_RENDERING_END,
     DE_HISTOGRAM_START,
     DE_HISTOGRAM_END,
+    DE_DCRAW_START,
+    DE_DCRAW_END,
     DE_DEBUG_START,
     DE_DEBUG_END
 };
@@ -102,7 +104,6 @@ class deLayerProcessor
         void lockUpdateImage();
         void unlockUpdateImage();
 
-        void sendInfoEvent(int i);
 
 
     public:
@@ -152,6 +153,7 @@ class deLayerProcessor
         void sendHistogramEvent();
 
         void setPreviewSize(const deSize& size);
+        void onImageLoad();
 
         bool isClosing() const {return closing;};
 
@@ -161,6 +163,8 @@ class deLayerProcessor
         void setRealtime(bool r);
 
         void removeAllLayers();
+
+        void sendInfoEvent(int i);
 
 };
 

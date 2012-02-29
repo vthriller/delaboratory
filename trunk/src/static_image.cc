@@ -63,7 +63,6 @@ deChannel* deStaticImage::getChannel(int index)
     {
         return NULL;
     }
-    //int n = getColorSpaceSize(colorSpace);
     int n = 3;
     if (index >= n)
     {
@@ -74,8 +73,11 @@ deChannel* deStaticImage::getChannel(int index)
 
 void deStaticImage::setSize(const deSize& _size)
 {
+    if (size == _size)
+    {
+        return;
+    }
     size = _size;
-    //int n = getColorSpaceSize(colorSpace);
     int n = 3;
     int i;
     for (i = 0; i < n; i++)
