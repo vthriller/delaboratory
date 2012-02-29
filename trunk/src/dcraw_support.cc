@@ -158,12 +158,15 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
         h *= 2;
     }
 
+    image.lock();
+
     deSize size(w, h);
     image.setSize(size);
 
     deChannel* channelRR = image.getChannel(0);
     if (!channelRR)
     {
+        image.unlock();
         return false;
     }
     deChannel& channelR = *channelRR;
@@ -171,6 +174,7 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     deChannel* channelGG = image.getChannel(1);
     if (!channelGG)
     {
+        image.unlock();
         return false;
     }
     deChannel& channelG = *channelGG;
@@ -178,6 +182,7 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     deChannel* channelBB = image.getChannel(2);
     if (!channelBB)
     {
+        image.unlock();
         return false;
     }
     deChannel& channelB = *channelBB;
@@ -381,6 +386,8 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     channelR.unlockWrite();
     channelG.unlockWrite();
     channelB.unlockWrite();
+
+    image.unlock();
     
     if (error)
     {

@@ -29,6 +29,7 @@ class deStaticImage
         deColorSpace colorSpace;
         std::vector<deChannel*> channels;
         deSize size;
+        mutable wxMutex mutex;
         
         deStaticImage(const deStaticImage& i);
         deStaticImage& operator = (const deStaticImage& i);
@@ -45,6 +46,9 @@ class deStaticImage
 
         void setSize(const deSize& _size);
         deSize getSize() const;
+
+        void lock();
+        void unlock();
 };
 
 #endif
