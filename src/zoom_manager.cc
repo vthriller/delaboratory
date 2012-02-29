@@ -52,7 +52,6 @@ bool deZoomManager::onClick(deValue x, deValue y)
     s_x2 = x;
     s_y1 = y;
     s_y2 = y;
-    return true;
 }
 
 bool deZoomManager::onMove(deValue x, deValue y)
@@ -76,7 +75,6 @@ bool deZoomManager::onMove(deValue x, deValue y)
 
     s_x2 = x;
     s_y2 = y;
-    return true;
 }
 
 bool deZoomManager::onRelease()
@@ -87,7 +85,6 @@ bool deZoomManager::onRelease()
     z_y2 = s_y2;
 
     selectionMode = false;
-    return true;
 }
 
 void deZoomManager::getSelection(deValue& _x1, deValue& _y1, deValue& _x2, deValue& _y2)

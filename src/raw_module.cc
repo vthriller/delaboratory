@@ -20,8 +20,10 @@
 #include "dcraw_support.h"
 #include "image_io.h"
 #include "str.h"
+#include "logger.h"
 
 deRawModule::deRawModule()
+:mutex(wxMUTEX_RECURSIVE)
 {
     dcraw_version = "";
 }
@@ -40,7 +42,11 @@ std::string deRawModule::getVersion() const
     return dcraw_version;
 }
 
-bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
+bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace, bool half)
 {
-    return execDcrawProcess(fileName, image, colorSpace);
+    lockWithLog(mutex, "raw module mutex");
+    bool result = execDcrawProcess(fileName, image, colorSpace, half);
+    mutex.Unlock();
+
+    return result;
 }

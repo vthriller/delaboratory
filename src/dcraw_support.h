@@ -23,7 +23,7 @@
 class deStaticImage;
 #include "color_space.h"
 
-bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace colorSpace);
+bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace colorSpace, bool half);
 std::string getDcrawVersion();
 
 #endif

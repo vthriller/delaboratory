@@ -69,18 +69,28 @@ std::string getDcrawVersion()
     return vs;
 }
 
-bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace colorSpace)
+bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace colorSpace, bool half)
 {
-    wxProgressDialog* progressDialog = new wxProgressDialog(_T("dcraw processing"), _T("dcraw processing"), 100, NULL, wxPD_AUTO_HIDE);
+    //wxProgressDialog* progressDialog = new wxProgressDialog(_T("dcraw processing"), _T("dcraw processing"), 100, NULL, wxPD_AUTO_HIDE);
 
-    std::string command = std::string(DCRAW_EXECUTABLE) + " -w -c -6 -o 4 -W " + f + " >abc ";
+    std::string options = "-w -c -6 -o 4 -W";
+    if (half)
+    {
+        options += " -h";
+    }
+    else
+    {
+        options += " -q 3";
+    }
+
+    std::string command = std::string(DCRAW_EXECUTABLE) + " " + options + " " + f + " >abc ";
     logMessage("calling: " + command);
 
     wxProcess* process = wxProcess::Open(wxString::FromAscii(command.c_str()));
 
     wxInputStream* input = process->GetInputStream();
 
-    delete progressDialog;
+//    delete progressDialog;
 
     char c1 = input->GetC();
     char c2 = input->GetC();
@@ -142,6 +152,11 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
         return false;
     }
 
+    if (half)
+    {
+        w *= 2;
+        h *= 2;
+    }
 
     deSize size(w, h);
     image.setSize(size);
@@ -194,6 +209,11 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
 
     int n = w * h;
 
+    if (half)
+    {
+        n /= 4;
+    }
+
     int offset = 0;
 
     int steps = 0;
@@ -208,6 +228,9 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
     }
 
     image.setColorSpace(colorSpace);
+
+    int tx = 0;
+    int ty = 0;
 
     while ((pos < n) && (!input->Eof()))
     {
@@ -267,15 +290,70 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
                 prophoto2xyz(r, g, b, vv1, vv2, vv3);
                 xyz2lab(vv1, vv2, vv3, v1, v2, v3);
 
-                pixels0[pos] = v1;
-                pixels1[pos] = v2;
-                pixels2[pos] = v3;
+                if (half)
+                {
+                    pixels0[(2 * ty + 0) * 2 * w + 2 * tx + 0] = v1;
+                    pixels0[(2 * ty + 1) * 2 * w + 2 * tx + 0] = v1;
+                    pixels0[(2 * ty + 0) * 2 * w + 2 * tx + 1] = v1;
+                    pixels0[(2 * ty + 1) * 2 * w + 2 * tx + 1] = v1;
+
+                    pixels1[(2 * ty + 0) * 2 * w + 2 * tx + 0] = v2;
+                    pixels1[(2 * ty + 1) * 2 * w + 2 * tx + 0] = v2;
+                    pixels1[(2 * ty + 0) * 2 * w + 2 * tx + 1] = v2;
+                    pixels1[(2 * ty + 1) * 2 * w + 2 * tx + 1] = v2;
+
+                    pixels2[(2 * ty + 0) * 2 * w + 2 * tx + 0] = v3;
+                    pixels2[(2 * ty + 1) * 2 * w + 2 * tx + 0] = v3;
+                    pixels2[(2 * ty + 0) * 2 * w + 2 * tx + 1] = v3;
+                    pixels2[(2 * ty + 1) * 2 * w + 2 * tx + 1] = v3;
+
+                    tx++;
+                    if (tx == w)
+                    {
+                        tx = 0;
+                        ty++;
+                    }
+                }
+
+                else
+                {
+                    pixels0[pos] = v1;
+                    pixels1[pos] = v2;
+                    pixels2[pos] = v3;
+                }
             }
             else
             {
-                pixels0[pos] = r;
-                pixels1[pos] = g;
-                pixels2[pos] = b;
+                if (half)
+                {
+                    pixels0[(2 * ty + 0) * 2 * w + 2 * tx + 0] = r;
+                    pixels0[(2 * ty + 1) * 2 * w + 2 * tx + 0] = r;
+                    pixels0[(2 * ty + 0) * 2 * w + 2 * tx + 1] = r;
+                    pixels0[(2 * ty + 1) * 2 * w + 2 * tx + 1] = r;
+
+                    pixels1[(2 * ty + 0) * 2 * w + 2 * tx + 0] = g;
+                    pixels1[(2 * ty + 1) * 2 * w + 2 * tx + 0] = g;
+                    pixels1[(2 * ty + 0) * 2 * w + 2 * tx + 1] = g;
+                    pixels1[(2 * ty + 1) * 2 * w + 2 * tx + 1] = g;
+
+                    pixels2[(2 * ty + 0) * 2 * w + 2 * tx + 0] = b;
+                    pixels2[(2 * ty + 1) * 2 * w + 2 * tx + 0] = b;
+                    pixels2[(2 * ty + 0) * 2 * w + 2 * tx + 1] = b;
+                    pixels2[(2 * ty + 1) * 2 * w + 2 * tx + 1] = b;
+
+                    tx++;
+                    if (tx == w)
+                    {
+                        tx = 0;
+                        ty++;
+                    }
+                }
+                else
+                {
+                    pixels0[pos] = r;
+                    pixels1[pos] = g;
+                    pixels2[pos] = b;
+                }
             }
 
             pos++;

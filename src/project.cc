@@ -51,6 +51,46 @@
 
 #define ICC_MESSAGE 0
 
+class deLoadRAWThread:public wxThread
+{
+    private:
+        void sendInfoEvent(int i)
+        {
+            wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_INFO_EVENT );
+            event.SetInt(i);
+            wxPostEvent( frame, event );
+        }
+
+        virtual void *Entry()
+        {
+            sendInfoEvent(DE_DCRAW_START);
+            bool result = rawModule.loadRAW(fileName, sourceImage, colorSpace, false);
+            sendInfoEvent(DE_DCRAW_END);
+            wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_IMAGE_LOAD_EVENT );
+            wxPostEvent( frame, event );
+
+            return NULL;
+        }
+
+        deRawModule& rawModule;
+        const std::string fileName;
+        deStaticImage& sourceImage;
+        deColorSpace colorSpace;
+        deMainFrame* frame;
+    public:    
+        deLoadRAWThread(deRawModule& _rawModule, const std::string& _fileName, deStaticImage& _sourceImage, deColorSpace _colorSpace, deMainFrame* _frame)
+        :rawModule(_rawModule),
+         fileName(_fileName),
+         sourceImage(_sourceImage),
+         colorSpace(_colorSpace),
+         frame(_frame)
+        {
+        }
+        virtual ~deLoadRAWThread()
+        {
+        }
+};
+
 deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager)
 :layerProcessor(_processor),
  viewModePanel(NULL),
@@ -593,12 +633,34 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
 
     logMessage("open image " + fileName);
 
+    bool status = false;
+
     deColorSpace oldColorSpace = sourceImage.getColorSpace();
 
     if (raw)
     { 
-        if ((!rawModule.loadRAW(fileName, sourceImage, colorSpace)))
+        bool half = true;
+        layerProcessor.sendInfoEvent(DE_DCRAW_START);
+        if ((rawModule.loadRAW(fileName, sourceImage, colorSpace, half)))
         {
+            layerProcessor.sendInfoEvent(DE_DCRAW_END);
+
+            deLoadRAWThread* thread = new deLoadRAWThread(rawModule, fileName, sourceImage, colorSpace, mainFrame);
+
+            if ( thread->Create() != wxTHREAD_NO_ERROR )
+            {
+                std::cout << "creating thread... CREATE ERROR" << std::endl;
+            }
+
+            if ( thread->Run() != wxTHREAD_NO_ERROR )
+            {
+                std::cout << "creating thread... RUN ERROR" << std::endl;
+            }
+            
+        }
+        else
+        {
+            layerProcessor.sendInfoEvent(DE_DCRAW_END);
             return false;
         }
     }

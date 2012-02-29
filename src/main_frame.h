@@ -56,6 +56,7 @@ enum
     ID_BenchmarkBlur,
     ID_BenchmarkColor,
     DE_REPAINT_EVENT,
+    DE_IMAGE_LOAD_EVENT,
     DE_HISTOGRAM_EVENT,
     DE_RANDOM_EVENT,
     DE_INFO_EVENT
@@ -114,6 +115,7 @@ private:
 	void onBenchmarkBlur(wxCommandEvent& event);
 	void onBenchmarkColor(wxCommandEvent& event);
 	void onRepaintEvent(wxCommandEvent& event);
+	void onImageLoadEvent(wxCommandEvent& event);
 	void onRandomEvent(wxCommandEvent& event);
 	void onInfoEvent(wxCommandEvent& event);
     void onHistogramEvent(wxCommandEvent& event);
@@ -125,6 +127,7 @@ private:
     void check(wxCommandEvent &event);
 
     void updateTitle();
+    void setInfoColor(int i);
 
 public:
 	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcrawVersion);
