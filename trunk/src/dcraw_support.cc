@@ -152,13 +152,17 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
         return false;
     }
 
+    logMessage("w: " + str(w) + " h: " + str(h) + " max: " + str(max));
+
     if (half)
     {
         w *= 2;
         h *= 2;
+        logMessage("after half w: " + str(w) + " h: " + str(h) + " max: " + str(max));
     }
 
     image.lock();
+
 
     deSize size(w, h);
     image.setSize(size);
@@ -210,6 +214,8 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
 
     buffer = new char[bufsize];
 
+    logMessage("buffer allocated");
+
     bool error = false;
 
     int n = w * h;
@@ -236,6 +242,8 @@ bool execDcrawProcess(const std::string& f, deStaticImage& image, deColorSpace c
 
     int tx = 0;
     int ty = 0;
+
+    logMessage("start loading PPM data");
 
     while ((pos < n) && (!input->Eof()))
     {
