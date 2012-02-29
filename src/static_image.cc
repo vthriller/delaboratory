@@ -18,10 +18,12 @@
 
 #include "static_image.h"
 #include "channel.h"
+#include "logger.h"
 
 deStaticImage::deStaticImage()
 :colorSpace(deColorSpaceInvalid),
- size(0,0)
+ size(0,0),
+ mutex(wxMUTEX_RECURSIVE)
 {
     int n = 3;
     int i;
@@ -91,3 +93,13 @@ deSize deStaticImage::getSize() const
 {
     return size;
 }
+
+void deStaticImage::lock()
+{
+    lockWithLog(mutex, "static image mutex");
+}    
+
+void deStaticImage::unlock()
+{
+    mutex.Unlock();
+}    
