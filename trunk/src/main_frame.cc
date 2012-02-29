@@ -139,12 +139,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     deZoomPanel* zoomPanel = new deZoomPanel(topPanel, _zoomManager);
     topSizer->Add(zoomPanel);
 
-
-/*
-    debugInfo = new wxStaticText(topPanel, wxID_ANY, _T("[debug]"), wxDefaultPosition);
-    sizerP->Add(debugInfo, 0, wxEXPAND);
-    */
-
     imageAreaPanel = new deImageAreaPanel(this, project, _samplerManager, _zoomManager, zoomPanel);
     imageAreaPanel->SetSize(300,300);
     leftSizer->Add(imageAreaPanel, 1, wxEXPAND);
@@ -237,6 +231,8 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deMainFrame::check));
 
     Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(deMainFrame::onCloseEvent));
+
+    Connect(wxEVT_TIMER, wxTimerEventHandler(deMainFrame::onTimerEvent));
 
     project.log("main frame created");
 
@@ -491,18 +487,6 @@ void deMainFrame::setInfoColor(int i)
             dcrawInfo->SetForegroundColour(wxColour(d, d, d));
             break;
         }
-        /*
-        case DE_DEBUG_START:
-        {
-            debugInfo->SetForegroundColour(wxColour(e, e, e));
-            break;
-        }
-        case DE_DEBUG_END:
-        {
-            debugInfo->SetForegroundColour(wxColour(d, d, d));
-            break;
-        }
-        */
     }
 }
 
@@ -608,3 +592,8 @@ void deMainFrame::setImageName(const std::string& _imageName, const deSize& _siz
     updateTitle();
 }    
     
+void deMainFrame::onTimerEvent(wxTimerEvent& event)
+{
+    project.onTimerUpdate();
+}
+

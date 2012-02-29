@@ -77,6 +77,8 @@ class deProject
 
         deZoomManager& zoomManager;
 
+        wxTimer* rawTimer;
+
         void onImageNameUpdate();
 
         void loadLayers(xmlNodePtr root);
@@ -87,7 +89,6 @@ class deProject
         void onScaleSet();
 
         void saveImage(const std::string& filename, const deImage& image, const std::string& type);
-
 
     public:
         deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager);
@@ -151,6 +152,8 @@ class deProject
 
         void addActionLayer(const std::string& action);
         void addConversionLayer(deColorSpace colorSpace);
+
+        void onTimerUpdate();
 
 };
 
