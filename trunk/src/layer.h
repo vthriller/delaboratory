@@ -28,6 +28,7 @@ class deProject;
 class deFrame;
 class deBlendFrame;
 class deImage;
+class dePropertyValue;
 
 enum deLayerProcessType
 {   
@@ -45,6 +46,7 @@ class deLayer
         std::string name;
         wxMutex mutex;
 
+
         virtual bool updateImage() = 0;
 
     protected:
@@ -52,7 +54,13 @@ class deLayer
         unsigned int index;
         unsigned int sourceLayer;
 
+        std::vector<dePropertyValue*> valueProperties;
+
+        int registerPropertyValue(const std::string& _name);
+
         void saveCommon(xmlNodePtr node);
+        void saveValueProperties(xmlNodePtr node);
+        void loadValueProperties(xmlNodePtr root);
 
     public:
         deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer);
@@ -96,6 +104,10 @@ class deLayer
         virtual void processChannel(int channel);
 
         virtual void onUpdateProperties() {};
+
+        int getNumberOfValueProperties() const {return valueProperties.size();};
+        dePropertyValue* getPropertyValue(int index);
+        dePropertyValue* getPropertyValue(const std::string& _name);
 
 };
 

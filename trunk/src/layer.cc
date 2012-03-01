@@ -22,6 +22,7 @@
 #include "str.h"
 #include "layer_processor.h"
 #include "logger.h"
+#include "property_value.h"
 
 deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer)
 :name(_name), 
@@ -140,3 +141,56 @@ std::string deLayer::getLabel() const
 {
     return getType();
 }    
+
+int deLayer::registerPropertyValue(const std::string& _name)
+{
+    dePropertyValue* p = new dePropertyValue(_name);
+    valueProperties.push_back(p);
+    return valueProperties.size() - 1;
+}
+
+dePropertyValue* deLayer::getPropertyValue(int index)
+{
+    if ((index < 0) || (index >= valueProperties.size()))
+    {
+        return NULL;
+    }
+    return valueProperties[index];
+}
+
+void deLayer::saveValueProperties(xmlNodePtr root)
+{
+    int n = getNumberOfValueProperties();
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        dePropertyValue* p = getPropertyValue(i);
+        p->save(root);
+    }
+}    
+
+void deLayer::loadValueProperties(xmlNodePtr root)
+{
+    int n = getNumberOfValueProperties();
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        dePropertyValue* p = getPropertyValue(i);
+        p->load(root);
+    }
+}       
+
+dePropertyValue* deLayer::getPropertyValue(const std::string& _name)
+{
+    int n = getNumberOfValueProperties();
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        dePropertyValue* p = getPropertyValue(i);
+        if (p->getName() == _name)
+        {
+            return p;
+        }
+    }
+    return NULL;
+}

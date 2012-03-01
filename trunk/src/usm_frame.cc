@@ -32,29 +32,35 @@ deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor
 
     int range = 400;
 
-    radius = new dePropertyValueSlider(this, range, usmLayer.getPropertyRadius(), usmLayer, layerProcessor);
-    sizer->Add(radius);
+    int n = usmLayer.getNumberOfValueProperties();
 
-    amount = new dePropertyValueSlider(this, range, usmLayer.getPropertyAmount(), usmLayer, layerProcessor);
-    sizer->Add(amount);
+    int i;
 
-    threshold = new dePropertyValueSlider(this, range, usmLayer.getPropertyThreshold(), usmLayer, layerProcessor);
-    sizer->Add(threshold);
+    for (i = 0; i < n; i++)
+    {
+        dePropertyValue* p = usmLayer.getPropertyValue(i);
+        if (p)
+        {
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, usmLayer, layerProcessor);
+            valueSliders.push_back(s);
+            sizer->Add(s);
+        }            
+    }
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
     sizer->Add(sizerB, 0);
 
-    reset = new wxButton(this, wxID_ANY, _T("reset"), wxDefaultPosition, wxSize(100,25));
-    sizerB->Add(reset, 0);
+    std::vector<std::string> presets;
+    usmLayer.getPresets(presets);
 
-    sharp = new wxButton(this, wxID_ANY, _T("sharp"), wxDefaultPosition, wxSize(100,25));
-    sizerB->Add(sharp, 0);
 
-    hiraloam1 = new wxButton(this, wxID_ANY, _T("hiraloam 1"), wxDefaultPosition, wxSize(100,25));
-    sizerB->Add(hiraloam1, 0);
-
-    hiraloam2 = new wxButton(this, wxID_ANY, _T("hiraloam 2"), wxDefaultPosition, wxSize(100,25));
-    sizerB->Add(hiraloam2, 0);
+    std::vector<std::string>::iterator j;
+    for (j = presets.begin(); j != presets.end(); j++)
+    {
+        wxButton* b = new wxButton(this, wxID_ANY, wxString::FromAscii(j->c_str()), wxDefaultPosition, wxSize(100,25));
+        sizerB->Add(b, 0);
+        buttons[*j] = b;
+    }
 
     Fit();
 
@@ -70,29 +76,21 @@ void deUSMFrame::click(wxCommandEvent &event)
     int id = event.GetId();
     deUSMLayer& usmLayer = dynamic_cast<deUSMLayer&>(layer);
 
-    if (reset->GetId() == id)
-    {
-        usmLayer.reset();
-    }      
+    std::map<std::string, wxButton*>::iterator i;
 
-    if (sharp->GetId() == id)
+    for (i = buttons.begin(); i != buttons.end(); i++)
     {
-        usmLayer.sharp();
-    }      
+        if (i->second->GetId() == id)
+        {
+            usmLayer.applyPreset(i->first);
+        }
+    }
 
-    if (hiraloam1->GetId() == id)
+    std::vector<dePropertyValueSlider*>::iterator j;
+    for (j = valueSliders.begin(); j != valueSliders.end(); j++)
     {
-        usmLayer.hiraloam1();
-    }      
-
-    if (hiraloam2->GetId() == id)
-    {
-        usmLayer.hiraloam2();
-    }      
-
-    radius->setFromProperty();
-    amount->setFromProperty();
-    threshold->setFromProperty();
+        (*j)->setFromProperty();
+    }
 
     int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(index);

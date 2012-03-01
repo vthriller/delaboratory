@@ -21,6 +21,8 @@
 
 #include "action_frame.h"
 #include "slider.h"
+#include <vector>
+#include <map>
 
 class dePropertyValueSlider;
 class deLayerProcessor;
@@ -28,16 +30,10 @@ class deLayerProcessor;
 class deUSMFrame:public deActionFrame
 {
     private:
-        dePropertyValueSlider* radius;
-        dePropertyValueSlider* amount;
-        dePropertyValueSlider* threshold;
+        std::vector<dePropertyValueSlider*> valueSliders;
+        std::map<std::string, wxButton*> buttons;
 
         deLayerProcessor& layerProcessor;
-
-        wxButton* reset;
-        wxButton* sharp;
-        wxButton* hiraloam1;
-        wxButton* hiraloam2;
 
         void click(wxCommandEvent &event);
 
