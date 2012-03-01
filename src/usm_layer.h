@@ -22,12 +22,16 @@
 #include "action_layer.h"
 #include "property_value.h"
 
+class dePresetLayer;
+
 class deUSMLayer:public deActionLayer
 {
     private:
-        dePropertyValue blurRadius;
-        dePropertyValue amount;
-        dePropertyValue threshold;
+        int blurRadiusPropertyIndex;
+        int amountPropertyIndex;
+        int thresholdPropertyIndex;
+
+        std::map<std::string, dePresetLayer*> presets;
 
     protected:
         virtual bool singleChannelProcessing() const {return true;};
@@ -42,21 +46,15 @@ class deUSMLayer:public deActionLayer
 
         virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
 
-        void reset();
-        void sharp();
-        void hiraloam1();
-        void hiraloam2();
-
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
 
         virtual std::string getActionName() {return "usm";};
 
-        dePropertyValue& getPropertyRadius() {return blurRadius;};
-        dePropertyValue& getPropertyAmount() {return amount;};
-        dePropertyValue& getPropertyThreshold() {return threshold;};
-
         virtual bool randomize();
+
+        bool applyPreset(const std::string& _name);
+        void getPresets(std::vector<std::string>& result);
 
 
 };

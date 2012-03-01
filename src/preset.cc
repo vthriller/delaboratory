@@ -16,31 +16,5 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_H
-#define _DE_PROPERTY_H
+#include "preset.h"
 
-#include <string>
-#include <libxml/parser.h>
-
-class deProperty
-{
-    private:
-        std::string label;
-
-    protected:        
-        std::string name;
-
-    public:
-        deProperty(const std::string& _name);
-        virtual ~deProperty();
-
-        virtual void save(xmlNodePtr root) const = 0;
-        virtual void load(xmlNodePtr root) = 0;
-
-        std::string getLabel() const;
-        void setLabel(const std::string& _label);
-
-        std::string getName() const;
-};
-
-#endif

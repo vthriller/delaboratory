@@ -28,6 +28,11 @@ deProperty::~deProperty()
 {
 }
 
+std::string deProperty::getName() const
+{
+    return name;
+}
+
 std::string deProperty::getLabel() const
 {
     if (label == "")

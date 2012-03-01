@@ -24,25 +24,65 @@
 #include "xml.h"
 #include "frame_factory.h"
 #include "layer_processor.h"
+#include "preset.h"
 
 deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
- blurRadius("blur_radius"),
- amount("amount"),
- threshold("threshold")
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
 {
-    blurRadius.setMin(1);
-    blurRadius.setMax(200);
-    reset();
-    amount.setMax(5);
-    blurRadius.setLabel("radius");
+    blurRadiusPropertyIndex = registerPropertyValue("blur_radius");
+    amountPropertyIndex = registerPropertyValue("amount");
+    thresholdPropertyIndex = registerPropertyValue("threshold");
+
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("blur_radius", 5.0));
+        p->addPresetValue(new dePresetValue("amount", 0.1));
+        p->addPresetValue(new dePresetValue("threshold", 0.0));
+        presets["reset"] = p;
+    }        
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("blur_radius", 3.0));
+        p->addPresetValue(new dePresetValue("amount", 3.0));
+        p->addPresetValue(new dePresetValue("threshold", 0.0));
+        presets["sharp"] = p;
+    }        
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("blur_radius", 100));
+        p->addPresetValue(new dePresetValue("amount", 0.1));
+        p->addPresetValue(new dePresetValue("threshold", 0.0));
+        presets["hiraloam"] = p;
+    }        
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("blur_radius", 150));
+        p->addPresetValue(new dePresetValue("amount", 0.2));
+        p->addPresetValue(new dePresetValue("threshold", 0.0));
+        presets["hiraloam2"] = p;
+    }        
+
+    dePropertyValue* blurRadius = valueProperties[blurRadiusPropertyIndex];
+    dePropertyValue* amount = valueProperties[amountPropertyIndex];
+
+    blurRadius->setMin(1);
+    blurRadius->setMax(200);
+    applyPreset("reset");
+    amount->setMax(5);
+    blurRadius->setLabel("radius");
 }
 
 deUSMLayer::~deUSMLayer()
 {
+    while (presets.size() > 0)
+    {
+        std::map<std::string, dePresetLayer*>::iterator i = presets.begin();
+        delete i->second;
+        presets.erase(i);
+    }
 }
 
-bool deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
+bool deUSMLayer::processAction(int index, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
     logMessage("usm start");
 
@@ -55,7 +95,7 @@ bool deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
     }
     catch (std::bad_alloc)
     {
-        logMessage("ERROR allocating memory in high pass");
+        logMessage("ERROR allocating memory in USM");
         if (unsharpMask)
         {
             delete [] unsharpMask;
@@ -63,23 +103,62 @@ bool deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
         return false;
     }
 
+    dePropertyValue* blurRadius = valueProperties[blurRadiusPropertyIndex];
+    dePropertyValue* amount = valueProperties[amountPropertyIndex];
+    dePropertyValue* threshold = valueProperties[thresholdPropertyIndex];
+
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
     deBlurType type = deGaussianBlur;
-    deValue t = 0.0;
+    deValue b_t = 0.0;
 
-    deValue r = viewManager.getRealScale() * blurRadius.get();
+    deValue r = viewManager.getRealScale() * blurRadius->get();
 
-    bool result = blurChannel(source, unsharpMask, size, r, r, type, t);
+    bool result = blurChannel(source, unsharpMask, size, r, r, type, b_t);
 
-    for (i = 0; i < n; i ++)
+    int i;
+
+    deValue t = threshold->get();
+    deValue a = amount->get();
+
+    if (t > 0)
     {
-        deValue src = source[i];
-        deValue u = src - unsharpMask[i];
-
-        if (fabs(u) >= threshold.get())
+        for (i = 0; i < n; i++)
         {
-            deValue d = src + amount.get() * u;
+            deValue src = source[i];
+            deValue u = src - unsharpMask[i];
+
+            if (fabs(u) >= t)
+            {
+                deValue d = src + a * u;
+
+                if (d < 0)
+                {
+                    destination[i] = 0;
+                }
+                else if (d > 1)
+                {
+                    destination[i] = 1;
+                }
+                else
+                {    
+                    destination[i] = d;
+                }               
+            }
+            else
+            {
+                destination[i] = src;
+            }
+        }
+    }
+    else
+    {
+        for (i = 0; i < n; i++)
+        {
+            deValue src = source[i];
+            deValue u = src - unsharpMask[i];
+
+            deValue d = src + a * u;
 
             if (d < 0)
             {
@@ -94,11 +173,8 @@ bool deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
                 destination[i] = d;
             }               
         }
-        else
-        {
-            destination[i] = src;
-        }
     }
+
 
     delete [] unsharpMask;
 
@@ -110,44 +186,15 @@ bool deUSMLayer::processAction(int i, const deChannel& sourceChannel, deChannel&
 
 bool deUSMLayer::isChannelNeutral(int index)
 {
-    return (blurRadius.get() == 0);
+    dePropertyValue* blurRadius = valueProperties[blurRadiusPropertyIndex];
+    return (blurRadius->get() == 0);
 }    
-
-void deUSMLayer::reset()
-{
-    blurRadius.set(5);
-    amount.set(0.1);
-    threshold.set(0.0);
-}
-
-void deUSMLayer::sharp()
-{
-    blurRadius.set(3);
-    amount.set(3.0);
-    threshold.set(0.0);
-}
-
-void deUSMLayer::hiraloam1()
-{
-    blurRadius.set(100);
-    amount.set(0.1);
-    threshold.set(0.0);
-}
-
-void deUSMLayer::hiraloam2()
-{
-    blurRadius.set(150);
-    amount.set(0.2);
-    threshold.set(0.0);
-}
 
 void deUSMLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
     saveBlend(root);
-    blurRadius.save(root);
-    amount.save(root);
-    threshold.save(root);
+    saveValueProperties(root);
 }
 
 void deUSMLayer::load(xmlNodePtr root)
@@ -158,9 +205,7 @@ void deUSMLayer::load(xmlNodePtr root)
 
     while (child)
     {
-        blurRadius.load(child);
-        amount.load(child);
-        threshold.load(child);
+        loadValueProperties(child);
 
         child = child->next;
     }        
@@ -168,17 +213,47 @@ void deUSMLayer::load(xmlNodePtr root)
 
 bool deUSMLayer::randomize()
 {
+    dePropertyValue* blurRadius = valueProperties[blurRadiusPropertyIndex];
+    dePropertyValue* amount = valueProperties[amountPropertyIndex];
+    dePropertyValue* threshold = valueProperties[thresholdPropertyIndex];
+
     deValue r = (deValue) rand() / RAND_MAX;
     r *= 0.5;
-    blurRadius.set(r + 0.001);
+    blurRadius->set(r + 0.001);
 
     deValue r2 = (deValue) rand() / RAND_MAX;
     r2 *= 5;
-    amount.set(r2);
+    amount->set(r2);
 
     deValue r3 = (deValue) rand() / RAND_MAX;
     r3 *= 0.2;
-    threshold.set(r3);
+    threshold->set(r3);
 
     return true;
 }
+
+bool deUSMLayer::applyPreset(const std::string& _name)
+{
+    std::map<std::string, dePresetLayer*>::iterator i = presets.find(_name);
+
+    if (i == presets.end())
+    {
+        return false;
+    }
+
+    dePresetLayer* preset = i->second;
+
+    preset->apply();
+            
+}
+
+void deUSMLayer::getPresets(std::vector<std::string>& result)
+{
+    std::map<std::string, dePresetLayer*>::iterator i;
+    for (i = presets.begin(); i != presets.end(); i++)
+    {
+        std::string n = i->first;
+        result.push_back(n);
+    }
+}
+
