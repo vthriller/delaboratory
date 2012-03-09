@@ -22,7 +22,10 @@
 deBasicLayer::deBasicLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
 {
-    getBasicSettings(colorSpace, settings);
+    getBasicSettings(colorSpace, settings1, settings2);
+
+    std::copy(settings1.begin(), settings1.end(), std::back_inserter(settings));
+    std::copy(settings2.begin(), settings2.end(), std::back_inserter(settings));
 
     int n = settings.size();
     int i;
@@ -162,6 +165,12 @@ bool deBasicLayer::randomize()
 int deBasicLayer::getNumberOfSettings()
 {
     int n = settings.size();
+    return n;
+}
+
+int deBasicLayer::getSeparator()
+{
+    int n = settings1.size();
     return n;
 }
 

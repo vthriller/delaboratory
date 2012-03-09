@@ -26,6 +26,8 @@
 class deBasicLayer:public deActionLayer
 {
     private:
+        std::vector<deBasicSetting> settings1;
+        std::vector<deBasicSetting> settings2;
         std::vector<deBasicSetting> settings;
         std::vector<dePropertyValue*> basicProperties;
         deCurve* curves;
@@ -53,6 +55,7 @@ class deBasicLayer:public deActionLayer
         virtual std::string getActionName() {return "setup";};
 
         int getNumberOfSettings();
+        int getSeparator();
         dePropertyValue* getBasicProperty(int n);
 
         virtual bool randomize();

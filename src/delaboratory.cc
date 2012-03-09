@@ -131,14 +131,6 @@ bool deLaboratory::OnInit()
 
 	frame = new deMainFrame( wxSize(width,height), project, processor, samplerManager, zoomManager, dcraw_version);
 
-    logMessage("main frame created");
-
-    if (argc > 1)
-    {
-        wxString a = argv[1];
-        project.init(str(a));
-    }
-
     logMessage("show main frame");
 
 	frame->Show(TRUE);
@@ -159,7 +151,16 @@ bool deLaboratory::OnInit()
 
     processor.startWorkerThread();
 
+    logMessage("process argc/argv...");
+
+    if (argc > 1)
+    {
+        wxString a = argv[1];
+        project.init(str(a));
+    }
+
     logMessage("OnInit done");
+
 
 	return TRUE;
 } 

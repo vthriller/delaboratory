@@ -610,6 +610,14 @@ bool deActionLayer::updateAction(int i)
 {
     bool actionResult = false;
 
+    if ((i < 0) || (i>=getColorSpaceSize(colorSpace)))
+    {
+        logError("updateAction for invalid channel " +str(i)+ " requested");
+        return false;
+    };
+
+
+
 //    std::cout << "updateAction " << i << std::endl;
 
     logMessage("update action start i:" +str(i));

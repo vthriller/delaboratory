@@ -102,6 +102,11 @@ void deHistogramModePanel::updateNames()
 
 void deHistogramModePanel::updateMode(int c)
 {
+    if ((c < 0) || (c >= 4))
+    {
+        return;
+    }
+
     histogramPanel->setChannel(c);
     buttons[c]->SetValue(1);
 }

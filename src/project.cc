@@ -593,8 +593,6 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
 
     logMessage("open image " + fileName);
 
-    bool status = false;
-
     deColorSpace oldColorSpace = sourceImage.getColorSpace();
 
     if (raw)
