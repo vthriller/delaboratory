@@ -82,7 +82,8 @@ void deZoomPanel::updateButtons()
 
     if (zoomManager.isZoomed())
     {
-        zoomIn->Disable();
+        //zoomIn->Disable();
+        zoomIn->Enable();
         zoomOut->Enable();
     }
     else

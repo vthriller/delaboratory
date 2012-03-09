@@ -173,6 +173,22 @@ void deControlPanel::setConversions()
         {
             b->Disable();
         }
+    }
+
+    for (i = actionButtons.begin(); i != actionButtons.end(); i++)
+    {
+        wxButton* b = *i;
+        int id = b->GetId();
+        std::string action = actionButtonsNames[b->GetId()];
+
+        if (isActionSupported(action, currentColorSpace))
+        {
+            b->Enable();
+        }
+        else
+        {
+            b->Disable();
+        }
 
     }
 }

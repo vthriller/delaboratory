@@ -31,21 +31,35 @@ deBasicFrame::deBasicFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(_layer);
 
     int n = basicLayer.getNumberOfSettings();
+    int s = basicLayer.getSeparator();
 
     int range = 400;
+
+    wxSizer* sizerS = NULL;
+
+    wxSizer* sizerS1 = new wxStaticBoxSizer(wxVERTICAL, this, _T("primary settings"));
+    sizer->Add(sizerS1);
+
+    sizerS = sizerS1;
 
     int i;
     for (i = 0; i < n; i++)
     {
+        if (i == s)
+        {
+            wxSizer* sizerS2 = new wxStaticBoxSizer(wxVERTICAL, this, _T("secondary settings"));
+            sizer->Add(sizerS2);
+            sizerS = sizerS2;
+        }
+
         dePropertyValue* p = basicLayer.getBasicProperty(i);
 
         if (p)
         {
             dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, basicLayer, layerProcessor);
             basicSliders.push_back(s);
-            sizer->Add(s);
+            sizerS->Add(s);
         }
-
     }
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));

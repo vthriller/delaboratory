@@ -22,6 +22,7 @@
 #include "mixer_editor.h"
 #include "apply_image_frame.h"
 #include "blur_frame.h"
+#include "equalizer_frame.h"
 #include "usm_frame.h"
 #include "basic_frame.h"
 #include "mixer_bw_editor.h"
@@ -61,6 +62,12 @@ deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerPr
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
         return new deBlurFrame(parent, al, layerProcessor, frameManager);
+    }        
+
+    if (type == "equalizer")
+    {
+        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        return new deEqualizerFrame(parent, al, layerProcessor, frameManager);
     }        
 
     if (type == "usm")

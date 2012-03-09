@@ -19,6 +19,33 @@
 #include "color_space.h"
 #include "channels.h"
 
+int getEqualizerChannel(deColorSpace colorSpace)
+{
+    switch (colorSpace)
+    {
+        case deColorSpaceBW:
+            return 0;
+        case deColorSpaceRGB:
+            return -1;
+        case deColorSpaceProPhoto:
+            return -1;
+        case deColorSpaceHSL:
+            return 0;
+        case deColorSpaceHSV:
+            return 0;
+        case deColorSpaceLAB:
+            return 0;
+        case deColorSpaceLCH:
+            return 2;
+        case deColorSpaceCMY:
+            return -1;
+        case deColorSpaceCMYK:
+            return 3;
+        default:
+            return 0;
+    }
+}
+
 int getColorSpaceSize(const deColorSpace& colorSpace)
 {
     switch (colorSpace)
@@ -229,8 +256,7 @@ void getSupportedColorSpaces(std::vector<deColorSpace>& result)
     result.push_back(deColorSpaceLCH);
     result.push_back(deColorSpaceHSL);
     result.push_back(deColorSpaceHSV);
-//    result.push_back(deColorSpaceXYZ);
-    result.push_back(deColorSpaceCMY);
+//    result.push_back(deColorSpaceCMY);
     result.push_back(deColorSpaceCMYK);
 }
 
@@ -329,7 +355,7 @@ deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v)
     return v;
 }
 
-void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& settings)
+void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& settings1, std::vector<deBasicSetting>& settings2)
 {
     switch (colorSpace)
     {
@@ -338,38 +364,38 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             deBasicSetting b("brightness");
             b.setBrightness();
             b.addChannel(0);
-            settings.push_back(b);
+            settings1.push_back(b);
 
             deBasicSetting c("contrast");
             c.setContrast();
             c.addChannel(0);
-            settings.push_back(c);
+            settings1.push_back(c);
 
             deBasicSetting s("saturation");
             s.setContrast();
             s.addChannel(1);
             s.addChannel(2);
-            settings.push_back(s);
+            settings1.push_back(s);
 
             deBasicSetting gms("A tint");
             gms.setBrightness();
             gms.addChannel(1);
-            settings.push_back(gms);
+            settings2.push_back(gms);
 
             deBasicSetting gmc("A contrast");
             gmc.setContrast();
             gmc.addChannel(1);
-            settings.push_back(gmc);
+            settings2.push_back(gmc);
 
             deBasicSetting bys("B tint");
             bys.setBrightness();
             bys.addChannel(2);
-            settings.push_back(bys);
+            settings2.push_back(bys);
 
             deBasicSetting byc("B contrast");
             byc.setContrast();
             byc.addChannel(2);
-            settings.push_back(byc);
+            settings2.push_back(byc);
 
             break;
         }
@@ -379,27 +405,27 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             deBasicSetting b("brightness");
             b.setBrightness();
             b.addChannel(0);
-            settings.push_back(b);
+            settings1.push_back(b);
 
             deBasicSetting c("contrast");
             c.setContrast();
             c.addChannel(0);
-            settings.push_back(c);
+            settings1.push_back(c);
 
             deBasicSetting st("saturation");
             st.setBrightness();
             st.addChannel(1);
-            settings.push_back(st);
+            settings1.push_back(st);
 
             deBasicSetting s("C contrast");
             s.setContrast();
             s.addChannel(1);
-            settings.push_back(s);
+            settings2.push_back(s);
 
             deBasicSetting h("hue shift");
             h.setShift();
             h.addChannel(2);
-            settings.push_back(h);
+            settings2.push_back(h);
 
             break;
         }
@@ -410,27 +436,27 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             deBasicSetting b("brightness");
             b.setBrightness();
             b.addChannel(2);
-            settings.push_back(b);
+            settings1.push_back(b);
 
             deBasicSetting c("contrast");
             c.setContrast();
             c.addChannel(2);
-            settings.push_back(c);
+            settings1.push_back(c);
 
             deBasicSetting st("saturation");
             st.setBrightness();
             st.addChannel(1);
-            settings.push_back(st);
+            settings1.push_back(st);
 
             deBasicSetting s("S contrast");
             s.setContrast();
             s.addChannel(1);
-            settings.push_back(s);
+            settings2.push_back(s);
 
             deBasicSetting h("hue shift");
             h.setShift();
             h.addChannel(0);
-            settings.push_back(h);
+            settings2.push_back(h);
 
             break;
         }
@@ -440,12 +466,12 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             deBasicSetting b("brightness");
             b.setBrightness();
             b.addChannel(0);
-            settings.push_back(b);
+            settings1.push_back(b);
 
             deBasicSetting c("contrast");
             c.setContrast();
             c.addChannel(0);
-            settings.push_back(c);
+            settings1.push_back(c);
 
             break;
         }            
@@ -458,44 +484,44 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             b.addChannel(0);
             b.addChannel(1);
             b.addChannel(2);
-            settings.push_back(b);
+            settings1.push_back(b);
 
             deBasicSetting c("contrast");
             c.setContrast();
             c.addChannel(0);
             c.addChannel(1);
             c.addChannel(2);
-            settings.push_back(c);
+            settings1.push_back(c);
 
             deBasicSetting b0("Red tint");
             b0.setBrightness();
             b0.addChannel(0);
-            settings.push_back(b0);
+            settings2.push_back(b0);
 
             deBasicSetting c0("Red contrast");
             c0.setContrast();
             c0.addChannel(0);
-            settings.push_back(c0);
+            settings2.push_back(c0);
 
             deBasicSetting b1("Green tint");
             b1.setBrightness();
             b1.addChannel(1);
-            settings.push_back(b1);
+            settings2.push_back(b1);
 
             deBasicSetting c1("Green contrast");
             c1.setContrast();
             c1.addChannel(1);
-            settings.push_back(c1);
+            settings2.push_back(c1);
 
             deBasicSetting b2("Blue tint");
             b2.setBrightness();
             b2.addChannel(2);
-            settings.push_back(b2);
+            settings2.push_back(b2);
 
             deBasicSetting c2("Blue contrast");
             c2.setContrast();
             c2.addChannel(2);
-            settings.push_back(c2);
+            settings2.push_back(c2);
 
             break;
         }
@@ -518,7 +544,7 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             {
                 b.addChannel(3);
             }
-            settings.push_back(b);
+            settings1.push_back(b);
 
             deBasicSetting c("contrast");
             c.setContrast();
@@ -529,49 +555,49 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             {
                 c.addChannel(3);
             }
-            settings.push_back(c);
+            settings1.push_back(c);
 
             deBasicSetting b0("Cyan tint");
             b0.setBrightness();
             b0.addChannel(0);
-            settings.push_back(b0);
+            settings2.push_back(b0);
 
             deBasicSetting c0("Cyan contrast");
             c0.setContrast();
             c0.addChannel(0);
-            settings.push_back(c0);
+            settings2.push_back(c0);
 
             deBasicSetting b1("Magenta tint");
             b1.setBrightness();
             b1.addChannel(1);
-            settings.push_back(b1);
+            settings2.push_back(b1);
 
             deBasicSetting c1("Magenta contrast");
             c1.setContrast();
             c1.addChannel(1);
-            settings.push_back(c1);
+            settings2.push_back(c1);
 
             deBasicSetting b2("Yellow tint");
             b2.setBrightness();
             b2.addChannel(2);
-            settings.push_back(b2);
+            settings2.push_back(b2);
 
             deBasicSetting c2("Yellow contrast");
             c2.setContrast();
             c2.addChannel(2);
-            settings.push_back(c2);
+            settings2.push_back(c2);
 
             if (cmyk)
             {
                 deBasicSetting b3("Key tint");
                 b3.setBrightness();
                 b3.addChannel(3);
-                settings.push_back(b3);
+                settings2.push_back(b3);
 
                 deBasicSetting c3("Key contrast");
                 c3.setContrast();
                 c3.addChannel(3);
-                settings.push_back(c3);
+                settings2.push_back(c3);
             }
 
             break;
@@ -614,8 +640,49 @@ bool isChannelLuminance(deColorSpace colorSpace, int channel)
     }
 
     return false;
-            
-
-
 }
 
+bool isChannelWrapped(deColorSpace colorSpace, int channel)
+{
+    switch (colorSpace)
+    {
+        case deColorSpaceLCH:
+        {
+            if (channel == 2)
+            {
+                return true;
+            }
+            break;
+        }
+        case deColorSpaceHSV:
+        case deColorSpaceHSL:
+        {
+            if (channel == 0)
+            {
+                return true;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+
+    return false;
+}
+
+bool isActionSupported(const std::string& action, deColorSpace colorSpace)
+{
+    if (action == "equalizer")
+    {
+        switch (colorSpace)
+        {
+            case deColorSpaceRGB:
+            case deColorSpaceCMY:
+            case deColorSpaceProPhoto:
+                return false;
+            default:
+                return true;
+        }                
+    }
+    return true;
+}

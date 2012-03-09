@@ -44,6 +44,10 @@ bool deZoomManager::isInSelectionMode() const
 void deZoomManager::enableSelectionMode()
 {
     selectionMode = true;
+    s_x1 = 0;
+    s_x2 = 0;
+    s_y1 = 0;
+    s_y2 = 0;
 }
 
 bool deZoomManager::onClick(deValue x, deValue y)
@@ -52,6 +56,7 @@ bool deZoomManager::onClick(deValue x, deValue y)
     s_x2 = x;
     s_y1 = y;
     s_y2 = y;
+    return true;
 }
 
 bool deZoomManager::onMove(deValue x, deValue y)
@@ -75,16 +80,21 @@ bool deZoomManager::onMove(deValue x, deValue y)
 
     s_x2 = x;
     s_y2 = y;
+    return true;
 }
 
 bool deZoomManager::onRelease()
 {
     if ((s_x1 < s_x2) && (s_y1 < s_y2))
     {
-        z_x1 = s_x1;
-        z_x2 = s_x2;
-        z_y1 = s_y1;
-        z_y2 = s_y2;
+        deValue x1 = z_x1 + s_x1 * (z_x2 - z_x1);
+        deValue x2 = z_x1 + s_x2 * (z_x2 - z_x1);
+        deValue y1 = z_y1 + s_y1 * (z_y2 - z_y1);
+        deValue y2 = z_y1 + s_y2 * (z_y2 - z_y1);
+        z_x1 = x1;
+        z_x2 = x2;
+        z_y1 = y1;
+        z_y2 = y2;
     }
     else
     {
@@ -92,6 +102,7 @@ bool deZoomManager::onRelease()
     }
 
     selectionMode = false;
+    return true;
 }
 
 void deZoomManager::getSelection(deValue& _x1, deValue& _y1, deValue& _x2, deValue& _y2)

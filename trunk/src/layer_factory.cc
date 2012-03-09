@@ -23,6 +23,7 @@
 #include "vignette_layer.h"
 #include "apply_image_layer.h"
 #include "mixer_layer.h"
+#include "equalizer_layer.h"
 #include "conversion_layer.h"
 #include "conversion_bw_layer.h"
 #include "conversion_bw2hue_layer.h"
@@ -81,6 +82,11 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
     if (type == "mixer")
     {
         return new deMixerLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
+    }
+
+    if (type == "equalizer")
+    {
+        return new deEqualizerLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
     }
 
     if (type == "apply_image")
@@ -160,6 +166,7 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("basic");
     actions.push_back("curves");
     actions.push_back("mixer");
+    actions.push_back("equalizer");
     actions.push_back("apply_image");
 
     actions.push_back("vignette");

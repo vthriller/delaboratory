@@ -53,8 +53,13 @@ wxColour getChannelwxColour(deColorSpace colorSpace, int channel);
 
 deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v);
 
-void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& settings);
+void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& settings1, std::vector<deBasicSetting>& settings2);
 
 bool isChannelLuminance(deColorSpace colorSpace, int channel);
+
+int getEqualizerChannel(deColorSpace colorSpace);
+bool isChannelWrapped(deColorSpace colorSpace, int channel);
+
+bool isActionSupported(const std::string& action, deColorSpace colorSpace);
 
 #endif
