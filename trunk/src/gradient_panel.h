@@ -22,14 +22,36 @@
 #include <wx/wx.h>
 #include "color_space.h"
 
+class deColorPanel:public wxPanel
+{
+public:
+    deColorPanel(wxWindow* parent, wxSize _size);
+    virtual ~deColorPanel();
+
+    void setRGB(deValue rr, deValue gg, deValue bb);
+    void setColor(deColorSpace colorSpace, int channel, deValue value);
+};
+
 class deGradientPanel:public wxPanel
 {
-private:
+protected:
     wxBitmap* bitmap;
+    deColorSpace colorSpace;
+
+public:
+    deGradientPanel(wxWindow* parent, wxSize _size, deColorSpace _colorSpace);
+    virtual ~deGradientPanel();
+
+	void paintEvent(wxPaintEvent & evt);
+};
+
+
+class deGradientPanel1:public deGradientPanel
+{
+private:
 
     void generateBitmap();
 
-    deColorSpace colorSpace;
     int channel1;
     int channel2;
 
@@ -38,20 +60,17 @@ private:
     deValue c3;
 
 public:
-    deGradientPanel(wxWindow* parent, wxSize _size, deColorSpace _colorSpace, int _channel1, int _channel2, deValue _c1, deValue _c2, deValue _c3);
-    ~deGradientPanel();
+    deGradientPanel1(wxWindow* parent, wxSize _size, deColorSpace _colorSpace, int _channel1, int _channel2, deValue _c1, deValue _c2, deValue _c3);
+    ~deGradientPanel1();
 
-	void paintEvent(wxPaintEvent & evt);
     void changeChannel(int _channel);
 
-	DECLARE_EVENT_TABLE()
 
 };
 
-class deGradientPanel2:public wxPanel
+class deGradientPanel2:public deGradientPanel
 {
 private:
-    wxBitmap* bitmap;
 
     void generateBitmap();
 
@@ -66,9 +85,6 @@ public:
     deGradientPanel2(wxWindow* parent, wxSize _size, deColorSpace _colorSpace, deValue _c1, deValue _c2, deValue _c3, deValue _c4);
     ~deGradientPanel2();
 
-	void paintEvent(wxPaintEvent & evt);
-
-	DECLARE_EVENT_TABLE()
 
 };
 

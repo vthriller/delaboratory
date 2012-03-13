@@ -62,7 +62,7 @@ deHelpColorSpacesFrame2::deHelpColorSpacesFrame2(wxWindow *parent)
                 wxSizer* sizerBC= new wxStaticBoxSizer(wxHORIZONTAL, this,  wxString::FromAscii(s.c_str()));
                 sizerB->Add(sizerBC);
 
-                deGradientPanel* gradient = new deGradientPanel(this, wxSize(width, barSize), c, j, k, -1, -1, -1);
+                deGradientPanel1* gradient = new deGradientPanel1(this, wxSize(width, barSize), c, j, k, -1, -1, -1);
                 sizerBC->Add(gradient, 0, wxCENTER);
             }
 
@@ -94,7 +94,7 @@ deHelpColorSpacesFrame2::deHelpColorSpacesFrame2(wxWindow *parent)
                     wxSizer* sizerBC= new wxStaticBoxSizer(wxHORIZONTAL, this,  wxString::FromAscii(s.c_str()));
                     sizerB->Add(sizerBC);
 
-                    deGradientPanel* gradient = new deGradientPanel(this, wxSize(width, barSize), c, j, k, -1, -1, -1);
+                    deGradientPanel1* gradient = new deGradientPanel1(this, wxSize(width, barSize), c, j, k, -1, -1, -1);
                     sizerBC->Add(gradient, 0, wxCENTER);
                 }                    
             }

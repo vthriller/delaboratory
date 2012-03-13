@@ -62,7 +62,7 @@ void add2(deColorSpace colorSpace, wxWindow* parent, wxSizer* sizer)
             c2 = 2;
         }
 
-        deGradientPanel* gradient = new deGradientPanel(parent, wxSize(w, h), colorSpace, c1, c2, -1, l, -1);
+        deGradientPanel1* gradient = new deGradientPanel1(parent, wxSize(w, h), colorSpace, c1, c2, -1, l, -1);
         sizerBC->Add(gradient, 0, wxCENTER);
 
         l += step;

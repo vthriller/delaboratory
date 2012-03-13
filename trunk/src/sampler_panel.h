@@ -22,6 +22,7 @@
 #include "wx/wx.h"
 #include <vector>
 #include "color_space.h"
+#include "gradient_panel.h"
 class deSampler;
 class deProject;
 
@@ -32,7 +33,8 @@ private:
     deProject& project;
 
     wxChoice* colorSpaceChoice;
-    wxPanel* colorPanel;
+//    wxPanel* colorPanel;
+    deColorPanel* colorPanel;
     wxStaticText* v1;
     wxStaticText* v2;
     wxStaticText* v3;

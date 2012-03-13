@@ -57,8 +57,8 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerP
 
     int barSize = 16;
 
-    leftBar = new deGradientPanel(this, wxSize(barSize, CURVES_PANEL_SIZE_Y), colorSpace, 0, -1, -1, -1, -1);
-    bottomBar = new deGradientPanel(this, wxSize(CURVES_PANEL_SIZE_X, barSize), colorSpace, 0, -1, -1, -1, -1);
+    leftBar = new deGradientPanel1(this, wxSize(barSize, CURVES_PANEL_SIZE_Y), colorSpace, 0, -1, -1, -1, -1);
+    bottomBar = new deGradientPanel1(this, wxSize(CURVES_PANEL_SIZE_X, barSize), colorSpace, 0, -1, -1, -1, -1);
 
     sizerC->Add(leftBar, 0, wxCENTER);
     sizerC->Add(curvesPanel, 0, wxCENTER);

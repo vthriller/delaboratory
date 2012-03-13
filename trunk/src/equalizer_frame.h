@@ -25,6 +25,7 @@
 class dePropertyValueSlider;
 class dePropertyChoiceUI;
 class deLayerProcessor;
+class deEqualizerSlider;
 
 class deEqualizerFrame:public deActionFrame
 {
@@ -34,11 +35,15 @@ class deEqualizerFrame:public deActionFrame
         dePropertyChoiceUI* blurType;
         deLayerProcessor& layerProcessor;
 
+        std::vector<deEqualizerSlider*> sliders;
+
         wxButton* reset;
 
     public:
         deEqualizerFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deEqualizerFrame();
+
+        void click(wxCommandEvent &event);
 
 };
 

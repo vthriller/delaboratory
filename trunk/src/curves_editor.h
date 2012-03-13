@@ -21,7 +21,7 @@
 
 #include "action_frame.h"
 class deCurvesPanel;
-class deGradientPanel;
+class deGradientPanel1;
 class deLayerProcessor;
 
 class deCurvesEditor:public deActionFrame
@@ -32,8 +32,8 @@ class deCurvesEditor:public deActionFrame
         void choose(wxCommandEvent &event);
         void click(wxCommandEvent &event);
 
-        deGradientPanel* leftBar;
-        deGradientPanel* bottomBar;
+        deGradientPanel1* leftBar;
+        deGradientPanel1* bottomBar;
 
         wxChoice* channelChoice;
         wxButton* reset;
