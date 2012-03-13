@@ -39,7 +39,7 @@ class deEqualizerSlider:public deSlider
         :deSlider(parent, name, range, -1.0, 1.0, 0.0, _layerProcessor), layer(_layer), equalizer(_equalizer), index(_index), channel(_channel),
          layerProcessor(_layerProcessor)
         {
-            setValue(equalizer.getValue(index));
+            setFromProperty();
         }
 
         virtual ~deEqualizerSlider()
@@ -57,7 +57,13 @@ class deEqualizerSlider:public deSlider
                 layerProcessor.markUpdateSingleChannel(ind, channel);
             }                
         }
+
+        void setFromProperty()
+        {
+            setValue(equalizer.getValue(index));
+        }
 };        
+
 
 deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
 :deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
@@ -86,7 +92,9 @@ deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deActionLayer& _layer, deLa
         int h = 80;
         deValue l = (deValue) i / bands;
 
-        deGradientPanel* gradient = new deGradientPanel(this, wxSize(w, h), colorSpace, c, -1, -1, l, -1);
+        //deGradientPanel1* gradient = new deGradientPanel1(this, wxSize(w, h), colorSpace, c, -1, -1, l, -1);
+        deColorPanel* gradient = new deColorPanel(this, wxSize(w, h));
+        gradient->setColor(colorSpace, c, l);
         sSizer->Add(gradient);
 
         sSizer->AddSpacer(10);
@@ -103,6 +111,7 @@ deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deActionLayer& _layer, deLa
                 const std::string n = getChannelName(equalizerLayer.getColorSpace(), j);
                 deEqualizerSlider* s = new deEqualizerSlider(this, range, equalizerLayer, *equalizer, i, j, n, layerProcessor);
                 slidersSizer->Add(s);
+                sliders.push_back(s);
             }
         }
     }
@@ -110,18 +119,7 @@ deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deActionLayer& _layer, deLa
     reset = new wxButton(this, wxID_ANY, _T("reset"), wxDefaultPosition, wxSize(100,25));
     sizer->Add(reset, 0);
 
-    /*
-
-    radius = new dePropertyValueSlider(this, range, equalizerLayer.getPropertyRadius(), equalizerLayer, layerProcessor);
-    sizer->Add(radius);
-
-    threshold = new dePropertyValueSlider(this, range, equalizerLayer.getPropertyThreshold(), equalizerLayer, layerProcessor);
-    sizer->Add(threshold);
-
-    equalizerType = new dePropertyChoiceUI(this, equalizerLayer.getPropertyType(), equalizerLayer, layerProcessor);
-    sizer->Add(equalizerType);
-
-    */
+    Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deEqualizerFrame::click));
 
     Fit();
 
@@ -131,3 +129,22 @@ deEqualizerFrame::~deEqualizerFrame()
 {
 }
 
+void deEqualizerFrame::click(wxCommandEvent &event)
+{
+    int id = event.GetId();
+    deEqualizerLayer& equalizerLayer = dynamic_cast<deEqualizerLayer&>(layer);
+
+    if (id == reset->GetId())
+    {
+        equalizerLayer.reset();
+    }
+
+    std::vector<deEqualizerSlider*>::iterator j;
+    for (j = sliders.begin(); j != sliders.end(); j++)
+    {
+        (*j)->setFromProperty();
+    }
+
+    int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(index);
+}   

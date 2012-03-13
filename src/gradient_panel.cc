@@ -19,27 +19,124 @@
 #include "gradient_panel.h"
 #include "conversion_functions.h"
 
-BEGIN_EVENT_TABLE(deGradientPanel, wxPanel)
-EVT_PAINT(deGradientPanel::paintEvent)
-END_EVENT_TABLE()
+deColorPanel::deColorPanel(wxWindow* parent, wxSize _size)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, _size)
+{
+}
 
-BEGIN_EVENT_TABLE(deGradientPanel2, wxPanel)
-EVT_PAINT(deGradientPanel2::paintEvent)
-END_EVENT_TABLE()
+deColorPanel::~deColorPanel()
+{
+}
 
-deGradientPanel::deGradientPanel(wxWindow* parent, wxSize _size, deColorSpace _colorSpace, int _channel1, int _channel2, deValue _c1, deValue _c2, deValue _c3)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, _size), colorSpace(_colorSpace), channel1(_channel1), channel2(_channel2), c1(_c1), c2(_c2), c3(_c3)
+void deColorPanel::setRGB(deValue rr, deValue gg, deValue bb)
+{
+    SetBackgroundColour(wxColour(255 * rr, 255 * gg, 255 * bb));
+}        
+
+void deColorPanel::setColor(deColorSpace colorSpace, int channel, deValue value)
+{
+    deValue rr = 0;
+    deValue gg = 0;
+    deValue bb = 0;
+
+    deValue v1 = 0;
+    deValue v2 = 0;
+    deValue v3 = 0;
+    deValue v4 = 0;
+
+    if (colorSpace == deColorSpaceHSV)
+    {
+        v2 = 0.8;
+        v3 = 1.0;
+    }
+
+    if (colorSpace == deColorSpaceHSL)
+    {
+        v2 = 0.8;
+        v3 = 0.5;
+    }
+
+    if (colorSpace == deColorSpaceLCH)
+    {
+        v1 = 0.9;
+        v2 = 0.7;
+    }
+
+    if (colorSpace == deColorSpaceLAB)
+    {
+        v2 = 0.5;
+        v3 = 0.5;
+    }
+
+    switch (channel)
+    {
+        case 0:
+            v1 = value;
+            break;
+        case 1:
+            v2 = value;
+            break;
+        case 2:
+            v3 = value;
+            break;
+        case 3:
+            v4 = value;
+            break;
+    }
+
+    deConversion1x3 f1x3 = getConversion1x3(colorSpace, deColorSpaceRGB);
+    deConversion3x3 f3x3 = getConversion3x3(colorSpace, deColorSpaceRGB);
+    deConversion4x3 f4x3 = getConversion4x3(colorSpace, deColorSpaceRGB);
+    if (f3x3)
+    {
+        f3x3(v1, v2, v3, rr, gg, bb);
+    } else if (f4x3)
+    {
+        f4x3(v1, v2, v3, v4, rr, gg, bb);
+    } else if (f1x3)
+    {
+        f1x3(v1, rr, gg, bb);
+    }
+
+    SetBackgroundColour(wxColour(255 * rr, 255 * gg, 255 * bb));
+}
+
+deGradientPanel::deGradientPanel(wxWindow* parent, wxSize _size, deColorSpace _colorSpace)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, _size),
+ colorSpace(_colorSpace)
+{
+    bitmap = NULL;
+    Connect(wxEVT_PAINT, wxPaintEventHandler(deGradientPanel::paintEvent));
+}
+
+deGradientPanel::~deGradientPanel()
+{
+    if (bitmap)
+    {
+        delete bitmap;
+    }
+}
+
+void deGradientPanel::paintEvent(wxPaintEvent & evt)
+{
+    wxPaintDC dc(this);
+    dc.DrawBitmap(*bitmap, 0, 0, false);
+}
+
+
+deGradientPanel1::deGradientPanel1(wxWindow* parent, wxSize _size, deColorSpace _colorSpace, int _channel1, int _channel2, deValue _c1, deValue _c2, deValue _c3)
+:deGradientPanel(parent, _size, _colorSpace), 
+channel1(_channel1), channel2(_channel2), c1(_c1), c2(_c2), c3(_c3)
 {
     bitmap = NULL;
     generateBitmap();
 }
 
-deGradientPanel::~deGradientPanel()
+deGradientPanel1::~deGradientPanel1()
 {
-    delete bitmap;
 }
 
-void deGradientPanel::changeChannel(int _channel)
+void deGradientPanel1::changeChannel(int _channel)
 {
     channel1 = _channel;
     generateBitmap();
@@ -166,7 +263,7 @@ void setValues(deValue& v1, deValue& v2, deValue& v3, deValue& v4, deColorSpace 
     }
 }
 
-void deGradientPanel::generateBitmap()
+void deGradientPanel1::generateBitmap()
 {
     if (bitmap)
     {
@@ -236,15 +333,9 @@ void deGradientPanel::generateBitmap()
     delete image;
 }
 
-void deGradientPanel::paintEvent(wxPaintEvent & evt)
-{
-    wxPaintDC dc(this);
-    dc.DrawBitmap(*bitmap, 0, 0, false);
-}
-
-
 deGradientPanel2::deGradientPanel2(wxWindow* parent, wxSize _size, deColorSpace _colorSpace, deValue _c1, deValue _c2, deValue _c3, deValue _c4)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, _size), colorSpace(_colorSpace), c1(_c1), c2(_c2), c3(_c3), c4(_c4)
+:deGradientPanel(parent, _size, _colorSpace), 
+ c1(_c1), c2(_c2), c3(_c3), c4(_c4)
 {
     bitmap = NULL;
     generateBitmap();
@@ -252,7 +343,6 @@ deGradientPanel2::deGradientPanel2(wxWindow* parent, wxSize _size, deColorSpace 
 
 deGradientPanel2::~deGradientPanel2()
 {
-    delete bitmap;
 }
 
 void setValues2(deValue& v1, deValue& v2, deValue& v3, deValue& v4, deColorSpace colorSpace, deValue c1, deValue c2, deValue c3, deValue c4, deValue u, deValue v)
@@ -355,11 +445,5 @@ void deGradientPanel2::generateBitmap()
     }
     bitmap = new wxBitmap(*image);
     delete image;
-}
-
-void deGradientPanel2::paintEvent(wxPaintEvent & evt)
-{
-    wxPaintDC dc(this);
-    dc.DrawBitmap(*bitmap, 0, 0, false);
 }
 

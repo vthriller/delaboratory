@@ -49,7 +49,7 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject&
     colorSpaceChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, colorSpaces.size(), colorSpaceStrings);
     sizerT->Add(colorSpaceChoice);
 
-    colorPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(60, 25));
+    colorPanel = new deColorPanel(this, wxSize(60, 25));
     sizerT->Add(colorPanel, 0, wxALIGN_CENTER);
 
     sizerS = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
@@ -187,7 +187,8 @@ void deSamplerPanel::update()
         convertPixel(image, p, deColorSpaceRGB, rr, gg, bb, vv4);
         convertPixel(image, p, colorSpace, vv1, vv2, vv3, vv4);
 
-        colorPanel->SetBackgroundColour(wxColour(255 * rr, 255 * gg, 255 * bb));
+        //colorPanel->SetBackgroundColour(wxColour(255 * rr, 255 * gg, 255 * bb));
+        colorPanel->setRGB(rr, gg, bb);
 
         image.unlockRead();
 

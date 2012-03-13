@@ -134,6 +134,15 @@ bool deEqualizerLayer::randomize()
     return true;
 }
 
+void deEqualizerLayer::reset()
+{
+    std::vector<deEqualizer*>::iterator i;
+    for (i = equalizers.begin(); i != equalizers.end(); i++)
+    {
+        (*i)->reset();
+    }
+}
+
 deEqualizer* deEqualizerLayer::getEqualizer(int index)
 {
     int n = getColorSpaceSize(colorSpace);
@@ -143,3 +152,5 @@ deEqualizer* deEqualizerLayer::getEqualizer(int index)
     }
     return NULL;
 }
+
+

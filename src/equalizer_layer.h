@@ -41,11 +41,6 @@ class deEqualizerLayer:public deActionLayer
 
         virtual bool processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize);
 
-/*
-        void setWeight(int s, int d, deValue value);
-        deValue getWeight(int s, int d);
-        */
-
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
 
@@ -55,6 +50,8 @@ class deEqualizerLayer:public deActionLayer
 
         int getBands() const {return bands;};
         deEqualizer* getEqualizer(int index);
+
+        void reset();
 
 
 

@@ -70,7 +70,7 @@ deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _laye
     int barSize = 20;
     int width = 300;
 
-    deGradientPanel* gradient = new deGradientPanel(this, wxSize(width, barSize), colorSpace, index, -1, -1, -1, -1);
+    deGradientPanel1* gradient = new deGradientPanel1(this, wxSize(width, barSize), colorSpace, index, -1, -1, -1, -1);
     sizer->Add(gradient, 0, wxCENTER);
 
     std::string src1;
