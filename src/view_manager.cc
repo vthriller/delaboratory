@@ -123,18 +123,6 @@ void deViewManager::setHistogramChannel(int channel)
 
 deValue deViewManager::getRealScale() const
 {
-/*
-    deValue x1;
-    deValue y1;
-    deValue x2;
-    deValue y2;
-
-    zoomManager.getZoom(x1, y1, x2, y2);
-
-    deValue w = x2 - x1;
-    deValue h = y2 - y1;
-    */
-
     deSize ps = project.getPreviewChannelManager().getChannelSize();
 
     deSize ss = project.getSourceImageSize();

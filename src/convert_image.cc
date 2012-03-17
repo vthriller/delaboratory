@@ -247,6 +247,51 @@ void convertImage1x3(const deImage& sourceImage, deImage& image, deChannelManage
 
 }
 
+void convertImage1x4(const deImage& sourceImage, deImage& image, deChannelManager& channelManager, deConversion1x4 conversion)
+{
+    int n = channelManager.getChannelSize().getN();
+
+    deChannel* sc1 = channelManager.getChannel(sourceImage.getChannelIndex(0));
+    if (!sc1)
+    {
+        return;
+    }
+
+    sc1->lockRead();
+
+    deValue* s1 = sc1->getPixels();
+
+    deChannel* dc1 = channelManager.getChannel(image.getChannelIndex(0));
+    deChannel* dc2 = channelManager.getChannel(image.getChannelIndex(1));
+    deChannel* dc3 = channelManager.getChannel(image.getChannelIndex(2));
+    deChannel* dc4 = channelManager.getChannel(image.getChannelIndex(3));
+
+    dc1->lockWrite();
+    dc2->lockWrite();
+    dc3->lockWrite();
+    dc4->lockWrite();
+
+    deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
+    deValue* d2 = channelManager.getChannel(image.getChannelIndex(1))->getPixels();
+    deValue* d3 = channelManager.getChannel(image.getChannelIndex(2))->getPixels();
+    deValue* d4 = channelManager.getChannel(image.getChannelIndex(3))->getPixels();
+
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        conversion(s1[i], d1[i], d2[i], d3[i], d4[i]);
+    }
+
+    dc1->unlockWrite();
+    dc2->unlockWrite();
+    dc3->unlockWrite();
+    dc4->unlockWrite();
+
+    sc1->unlockRead();
+
+}
+
 void convertImage3x1(const deImage& sourceImage, deImage& image, deChannelManager& channelManager, deConversion3x1 conversion)
 {
     int n = channelManager.getChannelSize().getN();
@@ -333,6 +378,16 @@ void convertImage(const deImage& sourceImage, deImage& image, deChannelManager& 
         if (conversion)
         {
             convertImage1x3(sourceImage, image, channelManager, conversion);
+            return;
+        }            
+    }        
+
+    if ((sn == 1) && (tn == 4))
+    {
+        deConversion1x4 conversion = getConversion1x4(sourceColorSpace, targetColorSpace);
+        if (conversion)
+        {
+            convertImage1x4(sourceImage, image, channelManager, conversion);
             return;
         }            
     }        

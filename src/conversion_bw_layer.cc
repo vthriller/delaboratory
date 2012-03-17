@@ -38,8 +38,6 @@ deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerSt
  overlay2("overlay_2"),
  overlay3("overlay_3")
 {
-    resetM();
-
     add0.setMin(-1.0);
     add0.setMax(3.0);
     add1.setMin(-1.0);
@@ -49,6 +47,9 @@ deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerSt
 
     deLayer* source = layerStack.getLayer(sourceLayer);
     deColorSpace sourceColorSpace = source->getColorSpace();
+    int cs = getColorSpaceSize(sourceColorSpace);
+
+    resetM();
 
     add0.setLabel(getChannelName(sourceColorSpace, 0));
     add1.setLabel(getChannelName(sourceColorSpace, 1));
@@ -57,6 +58,14 @@ deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerSt
     overlay0.setLabel(getChannelName(sourceColorSpace, 0));
     overlay1.setLabel(getChannelName(sourceColorSpace, 1));
     overlay2.setLabel(getChannelName(sourceColorSpace, 2));
+
+    if (cs == 4)
+    {
+        add3.setMin(-1.0);
+        add3.setMax(3.0);
+        add3.setLabel(getChannelName(sourceColorSpace, 3));
+        overlay3.setLabel(getChannelName(sourceColorSpace, 3));
+    }        
 }
 
 deConversionBWLayer::~deConversionBWLayer()
@@ -65,9 +74,58 @@ deConversionBWLayer::~deConversionBWLayer()
 
 void deConversionBWLayer::resetM()
 {
-    add0.set(0.3);
-    add1.set(0.6);
-    add2.set(0.1);
+    deLayer* source = layerStack.getLayer(sourceLayer);
+    deColorSpace sourceColorSpace = source->getColorSpace();
+    switch (sourceColorSpace)
+    {
+        case deColorSpaceRGB:
+        case deColorSpaceProPhoto:
+        {
+            add0.set(0.3);
+            add1.set(0.6);
+            add2.set(0.1);
+            add3.set(0.0);
+            break;
+        }            
+        case deColorSpaceCMYK:
+        {
+            add0.set(0.0);
+            add1.set(0.0);
+            add2.set(0.0);
+            add3.set(1.0);
+            break;
+        }            
+        case deColorSpaceLAB:
+        case deColorSpaceLCH:
+        {
+            add0.set(1.0);
+            add1.set(0.0);
+            add2.set(0.0);
+            add3.set(0.0);
+            break;
+        }
+        case deColorSpaceHSV:
+        case deColorSpaceHSL:
+        {
+            add0.set(0.0);
+            add1.set(0.0);
+            add2.set(1.0);
+            add3.set(0.0);
+            break;
+        }
+        default:
+        {
+            add0.set(0.3);
+            add1.set(0.3);
+            add2.set(0.3);
+            add3.set(0.0);
+            break;
+        }
+    }      
+    overlay0.set(0);
+    overlay1.set(0);
+    overlay2.set(0);
+    overlay3.set(0);
 }
 
 void deConversionBWLayer::presetM(int c)
@@ -75,6 +133,7 @@ void deConversionBWLayer::presetM(int c)
     add0.set(0);
     add1.set(0);
     add2.set(0);
+    add3.set(0);
     if (c == 0)
     {
         add0.set(1.0);
@@ -87,6 +146,10 @@ void deConversionBWLayer::presetM(int c)
     {
         add2.set(1.0);
     }
+    if (c == 3)
+    {
+        add3.set(1.0);
+    }
 }
 
 bool deConversionBWLayer::updateImage()
@@ -96,6 +159,9 @@ bool deConversionBWLayer::updateImage()
     deLayer* source = layerStack.getLayer(sourceLayer);
     const deImage& sourceImage = source->getImage();
 
+    deColorSpace sourceColorSpace = source->getColorSpace();
+    int cs = getColorSpaceSize(sourceColorSpace);
+
     image.enableAllChannels();
 
     int n = channelManager.getChannelSize().getN();
@@ -103,6 +169,7 @@ bool deConversionBWLayer::updateImage()
     deChannel* sc0 = NULL;
     deChannel* sc1 = NULL;
     deChannel* sc2 = NULL;
+    deChannel* sc3 = NULL;
 
     sc0 = channelManager.getChannel(sourceImage.getChannelIndex(0));
     sc1 = channelManager.getChannel(sourceImage.getChannelIndex(1));
@@ -121,6 +188,15 @@ bool deConversionBWLayer::updateImage()
         return false;
     }
 
+    if (cs == 4)
+    {
+        sc3 = channelManager.getChannel(sourceImage.getChannelIndex(3));
+        if (!sc3)
+        {
+            return false;
+        }
+    }        
+
     deChannel* dc = channelManager.getChannel(image.getChannelIndex(0));
 
     if (!dc)
@@ -135,10 +211,15 @@ bool deConversionBWLayer::updateImage()
     sc0->lockRead();
     sc1->lockRead();
     sc2->lockRead();
+    if (sc3)
+    {
+        sc3->lockRead();
+    }
 
     deValue* v0 = NULL;
     deValue* v1 = NULL;
     deValue* v2 = NULL;
+    deValue* v3 = NULL;
 
     if (sc0)
     {
@@ -152,13 +233,19 @@ bool deConversionBWLayer::updateImage()
     {
         v2 = sc2->getPixels();
     }
+    if (sc3)
+    {
+        v3 = sc3->getPixels();
+    }
 
     deValue a0 = add0.get();
     deValue a1 = add1.get();
     deValue a2 = add2.get();
+    deValue a3 = add3.get();
     deValue o0 = overlay0.get();
     deValue o1 = overlay1.get();
     deValue o2 = overlay2.get();
+    deValue o3 = overlay3.get();
 
     int i;
     for (i = 0; i < n; i++)
@@ -168,6 +255,10 @@ bool deConversionBWLayer::updateImage()
         result += v0[i] * a0;
         result += v1[i] * a1;
         result += v2[i] * a2;
+        if (v3)
+        {
+            result += v3[i] * a3;
+        }
 
         if (result < 0)
         {
@@ -182,10 +273,24 @@ bool deConversionBWLayer::updateImage()
         deValue blend0 = calcBlendResult(result, v0[i], deBlendOverlay);
         deValue blend1 = calcBlendResult(result, v1[i], deBlendOverlay);
         deValue blend2 = calcBlendResult(result, v2[i], deBlendOverlay);
+        deValue blend3 = 0;
+        if (v3)
+        {
+            blend3 = calcBlendResult(result, v3[i], deBlendOverlay);
+        }
 
         result = result * (1 - o0) + blend0 * o0;
         result = result * (1 - o1) + blend1 * o1;
         result = result * (1 - o2) + blend2 * o2;
+        if (v3)
+        {
+            result = result * (1 - o3) + blend3 * o3;
+        }
+
+        if (sourceColorSpace == deColorSpaceCMYK)
+        {
+            result = 1 - result;
+        }
 
         if (result < 0)
         {
@@ -203,6 +308,10 @@ bool deConversionBWLayer::updateImage()
     sc0->unlockRead();
     sc1->unlockRead();
     sc2->unlockRead();
+    if (sc3)
+    {
+        sc3->unlockRead();
+    }
     dc->unlockWrite();
 
     logMessage("conversion BW end");

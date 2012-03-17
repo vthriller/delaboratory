@@ -74,8 +74,6 @@ private:
 
     void generateBitmap();
 
-    deColorSpace colorSpace;
-
     deValue c1;
     deValue c2;
     deValue c3;

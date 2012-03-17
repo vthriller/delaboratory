@@ -155,7 +155,6 @@ void deProject::onKey(int key)
 
 void deProject::init(const std::string& fileName)
 {
-    logMessage("project init " + fileName);
     if (openImage(fileName, true, deColorSpaceLAB))
     {
         return;

@@ -135,7 +135,6 @@ bool deImagePanel::onRelease()
     }
 
     samplerManager.onRelease();
-    
 
     return false;
 }

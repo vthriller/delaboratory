@@ -85,26 +85,36 @@ void deSlider::finishMoveSlider(wxCommandEvent &event)
     updateValueFromSlider(true);
 }
 
-deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue, deLayerProcessor& _layerProcessor)
-:wxPanel(parent), sliderRange(_sliderRange), valueMin(_valueMin), valueMax(_valueMax), layerProcessor(_layerProcessor)
+deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue _defaultValue)
+:wxPanel(parent), sliderRange(_sliderRange), valueMin(_valueMin), valueMax(_valueMax), defaultValue(_defaultValue)
 {
     integerMode = false;
     sizer = new wxBoxSizer(wxHORIZONTAL);
 
-    label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(labelString.c_str()), wxDefaultPosition, wxSize(120, 30));
-    sizer->Add(label, 0, wxCENTER);
+    if (labelString.size() > 0)
+    {
+        label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(labelString.c_str()), wxDefaultPosition, wxSize(120, 30));
+        sizer->Add(label, 0, wxCENTER);
+    }
+    else
+    {
+        label = NULL;
+    }
 
     slider = new wxSlider(this, wxID_ANY, sliderRange, 0,  sliderRange, wxDefaultPosition, wxSize(sliderRange, -1), wxSL_HORIZONTAL);
     sizer->Add(slider, 0);
 
+    reset = new wxButton(this, wxID_ANY, _T("r"), wxDefaultPosition, wxSize(25,25));
+    sizer->Add(reset, 0, wxCENTER);
+
     labelValue = new wxStaticText(this, wxID_ANY, _T("inv"), wxDefaultPosition, wxSize(40, 30));
     sizer->Add(labelValue, 0, wxCENTER);
-
 
     SetSizer(sizer);
 
     Connect(wxEVT_SCROLL_THUMBTRACK, wxCommandEventHandler(deSlider::moveSlider));
     Connect(wxEVT_SCROLL_CHANGED, wxCommandEventHandler(deSlider::finishMoveSlider));
+    Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deSlider::click));
 
 }
 
@@ -116,3 +126,14 @@ void deSlider::setIntegerMode()
 {
     integerMode = true;
 }
+
+void deSlider::click(wxCommandEvent &event)
+{
+    int id = event.GetId();
+
+    if (reset->GetId() == id)
+    {
+        setValue(defaultValue);
+        onValueChange(defaultValue, true);
+    }
+}            

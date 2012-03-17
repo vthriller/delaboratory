@@ -31,7 +31,7 @@ class deAlphaSlider:public deSlider
 
     public:
         deAlphaSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-        :deSlider(parent, "opacity", range, 0.0, 1.0, 1.0, _layerProcessor), layer(_layer),
+        :deSlider(parent, "opacity", range, 0.0, 1.0, 1.0), layer(_layer),
         layerProcessor(_layerProcessor)
         {
             setValue(layer.getOpacity());
@@ -61,7 +61,7 @@ class deBlurRadiusSlider:public deSlider
 
     public:
         deBlurRadiusSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-        :deSlider(parent, "blur radius", range, 0.0, 50, 0.0, _layerProcessor), layer(_layer),
+        :deSlider(parent, "blur radius", range, 0.0, 50, 0.0), layer(_layer),
          layerProcessor(_layerProcessor)
         {
             setValue(layer.getBlendBlurRadius());
@@ -91,7 +91,7 @@ class deBlendMaskMinSlider:public deSlider
 
     public:
         deBlendMaskMinSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-        :deSlider(parent, "min", range, 0.0, 1.0, 0.0, _layerProcessor), layer(_layer),
+        :deSlider(parent, "min", range, 0.0, 1.0, 0.0), layer(_layer),
         layerProcessor(_layerProcessor)
         {
             setValue(layer.getBlendMaskMin());
@@ -121,7 +121,7 @@ class deBlendMaskMaxSlider:public deSlider
 
     public:
         deBlendMaskMaxSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-        :deSlider(parent, "max", range, 0.0, 1.0, 0.0, _layerProcessor), layer(_layer),
+        :deSlider(parent, "max", range, 0.0, 1.0, 0.0), layer(_layer),
         layerProcessor(_layerProcessor)
         {
             setValue(layer.getBlendMaskMax());

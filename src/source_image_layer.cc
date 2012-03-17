@@ -46,7 +46,6 @@ bool deSourceImageLayer::updateImage()
     deChannel* sourceChannelG = sourceImage.getChannel(1);
     deChannel* sourceChannelB = sourceImage.getChannel(2);
 
-
     if (!sourceChannelR)
     {
         std::cout << "deSourceImageLayer::updateImage !sourceChannelR" << std::endl;

@@ -22,13 +22,30 @@
 #include "frame_factory.h"
 #include "equalizer.h"
 
-deEqualizerLayer::deEqualizerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
+deEqualizerLayer8::deEqualizerLayer8(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
+:deEqualizerLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager, _name, 8)
+{
+}
+
+deEqualizerLayer8::~deEqualizerLayer8()
+{
+}
+
+deEqualizerLayer16::deEqualizerLayer16(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
+:deEqualizerLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager, _name, 16)
+{
+}
+
+deEqualizerLayer16::~deEqualizerLayer16()
+{
+}
+
+deEqualizerLayer::deEqualizerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name, int _bands)
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
+ bands(_bands)
 {
     int n = getColorSpaceSize(colorSpace);
     int i;
-
-    bands = 8;
 
     for (i = 0; i < n; i++)
     {
