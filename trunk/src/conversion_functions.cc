@@ -51,6 +51,23 @@ void prophoto2lab(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, 
     xyz2lab(x, y, z, d1, d2, d3);
 }
 
+void prophoto2lch(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue x;
+    deValue y;
+    deValue z;
+
+    prophoto2xyz(s1, s2, s3, x, y, z);
+
+    deValue l;
+    deValue a;
+    deValue b;
+
+    xyz2lab(x, y, z, l, a, b);
+
+    lab2lch(l, a, b, d1, d2, d3);
+}
+
 
 void lab2rgb(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
 {
@@ -61,8 +78,6 @@ void lab2rgb(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deVal
     lab2xyz(s1, s2, s3, x, y, z);
 
     xyz2rgb(x, y, z, d1, d2, d3);
-
-
 }
 
 void lab2prophoto(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
@@ -74,8 +89,6 @@ void lab2prophoto(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, 
     lab2xyz(s1, s2, s3, x, y, z);
 
     xyz2prophoto(x, y, z, d1, d2, d3);
-
-
 }
 
 
@@ -88,7 +101,6 @@ void cmyk2rgb(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deVal
     cmyk2cmy(s1, s2, s3, s4, c, m, y);
 
     cmy2rgb(c, m, y, d1, d2, d3);
-
 }
 
 void cmyk2hsv(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deValue& d2, deValue& d3)
@@ -108,6 +120,23 @@ void cmyk2hsv(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deVal
     rgb2hsv(r, g, b, d1, d2, d3);
 }   
 
+void cmyk2hsl(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue c;
+    deValue m;
+    deValue y;
+
+    cmyk2cmy(s1, s2, s3, s4, c, m, y);
+
+    deValue r;
+    deValue g;
+    deValue b;
+
+    cmy2rgb(c, m, y, r, g, b);
+
+    rgb2hsl(r, g, b, d1, d2, d3);
+}   
+
 void cmyk2lab(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deValue& d2, deValue& d3)
 {
     deValue c;
@@ -123,6 +152,17 @@ void cmyk2lab(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deVal
     cmy2rgb(c, m, y, r, g, b);
 
     rgb2lab(r, g, b, d1, d2, d3);
+}   
+
+void cmyk2lch(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue l;
+    deValue a;
+    deValue b;
+
+    cmyk2lab(s1, s2, s3, s4, l, a, b);
+
+    lab2lch(l, a, b, d1, d2, d3);
 }   
 
 void rgb2lch(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
@@ -147,6 +187,46 @@ void rgb2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deVa
     cmy2cmyk(c, m, y, d1, d2, d3, d4);
 }    
 
+void prophoto2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3, deValue& d4)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    prophoto2rgb(s1, s2, s3, r, g, b);
+
+    deValue c;
+    deValue m;
+    deValue y;
+
+    rgb2cmy(r, g, b, c, m, y);
+
+    cmy2cmyk(c, m, y, d1, d2, d3, d4);
+}    
+
+void prophoto2hsv(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    prophoto2rgb(s1, s2, s3, r, g, b);
+
+    rgb2hsv(r, g, b, d1, d2, d3);
+}    
+
+void prophoto2hsl(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    prophoto2rgb(s1, s2, s3, r, g, b);
+
+    rgb2hsl(r, g, b, d1, d2, d3);
+}    
+
+
 void bw2cmyk(deValue s1, deValue& d1, deValue& d2, deValue& d3, deValue& d4)
 {
     deValue r;
@@ -167,6 +247,84 @@ void bw2lab(deValue s1, deValue& d1, deValue& d2, deValue& d3)
     bw2rgb(s1, r, g, b);
 
     rgb2lab(r, g, b, d1, d2, d3);
+}    
+
+void lab2bw(deValue s1, deValue s2, deValue s3, deValue& d)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    lab2rgb(s1, s2, s3, r, g, b);
+
+    rgb2bw(r, g, b, d);
+}    
+
+void cmyk2bw(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    cmyk2rgb(s1, s2, s3, s4, r, g, b);
+
+    rgb2bw(r, g, b, d);
+}    
+
+void hsv2bw(deValue s1, deValue s2, deValue s3, deValue& d)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    hsv2rgb(s1, s2, s3, r, g, b);
+
+    rgb2bw(r, g, b, d);
+}    
+
+void hsl2bw(deValue s1, deValue s2, deValue s3, deValue& d)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    hsl2rgb(s1, s2, s3, r, g, b);
+
+    rgb2bw(r, g, b, d);
+}    
+
+void lch2rgb(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue l;
+    deValue a;
+    deValue b;
+
+    lch2lab(s1, s2, s3, l, a, b);
+
+    lab2rgb(l, a, b, d1, d2, d3);
+}
+
+void lch2bw(deValue s1, deValue s2, deValue s3, deValue& d)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    lch2rgb(s1, s2, s3, r, g, b);
+
+    rgb2bw(r, g, b, d);
+}    
+
+
+void prophoto2bw(deValue s1, deValue s2, deValue s3, deValue& d)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    prophoto2rgb(s1, s2, s3, r, g, b);
+
+    rgb2bw(r, g, b, d);
 }    
 
 void bw2hsl(deValue s1, deValue& d1, deValue& d2, deValue& d3)
@@ -226,20 +384,6 @@ void lab2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deVa
     cmy2cmyk(_c, _m, _y, d1, d2, d3, d4);
 }    
 
-
-
-
-void lch2rgb(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
-{
-    deValue l;
-    deValue a;
-    deValue b;
-
-    lch2lab(s1, s2, s3, l, a, b);
-
-    lab2rgb(l, a, b, d1, d2, d3);
-}
-
 deConversion4x3 getConversion4x3(deColorSpace s, deColorSpace d)
 {
     if ((s == deColorSpaceCMYK) && (d == deColorSpaceRGB))
@@ -257,9 +401,19 @@ deConversion4x3 getConversion4x3(deColorSpace s, deColorSpace d)
         return cmyk2hsv;
     }
 
+    if ((s == deColorSpaceCMYK) && (d == deColorSpaceHSL))
+    {
+        return cmyk2hsl;
+    }
+
     if ((s == deColorSpaceCMYK) && (d == deColorSpaceLAB))
     {
         return cmyk2lab;
+    }
+
+    if ((s == deColorSpaceCMYK) && (d == deColorSpaceLCH))
+    {
+        return cmyk2lch;
     }
 
     return NULL;
@@ -270,6 +424,11 @@ deConversion3x4 getConversion3x4(deColorSpace s, deColorSpace d)
     if ((s == deColorSpaceRGB) && (d == deColorSpaceCMYK))
     {
         return rgb2cmyk;
+    }
+
+    if ((s == deColorSpaceProPhoto) && (d == deColorSpaceCMYK))
+    {
+        return prophoto2cmyk;
     }
 
     if ((s == deColorSpaceCMY) && (d == deColorSpaceCMYK))
@@ -285,11 +444,44 @@ deConversion3x4 getConversion3x4(deColorSpace s, deColorSpace d)
     return NULL;
 }
 
+deConversion4x1 getConversion4x1(deColorSpace s, deColorSpace d)
+{
+    if ((s == deColorSpaceCMYK) && (d == deColorSpaceBW))
+    {
+        return cmyk2bw;
+    }
+}    
+
 deConversion3x1 getConversion3x1(deColorSpace s, deColorSpace d)
 {
     if ((s == deColorSpaceRGB) && (d == deColorSpaceBW))
     {
         return rgb2bw;
+    }
+
+    if ((s == deColorSpaceHSV) && (d == deColorSpaceBW))
+    {
+        return hsv2bw;
+    }
+
+    if ((s == deColorSpaceHSL) && (d == deColorSpaceBW))
+    {
+        return hsl2bw;
+    }
+
+    if ((s == deColorSpaceLAB) && (d == deColorSpaceBW))
+    {
+        return lab2bw;
+    }
+
+    if ((s == deColorSpaceLCH) && (d == deColorSpaceBW))
+    {
+        return lch2bw;
+    }
+
+    if ((s == deColorSpaceProPhoto) && (d == deColorSpaceBW))
+    {
+        return prophoto2bw;
     }
 
     return NULL;
@@ -360,6 +552,11 @@ deConversion3x3 getConversion3x3(deColorSpace s, deColorSpace d)
     if ((s == deColorSpaceProPhoto) && (d == deColorSpaceLAB))
     {
         return prophoto2lab;
+    }
+
+    if ((s == deColorSpaceProPhoto) && (d == deColorSpaceLCH))
+    {
+        return prophoto2lch;
     }
 
     if ((d == deColorSpaceProPhoto) && (s == deColorSpaceXYZ))
@@ -437,6 +634,16 @@ deConversion3x3 getConversion3x3(deColorSpace s, deColorSpace d)
         return rgb2hsv;
     }
 
+    if ((s == deColorSpaceProPhoto) && (d == deColorSpaceHSV))
+    {
+        return prophoto2hsv;
+    }
+
+    if ((s == deColorSpaceProPhoto) && (d == deColorSpaceHSL))
+    {
+        return prophoto2hsl;
+    }
+
     if ((s == deColorSpaceHSV) && (d == deColorSpaceRGB))
     {
         return hsv2rgb;
@@ -462,6 +669,11 @@ bool checkConversion(deColorSpace currentColorSpace, deColorSpace colorSpace)
         return true;
     }
 
+    if (getConversion1x4(currentColorSpace, colorSpace))
+    {
+        return true;
+    }
+
     if (getConversion4x3(currentColorSpace, colorSpace))
     {
         return true;
@@ -478,6 +690,11 @@ bool checkConversion(deColorSpace currentColorSpace, deColorSpace colorSpace)
     }
 
     if (getConversion3x1(currentColorSpace, colorSpace))
+    {
+        return true;
+    }
+
+    if (getConversion4x1(currentColorSpace, colorSpace))
     {
         return true;
     }

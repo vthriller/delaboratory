@@ -28,6 +28,7 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
     frameManager.addActionFrame(this);
 
     deColorSpace sourceColorSpace = layer.getSourceColorSpace();
+    int cs = getColorSpaceSize(sourceColorSpace);
 
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -46,19 +47,27 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
     add2 = new dePropertyValueSlider(this, range, layer.getAdd2(), layer, layerProcessor);
     sizerM->Add(add2);
 
+    if (cs == 4)
+    {
+        add3 = new dePropertyValueSlider(this, range, layer.getAdd3(), layer, layerProcessor);
+        sizerM->Add(add3);
+    }        
+
     wxSizer* sizerBM = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T(""));
     sizerM->Add(sizerBM);
 
-    resetM = new wxButton(this, wxID_ANY, _T("reset"), wxDefaultPosition, wxSize(60,25));
+    int w = 80;
+
+    resetM = new wxButton(this, wxID_ANY, _T("reset"), wxDefaultPosition, wxSize(w,25));
     sizerBM->Add(resetM, 0);
 
-    preset0M = new wxButton(this, wxID_ANY, wxString::FromAscii(getChannelName(sourceColorSpace, 0).c_str()), wxDefaultPosition, wxSize(60,25));
+    preset0M = new wxButton(this, wxID_ANY, wxString::FromAscii(getChannelName(sourceColorSpace, 0).c_str()), wxDefaultPosition, wxSize(w,25));
     sizerBM->Add(preset0M, 0);
 
-    preset1M = new wxButton(this, wxID_ANY, wxString::FromAscii(getChannelName(sourceColorSpace, 1).c_str()), wxDefaultPosition, wxSize(60,25));
+    preset1M = new wxButton(this, wxID_ANY, wxString::FromAscii(getChannelName(sourceColorSpace, 1).c_str()), wxDefaultPosition, wxSize(w,25));
     sizerBM->Add(preset1M, 0);
 
-    preset2M = new wxButton(this, wxID_ANY, wxString::FromAscii(getChannelName(sourceColorSpace, 2).c_str()), wxDefaultPosition, wxSize(60,25));
+    preset2M = new wxButton(this, wxID_ANY, wxString::FromAscii(getChannelName(sourceColorSpace, 2).c_str()), wxDefaultPosition, wxSize(w,25));
     sizerBM->Add(preset2M, 0);
 
     wxSizer* sizerO = new wxStaticBoxSizer(wxVERTICAL, this,  _T("overlay"));
@@ -72,6 +81,12 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
 
     overlay2 = new dePropertyValueSlider(this, range, layer.getOverlay2(), layer, layerProcessor);
     sizerO->Add(overlay2);
+
+    if (cs == 4)
+    {
+        overlay3 = new dePropertyValueSlider(this, range, layer.getOverlay3(), layer, layerProcessor);
+        sizerO->Add(overlay3);
+    }        
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMixerBWEditor::click));
 
@@ -112,6 +127,13 @@ void deMixerBWEditor::click(wxCommandEvent &event)
     add0->setFromProperty();
     add1->setFromProperty();
     add2->setFromProperty();
+
+    deColorSpace sourceColorSpace = layer.getSourceColorSpace();
+    int cs = getColorSpaceSize(sourceColorSpace);
+    if (cs == 4)
+    {
+        add3->setFromProperty();
+    }        
 
     int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(index);

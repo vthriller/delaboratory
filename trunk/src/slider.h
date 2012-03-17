@@ -29,13 +29,13 @@ class deSlider:public wxPanel
         wxSizer* sizer;
         wxStaticText* label;
         wxStaticText* labelValue;
+        wxButton* reset;
         wxSlider* slider;
         int sliderRange;
         deValue valueMin;
         deValue valueMax;
+        deValue defaultValue;
         bool integerMode;
-
-        deLayerProcessor& layerProcessor;
 
         void moveSlider(wxCommandEvent &event);
         void finishMoveSlider(wxCommandEvent &event);
@@ -45,8 +45,10 @@ class deSlider:public wxPanel
         void setEdit(deValue v);
         void setSlider(deValue v);
 
+        void click(wxCommandEvent &event);
+
     public:
-        deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue, deLayerProcessor& _layerProcessor);
+        deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue);
         virtual ~deSlider();
 
         void setIntegerMode();

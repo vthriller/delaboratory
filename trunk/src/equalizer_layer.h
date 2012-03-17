@@ -30,11 +30,9 @@ class deEqualizerLayer:public deActionLayer
 
     protected:
         virtual bool singleChannelProcessing() const {return false;};
-        virtual std::string getType() const {return "equalizer";};
-        virtual std::string getLabel() const {return "equalizer";};
 
     public:
-        deEqualizerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deEqualizerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name, int _bands);
         virtual ~deEqualizerLayer();
 
         virtual bool isChannelNeutral(int index);
@@ -44,17 +42,35 @@ class deEqualizerLayer:public deActionLayer
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
 
-        virtual std::string getActionName() {return "eq";};
-
         virtual bool randomize();
 
         int getBands() const {return bands;};
         deEqualizer* getEqualizer(int index);
 
         void reset();
-
-
-
 };
+
+class deEqualizerLayer8:public deEqualizerLayer
+{
+    public:
+        deEqualizerLayer8(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        virtual ~deEqualizerLayer8();
+
+        virtual std::string getActionName() {return "eq8";};
+        virtual std::string getType() const {return "equalizer8";};
+        virtual std::string getLabel() const {return "equalizer8";};
+};
+
+class deEqualizerLayer16:public deEqualizerLayer
+{
+    public:
+        deEqualizerLayer16(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        virtual ~deEqualizerLayer16();
+
+        virtual std::string getActionName() {return "eq16";};
+        virtual std::string getType() const {return "equalizer16";};
+        virtual std::string getLabel() const {return "equalizer16";};
+};
+
 
 #endif

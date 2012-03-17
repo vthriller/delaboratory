@@ -64,7 +64,7 @@ deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerPr
         return new deBlurFrame(parent, al, layerProcessor, frameManager);
     }        
 
-    if (type == "equalizer")
+    if ((type == "equalizer8") || (type == "equalizer16"))
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
         return new deEqualizerFrame(parent, al, layerProcessor, frameManager);

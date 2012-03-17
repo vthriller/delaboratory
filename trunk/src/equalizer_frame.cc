@@ -24,6 +24,7 @@
 #include "property_value_slider.h"
 #include "property_choice_ui.h"
 #include "gradient_panel.h"
+#include "wx/notebook.h"
 
 class deEqualizerSlider:public deSlider
 {
@@ -36,7 +37,7 @@ class deEqualizerSlider:public deSlider
 
     public:
         deEqualizerSlider(wxWindow *parent, int range, deEqualizerLayer& _layer, deEqualizer& _equalizer, int _index, int _channel, const std::string& name, deLayerProcessor& _layerProcessor)
-        :deSlider(parent, name, range, -1.0, 1.0, 0.0, _layerProcessor), layer(_layer), equalizer(_equalizer), index(_index), channel(_channel),
+        :deSlider(parent, name, range, -1.0, 1.0, 0.0), layer(_layer), equalizer(_equalizer), index(_index), channel(_channel),
          layerProcessor(_layerProcessor)
         {
             setFromProperty();
@@ -81,36 +82,35 @@ deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deActionLayer& _layer, deLa
 
     int n = getColorSpaceSize(equalizerLayer.getColorSpace());
 
-    for (i = 0; i < bands; i++)
+    wxNotebook* notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("notebook"));
+    sizer->Add(notebook, 1, wxEXPAND);
+
+    int c = getEqualizerChannel(colorSpace);
+    int j;
+    for (j = 0; j < n; j++)
     {
-        wxSizer* sSizer = new wxStaticBoxSizer(wxHORIZONTAL, this);
-        sizer->Add(sSizer);
+        const std::string n = getChannelName(equalizerLayer.getColorSpace(), j);
+        wxPanel* slidersPanel = new wxPanel(notebook);
+        notebook->AddPage(slidersPanel, wxString::FromAscii(n.c_str()));
+        wxSizer* sSizer = new wxFlexGridSizer(2);
+        slidersPanel->SetSizer(sSizer);
 
-        int c = getEqualizerChannel(colorSpace);
+        deEqualizer* equalizer = equalizerLayer.getEqualizer(j);
 
-        int w = 60;
-        int h = 80;
-        deValue l = (deValue) i / bands;
-
-        //deGradientPanel1* gradient = new deGradientPanel1(this, wxSize(w, h), colorSpace, c, -1, -1, l, -1);
-        deColorPanel* gradient = new deColorPanel(this, wxSize(w, h));
-        gradient->setColor(colorSpace, c, l);
-        sSizer->Add(gradient);
-
-        sSizer->AddSpacer(10);
-
-        wxSizer* slidersSizer = new wxBoxSizer(wxVERTICAL);
-        sSizer->Add(slidersSizer);
-
-        int j;
-        for (j = 0; j < n; j++)
+        if (equalizer)
         {
-            deEqualizer* equalizer = equalizerLayer.getEqualizer(j);
-            if (equalizer)
+            for (i = 0; i < bands; i++)
             {
-                const std::string n = getChannelName(equalizerLayer.getColorSpace(), j);
-                deEqualizerSlider* s = new deEqualizerSlider(this, range, equalizerLayer, *equalizer, i, j, n, layerProcessor);
-                slidersSizer->Add(s);
+                int w = 100;
+                int h = 30;
+                deValue l = (deValue) i / bands;
+
+                deColorPanel* gradient = new deColorPanel(slidersPanel, wxSize(w, h));
+                gradient->setColor(colorSpace, c, l);
+                sSizer->Add(gradient);
+
+                deEqualizerSlider* s = new deEqualizerSlider(slidersPanel, range, equalizerLayer, *equalizer, i, j, "", layerProcessor);
+                sSizer->Add(s);
                 sliders.push_back(s);
             }
         }

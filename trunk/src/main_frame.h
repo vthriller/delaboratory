@@ -29,6 +29,7 @@ class deLayerProcessor;
 class deSamplersPanel;
 class deSamplerManager;
 class deZoomManager;
+class deThreadsPanel;
 #include "size.h"
 
 enum
@@ -75,11 +76,7 @@ private:
     wxSizer* mainSizer;
     deImageAreaPanel* imageAreaPanel;
     deHistogramPanel* histogramPanel;
-    wxStaticText* processingInfo;
-    wxStaticText* renderingInfo;
-    wxStaticText* histogramInfo;
-    wxStaticText* debugInfo;
-    wxStaticText* dcrawInfo;
+    deThreadsPanel* threadsPanel;
 
     wxCheckBox* realtime;
     wxCheckBox* autoUI;
@@ -128,7 +125,6 @@ private:
     void check(wxCommandEvent &event);
 
     void updateTitle();
-    void setInfoColor(int i);
 
 public:
 	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcrawVersion);

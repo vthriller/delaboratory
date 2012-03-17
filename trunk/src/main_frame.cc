@@ -37,6 +37,7 @@
 #include "samplers_panel.h"
 #include "layer_processor.h"
 #include "zoom_panel.h"
+#include "threads_panel.h"
 
 #include "image_panel.h"
 
@@ -93,7 +94,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     mainSizer->Add(leftSizer, 1, wxEXPAND);
 
     topPanel = new wxPanel(this);
-    topPanel->SetSize(300,20);
     leftSizer->Add(topPanel, 0, wxEXPAND);
 
     wxSizer* topSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -102,20 +102,8 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxPanel* viewModePanel = new deViewModePanel(topPanel, project);
     topSizer->Add(viewModePanel);
 
-    wxSizer* sizerP = new wxStaticBoxSizer(wxHORIZONTAL, topPanel,  _T("thread activity"));
-    topSizer->Add(sizerP, 0, wxEXPAND);
-
-    processingInfo = new wxStaticText(topPanel, wxID_ANY, _T("[processing]"), wxDefaultPosition);
-    sizerP->Add(processingInfo, 0, wxEXPAND);
-
-    renderingInfo = new wxStaticText(topPanel, wxID_ANY, _T("[rendering]"), wxDefaultPosition);
-    sizerP->Add(renderingInfo, 0, wxEXPAND);
-
-    histogramInfo = new wxStaticText(topPanel, wxID_ANY, _T("[histogram]"), wxDefaultPosition);
-    sizerP->Add(histogramInfo, 0, wxEXPAND);
-
-    dcrawInfo = new wxStaticText(topPanel, wxID_ANY, _T("[dcraw]"), wxDefaultPosition);
-    sizerP->Add(dcrawInfo, 0, wxEXPAND);
+    threadsPanel = new deThreadsPanel(topPanel);
+    topSizer->Add(threadsPanel, 0, wxEXPAND);
 
     wxSizer* sizerR = new wxStaticBoxSizer(wxHORIZONTAL, topPanel,  _T("options"));
     topSizer->Add(sizerR, 0, wxEXPAND);
@@ -139,9 +127,11 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     deZoomPanel* zoomPanel = new deZoomPanel(topPanel, _zoomManager);
     topSizer->Add(zoomPanel);
 
+    wxSizer* sizerI = new wxStaticBoxSizer(wxVERTICAL, this,  _T("image"));
+    leftSizer->Add(sizerI, 1, wxEXPAND);
+
     imageAreaPanel = new deImageAreaPanel(this, project, _samplerManager, _zoomManager, zoomPanel);
-    imageAreaPanel->SetSize(300,300);
-    leftSizer->Add(imageAreaPanel, 1, wxEXPAND);
+    sizerI->Add(imageAreaPanel, 1, wxEXPAND);
 
     wxSizer* rightSizer = new wxBoxSizer(wxVERTICAL);
     hPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(280, 250));
@@ -236,7 +226,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     project.log("main frame created");
 
-    setInfoColor(DE_DCRAW_END);
+    threadsPanel->setInfoColor(DE_DCRAW_END);
 }
 
 void deMainFrame::hidePanels()
@@ -440,60 +430,10 @@ void deMainFrame::onRandomEvent(wxCommandEvent& event)
     project.log("random event end");
 }
 
-void deMainFrame::setInfoColor(int i)
-{
-    int e = 100;
-    int e2 = 50;
-    int d = 150;
-    switch (i)
-    {
-        case DE_PROCESSING_START:
-        {
-            processingInfo->SetForegroundColour(wxColour(e, e, e));
-            break;
-        }
-        case DE_PROCESSING_END:
-        {
-            processingInfo->SetForegroundColour(wxColour(d, d, d));
-            break;
-        }
-        case DE_RENDERING_START:
-        {
-            renderingInfo->SetForegroundColour(wxColour(e, e, e));
-            break;
-        }
-        case DE_RENDERING_END:
-        {
-            renderingInfo->SetForegroundColour(wxColour(d, d, d));
-            break;
-        }
-        case DE_HISTOGRAM_START:
-        {
-            histogramInfo->SetForegroundColour(wxColour(e, e, e));
-            break;
-        }
-        case DE_HISTOGRAM_END:
-        {
-            histogramInfo->SetForegroundColour(wxColour(d, d, d));
-            break;
-        }
-        case DE_DCRAW_START:
-        {
-            dcrawInfo->SetForegroundColour(wxColour(e2, e2, e2));
-            break;
-        }
-        case DE_DCRAW_END:
-        {
-            dcrawInfo->SetForegroundColour(wxColour(d, d, d));
-            break;
-        }
-    }
-}
-
 void deMainFrame::onInfoEvent(wxCommandEvent& event)
 {
     int i = event.GetInt();
-    setInfoColor(i);
+    threadsPanel->setInfoColor(i);
 }
 
 class deTestThread:public wxThread

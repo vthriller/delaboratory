@@ -672,7 +672,7 @@ bool isChannelWrapped(deColorSpace colorSpace, int channel)
 
 bool isActionSupported(const std::string& action, deColorSpace colorSpace)
 {
-    if (action == "equalizer")
+    if ((action == "equalizer8") || (action == "equalizer16"))
     {
         switch (colorSpace)
         {

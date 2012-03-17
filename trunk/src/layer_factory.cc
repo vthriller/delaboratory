@@ -84,9 +84,14 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
         return new deMixerLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
     }
 
-    if (type == "equalizer")
+    if (type == "equalizer8")
     {
-        return new deEqualizerLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
+        return new deEqualizerLayer8(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
+    }
+
+    if (type == "equalizer16")
+    {
+        return new deEqualizerLayer16(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
     }
 
     if (type == "apply_image")
@@ -163,10 +168,11 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
 
 void getSupportedActions(std::vector<std::string>& actions)
 {
-    actions.push_back("basic");
     actions.push_back("curves");
+    actions.push_back("basic");
     actions.push_back("mixer");
-    actions.push_back("equalizer");
+    actions.push_back("equalizer8");
+    actions.push_back("equalizer16");
     actions.push_back("apply_image");
 
     actions.push_back("vignette");

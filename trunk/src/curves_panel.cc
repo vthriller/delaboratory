@@ -435,6 +435,10 @@ void deCurvesPanel::changeChannel(int _channel)
 
 void deCurvesPanel::onImageClick(deValue x, deValue y)
 {
+    if ((x < 0) || (y < 0) || (x >= 1) || (y >= 1))
+    {
+        return;
+    }
     deSize size = layer.getChannelSize();
     clickPosition = (y * size.getH() )  * size.getW() + (x * size.getW());
     setMarker();
