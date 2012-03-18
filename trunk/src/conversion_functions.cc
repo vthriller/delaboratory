@@ -120,6 +120,51 @@ void cmyk2hsv(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deVal
     rgb2hsv(r, g, b, d1, d2, d3);
 }   
 
+void lab2hsl(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    lab2rgb(s1, s2, s3, r, g, b);
+
+    rgb2hsl(r, g, b, d1, d2, d3);
+}   
+
+void lab2hsv(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    lab2rgb(s1, s2, s3, r, g, b);
+
+    rgb2hsv(r, g, b, d1, d2, d3);
+}   
+
+void lch2hsv(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue l;
+    deValue a;
+    deValue b;
+
+    lch2lab(s1, s2, s3, l, a, b);
+
+    lab2hsv(l, a, b, d1, d2, d3);
+}   
+
+void lch2hsl(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue l;
+    deValue a;
+    deValue b;
+
+    lch2lab(s1, s2, s3, l, a, b);
+
+    lab2hsl(l, a, b, d1, d2, d3);
+}   
+
+
 void cmyk2hsl(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deValue& d2, deValue& d3)
 {
     deValue c;
@@ -185,6 +230,28 @@ void rgb2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deVa
     rgb2cmy(s1, s2, s3, c, m, y);
 
     cmy2cmyk(c, m, y, d1, d2, d3, d4);
+}    
+
+void hsv2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3, deValue& d4)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    hsv2rgb(s1, s2, s3, r, g, b);
+
+    rgb2cmyk(r, g, b, d1, d2, d3, d4);
+}    
+
+void hsl2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3, deValue& d4)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    hsl2rgb(s1, s2, s3, r, g, b);
+
+    rgb2cmyk(r, g, b, d1, d2, d3, d4);
 }    
 
 void prophoto2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3, deValue& d4)
@@ -293,6 +360,72 @@ void hsl2bw(deValue s1, deValue s2, deValue s3, deValue& d)
     rgb2bw(r, g, b, d);
 }    
 
+void hsl2lab(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    hsl2rgb(s1, s2, s3, r, g, b);
+
+    rgb2lab(r, g, b, d1, d2, d3);
+}    
+
+void hsv2lab(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    hsv2rgb(s1, s2, s3, r, g, b);
+
+    rgb2lab(r, g, b, d1, d2, d3);
+}    
+
+void hsl2hsv(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    hsl2rgb(s1, s2, s3, r, g, b);
+
+    rgb2hsv(r, g, b, d1, d2, d3);
+}    
+
+void hsv2hsl(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    hsv2rgb(s1, s2, s3, r, g, b);
+
+    rgb2hsl(r, g, b, d1, d2, d3);
+}    
+
+void hsl2lch(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    hsl2rgb(s1, s2, s3, r, g, b);
+
+    rgb2lch(r, g, b, d1, d2, d3);
+}    
+
+void hsv2lch(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
+{
+    deValue r;
+    deValue g;
+    deValue b;
+
+    hsv2rgb(s1, s2, s3, r, g, b);
+
+    rgb2lch(r, g, b, d1, d2, d3);
+}    
+
 void lch2rgb(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
 {
     deValue l;
@@ -384,6 +517,18 @@ void lab2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deVa
     cmy2cmyk(_c, _m, _y, d1, d2, d3, d4);
 }    
 
+void lch2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3, deValue& d4)
+{
+    deValue l;
+    deValue a;
+    deValue b;
+
+    lch2lab(s1, s2, s3, l, a, b);
+
+    lab2cmyk(l, a, b, d1, d2, d3, d4);
+}
+
+
 deConversion4x3 getConversion4x3(deColorSpace s, deColorSpace d)
 {
     if ((s == deColorSpaceCMYK) && (d == deColorSpaceRGB))
@@ -426,6 +571,16 @@ deConversion3x4 getConversion3x4(deColorSpace s, deColorSpace d)
         return rgb2cmyk;
     }
 
+    if ((s == deColorSpaceHSV) && (d == deColorSpaceCMYK))
+    {
+        return hsv2cmyk;
+    }
+
+    if ((s == deColorSpaceHSL) && (d == deColorSpaceCMYK))
+    {
+        return hsl2cmyk;
+    }
+
     if ((s == deColorSpaceProPhoto) && (d == deColorSpaceCMYK))
     {
         return prophoto2cmyk;
@@ -441,6 +596,11 @@ deConversion3x4 getConversion3x4(deColorSpace s, deColorSpace d)
         return lab2cmyk;
     }
 
+    if ((s == deColorSpaceLCH) && (d == deColorSpaceCMYK))
+    {
+        return lch2cmyk;
+    }
+
     return NULL;
 }
 
@@ -450,6 +610,8 @@ deConversion4x1 getConversion4x1(deColorSpace s, deColorSpace d)
     {
         return cmyk2bw;
     }
+
+    return false;
 }    
 
 deConversion3x1 getConversion3x1(deColorSpace s, deColorSpace d)
@@ -624,6 +786,26 @@ deConversion3x3 getConversion3x3(deColorSpace s, deColorSpace d)
         return rgb2hsl;
     }
 
+    if ((s == deColorSpaceLAB) && (d == deColorSpaceHSL))
+    {
+        return lab2hsl;
+    }
+
+    if ((s == deColorSpaceLAB) && (d == deColorSpaceHSV))
+    {
+        return lab2hsv;
+    }
+
+    if ((s == deColorSpaceLCH) && (d == deColorSpaceHSL))
+    {
+        return lch2hsl;
+    }
+
+    if ((s == deColorSpaceLCH) && (d == deColorSpaceHSV))
+    {
+        return lch2hsv;
+    }
+
     if ((s == deColorSpaceHSL) && (d == deColorSpaceRGB))
     {
         return hsl2rgb;
@@ -657,6 +839,36 @@ deConversion3x3 getConversion3x3(deColorSpace s, deColorSpace d)
     if ((s == deColorSpaceCMY) && (d == deColorSpaceRGB))
     {
         return cmy2rgb;
+    }
+
+    if ((s == deColorSpaceHSV) && (d == deColorSpaceLAB))
+    {
+        return hsv2lab;
+    }
+
+    if ((s == deColorSpaceHSL) && (d == deColorSpaceLAB))
+    {
+        return hsl2lab;
+    }
+
+    if ((s == deColorSpaceHSV) && (d == deColorSpaceLCH))
+    {
+        return hsv2lch;
+    }
+
+    if ((s == deColorSpaceHSL) && (d == deColorSpaceLCH))
+    {
+        return hsl2lch;
+    }
+
+    if ((s == deColorSpaceHSV) && (d == deColorSpaceHSL))
+    {
+        return hsv2hsl;
+    }
+
+    if ((d == deColorSpaceHSV) && (s == deColorSpaceHSL))
+    {
+        return hsl2hsv;
     }
 
     return NULL;
