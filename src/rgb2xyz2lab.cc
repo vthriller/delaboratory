@@ -22,8 +22,8 @@
 #include <cassert>
 #include <iostream>
 
-const deValue lch_hue_shift = 1.0/8.0;
-//const deValue lch_hue_shift = 0;
+//const deValue lch_hue_shift = 1.0/8.0;
+const deValue lch_hue_shift = 0;
 
 /* almost same for conversion */
 static const deValue Xn  = 0.951;
