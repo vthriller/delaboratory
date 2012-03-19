@@ -46,7 +46,6 @@ class deLayer
         std::string name;
         wxMutex mutex;
 
-
         virtual bool updateImage() = 0;
 
     protected:

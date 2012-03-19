@@ -178,7 +178,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     menuFile->Append( ID_NewProject, _("New project") );
     menuFile->AppendSeparator();
     menuFile->Append( ID_OpenRawImageLAB, _("Open RAW image as LAB") );
-    menuFile->Append( ID_OpenRawImageProPhoto, _("Open RAW image as ProPhoto") );
+    menuFile->Append( ID_OpenRawImageProPhoto, _("Open RAW image as ProPhoto RGB") );
     menuFile->Append( ID_OpenImage, _("Open TIFF/JPG image") );
     menuFile->AppendSeparator();
     menuFile->Append( ID_TestImageSmall, _("Generate test image (small)") );

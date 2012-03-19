@@ -53,7 +53,6 @@ deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor
     std::vector<std::string> presets;
     usmLayer.getPresets(presets);
 
-
     std::vector<std::string>::iterator j;
     for (j = presets.begin(); j != presets.end(); j++)
     {

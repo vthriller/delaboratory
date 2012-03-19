@@ -31,17 +31,20 @@ deShadowsHighlightsFrame::deShadowsHighlightsFrame(wxWindow *parent, deActionLay
 
     int range = 400;
 
-    radius = new dePropertyValueSlider(this, range, shLayer.getPropertyRadius(), shLayer, layerProcessor);
-    sizer->Add(radius);
+    int n = shLayer.getNumberOfValueProperties();
 
-    shAmount = new dePropertyValueSlider(this, range, shLayer.getPropertyShadowsHighlightsAmount(), shLayer, layerProcessor);
-    sizer->Add(shAmount);
+    int i;
 
-    darkenAmount = new dePropertyValueSlider(this, range, shLayer.getPropertyDarkenAmount(), shLayer, layerProcessor);
-    sizer->Add(darkenAmount);
-
-    lightenAmount = new dePropertyValueSlider(this, range, shLayer.getPropertyLightenAmount(), shLayer, layerProcessor);
-    sizer->Add(lightenAmount);
+    for (i = 0; i < n; i++)
+    {
+        dePropertyValue* p = shLayer.getPropertyValue(i);
+        if (p)
+        {
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, shLayer, layerProcessor);
+            valueSliders.push_back(s);
+            sizer->Add(s);
+        }            
+    }
 
     Fit();
 
@@ -54,8 +57,4 @@ deShadowsHighlightsFrame::~deShadowsHighlightsFrame()
 
 void deShadowsHighlightsFrame::click(wxCommandEvent &event)
 {
-/*
-    int id = event.GetId();
-    deShadowsHighlightsLayer& shLayer = dynamic_cast<deShadowsHighlightsLayer&>(layer);
-*/
 }   
