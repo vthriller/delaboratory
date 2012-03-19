@@ -31,9 +31,10 @@
 
 std::string getDcrawVersion()
 {
-    const wxString command = wxString::FromAscii(DCRAW_EXECUTABLE);
+    const char* com = DCRAW_EXECUTABLE;
+    wxString s(com, wxConvUTF8);
 
-    wxProcess* process = wxProcess::Open(command);
+    wxProcess* process = wxProcess::Open(s);
 
     wxInputStream* input = process->GetInputStream();
 
@@ -82,10 +83,13 @@ deRawLoader::deRawLoader(const std::string& f, deStaticImage& _image, deColorSpa
         options += " -q 3";
     }
 
-    std::string command = std::string(DCRAW_EXECUTABLE) + " " + options + " " + f + " >abc ";
+    std::string command = std::string(DCRAW_EXECUTABLE) + " " + options + " \"" + f + "\" >abc ";
     logMessage("calling: " + command);
 
-    process = wxProcess::Open(wxString::FromAscii(command.c_str()));
+    const char* c = command.c_str();
+    wxString s(c, wxConvUTF8);
+
+    process = wxProcess::Open(s);
 
     input = process->GetInputStream();
 }
