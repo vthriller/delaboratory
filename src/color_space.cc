@@ -256,7 +256,6 @@ void getSupportedColorSpaces(std::vector<deColorSpace>& result)
     result.push_back(deColorSpaceLCH);
     result.push_back(deColorSpaceHSL);
     result.push_back(deColorSpaceHSV);
-//    result.push_back(deColorSpaceCMY);
     result.push_back(deColorSpaceCMYK);
 }
 

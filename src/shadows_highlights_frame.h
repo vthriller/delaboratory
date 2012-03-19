@@ -21,6 +21,7 @@
 
 #include "action_frame.h"
 #include "slider.h"
+#include <vector>
 
 class dePropertyValueSlider;
 class deLayerProcessor;
@@ -28,10 +29,8 @@ class deLayerProcessor;
 class deShadowsHighlightsFrame:public deActionFrame
 {
     private:
-        dePropertyValueSlider* radius;
-        dePropertyValueSlider* shAmount;
-        dePropertyValueSlider* darkenAmount;
-        dePropertyValueSlider* lightenAmount;
+        std::vector<dePropertyValueSlider*> valueSliders;
+
         deLayerProcessor& layerProcessor;
 
         void click(wxCommandEvent &event);

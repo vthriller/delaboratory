@@ -89,7 +89,7 @@ void deHueSaturationFrame::click(wxCommandEvent &event)
 
     if (preset3->GetId() == id)
     {
-        hsLayer.preset(0.6);
+        hsLayer.preset(0.73);
     }      
 
     hue->setFromProperty();

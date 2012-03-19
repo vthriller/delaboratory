@@ -58,8 +58,8 @@ void deColorPanel::setColor(deColorSpace colorSpace, int channel, deValue value)
 
     if (colorSpace == deColorSpaceLCH)
     {
-        v1 = 0.9;
-        v2 = 0.7;
+        v1 = 0.7;
+        v2 = 0.9;
     }
 
     if (colorSpace == deColorSpaceLAB)

@@ -29,18 +29,27 @@
 #include "layer_processor.h"
 
 deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
- blurRadius("blur_radius"),
- shadowsHighlightsAmount("shadows_highlights_amount"),
- darkenAmount("darken_amount"),
- lightenAmount("lighten_amount")
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
 {
-    blurRadius.setLabel("radius");
-    blurRadius.setMin(1);
-    blurRadius.setMax(50);
-    shadowsHighlightsAmount.setLabel("sh/hi");
-    darkenAmount.setLabel("darken");
-    lightenAmount.setLabel("lighten");
+    blurRadiusIndex = registerPropertyValue("blur_radius");
+    shadowsHighlightsAmountIndex = registerPropertyValue("shadows_highlights_amount");
+    darkenAmountIndex = registerPropertyValue("darken_amount");
+    lightenAmountIndex = registerPropertyValue("lighten_amount");
+
+    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+    dePropertyValue* shadowsHighlightsAmount = valueProperties[shadowsHighlightsAmountIndex];
+    dePropertyValue* darkenAmount = valueProperties[darkenAmountIndex];
+    dePropertyValue* lightenAmount = valueProperties[lightenAmountIndex];
+
+    blurRadius->setLabel("radius");
+    blurRadius->setMin(1);
+    blurRadius->setMax(50);
+
+    shadowsHighlightsAmount->setLabel("sh/hi");
+
+    darkenAmount->setLabel("darken");
+    lightenAmount->setLabel("lighten");
+
     reset();
 
     disableNotLuminance();
@@ -48,10 +57,15 @@ deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int
 
 void deShadowsHighlightsLayer::reset()
 {
-    blurRadius.set(5);
-    shadowsHighlightsAmount.set(0.3);
-    darkenAmount.set(0.0);
-    lightenAmount.set(0.0);
+    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+    dePropertyValue* shadowsHighlightsAmount = valueProperties[shadowsHighlightsAmountIndex];
+    dePropertyValue* darkenAmount = valueProperties[darkenAmountIndex];
+    dePropertyValue* lightenAmount = valueProperties[lightenAmountIndex];
+
+    blurRadius->set(5);
+    shadowsHighlightsAmount->set(0.3);
+    darkenAmount->set(0.0);
+    lightenAmount->set(0.0);
 }
 
 deShadowsHighlightsLayer::~deShadowsHighlightsLayer()
@@ -93,17 +107,22 @@ bool deShadowsHighlightsLayer::processAction(int i, const deChannel& sourceChann
         return false;
     }
 
-    deValue r = viewManager.getRealScale() * blurRadius.get();
+    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+    dePropertyValue* shadowsHighlightsAmount = valueProperties[shadowsHighlightsAmountIndex];
+    dePropertyValue* darkenAmount = valueProperties[darkenAmountIndex];
+    dePropertyValue* lightenAmount = valueProperties[lightenAmountIndex];
+
+    deValue r = viewManager.getRealScale() * blurRadius->get();
     deBlurType type = deGaussianBlur;
     bool result = blurChannel(source, blurMap, size, r, r, type, 0.0);
 
-    deValue sha = shadowsHighlightsAmount.get();
+    deValue sha = shadowsHighlightsAmount->get();
     blendChannel(source, blurMap, firstStage, NULL, deBlendOverlayInvert, sha, size.getN());
 
-    deValue da = darkenAmount.get();
+    deValue da = darkenAmount->get();
     blendChannel(firstStage, source, secondStage, NULL, deBlendDarken, da, size.getN());
 
-    deValue la = lightenAmount.get();
+    deValue la = lightenAmount->get();
     blendChannel(secondStage, source, destination, NULL, deBlendLighten, la, size.getN());
 
     delete [] blurMap;
@@ -125,10 +144,7 @@ void deShadowsHighlightsLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
     saveBlend(root);
-    blurRadius.save(root);
-    shadowsHighlightsAmount.save(root);
-    darkenAmount.save(root);
-    lightenAmount.save(root);
+    saveValueProperties(root);
 }
 
 void deShadowsHighlightsLayer::load(xmlNodePtr root)
@@ -139,12 +155,10 @@ void deShadowsHighlightsLayer::load(xmlNodePtr root)
 
     while (child)
     {
-        blurRadius.load(child);
-        shadowsHighlightsAmount.load(child);
-        darkenAmount.load(child);
-        lightenAmount.load(child);
+        loadValueProperties(child);
 
         child = child->next;
+
     }        
 }
 

@@ -25,10 +25,10 @@
 class deShadowsHighlightsLayer:public deActionLayer
 {
     private:
-        dePropertyValue blurRadius;
-        dePropertyValue shadowsHighlightsAmount;
-        dePropertyValue darkenAmount;
-        dePropertyValue lightenAmount;
+        int blurRadiusIndex;
+        int shadowsHighlightsAmountIndex;
+        int darkenAmountIndex;
+        int lightenAmountIndex;
 
     protected:
         virtual bool singleChannelProcessing() const {return true;};
@@ -47,12 +47,6 @@ class deShadowsHighlightsLayer:public deActionLayer
         virtual void save(xmlNodePtr root);
 
         virtual std::string getActionName() {return "s/h";};
-
-        dePropertyValue& getPropertyRadius() {return blurRadius;};
-
-        dePropertyValue& getPropertyShadowsHighlightsAmount() {return shadowsHighlightsAmount;};
-        dePropertyValue& getPropertyDarkenAmount() {return darkenAmount;};
-        dePropertyValue& getPropertyLightenAmount() {return lightenAmount;};
 
         void reset();
 
