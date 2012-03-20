@@ -26,24 +26,32 @@
 #include "layer_processor.h"
 
 deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
- radiusX("radius_x"),
- radiusY("radius_y"),
- centerX("center_x"),
- centerY("center_y"),
- light("light"),
- darkness("darkness")
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
 {
-    radiusX.setMin(0.01);
-    radiusX.setMax(0.7);
-    radiusY.setMin(0.01);
-    radiusY.setMax(0.7);
-    centerX.setMin(-1);
-    centerY.setMin(-1);
-    light.setMin(0.0);
-    light.setMax(1.0);
-    darkness.setMin(0.0);
-    darkness.setMax(1.0);
+    lightIndex = registerPropertyValue("light");
+    darknessIndex = registerPropertyValue("darkness");
+    centerXIndex = registerPropertyValue("center_x");
+    centerYIndex = registerPropertyValue("center_y");
+    radiusXIndex = registerPropertyValue("radius_x");
+    radiusYIndex = registerPropertyValue("radius_y");
+
+    dePropertyValue* radiusX = valueProperties[radiusXIndex];
+    dePropertyValue* radiusY = valueProperties[radiusYIndex];
+    dePropertyValue* centerX = valueProperties[centerXIndex];
+    dePropertyValue* centerY = valueProperties[centerYIndex];
+    dePropertyValue* light = valueProperties[lightIndex];
+    dePropertyValue* darkness = valueProperties[darknessIndex];
+
+    radiusX->setMin(0.01);
+    radiusX->setMax(0.7);
+    radiusY->setMin(0.01);
+    radiusY->setMax(0.7);
+    centerX->setMin(-1);
+    centerY->setMin(-1);
+    light->setMin(0.0);
+    light->setMax(1.0);
+    darkness->setMin(0.0);
+    darkness->setMax(1.0);
     reset();
 
     disableNotLuminance();
@@ -72,17 +80,22 @@ bool deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deCha
 
     viewManager.getZoom(x1, y1, x2, y2);
 
-
-
     deValue w = x2 - x1;
     deValue h = y2 - y1;
 
-    deValue rx = radiusX.get() / w;
-    deValue ry = radiusY.get() / h;
+    dePropertyValue* radiusX = valueProperties[radiusXIndex];
+    dePropertyValue* radiusY = valueProperties[radiusYIndex];
+    dePropertyValue* centerX = valueProperties[centerXIndex];
+    dePropertyValue* centerY = valueProperties[centerYIndex];
+    dePropertyValue* light = valueProperties[lightIndex];
+    dePropertyValue* darkness = valueProperties[darknessIndex];
+
+    deValue rx = radiusX->get() / w;
+    deValue ry = radiusY->get() / h;
 
     // 0..1
-    deValue ccx = (centerX.get() + 1.0) / 2.0;
-    deValue ccy = (centerY.get() + 1.0) / 2.0;
+    deValue ccx = (centerX->get() + 1.0) / 2.0;
+    deValue ccy = (centerY->get() + 1.0) / 2.0;
 
     deValue cccx = (ccx - x1) / w;
     deValue cccy = (ccy - y1) / h;
@@ -91,7 +104,7 @@ bool deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deCha
     deValue cx = cccx * 2.0 - 1.0;
     deValue cy = cccy * 2.0 - 1.0;
 
-    vignetteChannel(destination, size, cx, cy, rx, ry, light.get(), darkness.get());
+    vignetteChannel(destination, size, cx, cy, rx, ry, light->get(), darkness->get());
 
     logMessage("deVignetteLayer::processAction i=" + str(i) + " done");
 
@@ -105,25 +118,28 @@ bool deVignetteLayer::isChannelNeutral(int index)
 
 void deVignetteLayer::reset()
 {
+    dePropertyValue* radiusX = valueProperties[radiusXIndex];
+    dePropertyValue* radiusY = valueProperties[radiusYIndex];
+    dePropertyValue* centerX = valueProperties[centerXIndex];
+    dePropertyValue* centerY = valueProperties[centerYIndex];
+    dePropertyValue* light = valueProperties[lightIndex];
+    dePropertyValue* darkness = valueProperties[darknessIndex];
+
     setBlendMode(deBlendOverlay);
     setOpacity(1.0);
-    radiusX.set(0.3);
-    radiusY.set(0.3);
-    centerX.set(0.0);
-    centerY.set(0.0);
-    light.set(0.5);
-    darkness.set(0.2);
+    radiusX->set(0.3);
+    radiusY->set(0.3);
+    centerX->set(0.0);
+    centerY->set(0.0);
+    light->set(0.5);
+    darkness->set(0.2);
 }
 
 void deVignetteLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
     saveBlend(root);
-    radiusX.save(root);
-    radiusY.save(root);
-    centerX.save(root);
-    centerY.save(root);
-    light.save(root);
+    saveValueProperties(root);
 }
 
 void deVignetteLayer::load(xmlNodePtr root)
@@ -134,37 +150,36 @@ void deVignetteLayer::load(xmlNodePtr root)
 
     while (child)
     {
-
-        radiusX.load(child);
-        radiusY.load(child);
-        centerX.load(child);
-        centerY.load(child);
-        light.load(child);
-
+        loadValueProperties(child);
         child = child->next;
-
     }        
 
 }
 
 bool deVignetteLayer::randomize()
 {
+    dePropertyValue* radiusX = valueProperties[radiusXIndex];
+    dePropertyValue* radiusY = valueProperties[radiusYIndex];
+    dePropertyValue* centerX = valueProperties[centerXIndex];
+    dePropertyValue* centerY = valueProperties[centerYIndex];
+    dePropertyValue* light = valueProperties[lightIndex];
+    dePropertyValue* darkness = valueProperties[darknessIndex];
+
     deValue r = (deValue) rand() / RAND_MAX;
     r *= 0.5;
-    radiusX.set(r + 0.8);
+    radiusX->set(r + 0.8);
 
     deValue r2 = (deValue) rand() / RAND_MAX;
     r2 *= 0.5;
-    radiusY.set(r2 + 0.8);
+    radiusY->set(r2 + 0.8);
 
     deValue r3 = (deValue) rand() / RAND_MAX;
     r3 *= 2.0;
-    centerX.set(r3 - 1.0);
+    centerX->set(r3 - 1.0);
 
     deValue r4 = (deValue) rand() / RAND_MAX;
     r4 *= 2.0;
-    centerY.set(r4 - 1.0);
-
+    centerY->set(r4 - 1.0);
 
     return true;
 }

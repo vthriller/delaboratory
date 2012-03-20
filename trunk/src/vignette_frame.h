@@ -21,6 +21,7 @@
 
 #include "action_frame.h"
 #include "slider.h"
+#include <vector>
 
 class dePropertyValueSlider;
 class deLayerProcessor;
@@ -28,12 +29,7 @@ class deLayerProcessor;
 class deVignetteFrame:public deActionFrame
 {
     private:
-        dePropertyValueSlider* radiusX;
-        dePropertyValueSlider* radiusY;
-        dePropertyValueSlider* centerX;
-        dePropertyValueSlider* centerY;
-        dePropertyValueSlider* light;
-        dePropertyValueSlider* darkness;
+        std::vector<dePropertyValueSlider*> valueSliders;
         deLayerProcessor& layerProcessor;
 
         wxButton* reset;
