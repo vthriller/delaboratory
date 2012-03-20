@@ -47,7 +47,7 @@ void deConversionBW2HueLayer::reset()
 void deConversionBW2HueLayer::preset(deValue h)
 {
     hue.set(h);
-    saturation.set(0.04);
+    saturation.set(0.05);
 }
 
 void fill(deValue* pixels, int n, deValue v)
