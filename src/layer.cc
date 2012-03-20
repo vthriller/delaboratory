@@ -37,6 +37,14 @@ sourceLayer(_sourceLayer)
 deLayer::~deLayer()
 {
     logMessage("destroying layer " + str(index) + " " + name);
+    while (valueProperties.size() > 0)
+    {
+       std::vector<dePropertyValue*>::iterator i = valueProperties.begin();
+       dePropertyValue* p = *i;
+       delete p;
+       valueProperties.erase(i);
+    }       
+    logMessage("destroyed layer " + str(index) + " " + name);
 }
 
 deColorSpace deLayer::getColorSpace() const

@@ -25,12 +25,12 @@
 class deVignetteLayer:public deActionLayer
 {
     private:
-        dePropertyValue radiusX;
-        dePropertyValue radiusY;
-        dePropertyValue centerX;
-        dePropertyValue centerY;
-        dePropertyValue light;
-        dePropertyValue darkness;
+        int radiusXIndex;
+        int radiusYIndex;
+        int centerXIndex;
+        int centerYIndex;
+        int lightIndex;
+        int darknessIndex;
 
     protected:
         virtual bool singleChannelProcessing() const {return true;};
@@ -47,16 +47,7 @@ class deVignetteLayer:public deActionLayer
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
 
-        virtual std::string getActionName() {return "setup";};
-
-        dePropertyValue& getPropertyCenterX() {return centerX;};
-        dePropertyValue& getPropertyCenterY() {return centerY;};
-
-        dePropertyValue& getPropertyRadiusX() {return radiusX;};
-        dePropertyValue& getPropertyRadiusY() {return radiusY;};
-
-        dePropertyValue& getPropertyLight() {return light;};
-        dePropertyValue& getPropertyDarkness() {return darkness;};
+        virtual std::string getActionName() {return "vign";};
 
         void reset();
 

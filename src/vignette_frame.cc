@@ -32,24 +32,20 @@ deVignetteFrame::deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLaye
 
     int range = 400;
 
-    light = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyLight(), vignetteLayer, layerProcessor);
-    sizer->Add(light);
+    int n = vignetteLayer.getNumberOfValueProperties();
 
-    darkness = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyDarkness(), vignetteLayer, layerProcessor);
-    sizer->Add(darkness);
+    int i;
 
-    centerX = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyCenterX(), vignetteLayer, layerProcessor);
-    sizer->Add(centerX);
-
-    centerY = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyCenterY(), vignetteLayer, layerProcessor);
-    sizer->Add(centerY);
-
-    radiusX = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyRadiusX(), vignetteLayer, layerProcessor);
-    sizer->Add(radiusX);
-
-    radiusY = new dePropertyValueSlider(this, range, vignetteLayer.getPropertyRadiusY(), vignetteLayer, layerProcessor);
-    sizer->Add(radiusY);
-
+    for (i = 0; i < n; i++)
+    {
+        dePropertyValue* p = vignetteLayer.getPropertyValue(i);
+        if (p)
+        {
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, vignetteLayer, layerProcessor);
+            valueSliders.push_back(s);
+            sizer->Add(s);
+        }            
+    }
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
     sizer->Add(sizerB, 0);
@@ -76,12 +72,11 @@ void deVignetteFrame::click(wxCommandEvent &event)
         vignetteLayer.reset();
     }      
 
-    light->setFromProperty();
-    darkness->setFromProperty();
-    radiusX->setFromProperty();
-    radiusY->setFromProperty();
-    centerX->setFromProperty();
-    centerY->setFromProperty();
+    std::vector<dePropertyValueSlider*>::iterator j;
+    for (j = valueSliders.begin(); j != valueSliders.end(); j++)
+    {
+        (*j)->setFromProperty();
+    }
 
     int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(index);
