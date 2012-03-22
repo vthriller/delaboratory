@@ -39,6 +39,10 @@ class deColor3
         virtual ~deColor3()
         {
         };
+
+        deValue getV1() {return v1;};
+        deValue getV2() {return v2;};
+        deValue getV3() {return v3;};
 };
 
 class dePalette3
@@ -52,6 +56,10 @@ class dePalette3
         virtual ~dePalette3();
 
         void addColor(const deColor3& color);
+
+        void optimize(const dePalette3& source, int n);
+
+        deColor3 getColor(int index);
     
 };
 
