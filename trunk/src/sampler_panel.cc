@@ -187,7 +187,6 @@ void deSamplerPanel::update()
         convertPixel(image, p, deColorSpaceRGB, rr, gg, bb, vv4);
         convertPixel(image, p, colorSpace, vv1, vv2, vv3, vv4);
 
-        //colorPanel->SetBackgroundColour(wxColour(255 * rr, 255 * gg, 255 * bb));
         colorPanel->setRGB(rr, gg, bb);
 
         image.unlockRead();

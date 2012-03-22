@@ -54,6 +54,7 @@ enum
     ID_LABColors2,
     ID_LABColors5,
     ID_MemoryInfo,
+    ID_ColorMatrix,
     ID_BenchmarkBlur,
     ID_BenchmarkColor,
     DE_REPAINT_EVENT,
@@ -109,6 +110,7 @@ private:
 	void onLABColors2(wxCommandEvent& event);
 	void onLABColors5(wxCommandEvent& event);
 	void onMemoryInfo(wxCommandEvent& event);
+	void onColorMatrix(wxCommandEvent& event);
 	void onBenchmarkBlur(wxCommandEvent& event);
 	void onBenchmarkColor(wxCommandEvent& event);
 	void onRepaintEvent(wxCommandEvent& event);

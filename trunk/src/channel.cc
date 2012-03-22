@@ -53,8 +53,14 @@ const deValue* deChannel::getPixels() const
 
 deValue deChannel::getValue(int pos) const
 {
-    assert(pos >= 0);
-    assert(pos < magicSize);
+    if (pos < 0) 
+    {
+        return 0.0;
+    }
+    if (pos > magicSize) 
+    {
+        return 0.0;
+    }
     deValue v = pixels[pos];
     return v;
 }

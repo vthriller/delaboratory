@@ -30,6 +30,7 @@
 #include "help_color_spaces_frame5.h"
 #include "help_color_spaces_frame6.h"
 #include "benchmark_frame.h"
+#include "color_matrix_frame.h"
 #include "project.h"
 #include "str.h"
 #include "file_dialogs.h"
@@ -66,6 +67,7 @@ EVT_MENU(ID_LABColors1, deMainFrame::onLABColors1)
 EVT_MENU(ID_LABColors2, deMainFrame::onLABColors2)
 EVT_MENU(ID_LABColors5, deMainFrame::onLABColors5)
 EVT_MENU(ID_MemoryInfo, deMainFrame::onMemoryInfo)
+EVT_MENU(ID_ColorMatrix, deMainFrame::onColorMatrix)
 EVT_MENU(ID_BenchmarkBlur, deMainFrame::onBenchmarkBlur)
 EVT_MENU(ID_BenchmarkColor, deMainFrame::onBenchmarkColor)
 EVT_MENU(DE_REPAINT_EVENT, deMainFrame::onRepaintEvent)
@@ -208,9 +210,13 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     menuInfo->Append( ID_BenchmarkColor, _("benchmark color conversion") );
     menuInfo->Append( ID_BenchmarkBlur, _("benchmark blur (slow!)") );
 
+    wxMenu *menuPalette = new wxMenu;
+    menuPalette->Append( ID_ColorMatrix, _("color matrix") );
+
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, _("&File") );
     menuBar->Append( menuInfo, _("&Info") );
+    menuBar->Append( menuPalette, _("&Palette") );
     menuBar->Append( menuHelp, _("&Channels") );
 
     SetMenuBar( menuBar );
@@ -397,6 +403,12 @@ void deMainFrame::onLABColors5(wxCommandEvent& event)
 void deMainFrame::onMemoryInfo(wxCommandEvent& event)
 {
     project.openMemoryInfoFrame(this);
+}
+
+void deMainFrame::onColorMatrix(wxCommandEvent& event)
+{
+    wxFrame* help = new deColorMatrixFrame(this, project);
+    help->Show();
 }
 
 void deMainFrame::onBenchmarkBlur(wxCommandEvent& event)
