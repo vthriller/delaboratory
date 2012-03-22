@@ -29,12 +29,6 @@ class deMemoryInfoFrame:public deHelpFrame
         wxStaticText* previewChannels;
         wxStaticText* previewSize;
         wxStaticText* previewMemory;
-        /*
-        wxStaticText* sourceChannels;
-        wxStaticText* sourceSize;
-        wxStaticText* sourceMemory;
-        wxStaticText* totalMemory;
-        */
     public:
         deMemoryInfoFrame(wxWindow *parent, deProject& _project);
         virtual ~deMemoryInfoFrame();
