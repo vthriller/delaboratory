@@ -56,7 +56,6 @@ int generateInfo(deChannelManager& channelManager, wxWindow* parent, wxSizer* si
 void deMemoryInfoFrame::update()
 {
     int m1;
-    //int m2;
     {
         deChannelManager& channelManager = project.getPreviewChannelManager();
         int size = sizeof(deValue) * channelManager.getChannelSize().getN();
@@ -68,23 +67,6 @@ void deMemoryInfoFrame::update()
         std::string s = str(m1) + "MB";
         previewMemory->SetLabel(wxString::FromAscii(s.c_str()));
     }        
-    /*
-    {
-        deChannelManager& channelManager = project.getSourceChannelManager();
-        int size = sizeof(deValue) * channelManager.getChannelSize().getN();
-        int n = channelManager.getNumberOfAllocatedChannels();
-        m2 = n * size / (1024 * 1024);
-
-        sourceChannels->SetLabel(wxString::FromAscii(str(n).c_str()));
-        sourceSize->SetLabel(wxString::FromAscii(str(size).c_str()));
-        std::string s = str(m2) + "MB";
-        sourceMemory->SetLabel(wxString::FromAscii(s.c_str()));
-    }        
-
-    int m = m1 + m2;
-    std::string s = str(m) + "MB";
-    totalMemory->SetLabel(wxString::FromAscii(s.c_str()));
-    */
 
     Layout();
     Fit();
@@ -116,32 +98,6 @@ deMemoryInfoFrame::deMemoryInfoFrame(wxWindow *parent, deProject& _project)
         previewMemory = new wxStaticText(this, wxID_ANY, _T(""));
         sizer->Add(previewMemory);
     }   
-    /*
-    {
-        wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("allocated source channels:"));
-        sizer->Add(l);
-        sourceChannels = new wxStaticText(this, wxID_ANY, _T(""));
-        sizer->Add(sourceChannels);
-    }        
-    {
-        wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("source channel size:"));
-        sizer->Add(l);
-        sourceSize = new wxStaticText(this, wxID_ANY, _T(""));
-        sizer->Add(sourceSize);
-    }        
-    {
-        wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("memory used by source channels:"));
-        sizer->Add(l);
-        sourceMemory = new wxStaticText(this, wxID_ANY, _T(""));
-        sizer->Add(sourceMemory);
-    }        
-    {
-        wxStaticText* l = new wxStaticText(this, wxID_ANY, _T("total memory used:"));
-        sizer->Add(l);
-        totalMemory = new wxStaticText(this, wxID_ANY, _T(""));
-        sizer->Add(totalMemory);
-    } 
-    */
 
     update();
 
