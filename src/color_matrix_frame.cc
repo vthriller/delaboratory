@@ -24,6 +24,9 @@
 #include "channel_manager.h"
 #include "conversion_functions.h"
 
+#define DE_PALETTE_TILE_RENDER_WIDTH 60
+#define DE_PALETTE_TILE_RENDER_HEIGHT 40
+
 #define DE_COLOR_MATRIX_TILE_RENDER_WIDTH 20
 #define DE_COLOR_MATRIX_TILE_RENDER_HEIGHT 20
 #define DE_COLOR_MATRIX_TILE_WIDTH 30
@@ -34,6 +37,12 @@
 deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project)
 :deHelpFrame(parent, "color matrix"), project(_project)
 {
+    wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(mainSizer);
+
+    palette = NULL;
+    palette2 = NULL;
+
     const deViewManager& viewManager = project.getViewManager();
     int view = viewManager.getView();
 
@@ -54,6 +63,8 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project)
         return;
     }
 
+    palette = new dePalette3(colorSpace);
+
     deChannelManager& channelManager = project.getPreviewChannelManager();
     deSize channelSize = channelManager.getChannelSize();
 
@@ -67,7 +78,7 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project)
     int s = 2;
 
     wxSizer* sizer = new wxFlexGridSizer(w, s, s);
-    SetSizer(sizer);
+    mainSizer->Add(sizer);
 
     int i;
 
@@ -114,6 +125,8 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project)
         sum2 /= DE_COLOR_MATRIX_TILE_SIZE;
         sum3 /= DE_COLOR_MATRIX_TILE_SIZE;
 
+        palette->addColor(deColor3(sum1, sum2, sum3));
+
         deValue r;
         deValue g;
         deValue b;
@@ -130,11 +143,48 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project)
         }
     }
 
+    palette2 = new dePalette3(colorSpace);
+
+    int ps = 6;
+
+    palette2->optimize(*palette, ps);
+
+    int s2 = 5;
+
+    wxSizer* sizerS = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T("palette"));
+    mainSizer->Add(sizerS);
+    
+    wxSizer* paletteSizer = new wxFlexGridSizer(ps, s2, s2);
+    sizerS->Add(paletteSizer);
+    for (i = 0; i < ps; i++)
+    {
+        deColorPanel* colorPanel = new deColorPanel(this, wxSize(DE_PALETTE_TILE_RENDER_WIDTH, DE_PALETTE_TILE_RENDER_HEIGHT));
+        paletteSizer->Add(colorPanel);
+
+        deValue r;
+        deValue g;
+        deValue b;
+
+        deColor3 c = palette2->getColor(i);
+
+        f3x3(c.getV1(), c.getV2(), c.getV3(), r, g, b);
+
+        colorPanel->setRGB(r, g, b);
+    }
+
     Fit();
 
 }
 
 deColorMatrixFrame::~deColorMatrixFrame()
 {
+    if (palette)
+    {
+        delete palette;
+    }        
+    if (palette2)
+    {
+        delete palette2;
+    }        
 }
 

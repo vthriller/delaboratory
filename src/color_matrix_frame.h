@@ -20,12 +20,15 @@
 #define _DE_COLOR_MATRIX_FRAME6_H
 
 #include "help_frame.h"
+#include "palette.h"
 class deProject;
 
 class deColorMatrixFrame:public deHelpFrame
 {
     private:
         deProject& project;
+        dePalette3* palette;
+        dePalette3* palette2;
     public:
         deColorMatrixFrame(wxWindow *parent, deProject& _project);
         virtual ~deColorMatrixFrame();

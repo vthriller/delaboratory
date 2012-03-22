@@ -31,3 +31,19 @@ void dePalette3::addColor(const deColor3& color)
 {
     colors.push_back(color);
 }
+
+void dePalette3::optimize(const dePalette3& source, int n)
+{
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        deColor3 c = source.colors[i];
+        colors.push_back(c);
+
+    }
+}
+
+deColor3 dePalette3::getColor(int index)
+{
+    return colors[index];
+}
