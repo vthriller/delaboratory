@@ -43,6 +43,15 @@ class deColor3
         deValue getV1() {return v1;};
         deValue getV2() {return v2;};
         deValue getV3() {return v3;};
+
+        deValue calcDistance(const deColor3& c) const
+        {
+            deValue d1 = c.v1 - v1;
+            deValue d2 = c.v2 - v2;
+            deValue d3 = c.v3 - v3;
+            deValue d = d1 * d1 + d2 * d2 + d3 * d3;
+            return d;
+        };
 };
 
 class dePalette3
@@ -60,6 +69,8 @@ class dePalette3
         void optimize(const dePalette3& source, int n);
 
         deColor3 getColor(int index);
+
+        int getSize() const {return colors.size();};
     
 };
 
