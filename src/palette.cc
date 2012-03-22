@@ -34,13 +34,88 @@ void dePalette3::addColor(const deColor3& color)
 
 void dePalette3::optimize(const dePalette3& source, int n)
 {
+    int ss = source.colors.size();
+    int sss = ss * ss;
+
+    deValue** distances = new deValue * [ss];
+
     int i;
-    for (i = 0; i < n; i++)
+    int j;
+    for (i = 0; i < ss; i++)
     {
-        deColor3 c = source.colors[i];
-        colors.push_back(c);
+        distances[i] = new deValue [ss];
+        for (j = 0; j < ss; j++)
+        {
+            deValue d = 0;
+            if (i != j)
+            {
+                d = source.colors[i].calcDistance(source.colors[j]);
+            }   
+            distances[i][j] = d;
+        }
 
     }
+
+    deValue margin = 0.001;
+
+    bool no_more = false;
+
+    while ((colors.size() < n) && (!no_more))
+    {
+        int winner = -1;
+        int max = 0;
+
+        for (i = 0; i < ss; i++)
+        {
+            int counter = 0;
+            for (j = 0; j < ss; j++)
+            {
+                deValue d = distances[i][j];
+                if (d != 0)
+                {
+                    if ( d < margin )
+                    {
+                        counter++;
+                    }
+                }
+            }
+            if (counter > max)
+            {
+                winner = i;
+                max = counter;
+            }
+        }
+
+        if (winner >= 0)
+        {
+            colors.push_back(source.colors[winner]);
+            for (i = 0; i < ss; i++)
+            {
+                deValue d = distances[winner][i];
+                if (d != 0)
+                {
+                    if ( d < margin )
+                    {
+                        for (j = 0; j < ss; j++)
+                        {
+                            distances[i][j] = 0;
+                            distances[j][i] = 0;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            no_more = true;
+        }
+    }
+
+    for (i = 0; i < ss; i++)
+    {
+        delete [] distances[i];
+    }        
+    delete [] distances;
 }
 
 deColor3 dePalette3::getColor(int index)

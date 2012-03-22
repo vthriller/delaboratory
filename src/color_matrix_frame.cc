@@ -145,7 +145,7 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project)
 
     palette2 = new dePalette3(colorSpace);
 
-    int ps = 6;
+    int ps = 8;
 
     palette2->optimize(*palette, ps);
 
@@ -156,7 +156,7 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project)
     
     wxSizer* paletteSizer = new wxFlexGridSizer(ps, s2, s2);
     sizerS->Add(paletteSizer);
-    for (i = 0; i < ps; i++)
+    for (i = 0; i < palette2->getSize(); i++)
     {
         deColorPanel* colorPanel = new deColorPanel(this, wxSize(DE_PALETTE_TILE_RENDER_WIDTH, DE_PALETTE_TILE_RENDER_HEIGHT));
         paletteSizer->Add(colorPanel);
