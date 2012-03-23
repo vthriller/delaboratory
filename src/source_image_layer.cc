@@ -24,6 +24,7 @@
 #include "logger.h"
 #include "static_image.h"
 #include "copy_channel.h"
+#include "str.h"
 
 deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace)
 :deLayer("source image", _colorSpace, _index, -1),
@@ -79,13 +80,19 @@ bool deSourceImageLayer::updateImage()
     deValue z_y2;
     viewManager.getZoom(z_x1, z_y1, z_x2, z_y2);
 
+    logMessage("z_x1: " + str(z_x1) + " z_x2: " + str(z_x2) + " z_y1: " + str(z_y1) + " z_y2: " + str(z_y2));
+
     int x1 = ss.getW() * z_x1;
     int y1 = ss.getH() * z_y1;
     int x2 = ss.getW() * z_x2;
     int y2 = ss.getH() * z_y2;
 
+    logMessage("x1: " + str(x1) + " x2: " + str(x2) + " y1: " + str(y1) + " y2: " + str(y2));
+
     int w = ds.getW();
     int h = ds.getH();
+
+    logMessage("w: " + str(w) + " h: " + str(h));
 
     int ws = ss.getW();
 
