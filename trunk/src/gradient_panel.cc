@@ -305,9 +305,9 @@ void deGradientPanel1::generateBitmap()
 
             setValues(v1, v2, v3, v4, colorSpace, channel1, channel2, u, v, c1, c2, c3);
 
-            deValue rr;
-            deValue gg;
-            deValue bb;
+            deValue rr = 0;
+            deValue gg = 0;
+            deValue bb = 0;
             if (f3x3)
             {
                 f3x3(v1, v2, v3, rr, gg, bb);
