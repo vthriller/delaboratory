@@ -24,17 +24,7 @@
 #include "channel_manager.h"
 #include "conversion_functions.h"
 
-#define DE_PALETTE_TILE_RENDER_WIDTH 60
-#define DE_PALETTE_TILE_RENDER_HEIGHT 40
-
-#define DE_COLOR_MATRIX_TILE_RENDER_WIDTH 20
-#define DE_COLOR_MATRIX_TILE_RENDER_HEIGHT 20
-#define DE_COLOR_MATRIX_TILE_WIDTH 30
-#define DE_COLOR_MATRIX_TILE_HEIGHT 30
-#define DE_COLOR_MATRIX_TILE_SIZE (DE_COLOR_MATRIX_TILE_WIDTH * DE_COLOR_MATRIX_TILE_HEIGHT)
-
-
-deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project)
+deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, int tileRW, int tileRH, int tileW, int tileH, int palW, int palH, int palSize, deValue margin)
 :deHelpFrame(parent, "color matrix"), project(_project)
 {
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
@@ -70,8 +60,8 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project)
 
     int cs = channelSize.getW();
 
-    int w = channelSize.getW() / DE_COLOR_MATRIX_TILE_WIDTH;
-    int h = channelSize.getH() / DE_COLOR_MATRIX_TILE_HEIGHT;
+    int w = channelSize.getW() / tileW;
+    int h = channelSize.getH() / tileH;
 
     int n = w * h;
 
@@ -87,13 +77,13 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project)
 
     for (i = 0; i < n; i++)
     {
-        deColorPanel* colorPanel = new deColorPanel(this, wxSize(DE_COLOR_MATRIX_TILE_RENDER_WIDTH, DE_COLOR_MATRIX_TILE_RENDER_HEIGHT));
+        deColorPanel* colorPanel = new deColorPanel(this, wxSize(tileRW, tileRH));
         sizer->Add(colorPanel);
 
-        int x1 = x * DE_COLOR_MATRIX_TILE_WIDTH;
-        int x2 = (x + 1) * DE_COLOR_MATRIX_TILE_WIDTH;
-        int y1 = y * DE_COLOR_MATRIX_TILE_HEIGHT;
-        int y2 = (y + 1) * DE_COLOR_MATRIX_TILE_HEIGHT;
+        int x1 = x * tileW;
+        int x2 = (x + 1) * tileW;
+        int y1 = y * tileH;
+        int y2 = (y + 1) * tileH;
 
         deValue sum1 = 0;
         deValue sum2 = 0;
@@ -121,9 +111,11 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project)
             }
         }
 
-        sum1 /= DE_COLOR_MATRIX_TILE_SIZE;
-        sum2 /= DE_COLOR_MATRIX_TILE_SIZE;
-        sum3 /= DE_COLOR_MATRIX_TILE_SIZE;
+        int ts = tileW * tileH;
+
+        sum1 /= ts;
+        sum2 /= ts;
+        sum3 /= ts;
 
         palette->addColor(deColor3(sum1, sum2, sum3));
 
@@ -145,20 +137,18 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project)
 
     palette2 = new dePalette3(colorSpace);
 
-    int ps = 8;
-
-    palette2->optimize(*palette, ps);
+    palette2->optimize(*palette, palSize, margin);
 
     int s2 = 5;
 
     wxSizer* sizerS = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T("palette"));
     mainSizer->Add(sizerS);
     
-    wxSizer* paletteSizer = new wxFlexGridSizer(ps, s2, s2);
+    wxSizer* paletteSizer = new wxFlexGridSizer(palSize / 2, s2, s2);
     sizerS->Add(paletteSizer);
     for (i = 0; i < palette2->getSize(); i++)
     {
-        deColorPanel* colorPanel = new deColorPanel(this, wxSize(DE_PALETTE_TILE_RENDER_WIDTH, DE_PALETTE_TILE_RENDER_HEIGHT));
+        deColorPanel* colorPanel = new deColorPanel(this, wxSize(palW, palH));
         paletteSizer->Add(colorPanel);
 
         deValue r;

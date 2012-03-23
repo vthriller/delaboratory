@@ -31,6 +31,7 @@ class deVignetteLayer:public deActionLayer
         int centerYIndex;
         int lightIndex;
         int darknessIndex;
+        int spotIndex;
 
     protected:
         virtual bool singleChannelProcessing() const {return true;};
@@ -52,6 +53,8 @@ class deVignetteLayer:public deActionLayer
         void reset();
 
         virtual bool randomize();
+
+        bool setCenter(deValue x, deValue y);
 
 };
 

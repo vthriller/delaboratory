@@ -30,6 +30,7 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sour
 {
     lightIndex = registerPropertyValue("light");
     darknessIndex = registerPropertyValue("darkness");
+    spotIndex = registerPropertyValue("spot");
     centerXIndex = registerPropertyValue("center_x");
     centerYIndex = registerPropertyValue("center_y");
     radiusXIndex = registerPropertyValue("radius_x");
@@ -41,6 +42,7 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sour
     dePropertyValue* centerY = valueProperties[centerYIndex];
     dePropertyValue* light = valueProperties[lightIndex];
     dePropertyValue* darkness = valueProperties[darknessIndex];
+    dePropertyValue* spot = valueProperties[spotIndex];
 
     radiusX->setMin(0.01);
     radiusX->setMax(0.7);
@@ -50,6 +52,8 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sour
     centerY->setMin(-1);
     light->setMin(0.0);
     light->setMax(1.0);
+    spot->setMin(0.0);
+    spot->setMax(1.0);
     darkness->setMin(0.0);
     darkness->setMax(1.0);
     reset();
@@ -89,6 +93,7 @@ bool deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deCha
     dePropertyValue* centerY = valueProperties[centerYIndex];
     dePropertyValue* light = valueProperties[lightIndex];
     dePropertyValue* darkness = valueProperties[darknessIndex];
+    dePropertyValue* spot = valueProperties[spotIndex];
 
     deValue rx = radiusX->get() / w;
     deValue ry = radiusY->get() / h;
@@ -104,7 +109,7 @@ bool deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deCha
     deValue cx = cccx * 2.0 - 1.0;
     deValue cy = cccy * 2.0 - 1.0;
 
-    vignetteChannel(destination, size, cx, cy, rx, ry, light->get(), darkness->get());
+    vignetteChannel(destination, size, cx, cy, rx, ry, light->get(), darkness->get(), spot->get());
 
     logMessage("deVignetteLayer::processAction i=" + str(i) + " done");
 
@@ -124,6 +129,7 @@ void deVignetteLayer::reset()
     dePropertyValue* centerY = valueProperties[centerYIndex];
     dePropertyValue* light = valueProperties[lightIndex];
     dePropertyValue* darkness = valueProperties[darknessIndex];
+    dePropertyValue* spot = valueProperties[spotIndex];
 
     setBlendMode(deBlendOverlay);
     setOpacity(1.0);
@@ -132,6 +138,7 @@ void deVignetteLayer::reset()
     centerX->set(0.0);
     centerY->set(0.0);
     light->set(0.5);
+    spot->set(0.3);
     darkness->set(0.2);
 }
 
@@ -182,4 +189,12 @@ bool deVignetteLayer::randomize()
     centerY->set(r4 - 1.0);
 
     return true;
+}
+
+bool deVignetteLayer::setCenter(deValue x, deValue y)
+{
+    dePropertyValue* centerX = valueProperties[centerXIndex];
+    dePropertyValue* centerY = valueProperties[centerYIndex];
+    centerX->set(2 * x - 1);
+    centerY->set(2 * y - 1);
 }

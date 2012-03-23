@@ -31,96 +31,39 @@ deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLa
 
     deDodgeBurnLayer& dodgeBurnLayer = dynamic_cast<deDodgeBurnLayer&>(_layer);
 
-    wxSizer* sizerTop = new wxStaticBoxSizer(wxVERTICAL, this, _T(""));
-    sizer->Add(sizerTop);
-
     int range = 400;
 
-    radius = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyRadius(), dodgeBurnLayer, layerProcessor);
-    sizerTop->Add(radius);
+    int n = dodgeBurnLayer.getNumberOfValueProperties();
+
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        dePropertyValue* p = dodgeBurnLayer.getPropertyValue(i);
+        if (p)
+        {
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, dodgeBurnLayer, layerProcessor);
+            valueSliders.push_back(s);
+            sizer->Add(s);
+        }            
+    }
 
     alternate = new dePropertyBooleanUI(this, dodgeBurnLayer.getPropertyAlternate(), dodgeBurnLayer, layerProcessor);
-    sizerTop->Add(alternate);
+    sizer->Add(alternate);
 
-
-    int w = 80;
-    int h = 25;
-
-
-    wxSizer* sizerDodge = new wxStaticBoxSizer(wxVERTICAL, this, _T("dodge"));
-    sizer->Add(sizerDodge);
-
-    dodgeAmount = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyDodgeAmount(), dodgeBurnLayer, layerProcessor);
-    sizerDodge->Add(dodgeAmount);
-
-    dodgeMin = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyDodgeMin(), dodgeBurnLayer, layerProcessor);
-    sizerDodge->Add(dodgeMin);
-
-    dodgeMax = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyDodgeMax(), dodgeBurnLayer, layerProcessor);
-    sizerDodge->Add(dodgeMax);
-
-    wxSizer* sizerDB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
-    sizerDodge->Add(sizerDB, 0);
-
-    dodgeLow = new wxButton(this, wxID_ANY, _T("low"), wxDefaultPosition, wxSize(w,h));
-    sizerDB->Add(dodgeLow, 0);
-
-    dodgeMedium = new wxButton(this, wxID_ANY, _T("medium"), wxDefaultPosition, wxSize(w,h));
-    sizerDB->Add(dodgeMedium, 0);
-
-    dodgeHigh = new wxButton(this, wxID_ANY, _T("high"), wxDefaultPosition, wxSize(w,h));
-    sizerDB->Add(dodgeHigh, 0);
-
-    dodgeNarrow = new wxButton(this, wxID_ANY, _T("narrow"), wxDefaultPosition, wxSize(w,h));
-    sizerDB->Add(dodgeNarrow, 0);
-
-    dodgeAverage = new wxButton(this, wxID_ANY, _T("average"), wxDefaultPosition, wxSize(w,h));
-    sizerDB->Add(dodgeAverage, 0);
-
-    dodgeWide = new wxButton(this, wxID_ANY, _T("wide"), wxDefaultPosition, wxSize(w,h));
-    sizerDB->Add(dodgeWide, 0);
-
-
-
-    wxSizer* sizerBurn = new wxStaticBoxSizer(wxVERTICAL, this, _T("burn"));
-    sizer->Add(sizerBurn);
-
-    burnAmount = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyBurnAmount(), dodgeBurnLayer, layerProcessor);
-    sizerBurn->Add(burnAmount);
-
-    burnMin = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyBurnMin(), dodgeBurnLayer, layerProcessor);
-    sizerBurn->Add(burnMin);
-
-    burnMax = new dePropertyValueSlider(this, range, dodgeBurnLayer.getPropertyBurnMax(), dodgeBurnLayer, layerProcessor);
-    sizerBurn->Add(burnMax);
-
-    wxSizer* sizerBB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
-    sizerBurn->Add(sizerBB, 0);
-
-    burnLow = new wxButton(this, wxID_ANY, _T("low"), wxDefaultPosition, wxSize(w,h));
-    sizerBB->Add(burnLow, 0);
-
-    burnMedium = new wxButton(this, wxID_ANY, _T("medium"), wxDefaultPosition, wxSize(w,h));
-    sizerBB->Add(burnMedium, 0);
-
-    burnHigh = new wxButton(this, wxID_ANY, _T("high"), wxDefaultPosition, wxSize(w,h));
-    sizerBB->Add(burnHigh, 0);
-
-    burnNarrow = new wxButton(this, wxID_ANY, _T("narrow"), wxDefaultPosition, wxSize(w,h));
-    sizerBB->Add(burnNarrow, 0);
-
-    burnAverage = new wxButton(this, wxID_ANY, _T("average"), wxDefaultPosition, wxSize(w,h));
-    sizerBB->Add(burnAverage, 0);
-
-    burnWide = new wxButton(this, wxID_ANY, _T("wide"), wxDefaultPosition, wxSize(w,h));
-    sizerBB->Add(burnWide, 0);
-
-
-    wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
+    wxSizer* sizerB = new wxFlexGridSizer(5);
     sizer->Add(sizerB, 0);
 
-    reset = new wxButton(this, wxID_ANY, _T("reset"), wxDefaultPosition, wxSize(100,25));
-    sizerB->Add(reset, 0);
+    std::vector<std::string> presets;
+    dodgeBurnLayer.getPresets(presets);
+
+    std::vector<std::string>::iterator j;
+    for (j = presets.begin(); j != presets.end(); j++)
+    {
+        wxButton* b = new wxButton(this, wxID_ANY, wxString::FromAscii(j->c_str()), wxDefaultPosition, wxSize(100,25));
+        sizerB->Add(b, 0);
+        buttons[*j] = b;
+    }
 
     Fit();
 
@@ -136,80 +79,21 @@ void deDodgeBurnFrame::click(wxCommandEvent &event)
     int id = event.GetId();
     deDodgeBurnLayer& dodgeBurnLayer = dynamic_cast<deDodgeBurnLayer&>(layer);
 
-    if (reset->GetId() == id)
+    std::map<std::string, wxButton*>::iterator i;
+
+    for (i = buttons.begin(); i != buttons.end(); i++)
     {
-        dodgeBurnLayer.reset();
-    }      
+        if (i->second->GetId() == id)
+        {
+            dodgeBurnLayer.applyPreset(i->first);
+        }
+    }
 
-    if (dodgeLow->GetId() == id)
+    std::vector<dePropertyValueSlider*>::iterator j;
+    for (j = valueSliders.begin(); j != valueSliders.end(); j++)
     {
-        dodgeBurnLayer.setDodge(0.3);
-    }      
-
-    if (dodgeMedium->GetId() == id)
-    {
-        dodgeBurnLayer.setDodge(0.6);
-    }      
-
-    if (dodgeHigh->GetId() == id)
-    {
-        dodgeBurnLayer.setDodge(0.9);
-    }      
-
-    if (dodgeNarrow->GetId() == id)
-    {
-        dodgeBurnLayer.setDodgeRange(0.7, 0.95);
-    }      
-
-    if (dodgeAverage->GetId() == id)
-    {
-        dodgeBurnLayer.setDodgeRange(0.5, 0.95);
-    }      
-
-    if (dodgeWide->GetId() == id)
-    {
-        dodgeBurnLayer.setDodgeRange(0.2, 0.95);
-    }      
-
-    if (burnLow->GetId() == id)
-    {
-        dodgeBurnLayer.setBurn(0.3);
-    }      
-
-    if (burnMedium->GetId() == id)
-    {
-        dodgeBurnLayer.setBurn(0.6);
-    }      
-
-    if (burnHigh->GetId() == id)
-    {
-        dodgeBurnLayer.setBurn(0.9);
-    }      
-
-    if (burnNarrow->GetId() == id)
-    {
-        dodgeBurnLayer.setBurnRange(0.05, 0.3);
-    }      
-
-    if (burnAverage->GetId() == id)
-    {
-        dodgeBurnLayer.setBurnRange(0.05, 0.5);
-    }      
-
-    if (burnWide->GetId() == id)
-    {
-        dodgeBurnLayer.setBurnRange(0.05, 0.8);
-    }      
-
-
-    radius->setFromProperty();
-    alternate->setFromProperty();
-    dodgeAmount->setFromProperty();
-    dodgeMin->setFromProperty();
-    dodgeMax->setFromProperty();
-    burnAmount->setFromProperty();
-    burnMin->setFromProperty();
-    burnMax->setFromProperty();
+        (*j)->setFromProperty();
+    }
 
     int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(index);

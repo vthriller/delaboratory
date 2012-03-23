@@ -27,70 +27,153 @@
 #include "blend_channel.h"
 #include "process_linear.h"
 #include "layer_processor.h"
+#include "preset.h"
 
 deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
 :deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
- blurRadius("blur_radius"),
- alternate("alternate"),
- dodgeAmount("dodge_amount"),
- dodgeMin("dodge_min"),
- dodgeMax("dodge_max"),
- burnAmount("burn_amount"),
- burnMin("burn_min"),
- burnMax("burn_max")
+ alternate("alternate")
 {
-    blurRadius.setLabel("radius");
-    blurRadius.setMin(1);
-    blurRadius.setMax(50);
+    blurRadiusIndex = registerPropertyValue("blur_radius");
+    dodgeAmountIndex = registerPropertyValue("dodge_amount");
+    dodgeMinIndex = registerPropertyValue("dodge_min");
+    dodgeMaxIndex = registerPropertyValue("dodge_max");
+    burnAmountIndex = registerPropertyValue("burn_amount");
+    burnMinIndex = registerPropertyValue("burn_min");
+    burnMaxIndex = registerPropertyValue("burn_max");
 
-    dodgeAmount.setLabel("amount");
-    dodgeMin.setLabel("min");
-    dodgeMax.setLabel("max");
+    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+    dePropertyValue* dodgeAmount = valueProperties[dodgeAmountIndex];
+    dePropertyValue* dodgeMin = valueProperties[dodgeMinIndex];
+    dePropertyValue* dodgeMax = valueProperties[dodgeMaxIndex];
+    dePropertyValue* burnAmount = valueProperties[burnAmountIndex];
+    dePropertyValue* burnMin = valueProperties[burnMinIndex];
+    dePropertyValue* burnMax = valueProperties[burnMaxIndex];
 
-    burnAmount.setLabel("amount");
-    burnMin.setLabel("min");
-    burnMax.setLabel("max");
+    blurRadius->setLabel("radius");
+    blurRadius->setMin(1);
+    blurRadius->setMax(50);
+
+    dodgeAmount->setLabel("dodge amount");
+    dodgeMin->setLabel("dodge min");
+    dodgeMax->setLabel("dodge max");
+
+    burnAmount->setLabel("burn amount");
+    burnMin->setLabel("burn min");
+    burnMax->setLabel("burn max");
 
     alternate.setLabel("use screen / multiply instead dodge / burn");
+    alternate.set(false);
 
-    reset();
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("blur_radius", 5.0));
+        p->addPresetValue(new dePresetValue("dodge_amount", 0.4));
+        p->addPresetValue(new dePresetValue("dodge_min", 0.6));
+        p->addPresetValue(new dePresetValue("dodge_max", 0.95));
+        p->addPresetValue(new dePresetValue("burn_amount", 0.4));
+        p->addPresetValue(new dePresetValue("burn_min", 0.05));
+        p->addPresetValue(new dePresetValue("burn_max", 0.4));
+        presets["reset"] = p;
+    }        
+
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("blur_radius", 20.0));
+        presets["radius big"] = p;
+    }        
+
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("blur_radius", 5.0));
+        presets["radius small"] = p;
+    }        
+
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("dodge_amount", 0.0));
+        presets["dodge off"] = p;
+    }        
+
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("dodge_amount", 0.4));
+        p->addPresetValue(new dePresetValue("dodge_min", 0.6));
+        p->addPresetValue(new dePresetValue("dodge_max", 0.95));
+        presets["dodge small"] = p;
+    }        
+
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("dodge_amount", 0.5));
+        p->addPresetValue(new dePresetValue("dodge_min", 0.5));
+        p->addPresetValue(new dePresetValue("dodge_max", 0.95));
+        presets["dodge medium"] = p;
+    }        
+
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("dodge_amount", 0.6));
+        p->addPresetValue(new dePresetValue("dodge_min", 0.3));
+        p->addPresetValue(new dePresetValue("dodge_max", 0.95));
+        presets["dodge big"] = p;
+    }        
+
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("burn_amount", 0.0));
+        presets["burn off"] = p;
+    }        
+
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("burn_amount", 0.4));
+        p->addPresetValue(new dePresetValue("burn_min", 0.05));
+        p->addPresetValue(new dePresetValue("burn_max", 0.4));
+        presets["burn small"] = p;
+    }        
+
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("burn_amount", 0.5));
+        p->addPresetValue(new dePresetValue("burn_min", 0.05));
+        p->addPresetValue(new dePresetValue("burn_max", 0.5));
+        presets["burn medium"] = p;
+    }        
+
+    {
+        dePresetLayer* p = new dePresetLayer(*this);
+        p->addPresetValue(new dePresetValue("burn_amount", 0.6));
+        p->addPresetValue(new dePresetValue("burn_min", 0.05));
+        p->addPresetValue(new dePresetValue("burn_max", 0.7));
+        presets["burn big"] = p;
+    }        
+
+    applyPreset("reset");
 
     disableNotLuminance();
 }
 
+/*
 void deDodgeBurnLayer::reset()
 {
-    blurRadius.set(5);
-    dodgeAmount.set(0.4);
-    dodgeMin.set(0.6);
-    dodgeMax.set(0.95);
-    burnAmount.set(0.4);
-    burnMin.set(0.05);
-    burnMax.set(0.4);
+    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+    dePropertyValue* dodgeAmount = valueProperties[dodgeAmountIndex];
+    dePropertyValue* dodgeMin = valueProperties[dodgeMinIndex];
+    dePropertyValue* dodgeMax = valueProperties[dodgeMaxIndex];
+    dePropertyValue* burnAmount = valueProperties[burnAmountIndex];
+    dePropertyValue* burnMin = valueProperties[burnMinIndex];
+    dePropertyValue* burnMax = valueProperties[burnMaxIndex];
+
+    blurRadius->set(5);
+    dodgeAmount->set(0.4);
+    dodgeMin->set(0.6);
+    dodgeMax->set(0.95);
+    burnAmount->set(0.4);
+    burnMin->set(0.05);
+    burnMax->set(0.4);
     alternate.set(false);
 }
-
-void deDodgeBurnLayer::setDodge(deValue v)
-{
-    dodgeAmount.set(v);
-}
-
-void deDodgeBurnLayer::setBurn(deValue v)
-{
-    burnAmount.set(v);
-}
-
-void deDodgeBurnLayer::setDodgeRange(deValue min, deValue max)
-{
-    dodgeMin.set(min);
-    dodgeMax.set(max);
-}
-
-void deDodgeBurnLayer::setBurnRange(deValue min, deValue max)
-{
-    burnMin.set(min);
-    burnMax.set(max);
-}
+*/
 
 deDodgeBurnLayer::~deDodgeBurnLayer()
 {
@@ -146,23 +229,31 @@ bool deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
         return false;
     }
 
-    deValue r = viewManager.getRealScale() * blurRadius.get();
+    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+    dePropertyValue* dodgeAmount = valueProperties[dodgeAmountIndex];
+    dePropertyValue* dodgeMin = valueProperties[dodgeMinIndex];
+    dePropertyValue* dodgeMax = valueProperties[dodgeMaxIndex];
+    dePropertyValue* burnAmount = valueProperties[burnAmountIndex];
+    dePropertyValue* burnMin = valueProperties[burnMinIndex];
+    dePropertyValue* burnMax = valueProperties[burnMaxIndex];
+
+    deValue r = viewManager.getRealScale() * blurRadius->get();
     deBlurType type = deGaussianBlur;
     bool result = blurChannel(source, blurMap, size, r, r, type, 0.0);
 
-    deValue dmin = dodgeMin.get();
-    deValue dmax = dodgeMax.get();
+    deValue dmin = dodgeMin->get();
+    deValue dmax = dodgeMax->get();
 
     processLinear(blurMap, dodgeMap, size.getN(), dmin, dmax, false);
 
-    deValue da = dodgeAmount.get(); 
+    deValue da = dodgeAmount->get(); 
     blendChannel(source, source, firstStage, dodgeMap, mode1, da, size.getN());
 
-    deValue bmin = burnMin.get();
-    deValue bmax = burnMax.get();
+    deValue bmin = burnMin->get();
+    deValue bmax = burnMax->get();
     processLinear(blurMap, burnMap, size.getN(), bmin, bmax, true);
 
-    deValue ba = burnAmount.get(); 
+    deValue ba = burnAmount->get(); 
     blendChannel(firstStage, firstStage, destination, burnMap, mode2, ba, size.getN());
 
     delete [] blurMap;
@@ -178,21 +269,17 @@ bool deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
 
 bool deDodgeBurnLayer::isChannelNeutral(int index)
 {
-    return (blurRadius.get() == 0);
+    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+    return (blurRadius->get() == 0);
 }    
 
 void deDodgeBurnLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
     saveBlend(root);
-    blurRadius.save(root);
+    saveValueProperties(root);
+
     alternate.save(root);
-    dodgeAmount.save(root);
-    dodgeMin.save(root);
-    dodgeMax.save(root);
-    burnAmount.save(root);
-    burnMin.save(root);
-    burnMax.save(root);
 }
 
 void deDodgeBurnLayer::load(xmlNodePtr root)
@@ -203,16 +290,36 @@ void deDodgeBurnLayer::load(xmlNodePtr root)
 
     while (child)
     {
-        blurRadius.load(child);
+        loadValueProperties(child);
         alternate.load(child);
-        dodgeAmount.load(child);
-        dodgeMin.load(child);
-        dodgeMax.load(child);
-        burnAmount.load(child);
-        burnMin.load(child);
-        burnMax.load(child);
 
         child = child->next;
     }        
+}
+
+
+bool deDodgeBurnLayer::applyPreset(const std::string& _name)
+{
+    std::map<std::string, dePresetLayer*>::iterator i = presets.find(_name);
+
+    if (i == presets.end())
+    {
+        return false;
+    }
+
+    dePresetLayer* preset = i->second;
+
+    preset->apply();
+            
+}
+
+void deDodgeBurnLayer::getPresets(std::vector<std::string>& result)
+{
+    std::map<std::string, dePresetLayer*>::iterator i;
+    for (i = presets.begin(); i != presets.end(); i++)
+    {
+        std::string n = i->first;
+        result.push_back(n);
+    }
 }
 

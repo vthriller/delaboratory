@@ -30,7 +30,7 @@ class deColorMatrixFrame:public deHelpFrame
         dePalette3* palette;
         dePalette3* palette2;
     public:
-        deColorMatrixFrame(wxWindow *parent, deProject& _project);
+        deColorMatrixFrame(wxWindow *parent, deProject& _project, int tileRW, int tileRH, int tileW, int tileH, int palW, int palH, int palSize, deValue margin);
         virtual ~deColorMatrixFrame();
 };
 

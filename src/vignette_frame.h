@@ -40,6 +40,8 @@ class deVignetteFrame:public deActionFrame
         deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deVignetteFrame();
 
+        virtual bool onImageClick(deValue x, deValue y);
+
 
 };
 

@@ -67,7 +67,12 @@ EVT_MENU(ID_LABColors1, deMainFrame::onLABColors1)
 EVT_MENU(ID_LABColors2, deMainFrame::onLABColors2)
 EVT_MENU(ID_LABColors5, deMainFrame::onLABColors5)
 EVT_MENU(ID_MemoryInfo, deMainFrame::onMemoryInfo)
-EVT_MENU(ID_ColorMatrix, deMainFrame::onColorMatrix)
+EVT_MENU(ID_ColorMatrix1, deMainFrame::onColorMatrix1)
+EVT_MENU(ID_ColorMatrix2, deMainFrame::onColorMatrix2)
+EVT_MENU(ID_ColorMatrix3, deMainFrame::onColorMatrix3)
+EVT_MENU(ID_ColorMatrix4, deMainFrame::onColorMatrix4)
+EVT_MENU(ID_ColorMatrix5, deMainFrame::onColorMatrix5)
+EVT_MENU(ID_ColorMatrix6, deMainFrame::onColorMatrix6)
 EVT_MENU(ID_BenchmarkBlur, deMainFrame::onBenchmarkBlur)
 EVT_MENU(ID_BenchmarkColor, deMainFrame::onBenchmarkColor)
 EVT_MENU(DE_REPAINT_EVENT, deMainFrame::onRepaintEvent)
@@ -211,7 +216,12 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     menuInfo->Append( ID_BenchmarkBlur, _("benchmark blur (slow!)") );
 
     wxMenu *menuPalette = new wxMenu;
-    menuPalette->Append( ID_ColorMatrix, _("color matrix") );
+    menuPalette->Append( ID_ColorMatrix1, _("color matrix 20x20 small margin") );
+    menuPalette->Append( ID_ColorMatrix2, _("color matrix 40x40 small margin") );
+    menuPalette->Append( ID_ColorMatrix3, _("color matrix 60x60 small margin") );
+    menuPalette->Append( ID_ColorMatrix4, _("color matrix 20x20 big margin") );
+    menuPalette->Append( ID_ColorMatrix5, _("color matrix 40x40 big margin") );
+    menuPalette->Append( ID_ColorMatrix6, _("color matrix 60x60 big margin") );
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, _("&File") );
@@ -234,6 +244,21 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     threadsPanel->setInfoColor(DE_DCRAW_END);
 }
+
+#define TILE1 20
+#define TILE2 40
+#define TILE3 60
+#define TILER1 30
+#define TILER2 50
+#define TILER3 80
+#define PALRW 60
+#define PALRH 40
+#define PAL1 16
+#define PAL2 12
+#define PAL3 10
+#define MAR1 0.03
+#define MAR2 0.06
+
 
 void deMainFrame::hidePanels()
 {
@@ -405,11 +430,42 @@ void deMainFrame::onMemoryInfo(wxCommandEvent& event)
     project.openMemoryInfoFrame(this);
 }
 
-void deMainFrame::onColorMatrix(wxCommandEvent& event)
+void deMainFrame::onColorMatrix1(wxCommandEvent& event)
 {
-    wxFrame* help = new deColorMatrixFrame(this, project);
+    wxFrame* help = new deColorMatrixFrame(this, project, TILE1, TILE1, TILER1, TILER1, PALRW, PALRH, PAL1, MAR1);
     help->Show();
 }
+
+void deMainFrame::onColorMatrix2(wxCommandEvent& event)
+{
+    wxFrame* help = new deColorMatrixFrame(this, project, TILE2, TILE2, TILER2, TILER2, PALRW, PALRH, PAL2, MAR1);
+    help->Show();
+}
+
+void deMainFrame::onColorMatrix3(wxCommandEvent& event)
+{
+    wxFrame* help = new deColorMatrixFrame(this, project, TILE3, TILE3, TILER3, TILER3, PALRW, PALRH, PAL3, MAR1);
+    help->Show();
+}
+
+void deMainFrame::onColorMatrix4(wxCommandEvent& event)
+{
+    wxFrame* help = new deColorMatrixFrame(this, project, TILE1, TILE1, TILER1, TILER1, PALRW, PALRH, PAL1, MAR2);
+    help->Show();
+}
+
+void deMainFrame::onColorMatrix5(wxCommandEvent& event)
+{
+    wxFrame* help = new deColorMatrixFrame(this, project, TILE2, TILE2, TILER2, TILER2, PALRW, PALRH, PAL2, MAR2);
+    help->Show();
+}
+
+void deMainFrame::onColorMatrix6(wxCommandEvent& event)
+{
+    wxFrame* help = new deColorMatrixFrame(this, project, TILE3, TILE3, TILER3, TILER3, PALRW, PALRH, PAL3, MAR2);
+    help->Show();
+}
+
 
 void deMainFrame::onBenchmarkBlur(wxCommandEvent& event)
 {

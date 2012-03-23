@@ -32,7 +32,7 @@ void dePalette3::addColor(const deColor3& color)
     colors.push_back(color);
 }
 
-void dePalette3::optimize(const dePalette3& source, int n)
+void dePalette3::optimize(const dePalette3& source, int n, deValue margin)
 {
     int ss = source.colors.size();
     int sss = ss * ss;
@@ -55,8 +55,6 @@ void dePalette3::optimize(const dePalette3& source, int n)
         }
 
     }
-
-    deValue margin = 0.001;
 
     bool no_more = false;
 
