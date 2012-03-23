@@ -105,6 +105,8 @@ class dePresetLayer
                 property->set(v);
 
             }
+
+            return true;
         }
 };
 
