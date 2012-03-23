@@ -35,7 +35,6 @@ void dePalette3::addColor(const deColor3& color)
 void dePalette3::optimize(const dePalette3& source, int n, deValue margin)
 {
     int ss = source.colors.size();
-    int sss = ss * ss;
 
     deValue** distances = new deValue * [ss];
 
@@ -58,7 +57,7 @@ void dePalette3::optimize(const dePalette3& source, int n, deValue margin)
 
     bool no_more = false;
 
-    while ((colors.size() < n) && (!no_more))
+    while ((colors.size() < (unsigned int)n) && (!no_more))
     {
         int winner = -1;
         int max = 0;

@@ -283,4 +283,6 @@ bool deVignetteLayer::setCenter(deValue x, deValue y)
     dePropertyValue* center1Y = valueProperties[center1YIndex];
     center1X->set(2 * x - 1);
     center1Y->set(2 * y - 1);
+
+    return true;
 }
