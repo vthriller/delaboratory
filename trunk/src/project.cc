@@ -612,6 +612,10 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
                 }
             }
             bool result = rawModule.loadRAW(fileName, sourceImage, colorSpace, false);
+            if (!result)
+            {
+                return false;
+            }
 
             rawTimer->Start(500);
 
