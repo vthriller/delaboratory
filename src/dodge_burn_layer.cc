@@ -153,28 +153,6 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _so
     disableNotLuminance();
 }
 
-/*
-void deDodgeBurnLayer::reset()
-{
-    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
-    dePropertyValue* dodgeAmount = valueProperties[dodgeAmountIndex];
-    dePropertyValue* dodgeMin = valueProperties[dodgeMinIndex];
-    dePropertyValue* dodgeMax = valueProperties[dodgeMaxIndex];
-    dePropertyValue* burnAmount = valueProperties[burnAmountIndex];
-    dePropertyValue* burnMin = valueProperties[burnMinIndex];
-    dePropertyValue* burnMax = valueProperties[burnMaxIndex];
-
-    blurRadius->set(5);
-    dodgeAmount->set(0.4);
-    dodgeMin->set(0.6);
-    dodgeMax->set(0.95);
-    burnAmount->set(0.4);
-    burnMin->set(0.05);
-    burnMax->set(0.4);
-    alternate.set(false);
-}
-*/
-
 deDodgeBurnLayer::~deDodgeBurnLayer()
 {
 }
@@ -295,31 +273,5 @@ void deDodgeBurnLayer::load(xmlNodePtr root)
 
         child = child->next;
     }        
-}
-
-
-bool deDodgeBurnLayer::applyPreset(const std::string& _name)
-{
-    std::map<std::string, dePresetLayer*>::iterator i = presets.find(_name);
-
-    if (i == presets.end())
-    {
-        return false;
-    }
-
-    dePresetLayer* preset = i->second;
-
-    preset->apply();
-            
-}
-
-void deDodgeBurnLayer::getPresets(std::vector<std::string>& result)
-{
-    std::map<std::string, dePresetLayer*>::iterator i;
-    for (i = presets.begin(); i != presets.end(); i++)
-    {
-        std::string n = i->first;
-        result.push_back(n);
-    }
 }
 

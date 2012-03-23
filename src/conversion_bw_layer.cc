@@ -66,6 +66,14 @@ deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerSt
         add3.setLabel(getChannelName(sourceColorSpace, 3));
         overlay3.setLabel(getChannelName(sourceColorSpace, 3));
     }        
+
+    if (sourceColorSpace == deColorSpaceRGB)
+    {
+        // http://www.markushartel.com/blog/learn-from-markus/channel-mixer-settings
+        films.push_back(deFilm("AGFA 200X", 18, 41, 41));
+        films.push_back(deFilm("Agfapan 25", 25, 39, 36));
+        films.push_back(deFilm("Agfapan 100", 21, 40, 39));
+    }
 }
 
 deConversionBWLayer::~deConversionBWLayer()
@@ -355,4 +363,28 @@ void deConversionBWLayer::load(xmlNodePtr root)
 
         child = child->next;
     }        
+}
+
+void deConversionBWLayer::applyFilm(int f)
+{
+    if (f < 0)
+    {
+        return;
+    }
+    if (f >= films.size())
+    {
+        return;
+    }
+    deFilm& film = films[f];
+
+    add0.set(film.getR());
+    add1.set(film.getG());
+    add2.set(film.getB());
+
+    add3.set(0.0);
+    overlay0.set(0);
+    overlay1.set(0);
+    overlay2.set(0);
+    overlay3.set(0);
+
 }

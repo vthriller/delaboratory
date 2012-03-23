@@ -20,6 +20,7 @@
 #define _DE_MIXER_BW_EDITOR_H
 
 #include "layer_frame.h"
+#include <vector>
 class deConversionBWLayer;
 class dePropertyValueSlider;
 class deLayerProcessor;
@@ -34,6 +35,8 @@ class deMixerBWEditor:public deLayerFrame
         wxButton* preset0M;
         wxButton* preset1M;
         wxButton* preset2M;
+
+        std::vector<wxButton*> filmButtons;
 
         dePropertyValueSlider* add0;
         dePropertyValueSlider* add1;

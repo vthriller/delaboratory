@@ -154,30 +154,14 @@ void deEqualizer::process(const deChannel& s, const deChannel& e, deChannel& des
 
 void deEqualizer::save(xmlNodePtr node) 
 {
-/*
-    int i;
-    for (i = 0; i < size; i++)
-    {
-        saveChild(node, "weight", str(weights[i]));
-    }
-    */
 }
 
 void deEqualizer::load(xmlNodePtr node) 
 {
     xmlNodePtr child = node->xmlChildrenNode;
 
-    int i = 0;
     while (child)
     {
-    /*
-        if ((!xmlStrcmp(child->name, BAD_CAST("weight")))) 
-        {
-            assert(i < size);
-            weights[i] = getValue(getContent(child));
-            i++;
-        }            
-        */
 
         child = child->next;
     }

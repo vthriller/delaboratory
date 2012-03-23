@@ -25,7 +25,7 @@
 class deHighPassLayer:public deActionLayer
 {
     private:
-        dePropertyValue blurRadius;
+        int blurRadiusIndex;
 
     protected:
         virtual bool singleChannelProcessing() const {return true;};
@@ -44,8 +44,6 @@ class deHighPassLayer:public deActionLayer
         virtual void save(xmlNodePtr root);
 
         virtual std::string getActionName() {return "hp";};
-
-        dePropertyValue& getPropertyRadius() {return blurRadius;};
 
         void reset();
 

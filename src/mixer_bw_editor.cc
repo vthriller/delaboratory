@@ -88,6 +88,22 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
         sizerO->Add(overlay3);
     }        
 
+    wxSizer* sizerBF = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T(""));
+    sizer->Add(sizerBF);
+
+    int w2 = 100;
+
+    const std::vector<deFilm>& films = layer.getFilms();
+    std::vector<deFilm>::const_iterator i;
+    for (i = films.begin(); i != films.end(); i++)
+    {
+        const deFilm& film = *i;
+        wxButton* b = new wxButton(this, wxID_ANY, wxString::FromAscii(film.getName().c_str()), wxDefaultPosition, wxSize(w2, 25));
+        filmButtons.push_back(b);
+        sizerBF->Add(b, 0);
+        
+    }
+
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deMixerBWEditor::click));
 
     Layout();
@@ -123,6 +139,17 @@ void deMixerBWEditor::click(wxCommandEvent &event)
     {
         layer.presetM(2);
     }      
+
+    std::vector<wxButton*>::iterator i;
+    int f = 0;
+    for (i = filmButtons.begin(); i != filmButtons.end(); i++)
+    {
+        if ((*i)->GetId() == id)
+        {
+            layer.applyFilm(f);
+        }
+        f++;
+    }
 
     add0->setFromProperty();
     add1->setFromProperty();

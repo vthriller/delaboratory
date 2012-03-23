@@ -22,7 +22,6 @@
 #include "action_layer.h"
 #include "property_value.h"
 
-class dePresetLayer;
 
 class deUSMLayer:public deActionLayer
 {
@@ -31,7 +30,6 @@ class deUSMLayer:public deActionLayer
         int amountPropertyIndex;
         int thresholdPropertyIndex;
 
-        std::map<std::string, dePresetLayer*> presets;
 
     protected:
         virtual bool singleChannelProcessing() const {return true;};
@@ -52,9 +50,6 @@ class deUSMLayer:public deActionLayer
         virtual std::string getActionName() {return "usm";};
 
         virtual bool randomize();
-
-        bool applyPreset(const std::string& _name);
-        void getPresets(std::vector<std::string>& result);
 
 
 };

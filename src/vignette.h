@@ -22,6 +22,25 @@
 #include "value.h"
 #include "size.h"
 
-void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue centerY, deValue radiusX, deValue radiusY, deValue light, deValue darkness, deValue spot);
+class deEllipse
+{
+    private:
+        deValue centerX;
+        deValue centerY;
+        deValue radiusX;
+        deValue radiusY;
+    public:
+        deEllipse(deValue _centerX, deValue _centerY, deValue _radiusX, deValue _radiusY);
+        virtual ~deEllipse();
+
+        deValue processX(deValue x) const;
+        deValue processY(deValue y) const;
+
+        bool isValid() const;
+
+};
+
+void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse, deValue light, deValue darkness, deValue spot);
+void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse1, deEllipse ellipse2, deValue light, deValue darkness, deValue spot);
 
 #endif    

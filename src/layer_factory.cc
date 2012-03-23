@@ -49,9 +49,14 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
         return new deBlurLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
     }
 
-    if (type == "vignette")
+    if (type == "vignette1")
     {
-        return new deVignetteLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
+        return new deVignetteLayer1(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
+    }
+
+    if (type == "vignette2")
+    {
+        return new deVignetteLayer2(colorSpace, index, source, _layerStack, _channelManager, _viewManager, name);
     }
 
     if (type == "usm")
@@ -175,7 +180,8 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("equalizer16");
     actions.push_back("apply_image");
 
-    actions.push_back("vignette");
+    actions.push_back("vignette1");
+    actions.push_back("vignette2");
     actions.push_back("dodge_burn");
     actions.push_back("shadows_highlights");
 
@@ -186,7 +192,7 @@ void getSupportedActions(std::vector<std::string>& actions)
 
 std::string getActionGroup(const std::string n)
 {
-    if ((n == "vignette") || (n == "dodge_burn") || (n == "shadows_highlights"))
+    if ((n == "vignette1") || (n == "vignette2") || (n == "dodge_burn") || (n == "shadows_highlights"))
     {
         return "light";
     }
