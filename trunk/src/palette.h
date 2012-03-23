@@ -50,7 +50,7 @@ class deColor3
             deValue d2 = c.v2 - v2;
             deValue d3 = c.v3 - v3;
             deValue d = d1 * d1 + d2 * d2 + d3 * d3;
-            return d;
+            return sqrt(d);
         };
 };
 
@@ -66,7 +66,7 @@ class dePalette3
 
         void addColor(const deColor3& color);
 
-        void optimize(const dePalette3& source, int n);
+        void optimize(const dePalette3& source, int n, deValue margin);
 
         deColor3 getColor(int index);
 

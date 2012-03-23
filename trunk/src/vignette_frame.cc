@@ -81,3 +81,24 @@ void deVignetteFrame::click(wxCommandEvent &event)
     int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(index);
 }   
+
+bool deVignetteFrame::onImageClick(deValue x, deValue y)
+{
+    if ((x < 0) || (y < 0) || (x >= 1) || (y >= 1))
+    {
+        return false;
+    }
+    deVignetteLayer& vignetteLayer = dynamic_cast<deVignetteLayer&>(layer);
+    bool result = vignetteLayer.setCenter(x, y);
+
+    std::vector<dePropertyValueSlider*>::iterator j;
+    for (j = valueSliders.begin(); j != valueSliders.end(); j++)
+    {
+        (*j)->setFromProperty();
+    }
+
+    int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(index);
+
+    return result;
+}

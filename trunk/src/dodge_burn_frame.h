@@ -21,6 +21,8 @@
 
 #include "action_frame.h"
 #include "slider.h"
+#include <vector>
+#include <map>
 
 class dePropertyValueSlider;
 class dePropertyBooleanUI;
@@ -29,36 +31,13 @@ class deLayerProcessor;
 class deDodgeBurnFrame:public deActionFrame
 {
     private:
-        dePropertyValueSlider* radius;
+        std::vector<dePropertyValueSlider*> valueSliders;
+
         dePropertyBooleanUI* alternate;
 
-        dePropertyValueSlider* dodgeAmount;
-        dePropertyValueSlider* dodgeMin;
-        dePropertyValueSlider* dodgeMax;
-
-        dePropertyValueSlider* burnAmount;
-        dePropertyValueSlider* burnMin;
-        dePropertyValueSlider* burnMax;
+        std::map<std::string, wxButton*> buttons;
 
         deLayerProcessor& layerProcessor;
-
-        wxButton* reset;
-
-        wxButton* dodgeLow;
-        wxButton* dodgeMedium;
-        wxButton* dodgeHigh;
-
-        wxButton* dodgeNarrow;
-        wxButton* dodgeAverage;
-        wxButton* dodgeWide;
-
-        wxButton* burnLow;
-        wxButton* burnMedium;
-        wxButton* burnHigh;
-
-        wxButton* burnNarrow;
-        wxButton* burnAverage;
-        wxButton* burnWide;
 
         void click(wxCommandEvent &event);
 

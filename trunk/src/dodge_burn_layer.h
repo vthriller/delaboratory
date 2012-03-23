@@ -23,17 +23,21 @@
 #include "property_value.h"
 #include "property_boolean.h"
 
+class dePresetLayer;
+
 class deDodgeBurnLayer:public deActionLayer
 {
     private:
-        dePropertyValue blurRadius;
         dePropertyBoolean alternate;
-        dePropertyValue dodgeAmount;
-        dePropertyValue dodgeMin;
-        dePropertyValue dodgeMax;
-        dePropertyValue burnAmount;
-        dePropertyValue burnMin;
-        dePropertyValue burnMax;
+        int blurRadiusIndex;
+        int dodgeAmountIndex;
+        int dodgeMinIndex;
+        int dodgeMaxIndex;
+        int burnAmountIndex;
+        int burnMinIndex;
+        int burnMaxIndex;
+
+        std::map<std::string, dePresetLayer*> presets;
 
     protected:
         virtual bool singleChannelProcessing() const {return true;};
@@ -53,22 +57,12 @@ class deDodgeBurnLayer:public deActionLayer
 
         virtual std::string getActionName() {return "d/b";};
 
-        dePropertyValue& getPropertyRadius() {return blurRadius;};
         dePropertyBoolean& getPropertyAlternate() {return alternate;};
 
-        dePropertyValue& getPropertyDodgeAmount() {return dodgeAmount;};
-        dePropertyValue& getPropertyDodgeMin() {return dodgeMin;};
-        dePropertyValue& getPropertyDodgeMax() {return dodgeMax;};
+        bool applyPreset(const std::string& _name);
+        void getPresets(std::vector<std::string>& result);
 
-        dePropertyValue& getPropertyBurnAmount() {return burnAmount;};
-        dePropertyValue& getPropertyBurnMin() {return burnMin;};
-        dePropertyValue& getPropertyBurnMax() {return burnMax;};
-
-        void reset();
-        void setDodge(deValue v);
-        void setBurn(deValue v);
-        void setDodgeRange(deValue min, deValue max);
-        void setBurnRange(deValue min, deValue max);
+//        void reset();
 
         virtual bool randomize() {return false;};
 
