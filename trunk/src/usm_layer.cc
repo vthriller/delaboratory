@@ -74,12 +74,6 @@ deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, d
 
 deUSMLayer::~deUSMLayer()
 {
-    while (presets.size() > 0)
-    {
-        std::map<std::string, dePresetLayer*>::iterator i = presets.begin();
-        delete i->second;
-        presets.erase(i);
-    }
 }
 
 bool deUSMLayer::processAction(int index, const deChannel& sourceChannel, deChannel& channel, deSize size)
@@ -232,28 +226,4 @@ bool deUSMLayer::randomize()
     return true;
 }
 
-bool deUSMLayer::applyPreset(const std::string& _name)
-{
-    std::map<std::string, dePresetLayer*>::iterator i = presets.find(_name);
-
-    if (i == presets.end())
-    {
-        return false;
-    }
-
-    dePresetLayer* preset = i->second;
-
-    preset->apply();
-            
-}
-
-void deUSMLayer::getPresets(std::vector<std::string>& result)
-{
-    std::map<std::string, dePresetLayer*>::iterator i;
-    for (i = presets.begin(); i != presets.end(); i++)
-    {
-        std::string n = i->first;
-        result.push_back(n);
-    }
-}
 

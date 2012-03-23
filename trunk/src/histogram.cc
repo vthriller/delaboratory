@@ -121,8 +121,6 @@ bool deHistogram::render(unsigned char* data, int sizeW, int sizeH, unsigned cha
         return false;
     }
 
-    //int maxH = sizeH - 10;
-
     int x;
     int y;
     for (x = 0; x < sizeW; x++)

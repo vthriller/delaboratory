@@ -21,6 +21,7 @@
 
 #include "action_frame.h"
 #include "slider.h"
+#include <vector>
 
 class dePropertyValueSlider;
 class deLayerProcessor;
@@ -28,7 +29,8 @@ class deLayerProcessor;
 class deHighPassFrame:public deActionFrame
 {
     private:
-        dePropertyValueSlider* radius;
+        std::vector<dePropertyValueSlider*> valueSliders;
+        //dePropertyValueSlider* radius;
         deLayerProcessor& layerProcessor;
 
         wxButton* reset;

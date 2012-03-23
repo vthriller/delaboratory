@@ -32,8 +32,25 @@ deHighPassFrame::deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLaye
 
     int range = 400;
 
+    int n = highPassLayer.getNumberOfValueProperties();
+
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        dePropertyValue* p = highPassLayer.getPropertyValue(i);
+        if (p)
+        {
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, highPassLayer, layerProcessor);
+            valueSliders.push_back(s);
+            sizer->Add(s);
+        }            
+    }
+
+/*
     radius = new dePropertyValueSlider(this, range, highPassLayer.getPropertyRadius(), highPassLayer, layerProcessor);
     sizer->Add(radius);
+    */
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
     sizer->Add(sizerB, 0);
@@ -60,7 +77,12 @@ void deHighPassFrame::click(wxCommandEvent &event)
         highPassLayer.reset();
     }      
 
-    radius->setFromProperty();
+    //radius->setFromProperty();
+    std::vector<dePropertyValueSlider*>::iterator j;
+    for (j = valueSliders.begin(); j != valueSliders.end(); j++)
+    {
+        (*j)->setFromProperty();
+    }
 
     int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(index);

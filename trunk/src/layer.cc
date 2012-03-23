@@ -23,6 +23,7 @@
 #include "layer_processor.h"
 #include "logger.h"
 #include "property_value.h"
+#include "preset.h"
 
 deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer)
 :name(_name), 
@@ -40,10 +41,18 @@ deLayer::~deLayer()
     while (valueProperties.size() > 0)
     {
        std::vector<dePropertyValue*>::iterator i = valueProperties.begin();
-       dePropertyValue* p = *i;
+       //std::vector<deProperty*>::iterator i = valueProperties.begin();
+       //dePropertyValue* p = *i;
+       deProperty* p = *i;
        delete p;
        valueProperties.erase(i);
     }       
+    while (presets.size() > 0)
+    {
+        std::map<std::string, dePresetLayer*>::iterator i = presets.begin();
+        delete i->second;
+        presets.erase(i);
+    }
     logMessage("destroyed layer " + str(index) + " " + name);
 }
 
@@ -159,11 +168,13 @@ int deLayer::registerPropertyValue(const std::string& _name)
 
 dePropertyValue* deLayer::getPropertyValue(int index)
 {
-    if ((index < 0) || (index >= valueProperties.size()))
+    if ((index < 0) || ((unsigned int)(index) >= valueProperties.size()))
     {
         return NULL;
     }
-    return valueProperties[index];
+    deProperty* property = valueProperties[index];
+
+    return dynamic_cast<dePropertyValue*>(property);
 }
 
 void deLayer::saveValueProperties(xmlNodePtr root)
@@ -201,4 +212,30 @@ dePropertyValue* deLayer::getPropertyValue(const std::string& _name)
         }
     }
     return NULL;
+}
+
+bool deLayer::applyPreset(const std::string& _name)
+{
+    std::map<std::string, dePresetLayer*>::iterator i = presets.find(_name);
+
+    if (i == presets.end())
+    {
+        return false;
+    }
+
+    dePresetLayer* preset = i->second;
+
+    preset->apply();
+
+    return true;
+}
+
+void deLayer::getPresets(std::vector<std::string>& result)
+{
+    std::map<std::string, dePresetLayer*>::iterator i;
+    for (i = presets.begin(); i != presets.end(); i++)
+    {
+        std::string n = i->first;
+        result.push_back(n);
+    }
 }

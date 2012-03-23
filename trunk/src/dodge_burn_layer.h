@@ -37,8 +37,6 @@ class deDodgeBurnLayer:public deActionLayer
         int burnMinIndex;
         int burnMaxIndex;
 
-        std::map<std::string, dePresetLayer*> presets;
-
     protected:
         virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "dodge_burn";};
@@ -58,11 +56,6 @@ class deDodgeBurnLayer:public deActionLayer
         virtual std::string getActionName() {return "d/b";};
 
         dePropertyBoolean& getPropertyAlternate() {return alternate;};
-
-        bool applyPreset(const std::string& _name);
-        void getPresets(std::vector<std::string>& result);
-
-//        void reset();
 
         virtual bool randomize() {return false;};
 

@@ -29,18 +29,21 @@
 #include "layer_processor.h"
 
 deHighPassLayer::deHighPassLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
- blurRadius("blur_radius")
+:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
 {
-    blurRadius.setLabel("radius");
-    blurRadius.setMin(1);
-    blurRadius.setMax(50);
+    blurRadiusIndex = registerPropertyValue("blur_radius");
+    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+
+    blurRadius->setLabel("radius");
+    blurRadius->setMin(1);
+    blurRadius->setMax(50);
     reset();
 }
 
 void deHighPassLayer::reset()
 {
-    blurRadius.set(5);
+    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+    blurRadius->set(5);
 }
 
 deHighPassLayer::~deHighPassLayer()
@@ -69,7 +72,9 @@ bool deHighPassLayer::processAction(int i, const deChannel& sourceChannel, deCha
         return false;
     }
 
-    deValue r = viewManager.getRealScale() * blurRadius.get();
+    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+
+    deValue r = viewManager.getRealScale() * blurRadius->get();
     deBlurType type = deGaussianBlur;
     bool result = blurChannel(source, blurMap, size, r, r, type, 0.0);
 
@@ -85,14 +90,14 @@ bool deHighPassLayer::processAction(int i, const deChannel& sourceChannel, deCha
 
 bool deHighPassLayer::isChannelNeutral(int index)
 {
-    return (blurRadius.get() == 0);
+    return false;
 }    
 
 void deHighPassLayer::save(xmlNodePtr root)
 {
     saveCommon(root);
     saveBlend(root);
-    blurRadius.save(root);
+    saveValueProperties(root);
 }
 
 void deHighPassLayer::load(xmlNodePtr root)
@@ -103,7 +108,7 @@ void deHighPassLayer::load(xmlNodePtr root)
 
     while (child)
     {
-        blurRadius.load(child);
+        loadValueProperties(child);
 
         child = child->next;
     }        

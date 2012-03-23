@@ -29,6 +29,8 @@ class deFrame;
 class deBlendFrame;
 class deImage;
 class dePropertyValue;
+class deProperty;
+class dePresetLayer;
 
 enum deLayerProcessType
 {   
@@ -54,6 +56,8 @@ class deLayer
         unsigned int sourceLayer;
 
         std::vector<dePropertyValue*> valueProperties;
+        //std::vector<deProperty*> valueProperties;
+        std::map<std::string, dePresetLayer*> presets;
 
         int registerPropertyValue(const std::string& _name);
 
@@ -107,6 +111,10 @@ class deLayer
         int getNumberOfValueProperties() const {return valueProperties.size();};
         dePropertyValue* getPropertyValue(int index);
         dePropertyValue* getPropertyValue(const std::string& _name);
+
+        bool applyPreset(const std::string& _name);
+        void getPresets(std::vector<std::string>& result);
+
 
 };
 

@@ -57,7 +57,7 @@ deValue deChannel::getValue(int pos) const
     {
         return 0.0;
     }
-    if (pos > magicSize) 
+    if (pos >= magicSize) 
     {
         return 0.0;
     }
@@ -67,15 +67,27 @@ deValue deChannel::getValue(int pos) const
 
 void deChannel::setValue(int pos, const deValue& value)
 {
-    assert(pos >= 0);
-    assert(pos < magicSize);
+    if (pos < 0) 
+    {
+        return;
+    }
+    if (pos >= magicSize) 
+    {
+        return;
+    }
     pixels[pos] = value;
 }
 
 void deChannel::setValueClip(int pos, const deValue& value)
 {
-    assert(pos >= 0);
-    assert(pos < magicSize);
+    if (pos < 0) 
+    {
+        return;
+    }
+    if (pos >= magicSize) 
+    {
+        return;
+    }
     if (value < 0)
     {
         pixels[pos] = 0;

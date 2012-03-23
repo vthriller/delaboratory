@@ -22,7 +22,32 @@
 #include "conversion_layer.h"
 #include "mixer.h"
 #include "property_value.h"
+#include <vector>
 class deViewManager;
+
+class deFilm
+{
+    private:
+        std::string name;
+        deValue r;
+        deValue g;
+        deValue b;
+    public:
+        deFilm(const std::string& _name, deValue _r, deValue _g, deValue _b)
+        :name(_name), r(_r), g(_g), b(_b)
+        {
+        }
+        virtual ~deFilm()
+        {
+        }
+
+        deValue getR() {return r / 100.0;};
+        deValue getG() {return g / 100.0;};
+        deValue getB() {return b / 100.0;};
+
+        std::string getName() const {return name;};
+};
+
 
 class deConversionBWLayer:public deConversionLayer
 {
@@ -35,6 +60,7 @@ class deConversionBWLayer:public deConversionLayer
         dePropertyValue overlay1;
         dePropertyValue overlay2;
         dePropertyValue overlay3;
+        std::vector<deFilm> films;
 
         virtual bool hasAction() const {return true;};
 
@@ -63,6 +89,10 @@ class deConversionBWLayer:public deConversionLayer
 
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
+
+        const std::vector<deFilm>& getFilms() const {return films;};
+
+        void applyFilm(int f);
 
 };
 

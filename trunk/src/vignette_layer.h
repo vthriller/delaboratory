@@ -25,10 +25,18 @@
 class deVignetteLayer:public deActionLayer
 {
     private:
-        int radiusXIndex;
-        int radiusYIndex;
-        int centerXIndex;
-        int centerYIndex;
+        int vignettes;
+
+        int radius1XIndex;
+        int radius1YIndex;
+        int center1XIndex;
+        int center1YIndex;
+
+        int radius2XIndex;
+        int radius2YIndex;
+        int center2XIndex;
+        int center2YIndex;
+
         int lightIndex;
         int darknessIndex;
         int spotIndex;
@@ -38,7 +46,7 @@ class deVignetteLayer:public deActionLayer
         virtual std::string getType() const {return "vignette";};
 
     public:
-        deVignetteLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deVignetteLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name, int _vignettes);
         virtual ~deVignetteLayer();
 
         virtual bool isChannelNeutral(int index);
@@ -56,6 +64,24 @@ class deVignetteLayer:public deActionLayer
 
         bool setCenter(deValue x, deValue y);
 
+};
+
+class deVignetteLayer1:public deVignetteLayer
+{
+    public:
+        deVignetteLayer1(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        virtual ~deVignetteLayer1();
+
+        virtual std::string getType() const {return "vignette1";};
+};
+
+class deVignetteLayer2:public deVignetteLayer
+{
+    public:
+        deVignetteLayer2(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        virtual ~deVignetteLayer2();
+
+        virtual std::string getType() const {return "vignette2";};
 };
 
 #endif

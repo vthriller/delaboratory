@@ -88,7 +88,7 @@ deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerPr
         return new deDodgeBurnFrame(parent, al, layerProcessor, frameManager);
     }        
 
-    if (type == "vignette")
+    if ((type == "vignette1") || (type == "vignette2"))
     {
         deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
         return new deVignetteFrame(parent, al, layerProcessor, frameManager);

@@ -22,27 +22,59 @@
 #include "logger.h"
 #include "str.h"
 
-void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue centerY, deValue radiusX, deValue radiusY, deValue light, deValue darkness, deValue spot)
+deEllipse::deEllipse(deValue _centerX, deValue _centerY, deValue _radiusX, deValue _radiusY)
+:centerX(_centerX),
+ centerY(_centerY),
+ radiusX(_radiusX),
+ radiusY(_radiusY)
 {
-    logMessage("vignette channel cx: " + str(centerX) + " cy: " + str(centerY) + " rx: " + str(radiusX) + " ry: " + str(radiusY) + " l: " + str(light));
+}
 
+deEllipse::~deEllipse()
+{
+}
+
+deValue deEllipse::processX(deValue x) const
+{
+    x = x - centerX;
+
+    x /= radiusX;
+
+    return x;
+}
+
+deValue deEllipse::processY(deValue y) const
+{
+    y = y - centerY;
+
+    y /= radiusY;
+
+    return y;
+}
+
+bool deEllipse::isValid() const
+{
     if (radiusX <= 0.0)
     {
-        return;
+        return false;
     }
     if (radiusY <= 0.0)
     {
+        return false;
+    }
+
+    return true;
+}
+
+void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse, deValue light, deValue darkness, deValue spot)
+{
+    if (!ellipse.isValid())
+    {
         return;
     }
 
-    //assert(source);
-    assert(destination);
-
     int w = size.getW();
     int h = size.getH();
-
-    deValue ww = w / 2.0;
-    deValue hh = h / 2.0;
 
     if (w == 0)
     {
@@ -54,36 +86,25 @@ void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue
         return;
     }
 
-    assert(w > 0);
-    assert(h > 0);
-    //assert(radius > 0);
-
-    deValue s = 3;
-
-    radiusX *= s;
-    radiusY *= s;
+    deValue ww = w / 2.0;
+    deValue hh = h / 2.0;
 
     int i;
     int j;
 
     int p = 0;
 
-    logMessage("before vignette fill");
-
     for (i = 0; i < h; i++)
     {
         deValue y = (i - hh) / hh;
 
-        y = y - centerY;
-
-        y /= radiusY;
+        y = ellipse.processY(y);
 
         for (j = 0; j < w; j++)
         {
             deValue x = (j - ww) / ww;
 
-            x = x - centerX;
-            x /= radiusX;
+            x = ellipse.processX(x);
 
             deValue r = sqrt(x * x + y * y);
 
@@ -96,8 +117,6 @@ void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue
             {
                 v = 1;
             }
-
-
 
             deValue vv = darkness + (light - darkness) * v;
             if (vv < 0)
@@ -114,7 +133,99 @@ void vignetteChannel(deValue* destination, deSize size, deValue centerX, deValue
         }
     }
 
-    logMessage("after vignette fill");
+}
+
+void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse1, deEllipse ellipse2, deValue light, deValue darkness, deValue spot)
+{
+    if (!ellipse1.isValid())
+    {
+        return;
+    }
+
+    if (!ellipse2.isValid())
+    {
+        return;
+    }
+
+
+    int w = size.getW();
+    int h = size.getH();
+
+    if (w == 0)
+    {
+        return;
+    }
+
+    if (h == 0)
+    {
+        return;
+    }
+
+    deValue ww = w / 2.0;
+    deValue hh = h / 2.0;
+
+    int i;
+    int j;
+
+    int p = 0;
+
+    for (i = 0; i < h; i++)
+    {
+        deValue y = (i - hh) / hh;
+
+        deValue y1 = ellipse1.processY(y);
+        deValue y2 = ellipse2.processY(y);
+
+        for (j = 0; j < w; j++)
+        {
+            deValue x = (j - ww) / ww;
+
+            deValue x1 = ellipse1.processX(x);
+            deValue x2 = ellipse2.processX(x);
+
+            deValue r1 = sqrt(x1 * x1 + y1 * y1);
+            deValue r2 = sqrt(x2 * x2 + y2 * y2);
+
+            deValue v1 = 1.0 - r1 + spot;
+            if (v1 < 0)
+            {
+                v1 = 0;
+            }
+            if (v1 > 1)
+            {
+                v1 = 1;
+            }
+
+            deValue v2 = 1.0 - r2 + spot;
+            if (v2 < 0)
+            {
+                v2 = 0;
+            }
+            if (v2 > 1)
+            {
+                v2 = 1;
+            }
+
+            deValue v = v1;
+            if (v2 > v)
+            {
+                v = v2;
+            }
+
+            deValue vv = darkness + (light - darkness) * v;
+            if (vv < 0)
+            {
+                vv = 0;
+            }
+            if (vv > 1)
+            {
+                vv = 1;
+            }
+
+            destination[p] = vv;
+            p++;
+        }
+    }
 
 }
 
