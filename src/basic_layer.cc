@@ -125,14 +125,15 @@ void deBasicLayer::updateCurve(int i)
         deBasicSetting& s = settings[j];
         if (s.affects(i))
         {
+            deValue scale = s.getScale();
             dePropertyValue* p = basicProperties[j];
             if (s.isContrast())
             {
-                contrast += p->get();
+                contrast += scale * p->get();
             }
             if (s.isBrightness())
             {
-                brightness += p->get();
+                brightness += scale * p->get();
             }
         }
     }
@@ -142,7 +143,6 @@ void deBasicLayer::updateCurve(int i)
 
 bool deBasicLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
 {
-//    std::cout << "deBasicLayer::processAction " << i << std::endl;
     if (i == shiftIndex)
     {
         shiftChannel(sourceChannel.getPixels(), channel.getPixels(), shiftValue, size.getN());    
