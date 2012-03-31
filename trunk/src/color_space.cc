@@ -379,6 +379,7 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             deBasicSetting gms("A tint");
             gms.setBrightness();
             gms.addChannel(1);
+            gms.setScale(0.5);
             settings2.push_back(gms);
 
             deBasicSetting gmc("A contrast");
@@ -389,6 +390,7 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             deBasicSetting bys("B tint");
             bys.setBrightness();
             bys.addChannel(2);
+            bys.setScale(0.5);
             settings2.push_back(bys);
 
             deBasicSetting byc("B contrast");
@@ -414,6 +416,7 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             deBasicSetting st("saturation");
             st.setBrightness();
             st.addChannel(1);
+            st.setScale(0.5);
             settings1.push_back(st);
 
             deBasicSetting s("C contrast");
@@ -543,6 +546,7 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             {
                 b.addChannel(3);
             }
+            b.setScale(-1);
             settings1.push_back(b);
 
             deBasicSetting c("contrast");

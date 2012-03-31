@@ -21,6 +21,7 @@
 
 #include <set>
 #include <string>
+#include "value.h"
 
 class deBasicSetting
 {
@@ -30,6 +31,8 @@ class deBasicSetting
         bool contrast;
         bool brightness;
         bool shift;
+
+        deValue scale;
     public:    
         deBasicSetting(const std::string& _name);
         virtual ~deBasicSetting();
@@ -37,6 +40,9 @@ class deBasicSetting
         void setContrast();
         void setBrightness();
         void setShift();
+
+        void setScale(deValue _scale);
+        deValue getScale() const;
 
         void addChannel(int c);
 

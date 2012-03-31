@@ -24,10 +24,22 @@ deBasicSetting::deBasicSetting(const std::string& _name)
     contrast = false;
     brightness = false;
     shift = false;
+    scale = 1.0;
 }
 
 deBasicSetting::~deBasicSetting()
 {
+}
+
+
+void deBasicSetting::setScale(deValue _scale)
+{
+    scale = _scale;
+}
+
+deValue deBasicSetting::getScale() const
+{
+    return scale;
 }
 
 void deBasicSetting::addChannel(int c)
