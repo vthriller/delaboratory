@@ -91,6 +91,9 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
     wxSizer* sizerBF = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T(""));
     sizer->Add(sizerBF);
 
+    wxSizer* sizerGF = new wxGridSizer(5);
+    sizerBF->Add(sizerGF);
+
     int w2 = 100;
 
     const std::vector<deFilm>& films = layer.getFilms();
@@ -100,7 +103,7 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
         const deFilm& film = *i;
         wxButton* b = new wxButton(this, wxID_ANY, wxString::FromAscii(film.getName().c_str()), wxDefaultPosition, wxSize(w2, 25));
         filmButtons.push_back(b);
-        sizerBF->Add(b, 0);
+        sizerGF->Add(b, 0);
         
     }
 
