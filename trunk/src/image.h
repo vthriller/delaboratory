@@ -57,6 +57,8 @@ class deImage
         void lockRead() const;
         void unlockRead() const;
 
+        const deValue* getValues(int channel) const;
+
 
 };
 

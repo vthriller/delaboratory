@@ -40,4 +40,6 @@ deConversion4x3 getConversion4x3(deColorSpace s, deColorSpace d);
 
 bool checkConversion(deColorSpace currentColorSpace, deColorSpace colorSpace);
 
+void lab2rgb(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3);
+
 #endif

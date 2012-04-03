@@ -35,6 +35,7 @@ void dePalette3::addColor(const deColor3& color)
 void dePalette3::optimize(const dePalette3& source, int n, deValue margin)
 {
     int ss = source.colors.size();
+    int sss = ss * ss;
 
     deValue** distances = new deValue * [ss];
 
@@ -57,7 +58,7 @@ void dePalette3::optimize(const dePalette3& source, int n, deValue margin)
 
     bool no_more = false;
 
-    while ((colors.size() < (unsigned int)n) && (!no_more))
+    while ((colors.size() < n) && (!no_more))
     {
         int winner = -1;
         int max = 0;
@@ -118,4 +119,72 @@ void dePalette3::optimize(const dePalette3& source, int n, deValue margin)
 deColor3 dePalette3::getColor(int index)
 {
     return colors[index];
+}
+
+void dePalette3::getMinMax(int index, deValue& min, deValue& max)
+{
+    int n = colors.size();
+    int i;
+    min = -1;
+    max = -1;
+    for (i = 0; i < n; i++)
+    {
+        deColor3& color = colors[i];
+        deValue v;
+        switch (index)
+        {
+            case 1:
+                v = color.getV1();
+                break;
+            case 2:
+                v = color.getV2();
+                break;
+            case 3:
+                v = color.getV3();
+                break;
+            default:
+                break;
+        }
+        if (min < 0)
+        {
+            min = v;
+            max = v;
+        }
+        else
+        {
+            if (v < min)
+            {
+                min = v;
+            }
+            if (v > max)
+            {
+                max = v;
+            }
+        }
+    }
+}
+
+bool dePalette3::find23(deValue minA, deValue maxA, deValue minB, deValue maxB, deValue& resultL)
+{
+    int n = colors.size();
+    int i;
+
+    deValue sum = 0.0;
+    int found = 0;
+
+    for (i = 0; i < n; i++)
+    {
+        deColor3& color = colors[i];
+        deValue L = color.getV1();
+        deValue A = color.getV2();
+        deValue B = color.getV3();
+        if ((A >= minA) && (A < maxA) && (B >= minB) && (B < maxB))
+        {
+            sum += L;
+            found++;
+        }
+    }
+
+    resultL = sum / found;
+    return (found > 0);
 }

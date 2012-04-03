@@ -71,6 +71,9 @@ class dePalette3
         deColor3 getColor(int index);
 
         int getSize() const {return colors.size();};
+
+        void getMinMax(int index, deValue& min, deValue& max);
+        bool find23(deValue minA, deValue maxA, deValue minB, deValue maxB, deValue& L);
     
 };
 

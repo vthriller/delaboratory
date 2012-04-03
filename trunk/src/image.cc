@@ -128,6 +128,16 @@ bool deImage::getPixel(int channel, int p, deValue& result) const
 
 }
 
+const deValue* deImage::getValues(int channel) const
+{
+    deChannel* c = channelManager.getChannel(channelsVisible[channel]);
+    if (!c)
+    {
+        return NULL;
+    }
+    return c->getPixels();
+}
+
 void deImage::lockRead() const
 {
     int i;
