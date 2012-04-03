@@ -16,31 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_COLOR_MARTIX_FRAME6_H
-#define _DE_COLOR_MATRIX_FRAME6_H
+#ifndef _DE_COLOR_MATRIX_H
+#define _DE_COLOR_MATRIX_H
 
-#include "help_frame.h"
-#include "palette.h"
-class deProject;
+#include "value.h"
 
-class deColorMatrixFrame:public deHelpFrame
+class deColorMatrix
 {
     private:
-        deProject& project;
-        dePalette3* palette;
-        dePalette3* palette2;
-        dePalette3* paletteLAB;
-    public:
-        deColorMatrixFrame(wxWindow *parent, deProject& _project, int tileRW, int tileRH, int tileW, int tileH, int palW, int palH, int palSize, deValue margin);
-        virtual ~deColorMatrixFrame();
-};
+        int width;
+        int height;
 
-class deColorMatrixFrame2:public deHelpFrame
-{
-    private:
+        deValue* matrix;
+        int* density;
     public:
-        deColorMatrixFrame2(wxWindow *parent, deProject& _project, int channelHorizontal, int channelVertical, int channelAverage, int width, int height);
-        virtual ~deColorMatrixFrame2();
+        deColorMatrix(int _w, int _h);
+        virtual ~deColorMatrix();
+
+        void clear();
+        void build(const deValue* channelH, const deValue* channelV, const deValue* channelA, int n);
+
+        deValue get(int x, int y, int min) const;
+
+
 };
 
 #endif
