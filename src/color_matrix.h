@@ -26,6 +26,10 @@ class deColorMatrix
     private:
         int width;
         int height;
+        deValue minX;
+        deValue minY;
+        deValue maxX;
+        deValue maxY;
 
         deValue* matrix;
         int* density;
@@ -35,8 +39,9 @@ class deColorMatrix
 
         void clear();
         void build(const deValue* channelH, const deValue* channelV, const deValue* channelA, int n);
+        void buildZoomed(const deValue* channelH, const deValue* channelV, const deValue* channelA, int n, int min);
 
-        deValue get(int x, int y, int min) const;
+        deValue get(int x, int y, int min, deValue& vx, deValue& vy, bool& center) const;
 
 
 };

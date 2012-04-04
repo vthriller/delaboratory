@@ -430,13 +430,15 @@ void deMainFrame::onMemoryInfo(wxCommandEvent& event)
 
 void deMainFrame::onColorMatrix1(wxCommandEvent& event)
 {
-    wxFrame* help = new deColorMatrixFrame2(this, project, 1, 2, 0, 40, 40);
+    dePalette3* palette = NULL;
+    wxFrame* help = new deColorMatrixFrame2(this, project, 1, 2, 0, 32, 32, palette);
     help->Show();
 }
 
 void deMainFrame::onColorMatrix2(wxCommandEvent& event)
 {
-    wxFrame* help = new deColorMatrixFrame2(this, project, 1, 2, 0, 20, 20);
+    dePalette3* palette = NULL;
+    wxFrame* help = new deColorMatrixFrame2(this, project, 1, 2, 0, 16, 16, palette);
     help->Show();
 }
 

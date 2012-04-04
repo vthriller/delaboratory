@@ -31,9 +31,10 @@
 #define LAB_TILE_SIZE 20
 #define ALL_TILES_SIZE 800
 
-deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, int channelHorizontal, int channelVertical, int channelAverage, int width, int height)
+deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, int channelHorizontal, int channelVertical, int channelAverage, int width, int height, dePalette3* palette)
 :deHelpFrame(parent, "color matrix")
 {
+
     const deViewManager& viewManager = project.getViewManager();
     int view = viewManager.getView();
 
@@ -55,17 +56,10 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
     LABImage.enableAllChannels();
     convertImage(originalImage, LABImage, channelManager);
 
-/*
-    deConversion3x3 f3x3 = getConversion3x3(deColorSpaceLAB, deColorSpaceRGB);
-    if (!f3x3)
-    {
-        return;
-    }
-    */
-
     int nn = width * height;
 
-    int min = (n / 2) / nn;
+    //int min = (n / 2) / nn;
+    int min = (n / 1.5) / nn;
 
     const deValue* valuesVertical = LABImage.getValues(channelVertical);
     const deValue* valuesHorizontal = LABImage.getValues(channelHorizontal);
@@ -75,28 +69,40 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
     int tilesH = height;
 
     deColorMatrix colorMatrix(tilesW , tilesH);
-    colorMatrix.clear();
 
-    colorMatrix.build(valuesHorizontal, valuesVertical, valuesAverage, n);
+    colorMatrix.buildZoomed(valuesHorizontal, valuesVertical, valuesAverage, n, min);
 
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
 
-    int s = 2;
+    //int s = 2;
+    int s = 0;
 
     wxSizer* LABMapSizer = new wxFlexGridSizer(tilesW, s, s);
     mainSizer->Add(LABMapSizer);
 
     int x;
     int y;
-    for (y = 0; y < tilesH; y++)
+    //for (y = 0; y < tilesH; y++)
+    for (y = tilesH - 1; y >= 0; y--)
     {
         for (x = 0; x < tilesW; x++)
         {
-            deColorPanel* colorPanel = new deColorPanel(this, wxSize(ALL_TILES_SIZE / width, ALL_TILES_SIZE / height));
-            LABMapSizer->Add(colorPanel);
+            int style = 0;
 
-            deValue a = colorMatrix.get(x, y, min);
+            deValue vx = 0;
+            deValue vy = 0;
+            bool center;
+            deValue a = colorMatrix.get(x, y, min, vx, vy, center);
+
+            style = wxBORDER_NONE;
+            if ((center) && (a < 0))
+            {
+                style = wxBORDER_SIMPLE;
+            }
+
+            deColorPanel* colorPanel = new deColorPanel(this, wxSize(ALL_TILES_SIZE / width, ALL_TILES_SIZE / height), palette, style);
+            LABMapSizer->Add(colorPanel);
 
             if (a >= 0)
             {
@@ -104,8 +110,6 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
                 deValue v1 = 0;
                 deValue v2 = 0;
                 deValue v3 = 0;
-                deValue vx = (deValue) x / tilesW;
-                deValue vy = (deValue) y / tilesH;
                 switch (channelHorizontal)
                 {
                     case 0:
@@ -155,14 +159,17 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
                 deValue g;
                 deValue b;
 
-//                std::cout << v1 << " " << v2 << " " << v3 << std::endl;
                 lab2rgb(v1, v2, v3, r, g, b);
                 colorPanel->setRGB(r, g, b);
             }                
+            else
+            {
+//                colorPanel->setRGB(0, 0, 0);
+            }
+
         }
     }     
     Fit();
-
 }
 
 deColorMatrixFrame2::~deColorMatrixFrame2()
@@ -251,7 +258,7 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
 
     for (i = 0; i < n; i++)
     {
-        deColorPanel* colorPanel = new deColorPanel(imagePanel, wxSize(tileRW, tileRH));
+        deColorPanel* colorPanel = new deColorPanel(imagePanel, wxSize(tileRW, tileRH), NULL, 0);
         sizer->Add(colorPanel);
 
         int x1 = x * tileW;
@@ -348,8 +355,7 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
 
         for (A = minA; A < maxA; A += step)
         {
-
-            deColorPanel* colorPanel = new deColorPanel(LABPanel, wxSize(LAB_TILE_SIZE, LAB_TILE_SIZE));
+            deColorPanel* colorPanel = new deColorPanel(LABPanel, wxSize(LAB_TILE_SIZE, LAB_TILE_SIZE), NULL, 0);
             LABMapSizer->Add(colorPanel);
 
             deValue L = 1.0;
@@ -379,7 +385,7 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
 
     for (i = 0; i < palette2->getSize(); i++)
     {
-        deColorPanel* colorPanel = new deColorPanel(palettePanel, wxSize(palW, palH));
+        deColorPanel* colorPanel = new deColorPanel(palettePanel, wxSize(palW, palH), NULL, 0);
         palSizer->Add(colorPanel);
 
         deValue r;

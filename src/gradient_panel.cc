@@ -19,17 +19,27 @@
 #include "gradient_panel.h"
 #include "conversion_functions.h"
 
-deColorPanel::deColorPanel(wxWindow* parent, wxSize _size)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, _size)
+deColorPanel::deColorPanel(wxWindow* parent, wxSize _size, dePalette3* _palette, int style)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, _size, style), palette(_palette)
 {
+    Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deColorPanel::click));
 }
 
 deColorPanel::~deColorPanel()
 {
 }
 
+void deColorPanel::click(wxMouseEvent &event)
+{
+
+}
+
 void deColorPanel::setRGB(deValue rr, deValue gg, deValue bb)
 {
+    r = rr;
+    g = gg;
+    b = bb;
+
     SetBackgroundColour(wxColour(255 * rr, 255 * gg, 255 * bb));
 }        
 
