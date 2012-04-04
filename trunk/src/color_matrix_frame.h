@@ -39,7 +39,7 @@ class deColorMatrixFrame2:public deHelpFrame
 {
     private:
     public:
-        deColorMatrixFrame2(wxWindow *parent, deProject& _project, int channelHorizontal, int channelVertical, int channelAverage, int width, int height);
+        deColorMatrixFrame2(wxWindow *parent, deProject& _project, int channelHorizontal, int channelVertical, int channelAverage, int width, int height, dePalette3* palette);
         virtual ~deColorMatrixFrame2();
 };
 

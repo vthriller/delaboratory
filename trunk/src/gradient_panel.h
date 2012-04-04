@@ -21,11 +21,21 @@
 
 #include <wx/wx.h>
 #include "color_space.h"
+class dePalette3;
 
 class deColorPanel:public wxPanel
 {
+private:
+    deValue r;
+    deValue g;
+    deValue b;
+    dePalette3* palette;
+
+protected:
+    void click(wxMouseEvent &event);
+
 public:
-    deColorPanel(wxWindow* parent, wxSize _size);
+    deColorPanel(wxWindow* parent, wxSize _size, dePalette3* _palette, int style);
     virtual ~deColorPanel();
 
     void setRGB(deValue rr, deValue gg, deValue bb);

@@ -18,11 +18,17 @@
 
 #include "color_matrix.h"
 #include <iostream>
+#include <cmath>
 
 deColorMatrix::deColorMatrix(int _w, int _h)
 {
     width = _w;
     height = _h;
+
+    minX = 0;
+    minY = 0;
+    maxX = 1;
+    maxY = 1;
 
     int n = width * height;
     matrix = new deValue [n];
@@ -46,11 +52,99 @@ void deColorMatrix::clear()
     }
 }
 
+void deColorMatrix::buildZoomed(const deValue* channelH, const deValue* channelV, const deValue* channelA, int n, int min)
+{
+    minX = 0;
+    minY = 0;
+    maxX = 1;
+    maxY = 1;
+
+    clear();
+    build(channelH, channelV, channelA, n);
+    int xx;
+    int yy;
+    int minxx = width;
+    int maxxx = -1;
+    int minyy = height;
+    int maxyy = -1;
+
+    for (xx = 0; xx < width; xx++)
+    {
+        for (yy = 0; yy < height; yy++)
+        {
+            int pos = width * yy + xx;
+            if (density[pos] >= min)
+            {
+                if (xx < minxx)
+                {
+                    minxx = xx;
+                }
+                if (yy < minyy)
+                {
+                    minyy = yy;
+                }
+                if (xx > maxxx)
+                {
+                    maxxx = xx;
+                }
+                if (yy > maxyy)
+                {
+                    maxyy = yy;
+                }
+            }
+        }
+    }
+
+    if (minxx > 0)
+    {
+        minxx--;
+    }
+    if (minyy > 0)
+    {
+        minyy--;
+    }
+    if (maxxx < width - 1)
+    {
+        maxxx++;
+    }
+    if (maxyy < height - 1)
+    {
+        maxyy++;
+    }
+
+    minX = (deValue) minxx / width;
+    minY = (deValue) minyy / height;
+    maxX = (deValue) maxxx / width;
+    maxY = (deValue) maxyy / height;
+
+    deValue margin = -0.01;
+
+    if (maxX < 0.5 - margin)
+    {
+        maxX = 0.5 - margin;
+    }
+    if (maxY < 0.5 - margin)
+    {
+        maxY = 0.5 - margin;
+    }
+    if (minX > 0.5 + margin)
+    {
+        minX = 0.5 + margin;
+    }
+    if (minY > 0.5 + margin)
+    {
+        minY = 0.5 + margin;
+    }
+
+    clear();
+    build(channelH, channelV, channelA, n);
+
+}
+
 void deColorMatrix::build(const deValue* channelH, const deValue* channelV, const deValue* channelA, int n)
 {
     int i;
 
-    int maxY = 0;
     for (i = 0; i < n; i++)
     {
         deValue h = channelH[i];
@@ -59,27 +153,25 @@ void deColorMatrix::build(const deValue* channelH, const deValue* channelV, cons
 
         if ((h >= 0) && (h < 1) && (v >= 0) && (v < 1) && ((a >= 0) && (a < 1)))
         {
-            int x = h * width;
-            int y = v * height;
+            int x = (h - minX) / (maxX - minX) * width;
+            int y = (v - minY) / (maxY - minY) * height;
 
-            if (y > maxY)
+            if ((x >= 0) && (y >= 0) && (x < width) && (y < height))
             {
-                maxY = y;
-            }
+                int pos = width * y + x;
+            
+                int d = density[pos];
 
-            int pos = width * y + x;
-        
-            int d = density[pos];
-
-            if (d == 0)
-            {
-                density[pos] = 1;
-                matrix[pos] = a;
-            }
-            else
-            {
-                density[pos]++;
-                matrix[pos] += a;
+                if (d == 0)
+                {
+                    density[pos] = 1;
+                    matrix[pos] = a;
+                }
+                else
+                {
+                    density[pos]++;
+                    matrix[pos] += a;
+                }
             }
         }            
     }
@@ -95,8 +187,32 @@ void deColorMatrix::build(const deValue* channelH, const deValue* channelV, cons
     }
 }
 
-deValue deColorMatrix::get(int x, int y, int min) const
+deValue deColorMatrix::get(int x, int y, int min, deValue& vx, deValue& vy, bool& center) const
 {
+    vx = minX + ((deValue) x / width) * (maxX - minX);
+    deValue vx2 = minX + ((deValue) (x+1) / width) * (maxX - minX);
+    deValue vx3 = minX + ((deValue) (x-1) / width) * (maxX - minX);
+    deValue dx = fabs(0.5 - vx);
+    deValue dx2 = fabs(0.5 - vx2);
+    deValue dx3 = fabs(0.5 - vx3);
+
+    vy = minY + ((deValue) y / height) * (maxY - minY);
+    deValue vy2 = minY + ((deValue) (y+1) / height) * (maxY - minY);
+    deValue vy3 = minY + ((deValue) (y-1) / height) * (maxY - minY);
+    deValue dy = fabs(0.5 - vy);
+    deValue dy2 = fabs(0.5 - vy2);
+    deValue dy3 = fabs(0.5 - vy3);
+
+    center = false;
+    if ((dx < dx2) && (dx < dx3))
+    {
+        center = true;
+    }
+    if ((dy < dy2) && (dy < dy3))
+    {
+        center = true;
+    }
+
     if (x < 0)
     {
         return -1;
@@ -118,5 +234,7 @@ deValue deColorMatrix::get(int x, int y, int min) const
     {
         return -1;
     }
-    return matrix[pos];
+
+    deValue result = matrix[pos];
+    return result;
 }
