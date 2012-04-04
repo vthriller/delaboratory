@@ -388,7 +388,7 @@ void deConversionBWLayer::applyFilm(int f)
     {
         return;
     }
-    if (f >= films.size())
+    if ((unsigned int)f >= films.size())
     {
         return;
     }
