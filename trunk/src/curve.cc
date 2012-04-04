@@ -197,6 +197,7 @@ void deCurve::process(const deChannel& source, deChannel& destination, int n)
     lock();
 
     const deValue* pixels = source.getPixels();
+    deValue* p = destination.getPixels();
 
     int i;
     for (i = 0; i < n; i++)
@@ -204,7 +205,18 @@ void deCurve::process(const deChannel& source, deChannel& destination, int n)
         deValue value = pixels[i];
         deValue result = shape.calc(value);
 
-        destination.setValueClip(i, result);
+        if (result < 0)
+        {
+            p[i] = 0;
+        }
+        else if (result > 1)
+        {
+            p[i] = 1;
+        }
+        else
+        {
+            p[i] = result;
+        }
     }
 
     unlock();
