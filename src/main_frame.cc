@@ -90,7 +90,11 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     imageName = "";
 
+#ifdef __WXOSX_MAC__
+    Create((wxFrame *)NULL, wxID_ANY, _T("main frame"), wxDefaultPosition, wxSize(1440, 800), wxDEFAULT_FRAME_STYLE);
+#else
     Create((wxFrame *)NULL, wxID_ANY, _T("main frame"), wxDefaultPosition, size, wxDEFAULT_FRAME_STYLE | wxMAXIMIZE);
+#endif    
 
     updateTitle();
 
