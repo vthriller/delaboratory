@@ -1,65 +1,67 @@
-#summary delaboratory features
+#summary delaboratory features April 2012
 
-delaboratory is *NOT a RAW processor* and is *NOT a per-pixel editor*, this is a *color correction utility*
+delaboratory is an unique postprocessing application
 
-current features:
+main features:
 
-  * floating point precision - it means that internal code uses not 8-bit (like Gimp), not 16-bit (like many apps), but *float for each color component*, input and output will use 16-bit tiffs or 8-bit jpgs
+  * floating point precision - it means that internal code uses not 8-bit (like Gimp), not 16-bit (like many apps), but *32-bit for each channel*
 
-  * native support for *RGB*/*BW*, *CMY*/*CMYK*, *XYZ*/*LAB*/*LCH*, *HSV*/*HSL* colorspaces - each colorspace is equal, can be displayed, can be edited same way (the only limitation is lack of direct conversions between some colorspaces, sometimes you need to use two steps)
+  * native support for multiple colorspaces - *sRGB*, *ProPhoto RGB*, *BW*, *LAB*, *LCH*, *CMYK*, *HSV*, *HSL*, it means that each effect like curves or vignette can be used in any colorspace, and result is visible on your screen without need for any conversions
 
-  * *adjustment layers* - it's not possible to "flatten" like in Gimp, so each operation is available for edit, the more layers you create the more complex the project will be, it's possible to change the "source" layer of each layer and colorspace, configuration window of each frame can stay on screen, so it's possible to modify - for instance - mixer and curves at same time
+  * *adjustment layers* - each effect is separate layer, and each layer can be edited at any time, it means that when you realize that some part of your photo is too bright, you can go back and edit some early layer to make it darker - without this feature you will need to start over
 
-  * *realtime* - you should see the result on your screen just when you move slider or curve point, without waiting for any calculations, the only time you should expect wait is during the final image generation
+  * *realtime preview* - every action is visible on screen, you don't need to wait
 
-  * *curves* - each channel in each colorspace can be processed by curve, marker shows position on curve (taken from currently touched sapler)
+effects (action layers):
 
-  * *mixer* - from each colorspace to each colorspace, for instance one can mix RGB colorspace to achieve BW (black and white) image, but it's also possible to mix from RGB to LAB or CMYK if you want (there are no limitations at all), natural usage is of course mix RGB to RGB or LAB to LAB
+  * *curves* - this is most important postprocessing utility, it's easy to start with, but hard to master, let just say that I am learning curves for few years (mostly by using Gimp) and still learn new techniques
 
-  * *blend* - blend some channels from one colorspace with another, the first one is called "source" the second one "overlay", so there are three layers in this operation: "source", "overlay" and "blend" (result), supported blend modes: *normal*, *multiply*, *screen*, *overlay*, *add*, *sub*, *difference*, *overlay_invert*, *add_invert*, *lighten*, *darken*
+  * *channel mixer* - as Dan Margulis wrote, mixer is utility which should be used at the moment when you can't achieve good result with curves, it's harder to learn, less intuitive, but worth knowing
 
-  * *blur* - each channel can be blured vertically or horizontally, the radius of the blur is not set in pixels but in the ratio of image size (width or height), so radius 0.1 means 10% of image size, there is a *box blur*, *gaussian blur* and *surface blur* to choose
+  * *basic* - this is just temporary name, this layer contains sliders like "brightness", "contrast" or "saturation", they are different for different colorspaces, so if you want to play with red contrast go to sRGB but if you want to play with saturation go to LAB, etc
 
-  * *high pass* - "high pass" is inversion of "blur", it detects edges and can be used to sharpen the photo or just bring the edges back after bluring
+  * *equalizer* - this idea comes from HSV equalizer in !RawTherapee, for each color you can change it's saturation, luminance and hue, but of course equalizer can be also used in other colorspaces (except RGB), for instance in LAB you can change A or B for each level of luminance, try it
 
-  * *lockable samplers* - it's possible to lock multiple samplers on given places and watch color values (any colorspace) in this place during the edit
+  * *apply image* - this layer is used to merge two other layers, for instance when you want to bring back original image or apply green channel in luminance mode or just play with blend modes, if you are beginner just don't touch it 
 
-  * *load/save support* for project via libxml2
+  * *vignette* - this layer adds vignette to your photo, but it's much more powerful than you can think, first it's very configurable, second - you can achieve strange effect if you apply vignette to non-luminance channels (like AB in LAB)
 
-plans for next releases:
+  * *dodge/burn* - this is automatic dodge/burn, you can only define some levels with sliders, I use this feature a lot, worth trying
 
-  * add "blend" feature for each layer
-  * more advanced UI
-  * blend mask 
-  * equalizer (idea from HSV equalizer in RawTherapee) - something between curves and mixer
-  * c2g-like effect like the one in GIMP/GEGL
-  * update preview per channel instead update all channels (speed)
-  * update preview in another thread (c2g-like effect will be slow, blur is already slow when big radius is set)
-  * combos - predefined set of layers so one could just click one button and generate whole stack of glamour postprocessing, cross processing, nice bw conversion, etc... 
-  * there are few more interesting colorspaces to add, like Munsell
-  * better structure of layer properties (design)
-  * multiple source images
-  * direct conversion between each two colorspaces - even if slow - may be useful for samplers, etc..
-  * number of samplers should not be fixed like it is now
-  * different colors for GUI (curves, histograms, etc)
-  * quick preview of multiple channels (like R/G/B, C/M/Y/K, L/A/B in one window)
-  * reverse engineering tools for processed images - take the source image, take final image and let the algorithm guess curves/mixer/otherstuff which generated it (see elsamuko Get Curves plugin for the idea)
-  * reset button for each layer
-  * random button, maybe randomly generated variants to choose (see biomorphs for the idea), this way user could click the random button, accept best choice and the image will evolve
-  * wavelets (see RawTherapee and GIMP wavelets plugins)
-  * more filters (see GMIC)
+  * *shadows/highlights* - it should be used if your photo has some very dark or very bright areas
 
-don't expect (may change in future):
+  * *unsharp mask* - well known technique for sharpening your photo, try sharpening only some channels (like L in LAB or K in CMYK)
 
-  * drawing support
-  * healing brush, clone tool
-  * dodge/burn
-  * RAW support
-  * DAM (thumbnails browsing, ratings stars, copy and delete files, etc...)
+  * *high pass* - set blend mode to "overlay" if you want to achieve sharpening effect, but high pass is a lot more, learn it from tutorials and books, if you want to apply modified high pass on your image - use apply image layer (to merge both layers)
 
-not sure about:
+  * *blur* - can be used to add "dreamy effect" to your photo, but also for some advanced techniques, if unsure - don't touch it
 
-  * color profiles, GCR setting in CMYK (pointless?)
-  * zoom support - I don't have any idea yet - how to do it fast when multiple layers are present and we deal with photos larger than 10 megapixels? imagine multiple blurs each with 1000-pixel radius
-  * sharpening - should be done in per-pixel editor like GIMP, but from the other side - it could be nice to have USM if blur is already here and it will be possible to sharpen only some channels, like K in CMYK or L in LAB
-  * some kind of Zone System support, however I am not yet sure how it can be useful except as view type
+other tools:
+
+  * *samplers* - up to 5 samplers can be set on image, you can see in realtime what are color values on each sampler (in any colorspace), this is very usable when playing with skin tones (that's why CMYK is default)
+
+  * *color matrix* - open the image with colors you like, and run color matrix tool - you will see map of LAB colors (A horizontally, B vertically) so you have some hints how to postprocess your photo to achieve similar effect, in the future it will be also possible to copy colors from color matrix
+
+input/output:
+
+  * delaboratory opens RAW files (via dcraw), 16-bit TIFF files (best output from any raw editor) and JPEGs (worst choice - worst quality)
+
+  * delaboratory saves 16-bit TIFFs or JPEGs, it can also send TIFF directly to Gimp
+
+limitations:
+
+  * delaboratory doesn't support any local modifications, like paiting, clone tool, healing tool or true dodge/burn, it can change in the future
+
+  * delaboratory doesn't support color profiles at all, RAWs are loaded in ProPhoto RGB, but display works in sRGB and output will be sRGB, so if your style of photography requires wider colorspace than sRGB then delaboratory is not a tool for you 
+
+why use delaboratory?
+
+  * you don't have to worry about quality loss during your postprocessing, it's perfectly fine to use for instance 10 different curves in different colorspaces, move between RGB, LAB and CMYK - in Gimp even one curve destroys the quality, because it's 8-bit color depth, in most RAW editors I've seen you can use 16-bit or 32-bit curve but only once, users of commercial software are afraid of converting between RGB/CMYK/LAB because they believe it means quality loss, that's why delaboratory uses 32-bit and adjustement layers
+
+  * it's a utility made for experiments, to play with colors, to learn new techniques, if you multiply some simple actions (curves, mixer, vignette, etc) by number of colorspaces by number of blend modes, you will realize how many ways  you can go, this is totally different approach than in RAW editors, when you can only set this and that
+
+  * it's free and it will be free forever, it compiles and works on multiple operating systems, I use it on Linux, many people uses it on Windows, and now we have also Mac build
+
+
+
+
