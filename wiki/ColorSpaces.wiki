@@ -10,7 +10,6 @@ delaboratory supports 9 color spaces:
   * LAB http://en.wikipedia.org/wiki/Lab_color_space
   * LCH http://www.colourphil.co.uk/lab_lch_colour_space.html
   * CMYK http://en.wikipedia.org/wiki/Cmyk
-  * CMY 
   * HSV http://en.wikipedia.org/wiki/HSL_and_HSV
   * HSL http://en.wikipedia.org/wiki/HSL_and_HSV
 
@@ -26,6 +25,4 @@ LCH is similar to LAB, but instead "not so user friendly" A/B channels there is 
 
 CMYK is the only colorspace which has 4 channels, that's why it's special and that's why it's so powerful, most people don't understand why this colorspace can be used in post processing and they just associate CMYK with printing, that's why it's not available in many Free Software projects at all
 
-CMY is just reversed RGB, it's like CMYK but without K
-
-HSV/HCL are old colorspaces which separate luminance from color, but they don't make it so well as LAB/LCH, but they are quite famous so they are available
+HSV/HSL are old colorspaces which separate luminance from color, but they don't make it so well as LAB/LCH, but they are quite famous so they are available
