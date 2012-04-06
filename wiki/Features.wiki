@@ -6,7 +6,7 @@ main features:
 
   * floating point precision - it means that internal code uses not 8-bit (like Gimp), not 16-bit (like many apps), but *32-bit for each channel*
 
-  * native support for multiple colorspaces - *sRGB*, *ProPhoto RGB*, *BW*, *LAB*, *LCH*, *CMYK*, *HSV*, *HSL*, it means that each effect like curves or vignette can be used in any colorspace, and result is visible on your screen without need for any conversions
+  * native support for multiple colorspaces - *sRGB*, *!ProPhoto RGB*, *BW*, *LAB*, *LCH*, *CMYK*, *HSV*, *HSL*, it means that each effect like curves or vignette can be used in any colorspace, and result is visible on your screen without need for any conversions
 
   * *adjustment layers* - each effect is separate layer, and each layer can be edited at any time, it means that when you realize that some part of your photo is too bright, you can go back and edit some early layer to make it darker - without this feature you will need to start over
 
@@ -61,7 +61,5 @@ why use delaboratory?
   * it's a utility made for experiments, to play with colors, to learn new techniques, if you multiply some simple actions (curves, mixer, vignette, etc) by number of colorspaces by number of blend modes, you will realize how many ways  you can go, this is totally different approach than in RAW editors, when you can only set this and that
 
   * it's free and it will be free forever, it compiles and works on multiple operating systems, I use it on Linux, many people uses it on Windows, and now we have also Mac build
-
-
 
 
