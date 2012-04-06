@@ -52,7 +52,7 @@ limitations:
 
   * delaboratory doesn't support any local modifications, like paiting, clone tool, healing tool or true dodge/burn, it can change in the future
 
-  * delaboratory doesn't support color profiles at all, RAWs are loaded in ProPhoto RGB, but display works in sRGB and output will be sRGB, so if your style of photography requires wider colorspace than sRGB then delaboratory is not a tool for you 
+  * delaboratory doesn't support color profiles at all, RAWs are loaded in !ProPhoto RGB, but display works in sRGB and output will be sRGB, so if your style of photography requires wider colorspace than sRGB then delaboratory is not a tool for you 
 
 why use delaboratory?
 
@@ -61,5 +61,3 @@ why use delaboratory?
   * it's a utility made for experiments, to play with colors, to learn new techniques, if you multiply some simple actions (curves, mixer, vignette, etc) by number of colorspaces by number of blend modes, you will realize how many ways  you can go, this is totally different approach than in RAW editors, when you can only set this and that
 
   * it's free and it will be free forever, it compiles and works on multiple operating systems, I use it on Linux, many people uses it on Windows, and now we have also Mac build
-
-
