@@ -18,9 +18,9 @@ effects (action layers):
 
   * *channel mixer* - as Dan Margulis wrote, mixer is utility which should be used at the moment when you can't achieve good result with curves, it's harder to learn, less intuitive, but worth knowing
 
-  * *basic* - this is just temporary name, this layer contains sliders like "brightness", "contrast" or "saturation", they are different for different colorspaces, so if you want to play with red contrast go to sRGB but if you want to play with saturation go to LAB, etc - the technique called "Jacob's Ladder" is just what equalizer in LAB mode does
+  * *basic* - this is just temporary name, this layer contains sliders like "brightness", "contrast" or "saturation", they are different for different colorspaces, so if you want to play with red contrast go to sRGB but if you want to play with saturation go to LAB, etc
 
-  * *equalizer* - this idea comes from HSV equalizer in !RawTherapee, for each color you can change it's saturation, luminance and hue, but of course equalizer can be also used in other colorspaces (except RGB), for instance in LAB you can change A or B for each level of luminance, try it
+  * *equalizer* - this idea comes from HSV equalizer in !RawTherapee, for each color you can change it's saturation, luminance and hue, but of course equalizer can be also used in other colorspaces (except RGB), for instance in LAB you can change A or B for each level of luminance, try it  - the technique called "Jacob's Ladder" is just what equalizer in LAB mode does
 
   * *apply image* - this layer is used to merge two other layers, for instance when you want to bring back original image or apply green channel in luminance mode or just play with blend modes, if you are beginner just don't touch it 
 
