@@ -30,14 +30,13 @@ class deUSMLayer:public deActionLayer
         int amountPropertyIndex;
         int thresholdPropertyIndex;
 
-
     protected:
         virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "usm";};
         virtual std::string getLabel() const {return "unsharp mask";};
 
     public:
-        deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deUSMLayer();
 
         virtual bool isChannelNeutral(int index);
@@ -49,7 +48,6 @@ class deUSMLayer:public deActionLayer
 
         virtual std::string getActionName() {return "usm";};
 
-        virtual bool randomize();
 
 
 };

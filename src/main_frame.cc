@@ -77,7 +77,6 @@ EVT_MENU(ID_BenchmarkColor, deMainFrame::onBenchmarkColor)
 EVT_MENU(DE_REPAINT_EVENT, deMainFrame::onRepaintEvent)
 EVT_MENU(DE_IMAGE_LOAD_EVENT, deMainFrame::onImageLoadEvent)
 EVT_MENU(DE_HISTOGRAM_EVENT, deMainFrame::onHistogramEvent)
-EVT_MENU(DE_RANDOM_EVENT, deMainFrame::onRandomEvent)
 EVT_MENU(DE_INFO_EVENT, deMainFrame::onInfoEvent)
 END_EVENT_TABLE()
 
@@ -489,49 +488,11 @@ void deMainFrame::onImageLoadEvent(wxCommandEvent& event)
     layerProcessor.onImageLoad();
 }
 
-void deMainFrame::onRandomEvent(wxCommandEvent& event)
-{
-    project.log("random event start");
-    project.addRandomLayer();
-    project.log("random event end");
-}
-
 void deMainFrame::onInfoEvent(wxCommandEvent& event)
 {
     int i = event.GetInt();
     threadsPanel->setInfoColor(i);
 }
-
-class deTestThread:public wxThread
-{
-    private:
-        virtual void *Entry()
-        {
-            int i;
-            int max = 999999;
-            for (i = 0; i < max; i++)
-            {
-                wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_RANDOM_EVENT );
-                wxPostEvent( frame, event );
-                wxThread::Sleep(100 + rand() % 1000);
-                if (TestDestroy())
-                {
-                    i = max;
-                }
-            }
-            return NULL;
-        }
-        deMainFrame* frame;
-        deProject& project;
-    public:    
-        deTestThread(deMainFrame* _frame, deProject& _project)
-        :frame(_frame), project(_project)
-        {
-        }
-        virtual ~deTestThread()
-        {
-        }
-};
 
 void deMainFrame::repaintMainFrame(bool calcHistogram)
 {

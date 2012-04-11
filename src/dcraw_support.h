@@ -22,6 +22,7 @@
 #include <string>
 class deStaticImage;
 #include "color_space.h"
+#include <wx/wx.h>
 
 std::string getDcrawVersion();
 

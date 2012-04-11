@@ -23,6 +23,7 @@
 #include <map>
 #include "color_space.h"
 #include <libxml/parser.h>
+#include <wx/wx.h>
 
 class deProject;
 class deFrame;
@@ -45,7 +46,6 @@ class deLayer
     private:
         deLayer(const deLayer& layer);
         deLayer& operator = (const deLayer& layer);
-        std::string name;
         wxMutex mutex;
 
         virtual bool updateImage() = 0;
@@ -55,8 +55,7 @@ class deLayer
         unsigned int index;
         unsigned int sourceLayer;
 
-        std::vector<dePropertyValue*> valueProperties;
-        //std::vector<deProperty*> valueProperties;
+        std::vector<deProperty*> properties;
         std::map<std::string, dePresetLayer*> presets;
 
         int registerPropertyValue(const std::string& _name);
@@ -66,13 +65,12 @@ class deLayer
         void loadValueProperties(xmlNodePtr root);
 
     public:
-        deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer);
+        deLayer(deColorSpace _colorSpace, int _index, int _sourceLayer);
         virtual ~deLayer();
 
         deColorSpace getColorSpace() const;
         virtual const deImage& getImage() const = 0;
 
-        std::string getName() const;
         virtual std::string getLabel() const;
 
         virtual bool hasAction() const;
@@ -95,8 +93,6 @@ class deLayer
 
         bool updateImageThreadCall();
 
-        virtual bool randomize() = 0;
-
         void lockLayer();
         void unlockLayer();
 
@@ -108,7 +104,7 @@ class deLayer
 
         virtual void onUpdateProperties() {};
 
-        int getNumberOfValueProperties() const {return valueProperties.size();};
+        int getNumberOfProperties() const {return properties.size();};
         dePropertyValue* getPropertyValue(int index);
         dePropertyValue* getPropertyValue(const std::string& _name);
 

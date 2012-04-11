@@ -22,8 +22,8 @@
 #include "frame_factory.h"
 #include "equalizer.h"
 
-deEqualizerLayer8::deEqualizerLayer8(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deEqualizerLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager, _name, 8)
+deEqualizerLayer8::deEqualizerLayer8(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deEqualizerLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager, 8)
 {
 }
 
@@ -31,8 +31,8 @@ deEqualizerLayer8::~deEqualizerLayer8()
 {
 }
 
-deEqualizerLayer16::deEqualizerLayer16(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deEqualizerLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager, _name, 16)
+deEqualizerLayer16::deEqualizerLayer16(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deEqualizerLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager, 16)
 {
 }
 
@@ -40,8 +40,8 @@ deEqualizerLayer16::~deEqualizerLayer16()
 {
 }
 
-deEqualizerLayer::deEqualizerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name, int _bands)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
+deEqualizerLayer::deEqualizerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _bands)
+:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
  bands(_bands)
 {
     int n = getColorSpaceSize(colorSpace);
@@ -143,11 +143,6 @@ void deEqualizerLayer::load(xmlNodePtr root)
 
         child = child->next;
     }
-}
-
-bool deEqualizerLayer::randomize()
-{
-    return true;
 }
 
 void deEqualizerLayer::reset()

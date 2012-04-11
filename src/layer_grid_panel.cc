@@ -71,12 +71,14 @@ void deLayerGridPanel::buildRows()
         row.view = new wxRadioButton(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, style);
         gridSizer->Add(row.view, 0, wxALIGN_CENTER);
 
+/*
         row.name = new wxStaticText(this, wxID_ANY, wxString::FromAscii(layer->getName().c_str()), wxDefaultPosition, wxSize(100, -1));
         gridSizer->Add(row.name, 0, wxALIGN_CENTER);
+        */
 
         std::string action = layer->getActionName();
 
-        row.action = new wxButton(this, wxID_ANY, wxString::FromAscii(action.c_str()), wxDefaultPosition, wxSize(60,25));
+        row.action = new wxButton(this, wxID_ANY, wxString::FromAscii(action.c_str()), wxDefaultPosition, wxSize(160,25));
         if (layer->hasAction())
         {
             gridSizer->Add(row.action, 0);
@@ -87,7 +89,7 @@ void deLayerGridPanel::buildRows()
             row.action->Hide();
         }
 
-        row.blend = new wxButton(this, wxID_ANY, _T("blend"), wxDefaultPosition, wxSize(60,25));
+        row.blend = new wxButton(this, wxID_ANY, _T("b"), wxDefaultPosition, wxSize(20,25));
         if (layer->hasBlending())
         {
             gridSizer->Add(row.blend, 0);
@@ -135,9 +137,11 @@ void deLayerGridPanel::clearRows()
         
         gridSizer->Detach(row.view);
         delete row.view;
-        
+       
+       /*
         gridSizer->Detach(row.name);
         delete row.name;
+        */
 
         gridSizer->Detach(row.action);
         delete row.action;
@@ -160,7 +164,7 @@ deLayerGridPanel::deLayerGridPanel(wxWindow* parent, deProject& _project, deLaye
 {
     maxRows = 10;
 
-    gridSizer = new wxFlexGridSizer(6);
+    gridSizer = new wxFlexGridSizer(5);
     gridSizer->SetFlexibleDirection(wxHORIZONTAL);
     SetSizer(gridSizer);
 

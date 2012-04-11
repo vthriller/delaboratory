@@ -25,8 +25,8 @@
 #include "frame_factory.h"
 #include "layer_processor.h"
 
-deVignetteLayer1::deVignetteLayer1(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deVignetteLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager, _name, 1)
+deVignetteLayer1::deVignetteLayer1(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deVignetteLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager, 1)
 {
 }
 
@@ -35,8 +35,8 @@ deVignetteLayer1::~deVignetteLayer1()
 {
 }
 
-deVignetteLayer2::deVignetteLayer2(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deVignetteLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager, _name, 2)
+deVignetteLayer2::deVignetteLayer2(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deVignetteLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager, 2)
 {
 }
 
@@ -45,8 +45,8 @@ deVignetteLayer2::~deVignetteLayer2()
 {
 }
 
-deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name, int _vignettes)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
+deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _vignettes)
+:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
  vignettes(_vignettes)
 {
     lightIndex = registerPropertyValue("light");
@@ -66,14 +66,14 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sour
         radius2YIndex = registerPropertyValue("radius2_y");
     }
 
-    dePropertyValue* radius1X = valueProperties[radius1XIndex];
-    dePropertyValue* radius1Y = valueProperties[radius1YIndex];
-    dePropertyValue* center1X = valueProperties[center1XIndex];
-    dePropertyValue* center1Y = valueProperties[center1YIndex];
+    dePropertyValue* radius1X = getPropertyValue(radius1XIndex);
+    dePropertyValue* radius1Y = getPropertyValue(radius1YIndex);
+    dePropertyValue* center1X = getPropertyValue(center1XIndex);
+    dePropertyValue* center1Y = getPropertyValue(center1YIndex);
 
-    dePropertyValue* light = valueProperties[lightIndex];
-    dePropertyValue* darkness = valueProperties[darknessIndex];
-    dePropertyValue* spot = valueProperties[spotIndex];
+    dePropertyValue* light = getPropertyValue(lightIndex);
+    dePropertyValue* darkness = getPropertyValue(darknessIndex);
+    dePropertyValue* spot = getPropertyValue(spotIndex);
 
     radius1X->setMin(0.01);
     radius1X->setMax(1.0);
@@ -91,10 +91,10 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sour
 
     if (vignettes == 2)
     {
-        dePropertyValue* radius2X = valueProperties[radius2XIndex];
-        dePropertyValue* radius2Y = valueProperties[radius2YIndex];
-        dePropertyValue* center2X = valueProperties[center2XIndex];
-        dePropertyValue* center2Y = valueProperties[center2YIndex];
+        dePropertyValue* radius2X = getPropertyValue(radius2XIndex);
+        dePropertyValue* radius2Y = getPropertyValue(radius2YIndex);
+        dePropertyValue* center2X = getPropertyValue(center2XIndex);
+        dePropertyValue* center2Y = getPropertyValue(center2YIndex);
         radius2X->setMin(0.01);
         radius2X->setMax(1.0);
         radius2Y->setMin(0.01);
@@ -153,23 +153,23 @@ bool deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deCha
 
     viewManager.getZoom(x1, y1, x2, y2);
 
-    dePropertyValue* radius1X = valueProperties[radius1XIndex];
-    dePropertyValue* radius1Y = valueProperties[radius1YIndex];
-    dePropertyValue* center1X = valueProperties[center1XIndex];
-    dePropertyValue* center1Y = valueProperties[center1YIndex];
+    dePropertyValue* radius1X = getPropertyValue(radius1XIndex);
+    dePropertyValue* radius1Y = getPropertyValue(radius1YIndex);
+    dePropertyValue* center1X = getPropertyValue(center1XIndex);
+    dePropertyValue* center1Y = getPropertyValue(center1YIndex);
 
-    dePropertyValue* light = valueProperties[lightIndex];
-    dePropertyValue* darkness = valueProperties[darknessIndex];
-    dePropertyValue* spot = valueProperties[spotIndex];
+    dePropertyValue* light = getPropertyValue(lightIndex);
+    dePropertyValue* darkness = getPropertyValue(darknessIndex);
+    dePropertyValue* spot = getPropertyValue(spotIndex);
 
     deEllipse ellipse1 = calcEllipse(radius1X->get(), radius1Y->get(), center1X->get(), center1Y->get(), x1, y1, x2, y2);
 
     if (vignettes == 2)
     {
-        dePropertyValue* radius2X = valueProperties[radius2XIndex];
-        dePropertyValue* radius2Y = valueProperties[radius2YIndex];
-        dePropertyValue* center2X = valueProperties[center2XIndex];
-        dePropertyValue* center2Y = valueProperties[center2YIndex];
+        dePropertyValue* radius2X = getPropertyValue(radius2XIndex);
+        dePropertyValue* radius2Y = getPropertyValue(radius2YIndex);
+        dePropertyValue* center2X = getPropertyValue(center2XIndex);
+        dePropertyValue* center2Y = getPropertyValue(center2YIndex);
 
         deEllipse ellipse2 = calcEllipse(radius2X->get(), radius2Y->get(), center2X->get(), center2Y->get(), x1, y1, x2, y2);
         vignetteChannel(destination, size, ellipse1, ellipse2, light->get(), darkness->get(), spot->get());
@@ -191,16 +191,16 @@ bool deVignetteLayer::isChannelNeutral(int index)
 
 void deVignetteLayer::reset()
 {
-    dePropertyValue* radius1X = valueProperties[radius1XIndex];
-    dePropertyValue* radius1Y = valueProperties[radius1YIndex];
-    dePropertyValue* center1X = valueProperties[center1XIndex];
-    dePropertyValue* center1Y = valueProperties[center1YIndex];
+    dePropertyValue* radius1X = getPropertyValue(radius1XIndex);
+    dePropertyValue* radius1Y = getPropertyValue(radius1YIndex);
+    dePropertyValue* center1X = getPropertyValue(center1XIndex);
+    dePropertyValue* center1Y = getPropertyValue(center1YIndex);
 
-    dePropertyValue* light = valueProperties[lightIndex];
-    dePropertyValue* darkness = valueProperties[darknessIndex];
-    dePropertyValue* spot = valueProperties[spotIndex];
+    dePropertyValue* light = getPropertyValue(lightIndex);
+    dePropertyValue* darkness = getPropertyValue(darknessIndex);
+    dePropertyValue* spot = getPropertyValue(spotIndex);
 
-    setBlendMode(deBlendOverlay);
+    setBlendMode(deBlendMultiply);
     setOpacity(1.0);
 
     radius1X->set(0.5);
@@ -210,10 +210,10 @@ void deVignetteLayer::reset()
 
     if (vignettes == 2)
     {
-        dePropertyValue* radius2X = valueProperties[radius2XIndex];
-        dePropertyValue* radius2Y = valueProperties[radius2YIndex];
-        dePropertyValue* center2X = valueProperties[center2XIndex];
-        dePropertyValue* center2Y = valueProperties[center2YIndex];
+        dePropertyValue* radius2X = getPropertyValue(radius2XIndex);
+        dePropertyValue* radius2Y = getPropertyValue(radius2YIndex);
+        dePropertyValue* center2X = getPropertyValue(center2XIndex);
+        dePropertyValue* center2Y = getPropertyValue(center2YIndex);
 
         radius2X->set(0.5);
         radius2Y->set(0.5);
@@ -221,7 +221,7 @@ void deVignetteLayer::reset()
         center2Y->set(0.0);
     }
 
-    light->set(0.5);
+    light->set(1.0);
     spot->set(1.0);
     darkness->set(0.2);
 }
@@ -247,40 +247,10 @@ void deVignetteLayer::load(xmlNodePtr root)
 
 }
 
-bool deVignetteLayer::randomize()
-{
-/*
-    dePropertyValue* radiusX = valueProperties[radiusXIndex];
-    dePropertyValue* radiusY = valueProperties[radiusYIndex];
-    dePropertyValue* centerX = valueProperties[centerXIndex];
-    dePropertyValue* centerY = valueProperties[centerYIndex];
-    dePropertyValue* light = valueProperties[lightIndex];
-    dePropertyValue* darkness = valueProperties[darknessIndex];
-
-    deValue r = (deValue) rand() / RAND_MAX;
-    r *= 0.5;
-    radiusX->set(r + 0.8);
-
-    deValue r2 = (deValue) rand() / RAND_MAX;
-    r2 *= 0.5;
-    radiusY->set(r2 + 0.8);
-
-    deValue r3 = (deValue) rand() / RAND_MAX;
-    r3 *= 2.0;
-    centerX->set(r3 - 1.0);
-
-    deValue r4 = (deValue) rand() / RAND_MAX;
-    r4 *= 2.0;
-    centerY->set(r4 - 1.0);
-*/
-
-    return true;
-}
-
 bool deVignetteLayer::setCenter(deValue x, deValue y)
 {
-    dePropertyValue* center1X = valueProperties[center1XIndex];
-    dePropertyValue* center1Y = valueProperties[center1YIndex];
+    dePropertyValue* center1X = getPropertyValue(center1XIndex);
+    dePropertyValue* center1Y = getPropertyValue(center1YIndex);
     center1X->set(2 * x - 1);
     center1Y->set(2 * y - 1);
 

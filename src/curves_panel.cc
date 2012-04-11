@@ -21,6 +21,53 @@
 #include "curves_layer.h"
 #include "layer_processor.h"
 #include "logger.h"
+#include "channels.h"
+
+wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
+{
+    switch (colorSpace)
+    {
+        case deColorSpaceRGB:
+        case deColorSpaceProPhoto:
+        {
+            int g = 200;
+            switch (channel)
+            {
+                case DE_CHANNEL_RED:
+                    return wxColour(g, 0, 0);
+                case DE_CHANNEL_GREEN:
+                    return wxColour(0, g, 0);
+                case DE_CHANNEL_BLUE:
+                    return wxColour(0, 0, g);
+            }                    
+        }            
+        case deColorSpaceCMYK:
+        case deColorSpaceCMY:
+        {
+            int g = 240;
+            int g2 = 50;
+            switch (channel)
+            {
+                case DE_CHANNEL_CYAN:
+                    return wxColour(0, g, g);
+                case DE_CHANNEL_MAGENTA:
+                    return wxColour(g, 0, g);
+                case DE_CHANNEL_YELLOW:
+                    return wxColour(g, g, 0);
+                case DE_CHANNEL_KEY:
+                    return wxColour(g2, g2, g2);
+            }                    
+        }            
+        default:
+        {
+            // in any other cases just use dark gray
+            int g = 50;
+            return wxColour(g, g, g);
+        }            
+    }
+
+}
+
 
 BEGIN_EVENT_TABLE(deCurvesPanel, wxPanel)
 EVT_PAINT(deCurvesPanel::paintEvent)
@@ -28,7 +75,7 @@ END_EVENT_TABLE()
 
 deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, deLayerProcessor& _layerProcessor)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(CURVES_PANEL_SIZE_X, CURVES_PANEL_SIZE_Y)),
-sizeX(CURVES_PANEL_SIZE_X), sizeY(CURVES_PANEL_SIZE_Y), layer(_layer), histogram(CURVES_PANEL_SIZE_X),
+sizeX(CURVES_PANEL_SIZE_X), sizeY(CURVES_PANEL_SIZE_Y), layer(_layer), 
 layerProcessor(_layerProcessor)
 {
     SetFocus();
@@ -57,6 +104,8 @@ void deCurvesPanel::generateBackground()
     {
         delete backgroundBitmap;
     }
+
+    deHistogram histogram(CURVES_PANEL_SIZE_X);
 
     deChannel* c = layer.getSourceChannel(channel);
     int n = layer.getChannelSize().getN();
@@ -320,7 +369,6 @@ void deCurvesPanel::setS(int a)
 
 void deCurvesPanel::update(bool finished)
 {
-//    std::cout << "curves update" << std::endl;
     logMessage("deCurvesPanel::update");
     paint();
     if ((finished) || (layerProcessor.isRealtime()))

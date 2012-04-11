@@ -21,6 +21,7 @@
 
 #include "color_space.h"
 #include "size.h"
+#include <wx/wx.h>
 class deChannel;
 
 class deStaticImage

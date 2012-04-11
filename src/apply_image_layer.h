@@ -38,7 +38,7 @@ class deApplyImageLayer:public deActionLayer
         virtual std::string getLabel() const {return "apply image";};
 
     public:
-        deApplyImageLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deApplyImageLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deApplyImageLayer();
 
         virtual bool isChannelNeutral(int index);
@@ -61,7 +61,6 @@ class deApplyImageLayer:public deActionLayer
 
         virtual std::string getActionName() {return "setup";};
 
-        virtual bool randomize() {return false;};
 
 
 };

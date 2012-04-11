@@ -28,11 +28,11 @@
 #include "process_linear.h"
 #include "layer_processor.h"
 
-deHighPassLayer::deHighPassLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
+deHighPassLayer::deHighPassLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
 {
     blurRadiusIndex = registerPropertyValue("blur_radius");
-    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
 
     blurRadius->setLabel("radius");
     blurRadius->setMin(1);
@@ -42,7 +42,7 @@ deHighPassLayer::deHighPassLayer(deColorSpace _colorSpace, int _index, int _sour
 
 void deHighPassLayer::reset()
 {
-    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
     blurRadius->set(5);
 }
 
@@ -72,7 +72,7 @@ bool deHighPassLayer::processAction(int i, const deChannel& sourceChannel, deCha
         return false;
     }
 
-    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
 
     deValue r = viewManager.getRealScale() * blurRadius->get();
     deBlurType type = deGaussianBlur;

@@ -46,7 +46,7 @@ class deVignetteLayer:public deActionLayer
         virtual std::string getType() const {return "vignette";};
 
     public:
-        deVignetteLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name, int _vignettes);
+        deVignetteLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _vignettes);
         virtual ~deVignetteLayer();
 
         virtual bool isChannelNeutral(int index);
@@ -60,7 +60,6 @@ class deVignetteLayer:public deActionLayer
 
         void reset();
 
-        virtual bool randomize();
 
         bool setCenter(deValue x, deValue y);
 
@@ -69,7 +68,7 @@ class deVignetteLayer:public deActionLayer
 class deVignetteLayer1:public deVignetteLayer
 {
     public:
-        deVignetteLayer1(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deVignetteLayer1(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deVignetteLayer1();
 
         virtual std::string getType() const {return "vignette1";};
@@ -78,7 +77,7 @@ class deVignetteLayer1:public deVignetteLayer
 class deVignetteLayer2:public deVignetteLayer
 {
     public:
-        deVignetteLayer2(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deVignetteLayer2(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deVignetteLayer2();
 
         virtual std::string getType() const {return "vignette2";};

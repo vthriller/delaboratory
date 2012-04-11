@@ -29,8 +29,8 @@
 #include "layer_processor.h"
 #include "preset.h"
 
-deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
+deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
  alternate("alternate")
 {
     blurRadiusIndex = registerPropertyValue("blur_radius");
@@ -41,13 +41,13 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _so
     burnMinIndex = registerPropertyValue("burn_min");
     burnMaxIndex = registerPropertyValue("burn_max");
 
-    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
-    dePropertyValue* dodgeAmount = valueProperties[dodgeAmountIndex];
-    dePropertyValue* dodgeMin = valueProperties[dodgeMinIndex];
-    dePropertyValue* dodgeMax = valueProperties[dodgeMaxIndex];
-    dePropertyValue* burnAmount = valueProperties[burnAmountIndex];
-    dePropertyValue* burnMin = valueProperties[burnMinIndex];
-    dePropertyValue* burnMax = valueProperties[burnMaxIndex];
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
+    dePropertyValue* dodgeAmount = getPropertyValue(dodgeAmountIndex);
+    dePropertyValue* dodgeMin = getPropertyValue(dodgeMinIndex);
+    dePropertyValue* dodgeMax = getPropertyValue(dodgeMaxIndex);
+    dePropertyValue* burnAmount = getPropertyValue(burnAmountIndex);
+    dePropertyValue* burnMin = getPropertyValue(burnMinIndex);
+    dePropertyValue* burnMax = getPropertyValue(burnMaxIndex);
 
     blurRadius->setLabel("radius");
     blurRadius->setMin(1);
@@ -207,13 +207,13 @@ bool deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
         return false;
     }
 
-    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
-    dePropertyValue* dodgeAmount = valueProperties[dodgeAmountIndex];
-    dePropertyValue* dodgeMin = valueProperties[dodgeMinIndex];
-    dePropertyValue* dodgeMax = valueProperties[dodgeMaxIndex];
-    dePropertyValue* burnAmount = valueProperties[burnAmountIndex];
-    dePropertyValue* burnMin = valueProperties[burnMinIndex];
-    dePropertyValue* burnMax = valueProperties[burnMaxIndex];
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
+    dePropertyValue* dodgeAmount = getPropertyValue(dodgeAmountIndex);
+    dePropertyValue* dodgeMin = getPropertyValue(dodgeMinIndex);
+    dePropertyValue* dodgeMax = getPropertyValue(dodgeMaxIndex);
+    dePropertyValue* burnAmount = getPropertyValue(burnAmountIndex);
+    dePropertyValue* burnMin = getPropertyValue(burnMinIndex);
+    dePropertyValue* burnMax = getPropertyValue(burnMaxIndex);
 
     deValue r = viewManager.getRealScale() * blurRadius->get();
     deBlurType type = deGaussianBlur;
@@ -247,7 +247,7 @@ bool deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
 
 bool deDodgeBurnLayer::isChannelNeutral(int index)
 {
-    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
     return (blurRadius->get() == 0);
 }    
 

@@ -32,7 +32,7 @@ deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor
 
     int range = 400;
 
-    int n = usmLayer.getNumberOfValueProperties();
+    int n = usmLayer.getNumberOfProperties();
 
     int i;
 

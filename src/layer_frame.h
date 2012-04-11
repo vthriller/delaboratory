@@ -30,7 +30,6 @@ class deLayerFrame:public deFrame
         deLayer& layer;
         deLayerFrameManager& frameManager;
     public:
-        //deLayerFrame(wxWindow *parent, deActionLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager);
         deLayerFrame(wxWindow *parent, deLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager);
         virtual ~deLayerFrame();
 

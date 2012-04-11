@@ -144,8 +144,6 @@ class deProject
 
         void setMainFrame(deMainFrame* _mainFrame);
 
-        void addRandomLayer();
-
         deLayerFrameManager& getLayerFrameManager() {return layerFrameManager;};
 
         void log(const std::string& message);
