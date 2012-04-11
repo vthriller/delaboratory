@@ -33,7 +33,7 @@ class deMixerLayer:public deActionLayer
         virtual std::string getLabel() const {return "channel mixer";};
 
     public:
-        deMixerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deMixerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deMixerLayer();
 
         deMixer* getMixer(int index);
@@ -50,7 +50,6 @@ class deMixerLayer:public deActionLayer
 
         virtual std::string getActionName() {return "mixer";};
 
-        virtual bool randomize();
 
 
 

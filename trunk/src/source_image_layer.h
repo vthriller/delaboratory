@@ -52,7 +52,6 @@ class deSourceImageLayer:public deLayer
 
         void setOffset(deValue x, deValue y);
 
-        virtual bool randomize() {return false;};
 
 };
 

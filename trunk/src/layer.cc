@@ -25,27 +25,22 @@
 #include "property_value.h"
 #include "preset.h"
 
-deLayer::deLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer)
-:name(_name), 
-mutex(wxMUTEX_RECURSIVE),
+deLayer::deLayer(deColorSpace _colorSpace, int _index, int _sourceLayer)
+:mutex(wxMUTEX_RECURSIVE),
 colorSpace(_colorSpace), 
 index(_index), 
 sourceLayer(_sourceLayer)
 {
-    logMessage("creating layer " + str(index) + " " + name);
 }
 
 deLayer::~deLayer()
 {
-    logMessage("destroying layer " + str(index) + " " + name);
-    while (valueProperties.size() > 0)
+    while (properties.size() > 0)
     {
-       std::vector<dePropertyValue*>::iterator i = valueProperties.begin();
-       //std::vector<deProperty*>::iterator i = valueProperties.begin();
-       //dePropertyValue* p = *i;
+       std::vector<deProperty*>::iterator i = properties.begin();
        deProperty* p = *i;
        delete p;
-       valueProperties.erase(i);
+       properties.erase(i);
     }       
     while (presets.size() > 0)
     {
@@ -53,17 +48,11 @@ deLayer::~deLayer()
         delete i->second;
         presets.erase(i);
     }
-    logMessage("destroyed layer " + str(index) + " " + name);
 }
 
 deColorSpace deLayer::getColorSpace() const
 {
     return colorSpace;
-}
-
-std::string deLayer::getName() const
-{
-    return name;
 }
 
 bool deLayer::hasAction() const
@@ -93,7 +82,6 @@ void deLayer::setEnabled(bool e)
 void deLayer::saveCommon(xmlNodePtr node)
 {
     saveChild(node, "type", getType());
-    saveChild(node, "name", name);
     saveChild(node, "index", str(index));
     saveChild(node, "source", str(sourceLayer));
     saveChild(node, "color_space", getColorSpaceName(colorSpace));
@@ -101,7 +89,6 @@ void deLayer::saveCommon(xmlNodePtr node)
 
 bool deLayer::updateImageThreadCall()
 {
-//    std::cout << "updateImageThreadCall :(" << std::endl;
     return updateImage();
 }
 
@@ -112,7 +99,6 @@ void deLayer::lockLayer()
 
 void deLayer::unlockLayer()
 {
-    //log("layer " + str(index) + " unlock");
     mutex.Unlock();
 }
 
@@ -142,7 +128,6 @@ void deLayer::process(deLayerProcessType type, int channel)
 
 void deLayer::processFull()
 {
-//    std::cout << "processFull :(" << std::endl;
     updateImageThreadCall();
 }
 
@@ -162,24 +147,24 @@ std::string deLayer::getLabel() const
 int deLayer::registerPropertyValue(const std::string& _name)
 {
     dePropertyValue* p = new dePropertyValue(_name);
-    valueProperties.push_back(p);
-    return valueProperties.size() - 1;
+    properties.push_back(p);
+    return properties.size() - 1;
 }
 
 dePropertyValue* deLayer::getPropertyValue(int index)
 {
-    if ((index < 0) || ((unsigned int)(index) >= valueProperties.size()))
+    if ((index < 0) || ((unsigned int)(index) >= properties.size()))
     {
         return NULL;
     }
-    deProperty* property = valueProperties[index];
+    deProperty* property = properties[index];
 
     return dynamic_cast<dePropertyValue*>(property);
 }
 
 void deLayer::saveValueProperties(xmlNodePtr root)
 {
-    int n = getNumberOfValueProperties();
+    int n = getNumberOfProperties();
     int i;
     for (i = 0; i < n; i++)
     {
@@ -190,7 +175,7 @@ void deLayer::saveValueProperties(xmlNodePtr root)
 
 void deLayer::loadValueProperties(xmlNodePtr root)
 {
-    int n = getNumberOfValueProperties();
+    int n = getNumberOfProperties();
     int i;
     for (i = 0; i < n; i++)
     {
@@ -201,7 +186,7 @@ void deLayer::loadValueProperties(xmlNodePtr root)
 
 dePropertyValue* deLayer::getPropertyValue(const std::string& _name)
 {
-    int n = getNumberOfValueProperties();
+    int n = getNumberOfProperties();
     int i;
     for (i = 0; i < n; i++)
     {
@@ -239,3 +224,4 @@ void deLayer::getPresets(std::vector<std::string>& result)
         result.push_back(n);
     }
 }
+

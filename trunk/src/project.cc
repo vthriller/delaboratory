@@ -201,7 +201,7 @@ void deProject::resetLayerStack(deColorSpace colorSpace)
 
     layerProcessor.removeAllLayers();
 
-    deLayer* layer = createLayer("source_image", -1, colorSpace, layerStack, previewChannelManager, viewManager, "source image", sourceImage);
+    deLayer* layer = createLayer("source_image", -1, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
 
     if (layer)
     {
@@ -489,7 +489,7 @@ void deProject::loadLayer(xmlNodePtr root)
         child = child->next;
     }
        
-    deLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, name, sourceImage);
+    deLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
 
     if (layer)
     {
@@ -716,7 +716,7 @@ void deProject::addActionLayer(const std::string& action)
 
     log("creating action " + action + " layer");
 
-    deLayer* layer = createLayer(action, s, colorSpace, layerStack, previewChannelManager, viewManager, actionDescription, sourceImage);
+    deLayer* layer = createLayer(action, s, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
 
     if (layer)
     {
@@ -738,7 +738,7 @@ void deProject::addConversionLayer(deColorSpace colorSpace)
 
     log("creating conversion to " + name + " layer");
 
-    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, previewChannelManager, viewManager, name, sourceImage);
+    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
 
     if (layer)
     {
@@ -752,80 +752,6 @@ void deProject::addConversionLayer(deColorSpace colorSpace)
         
     }
 }        
-
-void deProject::addRandomLayer()
-{
-    int view = layerStack.getSize() - 1;
-
-    if (view > 0)
-    {
-        if (rand() % view > 3)
-        {
-            layerProcessor.removeTopLayer();
-            if (controlPanel)
-            {
-                controlPanel->updateLayerGrid();
-            }                
-            return;
-        }
-    }
-
-    if (rand() % 10 > 2)
-    {
-        std::vector<std::string> actions;
-        getSupportedActions(actions);
-
-        int n = actions.size();
-        int r = rand() % n;
-
-        std::string a = actions[r];
-        addActionLayer(a);
-    }
-    else
-    {
-        deLayer* layer = layerStack.getLayer(view);
-        if (!layer)
-        {
-            return;
-        }
-
-        deColorSpace currentColorSpace = layer->getColorSpace();
-
-        bool valid = false;
-        deColorSpace c = deColorSpaceInvalid;
-
-        while (!valid)
-        {
-            std::vector<deColorSpace> colorSpaces;
-            getSupportedColorSpaces(colorSpaces);
-
-            int n = colorSpaces.size();
-            int r = rand() % n;
-
-            c = colorSpaces[r];
-
-            valid = checkConversion(currentColorSpace, c);
-
-            if (c == currentColorSpace)
-            {
-                valid = false;
-            }
-        }            
-
-        addConversionLayer(c);
-    }
-
-    int n = layerStack.getSize();
-    int i;
-    for (i = 0 ; i < n ; i++)
-    {
-        deLayer* layer = layerStack.getLayer(i);
-        if (layer->randomize())
-        {
-            layerProcessor.markUpdateAllChannels(i);
-        }            
-    }
-}
 
 void deProject::onImageNameUpdate()
 {

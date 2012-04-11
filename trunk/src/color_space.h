@@ -22,8 +22,6 @@
 #include "value.h"
 #include <string>
 #include <vector>
-#include <wx/wx.h>
-#include "basic_setting.h"
 
 enum deColorSpace
 {
@@ -49,11 +47,7 @@ deColorSpace colorSpaceFromString(const std::string& name);
 void getSupportedColorSpaces(std::vector<deColorSpace>& result);
 void getSupportedConversions(const deColorSpace& colorSpace, std::vector<deColorSpace>& result);
 
-wxColour getChannelwxColour(deColorSpace colorSpace, int channel);
-
 deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v);
-
-void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& settings1, std::vector<deBasicSetting>& settings2);
 
 bool isChannelLuminance(deColorSpace colorSpace, int channel);
 

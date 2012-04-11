@@ -31,7 +31,7 @@ deShadowsHighlightsFrame::deShadowsHighlightsFrame(wxWindow *parent, deActionLay
 
     int range = 400;
 
-    int n = shLayer.getNumberOfValueProperties();
+    int n = shLayer.getNumberOfProperties();
 
     int i;
 

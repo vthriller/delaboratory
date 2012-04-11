@@ -21,8 +21,8 @@
 #include <iostream>
 #include "frame_factory.h"
 
-deMixerLayer::deMixerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
+deMixerLayer::deMixerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
 {
     int n = getColorSpaceSize(colorSpace);
     int i;
@@ -111,19 +111,3 @@ void deMixerLayer::load(xmlNodePtr root)
     }
 }
 
-bool deMixerLayer::randomize()
-{
-    int n = getColorSpaceSize(colorSpace);
-
-    int s = rand() % n;
-    int d = rand() % n;
-    
-    deValue v = (deValue) rand() / RAND_MAX;
-
-    v *= 1.3;
-    v -= 0.2;
-
-    mixers[d]->setWeight(s, v);
-
-    return true;
-}

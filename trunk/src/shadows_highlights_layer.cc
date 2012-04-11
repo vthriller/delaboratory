@@ -28,18 +28,18 @@
 #include "process_linear.h"
 #include "layer_processor.h"
 
-deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
+deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer( _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
 {
     blurRadiusIndex = registerPropertyValue("blur_radius");
     shadowsHighlightsAmountIndex = registerPropertyValue("shadows_highlights_amount");
     darkenAmountIndex = registerPropertyValue("darken_amount");
     lightenAmountIndex = registerPropertyValue("lighten_amount");
 
-    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
-    dePropertyValue* shadowsHighlightsAmount = valueProperties[shadowsHighlightsAmountIndex];
-    dePropertyValue* darkenAmount = valueProperties[darkenAmountIndex];
-    dePropertyValue* lightenAmount = valueProperties[lightenAmountIndex];
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
+    dePropertyValue* shadowsHighlightsAmount = getPropertyValue(shadowsHighlightsAmountIndex);
+    dePropertyValue* darkenAmount = getPropertyValue(darkenAmountIndex);
+    dePropertyValue* lightenAmount = getPropertyValue(lightenAmountIndex);
 
     blurRadius->setLabel("radius");
     blurRadius->setMin(1);
@@ -57,10 +57,10 @@ deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int
 
 void deShadowsHighlightsLayer::reset()
 {
-    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
-    dePropertyValue* shadowsHighlightsAmount = valueProperties[shadowsHighlightsAmountIndex];
-    dePropertyValue* darkenAmount = valueProperties[darkenAmountIndex];
-    dePropertyValue* lightenAmount = valueProperties[lightenAmountIndex];
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
+    dePropertyValue* shadowsHighlightsAmount = getPropertyValue(shadowsHighlightsAmountIndex);
+    dePropertyValue* darkenAmount = getPropertyValue(darkenAmountIndex);
+    dePropertyValue* lightenAmount = getPropertyValue(lightenAmountIndex);
 
     blurRadius->set(5);
     shadowsHighlightsAmount->set(0.3);
@@ -107,10 +107,10 @@ bool deShadowsHighlightsLayer::processAction(int i, const deChannel& sourceChann
         return false;
     }
 
-    dePropertyValue* blurRadius = valueProperties[blurRadiusIndex];
-    dePropertyValue* shadowsHighlightsAmount = valueProperties[shadowsHighlightsAmountIndex];
-    dePropertyValue* darkenAmount = valueProperties[darkenAmountIndex];
-    dePropertyValue* lightenAmount = valueProperties[lightenAmountIndex];
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
+    dePropertyValue* shadowsHighlightsAmount = getPropertyValue(shadowsHighlightsAmountIndex);
+    dePropertyValue* darkenAmount = getPropertyValue(darkenAmountIndex);
+    dePropertyValue* lightenAmount = getPropertyValue(lightenAmountIndex);
 
     deValue r = viewManager.getRealScale() * blurRadius->get();
     deBlurType type = deGaussianBlur;

@@ -32,7 +32,7 @@ deHighPassFrame::deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLaye
 
     int range = 400;
 
-    int n = highPassLayer.getNumberOfValueProperties();
+    int n = highPassLayer.getNumberOfProperties();
 
     int i;
 

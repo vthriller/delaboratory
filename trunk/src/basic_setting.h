@@ -21,7 +21,9 @@
 
 #include <set>
 #include <string>
+#include <vector>
 #include "value.h"
+#include "color_space.h"
 
 class deBasicSetting
 {
@@ -55,5 +57,7 @@ class deBasicSetting
 
         int getChannel() const;
 };
+
+void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& settings1, std::vector<deBasicSetting>& settings2);
 
 #endif

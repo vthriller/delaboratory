@@ -144,7 +144,7 @@ class deBlendMaskMaxSlider:public deSlider
 };        
 
 deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deLayerFrame(parent, _layer, _layer.getName(), _frameManager),
+:deLayerFrame(parent, _layer, "blend frame", _frameManager),
  layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);

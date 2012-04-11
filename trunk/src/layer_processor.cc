@@ -576,7 +576,8 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
         }
 
         deLayer* layer = layerStack.getLayer(index);
-        std::string label = str(index) + " " + layer->getName();
+        //std::string label = str(index) + " " + layer->getName();
+        std::string label = str(index);
 
         progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
 
@@ -747,7 +748,7 @@ void deLayerProcessor::addLayer(deLayer* layer)
 {
 //    lock();
 
-    logMessage("add layer " + str(layer->getIndex()) + " " +  layer->getName());
+    //logMessage("add layer " + str(layer->getIndex()) + " " +  layer->getName());
 
     layerStack.addLayer(layer);
 

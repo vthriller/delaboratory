@@ -22,6 +22,7 @@
 #include <vector>
 #include "value.h"
 #include "color_space.h"
+#include <cmath>
 
 class deColor3
 {

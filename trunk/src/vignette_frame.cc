@@ -32,7 +32,7 @@ deVignetteFrame::deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLaye
 
     int range = 400;
 
-    int n = vignetteLayer.getNumberOfValueProperties();
+    int n = vignetteLayer.getNumberOfProperties();
 
     int i;
 

@@ -26,8 +26,8 @@
 
 #include "str.h"
 
-deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack,  _channelManager, _viewManager) 
+deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer( _colorSpace, _index, _sourceLayer, _layerStack,  _channelManager, _viewManager) 
 {
     int n = getColorSpaceSize(colorSpace);
     curves = new deCurve[n];
@@ -96,13 +96,3 @@ void deCurvesLayer::load(xmlNodePtr root)
     }
 }
 
-bool deCurvesLayer::randomize()
-{
-    int n = getColorSpaceSize(colorSpace);
-
-    int c = rand() % n;
-
-    curves[c].addRandom();
-
-    return true;
-}

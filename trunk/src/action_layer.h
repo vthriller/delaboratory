@@ -40,25 +40,29 @@ class deActionLayer:public deLayer
 {
     private:
 
+        // global enabled flag
         bool enabled;
 
+        // separate enabled flag for each channel
         std::set<int> channels;
 
+        // blend settings - mode and opacity
         deBlendMode blendMode;
         deValue opacity;
 
+        // TODO move to separate layer applicable after RGB or CMYK
         deApplyMode applyMode;
 
+        // TODO Move to separate layer called "apply mask" 
         bool blendMask;
         bool blendMaskShow;
-
         int blendMaskLayer;
         int blendMaskChannel;
-
         deValue blendBlurRadius;
         deValue blendMaskMin;
         deValue blendMaskMax;
 
+        // set from thread
         bool errorOnUpdate;
 
         virtual bool hasAction() const {return true;};
@@ -118,7 +122,7 @@ class deActionLayer:public deLayer
         virtual bool updateImage();
 
     public:
-        deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deActionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deActionLayer();
 
         deChannel* getSourceChannel(int index);

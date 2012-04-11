@@ -22,6 +22,7 @@
 #include "action_layer.h"
 #include "property_value.h"
 #include "curve.h"
+#include "basic_setting.h"
 
 class deBasicLayer:public deActionLayer
 {
@@ -42,7 +43,7 @@ class deBasicLayer:public deActionLayer
         virtual std::string getLabel() const {return "basic settings";};
 
     public:
-        deBasicLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deBasicLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deBasicLayer();
 
         virtual bool isChannelNeutral(int index);
@@ -58,7 +59,6 @@ class deBasicLayer:public deActionLayer
         int getSeparator();
         dePropertyValue* getBasicProperty(int n);
 
-        virtual bool randomize();
 
 
         virtual void onUpdateProperties();

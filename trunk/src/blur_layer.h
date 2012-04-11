@@ -36,7 +36,7 @@ class deBlurLayer:public deActionLayer
         virtual std::string getType() const {return "blur";};
 
     public:
-        deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name);
+        deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deBlurLayer();
 
         void reset();
@@ -54,7 +54,6 @@ class deBlurLayer:public deActionLayer
         dePropertyChoice& getPropertyType() {return blurType;};
         dePropertyValue& getPropertyThreshold() {return threshold;};
 
-        bool randomize();
 
 };
 

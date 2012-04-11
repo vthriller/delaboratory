@@ -24,8 +24,8 @@
 #include "frame_factory.h"
 #include "layer_processor.h"
 
-deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
+deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer( _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
  blurRadius("blur_radius"),
  threshold("threshold"),
  blurType("blur_type")
@@ -100,13 +100,3 @@ void deBlurLayer::load(xmlNodePtr root)
 
 }
 
-bool deBlurLayer::randomize()
-{
-    deValue r = (deValue) rand() / RAND_MAX;
-
-    r *= 0.5;
-
-    blurRadius.set(r);
-
-    return true;
-}

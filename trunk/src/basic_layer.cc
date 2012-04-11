@@ -19,8 +19,8 @@
 #include "basic_layer.h"
 #include "process_linear.h"
 
-deBasicLayer::deBasicLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
+deBasicLayer::deBasicLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
 {
     getBasicSettings(colorSpace, settings1, settings2);
 
@@ -152,13 +152,6 @@ bool deBasicLayer::processAction(int i, const deChannel& sourceChannel, deChanne
         curves[i].process(sourceChannel, channel, size.getN());
     }
 
-    return true;
-}
-
-
-
-bool deBasicLayer::randomize()
-{
     return true;
 }
 

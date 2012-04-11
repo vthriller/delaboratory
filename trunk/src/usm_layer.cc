@@ -26,8 +26,8 @@
 #include "layer_processor.h"
 #include "preset.h"
 
-deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, const std::string& _name)
-:deActionLayer(_name, _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
+deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
 {
     blurRadiusPropertyIndex = registerPropertyValue("blur_radius");
     amountPropertyIndex = registerPropertyValue("amount");
@@ -62,8 +62,10 @@ deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, d
         presets["hiraloam2"] = p;
     }        
 
-    dePropertyValue* blurRadius = valueProperties[blurRadiusPropertyIndex];
-    dePropertyValue* amount = valueProperties[amountPropertyIndex];
+    //dePropertyValue* blurRadius = valueProperties[blurRadiusPropertyIndex];
+    //dePropertyValue* amount = valueProperties[amountPropertyIndex];
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusPropertyIndex);
+    dePropertyValue* amount = getPropertyValue(amountPropertyIndex);
 
     blurRadius->setMin(1);
     blurRadius->setMax(200);
@@ -97,9 +99,9 @@ bool deUSMLayer::processAction(int index, const deChannel& sourceChannel, deChan
         return false;
     }
 
-    dePropertyValue* blurRadius = valueProperties[blurRadiusPropertyIndex];
-    dePropertyValue* amount = valueProperties[amountPropertyIndex];
-    dePropertyValue* threshold = valueProperties[thresholdPropertyIndex];
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusPropertyIndex);
+    dePropertyValue* amount = getPropertyValue(amountPropertyIndex);
+    dePropertyValue* threshold = getPropertyValue(thresholdPropertyIndex);
 
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
@@ -180,7 +182,7 @@ bool deUSMLayer::processAction(int index, const deChannel& sourceChannel, deChan
 
 bool deUSMLayer::isChannelNeutral(int index)
 {
-    dePropertyValue* blurRadius = valueProperties[blurRadiusPropertyIndex];
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusPropertyIndex);
     return (blurRadius->get() == 0);
 }    
 
@@ -205,25 +207,5 @@ void deUSMLayer::load(xmlNodePtr root)
     }        
 }
 
-bool deUSMLayer::randomize()
-{
-    dePropertyValue* blurRadius = valueProperties[blurRadiusPropertyIndex];
-    dePropertyValue* amount = valueProperties[amountPropertyIndex];
-    dePropertyValue* threshold = valueProperties[thresholdPropertyIndex];
-
-    deValue r = (deValue) rand() / RAND_MAX;
-    r *= 0.5;
-    blurRadius->set(r + 0.001);
-
-    deValue r2 = (deValue) rand() / RAND_MAX;
-    r2 *= 5;
-    amount->set(r2);
-
-    deValue r3 = (deValue) rand() / RAND_MAX;
-    r3 *= 0.2;
-    threshold->set(r3);
-
-    return true;
-}
 
 

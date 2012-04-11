@@ -33,7 +33,7 @@ deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLa
 
     int range = 400;
 
-    int n = dodgeBurnLayer.getNumberOfValueProperties();
+    int n = dodgeBurnLayer.getNumberOfProperties();
 
     int i;
 

@@ -46,7 +46,6 @@ class deConversionLayer:public deLayer
         virtual void load(xmlNodePtr root) {};
         virtual void save(xmlNodePtr root) {saveCommon(root);};
 
-        virtual bool randomize() {return false;};
 
 };
 

@@ -220,8 +220,8 @@ bool deActionLayer::updateImageInActionLayer(bool action, bool blend, int channe
 }
 
 
-deActionLayer::deActionLayer(const std::string& _name, deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayer(_name, _colorSpace, _index, _sourceLayer),
+deActionLayer::deActionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deLayer(_colorSpace, _index, _sourceLayer),
  layerStack(_layerStack),
  channelManager(_channelManager),
  viewManager(_viewManager),

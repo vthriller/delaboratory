@@ -27,7 +27,7 @@
 #include "str.h"
 
 deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace)
-:deLayer("source image", _colorSpace, _index, -1),
+:deLayer(_colorSpace, _index, -1),
 previewChannelManager(_previewChannelManager),
 viewManager(_viewManager),
 image(_colorSpace, _previewChannelManager),

@@ -36,7 +36,6 @@ private:
     int sizeX;
     int sizeY;
     deCurvesLayer& layer;
-    deHistogram histogram;
     int channel;
     
     bool realtime;
