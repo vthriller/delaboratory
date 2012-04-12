@@ -29,9 +29,7 @@ deViewManager::deViewManager(deProject& _project, deLayerProcessor& _processor, 
 :project(_project), layerProcessor(_processor), zoomManager(_zoomManager)
 {
     view = 0;
-    showBlendMask = false;
     single = false;
-    blendMaskChannel = 0;
 }
 
 deViewManager::~deViewManager()
@@ -46,7 +44,6 @@ int deViewManager::getView() const
 void deViewManager::setView(int v)
 {
     logMessage("view manager set view " + str(v) + " start");
-    hideMask();
     logMessage("view manager set view " + str(v) + " step a");
     int old = view;
     view = v;
@@ -69,39 +66,6 @@ void deViewManager::setNormal()
     single = false;
     project.onChangeViewMode();
     layerProcessor.onChangeViewMode();
-}
-
-void deViewManager::hideMask()
-{
-    showBlendMask = false;
-    project.onChangeViewMode();
-}
-
-void deViewManager::showMask(int maskChannel)
-{
-    showBlendMask = true;
-    blendMaskChannel = maskChannel;
-    project.onChangeViewMode();
-}
-
-void deViewManager::hideThisMask(int maskChannel)
-{
-    if (blendMaskChannel != maskChannel)
-    {
-        return;
-    }
-    showBlendMask = false;
-    project.onChangeViewMode();
-}
-
-bool deViewManager::maskVisible() const
-{
-    return showBlendMask;
-}
-
-int deViewManager::getMaskChannel() const
-{
-    return blendMaskChannel;
 }
 
 deColorSpace deViewManager::getColorSpace() const

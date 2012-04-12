@@ -43,103 +43,10 @@ class deAlphaSlider:public deSlider
 
         virtual void onValueChange(deValue value, bool finished)
         {
-            //if (finished)
-            {
-                layer.setOpacity(value);
+            layer.setOpacity(value);
 
-                int index = layer.getIndex();
-                layerProcessor.markUpdateBlendAllChannels(index);
-            }                
-        }
-};        
-
-class deBlurRadiusSlider:public deSlider
-{
-    private:
-        deActionLayer& layer;
-        deLayerProcessor& layerProcessor;
-
-    public:
-        deBlurRadiusSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-        :deSlider(parent, "blur radius", range, 0.0, 50, 0.0), layer(_layer),
-         layerProcessor(_layerProcessor)
-        {
-            setValue(layer.getBlendBlurRadius());
-        }
-
-        virtual ~deBlurRadiusSlider()
-        {
-        }
-
-        virtual void onValueChange(deValue value, bool finished)
-        {
-            if ((finished) || (layerProcessor.isRealtime()))
-            {
-                layer.setBlendBlurRadius(value);
-
-                int index = layer.getIndex();
-                layerProcessor.markUpdateBlendAllChannels(index);
-            }                
-        }
-};        
-
-class deBlendMaskMinSlider:public deSlider
-{
-    private:
-        deActionLayer& layer;
-        deLayerProcessor& layerProcessor;
-
-    public:
-        deBlendMaskMinSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-        :deSlider(parent, "min", range, 0.0, 1.0, 0.0), layer(_layer),
-        layerProcessor(_layerProcessor)
-        {
-            setValue(layer.getBlendMaskMin());
-        }
-
-        virtual ~deBlendMaskMinSlider()
-        {
-        }
-
-        virtual void onValueChange(deValue value, bool finished)
-        {
-            if ((finished) || (layerProcessor.isRealtime()))
-            {
-                layer.setBlendMaskMin(value);
-
-                int index = layer.getIndex();
-                layerProcessor.markUpdateBlendAllChannels(index);
-            }                
-        }
-};        
-
-class deBlendMaskMaxSlider:public deSlider
-{
-    private:
-        deActionLayer& layer;
-        deLayerProcessor& layerProcessor;
-
-    public:
-        deBlendMaskMaxSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
-        :deSlider(parent, "max", range, 0.0, 1.0, 0.0), layer(_layer),
-        layerProcessor(_layerProcessor)
-        {
-            setValue(layer.getBlendMaskMax());
-        }
-
-        virtual ~deBlendMaskMaxSlider()
-        {
-        }
-
-        virtual void onValueChange(deValue value, bool finished)
-        {
-            if ((finished) || (layerProcessor.isRealtime()))
-            {
-                layer.setBlendMaskMax(value);
-
-                int index = layer.getIndex();
-                layerProcessor.markUpdateBlendAllChannels(index);
-            }                
+            int index = layer.getIndex();
+            layerProcessor.markUpdateBlendAllChannels(index);
         }
 };        
 
@@ -151,16 +58,6 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
     SetSizer(sizer);
 
     deColorSpace colorSpace = layer.getColorSpace();
-    if (colorSpace == deColorSpaceRGB)
-    {
-        applyAllowed = true;
-    }
-    else
-    {
-        applyAllowed = false;
-    }
-
-    //layer.setBlendFrame(this);
     frameManager.addBlendFrame(this);
 
     getSupportedBlendModes(blendModes);
@@ -191,34 +88,6 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
     alphaSlider = new deAlphaSlider(this, 100, l, layerProcessor);
     sizer->Add(alphaSlider, 0);
 
-    wxSizer* sizerLC = new wxStaticBoxSizer(wxVERTICAL, this,  _T("luminance / color"));
-    sizer->Add(sizerLC, 0);
-
-    b1 = new wxRadioButton(this, wxID_ANY, _T("apply luminance and color"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
-    sizerLC->Add(b1, 0);
-
-    if (applyAllowed)
-    {
-        b2 = new wxRadioButton(this, wxID_ANY, _T("apply luminance"));
-        sizerLC->Add(b2, 0);
-        b3 = new wxRadioButton(this, wxID_ANY, _T("apply color"));
-        sizerLC->Add(b3, 0);
-        deApplyMode applyMode = l.getApplyMode();
-        if (applyMode == deApplyLuminance)
-        {
-            b2->SetValue(1);
-        }
-        if (applyMode == deApplyColor)
-        {
-            b3->SetValue(1);
-        }
-    }
-    else
-    {
-        b2 = NULL;
-        b3 = NULL;
-    }
-
     wxSizer* sizerC = new wxStaticBoxSizer(wxVERTICAL, this,  _T("channels"));
     sizer->Add(sizerC, 0);
 
@@ -232,76 +101,6 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
         channels.push_back(cb);
     }
 
-    wxSizer* sizerM = new wxStaticBoxSizer(wxVERTICAL, this,  _T("mask"));
-    sizer->Add(sizerM, 0);
-
-    wxSizer* sizerMC = new wxBoxSizer(wxHORIZONTAL);
-    sizerM->Add(sizerMC);
-
-    maskEnable = new wxCheckBox(this, wxID_ANY, _T("enable"));
-    sizerMC->Add(maskEnable, 0);
-    if (l.isBlendMaskEnabled())
-    {
-        maskEnable->SetValue(1);
-    }
-
-    maskShow = new wxCheckBox(this, wxID_ANY, _T("show"));
-    sizerMC->Add(maskShow, 0);
-
-    deViewManager& viewManager = l.getViewManager();
-
-    if ((l.isBlendMaskVisible()) && (viewManager.maskVisible()))
-    {
-        maskShow->SetValue(1);
-    }
-
-    unsigned int n = layer.getIndex();
-
-    wxString* layerStrings = new wxString [n];
-    for (i = 0; i < n; i++)
-    {
-        layerStrings[i] = wxString::Format(_T("%i"), i);
-    }        
-
-    maskLayerChoice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), n, layerStrings);
-
-    delete [] layerStrings;
-
-    maskLayerChoice->SetSelection(l.getBlendMaskLayer());
-
-    sizerM->Add(maskLayerChoice, 0);
-
-    unsigned int s = l.getBlendMaskChannel();
-
-    for (i = 0; i < 4; i++)
-    {
-        long style = 0;
-        if (i == 0)
-        {
-            style = wxRB_GROUP;
-        }
-        wxRadioButton* b = new wxRadioButton(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, style);
-        sizerM->Add(b, 0);
-        maskChannels[i] = b;
-        if (i == s)
-        {
-            maskChannels[i]->SetValue(1);
-        }
-    }
-
-    blurRadiusSlider = new deBlurRadiusSlider(this, 100, l, layerProcessor);
-    sizerM->Add(blurRadiusSlider, 0);
-
-    blendMaskMinSlider = new deBlendMaskMinSlider(this, 100, l, layerProcessor);
-    sizerM->Add(blendMaskMinSlider, 0);
-
-    blendMaskMaxSlider = new deBlendMaskMaxSlider(this, 100, l, layerProcessor);
-    sizerM->Add(blendMaskMaxSlider, 0);
-
-    setChannels();
-
-    showHide();
-
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deBlendFrame::choose));
     Connect(wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler(deBlendFrame::select));
     Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deBlendFrame::check));
@@ -313,8 +112,6 @@ deBlendFrame::~deBlendFrame()
 {
     deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
     deViewManager& viewManager = l.getViewManager();
-    viewManager.hideThisMask(l.getAllocatedBlendMaskChannel());
-    l.hideBlendMask();
 
     layerProcessor.onChangeViewMode();
 
@@ -337,7 +134,6 @@ void deBlendFrame::choose(wxCommandEvent &event)
     }
     else
     {
-        updateMask();
     }
 }
 
@@ -368,7 +164,6 @@ void deBlendFrame::check(wxCommandEvent &event)
         }
     }
 
-    updateMask();
 }
 
 void deBlendFrame::select(wxCommandEvent &event)
@@ -376,145 +171,5 @@ void deBlendFrame::select(wxCommandEvent &event)
     deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
     int i = event.GetId();
 
-    if (applyAllowed)
-    {
-        if (i == b1->GetId())
-        {
-            l.setApplyMode(deApplyLuminanceAndColor);
-
-            int index = layer.getIndex();
-            layerProcessor.markUpdateBlendAllChannels(index);
-
-            return;
-        }            
-        else if (i == b2->GetId())
-        {
-            l.setApplyMode(deApplyLuminance);
-
-            int index = layer.getIndex();
-            layerProcessor.markUpdateBlendAllChannels(index);
-
-            return;
-        }            
-        else if (i == b3->GetId())
-        {
-            l.setApplyMode(deApplyColor);
-
-            int index = layer.getIndex();
-            layerProcessor.markUpdateBlendAllChannels(index);
-
-            return;
-        }
-    }
-
-    updateMask();
-
 }
 
-void deBlendFrame::setChannels()
-{
-    deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
-    deColorSpace colorSpace = l.getBlendMaskLayerColorSpace();
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-    for (i = 0; i < 4; i++)
-    {
-        if (i < n)
-        {
-            std::string name = getChannelName(colorSpace, i);
-            maskChannels[i]->SetLabel(wxString::FromAscii(name.c_str()));
-            maskChannels[i]->Show();
-        }
-        else
-        {
-            maskChannels[i]->Hide();
-        }
-    }
-    Layout();
-}
-
-int deBlendFrame::getBlendChannel()
-{
-    int i;
-    for (i = 0; i < 4; i++)
-    {
-        if (maskChannels[i]->GetValue() == 1)
-        {
-            return i;
-        }
-    }
-    return -1;
-}
-
-void deBlendFrame::updateMask()
-{
-    deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
-    deViewManager& viewManager = l.getViewManager();
-
-    int layer = maskLayerChoice->GetSelection();
-    int channel = getBlendChannel();
-
-    if (maskShow->IsChecked())
-    {
-        l.setBlendMask(layer, channel);
-        l.showBlendMask();
-    }
-    else
-    {
-        l.hideBlendMask();
-    }
-
-    if (maskEnable->IsChecked())
-    {
-        l.setBlendMask(layer, channel);
-    }
-    else
-    {
-        l.disableBlendMask();
-    }
-
-    //l.onBlendSet();
-
-    if (maskShow->IsChecked())
-    {
-        viewManager.showMask(l.getAllocatedBlendMaskChannel());
-    }
-    else
-    {
-        viewManager.hideMask();
-    }
-
-    setChannels();
-    showHide();
-
-    int index = l.getIndex();
-    layerProcessor.markUpdateBlendAllChannels(index);
-}
-
-void deBlendFrame::showHide()
-{
-    deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
-    int i;
-    if (l.isBlendMaskEnabled())
-    {
-        maskLayerChoice->Enable();
-        for (i = 0; i < 4; i++)
-        {
-            maskChannels[i]->Enable();
-        }
-        blurRadiusSlider->Enable();
-        blendMaskMinSlider->Enable();
-        blendMaskMaxSlider->Enable();
-    }
-    else
-    {
-        maskLayerChoice->Disable();
-        for (i = 0; i < 4; i++)
-        {
-            maskChannels[i]->Disable();
-        }
-        blurRadiusSlider->Disable();
-        blendMaskMinSlider->Disable();
-        blendMaskMaxSlider->Disable();
-    }
-}

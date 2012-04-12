@@ -239,42 +239,6 @@ void renderChannel(const deImage& image, int c, unsigned char* data, deChannelMa
 
 }
 
-void renderChannel(int c, unsigned char* data, deChannelManager& channelManager)
-{
-    const deSize& s = channelManager.getChannelSize();
-
-    deChannel* channel = channelManager.getChannel(c);
-
-    if (!channel)
-    {
-        return;
-    }
-
-    channel->lockRead();
-
-    const deValue* pixels = channel->getPixels();
-
-    int n = s.getN();
-    int i;
-    int pos = 0;
-    for (i = 0; i < n; i++)
-    {
-        deValue s = pixels[i];
-
-        unsigned char ss = 255 * s;
-
-        data[pos] = ss;
-        pos++;
-        data[pos] = ss;
-        pos++;
-        data[pos] = ss;
-        pos++;
-    }      
-
-    channel->unlockRead();
-
-}
-
 deRenderer::deRenderer(deChannelManager& _channelManager)
 :size(0,0),
  channelManager(_channelManager),
@@ -301,7 +265,6 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
     int view = layerProcessor.getLastValidLayer();
     if (view > viewV)
     {
-//        std::cout << "WARNING view was " << view << " while viewV was " << viewV << std::endl;
         view = viewV;
     }
 
@@ -311,49 +274,41 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
         return false;
     }
 
-    if (viewManager.maskVisible())
+    logMessage("renderer getLayer " +str(view));
+    deLayer* layer = layerStack.getLayer(view);
+    if (!layer)
     {
-        renderChannel(viewManager.getMaskChannel(), getCurrentImageData(), channelManager);
+        logMessage("ERROR no layer");
+        logMessage("unlock renderer mutex");
+        mutex.Unlock();
+        return false;
+    }
+    logMessage("renderer lock layer " +str(view));
 
+    layer->lockLayer();
+
+    logMessage("renderer get image from layer " +str(view));
+
+    const deImage& layerImage = layer->getImage();
+
+    logMessage("renderer before renderer");
+
+    if (viewManager.isSingleChannel())
+    {
+        renderChannel(layerImage, viewManager.getChannel(), getCurrentImageData(), channelManager);
     }
     else
     {
-        logMessage("renderer getLayer " +str(view));
-        deLayer* layer = layerStack.getLayer(view);
-        if (!layer)
+        if (!renderImage(layerImage, getCurrentImageData(), channelManager))
         {
-            logMessage("ERROR no layer");
-            logMessage("unlock renderer mutex");
-            mutex.Unlock();
-            return false;
+            std::cout << "failed renderImage" << std::endl;
+            logMessage("render image FAILED");
         }
-        logMessage("renderer lock layer " +str(view));
-
-        layer->lockLayer();
-
-        logMessage("renderer get image from layer " +str(view));
-
-        const deImage& layerImage = layer->getImage();
-
-        logMessage("renderer before renderer");
-
-        if (viewManager.isSingleChannel())
-        {
-            renderChannel(layerImage, viewManager.getChannel(), getCurrentImageData(), channelManager);
-        }
-        else
-        {
-            if (!renderImage(layerImage, getCurrentImageData(), channelManager))
-            {
-                std::cout << "failed renderImage" << std::endl;
-                logMessage("render image FAILED");
-            }
-        }
-
-        logMessage("renderer unlock layer " +str(view));
-
-        layer->unlockLayer();
     }
+
+    logMessage("renderer unlock layer " +str(view));
+
+    layer->unlockLayer();
 
     logMessage("unlock renderer mutex");
     mutex.Unlock();

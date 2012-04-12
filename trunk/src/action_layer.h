@@ -29,13 +29,6 @@ class deChannelManager;
 class deViewManager;
 #include <set>
 
-enum deApplyMode
-{
-    deApplyLuminance,
-    deApplyColor,
-    deApplyLuminanceAndColor
-};
-
 class deActionLayer:public deLayer
 {
     private:
@@ -49,18 +42,6 @@ class deActionLayer:public deLayer
         // blend settings - mode and opacity
         deBlendMode blendMode;
         deValue opacity;
-
-        // TODO move to separate layer applicable after RGB or CMYK
-        deApplyMode applyMode;
-
-        // TODO Move to separate layer called "apply mask" 
-        bool blendMask;
-        bool blendMaskShow;
-        int blendMaskLayer;
-        int blendMaskChannel;
-        deValue blendBlurRadius;
-        deValue blendMaskMin;
-        deValue blendMaskMax;
 
         // set from thread
         bool errorOnUpdate;
@@ -82,8 +63,6 @@ class deActionLayer:public deLayer
 
         bool updateAction(int i);
 
-        bool renderBlendMask();
-
         bool isBlendingEnabled() const;
 
         bool updateActionAllChannels();
@@ -101,17 +80,12 @@ class deActionLayer:public deLayer
 
         deImage imageActionPass;
 
-        deImage imageBlendMask;
-
         void disableNotLuminance();
 
     private:        
-        deImage imageApplyPass;
-
         deImage imageBlendPass;
 
         bool updateBlend(int i);
-        bool updateApply();
 
         virtual bool processAction(int i) {return false;};
         virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size) {return false;};
@@ -130,39 +104,11 @@ class deActionLayer:public deLayer
         void setOpacity(deValue _alpha);
         void setBlendMode(deBlendMode mode);
         deBlendMode getBlendMode() const {return blendMode;};
-        deApplyMode getApplyMode() const {return applyMode;};
-        void setApplyMode(deApplyMode mode);
         deValue getOpacity();
-
-        deColorSpace getBlendMaskLayerColorSpace() const;
 
         virtual void updateChannelUsage(std::map<int, int>& channelUsage) const;
 
         deViewManager& getViewManager() {return viewManager;};
-
-        void showBlendMask();
-        void hideBlendMask();
-        void setBlendMask(int l, int c);
-        void disableBlendMask();
-        int getAllocatedBlendMaskChannel() const {return imageBlendMask.getChannelIndex(0);};
-
-        void enableBlendMaskChannel();
-        void disableBlendMaskChannel();
-
-        deValue getBlendBlurRadius() const {return blendBlurRadius;};
-        void setBlendBlurRadius(deValue r);
-        void tryRenderBlendMask();
-        bool isBlendMaskEnabled() const {return blendMask;};
-        bool isBlendMaskVisible() const {return blendMaskShow;};
-
-        int getBlendMaskLayer() const {return blendMaskLayer;};
-        int getBlendMaskChannel() const {return blendMaskChannel;};
-
-        void setBlendMaskMin(deValue v);
-        void setBlendMaskMax(deValue v);
-
-        deValue getBlendMaskMin() const {return blendMaskMin;};
-        deValue getBlendMaskMax() const {return blendMaskMax;};
 
         bool isChannelEnabled(int index) const;
         void enableChannel(int index);

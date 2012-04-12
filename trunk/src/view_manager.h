@@ -33,9 +33,6 @@ class deViewManager
         deZoomManager& zoomManager;
         bool single;
         int channel;
-        bool showBlendMask;
-        int blendMaskChannel;
-
 
     public:
         deViewManager(deProject& _project, deLayerProcessor& _processor, deZoomManager& _zoomManager);
@@ -51,13 +48,6 @@ class deViewManager
 
         bool isSingleChannel() const {return single;};
         int getChannel() const {return channel;};
-
-        void showMask(int maskChannel);
-        void hideThisMask(int maskChannel);
-        void hideMask();
-
-        bool maskVisible() const;
-        int getMaskChannel() const;
 
         void setHistogramChannel(int channel);
 
