@@ -1,6 +1,11 @@
 #summary Development News
 
 -----
+*2012.04.11 - more plans*
+
+[Operations] - I listed operations for typical postprocessing workflow
+
+-----
 *2012.04.09 - delaboratory 0.7 has been released*
 
 This release adds support for RAW files, image zoom, basic settings (brightness, contrast, saturation, etc.), an equalizer layer, a double vignette layer, a !ProPhoto RGB colorspace, an improved GUI and bugfixes.
