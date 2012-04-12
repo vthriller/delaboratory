@@ -3,7 +3,7 @@
 -----
 *2012.04.11 - more plans*
 
-[Operations] - I listed operations for typical postprocessing workflow
+[operations] - I listed operations for typical postprocessing workflow
 
 -----
 *2012.04.09 - delaboratory 0.7 has been released*
