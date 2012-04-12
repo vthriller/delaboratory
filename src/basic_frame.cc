@@ -100,8 +100,6 @@ void deBasicFrame::click(wxCommandEvent &event)
 
 bool deBasicFrame::onImageClick(deValue x, deValue y)
 {
-    std::cout << "basic frame on image click" << std::endl;
-
     if ((x < 0) || (y < 0) || (x >= 1) || (y >= 1))
     {
         return false;

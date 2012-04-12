@@ -166,7 +166,6 @@ bool deActionLayer::updateBlendAllChannels()
 
 bool deActionLayer::updateImageInActionLayer(bool action, bool blend, int channel)
 {
-//    std::cout << "updateImageInActionLayer " << channel << std::endl;
     if (action)
     {
         if (channel >= 0)
@@ -187,14 +186,6 @@ bool deActionLayer::updateImageInActionLayer(bool action, bool blend, int channe
 
     if (blend)
     {
-        if ((blendMask) || (blendMaskShow))
-        {
-            if (!renderBlendMask())
-            {
-                return false;
-            }
-        }
-
         if (channel >= 0)
         {
             if (!updateBlend(channel))
@@ -211,11 +202,6 @@ bool deActionLayer::updateImageInActionLayer(bool action, bool blend, int channe
         }            
     }    
 
-    if (!updateApply())
-    {
-        return false;
-    }
-
     return true;
 }
 
@@ -226,21 +212,11 @@ deActionLayer::deActionLayer(deColorSpace _colorSpace, int _index, int _sourceLa
  channelManager(_channelManager),
  viewManager(_viewManager),
  imageActionPass(_colorSpace, _channelManager), 
- imageBlendMask(deColorSpaceBW, _channelManager),
- imageApplyPass(_colorSpace, _channelManager), 
  imageBlendPass(_colorSpace, _channelManager)
 {
     enabled = true;
     blendMode = deBlendNormal;
-    applyMode = deApplyLuminanceAndColor;
     opacity = 1.0;
-    blendMask = false;
-    blendMaskShow = false;
-    blendMaskLayer = 0;
-    blendMaskChannel = 0;
-    blendBlurRadius = 0;
-    blendMaskMin = 0;
-    blendMaskMax = 1;
 
     int n = getColorSpaceSize(colorSpace);
     int i;
@@ -252,7 +228,6 @@ deActionLayer::deActionLayer(deColorSpace _colorSpace, int _index, int _sourceLa
 
 deActionLayer::~deActionLayer()
 {
-    disableBlendMaskChannel();
 }
 
 void deActionLayer::disableNotLuminance()
@@ -266,21 +241,6 @@ void deActionLayer::disableNotLuminance()
             channels.erase(i);
         }            
     }
-}
-
-void deActionLayer::enableBlendMaskChannel()
-{
-    imageBlendMask.enableChannel(0);
-}
-
-void deActionLayer::disableBlendMaskChannel()
-{
-    imageBlendMask.disableChannel(0, -1);
-}
-
-void deActionLayer::setBlendBlurRadius(deValue r)
-{
-    blendBlurRadius = r;
 }
 
 const deImage& deActionLayer::getSourceImage() const
@@ -319,11 +279,6 @@ const deImage& deActionLayer::getImage() const
         return sourceImage;
     }
 
-    if (applyMode != deApplyLuminanceAndColor)
-    {
-        return imageApplyPass;
-    }
-
     if (isBlendingEnabled())
     {
         return imageBlendPass;
@@ -336,129 +291,6 @@ deValue deActionLayer::getOpacity()
 {
     return opacity;
 }
-
-bool deActionLayer::updateApply()
-{
-    logMessage("update apply start");
-
-    if (!enabled)
-    {
-        return true;
-    }
-
-    if (applyMode == deApplyLuminanceAndColor)
-    {
-        imageApplyPass.disableAllChannels();
-        return true;
-    }
-
-    imageApplyPass.enableAllChannels();
-
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    const deImage& sourceImage = source->getImage();
-
-    int channelSize = channelManager.getChannelSize().getN();
-
-    deChannel* sc1 = channelManager.getChannel(sourceImage.getChannelIndex(0));
-    if (!sc1)
-    {
-        return false;
-    }
-    deChannel* sc2 = channelManager.getChannel(sourceImage.getChannelIndex(1));
-    if (!sc2)
-    {
-        return false;
-    }
-    deChannel* sc3 = channelManager.getChannel(sourceImage.getChannelIndex(2));
-    if (!sc3)
-    {
-        return false;
-    }
-
-    sc1->lockRead();
-    sc2->lockRead();
-    sc3->lockRead();
-
-    deValue* r1 = sc1->getPixels();
-    deValue* g1 = sc2->getPixels();
-    deValue* b1 = sc3->getPixels();
-
-    deChannel* bc1 = NULL;
-    deChannel* bc2 = NULL;
-    deChannel* bc3 = NULL;
-
-    if (isBlendingEnabled())
-    {
-        bc1 = channelManager.getChannel(imageBlendPass.getChannelIndex(0));
-        bc2 = channelManager.getChannel(imageBlendPass.getChannelIndex(1));
-        bc3 = channelManager.getChannel(imageBlendPass.getChannelIndex(2));
-    }
-    else
-    {
-        bc1 = channelManager.getChannel(imageActionPass.getChannelIndex(0));
-        bc2 = channelManager.getChannel(imageActionPass.getChannelIndex(1));
-        bc3 = channelManager.getChannel(imageActionPass.getChannelIndex(2));
-    }        
-
-    bc1->lockRead();
-    bc2->lockRead();
-    bc3->lockRead();
-
-    deValue* r2 = bc1->getPixels();
-    deValue* g2 = bc2->getPixels();
-    deValue* b2 = bc3->getPixels();
-
-    deChannel* dc1 = channelManager.getChannel(imageApplyPass.getChannelIndex(0));
-    deChannel* dc2 = channelManager.getChannel(imageApplyPass.getChannelIndex(1));
-    deChannel* dc3 = channelManager.getChannel(imageApplyPass.getChannelIndex(2));
-
-    dc1->lockWrite();
-    dc2->lockWrite();
-    dc3->lockWrite();
-
-    deValue* r = dc1->getPixels();
-    deValue* g = dc2->getPixels();
-    deValue* b = dc3->getPixels();
-
-    int i;
-
-    if (applyMode == deApplyLuminance)
-    {
-        for (i = 0; i < channelSize; i++)
-        {
-            applyLuminance(r1[i], g1[i], b1[i], r2[i], g2[i], b2[i], r[i], g[i], b[i]);
-        }
-    }        
-    if (applyMode == deApplyColor)
-    {
-        for (i = 0; i < channelSize; i++)
-        {
-            applyColor(r1[i], g1[i], b1[i], r2[i], g2[i], b2[i], r[i], g[i], b[i]);
-        }
-    }        
-
-    sc1->unlockRead();
-    sc2->unlockRead();
-    sc3->unlockRead();
-
-    bc1->unlockRead();
-    bc2->unlockRead();
-    bc3->unlockRead();
-
-    dc1->unlockWrite();
-    dc2->unlockWrite();
-    dc3->unlockWrite();
-
-    logMessage("update apply end");
-
-    return true;
-}
-
-void deActionLayer::setApplyMode(deApplyMode mode)
-{
-    applyMode = mode;
-}
-
 
 bool deActionLayer::updateBlend(int i)
 {
@@ -529,23 +361,6 @@ bool deActionLayer::updateBlend(int i)
 
     deValue* maskPixels = NULL;
 
-    if ((blendMask) || (blendMaskShow))
-    {
-        if (blendMask)
-        {
-            deChannel* allocatedMaskChannel = channelManager.getChannel(imageBlendMask.getChannelIndex(0));
-
-            allocatedMaskChannel->lockRead();
-
-            maskPixels = allocatedMaskChannel->getPixels();
-
-        }            
-    }
-    else
-    {
-        disableBlendMaskChannel();
-    }        
-
     deValue* sourcePixels = sourceChannel->getPixels();
     deValue* overlayPixels = channel->getPixels();
     deValue* resultPixels = blendChannel_->getPixels();
@@ -556,13 +371,6 @@ bool deActionLayer::updateBlend(int i)
     sourceChannel->unlockRead();
     channel->unlockRead();
     blendChannel_->unlockWrite();
-
-    if (blendMask)
-    {
-        deChannel* allocatedMaskChannel = channelManager.getChannel(imageBlendMask.getChannelIndex(0));
-
-        allocatedMaskChannel->unlockRead();
-    }            
 
     logMessage("update blend end");
 
@@ -587,11 +395,6 @@ bool deActionLayer::isBlendingEnabled() const
         return true;
     }
 
-    if (blendMask)
-    {
-        return true;
-    }
-
     return false;
 }
 
@@ -602,7 +405,6 @@ void deActionLayer::setOpacity(deValue _opacity)
 
 bool deActionLayer::updateImage()
 {
-//    std::cout << "updateImage :(" << std::endl;
     return updateImageInActionLayer(true, true, -1);
 }
 
@@ -615,10 +417,6 @@ bool deActionLayer::updateAction(int i)
         logError("updateAction for invalid channel " +str(i)+ " requested");
         return false;
     };
-
-
-
-//    std::cout << "updateAction " << i << std::endl;
 
     logMessage("update action start i:" +str(i));
 
@@ -653,7 +451,6 @@ bool deActionLayer::updateAction(int i)
         sourceChannel->lockRead();
         sourceChannel->unlockRead();
         imageActionPass.disableChannel(i, s);
-//        std::cout << "imageActionPass.disableChannel " << i << std::endl;
         return true;
     }
     else
@@ -665,7 +462,6 @@ bool deActionLayer::updateAction(int i)
             if (sourceChannel)
             {
                 imageActionPass.enableChannel(i);
-//                std::cout << "imageActionPass.enableChannel " << i << std::endl;
                 int c = imageActionPass.getChannelIndex(i);
                 deChannel* channel = channelManager.getChannel(c);
                 logMessage("update action 6 i:" +str(i));
@@ -771,110 +567,6 @@ void deActionLayer::updateChannelUsage(std::map<int, int>& channelUsage) const
     {
         imageBlendPass.updateChannelUsage(channelUsage, index);
     }
-
-    if (applyMode != deApplyLuminanceAndColor)
-    {
-        imageApplyPass.updateChannelUsage(channelUsage, index);
-    }
-
-    if (blendMask)
-    {
-        deLayer* l = layerStack.getLayer(blendMaskLayer);
-        const deImage& im = l->getImage();
-        im.updateChannelUsage(channelUsage, index);
-    }
-}
-
-void deActionLayer::setBlendMask(int l, int c)
-{
-    blendMaskLayer = l;
-    blendMaskChannel = c;
-    blendMask = true;
-}
-
-void deActionLayer::disableBlendMask()
-{
-    blendMask = false;
-}
-
-deColorSpace deActionLayer::getBlendMaskLayerColorSpace() const
-{
-    deLayer* maskLayer = layerStack.getLayer(blendMaskLayer);
-    const deImage& maskImage = maskLayer->getImage();
-    return maskImage.getColorSpace();
-}
-
-bool deActionLayer::renderBlendMask()
-{
-    logMessage("render blend mask");
-
-    enableBlendMaskChannel();
-
-    deLayer* maskLayer = layerStack.getLayer(blendMaskLayer);
-    const deImage& maskImage = maskLayer->getImage();
-    int m = maskImage.getChannelIndex(blendMaskChannel);
-    deChannel* maskChannel = channelManager.getChannel(m);
-    if (!maskChannel)
-    {
-        return true;
-    }
-
-    maskChannel->lockRead();
-
-    deValue* maskPixels = maskChannel->getPixels();
-
-    deChannel* allocatedMaskChannel = channelManager.getChannel(imageBlendMask.getChannelIndex(0));
-
-    allocatedMaskChannel->lockWrite();
-
-    deValue* allocatedMaskPixels = allocatedMaskChannel->getPixels();
-
-    deBlurType type = deGaussianBlur;
-    deValue t= 0.0;
-
-    if (blendBlurRadius <= 0)
-    {
-        copyChannel(maskChannel->getPixels(), allocatedMaskChannel->getPixels(), channelManager.getChannelSize());
-    }
-    else
-    {
-        deValue r = viewManager.getRealScale() * blendBlurRadius;
-        bool result = blurChannel(maskPixels, allocatedMaskPixels, channelManager.getChannelSize(), r, r, type, t);
-        if (!result)
-        {
-            return false;
-        }
-    }       
-
-    processLinear(allocatedMaskPixels, allocatedMaskPixels, channelManager.getChannelSize().getN(), blendMaskMin, blendMaskMax, false);
-
-    allocatedMaskChannel->unlockWrite();
-    maskChannel->unlockRead();
-
-    logMessage("render blend mask done");
-
-    return true;
-
-}
-
-void deActionLayer::showBlendMask()
-{
-    blendMaskShow = true;
-}
-
-void deActionLayer::hideBlendMask()
-{
-    blendMaskShow = false;
-}
-
-void deActionLayer::setBlendMaskMin(deValue v)
-{
-    blendMaskMin = v;
-}
-
-void deActionLayer::setBlendMaskMax(deValue v)
-{
-    blendMaskMax = v;
 }
 
 bool deActionLayer::isChannelEnabled(int index) const
@@ -897,23 +589,6 @@ void deActionLayer::saveBlend(xmlNodePtr root)
     saveChild(root, "enabled", str(enabled));
     saveChild(root, "blend_mode", getBlendModeName(blendMode));
     saveChild(root, "opacity", str(opacity));
-    saveChild(root, "blend_mask", str(blendMask));
-    saveChild(root, "blend_mask_layer", str(blendMaskLayer));
-    saveChild(root, "blend_mask_channel", str(blendMaskChannel));
-    saveChild(root, "blend_blur_radius", str(blendBlurRadius));
-    saveChild(root, "blend_mask_min", str(blendMaskMin));
-    saveChild(root, "blend_mask_max", str(blendMaskMax));
-
-    std::string apply = "normal";
-    if (applyMode == deApplyLuminance)
-    {
-        apply = "luminance";
-    }
-    if (applyMode == deApplyColor)
-    {
-        apply = "color";
-    }
-    saveChild(root, "apply", apply);
 
     int n = getColorSpaceSize(colorSpace);
     int i;
@@ -954,55 +629,10 @@ void deActionLayer::loadBlend(xmlNodePtr root)
             blendMode = blendModeFromString(getContent(child));
         }
 
-        if ((!xmlStrcmp(child->name, BAD_CAST("blend_mask")))) 
-        {
-            blendMask = getBool(getContent(child));
-        }
-
         if ((!xmlStrcmp(child->name, BAD_CAST("opacity"))))
         {
             opacity = getValue(getContent(child));
         }
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("blend_blur_radius"))))
-        {
-            blendBlurRadius = getValue(getContent(child));
-        }
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("blend_mask_min"))))
-        {
-            blendMaskMin = getValue(getContent(child));
-        }
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("blend_mask_max"))))
-        {
-            blendMaskMax = getValue(getContent(child));
-        }
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("blend_mask_layer"))))
-        {
-            blendMaskLayer = getInt(getContent(child));
-        }
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("blend_mask_channel"))))
-        {
-            blendMaskChannel = getInt(getContent(child));
-        }
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("apply"))))
-        {
-            std::string apply = getContent(child);
-            applyMode = deApplyLuminanceAndColor;
-            if (apply == "luminance")
-            {
-                applyMode = deApplyLuminance;
-            }                
-            if (apply == "color")
-            {
-                applyMode = deApplyColor;
-            }                
-        }
-
 
         child = child->next;
 
@@ -1028,7 +658,6 @@ void deActionLayer::processChannel(int channel)
 
 void deActionLayer::processBlend()
 {
-//    std::cout << "processBlend :(" << std::endl;
     updateImageInActionLayer(false, true, -1);
 }
 

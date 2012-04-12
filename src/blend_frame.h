@@ -27,36 +27,15 @@ class deLayerProcessor;
 class deBlendFrame:public deLayerFrame
 {
     private:
-        bool applyAllowed;
-
         void choose(wxCommandEvent &event);
         void check(wxCommandEvent &event);
         void select(wxCommandEvent &event);
 
-        void setChannels();
-
         wxChoice* choice;
         deSlider* alphaSlider;
-        deSlider* blurRadiusSlider;
-        deSlider* blendMaskMinSlider;
-        deSlider* blendMaskMaxSlider;
-        wxRadioButton *b1;
-        wxRadioButton *b2;
-        wxRadioButton *b3;
-        wxChoice* maskLayerChoice;
         std::vector<deBlendMode> blendModes;
         std::vector<wxCheckBox*> channels;
-        wxRadioButton* maskChannels[4];
         deLayerProcessor& layerProcessor;
-
-        wxCheckBox* maskEnable;
-        wxCheckBox* maskShow;
-
-        int getBlendChannel();
-
-        void updateMask();
-
-        void showHide();
 
     public:
         deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
