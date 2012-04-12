@@ -68,32 +68,6 @@ deBasicFrame::deBasicFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
     reset = new wxButton(this, wxID_ANY, _T("reset"), wxDefaultPosition, wxSize(100,25));
     sizerB->Add(reset, 0);
 
-
-/*
-    int range = 400;
-
-    radius = new dePropertyValueSlider(this, range, basicLayer.getPropertyRadius(), basicLayer, layerProcessor);
-    sizer->Add(radius);
-
-    amount = new dePropertyValueSlider(this, range, basicLayer.getPropertyAmount(), basicLayer, layerProcessor);
-    sizer->Add(amount);
-
-    threshold = new dePropertyValueSlider(this, range, basicLayer.getPropertyThreshold(), basicLayer, layerProcessor);
-    sizer->Add(threshold);
-
-
-
-    sharp = new wxButton(this, wxID_ANY, _T("sharp"), wxDefaultPosition, wxSize(100,25));
-    sizerB->Add(sharp, 0);
-
-    hiraloam1 = new wxButton(this, wxID_ANY, _T("hiraloam 1"), wxDefaultPosition, wxSize(100,25));
-    sizerB->Add(hiraloam1, 0);
-
-    hiraloam2 = new wxButton(this, wxID_ANY, _T("hiraloam 2"), wxDefaultPosition, wxSize(100,25));
-    sizerB->Add(hiraloam2, 0);
-
-    */
-
     Fit();
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deBasicFrame::click));
@@ -120,29 +94,62 @@ void deBasicFrame::click(wxCommandEvent &event)
         (*i)->setFromProperty();
     }
 
-    /*
-
-    if (sharp->GetId() == id)
-    {
-        basicLayer.sharp();
-    }      
-
-    if (hiraloam1->GetId() == id)
-    {
-        basicLayer.hiraloam1();
-    }      
-
-    if (hiraloam2->GetId() == id)
-    {
-        basicLayer.hiraloam2();
-    }      
-
-    radius->setFromProperty();
-    amount->setFromProperty();
-    threshold->setFromProperty();
-
-    */
-
     int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(index);
 }   
+
+bool deBasicFrame::onImageClick(deValue x, deValue y)
+{
+    std::cout << "basic frame on image click" << std::endl;
+
+    if ((x < 0) || (y < 0) || (x >= 1) || (y >= 1))
+    {
+        return false;
+    }
+
+    if (layer.getColorSpace() == deColorSpaceLAB)
+    {
+        const deImage& image = layer.getImage();
+        deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
+        deSize size = basicLayer.getChannelSize();
+        int p = (y * size.getH() )  * size.getW() + (x * size.getW());
+
+        deValue A;
+        bool res1 = image.getPixel(1, p, A);
+        if (res1)
+        {
+            dePropertyValue* ATint = basicLayer.getBasicProperty("A tint");
+            if (ATint)
+            {
+                deValue old = ATint->get();
+                A = 0.5 - A + old;
+                ATint->set(A);
+            }
+        }
+
+        deValue B;
+        bool res2 = image.getPixel(2, p, B);
+        if (res2)
+        {
+            dePropertyValue* BTint = basicLayer.getBasicProperty("B tint");
+            if (BTint)
+            {
+                deValue old = BTint->get();
+                B = 0.5 - B + old;
+                BTint->set(B);
+            }
+        }
+    }
+
+    std::vector<dePropertyValueSlider*>::iterator i;
+    for (i = basicSliders.begin(); i != basicSliders.end(); i++)
+    {
+        (*i)->setFromProperty();
+    }
+
+    int index = layer.getIndex();
+
+    layerProcessor.markUpdateAllChannels(index);
+
+    return true;
+}

@@ -193,3 +193,19 @@ void deBasicLayer::onUpdateProperties()
         }
     }
 }
+
+dePropertyValue* deBasicLayer::getBasicProperty(const std::string& name)
+{
+    int n = settings.size();
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        dePropertyValue* p = basicProperties[i];
+        if (p->getName() == name)
+        {
+            return p;
+        }
+    }
+
+    return NULL;
+}

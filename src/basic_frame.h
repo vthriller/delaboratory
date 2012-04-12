@@ -41,6 +41,8 @@ class deBasicFrame:public deActionFrame
         deBasicFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
         virtual ~deBasicFrame();
 
+        virtual bool onImageClick(deValue x, deValue y);
+
 
 };
 

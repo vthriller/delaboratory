@@ -58,8 +58,7 @@ class deBasicLayer:public deActionLayer
         int getNumberOfSettings();
         int getSeparator();
         dePropertyValue* getBasicProperty(int n);
-
-
+        dePropertyValue* getBasicProperty(const std::string& name);
 
         virtual void onUpdateProperties();
 
