@@ -203,7 +203,7 @@ bool renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
 
 }
 
-void renderChannel(const deImage& image, int c, unsigned char* data, deChannelManager& channelManager)
+void renderChannel(const deImage& image, int c, unsigned char* data, deChannelManager& channelManager, bool reversed)
 {
     const deSize& s = channelManager.getChannelSize();
 
@@ -225,6 +225,11 @@ void renderChannel(const deImage& image, int c, unsigned char* data, deChannelMa
     {
         deValue s = pixels[i];
 
+        if (reversed)
+        {
+            s = 1.0 - s;
+        }
+
         unsigned char ss = 255 * s;
 
         data[pos] = ss;
@@ -241,8 +246,7 @@ void renderChannel(const deImage& image, int c, unsigned char* data, deChannelMa
 
 deRenderer::deRenderer(deChannelManager& _channelManager)
 :size(0,0),
- channelManager(_channelManager),
- mutex(wxMUTEX_RECURSIVE)
+ channelManager(_channelManager)
 {
 }
 
@@ -270,7 +274,7 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
 
     if (view < 0)
     {
-        mutex.Unlock();
+        mutex.unlock();
         return false;
     }
 
@@ -280,7 +284,7 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
     {
         logMessage("ERROR no layer");
         logMessage("unlock renderer mutex");
-        mutex.Unlock();
+        mutex.unlock();
         return false;
     }
     logMessage("renderer lock layer " +str(view));
@@ -291,11 +295,19 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
 
     const deImage& layerImage = layer->getImage();
 
+    bool reversed = false;
+    deColorSpace colorSpace = layerImage.getColorSpace();
+
+    if ((colorSpace == deColorSpaceCMYK))
+    {
+        reversed = true;
+    }
+
     logMessage("renderer before renderer");
 
     if (viewManager.isSingleChannel())
     {
-        renderChannel(layerImage, viewManager.getChannel(), getCurrentImageData(), channelManager);
+        renderChannel(layerImage, viewManager.getChannel(), getCurrentImageData(), channelManager, reversed);
     }
     else
     {
@@ -311,7 +323,7 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
     layer->unlockLayer();
 
     logMessage("unlock renderer mutex");
-    mutex.Unlock();
+    mutex.unlock();
 
     return true;
 }
@@ -328,7 +340,7 @@ bool deRenderer::render(wxDC& dc)
     }
 
     logMessage("unlock renderer mutex");
-    mutex.Unlock();
+    mutex.unlock();
 
     return result;
 }

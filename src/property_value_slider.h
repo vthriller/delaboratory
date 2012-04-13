@@ -40,8 +40,6 @@ class dePropertyValueSlider:public deSlider
         virtual void onValueChange(deValue value, bool finished);
 
         void setFromProperty();
-
-//        void setChannel(int _index);
 };        
 
 #endif

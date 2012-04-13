@@ -34,8 +34,8 @@ deBasicLayer::deBasicLayer(deColorSpace _colorSpace, int _index, int _sourceLaye
         deBasicSetting& setting = settings[i];
         std::string n = setting.getName();
         dePropertyValue* p = new dePropertyValue(n);
-        p->setMin(-1.0);
-        p->setMax(1.0);
+        p->setMin(setting.getMin());
+        p->setMax(setting.getMax());
         int c = setting.getChannel();
         if (c >= 0)
         {

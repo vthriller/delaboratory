@@ -26,8 +26,7 @@
 #include "preset.h"
 
 deLayer::deLayer(deColorSpace _colorSpace, int _index, int _sourceLayer)
-:mutex(wxMUTEX_RECURSIVE),
-colorSpace(_colorSpace), 
+:colorSpace(_colorSpace), 
 index(_index), 
 sourceLayer(_sourceLayer)
 {
@@ -99,7 +98,7 @@ void deLayer::lockLayer()
 
 void deLayer::unlockLayer()
 {
-    mutex.Unlock();
+    mutex.unlock();
 }
 
 void deLayer::process(deLayerProcessType type, int channel)

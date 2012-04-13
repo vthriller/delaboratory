@@ -25,8 +25,7 @@
 #include "logger.h"
 
 deEqualizer::deEqualizer(int _size)
-:bands(_size),
- mutex(wxMUTEX_RECURSIVE)
+:bands(_size)
 {
     values = new deValue [bands];
 
@@ -174,5 +173,5 @@ void deEqualizer::lock() const
 
 void deEqualizer::unlock() const
 {
-    mutex.Unlock();
+    mutex.unlock();
 }

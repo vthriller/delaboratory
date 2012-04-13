@@ -24,7 +24,6 @@
 #include "project.h"
 
 deLayerStack::deLayerStack()
-:mutex(wxMUTEX_RECURSIVE)
 {
 }
 
@@ -41,7 +40,7 @@ void deLayerStack::lock() const
 void deLayerStack::unlock() const
 {
     logMessage("layer stack unlock");
-    mutex.Unlock();
+    mutex.unlock();
 }
 
 void deLayerStack::clear()

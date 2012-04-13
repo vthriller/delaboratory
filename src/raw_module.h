@@ -23,11 +23,12 @@
 class deStaticImage;
 #include "color_space.h"
 #include "dcraw_support.h"
+#include "mutex.h"
 
 class deRawModule
 {
     private:
-        mutable wxMutex mutex;
+        mutable deMutex mutex;
 
         deRawLoader* loader;
 
@@ -45,7 +46,7 @@ class deRawModule
         std::string getVersion() const;
         bool loadRAW(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace, bool half);
 
-        bool update(bool& failure);
+        bool updateRawLoading(bool& failure);
 
 
 };

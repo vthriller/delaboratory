@@ -24,8 +24,7 @@
 #include "str.h"
 
 deChannelManager::deChannelManager()
-:channelSize(0,0),
-mutex(wxMUTEX_RECURSIVE)
+:channelSize(0,0)
 {
 }
 
@@ -136,7 +135,7 @@ void deChannelManager::lock() const
 
 void deChannelManager::unlock() const
 {
-    mutex.Unlock();
+    mutex.unlock();
 }
 
 int deChannelManager::getNumberOfAllocatedChannels() const

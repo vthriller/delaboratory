@@ -61,11 +61,11 @@ class deLayerProcessor
         wxSemaphore workerSemaphore;
         wxSemaphore renderWorkerSemaphore;
         wxSemaphore histogramWorkerSemaphore;
-        wxMutex layerProcessMutex;
-        wxMutex histogramMutex;
-        wxMutex prepareImageMutex;
-        wxMutex updateImageMutex;
-        wxMutex updateImagesMutex;
+        deMutex layerProcessMutex;
+        deMutex histogramMutex;
+        deMutex prepareImageMutex;
+        deMutex updateImageMutex;
+        deMutex updateImagesMutex;
         deRenderer renderer;
         deChannelManager& previewChannelManager;
 

@@ -22,8 +22,7 @@
 
 deStaticImage::deStaticImage()
 :colorSpace(deColorSpaceInvalid),
- size(0,0),
- mutex(wxMUTEX_RECURSIVE)
+ size(0,0)
 {
     int n = 3;
     int i;
@@ -101,5 +100,5 @@ void deStaticImage::lock()
 
 void deStaticImage::unlock()
 {
-    mutex.Unlock();
+    mutex.unlock();
 }    

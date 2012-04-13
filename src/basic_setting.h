@@ -33,6 +33,8 @@ class deBasicSetting
         bool contrast;
         bool brightness;
         bool shift;
+        deValue min;
+        deValue max;
 
         deValue scale;
     public:    
@@ -56,6 +58,10 @@ class deBasicSetting
         bool isShift() const {return shift;};
 
         int getChannel() const;
+
+        deValue getMin() const;
+        deValue getMax() const;
+        void setMinMax(deValue _min, deValue _max);
 };
 
 void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& settings1, std::vector<deBasicSetting>& settings2);

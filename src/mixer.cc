@@ -25,8 +25,7 @@
 #include "logger.h"
 
 deMixer::deMixer(int _size)
-:size(_size),
- mutex(wxMUTEX_RECURSIVE)
+:size(_size)
 {
     weights = new deValue [size];
 }
@@ -212,5 +211,5 @@ void deMixer::lock() const
 
 void deMixer::unlock() const
 {
-    mutex.Unlock();
+    mutex.unlock();
 }

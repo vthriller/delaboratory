@@ -309,6 +309,46 @@ deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v)
     return v;
 }
 
+bool shouldChannelBeSharpened(deColorSpace colorSpace, int channel)
+{
+    switch (colorSpace)
+    {
+        case deColorSpaceLAB:
+        case deColorSpaceLCH:
+        {
+            if (channel == 0)
+            {
+                return true;
+            }
+            break;
+        }
+        case deColorSpaceHSV:
+        case deColorSpaceHSL:
+        {
+            if (channel == 2)
+            {
+                return true;
+            }
+            break;
+        }
+        case deColorSpaceCMYK:
+        {
+            if (channel == 3)
+            {
+                return true;
+            }
+            break;
+        }
+        default:
+        {
+            return true;
+            break;
+        }
+    }
+
+    return false;
+}
+
 bool isChannelLuminance(deColorSpace colorSpace, int channel)
 {
     switch (colorSpace)

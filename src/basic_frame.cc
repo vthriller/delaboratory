@@ -98,6 +98,130 @@ void deBasicFrame::click(wxCommandEvent &event)
     layerProcessor.markUpdateAllChannels(index);
 }   
 
+void applyWhiteBalanceLAB(deLayer& layer, deValue x, deValue y)
+{
+    const deImage& image = layer.getImage();
+    deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
+    deSize size = basicLayer.getChannelSize();
+    int p = (y * size.getH() )  * size.getW() + (x * size.getW());
+
+    deValue A;
+    bool res1 = image.getPixel(1, p, A);
+    if (res1)
+    {
+        dePropertyValue* ATint = basicLayer.getBasicProperty("A tint");
+        if (ATint)
+        {
+            deValue old = ATint->get();
+            A = 0.5 - A + old;
+            ATint->set(A);
+        }
+    }
+
+    deValue B;
+    bool res2 = image.getPixel(2, p, B);
+    if (res2)
+    {
+        dePropertyValue* BTint = basicLayer.getBasicProperty("B tint");
+        if (BTint)
+        {
+            deValue old = BTint->get();
+            B = 0.5 - B + old;
+            BTint->set(B);
+        }
+    }
+}
+
+void applyWhiteBalanceRGB(deLayer& layer, deValue x, deValue y)
+{
+    const deImage& image = layer.getImage();
+    deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
+    deSize size = basicLayer.getChannelSize();
+    int p = (y * size.getH() )  * size.getW() + (x * size.getW());
+
+    deValue r;
+    bool res1 = image.getPixel(0, p, r);
+    deValue g;
+    bool res2 = image.getPixel(1, p, g);
+    deValue b;
+    bool res3 = image.getPixel(2, p, b);
+
+    if ((!res1) || (!res2) || (!res3))
+    {
+        return;
+    }
+
+    deValue a = (r + g + b) / 3.0;
+
+    dePropertyValue* rTint = basicLayer.getBasicProperty("Red tint");
+    if (rTint)
+    {
+        deValue old = rTint->get();
+        r = old - (r - a);
+        rTint->set(r);
+    }
+    dePropertyValue* gTint = basicLayer.getBasicProperty("Green tint");
+    if (gTint)
+    {
+        deValue old = gTint->get();
+        g = old - (g - a);
+        gTint->set(g);
+    }
+    dePropertyValue* bTint = basicLayer.getBasicProperty("Blue tint");
+    if (bTint)
+    {
+        deValue old = bTint->get();
+        b = old - (b - a);
+        bTint->set(b);
+    }
+
+}
+
+void applyWhiteBalanceCMYK(deLayer& layer, deValue x, deValue y)
+{
+    const deImage& image = layer.getImage();
+    deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
+    deSize size = basicLayer.getChannelSize();
+    int p = (y * size.getH() )  * size.getW() + (x * size.getW());
+
+    deValue r;
+    bool res1 = image.getPixel(0, p, r);
+    deValue g;
+    bool res2 = image.getPixel(1, p, g);
+    deValue b;
+    bool res3 = image.getPixel(2, p, b);
+
+    if ((!res1) || (!res2) || (!res3))
+    {
+        return;
+    }
+
+    deValue a = (r + g + b) / 3.0;
+
+    dePropertyValue* rTint = basicLayer.getBasicProperty("Cyan tint");
+    if (rTint)
+    {
+        deValue old = rTint->get();
+        r = old - (r - a);
+        rTint->set(r);
+    }
+    dePropertyValue* gTint = basicLayer.getBasicProperty("Magenta tint");
+    if (gTint)
+    {
+        deValue old = gTint->get();
+        g = old - (g - a);
+        gTint->set(g);
+    }
+    dePropertyValue* bTint = basicLayer.getBasicProperty("Yellow tint");
+    if (bTint)
+    {
+        deValue old = bTint->get();
+        b = old - (b - a);
+        bTint->set(b);
+    }
+
+}
+
 bool deBasicFrame::onImageClick(deValue x, deValue y)
 {
     if ((x < 0) || (y < 0) || (x >= 1) || (y >= 1))
@@ -107,36 +231,17 @@ bool deBasicFrame::onImageClick(deValue x, deValue y)
 
     if (layer.getColorSpace() == deColorSpaceLAB)
     {
-        const deImage& image = layer.getImage();
-        deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
-        deSize size = basicLayer.getChannelSize();
-        int p = (y * size.getH() )  * size.getW() + (x * size.getW());
+        applyWhiteBalanceLAB(layer, x, y);
+    }
 
-        deValue A;
-        bool res1 = image.getPixel(1, p, A);
-        if (res1)
-        {
-            dePropertyValue* ATint = basicLayer.getBasicProperty("A tint");
-            if (ATint)
-            {
-                deValue old = ATint->get();
-                A = 0.5 - A + old;
-                ATint->set(A);
-            }
-        }
+    if (layer.getColorSpace() == deColorSpaceCMYK)
+    {
+        applyWhiteBalanceCMYK(layer, x, y);
+    }
 
-        deValue B;
-        bool res2 = image.getPixel(2, p, B);
-        if (res2)
-        {
-            dePropertyValue* BTint = basicLayer.getBasicProperty("B tint");
-            if (BTint)
-            {
-                deValue old = BTint->get();
-                B = 0.5 - B + old;
-                BTint->set(B);
-            }
-        }
+    if ((layer.getColorSpace() == deColorSpaceRGB) || (layer.getColorSpace() == deColorSpaceProPhoto))
+    {
+        applyWhiteBalanceRGB(layer, x, y);
     }
 
     std::vector<dePropertyValueSlider*>::iterator i;

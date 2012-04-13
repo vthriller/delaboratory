@@ -23,7 +23,7 @@
 #include <map>
 #include "color_space.h"
 #include <libxml/parser.h>
-#include <wx/wx.h>
+#include "mutex.h"
 
 class deProject;
 class deFrame;
@@ -46,7 +46,7 @@ class deLayer
     private:
         deLayer(const deLayer& layer);
         deLayer& operator = (const deLayer& layer);
-        wxMutex mutex;
+        deMutex mutex;
 
         virtual bool updateImage() = 0;
 

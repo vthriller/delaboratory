@@ -23,7 +23,6 @@
 #include "logger.h"
 
 deRawModule::deRawModule()
-:mutex(wxMUTEX_RECURSIVE)
 {
     dcraw_version = "";
     loader = NULL;
@@ -58,12 +57,12 @@ bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image, deC
 
     status = loader->getStatus();
 
-    mutex.Unlock();
+    mutex.unlock();
 
     return status;
 }
 
-bool deRawModule::update(bool& failure)
+bool deRawModule::updateRawLoading(bool& failure)
 {
     if (!loader)
     {

@@ -39,6 +39,14 @@ dePropertyValue::~dePropertyValue()
 void dePropertyValue::set(deValue _value)
 {
     value = _value;
+    if (value > max)
+    {
+        value = max;
+    }
+    if (value < min)
+    {
+        value = min;
+    }
 }
 
 deValue dePropertyValue::get() const

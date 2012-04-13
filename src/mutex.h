@@ -16,35 +16,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_RENDERER_H
-#define _DE_RENDERER_H
+#ifndef _DE_MUTEX_H
+#define _DE_MUTEX_H
 
-class wxDC;
-class deChannelManager;
-class deViewManager;
-class deLayerProcessor;
-class deLayerStack;
-#include <wx/wx.h>
-#include "size.h"
-#include "rendered_image.h"
-#include "mutex.h"
+class deMutexImpl;
 
-class deRenderer
+class deMutex
 {
     private:
-        deRenderedImage renderedImage;
-        deSize size;
-        deChannelManager& channelManager;
-        deMutex mutex;
-
-        unsigned char* getCurrentImageData();
-
+        deMutexImpl* impl;
     public:
-        deRenderer(deChannelManager& _channelManager);
-        virtual ~deRenderer();
+        deMutex();
+        ~deMutex();
 
-        bool render(wxDC& dc);
-        bool prepareImage(const deViewManager& viewManager, deLayerProcessor& layerProcessor, deLayerStack& layerStack);
+        void lock();
+        void unlock();
 };
+
 
 #endif

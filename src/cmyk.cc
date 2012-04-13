@@ -94,6 +94,11 @@ void cmy2cmyk(deValue c, deValue m, deValue y, deValue& _c, deValue& _m, deValue
         k = 0.8;
     }
 
+    if (c + m + y < 1.0)
+    {
+        k = 0.0;
+    }
+
     deValue kk = (1 - k);
 
     _k = k;

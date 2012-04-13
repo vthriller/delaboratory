@@ -21,7 +21,7 @@
 
 #include <libxml/parser.h>
 #include "value.h"
-#include <wx/wx.h>
+#include "mutex.h"
 class deChannel;
 
 class deMixer
@@ -30,7 +30,7 @@ class deMixer
         int size;
         deValue* weights;
 
-        mutable wxMutex mutex;
+        mutable deMutex mutex;
 
         deMixer(const deMixer& mixer);
         deMixer operator=(const deMixer& mixer);

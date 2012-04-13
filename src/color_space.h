@@ -50,6 +50,7 @@ void getSupportedConversions(const deColorSpace& colorSpace, std::vector<deColor
 deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v);
 
 bool isChannelLuminance(deColorSpace colorSpace, int channel);
+bool shouldChannelBeSharpened(deColorSpace colorSpace, int channel);
 
 int getEqualizerChannel(deColorSpace colorSpace);
 bool isChannelWrapped(deColorSpace colorSpace, int channel);
