@@ -128,7 +128,6 @@ void deEqualizerLayer::save(xmlNodePtr root)
     int i;
     for (i = 0; i < n; i++)
     {
-        xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("mixer"), NULL);
     }
 }
 

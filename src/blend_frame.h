@@ -29,7 +29,6 @@ class deBlendFrame:public deLayerFrame
     private:
         void choose(wxCommandEvent &event);
         void check(wxCommandEvent &event);
-        void select(wxCommandEvent &event);
 
         wxChoice* choice;
         deSlider* alphaSlider;

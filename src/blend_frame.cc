@@ -102,7 +102,6 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
     }
 
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deBlendFrame::choose));
-    Connect(wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler(deBlendFrame::select));
     Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deBlendFrame::check));
 
     Fit();
@@ -110,9 +109,6 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
 deBlendFrame::~deBlendFrame()
 {
-    deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
-    deViewManager& viewManager = l.getViewManager();
-
     layerProcessor.onChangeViewMode();
 
     frameManager.removeBlendFrame(this);
@@ -166,10 +162,4 @@ void deBlendFrame::check(wxCommandEvent &event)
 
 }
 
-void deBlendFrame::select(wxCommandEvent &event)
-{
-    deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
-    int i = event.GetId();
-
-}
 

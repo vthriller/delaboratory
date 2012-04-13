@@ -65,7 +65,6 @@ void deApplyLuminanceLayer::load(xmlNodePtr root)
 
     xmlNodePtr child = root->xmlChildrenNode;
 
-    int i = 0;
     while (child)
     {
 
