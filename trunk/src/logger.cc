@@ -42,11 +42,13 @@ deLogger::~deLogger()
     if (f)
     {
         f->close();
+        delete f;
     }
 
     if (fl)
     {
         fl->close();
+        delete fl;
     }
 
     mutex.unlock();
@@ -60,6 +62,7 @@ void deLogger::setFile(const std::string& fileName)
     if (f)
     {
         f->close();
+        delete f;
     }
 
     f = new std::ofstream(fileName.c_str());
@@ -76,6 +79,7 @@ void deLogger::setLocksFile(const std::string& fileName)
     if (fl)
     {
         fl->close();
+        delete fl;
     }
 
     fl = new std::ofstream(fileName.c_str());
