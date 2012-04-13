@@ -51,6 +51,7 @@ class deActionLayer:public deLayer
         virtual bool canDisable() const {return true;};
 
         virtual bool simpleActionProcessing() const {return false;};
+        virtual bool onlyFullProcessing() const {return false;};
 
         virtual const deImage& getSourceImage() const;
 
@@ -85,11 +86,13 @@ class deActionLayer:public deLayer
     private:        
         deImage imageBlendPass;
 
+        bool fullProcessing();
         bool updateBlend(int i);
 
         virtual bool processAction(int i) {return false;};
         virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size) {return false;};
         virtual bool processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize) {return false;};
+        virtual bool processActionFull(deValue** sp, deValue** dp, int channelSize) {return false;};
 
         virtual bool singleChannelProcessing() const = 0;
 

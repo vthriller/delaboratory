@@ -98,9 +98,10 @@ bool deSourceImageLayer::updateImage()
 
     if (ss == ds)
     {
-        copyChannel(sourceChannelR->getPixels(), channelR->getPixels(), ss);
-        copyChannel(sourceChannelG->getPixels(), channelG->getPixels(), ss);
-        copyChannel(sourceChannelB->getPixels(), channelB->getPixels(), ss);
+        int nn = ss.getN();
+        copyChannel(sourceChannelR->getPixels(), channelR->getPixels(), nn);
+        copyChannel(sourceChannelG->getPixels(), channelG->getPixels(), nn);
+        copyChannel(sourceChannelB->getPixels(), channelB->getPixels(), nn);
     }
     else
     {

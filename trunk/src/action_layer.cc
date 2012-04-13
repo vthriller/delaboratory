@@ -403,11 +403,6 @@ void deActionLayer::setOpacity(deValue _opacity)
     opacity = _opacity;
 }
 
-bool deActionLayer::updateImage()
-{
-    return updateImageInActionLayer(true, true, -1);
-}
-
 bool deActionLayer::updateAction(int i)
 {
     bool actionResult = false;
@@ -650,9 +645,100 @@ void deActionLayer::updateBlendOnThread(int i)
     updateBlend(i);
 }
 
+bool deActionLayer::fullProcessing()
+{
+    if (!enabled)
+    {
+        return true;
+    }
+
+    deLayer* source = layerStack.getLayer(sourceLayer);
+
+    const deImage& sourceImage = source->getImage();
+
+    int channelSize = channelManager.getChannelSize().getN();
+
+    int s[4];
+    deChannel* sc[4];
+    int d[4];
+    deChannel* dc[4];
+
+    deValue* sp[4];
+    deValue* dp[4];
+
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        s[i] = sourceImage.getChannelIndex(i);
+        sc[i] = channelManager.getChannel(s[i]);
+        imageActionPass.enableChannel(i);
+        d[i] = imageActionPass.getChannelIndex(i);
+        dc[i] = channelManager.getChannel(d[i]);
+
+        if (sc[i])
+        {
+            sc[i]->lockRead();
+            sp[i] = sc[i]->getPixels();
+        }                    
+        else
+        {
+            sp[i] = NULL;
+        }
+
+        if (dc[i])
+        {
+            dc[i]->lockWrite();
+            dp[i] = dc[i]->getPixels();
+        }                 
+        else
+        {
+            dp[i] = NULL;
+        }
+    }
+
+    bool actionResult = processActionFull(sp, dp, channelSize);
+
+    for (i = 0; i < n; i++)
+    {
+        if (sc[i])
+        {
+            sc[i]->unlockRead();
+        }                    
+        if (dc[i])
+        {
+            dc[i]->unlockWrite();
+        }                    
+    }
+
+    return actionResult;
+}
+
+bool deActionLayer::updateImage()
+{
+    if (onlyFullProcessing())
+    {
+        bool result = fullProcessing();
+        if (result)
+        {
+            updateImageInActionLayer(false, true, -1);
+        }
+        return result;
+    }
+    else
+    {
+        return updateImageInActionLayer(true, true, -1);
+    }        
+}
 
 void deActionLayer::processChannel(int channel)
 {
+    if (onlyFullProcessing())
+    {
+        logError("processChannel called but full processing is set to true");
+        return;
+    }
     updateImageInActionLayer(true, true, channel);
 }    
 

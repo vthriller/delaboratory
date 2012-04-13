@@ -23,7 +23,6 @@
 
 void copyImage(const deImage& sourceImage, const deImage& image, deChannelManager& channelManager)
 {
-    //int channelSize = channelManager.getChannelSize().getN();
     int n = getColorSpaceSize(sourceImage.getColorSpace());
     int i;
 
@@ -39,7 +38,7 @@ void copyImage(const deImage& sourceImage, const deImage& image, deChannelManage
        sourceChannel->lockRead();
        channel->lockWrite();
 
-       copyChannel(sourceChannel->getPixels(), channel->getPixels(), channelManager.getChannelSize());
+       copyChannel(sourceChannel->getPixels(), channel->getPixels(), channelManager.getChannelSize().getN());
 
        sourceChannel->unlockRead();
        channel->unlockWrite();
