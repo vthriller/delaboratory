@@ -21,10 +21,10 @@
 
 #include "value.h"
 
-// these functions are only for RGB colorspace
-// for other colorspaces new functions are needed, but they are very easy to implement
+void applyLuminanceRGB(deValue r1, deValue g1, deValue b1, deValue r2, deValue g2, deValue b2, deValue &r, deValue &g, deValue &b);
+void applyLuminanceProPhoto(deValue r1, deValue g1, deValue b1, deValue r2, deValue g2, deValue b2, deValue &r, deValue &g, deValue &b);
+void applyLuminanceCMYK(deValue c1, deValue m1, deValue y1, deValue k1, deValue c2, deValue m2, deValue y2, deValue k2, deValue &c, deValue &m, deValue &y, deValue& k);
 
-void applyLuminance(deValue r1, deValue g1, deValue b1, deValue r2, deValue g2, deValue b2, deValue &r, deValue &g, deValue &b);
 void applyColor(deValue r1, deValue g1, deValue b1, deValue r2, deValue g2, deValue b2, deValue &r, deValue &g, deValue &b);
 
 #endif

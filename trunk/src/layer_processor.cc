@@ -201,11 +201,6 @@ layerStack(_layerStack),
 layerFrameManager(_layerFrameManager),
 renderWorkerSemaphore(1, 1),
 histogramWorkerSemaphore(1, 1),
-layerProcessMutex(wxMUTEX_RECURSIVE),
-histogramMutex(wxMUTEX_RECURSIVE),
-prepareImageMutex(wxMUTEX_RECURSIVE),
-updateImageMutex(wxMUTEX_RECURSIVE),
-updateImagesMutex(wxMUTEX_RECURSIVE),
 renderer(_previewChannelManager),
 previewChannelManager(_previewChannelManager)
 {
@@ -396,7 +391,7 @@ void deLayerProcessor::lockLayers()
 void deLayerProcessor::unlockLayers()
 {
     logMessage("unlockLayers");
-    layerProcessMutex.Unlock();
+    layerProcessMutex.unlock();
 }
 
 void deLayerProcessor::lockHistogram()
@@ -407,7 +402,7 @@ void deLayerProcessor::lockHistogram()
 void deLayerProcessor::unlockHistogram()
 {
     logMessage("unlockHistogram");
-    histogramMutex.Unlock();
+    histogramMutex.unlock();
 }
 
 void deLayerProcessor::lockUpdateImage()
@@ -418,7 +413,7 @@ void deLayerProcessor::lockUpdateImage()
 void deLayerProcessor::unlockUpdateImage()
 {
     logMessage("unlockUpdateImage");
-    updateImageMutex.Unlock();
+    updateImageMutex.unlock();
 }
 
 void deLayerProcessor::lockPrepareImage()
@@ -429,7 +424,7 @@ void deLayerProcessor::lockPrepareImage()
 void deLayerProcessor::unlockPrepareImage()
 {
     logMessage("unlockPrepare");
-    prepareImageMutex.Unlock();
+    prepareImageMutex.unlock();
 }
 
 void deLayerProcessor::updateImages(int a, int channel, bool action)
@@ -655,7 +650,7 @@ void deLayerProcessor::lock()
 void deLayerProcessor::unlock()
 {
     logMessage("layer processor unlock");
-    updateImagesMutex.Unlock();
+    updateImagesMutex.unlock();
 }
 
 void deLayerProcessor::tickWork()

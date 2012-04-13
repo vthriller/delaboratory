@@ -200,7 +200,14 @@ void deVignetteLayer::reset()
     dePropertyValue* darkness = getPropertyValue(darknessIndex);
     dePropertyValue* spot = getPropertyValue(spotIndex);
 
-    setBlendMode(deBlendMultiply);
+    if (colorSpace == deColorSpaceCMYK)
+    {
+        setBlendMode(deBlendScreen);
+    }
+    else
+    {
+        setBlendMode(deBlendMultiply);
+    }
     setOpacity(1.0);
 
     radius1X->set(0.5);
@@ -221,9 +228,17 @@ void deVignetteLayer::reset()
         center2Y->set(0.0);
     }
 
-    light->set(1.0);
+    if (colorSpace == deColorSpaceCMYK)
+    {
+        light->set(0.2);
+        darkness->set(1.0);
+    }
+    else
+    {
+        light->set(1.0);
+        darkness->set(0.2);
+    }
     spot->set(1.0);
-    darkness->set(0.2);
 }
 
 void deVignetteLayer::save(xmlNodePtr root)

@@ -62,8 +62,6 @@ deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, d
         presets["hiraloam2"] = p;
     }        
 
-    //dePropertyValue* blurRadius = valueProperties[blurRadiusPropertyIndex];
-    //dePropertyValue* amount = valueProperties[amountPropertyIndex];
     dePropertyValue* blurRadius = getPropertyValue(blurRadiusPropertyIndex);
     dePropertyValue* amount = getPropertyValue(amountPropertyIndex);
 
@@ -72,6 +70,8 @@ deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, d
     applyPreset("reset");
     amount->setMax(5);
     blurRadius->setLabel("radius");
+
+    disableNotForSharpen();
 }
 
 deUSMLayer::~deUSMLayer()

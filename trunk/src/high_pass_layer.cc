@@ -38,6 +38,7 @@ deHighPassLayer::deHighPassLayer(deColorSpace _colorSpace, int _index, int _sour
     blurRadius->setMin(1);
     blurRadius->setMax(50);
     reset();
+    disableNotForSharpen();
 }
 
 void deHighPassLayer::reset()

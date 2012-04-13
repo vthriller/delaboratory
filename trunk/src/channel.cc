@@ -25,8 +25,7 @@
 #define CHANNEL_LOCKING 1
 
 deChannel::deChannel()
-:readSemaphore(4, 4),
-writeMutex(wxMUTEX_RECURSIVE)
+:readSemaphore(4, 4)
 {
     pixels = NULL;
     maxReaders = 4;
@@ -160,7 +159,7 @@ void deChannel::lockWrite()
 void deChannel::unlockWrite()
 {
 #if CHANNEL_LOCKING
-    writeMutex.Unlock();
+    writeMutex.unlock();
     int i;
     for (i = 0; i < maxReaders; i++)
     {

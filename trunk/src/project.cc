@@ -155,7 +155,7 @@ void deProject::onKey(int key)
 
 void deProject::init(const std::string& fileName)
 {
-    if (openImage(fileName, true, deColorSpaceLAB))
+    if (openImage(fileName, true, deColorSpaceProPhoto))
     {
         return;
     }
@@ -557,7 +557,7 @@ void deProject::open(const std::string& fileName, bool image)
 
     if (image)
     {
-        if (!openImage(imageFile, true, deColorSpaceLAB))   // FIXME
+        if (!openImage(imageFile, true, deColorSpaceProPhoto)) 
         {
             openImage(imageFile, false, deColorSpaceRGB);
         }
@@ -601,7 +601,7 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
         {
             logMessage("found RAW " + fileName);
             bool failure = false;
-            while (!rawModule.update(failure))
+            while (!rawModule.updateRawLoading(failure))
             {
                 wxThread::Sleep(200);
                 if (failure)
@@ -765,7 +765,7 @@ void deProject::onTimerUpdate()
 {
     bool failure = false;
 
-    bool result = rawModule.update(failure);
+    bool result = rawModule.updateRawLoading(failure);
 
     if ((result) || (failure))
     {

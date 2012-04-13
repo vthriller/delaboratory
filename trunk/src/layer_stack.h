@@ -22,7 +22,7 @@
 #include <vector>
 #include <map>
 #include <libxml/parser.h>
-#include <wx/wx.h>
+#include "mutex.h"
 
 class deLayer;
 class deChannelManager;
@@ -32,7 +32,7 @@ class deLayerStack
 {
     private:
         std::vector<deLayer*> layers;
-        mutable wxMutex mutex;
+        mutable deMutex mutex;
 
         deLayerStack(const deLayerStack& );
         deLayerStack& operator = (const deLayerStack& );

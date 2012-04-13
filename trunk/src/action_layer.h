@@ -82,6 +82,7 @@ class deActionLayer:public deLayer
         deImage imageActionPass;
 
         void disableNotLuminance();
+        void disableNotForSharpen();
 
     private:        
         deImage imageBlendPass;

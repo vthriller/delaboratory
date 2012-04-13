@@ -52,7 +52,6 @@ EVT_MENU(ID_NewProject, deMainFrame::onNewProject)
 EVT_MENU(ID_TestImageSmall, deMainFrame::onTestImageSmall)
 EVT_MENU(ID_TestImageBig, deMainFrame::onTestImageBig)
 EVT_MENU(ID_OpenImage, deMainFrame::onOpenImage)
-EVT_MENU(ID_OpenRawImageLAB, deMainFrame::onOpenRawImageLAB)
 EVT_MENU(ID_OpenRawImageProPhoto, deMainFrame::onOpenRawImageProPhoto)
 EVT_MENU(ID_OpenProject, deMainFrame::onOpenProject)
 EVT_MENU(ID_SaveProject, deMainFrame::onSaveProject)
@@ -186,7 +185,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxMenu *menuFile = new wxMenu;
     menuFile->Append( ID_NewProject, _("New project") );
     menuFile->AppendSeparator();
-    menuFile->Append( ID_OpenRawImageLAB, _("Open RAW image as LAB") );
     menuFile->Append( ID_OpenRawImageProPhoto, _("Open RAW image as ProPhoto RGB") );
     menuFile->Append( ID_OpenImage, _("Open TIFF/JPG image") );
     menuFile->AppendSeparator();
@@ -364,12 +362,6 @@ void deMainFrame::onOpenImage(wxCommandEvent& WXUNUSED(event))
 {
     std::string fileName = getOpenFile(this, "load source image", "image");
     project.openImage(fileName, false, deColorSpaceRGB);
-}
-
-void deMainFrame::onOpenRawImageLAB(wxCommandEvent& WXUNUSED(event))
-{
-    std::string fileName = getOpenFile(this, "load source image", "raw");
-    project.openImage(fileName, true, deColorSpaceLAB);
 }
 
 void deMainFrame::onOpenRawImageProPhoto(wxCommandEvent& WXUNUSED(event))

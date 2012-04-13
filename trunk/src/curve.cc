@@ -30,8 +30,7 @@
 #define VERTICAL_STEP 0.01
 
 deCurve::deCurve()
-:shape(256),
- mutex(wxMUTEX_RECURSIVE)
+:shape(256)
 {
     reset();
 }
@@ -552,7 +551,7 @@ void deCurve::lock() const
 
 void deCurve::unlock() const
 {
-    mutex.Unlock();
+    mutex.unlock();
 }
 
 void deCurve::addRandom()

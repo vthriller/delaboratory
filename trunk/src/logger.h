@@ -22,6 +22,7 @@
 #include <string>
 #include <fstream>
 #include <wx/wx.h>
+#include "mutex.h"
 
 class deLogger
 {
@@ -29,7 +30,7 @@ class deLogger
         std::ofstream* f;
         std::ofstream* fl;
         wxStopWatch sw;
-        wxMutex mutex;
+        deMutex mutex;
         wxThreadIdType main_id;
         bool started;
 
@@ -52,6 +53,7 @@ class deLogger
 
 void logError(const std::string& message);
 void logMessage(const std::string& message);
-void lockWithLog(wxMutex& mutex, const std::string& message);
+//void lockWithLog(wxMutex& mutex, const std::string& message);
+void lockWithLog(deMutex& mutex, const std::string& message);
 
 #endif

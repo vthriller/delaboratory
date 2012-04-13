@@ -21,7 +21,7 @@
 
 #include "color_space.h"
 #include "size.h"
-#include <wx/wx.h>
+#include "mutex.h"
 class deChannel;
 
 class deStaticImage
@@ -30,7 +30,7 @@ class deStaticImage
         deColorSpace colorSpace;
         std::vector<deChannel*> channels;
         deSize size;
-        mutable wxMutex mutex;
+        mutable deMutex mutex;
         
         deStaticImage(const deStaticImage& i);
         deStaticImage& operator = (const deStaticImage& i);

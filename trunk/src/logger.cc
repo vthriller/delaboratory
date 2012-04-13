@@ -37,7 +37,7 @@ deLogger::deLogger()
 
 deLogger::~deLogger()
 {
-    mutex.Lock();
+    mutex.lock();
 
     if (f)
     {
@@ -49,13 +49,13 @@ deLogger::~deLogger()
         fl->close();
     }
 
-    mutex.Unlock();
+    mutex.unlock();
 }
 
 void deLogger::setFile(const std::string& fileName)
 {
 #ifdef LOGGING    
-    mutex.Lock();
+    mutex.lock();
 
     if (f)
     {
@@ -64,14 +64,14 @@ void deLogger::setFile(const std::string& fileName)
 
     f = new std::ofstream(fileName.c_str());
 
-    mutex.Unlock();
+    mutex.unlock();
 #endif    
 }
 
 void deLogger::setLocksFile(const std::string& fileName)
 {
 #ifdef LOGGING    
-    mutex.Lock();
+    mutex.lock();
 
     if (fl)
     {
@@ -80,7 +80,7 @@ void deLogger::setLocksFile(const std::string& fileName)
 
     fl = new std::ofstream(fileName.c_str());
 
-    mutex.Unlock();
+    mutex.unlock();
 #endif    
 }
 
@@ -109,7 +109,7 @@ std::string deLogger::getThreadName()
 
 void deLogger::log(const std::string& message)
 {
-    mutex.Lock();
+    mutex.lock();
 
     if (f)
     {
@@ -118,7 +118,7 @@ void deLogger::log(const std::string& message)
         (*f) << t << ": [" << getThreadName() << "] " << message << std::endl;
     }
 
-    mutex.Unlock();
+    mutex.unlock();
 }
 
 void deLogger::logLock(const std::string& message, int dt)
@@ -128,7 +128,7 @@ void deLogger::logLock(const std::string& message, int dt)
         return;
     }
 
-    mutex.Lock();
+    mutex.lock();
 
     if (f)
     {
@@ -137,7 +137,7 @@ void deLogger::logLock(const std::string& message, int dt)
         (*fl) << t << ": [" << getThreadName() << "] [" << dt << "ms] " << message << std::endl;
     }
 
-    mutex.Unlock();
+    mutex.unlock();
 }
 
 int deLogger::getTime() const
@@ -155,25 +155,25 @@ void logMessage(const std::string& message)
 
 void logError(const std::string& message)
 {
-    static wxMutex mutex;
-    mutex.Lock();
+    static deMutex mutex;
+    mutex.lock();
     std::cout << message << std::endl;
-    mutex.Unlock();
+    mutex.unlock();
 #ifdef LOGGING    
     deLogger::getLogger().log(message);
 #endif    
 }
 
-void lockWithLog(wxMutex& mutex, const std::string& message)
+void lockWithLog(deMutex& mutex, const std::string& message)
 {
 #ifdef LOGGING    
     deLogger& logger = deLogger::getLogger();
     int t1 = logger.getTime();
     logger.log(message + " lock");
-    mutex.Lock();
+    mutex.lock();
     int t2 = logger.getTime();
     logger.logLock(message, t2-t1);
 #else    
-    mutex.Lock();
+    mutex.lock();
 #endif    
 }    

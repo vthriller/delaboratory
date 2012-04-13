@@ -259,13 +259,6 @@ bool deRawLoader::load(bool& failure)
 
     int maxRead = 0;
 
-    bool lab = false;
-
-    if (colorSpace == deColorSpaceLAB)
-    {
-        lab = true;
-    }
-
     image.setColorSpace(colorSpace);
 
     int tx = 0;
@@ -318,81 +311,35 @@ bool deRawLoader::load(bool& failure)
             cc2 = (unsigned char)(c);
             b = (256 * cc1 + cc2) * scale;
 
-            if (lab)
+            if (half)
             {
-                deValue v1;
-                deValue v2;
-                deValue v3;
-                deValue vv1;
-                deValue vv2;
-                deValue vv3;
-                prophoto2xyz(r, g, b, vv1, vv2, vv3);
-                xyz2lab(vv1, vv2, vv3, v1, v2, v3);
+                pixels0[(2 * ty + 0) * w + 2 * tx + 0] = r;
+                pixels0[(2 * ty + 1) * w + 2 * tx + 0] = r;
+                pixels0[(2 * ty + 0) * w + 2 * tx + 1] = r;
+                pixels0[(2 * ty + 1) * w + 2 * tx + 1] = r;
 
-                if (half)
+                pixels1[(2 * ty + 0) * w + 2 * tx + 0] = g;
+                pixels1[(2 * ty + 1) * w + 2 * tx + 0] = g;
+                pixels1[(2 * ty + 0) * w + 2 * tx + 1] = g;
+                pixels1[(2 * ty + 1) * w + 2 * tx + 1] = g;
+
+                pixels2[(2 * ty + 0) * w + 2 * tx + 0] = b;
+                pixels2[(2 * ty + 1) * w + 2 * tx + 0] = b;
+                pixels2[(2 * ty + 0) * w + 2 * tx + 1] = b;
+                pixels2[(2 * ty + 1) * w + 2 * tx + 1] = b;
+
+                tx++;
+                if (tx >= w / 2)
                 {
-                    pixels0[(2 * ty + 0) * w + 2 * tx + 0] = v1;
-                    pixels0[(2 * ty + 1) * w + 2 * tx + 0] = v1;
-                    pixels0[(2 * ty + 0) * w + 2 * tx + 1] = v1;
-                    pixels0[(2 * ty + 1) * w + 2 * tx + 1] = v1;
-
-                    pixels1[(2 * ty + 0) * w + 2 * tx + 0] = v2;
-                    pixels1[(2 * ty + 1) * w + 2 * tx + 0] = v2;
-                    pixels1[(2 * ty + 0) * w + 2 * tx + 1] = v2;
-                    pixels1[(2 * ty + 1) * w + 2 * tx + 1] = v2;
-
-                    pixels2[(2 * ty + 0) * w + 2 * tx + 0] = v3;
-                    pixels2[(2 * ty + 1) * w + 2 * tx + 0] = v3;
-                    pixels2[(2 * ty + 0) * w + 2 * tx + 1] = v3;
-                    pixels2[(2 * ty + 1) * w + 2 * tx + 1] = v3;
-
-                    tx++;
-                    if (tx >= w/2)
-                    {
-                        tx = 0;
-                        ty++;
-                    }
-                }
-
-                else
-                {
-                    pixels0[pos] = v1;
-                    pixels1[pos] = v2;
-                    pixels2[pos] = v3;
+                    tx = 0;
+                    ty++;
                 }
             }
             else
             {
-                if (half)
-                {
-                    pixels0[(2 * ty + 0) * w + 2 * tx + 0] = r;
-                    pixels0[(2 * ty + 1) * w + 2 * tx + 0] = r;
-                    pixels0[(2 * ty + 0) * w + 2 * tx + 1] = r;
-                    pixels0[(2 * ty + 1) * w + 2 * tx + 1] = r;
-
-                    pixels1[(2 * ty + 0) * w + 2 * tx + 0] = g;
-                    pixels1[(2 * ty + 1) * w + 2 * tx + 0] = g;
-                    pixels1[(2 * ty + 0) * w + 2 * tx + 1] = g;
-                    pixels1[(2 * ty + 1) * w + 2 * tx + 1] = g;
-
-                    pixels2[(2 * ty + 0) * w + 2 * tx + 0] = b;
-                    pixels2[(2 * ty + 1) * w + 2 * tx + 0] = b;
-                    pixels2[(2 * ty + 0) * w + 2 * tx + 1] = b;
-                    pixels2[(2 * ty + 1) * w + 2 * tx + 1] = b;
-
-                    tx++;
-                    if (tx >= w / 2)
-                    {
-                        tx = 0;
-                        ty++;
-                    }
-                }
-                else
-                {
-                    pixels0[pos] = r;
-                    pixels1[pos] = g;
-                    pixels2[pos] = b;
-                }
+                pixels0[pos] = r;
+                pixels1[pos] = g;
+                pixels2[pos] = b;
             }
 
             pos++;

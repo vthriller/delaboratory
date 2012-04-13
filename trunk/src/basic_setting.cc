@@ -25,6 +25,8 @@ deBasicSetting::deBasicSetting(const std::string& _name)
     brightness = false;
     shift = false;
     scale = 1.0;
+    min = -1.0;
+    max = 1.0;
 }
 
 deBasicSetting::~deBasicSetting()
@@ -91,6 +93,9 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
     {
         case deColorSpaceLAB:
         {
+
+            deValue tintRange = 0.15;
+
             deBasicSetting b("brightness");
             b.setBrightness();
             b.addChannel(0);
@@ -110,6 +115,7 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             deBasicSetting gms("A tint");
             gms.setBrightness();
             gms.addChannel(1);
+            gms.setMinMax(-tintRange, tintRange);
             settings2.push_back(gms);
 
             deBasicSetting gmc("A contrast");
@@ -120,6 +126,7 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
             deBasicSetting bys("B tint");
             bys.setBrightness();
             bys.addChannel(2);
+            bys.setMinMax(-tintRange, tintRange);
             settings2.push_back(bys);
 
             deBasicSetting byc("B contrast");
@@ -342,3 +349,18 @@ void getBasicSettings(deColorSpace colorSpace, std::vector<deBasicSetting>& sett
     };
 }
 
+deValue deBasicSetting::getMin() const
+{
+    return min;
+}
+
+deValue deBasicSetting::getMax() const
+{
+    return max;
+}
+
+void deBasicSetting::setMinMax(deValue _min, deValue _max)
+{
+    min = _min;
+    max = _max;
+}

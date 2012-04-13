@@ -21,7 +21,7 @@
 
 #include <libxml/parser.h>
 #include "value.h"
-#include <wx/wx.h>
+#include "mutex.h"
 class deChannel;
 
 class deEqualizer
@@ -30,7 +30,7 @@ class deEqualizer
         int bands;
         deValue* values;
 
-        mutable wxMutex mutex;
+        mutable deMutex mutex;
 
         deEqualizer(const deEqualizer& mixer);
         deEqualizer operator=(const deEqualizer& mixer);

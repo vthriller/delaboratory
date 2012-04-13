@@ -24,7 +24,7 @@
 class deApplyLuminanceLayer:public deActionLayer
 {
     private:
-        int channelIndex;
+        std::vector<dePropertyValue*> mixer;
 
     protected:
         virtual bool singleChannelProcessing() const {return false;};

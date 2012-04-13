@@ -23,7 +23,7 @@
 #include "curve_point.h"
 #include "curve_shape.h"
 #include <list>
-#include <wx/wx.h>
+#include "mutex.h"
 
 class deChannel;
 
@@ -34,7 +34,7 @@ class deCurve
         deCurvePoints points;
         deCurveShape shape;
 
-        mutable wxMutex mutex;
+        mutable deMutex mutex;
 
         void loadPoint(xmlNodePtr node);
 

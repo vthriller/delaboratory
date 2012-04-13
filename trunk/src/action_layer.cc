@@ -243,6 +243,19 @@ void deActionLayer::disableNotLuminance()
     }
 }
 
+void deActionLayer::disableNotForSharpen()
+{
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        if (!shouldChannelBeSharpened(colorSpace, i))
+        {
+            channels.erase(i);
+        }            
+    }
+}
+
 const deImage& deActionLayer::getSourceImage() const
 {
     deLayer* source = layerStack.getLayer(sourceLayer);
