@@ -1,6 +1,13 @@
 #summary Development News
 
 -----
+*2012.04.13 - started post-0.7 development*
+
+Layer masks have been temporarily removed.
+Apply color and apply luminance has been removed from blend frame.
+There is new Apply Luminance Layer. For now it works only in sRGB and is not configurable at all. It applies green channel in luminance mode. 
+
+-----
 *2012.04.11 - more plans*
 
 [operations] - I listed operations for typical postprocessing workflow
