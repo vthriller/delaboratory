@@ -19,10 +19,9 @@
 #include "copy_channel.h"
 #include <iostream>
 
-void copyChannel(const deValue* src, deValue* dst, const deSize& size)
+//void copyChannel(const deValue* src, deValue* dst, const deSize& size)
+void copyChannel(const deValue* src, deValue* dst, int n)
 {
-    int n = size.getN();
-
     int i;
     for (i = 0; i < n; i++)
     {

@@ -23,6 +23,7 @@
 #include "vignette_layer.h"
 #include "apply_image_layer.h"
 #include "mixer_layer.h"
+#include "apply_luminance_layer.h"
 #include "equalizer_layer.h"
 #include "conversion_layer.h"
 #include "conversion_bw_layer.h"
@@ -87,6 +88,11 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
     if (type == "mixer")
     {
         return new deMixerLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+    }
+
+    if (type == "apply_luminance")
+    {
+        return new deApplyLuminanceLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "equalizer8")
@@ -179,6 +185,7 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("equalizer8");
     actions.push_back("equalizer16");
     actions.push_back("apply_image");
+    actions.push_back("apply_luminance");
 
     actions.push_back("vignette1");
     actions.push_back("vignette2");
@@ -227,6 +234,11 @@ std::string getActionDescription(const std::string& a)
     if (a == "shadows_highlights")
     {
         return "sh / hi";
+    }
+
+    if (a == "apply_luminance")
+    {
+        return "luminance";
     }
 
     if (a == "apply_image")

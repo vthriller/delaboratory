@@ -104,8 +104,6 @@ class deLayerProcessor
         void lockUpdateImage();
         void unlockUpdateImage();
 
-
-
     public:
         deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager);
         virtual ~deLayerProcessor();
