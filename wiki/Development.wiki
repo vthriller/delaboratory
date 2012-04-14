@@ -1,6 +1,23 @@
 #summary Development News
 
 -----
+*2012.04.14*
+
+I removed opening RAW files in LAB mode, now there is only ProPhoto.
+
+White Balance now works in LAB, sRGB and ProPhoto, just open Basic Layer and click on image. sRGB and ProPhoto WB needs improvements, but LAB looks OK.
+
+Apply Luminance Layer now works in sRGB, ProPhoto and CMYK. But it's not configurable (it uses Greeen or Magenta channels).
+
+I will need some way to store multiple full-size images. For instance I need such image for noise texture (film grain, etc). Another reason is c2g. My brand new idea for c2g is to process it on thread, from the original source image. This way user won't be blocked and some kind of "texture layer" should be updated in realtime.
+
+Still no idea what's the best way to support G'MIC. Probably same way as c2g - call it on full size image on separate thread. But this way it won't be able to call G'MIC on alreaady processed image (because the processed layers are not in full scale). So maybe it will require to "flatten layers" i.e. to calculate final, full size image before calling G'MIC.
+
+If I will go into full-size images I could introduce paiting support. Or at least true dodge/burn.
+
+Another thing I need to remember about are layer masks. 
+
+-----
 *2012.04.13 - started post-0.7 development*
 
 Layer masks have been temporarily removed.
