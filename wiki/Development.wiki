@@ -3,11 +3,11 @@
 -----
 *2012.04.14*
 
-I removed opening RAW files in LAB mode, now there is only ProPhoto.
+I removed opening RAW files in LAB mode, now there is only !ProPhoto.
 
-White Balance now works in LAB, sRGB and ProPhoto, just open Basic Layer and click on image. sRGB and ProPhoto WB needs improvements, but LAB looks OK.
+White Balance now works in LAB, sRGB and !ProPhoto, just open Basic Layer and click on image. sRGB and ProPhoto WB needs improvements, but LAB looks OK.
 
-Apply Luminance Layer now works in sRGB, ProPhoto and CMYK. But it's not configurable (it uses Greeen or Magenta channels).
+Apply Luminance Layer now works in sRGB, !ProPhoto and CMYK. But it's not configurable (it uses Greeen or Magenta channels).
 
 I will need some way to store multiple full-size images. For instance I need such image for noise texture (film grain, etc). Another reason is c2g. My brand new idea for c2g is to process it on thread, from the original source image. This way user won't be blocked and some kind of "texture layer" should be updated in realtime.
 
