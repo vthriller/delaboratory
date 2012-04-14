@@ -5,7 +5,7 @@
 
 I removed opening RAW files in LAB mode, now there is only !ProPhoto.
 
-White Balance now works in LAB, sRGB and !ProPhoto, just open Basic Layer and click on image. sRGB and ProPhoto WB needs improvements, but LAB looks OK.
+White Balance now works in LAB, sRGB and !ProPhoto, just open Basic Layer and click on image. sRGB and !ProPhoto WB needs improvements, but LAB looks OK.
 
 Apply Luminance Layer now works in sRGB, !ProPhoto and CMYK. But it's not configurable (it uses Greeen or Magenta channels).
 
