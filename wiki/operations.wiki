@@ -1,17 +1,17 @@
 #summary Operations planned for 0.8
 
 typical workflows:
-  * RAW -> ProPhoto -> CMYK -> LAB -> sRGB 
-  * RAW -> ProPhoto -> CMYK -> sRGB -> BW
-  * RAW -> ProPhoto -> LAB -> sRGB
-  * RAW -> ProPhoto -> sRGB
-  * RAW -> ProPhoto -> BW
-  * RAW -> ProPhoto -> HSV/HSL/LCH -> sRGB
+  * RAW -> !ProPhoto -> CMYK -> LAB -> sRGB 
+  * RAW -> !ProPhoto -> CMYK -> sRGB -> BW
+  * RAW -> !ProPhoto -> LAB -> sRGB
+  * RAW -> !ProPhoto -> sRGB
+  * RAW -> !ProPhoto -> BW
+  * RAW -> !ProPhoto -> HSV/HSL/LCH -> sRGB
 
 operations:
-  * original image in ProPhoto RGB 
+  * original image in !ProPhoto RGB 
   * apply green channel in luminance mode
-  * low contrast or shadows/highlights in ProPhoto 
+  * low contrast or shadows/highlights in !ProPhoto 
   * CMYK curves / CMYK levels
   * White Balance in LAB
   * exposure (brightness, contrast) in LAB and BW
@@ -25,8 +25,6 @@ operations:
   * high pass (monochrome) in LAB/BW/RGB/CMYK
   * equalizer in HSV/HSL/LCH
   * hue shift in HSV/HSL/LCH
-
-
 
 
 
