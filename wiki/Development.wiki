@@ -1,6 +1,11 @@
 #summary Development News
 
 -----
+*2012.04.16*
+
+Updated list of [Operations] planned for 0.8, also listed typical workflows.
+
+-----
 *2012.04.14*
 
 I removed opening RAW files in LAB mode, now there is only !ProPhoto.
