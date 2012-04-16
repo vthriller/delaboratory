@@ -56,10 +56,10 @@ void deLayerStack::removeTopLayer()
     logMessage("layer stack remove top layer...");
     lock();
 
-    std::vector<deLayer*>::iterator i;
+    std::vector<deBaseLayer*>::iterator i;
     i = layers.end();    
     i--;
-    deLayer* layer = *i;
+    deBaseLayer* layer = *i;
 
     layers.erase(i);
     unlock();
@@ -68,11 +68,10 @@ void deLayerStack::removeTopLayer()
     logMessage("layer stack before delete layer");
     delete layer;
     logMessage("layer stack after delete layer");
-//    layer->unlock();
 
 }
 
-void deLayerStack::addLayer(deLayer* layer)
+void deLayerStack::addLayer(deBaseLayer* layer)
 {
     logMessage("layer stack add layer");
     lock();
@@ -90,7 +89,7 @@ int deLayerStack::getSize() const
     return n;
 }
 
-deLayer* deLayerStack::getLayer(int id) const
+deBaseLayer* deLayerStack::getLayer(int id) const
 {
     lock();
     unsigned int i = id;
@@ -105,7 +104,7 @@ deLayer* deLayerStack::getLayer(int id) const
 
 void deLayerStack::save(xmlNodePtr node)
 {
-    std::vector<deLayer*>::iterator i;
+    std::vector<deBaseLayer*>::iterator i;
     for (i = layers.begin(); i != layers.end(); i++)
     {
         xmlNodePtr child = xmlNewChild(node, NULL, BAD_CAST("layer"), NULL);

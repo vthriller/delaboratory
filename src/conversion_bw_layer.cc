@@ -26,9 +26,10 @@
 #include "blend_mode.h"
 #include "layer_processor.h"
 #include "logger.h"
+#include "color_space_utils.h"
 
-deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, int n)
-:deConversionLayer(deColorSpaceBW, _index, _sourceLayer, _layerStack, _channelManager),
+deConversionBWLayer::deConversionBWLayer(int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, int n)
+:deConversionLayer(deColorSpaceBW, _sourceLayer, _layerStack, _channelManager),
  add0("add_0"),
  add1("add_1"),
  add2("add_2"),
@@ -45,7 +46,7 @@ deConversionBWLayer::deConversionBWLayer(int _index, int _sourceLayer, deLayerSt
     add2.setMin(-1.0);
     add2.setMax(3.0);
 
-    deLayer* source = layerStack.getLayer(sourceLayer);
+    deBaseLayer* source = layerStack.getLayer(sourceLayer);
     deColorSpace sourceColorSpace = source->getColorSpace();
     int cs = getColorSpaceSize(sourceColorSpace);
 
@@ -99,7 +100,7 @@ deConversionBWLayer::~deConversionBWLayer()
 
 void deConversionBWLayer::resetM()
 {
-    deLayer* source = layerStack.getLayer(sourceLayer);
+    deBaseLayer* source = layerStack.getLayer(sourceLayer);
     deColorSpace sourceColorSpace = source->getColorSpace();
     switch (sourceColorSpace)
     {
@@ -181,8 +182,13 @@ bool deConversionBWLayer::updateImage()
 {
     logMessage("conversion BW start");
 
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    const deImage& sourceImage = source->getImage();
+/*
+    deBaseLayer* baseLayer = layerStack.getLayer(sourceLayer);
+    deLayer* source = dynamic_cast<deLayer*>(baseLayer);
+    */
+    deBaseLayer* source = layerStack.getLayer(sourceLayer);
+
+    const deImage& sourceImage = source->getLayerImage();
 
     deColorSpace sourceColorSpace = source->getColorSpace();
     int cs = getColorSpaceSize(sourceColorSpace);
@@ -346,7 +352,7 @@ bool deConversionBWLayer::updateImage()
 
 deColorSpace deConversionBWLayer::getSourceColorSpace() const
 {
-    deLayer* source = layerStack.getLayer(sourceLayer);
+    deBaseLayer* source = layerStack.getLayer(sourceLayer);
     return source->getColorSpace();
 }
 

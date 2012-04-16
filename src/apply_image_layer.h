@@ -38,7 +38,7 @@ class deApplyImageLayer:public deActionLayer
         virtual std::string getLabel() const {return "apply image";};
 
     public:
-        deApplyImageLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deApplyImageLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _layerIndex);
         virtual ~deApplyImageLayer();
 
         virtual bool isChannelNeutral(int index);

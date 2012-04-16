@@ -22,17 +22,19 @@
 #include "view_manager.h"
 #include "layer_processor.h"
 #include "layer_frame_manager.h"
+#include "color_space_utils.h"
 
 class deAlphaSlider:public deSlider
 {
     private:
         deActionLayer& layer;
         deLayerProcessor& layerProcessor;
+        int layerIndex;
 
     public:
-        deAlphaSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor)
+        deAlphaSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
         :deSlider(parent, "opacity", range, 0.0, 1.0, 1.0), layer(_layer),
-        layerProcessor(_layerProcessor)
+        layerProcessor(_layerProcessor), layerIndex(_layerIndex)
         {
             setValue(layer.getOpacity());
         }
@@ -45,13 +47,13 @@ class deAlphaSlider:public deSlider
         {
             layer.setOpacity(value);
 
-            int index = layer.getIndex();
-            layerProcessor.markUpdateBlendAllChannels(index);
+//            int index = layer.getIndex();
+            layerProcessor.markUpdateBlendAllChannels(layerIndex);
         }
 };        
 
-deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deLayerFrame(parent, _layer, "blend frame", _frameManager),
+deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deLayerFrame(parent, _layer, "blend frame", _frameManager, _layerIndex),
  layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -85,7 +87,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
     sizer->Add(choice, 0);
 
-    alphaSlider = new deAlphaSlider(this, 100, l, layerProcessor);
+    alphaSlider = new deAlphaSlider(this, 100, l, layerProcessor, layerIndex);
     sizer->Add(alphaSlider, 0);
 
     wxSizer* sizerC = new wxStaticBoxSizer(wxVERTICAL, this,  _T("channels"));
@@ -125,8 +127,8 @@ void deBlendFrame::choose(wxCommandEvent &event)
         int i = event.GetInt();
         deBlendMode& mode = blendModes[i];
         l.setBlendMode(mode);
-        int index = layer.getIndex();
-        layerProcessor.markUpdateBlendAllChannels(index);
+        //int index = layer.getIndex();
+        layerProcessor.markUpdateBlendAllChannels(layerIndex);
     }
     else
     {
@@ -153,8 +155,8 @@ void deBlendFrame::check(wxCommandEvent &event)
                 l.disableChannel(i);
             }
 
-            int l_index = layer.getIndex();   
-            layerProcessor.markUpdateSingleChannel(l_index, i);
+//            int l_index = layer.getIndex();   
+            layerProcessor.markUpdateSingleChannel(layerIndex, i);
 
             return;
         }

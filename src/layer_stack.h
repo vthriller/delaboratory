@@ -24,14 +24,14 @@
 #include <libxml/parser.h>
 #include "mutex.h"
 
-class deLayer;
+class deBaseLayer;
 class deChannelManager;
 class deMemoryInfoFrame;
 
 class deLayerStack
 {
     private:
-        std::vector<deLayer*> layers;
+        std::vector<deBaseLayer*> layers;
         mutable deMutex mutex;
 
         deLayerStack(const deLayerStack& );
@@ -47,10 +47,10 @@ class deLayerStack
         void clear();
         void removeTopLayer();
 
-        void addLayer(deLayer* layer);
+        void addLayer(deBaseLayer* layer);
 
         int getSize() const;
-        deLayer* getLayer(int id) const;
+        deBaseLayer* getLayer(int id) const;
 
         void save(xmlNodePtr node);
 

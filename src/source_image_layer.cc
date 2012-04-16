@@ -26,8 +26,8 @@
 #include "copy_channel.h"
 #include "str.h"
 
-deSourceImageLayer::deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace)
-:deLayer(_colorSpace, _index, -1),
+deSourceImageLayer::deSourceImageLayer(deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace)
+:deBaseLayer(_colorSpace),
 previewChannelManager(_previewChannelManager),
 viewManager(_viewManager),
 image(_colorSpace, _previewChannelManager),
@@ -41,35 +41,6 @@ deSourceImageLayer::~deSourceImageLayer()
 
 bool deSourceImageLayer::updateImage()
 {
-    logMessage("source image layer update image start");
-
-    deChannel* sourceChannelR = sourceImage.getChannel(0);
-    deChannel* sourceChannelG = sourceImage.getChannel(1);
-    deChannel* sourceChannelB = sourceImage.getChannel(2);
-
-    if (!sourceChannelR)
-    {
-        std::cout << "deSourceImageLayer::updateImage !sourceChannelR" << std::endl;
-        return false;
-    }
-
-    logMessage("enabling channels...");
-    image.enableChannel(0);
-    image.enableChannel(1);
-    image.enableChannel(2);
-    logMessage("enabled channels");
-
-    deChannel* channelR = previewChannelManager.getChannel(image.getChannelIndex(0));
-    deChannel* channelG = previewChannelManager.getChannel(image.getChannelIndex(1));
-    deChannel* channelB = previewChannelManager.getChannel(image.getChannelIndex(2));
-
-    sourceChannelR->lockRead();
-    sourceChannelG->lockRead();
-    sourceChannelB->lockRead();
-    channelR->lockWrite();
-    channelG->lockWrite();
-    channelB->lockWrite();
-
     const deSize ss = sourceImage.getSize();
 
     const deSize ds = previewChannelManager.getChannelSize();
@@ -80,55 +51,47 @@ bool deSourceImageLayer::updateImage()
     deValue z_y2;
     viewManager.getZoom(z_x1, z_y1, z_x2, z_y2);
 
-    logMessage("z_x1: " + str(z_x1) + " z_x2: " + str(z_x2) + " z_y1: " + str(z_y1) + " z_y2: " + str(z_y2));
-
     int x1 = ss.getW() * z_x1;
     int y1 = ss.getH() * z_y1;
     int x2 = ss.getW() * z_x2;
     int y2 = ss.getH() * z_y2;
 
-    logMessage("x1: " + str(x1) + " x2: " + str(x2) + " y1: " + str(y1) + " y2: " + str(y2));
-
     int w = ds.getW();
     int h = ds.getH();
 
-    logMessage("w: " + str(w) + " h: " + str(h));
-
     int ws = ss.getW();
+    int nn = ss.getN();
 
-    if (ss == ds)
+    int i;
+    for (i = 0; i < 3; i++)
     {
-        int nn = ss.getN();
-        copyChannel(sourceChannelR->getPixels(), channelR->getPixels(), nn);
-        copyChannel(sourceChannelG->getPixels(), channelG->getPixels(), nn);
-        copyChannel(sourceChannelB->getPixels(), channelB->getPixels(), nn);
+        deChannel* sourceChannel = sourceImage.getChannel(i);
+        image.enableChannel(i);
+        deChannel* channel = previewChannelManager.getChannel(image.getChannelIndex(i));
+        sourceChannel->lockRead();
+        channel->lockWrite();
+        if (ss == ds)
+        {
+            copyChannel(sourceChannel->getPixels(), channel->getPixels(), nn);
+        }
+        else
+        {
+            scaleChannel(sourceChannel->getPixels(), channel->getPixels(), x1, y1, x2, y2, w, h, ws);
+        }
+        sourceChannel->unlockRead();
+        channel->unlockWrite();
     }
-    else
-    {
-        scaleChannel(sourceChannelR->getPixels(), channelR->getPixels(), x1, y1, x2, y2, w, h, ws);
-        scaleChannel(sourceChannelG->getPixels(), channelG->getPixels(), x1, y1, x2, y2, w, h, ws);
-        scaleChannel(sourceChannelB->getPixels(), channelB->getPixels(), x1, y1, x2, y2, w, h, ws);
-    }
-
-    sourceChannelR->unlockRead();
-    sourceChannelG->unlockRead();
-    sourceChannelB->unlockRead();
-    channelR->unlockWrite();
-    channelG->unlockWrite();
-    channelB->unlockWrite();
-
-    logMessage("source image layer update image end");
 
     return true;
 }
 
-const deImage& deSourceImageLayer::getImage() const
+const deImage& deSourceImageLayer::getLayerImage() const
 {
     return image;
 }
  
-void deSourceImageLayer::updateChannelUsage(std::map<int, int>& channelUsage) const
+void deSourceImageLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
 {
-    image.updateChannelUsage(channelUsage, index);
+    image.updateChannelUsage(channelUsage, layerIndex);
 }
 

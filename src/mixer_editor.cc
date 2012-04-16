@@ -22,9 +22,10 @@
 #include "mixer_editor_channel.h"
 #include "layer_processor.h"
 #include "str.h"
+#include "color_space_utils.h"
 
-deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deActionFrame(parent, _layer, _frameManager)
+deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deActionFrame(parent, _layer, _frameManager, _layerIndex)
 {
 
     deMixerLayer& mixerLayer = dynamic_cast<deMixerLayer&>(_layer);
@@ -39,7 +40,7 @@ deMixerEditor::deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerPro
     int i;
     for (i = 0; i < n; i++)
     {
-        deMixerEditorChannel* mixerEditorChannel = new deMixerEditorChannel(this, mixerLayer, i, _layerProcessor);
+        deMixerEditorChannel* mixerEditorChannel = new deMixerEditorChannel(this, mixerLayer, i, _layerProcessor, layerIndex);
         sizer->Add(mixerEditorChannel);
         channels.push_back(mixerEditorChannel);
     }

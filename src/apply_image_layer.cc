@@ -22,9 +22,10 @@
 #include "xml.h"
 #include "str.h"
 #include "frame_factory.h"
+#include "color_space_utils.h"
 
-deApplyImageLayer::deApplyImageLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
+deApplyImageLayer::deApplyImageLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _layerIndex)
+:deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager),
 appliedLayer("applied_layer"),
 applySingleChannel("apply_single_channel")
 {
@@ -32,13 +33,13 @@ applySingleChannel("apply_single_channel")
     applySingleChannel.set(false);
 
     std::vector<std::string>& choices = appliedLayer. getChoices();
-    unsigned int i;
-    for (i = 0; i < index; i++)
+    int i;
+    for (i = 0; i < _layerIndex; i++)
     {
         choices.push_back(str(i));
     }
 
-    appliedLayer.setIndex(index - 1);
+    appliedLayer.setIndex(_layerIndex - 1);
 
 }
 
@@ -49,12 +50,18 @@ deApplyImageLayer::~deApplyImageLayer()
 bool deApplyImageLayer::processAction(int i)
 {
     int a = getInt(appliedLayer.get());
-    deLayer* applied = layerStack.getLayer(a);
+
+/*
+    deBaseLayer* baseLayer = layerStack.getLayer(a);
+    deLayer* applied = dynamic_cast<deLayer*>(baseLayer);
+    */
+    deBaseLayer* applied = layerStack.getLayer(a);
+
     if (!applied)
     {
         return false;
     }
-    const deImage& appliedImage = applied->getImage();
+    const deImage& appliedImage = applied->getLayerImage();
     int n = getColorSpaceSize(appliedImage.getColorSpace());
 
     int c = -1 ;
@@ -83,12 +90,16 @@ bool deApplyImageLayer::processAction(int i)
 deColorSpace deApplyImageLayer::getAppliedColorSpace()
 {
     int a = getInt(appliedLayer.get());
-    deLayer* applied = layerStack.getLayer(a);
+    /*
+    deBaseLayer* baseLayer = layerStack.getLayer(a);
+    deLayer* applied = dynamic_cast<deLayer*>(baseLayer);
+    */
+    deBaseLayer* applied = layerStack.getLayer(a);
     if (!applied)
     {
         return deColorSpaceInvalid;
     }
-    const deImage& appliedImage = applied->getImage();
+    const deImage& appliedImage = applied->getLayerImage();
     return appliedImage.getColorSpace();
 }
 

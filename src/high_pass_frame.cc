@@ -22,8 +22,8 @@
 #include "property_value_slider.h"
 #include "layer_processor.h"
 
-deHighPassFrame::deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
+deHighPassFrame::deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -41,7 +41,7 @@ deHighPassFrame::deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLaye
         dePropertyValue* p = highPassLayer.getPropertyValue(i);
         if (p)
         {
-            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, highPassLayer, layerProcessor);
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, highPassLayer, layerProcessor, layerIndex);
             valueSliders.push_back(s);
             sizer->Add(s);
         }            
@@ -84,6 +84,6 @@ void deHighPassFrame::click(wxCommandEvent &event)
         (*j)->setFromProperty();
     }
 
-    int index = layer.getIndex();
-    layerProcessor.markUpdateAllChannels(index);
+    //int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(layerIndex);
 }   

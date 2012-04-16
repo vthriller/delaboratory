@@ -21,9 +21,10 @@
 #include "property_value_slider.h"
 #include "layer_processor.h"
 #include "layer_frame_manager.h"
+#include "color_space_utils.h"
 
-deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deLayerFrame(parent, _layer, "conversion BW", _frameManager), layer( _layer), layerProcessor(_layerProcessor)
+deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deLayerFrame(parent, _layer, "conversion BW", _frameManager, _layerIndex), layer( _layer), layerProcessor(_layerProcessor)
 {
     frameManager.addActionFrame(this);
 
@@ -38,18 +39,18 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
     wxSizer* sizerM = new wxStaticBoxSizer(wxVERTICAL, this,  _T("monochrome mixer"));
     sizer->Add(sizerM);
 
-    add0 = new dePropertyValueSlider(this, range, layer.getAdd0(), layer, layerProcessor);
+    add0 = new dePropertyValueSlider(this, range, layer.getAdd0(), layer, layerProcessor, layerIndex);
     sizerM->Add(add0);
 
-    add1 = new dePropertyValueSlider(this, range, layer.getAdd1(), layer, layerProcessor);
+    add1 = new dePropertyValueSlider(this, range, layer.getAdd1(), layer, layerProcessor, layerIndex);
     sizerM->Add(add1);
 
-    add2 = new dePropertyValueSlider(this, range, layer.getAdd2(), layer, layerProcessor);
+    add2 = new dePropertyValueSlider(this, range, layer.getAdd2(), layer, layerProcessor, layerIndex);
     sizerM->Add(add2);
 
     if (cs == 4)
     {
-        add3 = new dePropertyValueSlider(this, range, layer.getAdd3(), layer, layerProcessor);
+        add3 = new dePropertyValueSlider(this, range, layer.getAdd3(), layer, layerProcessor, layerIndex);
         sizerM->Add(add3);
     }        
 
@@ -73,18 +74,18 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
     wxSizer* sizerO = new wxStaticBoxSizer(wxVERTICAL, this,  _T("overlay"));
     sizer->Add(sizerO);
 
-    overlay0 = new dePropertyValueSlider(this, range, layer.getOverlay0(), layer, layerProcessor);
+    overlay0 = new dePropertyValueSlider(this, range, layer.getOverlay0(), layer, layerProcessor, layerIndex);
     sizerO->Add(overlay0);
 
-    overlay1 = new dePropertyValueSlider(this, range, layer.getOverlay1(), layer, layerProcessor);
+    overlay1 = new dePropertyValueSlider(this, range, layer.getOverlay1(), layer, layerProcessor, layerIndex);
     sizerO->Add(overlay1);
 
-    overlay2 = new dePropertyValueSlider(this, range, layer.getOverlay2(), layer, layerProcessor);
+    overlay2 = new dePropertyValueSlider(this, range, layer.getOverlay2(), layer, layerProcessor, layerIndex);
     sizerO->Add(overlay2);
 
     if (cs == 4)
     {
-        overlay3 = new dePropertyValueSlider(this, range, layer.getOverlay3(), layer, layerProcessor);
+        overlay3 = new dePropertyValueSlider(this, range, layer.getOverlay3(), layer, layerProcessor, layerIndex);
         sizerO->Add(overlay3);
     }        
 
@@ -165,7 +166,7 @@ void deMixerBWEditor::click(wxCommandEvent &event)
         add3->setFromProperty();
     }        
 
-    int index = layer.getIndex();
-    layerProcessor.markUpdateAllChannels(index);
+    //int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(layerIndex);
 
 }

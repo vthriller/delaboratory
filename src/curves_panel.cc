@@ -22,6 +22,7 @@
 #include "layer_processor.h"
 #include "logger.h"
 #include "channels.h"
+#include "color_space_utils.h"
 
 wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
 {
@@ -73,11 +74,12 @@ BEGIN_EVENT_TABLE(deCurvesPanel, wxPanel)
 EVT_PAINT(deCurvesPanel::paintEvent)
 END_EVENT_TABLE()
 
-deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, deLayerProcessor& _layerProcessor)
+deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(CURVES_PANEL_SIZE_X, CURVES_PANEL_SIZE_Y)),
 sizeX(CURVES_PANEL_SIZE_X), sizeY(CURVES_PANEL_SIZE_Y), layer(_layer), 
-layerProcessor(_layerProcessor)
+layerProcessor(_layerProcessor), layerIndex(_layerIndex)
 {
+    logMessage("creating curves panel... ");
     SetFocus();
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deCurvesPanel::click));
     Connect(wxEVT_LEFT_UP, wxMouseEventHandler(deCurvesPanel::release));
@@ -91,6 +93,7 @@ layerProcessor(_layerProcessor)
     clickPosition = -1;
 
     generateBackground();
+    logMessage("created... ");
 }
 
 deCurvesPanel::~deCurvesPanel()
@@ -100,18 +103,23 @@ deCurvesPanel::~deCurvesPanel()
 
 void deCurvesPanel::generateBackground()
 {
+    logMessage("gb1");
+
     if (backgroundBitmap)
     {
         delete backgroundBitmap;
     }
 
     deHistogram histogram(CURVES_PANEL_SIZE_X);
+    logMessage("gb2");
 
     deChannel* c = layer.getSourceChannel(channel);
     int n = layer.getChannelSize().getN();
+    logMessage("gb3");
 
     histogram.clear();
     histogram.calc(c, n);
+    logMessage("gb4");
 
     wxImage* image = new wxImage(sizeX, sizeY);
     unsigned char* data = image->GetData();
@@ -120,6 +128,7 @@ void deCurvesPanel::generateBackground()
     unsigned char g2 = 120;
 
     histogram.render(data, sizeX, sizeY, g1, g2);
+    logMessage("gb5");
 
     backgroundBitmap = new wxBitmap(*image);
     delete image;
@@ -373,8 +382,8 @@ void deCurvesPanel::update(bool finished)
     paint();
     if ((finished) || (layerProcessor.isRealtime()))
     {
-        int index = layer.getIndex();
-        layerProcessor.markUpdateSingleChannel(index, channel);
+//        int index = layer.getIndex();
+        layerProcessor.markUpdateSingleChannel(layerIndex, channel);
     }
 }
 

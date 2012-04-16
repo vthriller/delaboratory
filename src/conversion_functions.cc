@@ -21,6 +21,7 @@
 #include "hsl_hsv.h"
 #include "cmyk.h"
 #include "bw.h"
+#include <string>
 
 void copy(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3)
 {

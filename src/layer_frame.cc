@@ -19,10 +19,11 @@
 #include "layer_frame.h"
 #include "action_layer.h"
 
-deLayerFrame::deLayerFrame(wxWindow *parent, deLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager)
+deLayerFrame::deLayerFrame(wxWindow *parent, deLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex)
 :deFrame(parent, name),
 layer(_layer),
-frameManager(_frameManager)
+frameManager(_frameManager),
+layerIndex(_layerIndex)
 {
 }
 
@@ -32,7 +33,7 @@ deLayerFrame::~deLayerFrame()
 
 bool deLayerFrame::checkIndex(int index)
 {
-    if (layer.getIndex() == index)
+    if (layerIndex == index)
     {
         return true;
     }

@@ -87,10 +87,11 @@ void deHistogramPanel::generateHistogram()
         view = viewV;
     }
 
-    deLayer* layer = layerStack.getLayer(view);
+    deBaseLayer* layer = layerStack.getLayer(view);
+
     if (layer)
     {
-        const deImage& image = layer->getImage();
+        const deImage& image = layer->getLayerImage();
         int channelIndex = image.getChannelIndex(channel);
 
         logMessage("generate histogram for channel " + str(channelIndex));

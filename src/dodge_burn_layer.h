@@ -43,7 +43,7 @@ class deDodgeBurnLayer:public deActionLayer
         virtual std::string getLabel() const {return "dodge / burn";};
 
     public:
-        deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deDodgeBurnLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deDodgeBurnLayer();
 
         virtual bool isChannelNeutral(int index);

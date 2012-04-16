@@ -21,6 +21,7 @@
 
 #include <wx/wx.h>
 #include "color_space.h"
+#include "value.h"
 class dePalette3;
 
 class deColorPanel:public wxPanel

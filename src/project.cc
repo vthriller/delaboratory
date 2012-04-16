@@ -48,6 +48,7 @@
 #include "static_image.h"
 #include "raw_module.h"
 #include "zoom_manager.h"
+#include "color_space_utils.h"
 
 #define ICC_MESSAGE 0
 
@@ -201,11 +202,11 @@ void deProject::resetLayerStack(deColorSpace colorSpace)
 
     layerProcessor.removeAllLayers();
 
-    deLayer* layer = createLayer("source_image", -1, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
+    deBaseLayer* layer = createLayer("original", -1, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
 
     if (layer)
     {
-        layerProcessor.addLayer(layer);
+        layerProcessor.addLayer(layer, 0);
     }        
 
     previewChannelManager.destroyAllChannels();
@@ -363,8 +364,8 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
     if (result)
     {
         // take the final image
-        deLayer* layer = layerStack.getLayer(view);
-        const deImage& image = layer->getImage();
+        deBaseLayer* layer = layerStack.getLayer(view);
+        const deImage& image = layer->getLayerImage();
 
         // save it
         saveImage(fileName, image, type);
@@ -444,14 +445,14 @@ void deProject::save(const std::string& fileName, bool image)
 
         if (image)
         {
-            saveChild(root, "source_image", sourceImageFileName);
+            saveChild(root, "original", sourceImageFileName);
         }
     }
 
     xmlSaveFormatFile (f.c_str(), doc, 1); 
 }
 
-void deProject::loadLayer(xmlNodePtr root)
+void deProject::loadLayer(xmlNodePtr root, int layerIndex)
 {
     xmlNodePtr child = root->xmlChildrenNode;
 
@@ -489,11 +490,11 @@ void deProject::loadLayer(xmlNodePtr root)
         child = child->next;
     }
        
-    deLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
+    deBaseLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
 
     if (layer)
     {
-        layerProcessor.addLayer(layer);
+        layerProcessor.addLayer(layer, layerIndex);
         layer->load(root);
     }        
 
@@ -506,11 +507,14 @@ void deProject::loadLayers(xmlNodePtr root)
 
     xmlNodePtr child = root->xmlChildrenNode;
 
+    int layerIndex = 0;
+
     while (child)
     {
         if ((!xmlStrcmp(child->name, BAD_CAST("layer")))) 
         {
-            loadLayer(child);
+            loadLayer(child, layerIndex);
+            layerIndex++;
         }
 
         child = child->next;
@@ -547,7 +551,7 @@ void deProject::open(const std::string& fileName, bool image)
             loadLayers(child);
         }
 
-        if ((!xmlStrcmp(child->name, BAD_CAST("source_image")))) 
+        if ((!xmlStrcmp(child->name, BAD_CAST("original")))) 
         {
             imageFile = getContent(child);
         }
@@ -702,9 +706,12 @@ void deProject::log(const std::string& message)
 
 void deProject::addActionLayer(const std::string& action)
 {
+    int layerIndex = layerStack.getSize();
+
     int s = viewManager.getView();
 
-    deLayer* vLayer = layerStack.getLayer(s);
+    deBaseLayer* vLayer = layerStack.getLayer(s);
+
     if (!vLayer)
     {
         return;
@@ -716,11 +723,11 @@ void deProject::addActionLayer(const std::string& action)
 
     log("creating action " + action + " layer");
 
-    deLayer* layer = createLayer(action, s, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
+    deBaseLayer* layer = createLayer(action, s, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
 
     if (layer)
     {
-        layerProcessor.addLayer(layer);
+        layerProcessor.addLayer(layer, layerIndex);
         setLastView();
 
         if (controlPanel)
@@ -732,17 +739,18 @@ void deProject::addActionLayer(const std::string& action)
 
 void deProject::addConversionLayer(deColorSpace colorSpace)
 {
+    int layerIndex = layerStack.getSize();
     int s = viewManager.getView();
 
     std::string name = getColorSpaceName(colorSpace);
 
     log("creating conversion to " + name + " layer");
 
-    deLayer* layer = createLayer("conversion", s, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
+    deBaseLayer* layer = createLayer("conversion", s, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
 
     if (layer)
     {
-        layerProcessor.addLayer(layer);
+        layerProcessor.addLayer(layer, layerIndex);
         setLastView();
 
         if (controlPanel)

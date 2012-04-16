@@ -51,7 +51,9 @@ void deLayerGridPanel::buildRows()
     for (i = n-1; i >=0; i--)
     {
         project.log("build rows i=" + str(i));
-        deLayer* layer = layerStack.getLayer(i);
+
+        deBaseLayer* baseLayer = layerStack.getLayer(i);
+        deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
 
         layerRows.push_back(deLayerRow(i));
         deLayerRow& row = layerRows.back();
@@ -71,15 +73,14 @@ void deLayerGridPanel::buildRows()
         row.view = new wxRadioButton(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, style);
         gridSizer->Add(row.view, 0, wxALIGN_CENTER);
 
-/*
-        row.name = new wxStaticText(this, wxID_ANY, wxString::FromAscii(layer->getName().c_str()), wxDefaultPosition, wxSize(100, -1));
-        gridSizer->Add(row.name, 0, wxALIGN_CENTER);
-        */
-
-        std::string action = layer->getActionName();
+        std::string action = "";
+        if (layer)
+        {
+            action = layer->getActionName();
+        }            
 
         row.action = new wxButton(this, wxID_ANY, wxString::FromAscii(action.c_str()), wxDefaultPosition, wxSize(160,25));
-        if (layer->hasAction())
+        if ((layer) && (layer->hasAction()))
         {
             gridSizer->Add(row.action, 0);
         }
@@ -90,7 +91,7 @@ void deLayerGridPanel::buildRows()
         }
 
         row.blend = new wxButton(this, wxID_ANY, _T("b"), wxDefaultPosition, wxSize(20,25));
-        if (layer->hasBlending())
+        if ((layer) && (layer->hasBlending()))
         {
             gridSizer->Add(row.blend, 0);
         }
@@ -101,11 +102,12 @@ void deLayerGridPanel::buildRows()
         }
 
         row.enabled = new wxCheckBox(this, wxID_ANY, _T(""));
-        if (layer->isEnabled())
+        if ((layer) && (layer->isEnabled()))
         {
             row.enabled->SetValue(true);
         }
-        if (layer->canDisable())
+
+        if ((layer) && (layer->canDisable()))
         {
             gridSizer->Add(row.enabled, 0, wxALIGN_CENTER);
         }
@@ -192,7 +194,10 @@ void deLayerGridPanel::check(wxCommandEvent &event)
         if (row.enabled->GetId() == id)
         {
             deLayerStack& layerStack = project.getLayerStack();
-            deLayer* layer = layerStack.getLayer(row.index);
+
+            deBaseLayer* baseLayer = layerStack.getLayer(row.index);
+            deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
+
             layer->setEnabled(checked);
             int index = row.index;
             layerProcessor.markUpdateAllChannels(index);
@@ -229,18 +234,21 @@ void deLayerGridPanel::click(wxCommandEvent &event)
         const deLayerRow& row = *i;
         if (row.action->GetId() == id)
         {
+            int layerIndex = row.index;
             project.log("new action frame requested in row " + str(row.index));
-            deLayer* layer = layerStack.getLayer(row.index);
 
-            //if (!layer->checkActionFrame())
+/*
+            deBaseLayer* baseLayer = layerStack.getLayer(row.index);
+            deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
+            */
+            deBaseLayer* layer = layerStack.getLayer(row.index);
+
             if (!project.getLayerFrameManager().checkActionFrame(row.index))
             {
                 project.log("creating action frame");
-                deFrame* actionFrame = createFrame(this, *layer, layerProcessor, frameManager);
+                deFrame* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex);
                 if (actionFrame)
                 {
-//                    project.getLayerFrameManager().addActionFrame(actionFrame);
-//                    layer->setActionFrame(actionFrame);
                     project.log("created action frame");
                     actionFrame->Show(true);
                 }
@@ -249,19 +257,18 @@ void deLayerGridPanel::click(wxCommandEvent &event)
         }
         if (row.blend->GetId() == id)
         {
+            int layerIndex = row.index;
             project.log("new blend frame requested in row " + str(row.index));
 
-            deLayer* layer = layerStack.getLayer(row.index);
+            deBaseLayer* baseLayer = layerStack.getLayer(row.index);
+            deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
             deActionLayer* al = dynamic_cast<deActionLayer*>(layer);
-            //if (!layer->checkBlendFrame())
             if (!frameManager.checkBlendFrame(row.index))
             {
                 project.log("creating blend frame");
-                deBlendFrame* blendFrame = new deBlendFrame(this, *al, layerProcessor, frameManager);
+                deBlendFrame* blendFrame = new deBlendFrame(this, *al, layerProcessor, frameManager, layerIndex);
                 if (blendFrame)
                 {
-                    //layer->setBlendFrame(blendFrame);
-  //                  frameManager.addBlendFrame(blendFrame);
                     project.log("created blend frame");
                     blendFrame->Show(true);
                 }

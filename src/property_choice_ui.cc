@@ -21,11 +21,12 @@
 #include "layer.h"
 #include "layer_processor.h"
 
-dePropertyChoiceUI::dePropertyChoiceUI(wxWindow *parent, dePropertyChoice& _property, deLayer& _layer, deLayerProcessor& _layerProcessor)
+dePropertyChoiceUI::dePropertyChoiceUI(wxWindow *parent, dePropertyChoice& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
 :deChoice(parent, _property.getLabel(), _property.getChoices()),
 property(_property),
 layer(_layer),
-layerProcessor(_layerProcessor)
+layerProcessor(_layerProcessor),
+layerIndex(_layerIndex)
 {
     setFromProperty();
 }
@@ -38,8 +39,8 @@ void dePropertyChoiceUI::onChoose(int c)
 {
     property.setIndex(c);
 
-    int index = layer.getIndex();
-    layerProcessor.markUpdateAllChannels(index);
+    //int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(layerIndex);
 }
 
 void dePropertyChoiceUI::setFromProperty()

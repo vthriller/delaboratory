@@ -16,9 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "color_space.h"
-
-/*
+#include "color_space_utils.h"
 #include "channels.h"
 
 int getEqualizerChannel(deColorSpace colorSpace)
@@ -427,4 +425,3 @@ bool isActionSupported(const std::string& action, deColorSpace colorSpace)
     }
     return true;
 }
-*/

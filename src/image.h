@@ -20,6 +20,7 @@
 #define _DE_IMAGE_H
 
 #include "color_space.h"
+#include "value.h"
 #include <map>
 class deChannelManager;
 
@@ -27,13 +28,12 @@ class deImage
 {
     private:
         const deColorSpace colorSpace;
-        int channelsVisible[4];
-        int channelsAllocated[4];
+        int channelsVisible[MAX_COLOR_SPACE_SIZE];
+        int channelsAllocated[MAX_COLOR_SPACE_SIZE];
         deChannelManager& channelManager;
 
         deImage(const deImage& i);
         deImage& operator = (const deImage& i);
-
 
     public:
         deImage(const deColorSpace& _colorSpace, deChannelManager& _channelManager);
@@ -51,8 +51,6 @@ class deImage
         void enableAllChannels();
 
         void updateChannelUsage(std::map<int, int>& channelUsage, int index) const;
-
-        bool getPixel(int channel, int p, deValue& result) const;
 
         void lockRead() const;
         void unlockRead() const;

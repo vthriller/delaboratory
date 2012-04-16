@@ -20,6 +20,7 @@
 #define _DE_APPLY_IMAGE_FRAME_H
 
 #include "action_frame.h"
+#include "color_space.h"
 class dePropertyChoiceUI;
 class dePropertyBooleanUI;
 class deLayerProcessor;
@@ -30,7 +31,7 @@ class deApplyImageFrame:public deActionFrame
         dePropertyChoiceUI* appliedLayer;
         dePropertyBooleanUI* applySingleChannel;
         wxChoice* layerChoice;
-        wxRadioButton* channels[4];
+        wxRadioButton* channels[MAX_COLOR_SPACE_SIZE];
         deLayerProcessor& layerProcessor;
 
         void select(wxCommandEvent &event);
@@ -38,7 +39,7 @@ class deApplyImageFrame:public deActionFrame
         void setChannels();
 
     public:
-        deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
+        deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deApplyImageFrame();
 
         virtual void onUpdateProperties();

@@ -30,9 +30,10 @@ class dePropertyChoiceUI:public deChoice
         dePropertyChoice& property;
         deLayer& layer;
         deLayerProcessor& layerProcessor;
+        int layerIndex;
 
     public:
-        dePropertyChoiceUI(wxWindow *parent, dePropertyChoice& _property, deLayer& _layer, deLayerProcessor& _layerProcessor);
+        dePropertyChoiceUI(wxWindow *parent, dePropertyChoice& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex);
         virtual ~dePropertyChoiceUI();
 
         virtual void onChoose(int c);

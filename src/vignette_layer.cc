@@ -25,8 +25,8 @@
 #include "frame_factory.h"
 #include "layer_processor.h"
 
-deVignetteLayer1::deVignetteLayer1(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deVignetteLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager, 1)
+deVignetteLayer1::deVignetteLayer1(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deVignetteLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager, 1)
 {
 }
 
@@ -35,8 +35,8 @@ deVignetteLayer1::~deVignetteLayer1()
 {
 }
 
-deVignetteLayer2::deVignetteLayer2(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deVignetteLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager, 2)
+deVignetteLayer2::deVignetteLayer2(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deVignetteLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager, 2)
 {
 }
 
@@ -45,8 +45,8 @@ deVignetteLayer2::~deVignetteLayer2()
 {
 }
 
-deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _vignettes)
-:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
+deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _vignettes)
+:deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager),
  vignettes(_vignettes)
 {
     lightIndex = registerPropertyValue("light");
@@ -230,8 +230,8 @@ void deVignetteLayer::reset()
 
     if (colorSpace == deColorSpaceCMYK)
     {
-        light->set(0.2);
-        darkness->set(1.0);
+        light->set(0.0);
+        darkness->set(0.8);
     }
     else
     {

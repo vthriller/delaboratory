@@ -22,7 +22,6 @@
 #include "size.h"
 #include "value.h"
 
-//void copyChannel(const deValue* src, deValue* dst, const deSize& size);
 void copyChannel(const deValue* src, deValue* dst, int n);
 
 #endif

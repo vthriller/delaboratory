@@ -27,8 +27,8 @@
 #include "layer_processor.h"
 #include "logger.h"
 
-deConversionBW2HueLayer::deConversionBW2HueLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deColorSpace _colorSpace)
-:deConversionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager),
+deConversionBW2HueLayer::deConversionBW2HueLayer(int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deColorSpace _colorSpace)
+:deConversionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager),
 hue("hue"), saturation("saturation")
 {
     reset();
@@ -63,8 +63,13 @@ bool deConversionBW2HueLayer::updateImage()
 {
     logMessage("conversion start");
 
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    const deImage& sourceImage = source->getImage();
+/*
+    deBaseLayer* baseLayer = layerStack.getLayer(sourceLayer);
+    deLayer* source = dynamic_cast<deLayer*>(baseLayer);
+    */
+    deBaseLayer* source = layerStack.getLayer(sourceLayer);
+
+    const deImage& sourceImage = source->getLayerImage();
 
     image.enableAllChannels();
     convertImage(sourceImage, image, channelManager);

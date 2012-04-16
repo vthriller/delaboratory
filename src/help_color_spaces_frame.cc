@@ -19,6 +19,7 @@
 #include "help_color_spaces_frame.h"
 #include "color_space.h"
 #include "gradient_panel.h"
+#include "color_space_utils.h"
 
 deHelpColorSpacesFrame::deHelpColorSpacesFrame(wxWindow *parent)
 :deHelpFrame(parent, "channels")

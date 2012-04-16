@@ -60,7 +60,6 @@ class deChannelManager
 
         deChannel* getChannel(int index);
 
-
         int getNumberOfAllocatedChannels() const;
 
         void setPrimary(int index);

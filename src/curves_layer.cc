@@ -26,8 +26,10 @@
 
 #include "str.h"
 
-deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer( _colorSpace, _index, _sourceLayer, _layerStack,  _channelManager, _viewManager) 
+#include "color_space_utils.h"
+
+deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer( _colorSpace,  _sourceLayer, _layerStack,  _channelManager, _viewManager) 
 {
     int n = getColorSpaceSize(colorSpace);
     curves = new deCurve[n];

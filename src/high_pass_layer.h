@@ -33,7 +33,7 @@ class deHighPassLayer:public deActionLayer
         virtual std::string getLabel() const {return "high pass";};
 
     public:
-        deHighPassLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deHighPassLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deHighPassLayer();
 
         virtual bool isChannelNeutral(int index);

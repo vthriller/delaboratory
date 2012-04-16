@@ -30,6 +30,7 @@
 #include "xml.h"
 #include "blend_channel.h"
 #include "logger.h"
+#include "color_space_utils.h"
 
 class deUpdateActionThread:public wxThread
 {
@@ -206,8 +207,8 @@ bool deActionLayer::updateImageInActionLayer(bool action, bool blend, int channe
 }
 
 
-deActionLayer::deActionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayer(_colorSpace, _index, _sourceLayer),
+deActionLayer::deActionLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deLayer(_colorSpace, _sourceLayer),
  layerStack(_layerStack),
  channelManager(_channelManager),
  viewManager(_viewManager),
@@ -258,8 +259,9 @@ void deActionLayer::disableNotForSharpen()
 
 const deImage& deActionLayer::getSourceImage() const
 {
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    const deImage& sourceImage = source->getImage();
+    deBaseLayer* source = layerStack.getLayer(sourceLayer);
+
+    const deImage& sourceImage = source->getLayerImage();
     return sourceImage;
 }
 
@@ -283,12 +285,13 @@ deSize deActionLayer::getChannelSize() const
     return channelManager.getChannelSize();
 }
 
-const deImage& deActionLayer::getImage() const
+const deImage& deActionLayer::getLayerImage() const
 {
     if (!enabled)
     {
-        deLayer* source = layerStack.getLayer(sourceLayer);
-        const deImage& sourceImage = source->getImage();
+        deBaseLayer* source = layerStack.getLayer(sourceLayer);
+
+        const deImage& sourceImage = source->getLayerImage();
         return sourceImage;
     }
 
@@ -314,14 +317,14 @@ bool deActionLayer::updateBlend(int i)
         return true;
     }
 
-    deLayer* source = layerStack.getLayer(sourceLayer);
+    deBaseLayer* source = layerStack.getLayer(sourceLayer);
     
     if (!source)
     {
         return false;
     }
 
-    const deImage& sourceImage = source->getImage();
+    const deImage& sourceImage = source->getLayerImage();
 
     int channelSize = channelManager.getChannelSize().getN();
 
@@ -435,11 +438,11 @@ bool deActionLayer::updateAction(int i)
 
     logMessage("update action 2 i:" +str(i));
 
-    deLayer* source = layerStack.getLayer(sourceLayer);
+    deBaseLayer* source = layerStack.getLayer(sourceLayer);
 
     logMessage("update action 3 i:" +str(i));
 
-    const deImage& sourceImage = source->getImage();
+    const deImage& sourceImage = source->getLayerImage();
 
     int channelSize = channelManager.getChannelSize().getN();
 
@@ -558,22 +561,23 @@ bool deActionLayer::updateAction(int i)
 
 }
 
-void deActionLayer::updateChannelUsage(std::map<int, int>& channelUsage) const
+void deActionLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
 {
     if (!enabled)
     {
         return;
     }
 
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    const deImage& sourceImage = source->getImage();
-    sourceImage.updateChannelUsage(channelUsage, index);
+    deBaseLayer* source = layerStack.getLayer(sourceLayer);
 
-    imageActionPass.updateChannelUsage(channelUsage, index);
+    const deImage& sourceImage = source->getLayerImage();
+    sourceImage.updateChannelUsage(channelUsage, layerIndex);
+
+    imageActionPass.updateChannelUsage(channelUsage, layerIndex);
 
     if (isBlendingEnabled())
     {
-        imageBlendPass.updateChannelUsage(channelUsage, index);
+        imageBlendPass.updateChannelUsage(channelUsage, layerIndex);
     }
 }
 
@@ -665,19 +669,19 @@ bool deActionLayer::fullProcessing()
         return true;
     }
 
-    deLayer* source = layerStack.getLayer(sourceLayer);
+    deBaseLayer* source = layerStack.getLayer(sourceLayer);
 
-    const deImage& sourceImage = source->getImage();
+    const deImage& sourceImage = source->getLayerImage();
 
     int channelSize = channelManager.getChannelSize().getN();
 
-    int s[4];
-    deChannel* sc[4];
-    int d[4];
-    deChannel* dc[4];
+    int s[MAX_COLOR_SPACE_SIZE];
+    deChannel* sc[MAX_COLOR_SPACE_SIZE];
+    int d[MAX_COLOR_SPACE_SIZE];
+    deChannel* dc[MAX_COLOR_SPACE_SIZE];
 
-    deValue* sp[4];
-    deValue* dp[4];
+    deValue* sp[MAX_COLOR_SPACE_SIZE];
+    deValue* dp[MAX_COLOR_SPACE_SIZE];
 
     int n = getColorSpaceSize(colorSpace);
     int i;

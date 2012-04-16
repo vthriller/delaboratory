@@ -25,6 +25,7 @@
 #include <sstream>
 #include "channel_manager.h"
 #include "layer_stack.h"
+#include "color_space_utils.h"
 
 deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject& _project)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition), sampler(_sampler), project(_project)
@@ -121,14 +122,19 @@ void deSamplerPanel::update()
     int view = viewManager.getView();
 
     deLayerStack& layerStack = project.getLayerStack();
-    deLayer* layer = layerStack.getLayer(view);
+
+/*
+    deBaseLayer* baseLayer = layerStack.getLayer(view);
+    deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
+    */
+    deBaseLayer* layer = layerStack.getLayer(view);
 
     if (!layer)
     {
         return;
     }
 
-    const deImage& image = layer->getImage();
+    const deImage& image = layer->getLayerImage();
 
     deChannelManager& channelManager = project.getPreviewChannelManager();
     deSize channelSize = channelManager.getChannelSize();

@@ -66,7 +66,7 @@ class deConversionBWLayer:public deConversionLayer
 
         virtual std::string getType() const {return "conversion_bw";};
     public:
-        deConversionBWLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, int n);
+        deConversionBWLayer(int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, int n);
         virtual ~deConversionBWLayer();
 
         virtual bool updateImage();

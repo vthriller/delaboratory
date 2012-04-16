@@ -28,8 +28,8 @@
 #include "process_linear.h"
 #include "layer_processor.h"
 
-deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer( _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
+deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer( _colorSpace,  _sourceLayer, _layerStack, _channelManager, _viewManager)
 {
     blurRadiusIndex = registerPropertyValue("blur_radius");
     shadowsHighlightsAmountIndex = registerPropertyValue("shadows_highlights_amount");
