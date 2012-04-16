@@ -1,20 +1,34 @@
 #summary Operations planned for 0.8
 
-most important set of operation planned for delaboratory 0.8
+typical workflows:
+  * RAW -> ProPhoto -> CMYK -> LAB -> sRGB 
+  * RAW -> ProPhoto -> CMYK -> sRGB -> BW
+  * RAW -> ProPhoto -> LAB -> sRGB
+  * RAW -> ProPhoto -> sRGB
+  * RAW -> ProPhoto -> BW
+  * RAW -> ProPhoto -> HSV/HSL/LCH -> sRGB
 
-typical workflow:
+operations:
+  * original image in ProPhoto RGB 
+  * apply green channel in luminance mode
+  * low contrast or shadows/highlights in ProPhoto 
+  * CMYK curves / CMYK levels
+  * White Balance in LAB
+  * exposure (brightness, contrast) in LAB and BW
+  * saturation in LAB 
+  * vignette in LAB and BW
+  * local contrast (USM hiraloam) in LAB and BW (maybe also in CMYK/RGB)
+  * sharpening (USM) in LAB, BW, CMYK (and maybe in RGB)
+  * dodge/burn in LAB and BW
+  * predefined RGB curves like cross processing
+  * RGB -> BW mixer
+  * high pass (monochrome) in LAB/BW/RGB/CMYK
+  * equalizer in HSV/HSL/LCH
+  * hue shift in HSV/HSL/LCH
 
-  * set WB with single mouse click on gray area (set A and B in LAB to 0.0)
-  * apply green channel in luminance mode (apply GREEN in RGB, use luminance mode)
-  * RGB curves
-  * vignette (on L channel in LAB)
-  * USM (in RGB)
 
-additional steps:
 
-  * dodge/burn on L channel in LAB
-  * CMYK curves
-  * luminance curve (L in LAB)
-  * saturation slider (AB in LAB)
 
-these operations should be quickly available for user  
+
+
+
