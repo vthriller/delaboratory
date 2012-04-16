@@ -82,7 +82,7 @@ class deProject
         void onImageNameUpdate();
 
         void loadLayers(xmlNodePtr root);
-        void loadLayer(xmlNodePtr root);
+        void loadLayer(xmlNodePtr root, int layerIndex);
 
         void freeImage();
 

@@ -23,13 +23,14 @@
 #include <iostream>
 #include "histogram_panel.h"
 #include "layer_processor.h"
+#include "color_space_utils.h"
 
 void deHistogramModePanel::select(wxCommandEvent &event)
 {
     int i = event.GetId();
 
     int j;
-    for (j = 0; j < 4; j++)
+    for (j = 0; j < MAX_COLOR_SPACE_SIZE; j++)
     {
         if (buttons[j]->GetId() == i)
         {
@@ -49,7 +50,7 @@ deHistogramModePanel::deHistogramModePanel(wxWindow* parent, deProject& _project
     SetSizer(sizer);
 
     int i;
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < MAX_COLOR_SPACE_SIZE; i++)
     {
         int style = 0;
         if (i == 0)
@@ -80,7 +81,7 @@ void deHistogramModePanel::updateNames()
 
     int i;
     int n = getColorSpaceSize(colorSpace);
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < MAX_COLOR_SPACE_SIZE; i++)
     {
         wxRadioButton* b = buttons[i];
         if (i < n)
@@ -102,7 +103,7 @@ void deHistogramModePanel::updateNames()
 
 void deHistogramModePanel::updateMode(int c)
 {
-    if ((c < 0) || (c >= 4))
+    if ((c < 0) || (c >= MAX_COLOR_SPACE_SIZE))
     {
         return;
     }

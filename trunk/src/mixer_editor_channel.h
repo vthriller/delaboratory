@@ -34,6 +34,8 @@ class deMixerEditorChannel:public wxPanel
 
         deLayerProcessor& layerProcessor;
 
+        int layerIndex;
+
         wxButton* reset;
         wxButton* app1;
         wxButton* app2;
@@ -46,7 +48,7 @@ class deMixerEditorChannel:public wxPanel
         void preset2(deValue a, deValue b, deValue c);
 
     public:
-        deMixerEditorChannel(wxWindow *parent, deMixerLayer& _layer, int _index, deLayerProcessor& _layerProcessor);
+        deMixerEditorChannel(wxWindow *parent, deMixerLayer& _layer, int _index, deLayerProcessor& _layerProcessor, int _layerIndex);
         virtual ~deMixerEditorChannel();
 
         void random(deValue a);

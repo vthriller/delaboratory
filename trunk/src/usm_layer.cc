@@ -26,8 +26,8 @@
 #include "layer_processor.h"
 #include "preset.h"
 
-deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager)
+deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager)
 {
     blurRadiusPropertyIndex = registerPropertyValue("blur_radius");
     amountPropertyIndex = registerPropertyValue("amount");

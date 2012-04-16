@@ -42,7 +42,7 @@ class deHueSaturationFrame:public deLayerFrame
         void click(wxCommandEvent &event);
 
     public:
-        deHueSaturationFrame(wxWindow *parent, deConversionBW2HueLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
+        deHueSaturationFrame(wxWindow *parent, deConversionBW2HueLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deHueSaturationFrame();
 
 

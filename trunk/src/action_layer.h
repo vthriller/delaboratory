@@ -58,7 +58,7 @@ class deActionLayer:public deLayer
         virtual bool isEnabled() const;
         virtual void setEnabled(bool e);
 
-        virtual const deImage& getImage() const;
+        virtual const deImage& getLayerImage() const;
 
         virtual bool isChannelNeutral(int index) = 0;
 
@@ -100,7 +100,7 @@ class deActionLayer:public deLayer
         virtual bool updateImage();
 
     public:
-        deActionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deActionLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deActionLayer();
 
         deChannel* getSourceChannel(int index);
@@ -110,7 +110,7 @@ class deActionLayer:public deLayer
         deBlendMode getBlendMode() const {return blendMode;};
         deValue getOpacity();
 
-        virtual void updateChannelUsage(std::map<int, int>& channelUsage) const;
+        virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
         deViewManager& getViewManager() {return viewManager;};
 

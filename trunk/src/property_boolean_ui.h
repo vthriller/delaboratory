@@ -30,9 +30,10 @@ class dePropertyBooleanUI:public deCheckBox
         dePropertyBoolean& property;
         deLayer& layer;
         deLayerProcessor& layerProcessor;
+        int layerIndex;
 
     public:
-        dePropertyBooleanUI(wxWindow *parent, dePropertyBoolean& _property, deLayer& _layer, deLayerProcessor& _layerProcessor);
+        dePropertyBooleanUI(wxWindow *parent, dePropertyBoolean& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex);
         virtual ~dePropertyBooleanUI();
 
         virtual void onCheck(bool c);

@@ -21,23 +21,24 @@
 #include "property_choice_ui.h"
 #include "property_boolean_ui.h"
 #include "layer_processor.h"
+#include "color_space_utils.h"
 
-deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
+deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     deApplyImageLayer& applyImageLayer = dynamic_cast<deApplyImageLayer&>(layer);
 
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
 
-    appliedLayer = new dePropertyChoiceUI(this, applyImageLayer.getAppliedLayer(), applyImageLayer, layerProcessor);
+    appliedLayer = new dePropertyChoiceUI(this, applyImageLayer.getAppliedLayer(), applyImageLayer, layerProcessor, layerIndex);
     mainSizer->Add(appliedLayer);
 
-    applySingleChannel = new dePropertyBooleanUI(this, applyImageLayer.getApplySingleChannel(), applyImageLayer, layerProcessor);
+    applySingleChannel = new dePropertyBooleanUI(this, applyImageLayer.getApplySingleChannel(), applyImageLayer, layerProcessor, layerIndex);
     mainSizer->Add(applySingleChannel);
 
     int i;
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < MAX_COLOR_SPACE_SIZE; i++)
     {
         int style = 0;
         if (i == 0)
@@ -66,7 +67,7 @@ void deApplyImageFrame::select(wxCommandEvent &event)
 
     int i = event.GetId();
     int j;
-    for (j = 0; j < 4; j++)
+    for (j = 0; j < MAX_COLOR_SPACE_SIZE; j++)
     {
         if (channels[j]->GetId() == i)
         {
@@ -74,8 +75,7 @@ void deApplyImageFrame::select(wxCommandEvent &event)
         }
     }
 
-    int index = layer.getIndex();
-    layerProcessor.markUpdateAllChannels(index);
+    layerProcessor.markUpdateAllChannels(layerIndex);
 }
 
 void deApplyImageFrame::setChannels()
@@ -86,7 +86,7 @@ void deApplyImageFrame::setChannels()
     int n = getColorSpaceSize(colorSpace);
     int s = applyImageLayer.getAppliedChannel();
     int i;
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < MAX_COLOR_SPACE_SIZE; i++)
     {
         if (i < n)
         {

@@ -20,6 +20,7 @@
 #define _DE_LAYER_FACTORY_H
 
 class deLayer;
+class deBaseLayer;
 #include <string>
 #include <vector>
 #include "color_space.h"
@@ -30,7 +31,7 @@ class deViewManager;
 class deImage;
 class deStaticImage;
 
-deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, deStaticImage& sourceImage);
+deBaseLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, deStaticImage& sourceImage);
 void getSupportedActions(std::vector<std::string>& actions);
 std::string getActionDescription(const std::string& a);
 void getSupportedActionGroups(std::vector<std::string>& actions);

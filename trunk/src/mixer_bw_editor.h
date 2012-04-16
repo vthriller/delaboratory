@@ -50,7 +50,7 @@ class deMixerBWEditor:public deLayerFrame
         void click(wxCommandEvent &event);
 
     public:
-        deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
+        deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deMixerBWEditor();
 
 };

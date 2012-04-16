@@ -24,10 +24,10 @@
 #include "logger.h"
 #include "property_value.h"
 #include "preset.h"
+#include "color_space_utils.h"
 
-deLayer::deLayer(deColorSpace _colorSpace, int _index, int _sourceLayer)
-:colorSpace(_colorSpace), 
-index(_index), 
+deLayer::deLayer(deColorSpace _colorSpace, int _sourceLayer)
+:deBaseLayer(_colorSpace),
 sourceLayer(_sourceLayer)
 {
 }
@@ -47,11 +47,7 @@ deLayer::~deLayer()
         delete i->second;
         presets.erase(i);
     }
-}
-
-deColorSpace deLayer::getColorSpace() const
-{
-    return colorSpace;
+//    unlockLayer();
 }
 
 bool deLayer::hasAction() const
@@ -75,66 +71,6 @@ bool deLayer::isEnabled() const
 }
 
 void deLayer::setEnabled(bool e)
-{
-}
-
-void deLayer::saveCommon(xmlNodePtr node)
-{
-    saveChild(node, "type", getType());
-    saveChild(node, "index", str(index));
-    saveChild(node, "source", str(sourceLayer));
-    saveChild(node, "color_space", getColorSpaceName(colorSpace));
-}
-
-bool deLayer::updateImageThreadCall()
-{
-    return updateImage();
-}
-
-void deLayer::lockLayer()
-{
-    lockWithLog(mutex, "layer mutex");
-}
-
-void deLayer::unlockLayer()
-{
-    mutex.unlock();
-}
-
-void deLayer::process(deLayerProcessType type, int channel)
-{
-    switch (type)
-    {
-        case deLayerProcessFull:
-        {
-            processFull();
-            break;
-        }
-        case deLayerProcessSingleChannel:
-        {
-            processChannel(channel);
-            break;
-        }
-        case deLayerProcessBlend:
-        {
-            processBlend();
-            break;
-        }
-        default:
-            break;
-    }
-}
-
-void deLayer::processFull()
-{
-    updateImageThreadCall();
-}
-
-void deLayer::processBlend()
-{
-}
-
-void deLayer::processChannel(int channel)
 {
 }
 

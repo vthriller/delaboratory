@@ -23,8 +23,8 @@
 #include "property_boolean_ui.h"
 #include "layer_processor.h"
 
-deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
+deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -42,13 +42,13 @@ deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deActionLayer& _layer, deLa
         dePropertyValue* p = dodgeBurnLayer.getPropertyValue(i);
         if (p)
         {
-            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, dodgeBurnLayer, layerProcessor);
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, dodgeBurnLayer, layerProcessor, layerIndex);
             valueSliders.push_back(s);
             sizer->Add(s);
         }            
     }
 
-    alternate = new dePropertyBooleanUI(this, dodgeBurnLayer.getPropertyAlternate(), dodgeBurnLayer, layerProcessor);
+    alternate = new dePropertyBooleanUI(this, dodgeBurnLayer.getPropertyAlternate(), dodgeBurnLayer, layerProcessor, layerIndex);
     sizer->Add(alternate);
 
     wxSizer* sizerB = new wxFlexGridSizer(5);
@@ -95,6 +95,6 @@ void deDodgeBurnFrame::click(wxCommandEvent &event)
         (*j)->setFromProperty();
     }
 
-    int index = layer.getIndex();
-    layerProcessor.markUpdateAllChannels(index);
+//    int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(layerIndex);
 }   

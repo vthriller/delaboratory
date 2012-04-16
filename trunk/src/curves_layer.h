@@ -32,7 +32,7 @@ class deCurvesLayer:public deActionLayer
         virtual std::string getType() const {return "curves";};
 
     public:
-        deCurvesLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deCurvesLayer();
 
         deCurve* getCurve(int index);

@@ -20,11 +20,11 @@
 #define _DE_FRAME_FACTORY_H
 
 #include <wx/wx.h>
-class deLayer;
+class deBaseLayer;
 class deFrame;
 class deLayerProcessor;
 class deLayerFrameManager;
 
-deFrame* createFrame(wxWindow *parent, deLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager);
+deFrame* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager, int layerIndex);
 
 #endif

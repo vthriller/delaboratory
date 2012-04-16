@@ -20,9 +20,10 @@
 #include "apply_luminance_color.h"
 #include "copy_channel.h"
 #include "property_value.h"
+#include "color_space_utils.h"
 
-deApplyLuminanceLayer::deApplyLuminanceLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
+deApplyLuminanceLayer::deApplyLuminanceLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager) 
 {
     int n = getColorSpaceSize(colorSpace);
     int i;

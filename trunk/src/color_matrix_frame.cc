@@ -39,14 +39,19 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
     int view = viewManager.getView();
 
     deLayerStack& layerStack = project.getLayerStack();
-    deLayer* layer = layerStack.getLayer(view);
+
+/*
+    deBaseLayer* baseLayer = layerStack.getLayer(view);
+    deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
+    */
+    deBaseLayer* layer = layerStack.getLayer(view);
 
     if (!layer)
     {
         return;
     }
 
-    const deImage& originalImage = layer->getImage();
+    const deImage& originalImage = layer->getLayerImage();
 
     deChannelManager& channelManager = project.getPreviewChannelManager();
     deSize channelSize = channelManager.getChannelSize();
@@ -210,14 +215,19 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
     int view = viewManager.getView();
 
     deLayerStack& layerStack = project.getLayerStack();
-    deLayer* layer = layerStack.getLayer(view);
+
+/*
+    deBaseLayer* baseLayer = layerStack.getLayer(view);
+    deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
+    */
+    deBaseLayer* layer = layerStack.getLayer(view);
 
     if (!layer)
     {
         return;
     }
 
-    const deImage& image = layer->getImage();
+    const deImage& image = layer->getLayerImage();
     deColorSpace colorSpace = image.getColorSpace();
 
     deConversion3x3 f3x3 = getConversion3x3(colorSpace, deColorSpaceRGB);
@@ -276,15 +286,18 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
 
         int xx;
         int yy;
+        const deValue* values1 = image.getValues(0);
+        const deValue* values2 = image.getValues(1);
+        const deValue* values3 = image.getValues(2);
 
         for (yy = y1; yy < y2; yy++)
         {
             int p = cs * yy + x1;
             for (xx = x1; xx < x2; xx++)
             {
-                image.getPixel(0, p, v1);
-                image.getPixel(1, p, v2);
-                image.getPixel(2, p, v3);
+                v1 = values1[p];
+                v2 = values2[p];
+                v3 = values3[p];
                 sum1 += v1;
                 sum2 += v2;
                 sum3 += v3;

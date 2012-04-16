@@ -36,7 +36,7 @@ class deBlurLayer:public deActionLayer
         virtual std::string getType() const {return "blur";};
 
     public:
-        deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deBlurLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deBlurLayer();
 
         void reset();

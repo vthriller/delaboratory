@@ -35,13 +35,13 @@ class deConversionLayer:public deLayer
         deImage image;
 
     public:
-        deConversionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
+        deConversionLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
         virtual ~deConversionLayer();
 
-        virtual const deImage& getImage() const;
+        virtual const deImage& getLayerImage() const;
         virtual bool updateImage();
 
-        virtual void updateChannelUsage(std::map<int, int>& channelUsage) const;
+        virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
         virtual void load(xmlNodePtr root) {};
         virtual void save(xmlNodePtr root) {saveCommon(root);};

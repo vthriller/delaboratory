@@ -35,79 +35,80 @@
 #include "shadows_highlights_layer.h"
 #include "basic_layer.h"
 #include <algorithm>
+#include "color_space_utils.h"
 
-deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, deStaticImage& sourceImage)
+deBaseLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, deStaticImage& sourceImage)
 {
     int index = _layerStack.getSize();
 
     if (type == "curves")
     {
-        return new deCurvesLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deCurvesLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "blur")
     {
-        return new deBlurLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deBlurLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "vignette1")
     {
-        return new deVignetteLayer1(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deVignetteLayer1(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "vignette2")
     {
-        return new deVignetteLayer2(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deVignetteLayer2(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "usm")
     {
-        return new deUSMLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deUSMLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "basic")
     {
-        return new deBasicLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deBasicLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "dodge_burn")
     {
-        return new deDodgeBurnLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deDodgeBurnLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "high_pass")
     {
-        return new deHighPassLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deHighPassLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "shadows_highlights")
     {
-        return new deShadowsHighlightsLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deShadowsHighlightsLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "mixer")
     {
-        return new deMixerLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deMixerLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "apply_luminance")
     {
-        return new deApplyLuminanceLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deApplyLuminanceLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "equalizer8")
     {
-        return new deEqualizerLayer8(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deEqualizerLayer8(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "equalizer16")
     {
-        return new deEqualizerLayer16(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deEqualizerLayer16(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "apply_image")
     {
-        return new deApplyImageLayer(colorSpace, index, source, _layerStack, _channelManager, _viewManager);
+        return new deApplyImageLayer(colorSpace, source, _layerStack, _channelManager, _viewManager, index);
     }
     
     bool cbw = false;
@@ -121,7 +122,7 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
         }
         else
         {
-            deLayer* sourceLayer = _layerStack.getLayer(source);
+            deBaseLayer* sourceLayer = _layerStack.getLayer(source);
             deColorSpace sourceColorSpace = sourceLayer->getColorSpace();
             if (sourceColorSpace == deColorSpaceBW)
             {
@@ -142,7 +143,7 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
 
         if ((!cbw) && (!cbwhue))
         {
-            return new deConversionLayer(colorSpace, index, source, _layerStack, _channelManager);
+            return new deConversionLayer(colorSpace, source, _layerStack, _channelManager);
         }
     }
 
@@ -158,20 +159,20 @@ deLayer* createLayer(const std::string& type, int source, deColorSpace colorSpac
 
     if (cbw)
     {
-        deLayer* sourceLayer = _layerStack.getLayer(source);
+        deBaseLayer* sourceLayer = _layerStack.getLayer(source);
         deColorSpace sourceColorSpace = sourceLayer->getColorSpace();
         int n = getColorSpaceSize(sourceColorSpace);
-        return new deConversionBWLayer(index, source, _layerStack, _channelManager, n);
+        return new deConversionBWLayer(source, _layerStack, _channelManager, n);
     }
 
     if (cbwhue)
     {
-        return new deConversionBW2HueLayer(index, source, _layerStack, _channelManager, colorSpace);
+        return new deConversionBW2HueLayer(source, _layerStack, _channelManager, colorSpace);
     }
 
-    if (type == "source_image")
+    if (type == "original")
     {
-        return new deSourceImageLayer(index,  _channelManager, _viewManager, sourceImage, colorSpace);
+        return new deSourceImageLayer(_channelManager, _viewManager, sourceImage, colorSpace);
     }
 
     return NULL;

@@ -23,6 +23,7 @@ class deProject;
 class deLayerProcessor;
 class deZoomManager;
 #include "color_space.h"
+#include "value.h"
 
 class deViewManager
 {

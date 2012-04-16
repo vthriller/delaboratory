@@ -37,6 +37,7 @@ private:
     int sizeY;
     deCurvesLayer& layer;
     int channel;
+    int layerIndex;
     
     bool realtime;
 
@@ -67,7 +68,7 @@ private:
 
     void generateBackground();
 public:
-    deCurvesPanel(wxWindow* parent, deCurvesLayer& layer, deLayerProcessor& _layerProcessor);
+    deCurvesPanel(wxWindow* parent, deCurvesLayer& layer, deLayerProcessor& _layerProcessor, int _layerIndex);
     ~deCurvesPanel();
 
 	void paintEvent(wxPaintEvent & evt);

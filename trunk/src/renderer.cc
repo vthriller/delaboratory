@@ -44,6 +44,7 @@ bool renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
             conversion1x3 = getConversion1x3(colorSpace, deColorSpaceRGB);
             if (!conversion1x3)
             {
+                logError("no conversion found");
                 return false;
             }            
         }            
@@ -91,25 +92,23 @@ bool renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
     {
         if (!channel0)
         {
+            logError("no channel 0");
             return false;
         }
         if (!channel1)
         {
+            logError("no channel 1");
             return false;
         }
         if (!channel2)
         {
+            logError("no channel 2");
             return false;
         }
         channel0->lockRead();
         channel1->lockRead();
         channel2->lockRead();
     }        
-
-    if (!channel0)
-    {
-        return false;
-    }
 
     deValue rr;
     deValue gg;
@@ -279,10 +278,10 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
     }
 
     logMessage("renderer getLayer " +str(view));
-    deLayer* layer = layerStack.getLayer(view);
+    deBaseLayer* layer = layerStack.getLayer(view);
     if (!layer)
     {
-        logMessage("ERROR no layer");
+        logError("no layer");
         logMessage("unlock renderer mutex");
         mutex.unlock();
         return false;
@@ -293,7 +292,7 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
 
     logMessage("renderer get image from layer " +str(view));
 
-    const deImage& layerImage = layer->getImage();
+    const deImage& layerImage = layer->getLayerImage();
 
     bool reversed = false;
     deColorSpace colorSpace = layerImage.getColorSpace();

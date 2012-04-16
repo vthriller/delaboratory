@@ -22,6 +22,7 @@
 #include "project.h"
 #include <iostream>
 #include "logger.h"
+#include "color_space_utils.h"
 
 void deViewModePanel::select(wxCommandEvent &event)
 {
@@ -35,7 +36,7 @@ void deViewModePanel::select(wxCommandEvent &event)
     }
 
     int j;
-    for (j = 0; j < 4; j++)
+    for (j = 0; j < MAX_COLOR_SPACE_SIZE; j++)
     {
         if (buttons[j+1]->GetId() == i)
         {
@@ -57,7 +58,7 @@ deViewModePanel::deViewModePanel(wxWindow* parent, deProject& _project)
     sizerS->Add(sizer);
 
     int i;
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < (MAX_COLOR_SPACE_SIZE + 1); i++)
     {
         int style = 0;
         if (i == 0)
@@ -92,7 +93,7 @@ void deViewModePanel::updateNames()
 
     int i;
     int n = getColorSpaceSize(colorSpace);
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < ( MAX_COLOR_SPACE_SIZE + 1) ; i++)
     {
         wxRadioButton* b = buttons[i];
         if (i == 0)

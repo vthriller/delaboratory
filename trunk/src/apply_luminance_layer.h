@@ -33,7 +33,7 @@ class deApplyLuminanceLayer:public deActionLayer
         virtual std::string getLabel() const {return "apply luminance";};
 
     public:
-        deApplyLuminanceLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deApplyLuminanceLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deApplyLuminanceLayer();
 
         virtual bool isChannelNeutral(int index) {return false;};

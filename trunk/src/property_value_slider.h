@@ -33,8 +33,10 @@ class dePropertyValueSlider:public deSlider
 
         int channel;
 
+        int layerIndex;
+
     public:
-        dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayer& _layer, deLayerProcessor& _layerProcessor);
+        dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex);
         virtual ~dePropertyValueSlider();
 
         virtual void onValueChange(deValue value, bool finished);

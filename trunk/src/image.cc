@@ -20,6 +20,7 @@
 #include "channel_manager.h"
 #include "logger.h"
 #include "str.h"
+#include "color_space_utils.h"
 
 deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelManager)
 :colorSpace(_colorSpace), channelManager(_channelManager)
@@ -27,7 +28,7 @@ deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelMana
     logMessage("create new image");
     int i;
     int s = getColorSpaceSize(colorSpace);
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < MAX_COLOR_SPACE_SIZE; i++)
     {
         if (i < s)
         {
@@ -57,7 +58,7 @@ void deImage::enableChannel(int n)
 {
     logMessage("enable channel " + str(n) + " in image");
     assert(n >= 0);
-    assert(n < 4);
+    assert(n < MAX_COLOR_SPACE_SIZE);
     assert (channelsAllocated[n] >= 0);
     channelManager.tryAllocateChannel(channelsAllocated[n]);
     channelsVisible[n] = channelsAllocated[n];
@@ -67,7 +68,7 @@ void deImage::disableChannel(int n, int c)
 {
     logMessage("disable channel " + str(n) + " in image, replace with " +str(c));
     assert(n >= 0);
-    assert(n < 4);
+    assert(n < MAX_COLOR_SPACE_SIZE);
     channelsVisible[n] = c;
     channelManager.tryDeallocateChannel(channelsAllocated[n]);
 }
@@ -75,7 +76,7 @@ void deImage::disableChannel(int n, int c)
 int deImage::getChannelIndex(int n) const
 {
     assert(n >= 0);
-    assert(n < 4);
+    assert(n < MAX_COLOR_SPACE_SIZE);
     return channelsVisible[n];
 }
 
@@ -114,18 +115,6 @@ void deImage::updateChannelUsage(std::map<int, int>& channelUsage, int index) co
         int c = channelsVisible[i];
         channelUsage[c] = index;
     }        
-}
-
-bool deImage::getPixel(int channel, int p, deValue& result) const
-{
-    deChannel* c = channelManager.getChannel(channelsVisible[channel]);
-    if (!c)
-    {
-        return false;
-    }
-    result = c->getValue(p);
-    return true;
-
 }
 
 const deValue* deImage::getValues(int channel) const

@@ -20,6 +20,7 @@
 #include "image.h"
 #include "conversion_functions.h"
 #include "channel_manager.h"
+#include "color_space_utils.h"
 
 
 bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue &v1, deValue& v2, deValue& v3, deValue& v4)
@@ -34,21 +35,24 @@ bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue 
 
         if (conversion)
         {
-            deValue s1;
-            if (!image.getPixel(0, p, s1))
+            const deValue* values1 = image.getValues(0);
+            if (!values1)
             {
                 return false;
             }
-            deValue s2;
-            if (!image.getPixel(1, p, s2))
+            const deValue* values2 = image.getValues(1);
+            if (!values2)
             {
                 return false;
             }
-            deValue s3;
-            if (!image.getPixel(2, p, s3))
+            const deValue* values3 = image.getValues(2);
+            if (!values3)
             {
                 return false;
             }
+            deValue s1 = values1[p];
+            deValue s2 = values2[p];
+            deValue s3 = values3[p];
             conversion(s1, s2, s3, v1, v2, v3);
             v4 = -1;
             return true;
@@ -61,21 +65,24 @@ bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue 
 
         if (conversion)
         {
-            deValue s1;
-            if (!image.getPixel(0, p, s1))
+            const deValue* values1 = image.getValues(0);
+            if (!values1)
             {
                 return false;
             }
-            deValue s2;
-            if (!image.getPixel(1, p, s2))
+            const deValue* values2 = image.getValues(1);
+            if (!values2)
             {
                 return false;
             }
-            deValue s3;
-            if (!image.getPixel(2, p, s3))
+            const deValue* values3 = image.getValues(2);
+            if (!values3)
             {
                 return false;
             }
+            deValue s1 = values1[p];
+            deValue s2 = values2[p];
+            deValue s3 = values3[p];
             conversion(s1, s2, s3, v1);
             return true;
         } 
@@ -87,21 +94,24 @@ bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue 
 
         if (conversion)
         {
-            deValue s1;
-            if (!image.getPixel(0, p, s1))
+            const deValue* values1 = image.getValues(0);
+            if (!values1)
             {
                 return false;
             }
-            deValue s2;
-            if (!image.getPixel(1, p, s2))
+            const deValue* values2 = image.getValues(1);
+            if (!values2)
             {
                 return false;
             }
-            deValue s3;
-            if (!image.getPixel(2, p, s3))
+            const deValue* values3 = image.getValues(2);
+            if (!values3)
             {
                 return false;
             }
+            deValue s1 = values1[p];
+            deValue s2 = values2[p];
+            deValue s3 = values3[p];
             conversion(s1, s2, s3, v1, v2, v3, v4);
             return true;
         } 
@@ -109,26 +119,30 @@ bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue 
 
     if ((sn == 4) && (tn == 4))
     {
-        deValue s1;
-        if (!image.getPixel(0, p, s1))
+        const deValue* values1 = image.getValues(0);
+        if (!values1)
         {
             return false;
         }
-        deValue s2;
-        if (!image.getPixel(1, p, s2))
+        const deValue* values2 = image.getValues(1);
+        if (!values2)
         {
             return false;
         }
-        deValue s3;
-        if (!image.getPixel(2, p, s3))
+        const deValue* values3 = image.getValues(2);
+        if (!values3)
         {
             return false;
         }
-        deValue s4;
-        if (!image.getPixel(3, p, s4))
+        const deValue* values4 = image.getValues(3);
+        if (!values4)
         {
             return false;
         }
+        deValue s1 = values1[p];
+        deValue s2 = values2[p];
+        deValue s3 = values3[p];
+        deValue s4 = values4[p];
         v1 = s1;
         v2 = s2;
         v3 = s3;
@@ -142,26 +156,30 @@ bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue 
 
         if (conversion)
         {
-            deValue s1;
-            if (!image.getPixel(0, p, s1))
+            const deValue* values1 = image.getValues(0);
+            if (!values1)
             {
                 return false;
             }
-            deValue s2;
-            if (!image.getPixel(1, p, s2))
+            const deValue* values2 = image.getValues(1);
+            if (!values2)
             {
                 return false;
             }
-            deValue s3;
-            if (!image.getPixel(2, p, s3))
+            const deValue* values3 = image.getValues(2);
+            if (!values3)
             {
                 return false;
             }
-            deValue s4;
-            if (!image.getPixel(3, p, s4))
+            const deValue* values4 = image.getValues(3);
+            if (!values4)
             {
                 return false;
             }
+            deValue s1 = values1[p];
+            deValue s2 = values2[p];
+            deValue s3 = values3[p];
+            deValue s4 = values4[p];
             conversion(s1, s2, s3, s4, v1, v2, v3);
             return true;
         } 
@@ -173,11 +191,12 @@ bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue 
 
         if (conversion)
         {
-            deValue s1;
-            if (!image.getPixel(0, p, s1))
+            const deValue* values1 = image.getValues(0);
+            if (!values1)
             {
                 return false;
             }
+            deValue s1 = values1[p];
             conversion(s1, v1, v2, v3);
             return true;
         } 
@@ -189,11 +208,12 @@ bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue 
 
         if (conversion)
         {
-            deValue s1;
-            if (!image.getPixel(0, p, s1))
+            const deValue* values1 = image.getValues(0);
+            if (!values1)
             {
                 return false;
             }
+            deValue s1 = values1[p];
             conversion(s1, v1, v2, v3, v4);
             return true;
         } 
@@ -201,11 +221,12 @@ bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue 
 
     if ((sn == 1) && (tn == 1))
     {
-        deValue s1;
-        if (!image.getPixel(0, p, s1))
+        const deValue* values1 = image.getValues(0);
+        if (!values1)
         {
             return false;
         }
+        deValue s1 = values1[p];
         v1 = s1;
         return true;
     }        

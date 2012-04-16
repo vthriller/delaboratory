@@ -71,7 +71,7 @@ void deViewManager::setNormal()
 deColorSpace deViewManager::getColorSpace() const
 {
     deLayerStack& layerStack = project.getLayerStack();
-    deLayer* layer = layerStack.getLayer(view);
+    deBaseLayer* layer = layerStack.getLayer(view);
     if (!layer)
     {
         return deColorSpaceInvalid;

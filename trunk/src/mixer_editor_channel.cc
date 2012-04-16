@@ -22,6 +22,7 @@
 #include "gradient_panel.h"
 #include "layer_processor.h"
 #include "str.h"
+#include "color_space_utils.h"
 
 class deMixerSlider:public deSlider
 {
@@ -30,11 +31,12 @@ class deMixerSlider:public deSlider
         int s;
         int d;
         deLayerProcessor& layerProcessor;
+        int layerIndex;
 
     public:
-        deMixerSlider(wxWindow *parent, int range, deMixerLayer& _layer, int _s, int _d, const std::string& name, deLayerProcessor& _layerProcessor)
+        deMixerSlider(wxWindow *parent, int range, deMixerLayer& _layer, int _s, int _d, const std::string& name, deLayerProcessor& _layerProcessor, int _layerIndex)
         :deSlider(parent, name, range, -2.0, 2.0, 0.0), layer(_layer), s(_s), d(_d),
-         layerProcessor(_layerProcessor)
+         layerProcessor(_layerProcessor), layerIndex(_layerIndex)
         {
             setValue(layer.getWeight(s, d));
         }
@@ -50,14 +52,13 @@ class deMixerSlider:public deSlider
                 layer.setWeight(s, d, value);
                 layer.setHistogramChannel(d);
 
-                int index = layer.getIndex();
-                layerProcessor.markUpdateSingleChannel(index, d);
+                layerProcessor.markUpdateSingleChannel(layerIndex, d);
             }                
         }
 };        
 
-deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _layer, int _index, deLayerProcessor& _layerProcessor)
-:wxPanel(parent), layer(_layer), index(_index), layerProcessor(_layerProcessor)
+deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _layer, int _index, deLayerProcessor& _layerProcessor, int _layerIndex)
+:wxPanel(parent), layer(_layer), index(_index), layerProcessor(_layerProcessor), layerIndex(_layerIndex)
 {
     deColorSpace colorSpace = layer.getColorSpace();
     unsigned int n = getColorSpaceSize(colorSpace);
@@ -81,7 +82,7 @@ deMixerEditorChannel::deMixerEditorChannel(wxWindow *parent, deMixerLayer& _laye
     for (i = 0; i < n; i++)
     {
         std::string src = getChannelName(colorSpace, i);
-        deMixerSlider* slider = new deMixerSlider(this, width, layer, i, index, src, layerProcessor);        
+        deMixerSlider* slider = new deMixerSlider(this, width, layer, i, index, src, layerProcessor, layerIndex);        
         sliders.push_back(slider);
         sizer->Add(slider);
         if (i != index)
@@ -189,8 +190,8 @@ void deMixerEditorChannel::preset(deValue a)
         layer.setWeight(i, index, v);
     }
 
-    int l_index = layer.getIndex();
-    layerProcessor.markUpdateSingleChannel(l_index, index);
+    //int l_index = layer.getIndex();
+    layerProcessor.markUpdateSingleChannel(layerIndex, index);
 }
 
 void deMixerEditorChannel::random(deValue a)
@@ -216,8 +217,8 @@ void deMixerEditorChannel::random(deValue a)
         layer.setWeight(i, index, v);
     }
 
-    int l_index = layer.getIndex();
-    layerProcessor.markUpdateSingleChannel(l_index, index);
+//    int l_index = layer.getIndex();
+    layerProcessor.markUpdateSingleChannel(layerIndex, index);
 }
 
 void deMixerEditorChannel::preset2(deValue a, deValue b, deValue c)
@@ -243,6 +244,6 @@ void deMixerEditorChannel::preset2(deValue a, deValue b, deValue c)
         layer.setWeight(i, index, v);
     }
 
-    int l_index = layer.getIndex();
-    layerProcessor.markUpdateSingleChannel(l_index, index);
+    //int l_index = layer.getIndex();
+    layerProcessor.markUpdateSingleChannel(layerIndex, index);
 }

@@ -19,6 +19,7 @@
 #include "benchmark_frame.h"
 #include "benchmarks.h"
 #include "str.h"
+#include "color_space_utils.h"
 
 void deBenchmarkFrame::addBenchmark(const std::string& s, std::string name, int value)
 {

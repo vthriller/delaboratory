@@ -37,7 +37,7 @@ class deVignetteFrame:public deActionFrame
         void click(wxCommandEvent &event);
 
     public:
-        deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
+        deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deVignetteFrame();
 
         virtual bool onImageClick(deValue x, deValue y);

@@ -22,8 +22,8 @@
 #include "layer_processor.h"
 #include "layer_stack.h"
 
-deConversionLayer::deConversionLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
-:deLayer( _colorSpace, _index, _sourceLayer), 
+deConversionLayer::deConversionLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
+:deLayer( _colorSpace, _sourceLayer), 
  layerStack(_layerStack),
  channelManager(_channelManager),
  image(_colorSpace, _channelManager) 
@@ -35,7 +35,7 @@ deConversionLayer::~deConversionLayer()
 {
 }
 
-const deImage& deConversionLayer::getImage() const
+const deImage& deConversionLayer::getLayerImage() const
 {
     return image;
 }
@@ -44,8 +44,9 @@ bool deConversionLayer::updateImage()
 {
     logMessage("conversion start");
 
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    const deImage& sourceImage = source->getImage();
+    deBaseLayer* source = layerStack.getLayer(sourceLayer);
+
+    const deImage& sourceImage = source->getLayerImage();
 
     image.enableAllChannels();
     convertImage(sourceImage, image, channelManager);
@@ -55,11 +56,12 @@ bool deConversionLayer::updateImage()
     return true;
 }
 
-void deConversionLayer::updateChannelUsage(std::map<int, int>& channelUsage) const
+void deConversionLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
 {
-    deLayer* source = layerStack.getLayer(sourceLayer);
-    const deImage& sourceImage = source->getImage();
-    sourceImage.updateChannelUsage(channelUsage, index);
-    image.updateChannelUsage(channelUsage, index);
+    deBaseLayer* source = layerStack.getLayer(sourceLayer);
+
+    const deImage& sourceImage = source->getLayerImage();
+    sourceImage.updateChannelUsage(channelUsage, layerIndex);
+    image.updateChannelUsage(channelUsage, layerIndex);
 }
 

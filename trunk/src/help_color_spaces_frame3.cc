@@ -20,6 +20,7 @@
 #include "color_space.h"
 #include "gradient_panel.h"
 #include <sstream>
+#include "color_space_utils.h"
 
 void add(deColorSpace colorSpace, wxWindow* parent, wxSizer* sizer)
 {

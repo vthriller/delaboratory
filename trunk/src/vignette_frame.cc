@@ -22,8 +22,8 @@
 #include "property_value_slider.h"
 #include "layer_processor.h"
 
-deVignetteFrame::deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
+deVignetteFrame::deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -41,7 +41,7 @@ deVignetteFrame::deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLaye
         dePropertyValue* p = vignetteLayer.getPropertyValue(i);
         if (p)
         {
-            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, vignetteLayer, layerProcessor);
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, vignetteLayer, layerProcessor, layerIndex);
             valueSliders.push_back(s);
             sizer->Add(s);
         }            
@@ -78,8 +78,8 @@ void deVignetteFrame::click(wxCommandEvent &event)
         (*j)->setFromProperty();
     }
 
-    int index = layer.getIndex();
-    layerProcessor.markUpdateAllChannels(index);
+    //int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(layerIndex);
 }   
 
 bool deVignetteFrame::onImageClick(deValue x, deValue y)
@@ -97,8 +97,8 @@ bool deVignetteFrame::onImageClick(deValue x, deValue y)
         (*j)->setFromProperty();
     }
 
-    int index = layer.getIndex();
-    layerProcessor.markUpdateAllChannels(index);
+    //int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(layerIndex);
 
     return result;
 }

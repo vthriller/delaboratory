@@ -34,7 +34,7 @@ class deConversionBW2HueLayer:public deConversionLayer
 
         virtual std::string getType() const {return "conversion_bw2hue";};
     public:
-        deConversionBW2HueLayer(int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deColorSpace _colorSpace);
+        deConversionBW2HueLayer(int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deColorSpace _colorSpace);
         virtual ~deConversionBW2HueLayer();
 
         virtual bool updateImage();

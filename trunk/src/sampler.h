@@ -20,6 +20,7 @@
 #define _DE_SAMPLER_H
 
 #include "color_space.h"
+#include "value.h"
 
 class deSampler
 {

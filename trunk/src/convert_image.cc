@@ -21,6 +21,7 @@
 #include "image.h"
 #include "conversion_functions.h"
 #include "channel_manager.h"
+#include "color_space_utils.h"
 
 
 void convertImage3x3(const deImage& sourceImage, deImage& image, deChannelManager& channelManager, deConversion3x3 conversion)

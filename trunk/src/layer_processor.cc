@@ -493,7 +493,8 @@ bool deLayerProcessor::updateImage()
 
     layerStack.lock();
 
-    deLayer* layer = layerStack.getLayer(i);
+    deBaseLayer* layer = layerStack.getLayer(i);
+
     if ((layer) && (ok))
     {
 
@@ -558,12 +559,13 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
             }
         }
 
-        deLayer* layer = layerStack.getLayer(index);
+        deBaseLayer* layer = layerStack.getLayer(index);
+
         std::string label = str(index);
 
         progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
 
-        bool r = layer->updateImageThreadCall();
+        bool r = layer->processFull();
         if (!r)
         {
             result = false;
@@ -602,14 +604,16 @@ void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
     int n = layerStack.getSize();
     for (i = 0; i < n; i++)
     {
-        deLayer* layer = layerStack.getLayer(i);
-        layer->updateChannelUsage(channelUsage);
+        deBaseLayer* layer = layerStack.getLayer(i);
+
+        layer->updateChannelUsage(channelUsage, i);
     }
 }
 
 void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 {
-    deLayer* layer = layerStack.getLayer(index);
+    deBaseLayer* layer = layerStack.getLayer(index);
+
     if (layer)
     {
         layer->onUpdateProperties();
@@ -621,7 +625,8 @@ void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 
 void deLayerProcessor::markUpdateAllChannels(int index)
 {
-    deLayer* layer = layerStack.getLayer(index);
+    deBaseLayer* layer = layerStack.getLayer(index);
+
     if (layer)
     {
         layerFrameManager.onUpdateProperties();
@@ -721,12 +726,11 @@ void deLayerProcessor::removeAllLayers()
     unlockHistogram();
 }    
 
-void deLayerProcessor::addLayer(deLayer* layer)
+void deLayerProcessor::addLayer(deBaseLayer* layer, int layerIndex)
 {
     layerStack.addLayer(layer);
 
-    int index = layer->getIndex();
-    markUpdateAllChannels(index);
+    markUpdateAllChannels(layerIndex);
 
 }    
 

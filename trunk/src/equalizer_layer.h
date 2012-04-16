@@ -32,7 +32,7 @@ class deEqualizerLayer:public deActionLayer
         virtual bool singleChannelProcessing() const {return false;};
 
     public:
-        deEqualizerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _bands);
+        deEqualizerLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _bands);
         virtual ~deEqualizerLayer();
 
         virtual bool isChannelNeutral(int index);
@@ -52,7 +52,7 @@ class deEqualizerLayer:public deActionLayer
 class deEqualizerLayer8:public deEqualizerLayer
 {
     public:
-        deEqualizerLayer8(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deEqualizerLayer8(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deEqualizerLayer8();
 
         virtual std::string getActionName() {return "eq8";};
@@ -63,7 +63,7 @@ class deEqualizerLayer8:public deEqualizerLayer
 class deEqualizerLayer16:public deEqualizerLayer
 {
     public:
-        deEqualizerLayer16(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deEqualizerLayer16(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deEqualizerLayer16();
 
         virtual std::string getActionName() {return "eq16";};

@@ -36,7 +36,7 @@ class deShadowsHighlightsLayer:public deActionLayer
         virtual std::string getLabel() const {return "shadows / highlights";};
 
     public:
-        deShadowsHighlightsLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deShadowsHighlightsLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deShadowsHighlightsLayer();
 
         virtual bool isChannelNeutral(int index);

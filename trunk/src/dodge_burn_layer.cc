@@ -29,8 +29,8 @@
 #include "layer_processor.h"
 #include "preset.h"
 
-deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
+deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager),
  alternate("alternate")
 {
     blurRadiusIndex = registerPropertyValue("blur_radius");

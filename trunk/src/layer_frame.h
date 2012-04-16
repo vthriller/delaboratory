@@ -29,8 +29,9 @@ class deLayerFrame:public deFrame
     protected:
         deLayer& layer;
         deLayerFrameManager& frameManager;
+        int layerIndex;
     public:
-        deLayerFrame(wxWindow *parent, deLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager);
+        deLayerFrame(wxWindow *parent, deLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deLayerFrame();
 
         bool checkIndex(int index);

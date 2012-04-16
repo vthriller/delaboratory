@@ -19,9 +19,7 @@
 #ifndef _DE_COLOR_SPACE_H
 #define _DE_COLOR_SPACE_H
 
-#include "value.h"
-#include <string>
-#include <vector>
+#define MAX_COLOR_SPACE_SIZE 4
 
 enum deColorSpace
 {
@@ -37,24 +35,5 @@ enum deColorSpace
     deColorSpaceXYZ,
     deColorSpaceLCH
 };
-
-int getColorSpaceSize(const deColorSpace& colorSpace);
-void getColorSpaceChannelRanges(const deColorSpace& colorSpace, int index, deValue& min, deValue& max);
-std::string getColorSpaceName(deColorSpace colorSpace);
-std::string getChannelName(deColorSpace colorSpace, int channel);
-deColorSpace colorSpaceFromString(const std::string& name);
-
-void getSupportedColorSpaces(std::vector<deColorSpace>& result);
-void getSupportedConversions(const deColorSpace& colorSpace, std::vector<deColorSpace>& result);
-
-deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v);
-
-bool isChannelLuminance(deColorSpace colorSpace, int channel);
-bool shouldChannelBeSharpened(deColorSpace colorSpace, int channel);
-
-int getEqualizerChannel(deColorSpace colorSpace);
-bool isChannelWrapped(deColorSpace colorSpace, int channel);
-
-bool isActionSupported(const std::string& action, deColorSpace colorSpace);
 
 #endif

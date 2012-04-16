@@ -28,6 +28,7 @@
 #include "layer_stack.h"
 #include "layer_frame_manager.h"
 #include "frame_factory.h"
+#include "color_space_utils.h"
 
 const int g_txt = 220;
 
@@ -147,7 +148,7 @@ void deControlPanel::setConversions()
     deViewManager& viewManager = project.getViewManager();
     int view = viewManager.getView();
     deLayerStack& layerStack = project.getLayerStack();
-    deLayer* layer = layerStack.getLayer(view);
+    deBaseLayer* layer = layerStack.getLayer(view);
 
     if (!layer)
     {
@@ -260,6 +261,7 @@ void deControlPanel::click(wxCommandEvent &event)
     if (c != convertButtonsColorSpaces.end())
     {
         deColorSpace colorSpace = c->second;
+
         project.addConversionLayer(colorSpace);
         onAddLayer();
     }
@@ -268,6 +270,7 @@ void deControlPanel::click(wxCommandEvent &event)
     if (a != actionButtonsNames.end())
     {
         std::string action = a->second;
+
         project.addActionLayer(action);
         onAddLayer();
     }
@@ -306,9 +309,11 @@ void deControlPanel::onAddLayer()
         deLayerFrameManager& frameManager = project.getLayerFrameManager();
         deLayerStack& layerStack = project.getLayerStack();
         int n = layerStack.getSize() - 1;
-        deLayer* layer = layerStack.getLayer(n);
+        deBaseLayer* baseLayer = layerStack.getLayer(n);
+        deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
+        int layerIndex = n;
         project.log("auto UI - creating action frame");
-        deFrame* actionFrame = createFrame(this, *layer, layerProcessor, frameManager);
+        deFrame* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex);
         if (actionFrame)
         {
             project.log("auto UI - created action frame");

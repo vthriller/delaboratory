@@ -22,8 +22,8 @@
 #include <string>
 #include <map>
 #include "color_space.h"
-#include <libxml/parser.h>
-#include "mutex.h"
+#include <vector>
+#include "base_layer.h"
 
 class deProject;
 class deFrame;
@@ -33,26 +33,13 @@ class dePropertyValue;
 class deProperty;
 class dePresetLayer;
 
-enum deLayerProcessType
-{   
-    deLayerProcessInvalid,
-    deLayerProcessFull,
-    deLayerProcessSingleChannel,
-    deLayerProcessBlend
-};
-
-class deLayer
+class deLayer:public deBaseLayer
 {
     private:
         deLayer(const deLayer& layer);
         deLayer& operator = (const deLayer& layer);
-        deMutex mutex;
-
-        virtual bool updateImage() = 0;
 
     protected:
-        deColorSpace colorSpace;
-        unsigned int index;
         unsigned int sourceLayer;
 
         std::vector<deProperty*> properties;
@@ -60,16 +47,12 @@ class deLayer
 
         int registerPropertyValue(const std::string& _name);
 
-        void saveCommon(xmlNodePtr node);
         void saveValueProperties(xmlNodePtr node);
         void loadValueProperties(xmlNodePtr root);
 
     public:
-        deLayer(deColorSpace _colorSpace, int _index, int _sourceLayer);
+        deLayer(deColorSpace _colorSpace, int _sourceLayer);
         virtual ~deLayer();
-
-        deColorSpace getColorSpace() const;
-        virtual const deImage& getImage() const = 0;
 
         virtual std::string getLabel() const;
 
@@ -80,29 +63,7 @@ class deLayer
         virtual bool isEnabled() const;
         virtual void setEnabled(bool e);
 
-        virtual void updateChannelUsage(std::map<int, int>& channelUsage) const = 0;
-
-        int getIndex() const {return index;};
-
-        virtual void load(xmlNodePtr root) = 0;
-        virtual void save(xmlNodePtr root) = 0;
-
         virtual std::string getActionName() {return "action";};
-
-        virtual std::string getType() const = 0;
-
-        bool updateImageThreadCall();
-
-        void lockLayer();
-        void unlockLayer();
-
-        void process(deLayerProcessType type, int channel);
-
-        virtual void processFull();
-        virtual void processBlend();
-        virtual void processChannel(int channel);
-
-        virtual void onUpdateProperties() {};
 
         int getNumberOfProperties() const {return properties.size();};
         dePropertyValue* getPropertyValue(int index);

@@ -23,8 +23,8 @@
 #include "layer_processor.h"
 #include "layer_frame_manager.h"
 
-deHueSaturationFrame::deHueSaturationFrame(wxWindow *parent, deConversionBW2HueLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deLayerFrame(parent, _layer, "BW -> hue/saturation", _frameManager), layerProcessor(_layerProcessor), layer(_layer)
+deHueSaturationFrame::deHueSaturationFrame(wxWindow *parent, deConversionBW2HueLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deLayerFrame(parent, _layer, "BW -> hue/saturation", _frameManager, _layerIndex), layerProcessor(_layerProcessor), layer(_layer)
 {
     frameManager.addActionFrame(this);
 
@@ -35,10 +35,10 @@ deHueSaturationFrame::deHueSaturationFrame(wxWindow *parent, deConversionBW2HueL
 
     int range = 400;
 
-    hue = new dePropertyValueSlider(this, range, hsLayer.getPropertyHue(), hsLayer, layerProcessor);
+    hue = new dePropertyValueSlider(this, range, hsLayer.getPropertyHue(), hsLayer, layerProcessor, layerIndex);
     sizer->Add(hue);
 
-    saturation = new dePropertyValueSlider(this, range, hsLayer.getPropertySaturation(), hsLayer, layerProcessor);
+    saturation = new dePropertyValueSlider(this, range, hsLayer.getPropertySaturation(), hsLayer, layerProcessor, layerIndex);
     sizer->Add(saturation);
 
 
@@ -95,6 +95,6 @@ void deHueSaturationFrame::click(wxCommandEvent &event)
     hue->setFromProperty();
     saturation->setFromProperty();
 
-    int index = layer.getIndex();
-    layerProcessor.markUpdateAllChannels(index);
+//    int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(layerIndex);
 }   

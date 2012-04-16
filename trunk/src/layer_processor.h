@@ -138,7 +138,7 @@ class deLayerProcessor
         void onGUIUpdate();
 
         void removeTopLayer();
-        void addLayer(deLayer* layer);
+        void addLayer(deBaseLayer* layer, int layerIndex);
 
         void stopWorkerThread();
 

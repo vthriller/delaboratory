@@ -38,7 +38,7 @@ class deHighPassFrame:public deActionFrame
         void click(wxCommandEvent &event);
 
     public:
-        deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager);
+        deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deHighPassFrame();
 
 

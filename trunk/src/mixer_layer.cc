@@ -20,9 +20,10 @@
 #include "project.h"
 #include <iostream>
 #include "frame_factory.h"
+#include "color_space_utils.h"
 
-deMixerLayer::deMixerLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer(_colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager) 
+deMixerLayer::deMixerLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer(_colorSpace,  _sourceLayer, _layerStack, _channelManager, _viewManager) 
 {
     int n = getColorSpaceSize(colorSpace);
     int i;

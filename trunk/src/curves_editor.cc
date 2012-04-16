@@ -21,16 +21,21 @@
 #include "curves_layer.h"
 #include "curves_panel.h"
 #include "gradient_panel.h"
+#include "color_space_utils.h"
+#include "logger.h"
 
-deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deActionFrame(parent, _layer, _frameManager)
+deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deActionFrame(parent, _layer, _frameManager, _layerIndex)
 {
+    logMessage("creating curves editor...");
     deCurvesLayer& curvesLayer = dynamic_cast<deCurvesLayer&>(_layer);
 
     deColorSpace colorSpace = layer.getColorSpace();
 
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
+
+    logMessage("creating curves editor... 2 ");
 
     int n = getColorSpaceSize(colorSpace);
     wxString* channelStrings = new wxString [n];
@@ -39,6 +44,7 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerP
     {
         channelStrings[i] = wxString::FromAscii(getChannelName(colorSpace,i).c_str());
     }        
+    logMessage("creating curves editor... 3 ");
 
     channelChoice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), n, channelStrings);
     channelChoice->SetSelection(0);
@@ -53,7 +59,11 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerP
     wxSizer* sizerC = new wxFlexGridSizer(2, 8, 8);
     sizerSB->Add(sizerC);
 
-    curvesPanel = new deCurvesPanel(this, curvesLayer, _layerProcessor);
+    logMessage("creating curves editor... 4 ");
+
+    curvesPanel = new deCurvesPanel(this, curvesLayer, _layerProcessor, _layerIndex);
+
+    logMessage("creating curves editor... 5 ");
 
     int barSize = 16;
 
@@ -125,6 +135,7 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerP
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::click));
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deCurvesEditor::choose));
+    logMessage("created curves editor...");
 }
 
 deCurvesEditor::~deCurvesEditor()

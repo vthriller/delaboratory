@@ -20,6 +20,7 @@
 #include "copy_channel.h"
 #include "image.h"
 #include "channel_manager.h"
+#include "color_space_utils.h"
 
 void copyImage(const deImage& sourceImage, const deImage& image, deChannelManager& channelManager)
 {

@@ -24,8 +24,8 @@
 #include "frame_factory.h"
 #include "layer_processor.h"
 
-deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _index, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer( _colorSpace, _index, _sourceLayer, _layerStack, _channelManager, _viewManager),
+deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deActionLayer( _colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager),
  blurRadius("blur_radius"),
  threshold("threshold"),
  blurType("blur_type")

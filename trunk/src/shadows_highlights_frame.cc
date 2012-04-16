@@ -21,8 +21,8 @@
 #include <iostream>
 #include "property_value_slider.h"
 
-deShadowsHighlightsFrame::deShadowsHighlightsFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
+deShadowsHighlightsFrame::deShadowsHighlightsFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -40,7 +40,7 @@ deShadowsHighlightsFrame::deShadowsHighlightsFrame(wxWindow *parent, deActionLay
         dePropertyValue* p = shLayer.getPropertyValue(i);
         if (p)
         {
-            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, shLayer, layerProcessor);
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, shLayer, layerProcessor, layerIndex);
             valueSliders.push_back(s);
             sizer->Add(s);
         }            

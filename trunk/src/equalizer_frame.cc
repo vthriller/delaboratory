@@ -25,6 +25,7 @@
 #include "property_choice_ui.h"
 #include "gradient_panel.h"
 #include "wx/notebook.h"
+#include "color_space_utils.h"
 
 class deEqualizerSlider:public deSlider
 {
@@ -34,11 +35,13 @@ class deEqualizerSlider:public deSlider
         int index;
         int channel;
         deLayerProcessor& layerProcessor;
+        int layerIndex;
 
     public:
-        deEqualizerSlider(wxWindow *parent, int range, deEqualizerLayer& _layer, deEqualizer& _equalizer, int _index, int _channel, const std::string& name, deLayerProcessor& _layerProcessor)
+        deEqualizerSlider(wxWindow *parent, int range, deEqualizerLayer& _layer, deEqualizer& _equalizer, int _index, int _channel, const std::string& name, deLayerProcessor& _layerProcessor, int _layerIndex)
         :deSlider(parent, name, range, -1.0, 1.0, 0.0), layer(_layer), equalizer(_equalizer), index(_index), channel(_channel),
-         layerProcessor(_layerProcessor)
+         layerProcessor(_layerProcessor),
+         layerIndex(_layerIndex)
         {
             setFromProperty();
         }
@@ -54,8 +57,8 @@ class deEqualizerSlider:public deSlider
                 equalizer.setValue(index, value);
                 layer.setHistogramChannel(index);
 
-                int ind = layer.getIndex();
-                layerProcessor.markUpdateSingleChannel(ind, channel);
+                //int ind = layer.getIndex();
+                layerProcessor.markUpdateSingleChannel(layerIndex, channel);
             }                
         }
 
@@ -66,8 +69,8 @@ class deEqualizerSlider:public deSlider
 };        
 
 
-deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
+deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -109,7 +112,7 @@ deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deActionLayer& _layer, deLa
                 gradient->setColor(colorSpace, c, l);
                 sSizer->Add(gradient);
 
-                deEqualizerSlider* s = new deEqualizerSlider(slidersPanel, range, equalizerLayer, *equalizer, i, j, "", layerProcessor);
+                deEqualizerSlider* s = new deEqualizerSlider(slidersPanel, range, equalizerLayer, *equalizer, i, j, "", layerProcessor, layerIndex);
                 sSizer->Add(s);
                 sliders.push_back(s);
             }
@@ -145,6 +148,6 @@ void deEqualizerFrame::click(wxCommandEvent &event)
         (*j)->setFromProperty();
     }
 
-    int index = layer.getIndex();
-    layerProcessor.markUpdateAllChannels(index);
+    //int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(layerIndex);
 }   

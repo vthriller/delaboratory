@@ -19,6 +19,7 @@
 #include "static_image.h"
 #include "channel.h"
 #include "logger.h"
+#include "color_space_utils.h"
 
 deStaticImage::deStaticImage()
 :colorSpace(deColorSpaceInvalid),

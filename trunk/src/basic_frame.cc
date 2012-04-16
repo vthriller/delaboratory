@@ -22,8 +22,8 @@
 #include "property_value_slider.h"
 #include "layer_processor.h"
 
-deBasicFrame::deBasicFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
+deBasicFrame::deBasicFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -56,7 +56,7 @@ deBasicFrame::deBasicFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
         if (p)
         {
-            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, basicLayer, layerProcessor);
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, basicLayer, layerProcessor, layerIndex);
             basicSliders.push_back(s);
             sizerS->Add(s);
         }
@@ -94,62 +94,72 @@ void deBasicFrame::click(wxCommandEvent &event)
         (*i)->setFromProperty();
     }
 
-    int index = layer.getIndex();
-    layerProcessor.markUpdateAllChannels(index);
+    //int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(layerIndex);
 }   
 
 void applyWhiteBalanceLAB(deLayer& layer, deValue x, deValue y)
 {
-    const deImage& image = layer.getImage();
+    const deImage& image = layer.getLayerImage();
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
     deSize size = basicLayer.getChannelSize();
     int p = (y * size.getH() )  * size.getW() + (x * size.getW());
 
-    deValue A;
-    bool res1 = image.getPixel(1, p, A);
-    if (res1)
+    const deValue* valuesA = image.getValues(1);
+    if (!valuesA)
     {
-        dePropertyValue* ATint = basicLayer.getBasicProperty("A tint");
-        if (ATint)
-        {
-            deValue old = ATint->get();
-            A = 0.5 - A + old;
-            ATint->set(A);
-        }
+        return;
+    }
+    deValue A = valuesA[p];
+    const deValue* valuesB = image.getValues(2);
+    if (!valuesB)
+    {
+        return;
+    }
+    deValue B = valuesB[p];
+
+    dePropertyValue* ATint = basicLayer.getBasicProperty("A tint");
+    if (ATint)
+    {
+        deValue old = ATint->get();
+        A = 0.5 - A + old;
+        ATint->set(A);
     }
 
-    deValue B;
-    bool res2 = image.getPixel(2, p, B);
-    if (res2)
+    dePropertyValue* BTint = basicLayer.getBasicProperty("B tint");
+    if (BTint)
     {
-        dePropertyValue* BTint = basicLayer.getBasicProperty("B tint");
-        if (BTint)
-        {
-            deValue old = BTint->get();
-            B = 0.5 - B + old;
-            BTint->set(B);
-        }
+        deValue old = BTint->get();
+        B = 0.5 - B + old;
+        BTint->set(B);
     }
 }
 
 void applyWhiteBalanceRGB(deLayer& layer, deValue x, deValue y)
 {
-    const deImage& image = layer.getImage();
+    const deImage& image = layer.getLayerImage();
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
     deSize size = basicLayer.getChannelSize();
     int p = (y * size.getH() )  * size.getW() + (x * size.getW());
 
-    deValue r;
-    bool res1 = image.getPixel(0, p, r);
-    deValue g;
-    bool res2 = image.getPixel(1, p, g);
-    deValue b;
-    bool res3 = image.getPixel(2, p, b);
-
-    if ((!res1) || (!res2) || (!res3))
+    const deValue* valuesR = image.getValues(0);
+    if (!valuesR)
     {
         return;
     }
+    deValue r = valuesR[p];
+    const deValue* valuesG = image.getValues(1);
+    if (!valuesG)
+    {
+        return;
+    }
+    deValue g = valuesG[p];
+    const deValue* valuesB = image.getValues(2);
+    if (!valuesB)
+    {
+        return;
+    }
+    deValue b = valuesB[p];
 
     deValue a = (r + g + b) / 3.0;
 
@@ -179,22 +189,29 @@ void applyWhiteBalanceRGB(deLayer& layer, deValue x, deValue y)
 
 void applyWhiteBalanceCMYK(deLayer& layer, deValue x, deValue y)
 {
-    const deImage& image = layer.getImage();
+    const deImage& image = layer.getLayerImage();
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
     deSize size = basicLayer.getChannelSize();
     int p = (y * size.getH() )  * size.getW() + (x * size.getW());
 
-    deValue r;
-    bool res1 = image.getPixel(0, p, r);
-    deValue g;
-    bool res2 = image.getPixel(1, p, g);
-    deValue b;
-    bool res3 = image.getPixel(2, p, b);
-
-    if ((!res1) || (!res2) || (!res3))
+    const deValue* valuesR = image.getValues(0);
+    if (!valuesR)
     {
         return;
     }
+    deValue r = valuesR[p];
+    const deValue* valuesG = image.getValues(1);
+    if (!valuesG)
+    {
+        return;
+    }
+    deValue g = valuesG[p];
+    const deValue* valuesB = image.getValues(2);
+    if (!valuesB)
+    {
+        return;
+    }
+    deValue b = valuesB[p];
 
     deValue a = (r + g + b) / 3.0;
 
@@ -250,9 +267,9 @@ bool deBasicFrame::onImageClick(deValue x, deValue y)
         (*i)->setFromProperty();
     }
 
-    int index = layer.getIndex();
+//    int index = layer.getIndex();
 
-    layerProcessor.markUpdateAllChannels(index);
+    layerProcessor.markUpdateAllChannels(layerIndex);
 
     return true;
 }

@@ -26,7 +26,7 @@ class deChannelManager;
 class deViewManager;
 class deStaticImage;
 
-class deSourceImageLayer:public deLayer
+class deSourceImageLayer:public deBaseLayer
 {
     private:
         deChannelManager& previewChannelManager;
@@ -35,23 +35,20 @@ class deSourceImageLayer:public deLayer
         deImage image;
         deStaticImage& sourceImage;
 
-        virtual std::string getType() const {return "source_image";};
+        virtual std::string getType() const {return "original";};
 
         virtual bool updateImage();
 
     public:
-        deSourceImageLayer(int _index, deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace);
+        deSourceImageLayer(deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace);
         virtual ~deSourceImageLayer();
 
-        virtual const deImage& getImage() const;
+        virtual const deImage& getLayerImage() const;
 
-        virtual void updateChannelUsage(std::map<int, int>& channelUsage) const;
+        virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
         virtual void load(xmlNodePtr root) {};
         virtual void save(xmlNodePtr root) {saveCommon(root);};
-
-        void setOffset(deValue x, deValue y);
-
 
 };
 

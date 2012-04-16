@@ -22,6 +22,7 @@
 #include "color_space.h"
 #include "size.h"
 #include "mutex.h"
+#include <vector>
 class deChannel;
 
 class deStaticImage

@@ -22,8 +22,8 @@
 #include "property_value_slider.h"
 #include "layer_processor.h"
 
-deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager)
-:deActionFrame(parent, _layer, _frameManager), layerProcessor(_layerProcessor)
+deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -41,7 +41,7 @@ deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor
         dePropertyValue* p = usmLayer.getPropertyValue(i);
         if (p)
         {
-            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, usmLayer, layerProcessor);
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, usmLayer, layerProcessor, layerIndex);
             valueSliders.push_back(s);
             sizer->Add(s);
         }            
@@ -91,6 +91,6 @@ void deUSMFrame::click(wxCommandEvent &event)
         (*j)->setFromProperty();
     }
 
-    int index = layer.getIndex();
-    layerProcessor.markUpdateAllChannels(index);
+    //int index = layer.getIndex();
+    layerProcessor.markUpdateAllChannels(layerIndex);
 }   
