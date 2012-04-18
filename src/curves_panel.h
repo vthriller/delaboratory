@@ -37,7 +37,6 @@ private:
     int sizeY;
     deCurvesLayer& layer;
     int channel;
-    int layerIndex;
     
     bool realtime;
 
@@ -62,6 +61,8 @@ private:
     int clickPosition;
 
     deLayerProcessor& layerProcessor;
+
+    int layerIndex;
 
     void drawLine(wxDC& dc, deValue x1, deValue y1, deValue x2, deValue y2);
     void drawLines(wxDC& dc);

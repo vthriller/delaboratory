@@ -20,14 +20,14 @@
 #define _DE_CHANNEL_H
 
 #include "value.h"
-#include <wx/wx.h>
 #include "mutex.h"
+#include "semaphore.h"
 
 class deChannel
 {
     private:
         deValue* pixels;
-        mutable wxSemaphore readSemaphore;
+        mutable deSemaphore readSemaphore;
         deMutex writeMutex;
         int maxReaders;
         int magicSize;

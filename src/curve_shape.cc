@@ -24,70 +24,39 @@
 deCurveShape::deCurveShape(int _size)
 :size(_size)
 {
-    functions.reserve(size);
     int i;
     for (i = 0; i < size; i++)
     {
-        functions[i] = NULL;
+        functions.push_back(deCurveFunctionBezier(0, 0, 0, 0, 0, 0));
     }
 }
 
 deCurveShape::~deCurveShape()
 {
-    clearFunctions();
 }
-
-void deCurveShape::clearFunctions()
-{
-    int i;
-    for (i = 0; i < size; i++)
-    {
-        if (functions[i] != NULL)
-        {
-            delete functions[i];
-            functions[i] = NULL;
-        }            
-    }
-}
-
-/*
-void deCurveShape::storeValues(deValue x1, deValue y1, deValue x2, deValue y2)
-{
-    int p1 = x1 * (size - 1);
-    int p2 = x2 * (size - 1);
-
-    int i;
-    for (i = p1; i <= p2; i++)
-    {
-        functions[i] = new deCurveFunctionLinear(x1, y1, x2, y2);
-    }
-
-}
-*/
 
 deValue deCurveShape::calc(deValue value)
 {
     if ( value <= 0 )
     {
-        return functions[0]->calc(0);
+        return functions[0].calc(0);
     }
     else if (value >= 1)
     {
-        return functions[size-1]->calc(1);
+        return functions[size-1].calc(1);
     }
     else
     {
         deValue s = size - 1;
         int p = s * value;
 
-        return functions[p]->calc(value);
+        return functions[p].calc(value);
     }        
 }
 
 void deCurveShape::build(const deCurvePoints& points)
 {
     nodes.clear();
-    clearFunctions();
     deCurvePoints::const_iterator j;
 
     for (j = points.begin(); j != points.end(); j++)
@@ -124,7 +93,7 @@ void deCurveShape::getCurvePoints(deCurvePoints& points) const
     for (i = 0; i < size; i++)
     {
         deValue x = i * s;
-        deValue y = functions[i]->calc(x);
+        deValue y = functions[i].calc(x);
         points.push_back(deCurvePoint(x,y));
     }
 
@@ -204,13 +173,12 @@ void deCurveShape::generateBezier()
             y2 = y3 - s2 * dx / 3.0;
         }
 
-
         int p1 = x0 * (size - 1);
         int p2 = x3 * (size - 1);
         int iii;
         for (iii = p1; iii <= p2; iii++)
         {
-            functions[iii] = new deCurveFunctionBezier(x0, x3, y0, y1, y2, y3);
+            functions[iii] = deCurveFunctionBezier(x0, x3, y0, y1, y2, y3);
         }
     }
 

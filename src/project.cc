@@ -49,24 +49,27 @@
 #include "raw_module.h"
 #include "zoom_manager.h"
 #include "color_space_utils.h"
+#include "operation_processor.h"
+#include "main_window.h"
 
 #define ICC_MESSAGE 0
 
-deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager)
+deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deOperationProcessor& _operationProcessor, deMainWindow& _mainWindow)
 :layerProcessor(_processor),
  viewModePanel(NULL),
  previewChannelManager(_previewChannelManager),
  controlPanel(NULL),
  memoryInfoFrame(NULL),
  viewManager(*this, _processor, _zoomManager),
- mainFrame(NULL),
  sourceImage(_sourceImage),
  layerStack(_layerStack),
  layerFrameManager(_layerFrameManager),
  histogramModePanel(NULL),
  imageAreaPanel(NULL),
  rawModule(_rawModule),
- zoomManager(_zoomManager)
+ zoomManager(_zoomManager),
+ operationProcessor(_operationProcessor),
+ mainWindow(_mainWindow)
 {
     imageFileName = "";
     sourceImageFileName = "";
@@ -77,6 +80,7 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
     layerProcessor.setViewManager(&viewManager);
 
     resetLayerStack(deColorSpaceRGB);
+
 
 }
 
@@ -206,7 +210,7 @@ void deProject::resetLayerStack(deColorSpace colorSpace)
 
     if (layer)
     {
-        layerProcessor.addLayer(layer, 0);
+        operationProcessor.addNewLayerOnTop(layer, 0);
     }        
 
     previewChannelManager.destroyAllChannels();
@@ -272,10 +276,7 @@ void deProject::onChangeView(int a)
         histogramModePanel->updateNames();
     }
     updateMemoryInfo();
-    if (mainFrame)
-    {
-        mainFrame->rebuild();
-    }
+    mainWindow.rebuild();
     logMessage("change view from " + str(a) + " end");
 }
 
@@ -494,7 +495,7 @@ void deProject::loadLayer(xmlNodePtr root, int layerIndex)
 
     if (layer)
     {
-        layerProcessor.addLayer(layer, layerIndex);
+        operationProcessor.addNewLayerOnTop(layer, layerIndex);
         layer->load(root);
     }        
 
@@ -621,7 +622,7 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
                 return false;
             }
 
-            rawTimer->Start(500);
+            mainWindow.startRawTimer();
 
         }
         else
@@ -686,14 +687,6 @@ void deProject::updateMemoryInfo()
     }
 }
 
-void deProject::setMainFrame(deMainFrame* _mainFrame)
-{
-    log("set main frame in project");
-    mainFrame = _mainFrame;
-
-    rawTimer = new wxTimer(mainFrame, wxID_ANY);
-}
-
 bool deProject::isSourceValid() const
 {
     return (previewChannelManager.getChannelSize().getN() > 0);
@@ -727,7 +720,7 @@ void deProject::addActionLayer(const std::string& action)
 
     if (layer)
     {
-        layerProcessor.addLayer(layer, layerIndex);
+        operationProcessor.addNewLayerOnTop(layer, layerIndex);
         setLastView();
 
         if (controlPanel)
@@ -750,7 +743,7 @@ void deProject::addConversionLayer(deColorSpace colorSpace)
 
     if (layer)
     {
-        layerProcessor.addLayer(layer, layerIndex);
+        operationProcessor.addNewLayerOnTop(layer, layerIndex);
         setLastView();
 
         if (controlPanel)
@@ -763,10 +756,7 @@ void deProject::addConversionLayer(deColorSpace colorSpace)
 
 void deProject::onImageNameUpdate()
 {
-    if (mainFrame)
-    {
-        mainFrame->setImageName(imageFileName, sourceImage.getSize());
-    }
+    mainWindow.setImageName(imageFileName, sourceImage.getSize());
 }
 
 void deProject::onTimerUpdate()
@@ -778,12 +768,12 @@ void deProject::onTimerUpdate()
     if ((result) || (failure))
     {
         layerProcessor.sendInfoEvent(DE_DCRAW_END);
-        rawTimer->Stop();
+        mainWindow.stopRawTimer();
     }
+
     if (result)
     {
-        wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_IMAGE_LOAD_EVENT );
-        wxPostEvent( mainFrame, event );
+        mainWindow.postEvent(DE_IMAGE_LOAD_EVENT, 0);
     }
 
 }

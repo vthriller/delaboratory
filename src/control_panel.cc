@@ -29,11 +29,12 @@
 #include "layer_frame_manager.h"
 #include "frame_factory.h"
 #include "color_space_utils.h"
+#include "operation_processor.h"
 
 const int g_txt = 220;
 
-deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor,  deLayerGridPanel* _layerGridPanel)
-:wxPanel(parent), project(_project), layerGridPanel(_layerGridPanel), layerProcessor(_processor)
+deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor,  deLayerGridPanel* _layerGridPanel, deOperationProcessor& _operationProcessor)
+:wxPanel(parent), project(_project), layerGridPanel(_layerGridPanel), layerProcessor(_processor), operationProcessor(_operationProcessor)
 {
     autoUI = false;
 
@@ -218,7 +219,7 @@ void deControlPanel::click(wxCommandEvent &event)
         deLayerStack& layerStack = project.getLayerStack();
         int index = layerStack.getSize() - 1;
         project.getLayerFrameManager().onDestroyLayer(index);
-        layerProcessor.removeTopLayer();
+        operationProcessor.removeTopLayer();
         updateLayerGrid();
     }
 

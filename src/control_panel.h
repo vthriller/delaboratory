@@ -26,6 +26,7 @@
 class deProject;
 class deLayerGridPanel;
 class deLayerProcessor;
+class deOperationProcessor;
 
 class deControlPanel:public wxPanel
 {
@@ -33,6 +34,7 @@ class deControlPanel:public wxPanel
         deProject& project;
         deLayerGridPanel* layerGridPanel;
         deLayerProcessor& layerProcessor;
+        deOperationProcessor& operationProcessor;
         wxSizer* mainSizer;
 
         bool autoUI;
@@ -58,7 +60,7 @@ class deControlPanel:public wxPanel
         void onAddLayer();
 
     public:
-        deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deLayerGridPanel* _layerGridPanel);
+        deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deLayerGridPanel* _layerGridPanel, deOperationProcessor& _operationProcessor);
         ~deControlPanel();
 
         void onChangeView();

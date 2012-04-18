@@ -30,6 +30,7 @@ class deSamplersPanel;
 class deSamplerManager;
 class deZoomManager;
 class deThreadsPanel;
+class deOperationProcessor;
 #include "size.h"
 
 enum
@@ -132,21 +133,22 @@ private:
 
     void updateTitle();
 
-public:
-	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcrawVersion);
-	~deMainFrame();
+    void paintHistogram();
 
     void showPanels();
     void hidePanels();
+
+public:
+	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcrawVersion, deOperationProcessor& _operationProcessor);
+	~deMainFrame();
+
     void rebuild();
 
     void onKey(int key);
 
     void generateHistogram();
-    void paintHistogram();
 
     void setImageName(const std::string& _imageName, const deSize& _size);
-
 
 	DECLARE_EVENT_TABLE()
 

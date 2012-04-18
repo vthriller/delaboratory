@@ -16,35 +16,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_RENDERED_IMAGE_H
-#define _DE_RENDERED_IMAGE_H
+#ifndef _DE_CANVAS_WX_H
+#define _DE_CANVAS_WX_H
 
-#include "size.h"
-class deBitmap;
-class deCanvas;
+#include "canvas.h"
+#include <wx/wx.h>
 
-class deRenderedImage
+class deCanvasWX:public deCanvas
 {
     private:
-        deBitmap* renderedBitmap;
-        unsigned char* internalData;
-        
-        deRenderedImage(const deRenderedImage& i);
-        deRenderedImage& operator = (const deRenderedImage& i);
-
-        deSize size;
-        deSize requestedSize;
-        deSize bitmapSize;
-
+        wxDC& dc;
     public:
-        deRenderedImage();
+        deCanvasWX(wxDC& _dc);
+        ~deCanvasWX();
 
-        virtual ~deRenderedImage();
+        virtual void clear();
+        virtual void drawCircle(int x, int y, int r);
+        virtual void drawLine(int x1, int y1, int x2, int y2);
+        virtual void setPen(int r, int g, int b);
+        virtual void drawBitmap(deBitmap& bitmap);
 
-        void setSize(const deSize& _size);
-        unsigned char* getCurrentImageData();
-        unsigned char* getCurrentBitmapData();
-        bool render(deCanvas& canvas);
 };
+
 
 #endif

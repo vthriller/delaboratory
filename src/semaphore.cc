@@ -16,35 +16,51 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_RENDERED_IMAGE_H
-#define _DE_RENDERED_IMAGE_H
+#include "semaphore.h"
+#include <wx/wx.h>
 
-#include "size.h"
-class deBitmap;
-class deCanvas;
-
-class deRenderedImage
+class deSemaphoreImpl
 {
     private:
-        deBitmap* renderedBitmap;
-        unsigned char* internalData;
-        
-        deRenderedImage(const deRenderedImage& i);
-        deRenderedImage& operator = (const deRenderedImage& i);
-
-        deSize size;
-        deSize requestedSize;
-        deSize bitmapSize;
-
+        wxSemaphore semaphore;
     public:
-        deRenderedImage();
+        deSemaphoreImpl(int a, int b)
+        :semaphore(a, b)
+        {
+        }
 
-        virtual ~deRenderedImage();
+        ~deSemaphoreImpl()
+        {
+        }
 
-        void setSize(const deSize& _size);
-        unsigned char* getCurrentImageData();
-        unsigned char* getCurrentBitmapData();
-        bool render(deCanvas& canvas);
+        void wait()
+        {
+            semaphore.Wait();
+        }
+
+        void post()
+        {
+            semaphore.Post();
+        }
+
 };
 
-#endif
+deSemaphore::deSemaphore(int a, int b)
+{
+    impl = new deSemaphoreImpl(a, b);
+}
+
+deSemaphore::~deSemaphore()
+{
+    delete impl;
+}
+
+void deSemaphore::wait()
+{
+    impl->wait();
+}
+
+void deSemaphore::post()
+{
+    impl->post();
+}

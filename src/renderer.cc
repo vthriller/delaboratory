@@ -28,6 +28,7 @@
 #include "logger.h"
 #include "channel_manager.h"
 #include "layer_stack.h"
+#include "canvas_wx.h"
 
 bool renderImage(const deImage& image, unsigned char* data, deChannelManager& channelManager)
 {
@@ -327,15 +328,15 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
     return true;
 }
 
-bool deRenderer::render(wxDC& dc)
+bool deRenderer::render(deCanvas& canvas)
 {
     lockWithLog(mutex, "renderer mutex");
 
-    bool result = renderedImage.render(dc);
+    bool result = renderedImage.render(canvas);
 
     if (!result)
     {
-        dc.Clear();
+        canvas.clear();
     }
 
     logMessage("unlock renderer mutex");

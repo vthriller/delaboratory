@@ -16,35 +16,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_RENDERED_IMAGE_H
-#define _DE_RENDERED_IMAGE_H
+#include "operation_processor.h"
+#include "layer_processor.h"
 
-#include "size.h"
-class deBitmap;
-class deCanvas;
-
-class deRenderedImage
+deOperationProcessor::deOperationProcessor(deLayerProcessor& _layerProcessor)
+:layerProcessor(_layerProcessor)
 {
-    private:
-        deBitmap* renderedBitmap;
-        unsigned char* internalData;
-        
-        deRenderedImage(const deRenderedImage& i);
-        deRenderedImage& operator = (const deRenderedImage& i);
+}
 
-        deSize size;
-        deSize requestedSize;
-        deSize bitmapSize;
+deOperationProcessor::~deOperationProcessor()
+{
+}
 
-    public:
-        deRenderedImage();
+void deOperationProcessor::addNewLayerOnTop(deBaseLayer* layer, int layerIndex)
+{
+    layerProcessor.addLayerInLayerProcessor(layer, layerIndex);
+}
 
-        virtual ~deRenderedImage();
-
-        void setSize(const deSize& _size);
-        unsigned char* getCurrentImageData();
-        unsigned char* getCurrentBitmapData();
-        bool render(deCanvas& canvas);
-};
-
-#endif
+void deOperationProcessor::removeTopLayer()
+{
+    layerProcessor.removeTopLayerInLayerProcessor();
+}

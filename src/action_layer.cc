@@ -31,6 +31,7 @@
 #include "blend_channel.h"
 #include "logger.h"
 #include "color_space_utils.h"
+#include "semaphore.h"
 
 class deUpdateActionThread:public wxThread
 {
@@ -43,14 +44,14 @@ class deUpdateActionThread:public wxThread
                 logError("update action failed");
                 layer.setError();
             }
-            semaphore.Post();
+            semaphore.post();
             return NULL;
         }
         deActionLayer& layer;
         int channel;
-        wxSemaphore& semaphore;
+        deSemaphore& semaphore;
     public:    
-        deUpdateActionThread(deActionLayer& _layer, int _channel, wxSemaphore& _semaphore)
+        deUpdateActionThread(deActionLayer& _layer, int _channel, deSemaphore& _semaphore)
         :layer(_layer),
          channel(_channel),
          semaphore(_semaphore)
@@ -67,14 +68,14 @@ class deUpdateBlendThread:public wxThread
         virtual void *Entry()
         {
             layer.updateBlendOnThread(channel);
-            semaphore.Post();
+            semaphore.post();
             return NULL;
         }
         deActionLayer& layer;
         int channel;
-        wxSemaphore& semaphore;
+        deSemaphore& semaphore;
     public:    
-        deUpdateBlendThread(deActionLayer& _layer, int _channel, wxSemaphore& _semaphore)
+        deUpdateBlendThread(deActionLayer& _layer, int _channel, deSemaphore& _semaphore)
         :layer(_layer),
          channel(_channel),
          semaphore(_semaphore)
@@ -92,7 +93,7 @@ bool deActionLayer::updateActionAllChannels()
     int n = getColorSpaceSize(colorSpace);
     int i;
 
-    wxSemaphore semaphore(0, n);
+    deSemaphore semaphore(0, n);
 
     errorOnUpdate = false;
 
@@ -115,7 +116,7 @@ bool deActionLayer::updateActionAllChannels()
     for (i = 0; i < n; i++)
     {
         logMessage("waiting for update action thread for channel " + str(i));
-        semaphore.Wait();
+        semaphore.wait();
     }
 
     logMessage("update action all channels end");
@@ -137,7 +138,7 @@ bool deActionLayer::updateBlendAllChannels()
     int n = getColorSpaceSize(colorSpace);
     int i;
 
-    wxSemaphore semaphore(0, n);
+    deSemaphore semaphore(0, n);
 
     for (i = 0; i < n; i++)
     {
@@ -156,7 +157,7 @@ bool deActionLayer::updateBlendAllChannels()
 
     for (i = 0; i < n; i++)
     {
-        semaphore.Wait();
+        semaphore.wait();
     }
 
     logMessage("update blend all channels end");

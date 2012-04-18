@@ -612,7 +612,7 @@ deConversion4x1 getConversion4x1(deColorSpace s, deColorSpace d)
         return cmyk2bw;
     }
 
-    return false;
+    return NULL;
 }    
 
 deConversion3x1 getConversion3x1(deColorSpace s, deColorSpace d)

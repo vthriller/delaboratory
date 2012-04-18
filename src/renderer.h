@@ -19,12 +19,10 @@
 #ifndef _DE_RENDERER_H
 #define _DE_RENDERER_H
 
-class wxDC;
 class deChannelManager;
 class deViewManager;
 class deLayerProcessor;
 class deLayerStack;
-#include <wx/wx.h>
 #include "size.h"
 #include "rendered_image.h"
 #include "mutex.h"
@@ -43,7 +41,7 @@ class deRenderer
         deRenderer(deChannelManager& _channelManager);
         virtual ~deRenderer();
 
-        bool render(wxDC& dc);
+        bool render(deCanvas& canvas);
         bool prepareImage(const deViewManager& viewManager, deLayerProcessor& layerProcessor, deLayerStack& layerStack);
 };
 

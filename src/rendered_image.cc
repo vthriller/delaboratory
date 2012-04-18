@@ -20,6 +20,8 @@
 #include "logger.h"
 #include "str.h"
 #include <wx/rawbmp.h>
+#include "bitmap_wx.h"
+#include "canvas_wx.h"
 
 void deRenderedImage::setSize(const deSize& _size)
 {
@@ -50,7 +52,7 @@ requestedSize(0,0),
 bitmapSize(0,0)
 {
     logMessage("create rendered image");
-    renderedBitmap = NULL;
+    renderedBitmap = new deBitmapWX();
     internalData = NULL;
 }
 
@@ -67,7 +69,7 @@ deRenderedImage::~deRenderedImage()
     }
 }
 
-bool deRenderedImage::render(wxDC& dc)
+bool deRenderedImage::render(deCanvas& canvas)
 {
     if (!internalData)
     {
@@ -80,21 +82,13 @@ bool deRenderedImage::render(wxDC& dc)
 
     if (bitmapSize != size)
     {
-        if (renderedBitmap)
-        {
-            delete renderedBitmap;
-        }            
-        renderedBitmap = new wxBitmap(w, h, 24);
+        renderedBitmap->resize(w, h);
         bitmapSize = size;
     }
 
-    if (!renderedBitmap)
-    {
-        logMessage("ERROR can't render - no rendered bitmap");
-        return false;
-    }
+    deBitmapWX* bitmapWX = dynamic_cast<deBitmapWX*>(renderedBitmap);
 
-    wxNativePixelData bitmapData(*renderedBitmap);
+    wxNativePixelData bitmapData(*(bitmapWX->getBitmap()));
     if (!bitmapData)
     {
         logMessage("ERROR can't render - wxNativePixelData doesn't work");
@@ -130,6 +124,6 @@ bool deRenderedImage::render(wxDC& dc)
         p.OffsetY(bitmapData, 1);
     }
 
-    dc.DrawBitmap(*renderedBitmap, 0, 0, false);
+    canvas.drawBitmap(*renderedBitmap);
     return true;
 }   
