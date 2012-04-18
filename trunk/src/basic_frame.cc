@@ -94,7 +94,6 @@ void deBasicFrame::click(wxCommandEvent &event)
         (*i)->setFromProperty();
     }
 
-    //int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(layerIndex);
 }   
 
@@ -266,8 +265,6 @@ bool deBasicFrame::onImageClick(deValue x, deValue y)
     {
         (*i)->setFromProperty();
     }
-
-//    int index = layer.getIndex();
 
     layerProcessor.markUpdateAllChannels(layerIndex);
 

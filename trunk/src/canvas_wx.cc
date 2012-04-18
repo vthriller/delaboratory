@@ -16,35 +16,42 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_RENDERED_IMAGE_H
-#define _DE_RENDERED_IMAGE_H
+#include "canvas_wx.h"
+#include "bitmap_wx.h"
 
-#include "size.h"
-class deBitmap;
-class deCanvas;
-
-class deRenderedImage
+deCanvasWX::deCanvasWX(wxDC& _dc)
+:dc(_dc)
 {
-    private:
-        deBitmap* renderedBitmap;
-        unsigned char* internalData;
-        
-        deRenderedImage(const deRenderedImage& i);
-        deRenderedImage& operator = (const deRenderedImage& i);
+}
 
-        deSize size;
-        deSize requestedSize;
-        deSize bitmapSize;
+deCanvasWX::~deCanvasWX()
+{
+}
 
-    public:
-        deRenderedImage();
+void deCanvasWX::clear()
+{
+    dc.Clear();
+}
 
-        virtual ~deRenderedImage();
+void deCanvasWX::drawCircle(int x, int y, int r)
+{
+    dc.DrawCircle(x, y, r);
+}
 
-        void setSize(const deSize& _size);
-        unsigned char* getCurrentImageData();
-        unsigned char* getCurrentBitmapData();
-        bool render(deCanvas& canvas);
-};
+void deCanvasWX::drawLine(int x1, int y1, int x2, int y2)
+{
+    dc.DrawLine(x1, y1, x2, y2);
+}    
 
-#endif
+void deCanvasWX::setPen(int r, int g, int b)
+{
+    wxPen pen(wxColour(r, g, b));
+
+    dc.SetPen(pen);
+}    
+
+void deCanvasWX::drawBitmap(deBitmap& bitmap)
+{
+    deBitmapWX& bitmapWX = dynamic_cast<deBitmapWX&>(bitmap);
+    dc.DrawBitmap(*(bitmapWX.getBitmap()), 0, 0, false);
+}    

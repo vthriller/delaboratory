@@ -34,7 +34,7 @@ class deViewModePanel;
 class deHistogramModePanel;
 class deImageAreaPanel;
 class deMemoryInfoFrame;
-class deMainFrame;
+class deMainWindow;
 class deLayerProcessor;
 class deLayerStack;
 class deLayerFrameManager;
@@ -42,6 +42,7 @@ class deLayer;
 class deStaticImage;
 class deRawModule;
 class deZoomManager;
+class deOperationProcessor;
 
 class deProject
 {
@@ -57,7 +58,7 @@ class deProject
         deMemoryInfoFrame* memoryInfoFrame;
         deViewManager viewManager;
 
-        deMainFrame* mainFrame;
+        deMainWindow& mainWindow;
 
         deStaticImage& sourceImage;
 
@@ -77,7 +78,7 @@ class deProject
 
         deZoomManager& zoomManager;
 
-        wxTimer* rawTimer;
+        deOperationProcessor& operationProcessor;
 
         void onImageNameUpdate();
 
@@ -91,7 +92,7 @@ class deProject
         void saveImage(const std::string& filename, const deImage& image, const std::string& type);
 
     public:
-        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager);
+        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deOperationProcessor& _operationProcessor, deMainWindow& _mainWindow);
 
         virtual ~deProject();
         void onKey(int key);
@@ -141,8 +142,6 @@ class deProject
         void updateMemoryInfo();
 
         void setHistogramChannel(int channel);
-
-        void setMainFrame(deMainFrame* _mainFrame);
 
         deLayerFrameManager& getLayerFrameManager() {return layerFrameManager;};
 

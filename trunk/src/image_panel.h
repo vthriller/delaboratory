@@ -27,6 +27,7 @@ class deSamplerManager;
 class deZoomManager;
 class deZoomPanel;
 class deImageAreaPanel;
+class deCanvas;
 
 class deImagePanel:public wxPanel
 {
@@ -49,15 +50,15 @@ private:
     bool onMove(deValue x, deValue y);
     bool onRelease();
 
-    void drawSamplers(wxDC& dc);
-    void drawSelection(wxDC& dc);
+    void drawSamplers(deCanvas& canvas);
+    void drawSelection(deCanvas& canvas);
+	void render(deCanvas& canvas);
 
 public:
 	deImagePanel(deImageAreaPanel* _area, deProject& _project, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, deZoomPanel* _zoomPanel);
 	virtual ~deImagePanel();
 
 	void paintEvent(wxPaintEvent & evt);
-	void render(wxDC& dc);
     void repaintImagePanel();
 
 	DECLARE_EVENT_TABLE()

@@ -17,6 +17,7 @@
 */
 
 #include "layer_processor.h"
+#include "main_window.h"
 #include "main_frame.h"
 #include "layer_frame_manager.h"
 #include "layer_stack.h"
@@ -45,7 +46,7 @@ class deLayerProcessorWorkerThread:public wxThread
                 }
 
                 logMessage("worker thread before wait");
-                semaphore.Wait();
+                semaphore.wait();
                 logMessage("worker thread after wait");
                 Sleep(10);
 
@@ -70,10 +71,10 @@ class deLayerProcessorWorkerThread:public wxThread
             return NULL;
         }
         deLayerProcessor& processor;
-        wxSemaphore& semaphore;
+        deSemaphore& semaphore;
 
     public:    
-        deLayerProcessorWorkerThread(deLayerProcessor& _processor, wxSemaphore& _semaphore)
+        deLayerProcessorWorkerThread(deLayerProcessor& _processor, deSemaphore& _semaphore)
         :processor(_processor),
          semaphore(_semaphore)
         {
@@ -97,7 +98,7 @@ class deRenderWorkerThread:public wxThread
                 }
 
                 logMessage("render thread before wait");
-                semaphore.Wait();
+                semaphore.wait();
                 logMessage("render thread after wait");
                 Sleep(10);
 
@@ -126,10 +127,10 @@ class deRenderWorkerThread:public wxThread
         }
 
         deLayerProcessor& processor;
-        wxSemaphore& semaphore;
+        deSemaphore& semaphore;
 
     public:    
-        deRenderWorkerThread(deLayerProcessor& _processor, wxSemaphore& _semaphore)
+        deRenderWorkerThread(deLayerProcessor& _processor, deSemaphore& _semaphore)
         :processor(_processor),
          semaphore(_semaphore)
         {
@@ -153,7 +154,7 @@ class deHistogramWorkerThread:public wxThread
                 }
 
                 logMessage("histogram thread before wait");
-                semaphore.Wait();
+                semaphore.wait();
                 logMessage("histogram thread after wait");
                 Sleep(10);
 
@@ -180,10 +181,10 @@ class deHistogramWorkerThread:public wxThread
         }
 
         deLayerProcessor& processor;
-        wxSemaphore& semaphore;
+        deSemaphore& semaphore;
 
     public:    
-        deHistogramWorkerThread(deLayerProcessor& _processor, wxSemaphore& _semaphore)
+        deHistogramWorkerThread(deLayerProcessor& _processor, deSemaphore& _semaphore)
         :processor(_processor),
          semaphore(_semaphore)
         {
@@ -195,16 +196,17 @@ class deHistogramWorkerThread:public wxThread
 };
 
 
-deLayerProcessor::deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager)
+deLayerProcessor::deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deMainWindow& _mainWindow)
 :
 layerStack(_layerStack),
 layerFrameManager(_layerFrameManager),
+workerSemaphore(1,1),
 renderWorkerSemaphore(1, 1),
 histogramWorkerSemaphore(1, 1),
 renderer(_previewChannelManager),
-previewChannelManager(_previewChannelManager)
+previewChannelManager(_previewChannelManager),
+mainWindow(_mainWindow)
 {
-    mainFrame = NULL;
     viewManager = NULL;
 
     histogramWorkerThread = NULL;
@@ -237,29 +239,24 @@ deLayerProcessor::~deLayerProcessor()
     logMessage("destroying layer processor");
 }
 
-void deLayerProcessor::setMainFrame(deMainFrame* _mainFrame)
-{
-    mainFrame = _mainFrame;
-}
-
 void deLayerProcessor::stopWorkerThread()
 {
     logMessage("stop worker thread");
     closing = true;
 
     logMessage("worker thread post before delete");
-    workerSemaphore.Post();
+    workerSemaphore.post();
     logMessage("stop worker thread - workerThread delete");
     workerThread->Delete();
 
     logMessage("render worker thread post before delete");
-    renderWorkerSemaphore.Post();
+    renderWorkerSemaphore.post();
 
     logMessage("stop worker thread - renderWorkerThread delete");
     renderWorkerThread->Delete();
 
     logMessage("histogram worker thread post before delete");
-    histogramWorkerSemaphore.Post();
+    histogramWorkerSemaphore.post();
     logMessage("stop worker thread - histogramWorkerThread delete");
     histogramWorkerThread->Delete();
 
@@ -317,7 +314,7 @@ void deLayerProcessor::repaintImageInLayerProcessor()
 
     logMessage("repaintImage post...");
 
-    renderWorkerSemaphore.Post();
+    renderWorkerSemaphore.post();
     generateHistogram();
 
 }
@@ -332,7 +329,7 @@ void deLayerProcessor::generateHistogram()
 
     logMessage("generate histogram post...");
 
-    histogramWorkerSemaphore.Post();
+    histogramWorkerSemaphore.post();
 }
 
 void deLayerProcessor::sendRepaintEvent()
@@ -342,11 +339,7 @@ void deLayerProcessor::sendRepaintEvent()
         return;
     }
 
-    if (mainFrame)
-    {
-        wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_REPAINT_EVENT );
-        wxPostEvent( mainFrame, event );
-    }
+    mainWindow.postEvent(DE_REPAINT_EVENT, 0 );
 }
 
 void deLayerProcessor::sendInfoEvent(int i)
@@ -356,12 +349,7 @@ void deLayerProcessor::sendInfoEvent(int i)
         return;
     }
 
-    if (mainFrame)
-    {
-        wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_INFO_EVENT );
-        event.SetInt(i);
-        wxPostEvent( mainFrame, event );
-    }
+    mainWindow.postEvent(DE_INFO_EVENT, i );
 }
 
 void deLayerProcessor::sendHistogramEvent()
@@ -371,11 +359,7 @@ void deLayerProcessor::sendHistogramEvent()
         return;
     }
 
-    if (mainFrame)
-    {
-        wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, DE_HISTOGRAM_EVENT );
-        wxPostEvent( mainFrame, event );
-    }
+    mainWindow.postEvent(DE_HISTOGRAM_EVENT, 0 );
 }
 
 void deLayerProcessor::updateAllImages(bool calcHistogram)
@@ -684,7 +668,7 @@ void deLayerProcessor::onGUIUpdate()
     sendRepaintEvent();
 }    
 
-void deLayerProcessor::removeTopLayer()
+void deLayerProcessor::removeTopLayerInLayerProcessor()
 {
     lockHistogram();
     lockPrepareImage();
@@ -726,7 +710,7 @@ void deLayerProcessor::removeAllLayers()
     unlockHistogram();
 }    
 
-void deLayerProcessor::addLayer(deBaseLayer* layer, int layerIndex)
+void deLayerProcessor::addLayerInLayerProcessor(deBaseLayer* layer, int layerIndex)
 {
     layerStack.addLayer(layer);
 
@@ -747,7 +731,7 @@ void deLayerProcessor::checkUpdateImagesRequest()
 
     if (ok)
     {
-        workerSemaphore.Post();
+        workerSemaphore.post();
     }        
 
     unlockLayers();
@@ -800,10 +784,7 @@ void deLayerProcessor::onGenerateHistogram()
 
     if (!closing)
     {
-        if (mainFrame)
-        {
-            mainFrame->generateHistogram();
-        }
+        mainWindow.generateHistogram();
     }        
 
     unlockHistogram();
@@ -849,9 +830,9 @@ void deLayerProcessor::onImageLoad()
     logMessage("on image load done...");
 }
 
-void deLayerProcessor::render(wxDC& dc)
+void deLayerProcessor::render(deCanvas& canvas)
 {
-    renderer.render(dc);
+    renderer.render(canvas);
 }
 
 bool deLayerProcessor::isRealtime() const

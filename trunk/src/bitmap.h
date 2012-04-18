@@ -16,35 +16,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_RENDERED_IMAGE_H
-#define _DE_RENDERED_IMAGE_H
+#ifndef _DE_BITMAP_H
+#define _DE_BITMAP_H
 
-#include "size.h"
-class deBitmap;
-class deCanvas;
-
-class deRenderedImage
+class deBitmap
 {
     private:
-        deBitmap* renderedBitmap;
-        unsigned char* internalData;
-        
-        deRenderedImage(const deRenderedImage& i);
-        deRenderedImage& operator = (const deRenderedImage& i);
-
-        deSize size;
-        deSize requestedSize;
-        deSize bitmapSize;
-
     public:
-        deRenderedImage();
+        deBitmap();
+        virtual ~deBitmap();
 
-        virtual ~deRenderedImage();
+        virtual void resize(int w, int h) = 0;
 
-        void setSize(const deSize& _size);
-        unsigned char* getCurrentImageData();
-        unsigned char* getCurrentBitmapData();
-        bool render(deCanvas& canvas);
 };
+
 
 #endif

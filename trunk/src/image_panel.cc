@@ -27,6 +27,7 @@
 #include "zoom_manager.h"
 #include "zoom_panel.h"
 #include "image_area_panel.h"
+#include "canvas_wx.h"
 
 BEGIN_EVENT_TABLE(deImagePanel, wxPanel)
 EVT_PAINT(deImagePanel::paintEvent)
@@ -163,8 +164,12 @@ void deImagePanel::paintEvent(wxPaintEvent & evt)
     if (view >= 0)
     {
         wxBufferedPaintDC dc(this);
-        dc.Clear();
-        render(dc);
+
+        deCanvasWX canvas(dc);
+
+        canvas.clear();
+
+        render(canvas);
     }
     else
     {
@@ -180,8 +185,12 @@ void deImagePanel::repaintImagePanel()
     {
         wxClientDC dc(this);
         wxBufferedDC bufferedDC(&dc);
-        bufferedDC.Clear();
-        render(bufferedDC);
+
+        deCanvasWX canvas(bufferedDC);
+
+        canvas.clear();
+
+        render(canvas);
     }
     else
     {
@@ -189,21 +198,22 @@ void deImagePanel::repaintImagePanel()
     }
 }
 
-void deImagePanel::render(wxDC& dc)
+void deImagePanel::render(deCanvas& canvas)
 {
-    project.getLayerProcessor().render(dc);
+    project.getLayerProcessor().render(canvas);
+
     if (samplerManager.getMoving())
     {
-        drawSamplers(dc);
+        drawSamplers(canvas);
     }        
     if (zoomManager.isInSelectionMode())
     {
-        drawSelection(dc);
+        drawSelection(canvas);
     }        
 }
 
 
-void deImagePanel::drawSamplers(wxDC& dc)
+void deImagePanel::drawSamplers(deCanvas& canvas)
 {
     int w;
     int h;
@@ -214,9 +224,6 @@ void deImagePanel::drawSamplers(wxDC& dc)
 
     int i;
 
-    wxPen penBLACK(*wxBLACK);
-    wxPen penGREEN(*wxGREEN);
-
     for (i = 0; i < n; i++)
     {
         deSampler* sampler = samplerManager.getSampler(i);
@@ -224,25 +231,25 @@ void deImagePanel::drawSamplers(wxDC& dc)
         {
             if (i == selected)
             {
-                dc.SetPen(penGREEN);
+                canvas.setPen(200, 200, 200);
             }
             else
             {
-                dc.SetPen(penBLACK);
+                canvas.setPen(0, 0, 0);
             }
             float x = sampler->getX();
             float y = sampler->getY();
 
             if ((x >= 0) && (y >= 0) && (x <= 1) && (y<= 1))
             {
-                dc.DrawCircle(w * x, h * y, 5);
+                canvas.drawCircle(w * x, h * y, 5);
             }
         }
     }
 
 }
 
-void deImagePanel::drawSelection(wxDC& dc)
+void deImagePanel::drawSelection(deCanvas& canvas)
 {
     int w;
     int h;
@@ -260,13 +267,12 @@ void deImagePanel::drawSelection(wxDC& dc)
     int xx2 = w * x2;
     int yy2 = h * y2;
 
-    wxPen pen(*wxWHITE);
-    dc.SetPen(pen);
+    canvas.setPen(220, 220, 220);
 
-    dc.DrawLine(xx1, yy1, xx2, yy1);
-    dc.DrawLine(xx1, yy2, xx2, yy2);
-    dc.DrawLine(xx1, yy1, xx1, yy2);
-    dc.DrawLine(xx2, yy1, xx2, yy2);
+    canvas.drawLine(xx1, yy1, xx2, yy1);
+    canvas.drawLine(xx1, yy2, xx2, yy2);
+    canvas.drawLine(xx1, yy1, xx1, yy2);
+    canvas.drawLine(xx2, yy1, xx2, yy2);
 
 }
 

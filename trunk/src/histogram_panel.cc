@@ -28,6 +28,7 @@
 #include "channel_manager.h"
 #include "layer_stack.h"
 #include "str.h"
+#include "canvas_wx.h"
 
 BEGIN_EVENT_TABLE(deHistogramPanel, wxPanel)
 EVT_PAINT(deHistogramPanel::paintEvent)
@@ -49,25 +50,27 @@ void deHistogramPanel::paintEvent(wxPaintEvent & evt)
 {
     logMessage("paintEvent in deHistogramPanel");
     wxBufferedPaintDC dc(this);
-	render(dc);
+    deCanvasWX canvas(dc);
+	render(canvas);
 }
 
 void deHistogramPanel::paintHistogram()
 {
     wxClientDC dc(this);
     wxBufferedDC bufferedDC(&dc);
-	render(bufferedDC);
+    deCanvasWX canvas(bufferedDC);
+	render(canvas);
 }
 
-void deHistogramPanel::render(wxDC& dc)
+void deHistogramPanel::render(deCanvas& canvas)
 {
     if (generated)
     {
-        renderedImage.render(dc);
+        renderedImage.render(canvas);
     }       
     else
     {
-        dc.Clear();
+        canvas.clear();
     }
 }
 

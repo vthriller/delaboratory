@@ -19,7 +19,6 @@
 
 #include "wx/wx.h"
 #include "project.h"
-#include "main_frame.h"
 #include "str.h"
 #include "rgb2xyz2lab.h"
 #include "layer_processor.h"
@@ -30,6 +29,8 @@
 #include "static_image.h"
 #include "raw_module.h"
 #include "zoom_manager.h"
+#include "operation_processor.h"
+#include "main_window.h"
 
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
@@ -41,10 +42,10 @@ class deLaboratory: public wxApp
         deLaboratory()
         :wxApp(),
          sourceImage(),
-         processor(previewChannelManager, layerStack, layerFrameManager),
-         project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage, rawModule, zoomManager)
+         processor(previewChannelManager, layerStack, layerFrameManager, mainWindow),
+         operationProcessor(processor),
+         project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage, rawModule, zoomManager, operationProcessor, mainWindow)
         {
-            frame = NULL;
             deLogger::getLogger().setFile(LOG_FILE_NAME);
             deLogger::getLogger().setLocksFile(LOG_LOCKS_FILE_NAME);
 
@@ -57,16 +58,17 @@ class deLaboratory: public wxApp
     private:
     	virtual bool OnInit();
     	virtual int OnExit();
-        deMainFrame* frame;
+        deMainWindow mainWindow;
         deSamplerManager samplerManager;
         deLayerStack layerStack;
         deLayerFrameManager layerFrameManager;
         deChannelManager previewChannelManager;
         deStaticImage sourceImage;
         deLayerProcessor processor;
-        deProject project;
         deRawModule rawModule;
         deZoomManager zoomManager;
+        deOperationProcessor operationProcessor;
+        deProject project;
 
         virtual int FilterEvent(wxEvent& event);
 
@@ -89,10 +91,7 @@ int deLaboratory::FilterEvent(wxEvent& event)
             }
 
             project.onKey(key);
-            if (frame)
-            {
-                frame->onKey(key);
-            }                 
+            mainWindow.onKey(key);
             return true;
         }
     }
@@ -129,23 +128,19 @@ bool deLaboratory::OnInit()
 	int width = 1200;
 	int height = 960;
 
-	frame = new deMainFrame( wxSize(width,height), project, processor, samplerManager, zoomManager, dcraw_version);
+	mainWindow.init( width, height, project, processor, samplerManager, zoomManager, dcraw_version, operationProcessor);
 
     logMessage("show main frame");
 
-	frame->Show(TRUE);
+    mainWindow.show();
 
     logMessage("set top level");
 
-	SetTopWindow(frame);
+    mainWindow.setTopWindow();
 
     logMessage("initLAB");
 
     initLAB();
-
-    logMessage("setMainFrame...");
-
-    processor.setMainFrame(frame);
 
     logMessage("startWorkerThread...");
 

@@ -133,14 +133,14 @@ void deChannel::allocate(int size)
 void deChannel::lockRead() const
 {
 #if CHANNEL_LOCKING
-    readSemaphore.Wait();
+    readSemaphore.wait();
 #endif    
 }
 
 void deChannel::unlockRead() const
 {
 #if CHANNEL_LOCKING
-    readSemaphore.Post();
+    readSemaphore.post();
 #endif    
 }
 
@@ -150,7 +150,7 @@ void deChannel::lockWrite()
     int i;
     for (i = 0; i < maxReaders; i++)
     {
-        readSemaphore.Wait();
+        readSemaphore.wait();
     }
     lockWithLog(writeMutex, "channel write mutex");
 #endif    
@@ -163,7 +163,7 @@ void deChannel::unlockWrite()
     int i;
     for (i = 0; i < maxReaders; i++)
     {
-        readSemaphore.Post();
+        readSemaphore.post();
     }
 #endif    
 }

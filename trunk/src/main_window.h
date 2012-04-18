@@ -16,38 +16,38 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_HISTOGRAM_PANEL_H
-#define _DE_HISTOGRAM_PANEL_H
+#ifndef _DE_MAIN_WINDOW_H
+#define _DE_MAIN_WINDOW_H
 
-#include <wx/wx.h>
-#include "histogram.h"
+class deMainWindowImpl;
 class deProject;
-#include "rendered_image.h"
+class deLayerProcessor;
+class deSamplerManager;
+class deZoomManager;
+class deOperationProcessor;
+class deSize;
+#include <string>
 
-class deHistogramPanel:public wxPanel
+class deMainWindow
 {
     private:
-        deProject* project;
-        deHistogram histogram;
-        deRenderedImage renderedImage;
-        int channel;
-        bool generated;
-
-        void paintEvent(wxPaintEvent & evt);
-        void render(deCanvas& canvas);
-
-        DECLARE_EVENT_TABLE()
+        deMainWindowImpl* impl;
 
     public:
-        deHistogramPanel(wxWindow* parent, deProject* _project);
-        virtual ~deHistogramPanel();
+        deMainWindow();
+        virtual ~deMainWindow();
 
+        void init(int width, int height, deProject& project, deLayerProcessor& layerProcessor, deSamplerManager& samplerManager, deZoomManager& zoomManager, const std::string& dcrawVersion, deOperationProcessor& operationProcessor);
+        void show();
+        void setTopWindow();
+        void postEvent(int event, int arg);
         void generateHistogram();
-        void paintHistogram();
+        void onKey(int key);
+        void rebuild();
+        void setImageName(const std::string& _imageName, const deSize& _size);
+        void startRawTimer();
+        void stopRawTimer();
 
-        void setChannel(int _channel);
-
-        int getChannel() const;
 };
 
 #endif

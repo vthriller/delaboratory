@@ -45,7 +45,6 @@
 #include "wx/thread.h"
 #include "wx/notebook.h"
 
-
 BEGIN_EVENT_TABLE(deMainFrame, wxFrame)
 EVT_MENU(ID_Quit, deMainFrame::onQuit)
 EVT_MENU(ID_NewProject, deMainFrame::onNewProject)
@@ -79,11 +78,9 @@ EVT_MENU(DE_HISTOGRAM_EVENT, deMainFrame::onHistogramEvent)
 EVT_MENU(DE_INFO_EVENT, deMainFrame::onInfoEvent)
 END_EVENT_TABLE()
 
-deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcraw_version)
+deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcraw_version, deOperationProcessor& _operationProcessor)
 : wxFrame() , project(_project), layerProcessor(_layerProcessor), imageSize(0,0)
 {
-    project.setMainFrame(this);
-
     project.log("creating main frame");
 
     imageName = "";
@@ -163,7 +160,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     samplersPanel = new deSamplersPanel(notebook, project, _samplerManager);
     notebook->AddPage(samplersPanel, _T("samplers"));
 
-    controlPanel = new deControlPanel(this, project, _layerProcessor, layerGridPanel);
+    controlPanel = new deControlPanel(this, project, _layerProcessor, layerGridPanel, _operationProcessor);
     rightSizer->Add(controlPanel, 0, wxEXPAND);
 
     bool a = controlPanel->getAutoUI();

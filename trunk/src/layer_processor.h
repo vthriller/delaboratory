@@ -19,7 +19,7 @@
 #ifndef _DE_LAYER_PROCESSOR_H
 #define _DE_LAYER_PROCESSOR_H
 
-class deMainFrame;
+class deMainWindow;
 class deLayerStack;
 class deViewManager;
 class deChannelManager;
@@ -33,6 +33,7 @@ class deLayerFrameManager;
 #include "layer.h"
 #include "size.h"
 #include "renderer.h"
+#include "semaphore.h"
 
 enum
 {
@@ -51,16 +52,16 @@ enum
 class deLayerProcessor
 {
     private:
-        deMainFrame* mainFrame;
+        deMainWindow& mainWindow;
         deLayerStack& layerStack;
         deViewManager* viewManager;
         wxThread* workerThread;
         wxThread* renderWorkerThread;
         wxThread* histogramWorkerThread;
         deLayerFrameManager& layerFrameManager;
-        wxSemaphore workerSemaphore;
-        wxSemaphore renderWorkerSemaphore;
-        wxSemaphore histogramWorkerSemaphore;
+        deSemaphore workerSemaphore;
+        deSemaphore renderWorkerSemaphore;
+        deSemaphore histogramWorkerSemaphore;
         deMutex layerProcessMutex;
         deMutex histogramMutex;
         deMutex prepareImageMutex;
@@ -105,12 +106,11 @@ class deLayerProcessor
         void unlockUpdateImage();
 
     public:
-        deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager);
+        deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deMainWindow& _mainWindow);
         virtual ~deLayerProcessor();
 
         int getLastValidLayer() const {return lastValidLayer;};
 
-        void setMainFrame(deMainFrame* _mainFrame);
         void setViewManager(deViewManager* _viewManager);
 
         void updateAllImages(bool calcHistogram);
@@ -137,8 +137,8 @@ class deLayerProcessor
 
         void onGUIUpdate();
 
-        void removeTopLayer();
-        void addLayer(deBaseLayer* layer, int layerIndex);
+        void removeTopLayerInLayerProcessor();
+        void addLayerInLayerProcessor(deBaseLayer* layer, int layerIndex);
 
         void stopWorkerThread();
 
@@ -155,7 +155,7 @@ class deLayerProcessor
 
         bool isClosing() const {return closing;};
 
-        void render(wxDC& dc);
+        void render(deCanvas& canvas);
 
         bool isRealtime() const;
         void setRealtime(bool r);
