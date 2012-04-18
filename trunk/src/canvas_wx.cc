@@ -53,5 +53,10 @@ void deCanvasWX::setPen(int r, int g, int b)
 void deCanvasWX::drawBitmap(deBitmap& bitmap)
 {
     deBitmapWX& bitmapWX = dynamic_cast<deBitmapWX&>(bitmap);
-    dc.DrawBitmap(*(bitmapWX.getBitmap()), 0, 0, false);
+
+    wxBitmap* b = bitmapWX.getBitmap();
+    if (b)
+    {
+        dc.DrawBitmap(*b, 0, 0, false);
+    }            
 }    
