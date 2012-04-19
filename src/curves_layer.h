@@ -28,7 +28,6 @@ class deCurvesLayer:public deActionLayer
         deCurve* curves;
 
     protected:
-        virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "curves";};
 
     public:

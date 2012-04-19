@@ -20,6 +20,38 @@
 #include "xml.h"
 #include "color_space_utils.h"
 #include "logger.h"
+#include "semaphore.h"
+#include "str.h"
+
+class deUpdateActionThread:public wxThread
+{
+    private:
+        virtual void *Entry()
+        {
+            bool result = layer.updateMainImageSingleChannel(channel);
+            if (!result)
+            {
+                logError("update action failed");
+                layer.setErrorOnUpdateFromThread();
+            }
+            semaphore.post();
+            return NULL;
+        }
+        deBaseLayer& layer;
+        int channel;
+        deSemaphore& semaphore;
+    public:    
+        deUpdateActionThread(deBaseLayer& _layer, int _channel, deSemaphore& _semaphore)
+        :layer(_layer),
+         channel(_channel),
+         semaphore(_semaphore)
+        {
+        }
+        virtual ~deUpdateActionThread()
+        {
+        }
+};
+
 
 deBaseLayer::deBaseLayer(deColorSpace _colorSpace, deChannelManager& _channelManager)
 :colorSpace(_colorSpace),
@@ -66,12 +98,12 @@ void deBaseLayer::processLayer(deLayerProcessType type, int channel)
         }
         case deLayerProcessSingleChannel:
         {
-            processChannel(channel);
+            processSingleChannel(channel);
             break;
         }
         case deLayerProcessBlend:
         {
-            processBlend();
+            updateBlendAllChannels();
             break;
         }
         default:
@@ -92,5 +124,69 @@ const deImage& deBaseLayer::getLayerImage() const
 void deBaseLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
 {
     mainLayerImage.updateChannelUsage(channelUsage, layerIndex);
+}
+
+void deBaseLayer::setErrorOnUpdateFromThread()
+{
+    errorOnUpdate = true;
+}
+
+bool deBaseLayer::updateMainImageAllChannels()
+{
+    logMessage("update action all channels start");
+
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+
+    deSemaphore semaphore(0, n);
+
+    errorOnUpdate = false;
+
+    for (i = 0; i < n; i++)
+    {
+        logMessage("creating update action thread for channel " + str(i));
+        deUpdateActionThread* thread = new deUpdateActionThread(*this, i, semaphore);
+
+        if ( thread->Create() != wxTHREAD_NO_ERROR )
+        {
+        }
+
+        if ( thread->Run() != wxTHREAD_NO_ERROR )
+        {
+        }
+    }
+
+    for (i = 0; i < n; i++)
+    {
+        logMessage("waiting for update action thread for channel " + str(i));
+        semaphore.wait();
+    }
+
+    logMessage("update action all channels end");
+
+    if (errorOnUpdate)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+void deBaseLayer::processSingleChannel(int channel)
+{
+    updateMainImageSingleChannel(channel);
+}    
+
+bool deBaseLayer::updateImage()
+{
+    bool result = updateMainImageNotThreadedWay();
+    if (!result)
+    {
+        result = updateMainImageAllChannels();
+    }
+
+    return result;
 }
 

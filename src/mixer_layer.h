@@ -28,7 +28,6 @@ class deMixerLayer:public deActionLayer
         std::vector<deMixer*> mixers;
 
     protected:
-        virtual bool singleChannelProcessing() const {return false;};
         virtual std::string getType() const {return "mixer";};
         virtual std::string getLabel() const {return "channel mixer";};
 
@@ -40,8 +39,6 @@ class deMixerLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual bool processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize);
-
         void setWeight(int s, int d, deValue value);
         deValue getWeight(int s, int d);
 
@@ -49,6 +46,8 @@ class deMixerLayer:public deActionLayer
         virtual void save(xmlNodePtr root);
 
         virtual std::string getActionName() {return "mixer";};
+
+        virtual bool updateMainImageSingleChannel(int i);
 
 
 

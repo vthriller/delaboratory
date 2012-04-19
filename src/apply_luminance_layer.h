@@ -27,10 +27,10 @@ class deApplyLuminanceLayer:public deActionLayer
         std::vector<dePropertyValue*> mixer;
 
     protected:
-        virtual bool singleChannelProcessing() const {return false;};
-        virtual bool onlyFullProcessing() const {return true;};
         virtual std::string getType() const {return "apply_luminance";};
         virtual std::string getLabel() const {return "apply luminance";};
+
+        bool updateMainImageNotThreadedWay();
 
     public:
         deApplyLuminanceLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
@@ -43,6 +43,7 @@ class deApplyLuminanceLayer:public deActionLayer
         virtual void save(xmlNodePtr root);
 
         virtual std::string getActionName() {return "apply luminance";};
+
 
 
 };

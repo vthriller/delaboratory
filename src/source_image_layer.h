@@ -34,11 +34,13 @@ class deSourceImageLayer:public deBaseLayer
 
         virtual std::string getType() const {return "original";};
 
-        virtual bool updateImage();
+        virtual bool updateMainImageNotThreadedWay();
 
     public:
         deSourceImageLayer(deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace);
         virtual ~deSourceImageLayer();
+
+        virtual bool updateMainImageSingleChannel(int channel) {return false;};
 
 };
 

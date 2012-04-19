@@ -488,7 +488,6 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
     project.log("repaint main frame start");
     if (!project.isSourceValid())
     {
-        std::cout << "source not valid" << std::endl;
         return;
     }
 

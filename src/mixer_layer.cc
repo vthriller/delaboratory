@@ -21,6 +21,7 @@
 #include <iostream>
 #include "frame_factory.h"
 #include "color_space_utils.h"
+#include "channel_manager.h"
 
 deMixerLayer::deMixerLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
 :deActionLayer(_colorSpace,  _sourceLayer, _layerStack, _channelManager, _viewManager) 
@@ -45,14 +46,31 @@ deMixerLayer::~deMixerLayer()
     }
 }
 
-bool deMixerLayer::processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize)
+bool deMixerLayer::updateMainImageSingleChannel(int channel)
 {
-    logMessage("process mixer start");
-    mixers[i]->process(s1, s2, s3, s4, channel, channelSize);
-    logMessage("process mixer end");
+    if (!isChannelEnabled(channel))
+    {
+        mainLayerImage.disableChannel(channel, getSourceImage().getChannelIndex(channel));
+        return true;
+    }
+
+    const deImage& sourceImage = getSourceImage();
+
+    mainLayerImage.enableChannel(channel);
+
+    int c = mainLayerImage.getChannelIndex(channel);
+    deChannel* destination = channelManager.getChannel(c);
+
+    if ((destination))
+    {
+        int channelSize = channelManager.getChannelSize().getN();
+    
+        mixers[channel]->process(sourceImage, *destination, channelSize);
+    }
 
     return true;
 }
+
 
 deMixer* deMixerLayer::getMixer(int index)
 {

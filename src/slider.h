@@ -35,7 +35,6 @@ class deSlider:public wxPanel
         deValue valueMin;
         deValue valueMax;
         deValue defaultValue;
-        bool integerMode;
 
         void moveSlider(wxCommandEvent &event);
         void finishMoveSlider(wxCommandEvent &event);
@@ -50,8 +49,6 @@ class deSlider:public wxPanel
     public:
         deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue);
         virtual ~deSlider();
-
-        void setIntegerMode();
 
         void setValue(deValue v);
 

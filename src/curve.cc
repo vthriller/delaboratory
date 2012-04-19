@@ -247,7 +247,6 @@ int deCurve::findPoint(deValue x, deValue y) const
 
 int deCurve::addPoint(deValue x, deValue y)
 {
-//    std::cout << "addPoint x = " << x << " y = " << y << std::endl;
     if ((x <= 0) || (x >= 1))
     {
         return -1;
@@ -261,7 +260,6 @@ int deCurve::addPoint(deValue x, deValue y)
 
     points.push_back(deCurvePoint(x,y));
 
-//    std::cout << "after addPoint, points.size() = " << points.size() << std::endl;
 
     shape.build(points);
 
@@ -272,7 +270,6 @@ int deCurve::addPoint(deValue x, deValue y)
 
 void deCurve::deletePoint(int p)
 {
-//    std::cout << "deletePoint p = " << p << std::endl;
     lock();
 
     deCurvePoints::iterator i = points.begin();
@@ -295,7 +292,6 @@ void deCurve::deletePoint(int p)
         points.push_back(deCurvePoint(1,1));
     }
 
-//    std::cout << "after deletePoint, points.size() = " << points.size() << std::endl;
 
     shape.build(points);
 
@@ -306,13 +302,11 @@ void deCurve::movePoint(int p, deValue x, deValue y)
 {
     if (p < 0)
     {
-        std::cout << "ERROR p = " << p << std::endl;
         return;
     }
 
     if ((unsigned int)p >= points.size())
     {
-        std::cout << "ERROR p = " << p << " points.size() = " << points.size() << std::endl;
         return;
     }
 
@@ -372,13 +366,11 @@ void deCurve::movePointVertically(int p, deValue delta)
 {
     if (p < 0)
     {
-        std::cout << "ERROR p = " << p << std::endl;
         return;
     }
 
     if ((unsigned int)p >= points.size())
     {
-        std::cout << "ERROR p = " << p << " points.size() = " << points.size() << std::endl;
         return;
     }
 

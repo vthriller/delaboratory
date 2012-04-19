@@ -31,7 +31,6 @@ class deUSMLayer:public deActionLayer
         int thresholdPropertyIndex;
 
     protected:
-        virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "usm";};
         virtual std::string getLabel() const {return "unsharp mask";};
 

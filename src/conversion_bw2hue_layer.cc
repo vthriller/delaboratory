@@ -59,7 +59,7 @@ void fill(deValue* pixels, int n, deValue v)
     }
 }
 
-bool deConversionBW2HueLayer::updateImage()
+bool deConversionBW2HueLayer::updateMainImageNotThreadedWay()
 {
     logMessage("conversion start");
 

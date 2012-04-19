@@ -38,7 +38,6 @@ class deBasicLayer:public deActionLayer
         void updateCurve(int i);
 
     protected:
-        virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "basic";};
         virtual std::string getLabel() const {return "basic settings";};
 

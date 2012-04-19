@@ -33,12 +33,14 @@ class deConversionLayer:public deBaseLayerWithSource
         deConversionLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
         virtual ~deConversionLayer();
 
-        virtual bool updateImage();
+        virtual bool updateMainImageNotThreadedWay();
 
         virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
         virtual void load(xmlNodePtr root) {};
         virtual void save(xmlNodePtr root) {saveCommon(root);};
+        
+        virtual bool updateMainImageSingleChannel(int channel) {return false;};
 
 
 };

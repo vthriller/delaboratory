@@ -23,11 +23,6 @@
 void deSlider::updateValueFromSlider(bool finished)
 {
     deValue v = valueMin + slider->GetValue() * ((valueMax-valueMin) / sliderRange);
-    if (integerMode)
-    {
-        int i = v;
-        v = i;
-    }        
     setEdit(v);
     onValueChange(v, finished);
 }
@@ -88,7 +83,6 @@ void deSlider::finishMoveSlider(wxCommandEvent &event)
 deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue _defaultValue)
 :wxPanel(parent), sliderRange(_sliderRange), valueMin(_valueMin), valueMax(_valueMax), defaultValue(_defaultValue)
 {
-    integerMode = false;
     sizer = new wxBoxSizer(wxHORIZONTAL);
 
     if (labelString.size() > 0)
@@ -120,11 +114,6 @@ deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _slider
 
 deSlider::~deSlider()
 {
-}
-
-void deSlider::setIntegerMode()
-{
-    integerMode = true;
 }
 
 void deSlider::click(wxCommandEvent &event)

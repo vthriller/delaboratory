@@ -29,7 +29,6 @@ class deEqualizerLayer:public deActionLayer
         int bands;
 
     protected:
-        virtual bool singleChannelProcessing() const {return false;};
 
     public:
         deEqualizerLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _bands);
@@ -37,11 +36,10 @@ class deEqualizerLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual bool processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize);
-
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
 
+        virtual bool updateMainImageSingleChannel(int i);
 
         int getBands() const {return bands;};
         deEqualizer* getEqualizer(int index);

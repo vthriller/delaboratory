@@ -28,7 +28,6 @@ class deHighPassLayer:public deActionLayer
         int blurRadiusIndex;
 
     protected:
-        virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "high_pass";};
         virtual std::string getLabel() const {return "high pass";};
 
