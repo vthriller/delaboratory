@@ -16,29 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_SOURCE_IMAGE_LAYER_H
-#define _DE_SOURCE_IMAGE_LAYER_H
+#ifndef _DE_BASE_LAYER_WITH_SOURCE_H
+#define _DE_BASE_LAYER_WITH_SOURCE_H
 
-#include "layer.h"
-class deProject;
-#include "image.h"
-class deChannelManager;
-class deViewManager;
-class deStaticImage;
+#include "base_layer.h"
+class deLayerStack;
 
-class deSourceImageLayer:public deBaseLayer
+class deBaseLayerWithSource:public deBaseLayer
 {
     private:
-        deStaticImage& sourceImage;
-        deViewManager& viewManager;
+        int sourceLayerIndex;
+        deLayerStack& layerStack;
 
-        virtual std::string getType() const {return "original";};
-
-        virtual bool updateImage();
+        const deBaseLayer& getSourceLayer() const;
 
     public:
-        deSourceImageLayer(deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace);
-        virtual ~deSourceImageLayer();
+        deBaseLayerWithSource(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
+        virtual ~deBaseLayerWithSource();
+
+        const deImage& getSourceImage() const;
+        const deImage& getOtherLayerImage(int a) const;
+        deColorSpace getSourceColorSpace() const;
+
+        virtual std::string getActionName() {return "";};
 
 };
 

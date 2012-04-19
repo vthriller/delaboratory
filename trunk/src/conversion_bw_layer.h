@@ -62,16 +62,12 @@ class deConversionBWLayer:public deConversionLayer
         dePropertyValue overlay3;
         std::vector<deFilm> films;
 
-        virtual bool hasAction() const {return true;};
-
         virtual std::string getType() const {return "conversion_bw";};
     public:
         deConversionBWLayer(int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, int n);
         virtual ~deConversionBWLayer();
 
         virtual bool updateImage();
-
-        deColorSpace getSourceColorSpace() const;
 
         dePropertyValue& getAdd0() {return add0;};
         dePropertyValue& getAdd1() {return add1;};

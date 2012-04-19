@@ -24,7 +24,9 @@
 #include <libxml/parser.h>
 #include <string>
 #include <map>
-class deImage;
+#include "image.h"
+class deChannelManager;
+class deViewManager;
 
 enum deLayerProcessType
 {   
@@ -46,25 +48,21 @@ class deBaseLayer
 
     protected:
         deColorSpace colorSpace;
+        deChannelManager& channelManager;
+        deImage mainLayerImage;
 
     public:
-        deBaseLayer(deColorSpace _colorSpace);
+        deBaseLayer(deColorSpace _colorSpace, deChannelManager& _channelManager);
         virtual ~deBaseLayer();
 
         deColorSpace getColorSpace() const;
 
-        virtual void load(xmlNodePtr root) = 0;
-        virtual void save(xmlNodePtr root) = 0;
         void saveCommon(xmlNodePtr node);
 
         void lockLayer();
         void unlockLayer();
 
-        virtual std::string getType() const = 0;
-
-        virtual const deImage& getLayerImage() const = 0;
-
-        void process(deLayerProcessType type, int channel);
+        void processLayer(deLayerProcessType type, int channel);
 
         bool processFull();
         virtual void processBlend() {};
@@ -72,9 +70,16 @@ class deBaseLayer
 
         bool updateImageThreadCall();
 
-        virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const = 0;
-
         virtual void onUpdateProperties() {};
+
+        virtual void load(xmlNodePtr root) {};
+        virtual void save(xmlNodePtr root) {saveCommon(root);};
+
+        virtual std::string getType() const = 0;
+
+        virtual const deImage& getLayerImage() const;
+
+        virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
 
 };

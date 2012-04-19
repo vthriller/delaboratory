@@ -63,20 +63,14 @@ bool deConversionBW2HueLayer::updateImage()
 {
     logMessage("conversion start");
 
-/*
-    deBaseLayer* baseLayer = layerStack.getLayer(sourceLayer);
-    deLayer* source = dynamic_cast<deLayer*>(baseLayer);
-    */
-    deBaseLayer* source = layerStack.getLayer(sourceLayer);
+    const deImage& sourceImage = getSourceImage();
 
-    const deImage& sourceImage = source->getLayerImage();
+    mainLayerImage.enableAllChannels();
+    convertImage(sourceImage, mainLayerImage, channelManager);
 
-    image.enableAllChannels();
-    convertImage(sourceImage, image, channelManager);
-
-    deChannel* dc0 = channelManager.getChannel(image.getChannelIndex(0));
-    deChannel* dc1 = channelManager.getChannel(image.getChannelIndex(1));
-    deChannel* dc2 = channelManager.getChannel(image.getChannelIndex(2));
+    deChannel* dc0 = channelManager.getChannel(mainLayerImage.getChannelIndex(0));
+    deChannel* dc1 = channelManager.getChannel(mainLayerImage.getChannelIndex(1));
+    deChannel* dc2 = channelManager.getChannel(mainLayerImage.getChannelIndex(2));
 
     deValue* p0 = dc0->getPixels();
     deValue* p1 = dc1->getPixels();

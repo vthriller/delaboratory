@@ -56,7 +56,7 @@ deBasicFrame::deBasicFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
         if (p)
         {
-            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, basicLayer, layerProcessor, layerIndex);
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, layerProcessor, layerIndex);
             basicSliders.push_back(s);
             sizerS->Add(s);
         }
@@ -97,7 +97,7 @@ void deBasicFrame::click(wxCommandEvent &event)
     layerProcessor.markUpdateAllChannels(layerIndex);
 }   
 
-void applyWhiteBalanceLAB(deLayer& layer, deValue x, deValue y)
+void applyWhiteBalanceLAB(deBaseLayer& layer, deValue x, deValue y)
 {
     const deImage& image = layer.getLayerImage();
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
@@ -134,7 +134,7 @@ void applyWhiteBalanceLAB(deLayer& layer, deValue x, deValue y)
     }
 }
 
-void applyWhiteBalanceRGB(deLayer& layer, deValue x, deValue y)
+void applyWhiteBalanceRGB(deBaseLayer& layer, deValue x, deValue y)
 {
     const deImage& image = layer.getLayerImage();
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
@@ -186,7 +186,7 @@ void applyWhiteBalanceRGB(deLayer& layer, deValue x, deValue y)
 
 }
 
-void applyWhiteBalanceCMYK(deLayer& layer, deValue x, deValue y)
+void applyWhiteBalanceCMYK(deBaseLayer& layer, deValue x, deValue y)
 {
     const deImage& image = layer.getLayerImage();
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);

@@ -41,7 +41,7 @@ deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor
         dePropertyValue* p = usmLayer.getPropertyValue(i);
         if (p)
         {
-            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, usmLayer, layerProcessor, layerIndex);
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, layerProcessor, layerIndex);
             valueSliders.push_back(s);
             sizer->Add(s);
         }            

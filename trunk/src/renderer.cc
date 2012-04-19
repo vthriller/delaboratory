@@ -132,7 +132,7 @@ bool renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
             deValue s2 = p2[i];
             deValue s3 = p3[i];
             conversion4x3(s0, s1, s2, s3, rr, gg, bb);
-
+            
             unsigned char r = 255 * rr;
             data[pos] = r;
             pos++;

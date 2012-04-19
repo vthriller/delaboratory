@@ -41,7 +41,7 @@ deVignetteFrame::deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLaye
         dePropertyValue* p = vignetteLayer.getPropertyValue(i);
         if (p)
         {
-            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, vignetteLayer, layerProcessor, layerIndex);
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, layerProcessor, layerIndex);
             valueSliders.push_back(s);
             sizer->Add(s);
         }            

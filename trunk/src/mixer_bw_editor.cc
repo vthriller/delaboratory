@@ -39,18 +39,18 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
     wxSizer* sizerM = new wxStaticBoxSizer(wxVERTICAL, this,  _T("monochrome mixer"));
     sizer->Add(sizerM);
 
-    add0 = new dePropertyValueSlider(this, range, layer.getAdd0(), layer, layerProcessor, layerIndex);
+    add0 = new dePropertyValueSlider(this, range, layer.getAdd0(), layerProcessor, layerIndex);
     sizerM->Add(add0);
 
-    add1 = new dePropertyValueSlider(this, range, layer.getAdd1(), layer, layerProcessor, layerIndex);
+    add1 = new dePropertyValueSlider(this, range, layer.getAdd1(), layerProcessor, layerIndex);
     sizerM->Add(add1);
 
-    add2 = new dePropertyValueSlider(this, range, layer.getAdd2(), layer, layerProcessor, layerIndex);
+    add2 = new dePropertyValueSlider(this, range, layer.getAdd2(), layerProcessor, layerIndex);
     sizerM->Add(add2);
 
     if (cs == 4)
     {
-        add3 = new dePropertyValueSlider(this, range, layer.getAdd3(), layer, layerProcessor, layerIndex);
+        add3 = new dePropertyValueSlider(this, range, layer.getAdd3(), layerProcessor, layerIndex);
         sizerM->Add(add3);
     }        
 
@@ -74,18 +74,18 @@ deMixerBWEditor::deMixerBWEditor(wxWindow *parent, deConversionBWLayer& _layer, 
     wxSizer* sizerO = new wxStaticBoxSizer(wxVERTICAL, this,  _T("overlay"));
     sizer->Add(sizerO);
 
-    overlay0 = new dePropertyValueSlider(this, range, layer.getOverlay0(), layer, layerProcessor, layerIndex);
+    overlay0 = new dePropertyValueSlider(this, range, layer.getOverlay0(), layerProcessor, layerIndex);
     sizerO->Add(overlay0);
 
-    overlay1 = new dePropertyValueSlider(this, range, layer.getOverlay1(), layer, layerProcessor, layerIndex);
+    overlay1 = new dePropertyValueSlider(this, range, layer.getOverlay1(), layerProcessor, layerIndex);
     sizerO->Add(overlay1);
 
-    overlay2 = new dePropertyValueSlider(this, range, layer.getOverlay2(), layer, layerProcessor, layerIndex);
+    overlay2 = new dePropertyValueSlider(this, range, layer.getOverlay2(), layerProcessor, layerIndex);
     sizerO->Add(overlay2);
 
     if (cs == 4)
     {
-        overlay3 = new dePropertyValueSlider(this, range, layer.getOverlay3(), layer, layerProcessor, layerIndex);
+        overlay3 = new dePropertyValueSlider(this, range, layer.getOverlay3(), layerProcessor, layerIndex);
         sizerO->Add(overlay3);
     }        
 

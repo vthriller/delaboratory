@@ -35,10 +35,10 @@ deHueSaturationFrame::deHueSaturationFrame(wxWindow *parent, deConversionBW2HueL
 
     int range = 400;
 
-    hue = new dePropertyValueSlider(this, range, hsLayer.getPropertyHue(), hsLayer, layerProcessor, layerIndex);
+    hue = new dePropertyValueSlider(this, range, hsLayer.getPropertyHue(), layerProcessor, layerIndex);
     sizer->Add(hue);
 
-    saturation = new dePropertyValueSlider(this, range, hsLayer.getPropertySaturation(), hsLayer, layerProcessor, layerIndex);
+    saturation = new dePropertyValueSlider(this, range, hsLayer.getPropertySaturation(), layerProcessor, layerIndex);
     sizer->Add(saturation);
 
 

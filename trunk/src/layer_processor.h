@@ -52,7 +52,6 @@ enum
 class deLayerProcessor
 {
     private:
-        deMainWindow& mainWindow;
         deLayerStack& layerStack;
         deViewManager* viewManager;
         wxThread* workerThread;
@@ -69,6 +68,7 @@ class deLayerProcessor
         deMutex updateImagesMutex;
         deRenderer renderer;
         deChannelManager& previewChannelManager;
+        deMainWindow& mainWindow;
 
         bool realtime;
 
@@ -82,7 +82,7 @@ class deLayerProcessor
         int lastValidLayer;
 
         void updateImages(int a, int channel, bool action);
-        bool updateImage();
+        bool updateLayerImage();
 
         void repaintImageInLayerProcessor();
 

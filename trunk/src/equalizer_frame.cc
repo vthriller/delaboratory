@@ -57,7 +57,6 @@ class deEqualizerSlider:public deSlider
                 equalizer.setValue(index, value);
                 layer.setHistogramChannel(index);
 
-                //int ind = layer.getIndex();
                 layerProcessor.markUpdateSingleChannel(layerIndex, channel);
             }                
         }
