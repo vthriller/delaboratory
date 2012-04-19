@@ -1,6 +1,11 @@
 #summary Development News
 
 -----
+*2012.04.19*
+
+CMYK curves are awesome.
+
+-----
 *2012.04.16*
 
 Updated list of [operations] planned for 0.8, also listed typical workflows.
