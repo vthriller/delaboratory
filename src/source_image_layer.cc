@@ -27,10 +27,8 @@
 #include "str.h"
 
 deSourceImageLayer::deSourceImageLayer(deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace)
-:deBaseLayer(_colorSpace),
-previewChannelManager(_previewChannelManager),
+:deBaseLayer(_colorSpace, _previewChannelManager) ,
 viewManager(_viewManager),
-image(_colorSpace, _previewChannelManager),
 sourceImage(_sourceImage)
 {
 }
@@ -43,7 +41,7 @@ bool deSourceImageLayer::updateImage()
 {
     const deSize ss = sourceImage.getSize();
 
-    const deSize ds = previewChannelManager.getChannelSize();
+    const deSize ds = channelManager.getChannelSize();
 
     deValue z_x1;
     deValue z_y1;
@@ -66,8 +64,8 @@ bool deSourceImageLayer::updateImage()
     for (i = 0; i < 3; i++)
     {
         deChannel* sourceChannel = sourceImage.getChannel(i);
-        image.enableChannel(i);
-        deChannel* channel = previewChannelManager.getChannel(image.getChannelIndex(i));
+        mainLayerImage.enableChannel(i);
+        deChannel* channel = channelManager.getChannel(mainLayerImage.getChannelIndex(i));
         sourceChannel->lockRead();
         channel->lockWrite();
         if (ss == ds)
@@ -84,14 +82,4 @@ bool deSourceImageLayer::updateImage()
 
     return true;
 }
-
-const deImage& deSourceImageLayer::getLayerImage() const
-{
-    return image;
-}
  
-void deSourceImageLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
-{
-    image.updateChannelUsage(channelUsage, layerIndex);
-}
-

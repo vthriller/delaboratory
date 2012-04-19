@@ -24,7 +24,6 @@
 #include "size.h"
 #include "image.h"
 #include "channel.h"
-class deLayerStack;
 class deChannelManager;
 class deViewManager;
 #include <set>
@@ -32,63 +31,22 @@ class deViewManager;
 class deActionLayer:public deLayer
 {
     private:
-
-        // global enabled flag
-        bool enabled;
-
-        // separate enabled flag for each channel
-        std::set<int> channels;
-
-        // blend settings - mode and opacity
-        deBlendMode blendMode;
-        deValue opacity;
-
         // set from thread
         bool errorOnUpdate;
-
-        virtual bool hasAction() const {return true;};
-        virtual bool hasBlending() const {return true;};
-        virtual bool canDisable() const {return true;};
 
         virtual bool simpleActionProcessing() const {return false;};
         virtual bool onlyFullProcessing() const {return false;};
 
-        virtual const deImage& getSourceImage() const;
-
-        virtual bool isEnabled() const;
-        virtual void setEnabled(bool e);
-
-        virtual const deImage& getLayerImage() const;
-
-        virtual bool isChannelNeutral(int index) = 0;
-
         bool updateAction(int i);
 
-        bool isBlendingEnabled() const;
-
         bool updateActionAllChannels();
-        bool updateBlendAllChannels();
-
-    protected:
-        deLayerStack& layerStack;
-
-    private:
-
-        deChannelManager& channelManager;
 
     protected:
         deViewManager& viewManager;
 
-        deImage imageActionPass;
-
-        void disableNotLuminance();
-        void disableNotForSharpen();
-
     private:        
-        deImage imageBlendPass;
 
         bool fullProcessing();
-        bool updateBlend(int i);
 
         virtual bool processAction(int i) {return false;};
         virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size) {return false;};
@@ -105,25 +63,14 @@ class deActionLayer:public deLayer
 
         deChannel* getSourceChannel(int index);
         deSize getChannelSize() const;
-        void setOpacity(deValue _alpha);
-        void setBlendMode(deBlendMode mode);
-        deBlendMode getBlendMode() const {return blendMode;};
-        deValue getOpacity();
-
-        virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
         deViewManager& getViewManager() {return viewManager;};
-
-        bool isChannelEnabled(int index) const;
-        void enableChannel(int index);
-        void disableChannel(int index);
 
         virtual void loadBlend(xmlNodePtr root);
         virtual void saveBlend(xmlNodePtr root);
 
         bool updateImageInActionLayer(bool action, bool blend, int channel);
         bool updateActionOnThread(int i);
-        void updateBlendOnThread(int i);
 
         virtual void processChannel(int channel);
         virtual void processBlend();

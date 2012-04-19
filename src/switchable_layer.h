@@ -16,29 +16,36 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_SOURCE_IMAGE_LAYER_H
-#define _DE_SOURCE_IMAGE_LAYER_H
+#ifndef _DE_SWITCHABLE_LAYER_H
+#define _DE_SWITCHABLE_LAYER_H
 
-#include "layer.h"
-class deProject;
-#include "image.h"
-class deChannelManager;
-class deViewManager;
-class deStaticImage;
+#include "base_layer_with_source.h"
+#include <set>
 
-class deSourceImageLayer:public deBaseLayer
+class deSwitchableLayer:public deBaseLayerWithSource
 {
     private:
-        deStaticImage& sourceImage;
-        deViewManager& viewManager;
+        bool enabled;
 
-        virtual std::string getType() const {return "original";};
+        std::set<int> channels;
 
-        virtual bool updateImage();
+    protected:
+        void disableNotLuminance();
+        void disableNotForSharpen();
 
     public:
-        deSourceImageLayer(deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace);
-        virtual ~deSourceImageLayer();
+        deSwitchableLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
+        virtual ~deSwitchableLayer();
+
+        bool isEnabled() const;
+        void setEnabled(bool e);
+
+        bool isChannelEnabled(int index) const;
+        void enableChannel(int index);
+        void disableChannel(int index);
+
+
+
 
 };
 

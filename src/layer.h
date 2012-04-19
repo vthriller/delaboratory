@@ -23,7 +23,7 @@
 #include <map>
 #include "color_space.h"
 #include <vector>
-#include "base_layer.h"
+#include "layer_with_blending.h"
 
 class deProject;
 class deFrame;
@@ -33,15 +33,13 @@ class dePropertyValue;
 class deProperty;
 class dePresetLayer;
 
-class deLayer:public deBaseLayer
+class deLayer:public deLayerWithBlending
 {
     private:
         deLayer(const deLayer& layer);
         deLayer& operator = (const deLayer& layer);
 
     protected:
-        unsigned int sourceLayer;
-
         std::vector<deProperty*> properties;
         std::map<std::string, dePresetLayer*> presets;
 
@@ -51,19 +49,11 @@ class deLayer:public deBaseLayer
         void loadValueProperties(xmlNodePtr root);
 
     public:
-        deLayer(deColorSpace _colorSpace, int _sourceLayer);
+        deLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
         virtual ~deLayer();
 
         virtual std::string getLabel() const;
 
-        virtual bool hasAction() const;
-        virtual bool hasBlending() const;
-        virtual bool canDisable() const;
-
-        virtual bool isEnabled() const;
-        virtual void setEnabled(bool e);
-
-        virtual std::string getActionName() {return "action";};
 
         int getNumberOfProperties() const {return properties.size();};
         dePropertyValue* getPropertyValue(int index);

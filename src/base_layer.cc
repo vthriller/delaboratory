@@ -21,8 +21,10 @@
 #include "color_space_utils.h"
 #include "logger.h"
 
-deBaseLayer::deBaseLayer(deColorSpace _colorSpace)
-:colorSpace(_colorSpace) 
+deBaseLayer::deBaseLayer(deColorSpace _colorSpace, deChannelManager& _channelManager)
+:colorSpace(_colorSpace),
+ channelManager(_channelManager),
+ mainLayerImage(_colorSpace, _channelManager)
 {
 }
 
@@ -53,7 +55,7 @@ void deBaseLayer::unlockLayer()
     mutex.unlock();
 }
 
-void deBaseLayer::process(deLayerProcessType type, int channel)
+void deBaseLayer::processLayer(deLayerProcessType type, int channel)
 {
     switch (type)
     {
@@ -80,5 +82,15 @@ void deBaseLayer::process(deLayerProcessType type, int channel)
 bool deBaseLayer::processFull()
 {
     return updateImage();
+}
+
+const deImage& deBaseLayer::getLayerImage() const
+{
+    return mainLayerImage;
+}
+
+void deBaseLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
+{
+    mainLayerImage.updateChannelUsage(channelUsage, layerIndex);
 }
 

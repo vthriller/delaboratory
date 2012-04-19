@@ -41,7 +41,7 @@ deHighPassFrame::deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLaye
         dePropertyValue* p = highPassLayer.getPropertyValue(i);
         if (p)
         {
-            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, highPassLayer, layerProcessor, layerIndex);
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, layerProcessor, layerIndex);
             valueSliders.push_back(s);
             sizer->Add(s);
         }            

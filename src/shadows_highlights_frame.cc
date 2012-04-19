@@ -40,7 +40,7 @@ deShadowsHighlightsFrame::deShadowsHighlightsFrame(wxWindow *parent, deActionLay
         dePropertyValue* p = shLayer.getPropertyValue(i);
         if (p)
         {
-            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, shLayer, layerProcessor, layerIndex);
+            dePropertyValueSlider* s = new dePropertyValueSlider(this, range, *p, layerProcessor, layerIndex);
             valueSliders.push_back(s);
             sizer->Add(s);
         }            

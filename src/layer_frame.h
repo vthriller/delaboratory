@@ -21,17 +21,19 @@
 
 #include "frame.h"
 class deActionLayer;
-class deLayer;
+//class deLayer;
+class deBaseLayer;
 class deLayerFrameManager;
 
 class deLayerFrame:public deFrame
 {
     protected:
-        deLayer& layer;
+        //deLayer& layer;
+        deBaseLayer& layer;
         deLayerFrameManager& frameManager;
         int layerIndex;
     public:
-        deLayerFrame(wxWindow *parent, deLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex);
+        deLayerFrame(wxWindow *parent, deBaseLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deLayerFrame();
 
         bool checkIndex(int index);

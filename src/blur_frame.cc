@@ -32,10 +32,10 @@ deBlurFrame::deBlurFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcess
 
     int range = 100;
 
-    radius = new dePropertyValueSlider(this, range, blurLayer.getPropertyRadius(), blurLayer, layerProcessor, layerIndex);
+    radius = new dePropertyValueSlider(this, range, blurLayer.getPropertyRadius(), layerProcessor, layerIndex);
     sizer->Add(radius);
 
-    threshold = new dePropertyValueSlider(this, range, blurLayer.getPropertyThreshold(), blurLayer, layerProcessor, layerIndex);
+    threshold = new dePropertyValueSlider(this, range, blurLayer.getPropertyThreshold(), layerProcessor, layerIndex);
     sizer->Add(threshold);
 
     blurType = new dePropertyChoiceUI(this, blurLayer.getPropertyType(), blurLayer, layerProcessor, layerIndex);

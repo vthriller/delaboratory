@@ -46,8 +46,7 @@ deConversionBWLayer::deConversionBWLayer(int _sourceLayer, deLayerStack& _layerS
     add2.setMin(-1.0);
     add2.setMax(3.0);
 
-    deBaseLayer* source = layerStack.getLayer(sourceLayer);
-    deColorSpace sourceColorSpace = source->getColorSpace();
+    deColorSpace sourceColorSpace = getSourceColorSpace();
     int cs = getColorSpaceSize(sourceColorSpace);
 
     resetM();
@@ -100,8 +99,7 @@ deConversionBWLayer::~deConversionBWLayer()
 
 void deConversionBWLayer::resetM()
 {
-    deBaseLayer* source = layerStack.getLayer(sourceLayer);
-    deColorSpace sourceColorSpace = source->getColorSpace();
+    deColorSpace sourceColorSpace = getSourceColorSpace();
     switch (sourceColorSpace)
     {
         case deColorSpaceRGB:
@@ -182,18 +180,12 @@ bool deConversionBWLayer::updateImage()
 {
     logMessage("conversion BW start");
 
-/*
-    deBaseLayer* baseLayer = layerStack.getLayer(sourceLayer);
-    deLayer* source = dynamic_cast<deLayer*>(baseLayer);
-    */
-    deBaseLayer* source = layerStack.getLayer(sourceLayer);
+    const deImage& sourceImage = getSourceImage();
 
-    const deImage& sourceImage = source->getLayerImage();
-
-    deColorSpace sourceColorSpace = source->getColorSpace();
+    deColorSpace sourceColorSpace = sourceImage.getColorSpace();
     int cs = getColorSpaceSize(sourceColorSpace);
 
-    image.enableAllChannels();
+    mainLayerImage.enableAllChannels();
 
     int n = channelManager.getChannelSize().getN();
 
@@ -228,7 +220,7 @@ bool deConversionBWLayer::updateImage()
         }
     }        
 
-    deChannel* dc = channelManager.getChannel(image.getChannelIndex(0));
+    deChannel* dc = channelManager.getChannel(mainLayerImage.getChannelIndex(0));
 
     if (!dc)
     {
@@ -348,12 +340,6 @@ bool deConversionBWLayer::updateImage()
     logMessage("conversion BW end");
 
     return true;
-}
-
-deColorSpace deConversionBWLayer::getSourceColorSpace() const
-{
-    deBaseLayer* source = layerStack.getLayer(sourceLayer);
-    return source->getColorSpace();
 }
 
 void deConversionBWLayer::save(xmlNodePtr root)

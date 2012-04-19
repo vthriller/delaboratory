@@ -30,8 +30,6 @@ class deConversionBW2HueLayer:public deConversionLayer
         dePropertyValue hue;
         dePropertyValue saturation;
 
-        virtual bool hasAction() const {return true;};
-
         virtual std::string getType() const {return "conversion_bw2hue";};
     public:
         deConversionBW2HueLayer(int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deColorSpace _colorSpace);

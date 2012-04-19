@@ -51,17 +51,8 @@ bool deApplyImageLayer::processAction(int i)
 {
     int a = getInt(appliedLayer.get());
 
-/*
-    deBaseLayer* baseLayer = layerStack.getLayer(a);
-    deLayer* applied = dynamic_cast<deLayer*>(baseLayer);
-    */
-    deBaseLayer* applied = layerStack.getLayer(a);
+    const deImage& appliedImage = getOtherLayerImage(a);
 
-    if (!applied)
-    {
-        return false;
-    }
-    const deImage& appliedImage = applied->getLayerImage();
     int n = getColorSpaceSize(appliedImage.getColorSpace());
 
     int c = -1 ;
@@ -82,24 +73,14 @@ bool deApplyImageLayer::processAction(int i)
         }
     }        
 
-    imageActionPass.disableChannel(i, c);
+    mainLayerImage.disableChannel(i, c);
 
     return true;
 }
 
 deColorSpace deApplyImageLayer::getAppliedColorSpace()
 {
-    int a = getInt(appliedLayer.get());
-    /*
-    deBaseLayer* baseLayer = layerStack.getLayer(a);
-    deLayer* applied = dynamic_cast<deLayer*>(baseLayer);
-    */
-    deBaseLayer* applied = layerStack.getLayer(a);
-    if (!applied)
-    {
-        return deColorSpaceInvalid;
-    }
-    const deImage& appliedImage = applied->getLayerImage();
+    const deImage& appliedImage = getOtherLayerImage(getInt(appliedLayer.get()));
     return appliedImage.getColorSpace();
 }
 

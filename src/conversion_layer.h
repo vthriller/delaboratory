@@ -19,26 +19,20 @@
 #ifndef _DE_CONVERSION_LAYER_H
 #define _DE_CONVERSION_LAYER_H
 
-#include "layer.h"
+#include "base_layer_with_source.h"
 #include "image.h"
 class deLayerStack;
 class deChannelManager;
 
-class deConversionLayer:public deLayer
+class deConversionLayer:public deBaseLayerWithSource
 {
     private:
         virtual std::string getType() const {return "conversion";};
-
-    protected:        
-        deLayerStack& layerStack;
-        deChannelManager& channelManager;
-        deImage image;
 
     public:
         deConversionLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
         virtual ~deConversionLayer();
 
-        virtual const deImage& getLayerImage() const;
         virtual bool updateImage();
 
         virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;

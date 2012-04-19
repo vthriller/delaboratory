@@ -26,9 +26,8 @@
 #include "preset.h"
 #include "color_space_utils.h"
 
-deLayer::deLayer(deColorSpace _colorSpace, int _sourceLayer)
-:deBaseLayer(_colorSpace),
-sourceLayer(_sourceLayer)
+deLayer::deLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack)
+:deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
 {
 }
 
@@ -48,30 +47,6 @@ deLayer::~deLayer()
         presets.erase(i);
     }
 //    unlockLayer();
-}
-
-bool deLayer::hasAction() const
-{
-    return false;
-}
-
-bool deLayer::hasBlending() const
-{
-    return false;
-}
-
-bool deLayer::canDisable() const
-{
-    return false;
-}
-
-bool deLayer::isEnabled() const
-{
-    return true;
-}
-
-void deLayer::setEnabled(bool e)
-{
 }
 
 std::string deLayer::getLabel() const 

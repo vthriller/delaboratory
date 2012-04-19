@@ -28,7 +28,6 @@
 #include "process_linear.h"
 #include "str.h"
 #include "xml.h"
-#include "blend_channel.h"
 #include "logger.h"
 #include "color_space_utils.h"
 #include "semaphore.h"
@@ -58,30 +57,6 @@ class deUpdateActionThread:public wxThread
         {
         }
         virtual ~deUpdateActionThread()
-        {
-        }
-};
-
-class deUpdateBlendThread:public wxThread
-{
-    private:
-        virtual void *Entry()
-        {
-            layer.updateBlendOnThread(channel);
-            semaphore.post();
-            return NULL;
-        }
-        deActionLayer& layer;
-        int channel;
-        deSemaphore& semaphore;
-    public:    
-        deUpdateBlendThread(deActionLayer& _layer, int _channel, deSemaphore& _semaphore)
-        :layer(_layer),
-         channel(_channel),
-         semaphore(_semaphore)
-        {
-        }
-        virtual ~deUpdateBlendThread()
         {
         }
 };
@@ -131,41 +106,6 @@ bool deActionLayer::updateActionAllChannels()
     }
 }
 
-bool deActionLayer::updateBlendAllChannels()
-{
-    logMessage("update blend all channels start");
-
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-
-    deSemaphore semaphore(0, n);
-
-    for (i = 0; i < n; i++)
-    {
-        deUpdateBlendThread* thread = new deUpdateBlendThread(*this, i, semaphore);
-
-        if ( thread->Create() != wxTHREAD_NO_ERROR )
-        {
-            std::cout << "creating thread... CREATE ERROR" << std::endl;
-        }
-
-        if ( thread->Run() != wxTHREAD_NO_ERROR )
-        {
-            std::cout << "creating thread... RUN ERROR" << std::endl;
-        }
-    }
-
-    for (i = 0; i < n; i++)
-    {
-        semaphore.wait();
-    }
-
-    logMessage("update blend all channels end");
-
-    return true;
-
-}
-
 bool deActionLayer::updateImageInActionLayer(bool action, bool blend, int channel)
 {
     if (action)
@@ -209,71 +149,14 @@ bool deActionLayer::updateImageInActionLayer(bool action, bool blend, int channe
 
 
 deActionLayer::deActionLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayer(_colorSpace, _sourceLayer),
- layerStack(_layerStack),
- channelManager(_channelManager),
- viewManager(_viewManager),
- imageActionPass(_colorSpace, _channelManager), 
- imageBlendPass(_colorSpace, _channelManager)
+:deLayer(_colorSpace, _channelManager, _sourceLayer, _layerStack),
+ viewManager(_viewManager)
 {
-    enabled = true;
-    blendMode = deBlendNormal;
-    opacity = 1.0;
 
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        channels.insert(i);
-    }
 }
 
 deActionLayer::~deActionLayer()
 {
-}
-
-void deActionLayer::disableNotLuminance()
-{
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        if (!isChannelLuminance(colorSpace, i))
-        {
-            channels.erase(i);
-        }            
-    }
-}
-
-void deActionLayer::disableNotForSharpen()
-{
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        if (!shouldChannelBeSharpened(colorSpace, i))
-        {
-            channels.erase(i);
-        }            
-    }
-}
-
-const deImage& deActionLayer::getSourceImage() const
-{
-    deBaseLayer* source = layerStack.getLayer(sourceLayer);
-
-    const deImage& sourceImage = source->getLayerImage();
-    return sourceImage;
-}
-
-bool deActionLayer::isEnabled() const
-{
-    return enabled;
-}
-
-void deActionLayer::setEnabled(bool e)
-{
-    enabled = e;
 }
 
 deChannel* deActionLayer::getSourceChannel(int index)
@@ -284,140 +167,6 @@ deChannel* deActionLayer::getSourceChannel(int index)
 deSize deActionLayer::getChannelSize() const
 {
     return channelManager.getChannelSize();
-}
-
-const deImage& deActionLayer::getLayerImage() const
-{
-    if (!enabled)
-    {
-        deBaseLayer* source = layerStack.getLayer(sourceLayer);
-
-        const deImage& sourceImage = source->getLayerImage();
-        return sourceImage;
-    }
-
-    if (isBlendingEnabled())
-    {
-        return imageBlendPass;
-    }
-
-    return imageActionPass;
-}
-
-deValue deActionLayer::getOpacity()
-{
-    return opacity;
-}
-
-bool deActionLayer::updateBlend(int i)
-{
-    logMessage("update blend start");
-
-    if (!enabled)
-    {
-        return true;
-    }
-
-    deBaseLayer* source = layerStack.getLayer(sourceLayer);
-    
-    if (!source)
-    {
-        return false;
-    }
-
-    const deImage& sourceImage = source->getLayerImage();
-
-    int channelSize = channelManager.getChannelSize().getN();
-
-    int s = sourceImage.getChannelIndex(i);
-
-    if (!isBlendingEnabled())
-    {
-        return true;
-    }
-
-    if (isChannelNeutral(i))
-    {
-        if (blendMode == deBlendNormal)
-        {
-            imageBlendPass.disableChannel(i, s);
-            return true;
-        }
-    }
-
-    if (!isChannelEnabled(i))
-    {
-        imageBlendPass.disableChannel(i, s);
-        return true;
-    }
-
-    deChannel* sourceChannel = channelManager.getChannel(s);
-    if (!sourceChannel)
-    {
-        return false;
-    }
-
-    int c = imageActionPass.getChannelIndex(i);
-    deChannel* channel = channelManager.getChannel(c);
-    if (!channel)
-    {
-        return false;
-    }
-
-    imageBlendPass.enableChannel(i);
-    int b = imageBlendPass.getChannelIndex(i);
-    deChannel* blendChannel_ = channelManager.getChannel(b);
-    if (!blendChannel_)
-    {
-        return false;
-    }
-
-    sourceChannel->lockRead();
-    channel->lockRead();
-    blendChannel_->lockWrite();
-
-    deValue* maskPixels = NULL;
-
-    deValue* sourcePixels = sourceChannel->getPixels();
-    deValue* overlayPixels = channel->getPixels();
-    deValue* resultPixels = blendChannel_->getPixels();
-
-    blendChannel(sourcePixels, overlayPixels, resultPixels, maskPixels, blendMode, opacity, channelSize);
-
-
-    sourceChannel->unlockRead();
-    channel->unlockRead();
-    blendChannel_->unlockWrite();
-
-    logMessage("update blend end");
-
-    return true;
-
-}
-
-void deActionLayer::setBlendMode(deBlendMode mode)
-{
-    blendMode = mode;
-}
-
-bool deActionLayer::isBlendingEnabled() const
-{
-    if (opacity < 1.0)
-    {
-        return true;
-    }
-
-    if (blendMode != deBlendNormal)
-    {
-        return true;
-    }
-
-    return false;
-}
-
-void deActionLayer::setOpacity(deValue _opacity)
-{
-    opacity = _opacity;
 }
 
 bool deActionLayer::updateAction(int i)
@@ -432,18 +181,12 @@ bool deActionLayer::updateAction(int i)
 
     logMessage("update action start i:" +str(i));
 
-    if (!enabled)
+    if (!isEnabled())
     {
         return true;
     }
 
-    logMessage("update action 2 i:" +str(i));
-
-    deBaseLayer* source = layerStack.getLayer(sourceLayer);
-
-    logMessage("update action 3 i:" +str(i));
-
-    const deImage& sourceImage = source->getLayerImage();
+    const deImage& sourceImage = getSourceImage();
 
     int channelSize = channelManager.getChannelSize().getN();
 
@@ -460,10 +203,17 @@ bool deActionLayer::updateAction(int i)
     {
         logMessage("update action 4a i:" +str(i));
         deChannel* sourceChannel = channelManager.getChannel(s);
-        sourceChannel->lockRead();
-        sourceChannel->unlockRead();
-        imageActionPass.disableChannel(i, s);
-        return true;
+        if (sourceChannel)
+        {
+            sourceChannel->lockRead();
+            sourceChannel->unlockRead();
+            mainLayerImage.disableChannel(i, s);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     else
     {
@@ -473,8 +223,8 @@ bool deActionLayer::updateAction(int i)
             deChannel* sourceChannel = channelManager.getChannel(s);
             if (sourceChannel)
             {
-                imageActionPass.enableChannel(i);
-                int c = imageActionPass.getChannelIndex(i);
+                mainLayerImage.enableChannel(i);
+                int c = mainLayerImage.getChannelIndex(i);
                 deChannel* channel = channelManager.getChannel(c);
                 logMessage("update action 6 i:" +str(i));
 
@@ -508,8 +258,8 @@ bool deActionLayer::updateAction(int i)
             deChannel* sc3 = channelManager.getChannel(s3);
             deChannel* sc4 = channelManager.getChannel(s4);
 
-            imageActionPass.enableChannel(i);
-            int c = imageActionPass.getChannelIndex(i);
+            mainLayerImage.enableChannel(i);
+            int c = mainLayerImage.getChannelIndex(i);
             deChannel* channel = channelManager.getChannel(c);
 
             if (channel)
@@ -562,46 +312,11 @@ bool deActionLayer::updateAction(int i)
 
 }
 
-void deActionLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
-{
-    if (!enabled)
-    {
-        return;
-    }
-
-    deBaseLayer* source = layerStack.getLayer(sourceLayer);
-
-    const deImage& sourceImage = source->getLayerImage();
-    sourceImage.updateChannelUsage(channelUsage, layerIndex);
-
-    imageActionPass.updateChannelUsage(channelUsage, layerIndex);
-
-    if (isBlendingEnabled())
-    {
-        imageBlendPass.updateChannelUsage(channelUsage, layerIndex);
-    }
-}
-
-bool deActionLayer::isChannelEnabled(int index) const
-{
-    return channels.count(index) > 0;
-}
-
-void deActionLayer::enableChannel(int index)
-{
-    channels.insert(index);
-}
-
-void deActionLayer::disableChannel(int index)
-{
-    channels.erase(index);
-}
-
 void deActionLayer::saveBlend(xmlNodePtr root)
 {
-    saveChild(root, "enabled", str(enabled));
-    saveChild(root, "blend_mode", getBlendModeName(blendMode));
-    saveChild(root, "opacity", str(opacity));
+//    saveChild(root, "enabled", str(isEnabled()));
+//    saveChild(root, "blend_mode", getBlendModeName(blendMode));
+//    saveChild(root, "opacity", str(opacity));
 
     int n = getColorSpaceSize(colorSpace);
     int i;
@@ -617,7 +332,7 @@ void deActionLayer::loadBlend(xmlNodePtr root)
     xmlNodePtr child = root->xmlChildrenNode;
 
     int channelIndex = 0;
-    channels.clear();
+    //channels.clear();
 
     while (child)
     {
@@ -627,24 +342,24 @@ void deActionLayer::loadBlend(xmlNodePtr root)
             bool c = getBool(getContent(child));
             if (c)
             {
-                channels.insert(channelIndex);
+                //channels.insert(channelIndex);
             }
             channelIndex++;
         }
 
         if ((!xmlStrcmp(child->name, BAD_CAST("enabled")))) 
         {
-            enabled = getBool(getContent(child));
+            setEnabled(getBool(getContent(child)));
         }
 
         if ((!xmlStrcmp(child->name, BAD_CAST("blend_mode")))) 
         {
-            blendMode = blendModeFromString(getContent(child));
+            //blendMode = blendModeFromString(getContent(child));
         }
 
         if ((!xmlStrcmp(child->name, BAD_CAST("opacity"))))
         {
-            opacity = getValue(getContent(child));
+            //opacity = getValue(getContent(child));
         }
 
         child = child->next;
@@ -658,21 +373,12 @@ bool deActionLayer::updateActionOnThread(int i)
     return updateAction(i);
 }
 
-void deActionLayer::updateBlendOnThread(int i)
-{
-    updateBlend(i);
-}
-
 bool deActionLayer::fullProcessing()
 {
-    if (!enabled)
+    if (!isEnabled())
     {
         return true;
     }
-
-    deBaseLayer* source = layerStack.getLayer(sourceLayer);
-
-    const deImage& sourceImage = source->getLayerImage();
 
     int channelSize = channelManager.getChannelSize().getN();
 
@@ -689,10 +395,10 @@ bool deActionLayer::fullProcessing()
 
     for (i = 0; i < n; i++)
     {
-        s[i] = sourceImage.getChannelIndex(i);
+        s[i] = getSourceImage().getChannelIndex(i);
         sc[i] = channelManager.getChannel(s[i]);
-        imageActionPass.enableChannel(i);
-        d[i] = imageActionPass.getChannelIndex(i);
+        mainLayerImage.enableChannel(i);
+        d[i] = mainLayerImage.getChannelIndex(i);
         dc[i] = channelManager.getChannel(d[i]);
 
         if (sc[i])

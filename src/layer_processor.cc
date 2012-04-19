@@ -456,7 +456,7 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
 
 }    
 
-bool deLayerProcessor::updateImage()
+bool deLayerProcessor::updateLayerImage()
 {
     lockUpdateImage();
 
@@ -502,7 +502,7 @@ bool deLayerProcessor::updateImage()
 
     if ((layer) && (ok))
     {
-        layer->process(type, channel);
+        layer->processLayer(type, channel);
 
         layer->unlockLayer();
 
@@ -646,7 +646,7 @@ void deLayerProcessor::tickWork()
 {
     sendInfoEvent(DE_PROCESSING_START);
 
-    bool result = updateImage();
+    bool result = updateLayerImage();
 
     if (result)
     {

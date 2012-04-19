@@ -53,7 +53,9 @@ void deLayerGridPanel::buildRows()
         project.log("build rows i=" + str(i));
 
         deBaseLayer* baseLayer = layerStack.getLayer(i);
-        deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
+        deBaseLayerWithSource* layer = dynamic_cast<deBaseLayerWithSource*>(baseLayer);
+        deSwitchableLayer* switchable = dynamic_cast<deSwitchableLayer*>(baseLayer);
+        deLayerWithBlending* blending = dynamic_cast<deLayerWithBlending*>(baseLayer);
 
         layerRows.push_back(deLayerRow(i));
         deLayerRow& row = layerRows.back();
@@ -80,7 +82,7 @@ void deLayerGridPanel::buildRows()
         }            
 
         row.action = new wxButton(this, wxID_ANY, wxString::FromAscii(action.c_str()), wxDefaultPosition, wxSize(160,25));
-        if ((layer) && (layer->hasAction()))
+        if (action.size() > 0)
         {
             gridSizer->Add(row.action, 0);
         }
@@ -91,7 +93,7 @@ void deLayerGridPanel::buildRows()
         }
 
         row.blend = new wxButton(this, wxID_ANY, _T("b"), wxDefaultPosition, wxSize(20,25));
-        if ((layer) && (layer->hasBlending()))
+        if (blending)
         {
             gridSizer->Add(row.blend, 0);
         }
@@ -102,12 +104,12 @@ void deLayerGridPanel::buildRows()
         }
 
         row.enabled = new wxCheckBox(this, wxID_ANY, _T(""));
-        if ((layer) && (layer->isEnabled()))
+        if ((switchable) && (switchable->isEnabled()))
         {
             row.enabled->SetValue(true);
         }
 
-        if ((layer) && (layer->canDisable()))
+        if (switchable)
         {
             gridSizer->Add(row.enabled, 0, wxALIGN_CENTER);
         }
@@ -140,11 +142,6 @@ void deLayerGridPanel::clearRows()
         gridSizer->Detach(row.view);
         delete row.view;
        
-       /*
-        gridSizer->Detach(row.name);
-        delete row.name;
-        */
-
         gridSizer->Detach(row.action);
         delete row.action;
 
@@ -237,10 +234,6 @@ void deLayerGridPanel::click(wxCommandEvent &event)
             int layerIndex = row.index;
             project.log("new action frame requested in row " + str(row.index));
 
-/*
-            deBaseLayer* baseLayer = layerStack.getLayer(row.index);
-            deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
-            */
             deBaseLayer* layer = layerStack.getLayer(row.index);
 
             if (!project.getLayerFrameManager().checkActionFrame(row.index))
@@ -263,16 +256,19 @@ void deLayerGridPanel::click(wxCommandEvent &event)
             deBaseLayer* baseLayer = layerStack.getLayer(row.index);
             deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
             deActionLayer* al = dynamic_cast<deActionLayer*>(layer);
-            if (!frameManager.checkBlendFrame(row.index))
+            if (al)
             {
-                project.log("creating blend frame");
-                deBlendFrame* blendFrame = new deBlendFrame(this, *al, layerProcessor, frameManager, layerIndex);
-                if (blendFrame)
+                if (!frameManager.checkBlendFrame(row.index))
                 {
-                    project.log("created blend frame");
-                    blendFrame->Show(true);
+                    project.log("creating blend frame");
+                    deBlendFrame* blendFrame = new deBlendFrame(this, *al, layerProcessor, frameManager, layerIndex);
+                    if (blendFrame)
+                    {
+                        project.log("created blend frame");
+                        blendFrame->Show(true);
+                    }
                 }
-            }        
+            }
         }
     }
 

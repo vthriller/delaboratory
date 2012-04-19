@@ -19,7 +19,8 @@
 #include "layer_frame.h"
 #include "action_layer.h"
 
-deLayerFrame::deLayerFrame(wxWindow *parent, deLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex)
+//deLayerFrame::deLayerFrame(wxWindow *parent, deLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex)
+deLayerFrame::deLayerFrame(wxWindow *parent, deBaseLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex)
 :deFrame(parent, name),
 layer(_layer),
 frameManager(_frameManager),
