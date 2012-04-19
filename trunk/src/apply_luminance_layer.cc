@@ -21,6 +21,7 @@
 #include "copy_channel.h"
 #include "property_value.h"
 #include "color_space_utils.h"
+#include "channel_manager.h"
 
 deApplyLuminanceLayer::deApplyLuminanceLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
 :deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager) 
@@ -137,3 +138,69 @@ void deApplyLuminanceLayer::load(xmlNodePtr root)
     }
 }
 
+
+bool deApplyLuminanceLayer::updateMainImageNotThreadedWay()
+{
+    if (!isEnabled())
+    {
+        return true;
+    }
+
+    int channelSize = channelManager.getChannelSize().getN();
+
+    int s[MAX_COLOR_SPACE_SIZE];
+    deChannel* sc[MAX_COLOR_SPACE_SIZE];
+    int d[MAX_COLOR_SPACE_SIZE];
+    deChannel* dc[MAX_COLOR_SPACE_SIZE];
+
+    deValue* sp[MAX_COLOR_SPACE_SIZE];
+    deValue* dp[MAX_COLOR_SPACE_SIZE];
+
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        s[i] = getSourceImage().getChannelIndex(i);
+        sc[i] = channelManager.getChannel(s[i]);
+        mainLayerImage.enableChannel(i);
+        d[i] = mainLayerImage.getChannelIndex(i);
+        dc[i] = channelManager.getChannel(d[i]);
+
+        if (sc[i])
+        {
+            sc[i]->lockRead();
+            sp[i] = sc[i]->getPixels();
+        }                    
+        else
+        {
+            sp[i] = NULL;
+        }
+
+        if (dc[i])
+        {
+            dc[i]->lockWrite();
+            dp[i] = dc[i]->getPixels();
+        }                 
+        else
+        {
+            dp[i] = NULL;
+        }
+    }
+
+    bool actionResult = processActionFull(sp, dp, channelSize);
+
+    for (i = 0; i < n; i++)
+    {
+        if (sc[i])
+        {
+            sc[i]->unlockRead();
+        }                    
+        if (dc[i])
+        {
+            dc[i]->unlockWrite();
+        }                    
+    }
+
+    return actionResult;
+}

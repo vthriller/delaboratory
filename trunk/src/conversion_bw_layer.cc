@@ -176,7 +176,7 @@ void deConversionBWLayer::presetM(int c)
     }
 }
 
-bool deConversionBWLayer::updateImage()
+bool deConversionBWLayer::updateMainImageNotThreadedWay()
 {
     logMessage("conversion BW start");
 

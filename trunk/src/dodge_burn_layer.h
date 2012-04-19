@@ -38,7 +38,6 @@ class deDodgeBurnLayer:public deActionLayer
         int burnMaxIndex;
 
     protected:
-        virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "dodge_burn";};
         virtual std::string getLabel() const {return "dodge / burn";};
 

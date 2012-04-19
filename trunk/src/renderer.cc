@@ -313,7 +313,6 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
     {
         if (!renderImage(layerImage, getCurrentImageData(), channelManager))
         {
-            std::cout << "failed renderImage" << std::endl;
             logMessage("render image FAILED");
         }
     }

@@ -42,7 +42,6 @@ class deBaseLayer
         deBaseLayer(const deBaseLayer& layer);
         deBaseLayer& operator = (const deBaseLayer& layer);
 
-        virtual bool updateImage() = 0;
 
         deMutex mutex;
 
@@ -50,6 +49,12 @@ class deBaseLayer
         deColorSpace colorSpace;
         deChannelManager& channelManager;
         deImage mainLayerImage;
+        bool errorOnUpdate;
+
+        virtual bool updateBlendAllChannels() {};
+        bool updateMainImageAllChannels();
+        virtual bool updateMainImageNotThreadedWay() {return false;};
+        virtual bool updateImage();
 
     public:
         deBaseLayer(deColorSpace _colorSpace, deChannelManager& _channelManager);
@@ -65,8 +70,7 @@ class deBaseLayer
         void processLayer(deLayerProcessType type, int channel);
 
         bool processFull();
-        virtual void processBlend() {};
-        virtual void processChannel(int channel) {};
+        virtual void processSingleChannel(int channel);
 
         bool updateImageThreadCall();
 
@@ -80,6 +84,10 @@ class deBaseLayer
         virtual const deImage& getLayerImage() const;
 
         virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
+
+        virtual bool updateMainImageSingleChannel(int channel) = 0;
+
+        void setErrorOnUpdateFromThread();
 
 
 };

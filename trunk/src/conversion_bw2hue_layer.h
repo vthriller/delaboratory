@@ -35,7 +35,7 @@ class deConversionBW2HueLayer:public deConversionLayer
         deConversionBW2HueLayer(int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deColorSpace _colorSpace);
         virtual ~deConversionBW2HueLayer();
 
-        virtual bool updateImage();
+        virtual bool updateMainImageNotThreadedWay();
 
         dePropertyValue& getPropertyHue() {return hue;};
         dePropertyValue& getPropertySaturation() {return saturation;};

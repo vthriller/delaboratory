@@ -23,6 +23,7 @@
 #include <sstream>
 #include <cassert>
 #include "logger.h"
+#include "image.h"
 
 deMixer::deMixer(int _size)
 :size(_size)
@@ -83,7 +84,7 @@ void deMixer::setWeight(int c, deValue value)
     unlock();
 }
 
-void deMixer::process(const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& destination, int n)
+void deMixer::process(const deImage& sourceImage, deChannel& destination, int n)
 {
     if (size < 1)
     {
@@ -92,14 +93,9 @@ void deMixer::process(const deChannel* s1, const deChannel* s2, const deChannel*
 
     int i;
 
-    if (!s1)
-    {
-        return;
-    }
-
     lock();
 
-    const deValue *p1 = s1->getPixels();
+    const deValue *p1 = sourceImage.getValues(0);
     if (size == 1)
     {
         for (i = 0; i < n; i++)
@@ -111,18 +107,8 @@ void deMixer::process(const deChannel* s1, const deChannel* s2, const deChannel*
         return;
     }        
 
-    if (!s2)
-    {
-        unlock();
-        return;
-    }
-    if (!s3)
-    {
-        unlock();
-        return;
-    }
-    const deValue *p2 = s2->getPixels();
-    const deValue *p3 = s3->getPixels();
+    const deValue *p2 = sourceImage.getValues(1);
+    const deValue *p3 = sourceImage.getValues(2);
     if (size == 3)
     {
         for (i = 0; i < n; i++)
@@ -136,12 +122,7 @@ void deMixer::process(const deChannel* s1, const deChannel* s2, const deChannel*
         return;
     }        
 
-    if (!s4)
-    {
-        unlock();
-        return;
-    }
-    const deValue *p4 = s4->getPixels();
+    const deValue *p4 = sourceImage.getValues(3);
     for (i = 0; i < n; i++)
     {
         deValue result = weights[0] * p1[i];

@@ -30,10 +30,7 @@ class deApplyImageLayer:public deActionLayer
         dePropertyBoolean applySingleChannel;
         int appliedChannel;
 
-        virtual bool simpleActionProcessing() const {return true;};
-
     protected:
-        virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "apply_image";};
         virtual std::string getLabel() const {return "apply image";};
 
@@ -42,8 +39,6 @@ class deApplyImageLayer:public deActionLayer
         virtual ~deApplyImageLayer();
 
         virtual bool isChannelNeutral(int index);
-
-        virtual bool processAction(int i);
 
         bool isSingleChannel() const;
 
@@ -60,6 +55,8 @@ class deApplyImageLayer:public deActionLayer
         virtual void save(xmlNodePtr root);
 
         virtual std::string getActionName() {return "setup";};
+
+        virtual bool updateMainImageSingleChannel(int i);
 
 
 

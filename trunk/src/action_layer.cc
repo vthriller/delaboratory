@@ -30,123 +30,6 @@
 #include "xml.h"
 #include "logger.h"
 #include "color_space_utils.h"
-#include "semaphore.h"
-
-class deUpdateActionThread:public wxThread
-{
-    private:
-        virtual void *Entry()
-        {
-            bool result = layer.updateActionOnThread(channel);
-            if (!result)
-            {
-                logError("update action failed");
-                layer.setError();
-            }
-            semaphore.post();
-            return NULL;
-        }
-        deActionLayer& layer;
-        int channel;
-        deSemaphore& semaphore;
-    public:    
-        deUpdateActionThread(deActionLayer& _layer, int _channel, deSemaphore& _semaphore)
-        :layer(_layer),
-         channel(_channel),
-         semaphore(_semaphore)
-        {
-        }
-        virtual ~deUpdateActionThread()
-        {
-        }
-};
-
-bool deActionLayer::updateActionAllChannels()
-{
-    logMessage("update action all channels start");
-
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-
-    deSemaphore semaphore(0, n);
-
-    errorOnUpdate = false;
-
-    for (i = 0; i < n; i++)
-    {
-        logMessage("creating update action thread for channel " + str(i));
-        deUpdateActionThread* thread = new deUpdateActionThread(*this, i, semaphore);
-
-        if ( thread->Create() != wxTHREAD_NO_ERROR )
-        {
-            std::cout << "creating thread... CREATE ERROR" << std::endl;
-        }
-
-        if ( thread->Run() != wxTHREAD_NO_ERROR )
-        {
-            std::cout << "creating thread... RUN ERROR" << std::endl;
-        }
-    }
-
-    for (i = 0; i < n; i++)
-    {
-        logMessage("waiting for update action thread for channel " + str(i));
-        semaphore.wait();
-    }
-
-    logMessage("update action all channels end");
-
-    if (errorOnUpdate)
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
-}
-
-bool deActionLayer::updateImageInActionLayer(bool action, bool blend, int channel)
-{
-    if (action)
-    {
-        if (channel >= 0)
-        {
-            if (!updateAction(channel))
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if (!updateActionAllChannels())
-            {
-                return false;
-            }
-        }
-    }        
-
-    if (blend)
-    {
-        if (channel >= 0)
-        {
-            if (!updateBlend(channel))
-            {
-                return false;
-            }
-        }
-        else
-        {   
-            if (!updateBlendAllChannels())
-            {
-                return false;
-            }
-        }            
-    }    
-
-    return true;
-}
-
 
 deActionLayer::deActionLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
 :deLayer(_colorSpace, _channelManager, _sourceLayer, _layerStack),
@@ -169,144 +52,40 @@ deSize deActionLayer::getChannelSize() const
     return channelManager.getChannelSize();
 }
 
-bool deActionLayer::updateAction(int i)
+bool deActionLayer::updateMainImageSingleChannel(int i)
 {
     bool actionResult = false;
 
-    if ((i < 0) || (i>=getColorSpaceSize(colorSpace)))
-    {
-        logError("updateAction for invalid channel " +str(i)+ " requested");
-        return false;
-    };
-
-    logMessage("update action start i:" +str(i));
-
-    if (!isEnabled())
-    {
-        return true;
-    }
-
     const deImage& sourceImage = getSourceImage();
-
-    int channelSize = channelManager.getChannelSize().getN();
 
     int s = sourceImage.getChannelIndex(i);
 
-    if (simpleActionProcessing())
-    {
-        return processAction(i);
-    }
-
-    logMessage("update action 4 i:" +str(i));
-
     if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
     {
-        logMessage("update action 4a i:" +str(i));
-        deChannel* sourceChannel = channelManager.getChannel(s);
-        if (sourceChannel)
-        {
-            sourceChannel->lockRead();
-            sourceChannel->unlockRead();
-            mainLayerImage.disableChannel(i, s);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        mainLayerImage.disableChannel(i, s);
+        return true;
     }
     else
     {
-        if (singleChannelProcessing())
+        deChannel* sourceChannel = channelManager.getChannel(s);
+        if (sourceChannel)
         {
-            logMessage("update action 5 i:" +str(i));
-            deChannel* sourceChannel = channelManager.getChannel(s);
-            if (sourceChannel)
-            {
-                mainLayerImage.enableChannel(i);
-                int c = mainLayerImage.getChannelIndex(i);
-                deChannel* channel = channelManager.getChannel(c);
-                logMessage("update action 6 i:" +str(i));
-
-                if (channel)
-                {
-                    logMessage("update action 7 i:" +str(i));
-                    channel->lockWrite();
-                    logMessage("update action 8 i:" +str(i));
-                    sourceChannel->lockRead();
-                    logMessage("update action 9 i:" +str(i));
-
-                    actionResult = processAction(i, *sourceChannel, *channel, channelManager.getChannelSize());
-
-                    logMessage("update action 10 i:" +str(i));
-
-                    sourceChannel->unlockRead();
-                    channel->unlockWrite();
-                }
-            }
-        }
-        else
-        {
-            logMessage("update action 999 i:" +str(i));
-            int s1 = sourceImage.getChannelIndex(0);
-            int s2 = sourceImage.getChannelIndex(1);
-            int s3 = sourceImage.getChannelIndex(2);
-            int s4 = sourceImage.getChannelIndex(3);
-
-            deChannel* sc1 = channelManager.getChannel(s1);
-            deChannel* sc2 = channelManager.getChannel(s2);
-            deChannel* sc3 = channelManager.getChannel(s3);
-            deChannel* sc4 = channelManager.getChannel(s4);
-
             mainLayerImage.enableChannel(i);
             int c = mainLayerImage.getChannelIndex(i);
             deChannel* channel = channelManager.getChannel(c);
 
             if (channel)
             {
-                if (sc1)
-                {
-                    sc1->lockRead();
-                }                    
-                if (sc2)
-                {
-                    sc2->lockRead();
-                }              
-                if (sc3)
-                {
-                    sc3->lockRead();
-                }    
-                if (sc4)
-                {
-                    sc4->lockRead();
-                }                    
                 channel->lockWrite();
+                sourceChannel->lockRead();
 
-                actionResult = processAction4(i, sc1, sc2, sc3, sc4, *channel, channelSize);
+                actionResult = processAction(i, *sourceChannel, *channel, channelManager.getChannelSize());
 
+                sourceChannel->unlockRead();
                 channel->unlockWrite();
-
-                if (sc1)
-                {
-                    sc1->unlockRead();
-                }
-                if (sc2)
-                {
-                    sc2->unlockRead();
-                }
-                if (sc3)
-                {
-                    sc3->unlockRead();
-                }
-                if (sc4)
-                {
-                    sc4->unlockRead();
-                }                    
             }
         }
     }
-
-    logMessage("update action end i:" +str(i));
 
     return actionResult;
 
@@ -366,114 +145,6 @@ void deActionLayer::loadBlend(xmlNodePtr root)
 
     }        
 
-}
-
-bool deActionLayer::updateActionOnThread(int i)
-{
-    return updateAction(i);
-}
-
-bool deActionLayer::fullProcessing()
-{
-    if (!isEnabled())
-    {
-        return true;
-    }
-
-    int channelSize = channelManager.getChannelSize().getN();
-
-    int s[MAX_COLOR_SPACE_SIZE];
-    deChannel* sc[MAX_COLOR_SPACE_SIZE];
-    int d[MAX_COLOR_SPACE_SIZE];
-    deChannel* dc[MAX_COLOR_SPACE_SIZE];
-
-    deValue* sp[MAX_COLOR_SPACE_SIZE];
-    deValue* dp[MAX_COLOR_SPACE_SIZE];
-
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-
-    for (i = 0; i < n; i++)
-    {
-        s[i] = getSourceImage().getChannelIndex(i);
-        sc[i] = channelManager.getChannel(s[i]);
-        mainLayerImage.enableChannel(i);
-        d[i] = mainLayerImage.getChannelIndex(i);
-        dc[i] = channelManager.getChannel(d[i]);
-
-        if (sc[i])
-        {
-            sc[i]->lockRead();
-            sp[i] = sc[i]->getPixels();
-        }                    
-        else
-        {
-            sp[i] = NULL;
-        }
-
-        if (dc[i])
-        {
-            dc[i]->lockWrite();
-            dp[i] = dc[i]->getPixels();
-        }                 
-        else
-        {
-            dp[i] = NULL;
-        }
-    }
-
-    bool actionResult = processActionFull(sp, dp, channelSize);
-
-    for (i = 0; i < n; i++)
-    {
-        if (sc[i])
-        {
-            sc[i]->unlockRead();
-        }                    
-        if (dc[i])
-        {
-            dc[i]->unlockWrite();
-        }                    
-    }
-
-    return actionResult;
-}
-
-bool deActionLayer::updateImage()
-{
-    if (onlyFullProcessing())
-    {
-        bool result = fullProcessing();
-        if (result)
-        {
-            updateImageInActionLayer(false, true, -1);
-        }
-        return result;
-    }
-    else
-    {
-        return updateImageInActionLayer(true, true, -1);
-    }        
-}
-
-void deActionLayer::processChannel(int channel)
-{
-    if (onlyFullProcessing())
-    {
-        logError("processChannel called but full processing is set to true");
-        return;
-    }
-    updateImageInActionLayer(true, true, channel);
-}    
-
-void deActionLayer::processBlend()
-{
-    updateImageInActionLayer(false, true, -1);
-}
-
-void deActionLayer::setError()
-{
-    errorOnUpdate = true;
 }
 
 void deActionLayer::setHistogramChannel(int channel)

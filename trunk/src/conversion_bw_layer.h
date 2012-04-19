@@ -67,7 +67,7 @@ class deConversionBWLayer:public deConversionLayer
         deConversionBWLayer(int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, int n);
         virtual ~deConversionBWLayer();
 
-        virtual bool updateImage();
+        virtual bool updateMainImageNotThreadedWay();
 
         dePropertyValue& getAdd0() {return add0;};
         dePropertyValue& getAdd1() {return add1;};

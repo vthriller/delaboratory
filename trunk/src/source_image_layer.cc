@@ -37,7 +37,7 @@ deSourceImageLayer::~deSourceImageLayer()
 {
 }
 
-bool deSourceImageLayer::updateImage()
+bool deSourceImageLayer::updateMainImageNotThreadedWay()
 {
     const deSize ss = sourceImage.getSize();
 

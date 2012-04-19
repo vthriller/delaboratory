@@ -32,7 +32,7 @@ deConversionLayer::~deConversionLayer()
 {
 }
 
-bool deConversionLayer::updateImage()
+bool deConversionLayer::updateMainImageNotThreadedWay()
 {
     logMessage("conversion start");
 

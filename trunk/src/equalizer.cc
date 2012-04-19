@@ -80,14 +80,11 @@ void deEqualizer::setValue(int c, deValue value)
     unlock();
 }
 
-void deEqualizer::process(const deChannel& s, const deChannel& e, deChannel& destination, int n, bool wrap)
+void deEqualizer::process(const deValue* ps, const deValue* pe, deChannel& destination, int n, bool wrap)
 {
     lock();
 
     deValue limitScale = 3.0;
-
-    const deValue *ps = s.getPixels();
-    const deValue *pe = e.getPixels();
 
     deValue bandSize = 1.0 / bands;
 

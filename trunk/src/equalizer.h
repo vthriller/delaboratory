@@ -45,7 +45,7 @@ class deEqualizer
         deValue getValue(int c) const;
         void setValue(int c, deValue value);
 
-        void process(const deChannel& s, const deChannel& e, deChannel& destination, int n, bool wrap);
+        void process(const deValue* s, const deValue* e, deChannel& destination, int n, bool wrap);
 
         void reset();
 

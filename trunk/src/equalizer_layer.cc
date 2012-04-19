@@ -22,6 +22,7 @@
 #include "frame_factory.h"
 #include "equalizer.h"
 #include "color_space_utils.h"
+#include "channel_manager.h"
 
 deEqualizerLayer8::deEqualizerLayer8(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
 :deEqualizerLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager, 8)
@@ -65,50 +66,26 @@ deEqualizerLayer::~deEqualizerLayer()
     }
 }
 
-bool deEqualizerLayer::processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize)
+bool deEqualizerLayer::updateMainImageSingleChannel(int channel)
 {
+    const deImage& sourceImage = getSourceImage();
+
     int e = getEqualizerChannel(colorSpace);
 
-    const deChannel* eChannel = NULL;
-    const deChannel* sChannel = NULL;
+    mainLayerImage.enableChannel(channel);
 
-    switch (e)
-    {
-        case 0:
-            eChannel = s1;
-            break;
-        case 1:
-            eChannel = s2;
-            break;
-        case 2:
-            eChannel = s3;
-            break;
-        case 3:
-            eChannel = s4;
-            break;
-    }
+    int c = mainLayerImage.getChannelIndex(channel);
+    deChannel* destination = channelManager.getChannel(c);
 
-    switch (i)
-    {
-        case 0:
-            sChannel = s1;
-            break;
-        case 1:
-            sChannel = s2;
-            break;
-        case 2:
-            sChannel = s3;
-            break;
-        case 3:
-            sChannel = s4;
-            break;
-    }
+    const deValue* eChannel = sourceImage.getValues(e);
+    const deValue* sChannel = sourceImage.getValues(channel);
 
     bool wrap = isChannelWrapped(colorSpace, e);
 
-    if ((eChannel) && (sChannel))
+    if ((eChannel) && (sChannel) && (destination))
     {
-        equalizers[i]->process(*sChannel, *eChannel, channel, channelSize, wrap);
+        int channelSize = channelManager.getChannelSize().getN();
+        equalizers[channel]->process(sChannel, eChannel, *destination, channelSize, wrap);
     }
 
     return true;

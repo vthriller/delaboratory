@@ -42,7 +42,6 @@ class deVignetteLayer:public deActionLayer
         int spotIndex;
 
     protected:
-        virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "vignette";};
 
     public:

@@ -31,7 +31,6 @@ class deShadowsHighlightsLayer:public deActionLayer
         int lightenAmountIndex;
 
     protected:
-        virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "shadows_highlights";};
         virtual std::string getLabel() const {return "shadows / highlights";};
 

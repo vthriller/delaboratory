@@ -54,7 +54,6 @@ class deLayer:public deLayerWithBlending
 
         virtual std::string getLabel() const;
 
-
         int getNumberOfProperties() const {return properties.size();};
         dePropertyValue* getPropertyValue(int index);
         dePropertyValue* getPropertyValue(const std::string& _name);

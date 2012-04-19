@@ -173,7 +173,6 @@ void deImagePanel::paintEvent(wxPaintEvent & evt)
     }
     else
     {
-        std::cout << "view: " << view << " in paintEvent" << std::endl;
     }
     project.getLayerProcessor().unlock();
 }
@@ -194,7 +193,6 @@ void deImagePanel::repaintImagePanel()
     }
     else
     {
-        std::cout << "view: " << view << " in repaintImagePanel" << std::endl;
     }
 }
 

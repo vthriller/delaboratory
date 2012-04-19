@@ -47,8 +47,15 @@ deApplyImageLayer::~deApplyImageLayer()
 {
 }
 
-bool deApplyImageLayer::processAction(int i)
+bool deApplyImageLayer::updateMainImageSingleChannel(int i)
 {
+
+    if (!isChannelEnabled(i))
+    {
+        mainLayerImage.disableChannel(i, getSourceImage().getChannelIndex(i));
+        return true;
+    }
+
     int a = getInt(appliedLayer.get());
 
     const deImage& appliedImage = getOtherLayerImage(a);

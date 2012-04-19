@@ -21,6 +21,7 @@
 #include "blend_channel.h"
 #include <wx/thread.h>
 #include "color_space_utils.h"
+#include <iostream>
 
 class deUpdateBlendThread:public wxThread
 {
@@ -220,5 +221,23 @@ bool deLayerWithBlending::updateBlendAllChannels()
 
     return true;
 
+}
+
+void deLayerWithBlending::processSingleChannel(int channel)
+{
+    deBaseLayer::processSingleChannel(channel);
+    updateBlend(channel);
+}    
+
+bool deLayerWithBlending::updateImage()
+{
+    bool result = deBaseLayer::updateImage();
+
+    if (result)
+    {
+        result = updateBlendAllChannels();
+    }
+
+    return result;
 }
 

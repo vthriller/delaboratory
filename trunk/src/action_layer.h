@@ -31,31 +31,13 @@ class deViewManager;
 class deActionLayer:public deLayer
 {
     private:
-        // set from thread
-        bool errorOnUpdate;
-
-        virtual bool simpleActionProcessing() const {return false;};
-        virtual bool onlyFullProcessing() const {return false;};
-
-        bool updateAction(int i);
-
-        bool updateActionAllChannels();
 
     protected:
         deViewManager& viewManager;
 
     private:        
 
-        bool fullProcessing();
-
-        virtual bool processAction(int i) {return false;};
         virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size) {return false;};
-        virtual bool processAction4(int i, const deChannel* s1, const deChannel* s2, const deChannel* s3, const deChannel* s4, deChannel& channel, int channelSize) {return false;};
-        virtual bool processActionFull(deValue** sp, deValue** dp, int channelSize) {return false;};
-
-        virtual bool singleChannelProcessing() const = 0;
-
-        virtual bool updateImage();
 
     public:
         deActionLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
@@ -64,20 +46,12 @@ class deActionLayer:public deLayer
         deChannel* getSourceChannel(int index);
         deSize getChannelSize() const;
 
-        deViewManager& getViewManager() {return viewManager;};
-
         virtual void loadBlend(xmlNodePtr root);
         virtual void saveBlend(xmlNodePtr root);
 
-        bool updateImageInActionLayer(bool action, bool blend, int channel);
-        bool updateActionOnThread(int i);
-
-        virtual void processChannel(int channel);
-        virtual void processBlend();
-
-        void setError();
-
         void setHistogramChannel(int channel);
+
+        virtual bool updateMainImageSingleChannel(int i);
 
 
 };

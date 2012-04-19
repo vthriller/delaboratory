@@ -32,7 +32,6 @@ class deBlurLayer:public deActionLayer
         dePropertyChoice blurType;
 
     protected:
-        virtual bool singleChannelProcessing() const {return true;};
         virtual std::string getType() const {return "blur";};
 
     public:

@@ -200,3 +200,4 @@ void applyColor(deValue r1, deValue g1, deValue b1, deValue r2, deValue g2, deVa
         b = 1.0;
     }
 }
+
