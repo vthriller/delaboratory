@@ -19,10 +19,10 @@
 #ifndef _DE_EQUALIZER_LAYER_H
 #define _DE_EQUALIZER_LAYER_H
 
-#include "action_layer.h"
+#include "layer.h"
 class deEqualizer;
 
-class deEqualizerLayer:public deActionLayer
+class deEqualizerLayer:public deLayer
 {
     private:
         std::vector<deEqualizer*> equalizers;

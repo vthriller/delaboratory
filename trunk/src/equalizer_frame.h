@@ -40,7 +40,7 @@ class deEqualizerFrame:public deActionFrame
         wxButton* reset;
 
     public:
-        deEqualizerFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
+        deEqualizerFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deEqualizerFrame();
 
         void click(wxCommandEvent &event);

@@ -23,6 +23,7 @@
 #include "blend_mode.h"
 #include "slider.h"
 class deLayerProcessor;
+class deLayer;
 
 class deBlendFrame:public deLayerFrame
 {
@@ -31,13 +32,12 @@ class deBlendFrame:public deLayerFrame
         void check(wxCommandEvent &event);
 
         wxChoice* choice;
-        deSlider* alphaSlider;
         std::vector<deBlendMode> blendModes;
         std::vector<wxCheckBox*> channels;
         deLayerProcessor& layerProcessor;
 
     public:
-        deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
+        deBlendFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deBlendFrame();
 
 

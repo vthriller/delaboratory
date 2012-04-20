@@ -27,6 +27,7 @@ class deProject;
 class deLayerGridPanel;
 class deLayerProcessor;
 class deOperationProcessor;
+class deChannelManager;
 
 class deControlPanel:public wxPanel
 {
@@ -49,6 +50,8 @@ class deControlPanel:public wxPanel
         std::map<int, std::string> actionButtonsNames;
         std::vector<wxButton*> actionButtons;
 
+        deChannelManager& channelManager;
+
         wxButton* deleteLayer;
 
         void click(wxCommandEvent &event);
@@ -60,7 +63,7 @@ class deControlPanel:public wxPanel
         void onAddLayer();
 
     public:
-        deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deLayerGridPanel* _layerGridPanel, deOperationProcessor& _operationProcessor);
+        deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deLayerGridPanel* _layerGridPanel, deOperationProcessor& _operationProcessor, deChannelManager& _channelManager);
         ~deControlPanel();
 
         void onChangeView();

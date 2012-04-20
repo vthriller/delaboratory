@@ -26,6 +26,7 @@ class deSamplerManager;
 class deZoomManager;
 class deOperationProcessor;
 class deSize;
+class deChannelManager;
 #include <string>
 
 class deMainWindow
@@ -37,7 +38,7 @@ class deMainWindow
         deMainWindow();
         virtual ~deMainWindow();
 
-        void init(int width, int height, deProject& project, deLayerProcessor& layerProcessor, deSamplerManager& samplerManager, deZoomManager& zoomManager, const std::string& dcrawVersion, deOperationProcessor& operationProcessor);
+        void init(int width, int height, deProject& project, deLayerProcessor& layerProcessor, deSamplerManager& samplerManager, deZoomManager& zoomManager, const std::string& dcrawVersion, deOperationProcessor& operationProcessor, deChannelManager& channelManager);
         void show();
         void setTopWindow();
         void postEvent(int event, int arg);

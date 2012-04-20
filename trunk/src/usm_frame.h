@@ -38,7 +38,7 @@ class deUSMFrame:public deActionFrame
         void click(wxCommandEvent &event);
 
     public:
-        deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
+        deUSMFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deUSMFrame();
 
 

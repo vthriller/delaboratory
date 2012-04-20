@@ -23,7 +23,7 @@
 #include "layer_processor.h"
 #include "color_space_utils.h"
 
-deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
 :deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     deApplyImageLayer& applyImageLayer = dynamic_cast<deApplyImageLayer&>(layer);

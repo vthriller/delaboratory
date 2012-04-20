@@ -106,17 +106,29 @@ void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse, deVal
 
             x = ellipse.processX(x);
 
-            deValue r = sqrt(x * x + y * y);
+            deValue rr = x * x + y * y;
 
-            deValue v = 1.0 - r + spot;
+            deValue r = sqrt(rr);
+
+            deValue v = 1.0 - r;
+
             if (v < 0)
             {
                 v = 0;
             }
+
+            if (v > 1 - spot)
+            {
+                deValue over = v - (1 - spot);
+                v += 0.5 * over;
+            }
+
             if (v > 1)
             {
                 v = 1;
             }
+
+
 
             deValue vv = darkness + (light - darkness) * v;
             if (vv < 0)

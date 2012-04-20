@@ -128,7 +128,7 @@ bool deLaboratory::OnInit()
 	int width = 1200;
 	int height = 960;
 
-	mainWindow.init( width, height, project, processor, samplerManager, zoomManager, dcraw_version, operationProcessor);
+	mainWindow.init( width, height, project, processor, samplerManager, zoomManager, dcraw_version, operationProcessor, previewChannelManager);
 
     logMessage("show main frame");
 

@@ -19,17 +19,19 @@
 #ifndef _DE_BLUR_LAYER_H
 #define _DE_BLUR_LAYER_H
 
-#include "action_layer.h"
+#include "layer.h"
 #include "blur.h"
 #include "property_value.h"
 #include "property_choice.h"
+#include "channel_manager.h"
 
-class deBlurLayer:public deActionLayer
+class deBlurLayer:public deLayer
 {
     private:
         dePropertyValue blurRadius;
         dePropertyValue threshold;
         dePropertyChoice blurType;
+        deViewManager& viewManager;
 
     protected:
         virtual std::string getType() const {return "blur";};
@@ -42,8 +44,6 @@ class deBlurLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
-
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
 
@@ -52,6 +52,8 @@ class deBlurLayer:public deActionLayer
         dePropertyValue& getPropertyRadius() {return blurRadius;};
         dePropertyChoice& getPropertyType() {return blurType;};
         dePropertyValue& getPropertyThreshold() {return threshold;};
+
+        virtual bool updateMainImageSingleChannel(int i);
 
 
 };

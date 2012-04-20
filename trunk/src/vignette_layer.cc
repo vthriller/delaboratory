@@ -24,6 +24,7 @@
 #include "xml.h"
 #include "frame_factory.h"
 #include "layer_processor.h"
+#include "channel_manager.h"
 
 deVignetteLayer1::deVignetteLayer1(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
 :deVignetteLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager, 1)
@@ -46,8 +47,9 @@ deVignetteLayer2::~deVignetteLayer2()
 }
 
 deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _vignettes)
-:deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager),
- vignettes(_vignettes)
+:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager),
+ vignettes(_vignettes),
+ viewManager(_viewManager)
 {
     lightIndex = registerPropertyValue("light");
     darknessIndex = registerPropertyValue("darkness");
@@ -76,16 +78,16 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, int _sourceLayer, deL
     dePropertyValue* spot = getPropertyValue(spotIndex);
 
     radius1X->setMin(0.01);
-    radius1X->setMax(1.0);
+    radius1X->setMax(2.0);
     radius1Y->setMin(0.01);
-    radius1Y->setMax(1.0);
+    radius1Y->setMax(2.0);
     center1X->setMin(-1);
     center1Y->setMin(-1);
 
     light->setMin(0.0);
     light->setMax(1.0);
     spot->setMin(0.0);
-    spot->setMax(2.0);
+    spot->setMax(1.0);
     darkness->setMin(0.0);
     darkness->setMax(1.0);
 
@@ -134,56 +136,6 @@ deEllipse calcEllipse(deValue radX, deValue radY, deValue cenX, deValue cenY, de
     return deEllipse(cx, cy, rx, ry);
 }
 
-bool deVignetteLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
-{
-    logMessage("deVignetteLayer::processAction i=" + str(i));
-
-    deValue* destination = channel.getPixels();
-
-    if (!destination)
-    {
-        logMessage("ERROR channel pixels are NULL");
-        return false;
-    }
-
-    deValue x1;
-    deValue y1;
-    deValue x2;
-    deValue y2;
-
-    viewManager.getZoom(x1, y1, x2, y2);
-
-    dePropertyValue* radius1X = getPropertyValue(radius1XIndex);
-    dePropertyValue* radius1Y = getPropertyValue(radius1YIndex);
-    dePropertyValue* center1X = getPropertyValue(center1XIndex);
-    dePropertyValue* center1Y = getPropertyValue(center1YIndex);
-
-    dePropertyValue* light = getPropertyValue(lightIndex);
-    dePropertyValue* darkness = getPropertyValue(darknessIndex);
-    dePropertyValue* spot = getPropertyValue(spotIndex);
-
-    deEllipse ellipse1 = calcEllipse(radius1X->get(), radius1Y->get(), center1X->get(), center1Y->get(), x1, y1, x2, y2);
-
-    if (vignettes == 2)
-    {
-        dePropertyValue* radius2X = getPropertyValue(radius2XIndex);
-        dePropertyValue* radius2Y = getPropertyValue(radius2YIndex);
-        dePropertyValue* center2X = getPropertyValue(center2XIndex);
-        dePropertyValue* center2Y = getPropertyValue(center2YIndex);
-
-        deEllipse ellipse2 = calcEllipse(radius2X->get(), radius2Y->get(), center2X->get(), center2Y->get(), x1, y1, x2, y2);
-        vignetteChannel(destination, size, ellipse1, ellipse2, light->get(), darkness->get(), spot->get());
-    }
-    else
-    {
-        vignetteChannel(destination, size, ellipse1, light->get(), darkness->get(), spot->get());
-    }
-
-    logMessage("deVignetteLayer::processAction i=" + str(i) + " done");
-
-    return true;
-}
-
 bool deVignetteLayer::isChannelNeutral(int index)
 {
     return false;
@@ -210,8 +162,8 @@ void deVignetteLayer::reset()
     }
     setOpacity(1.0);
 
-    radius1X->set(0.5);
-    radius1Y->set(0.5);
+    radius1X->set(1.0);
+    radius1Y->set(1.0);
     center1X->set(0.0);
     center1Y->set(0.0);
 
@@ -231,14 +183,14 @@ void deVignetteLayer::reset()
     if (colorSpace == deColorSpaceCMYK)
     {
         light->set(0.0);
-        darkness->set(0.8);
+        darkness->set(1.0);
     }
     else
     {
         light->set(1.0);
-        darkness->set(0.2);
+        darkness->set(0.0);
     }
-    spot->set(1.0);
+    spot->set(0.5);
 }
 
 void deVignetteLayer::save(xmlNodePtr root)
@@ -271,3 +223,74 @@ bool deVignetteLayer::setCenter(deValue x, deValue y)
 
     return true;
 }
+
+bool deVignetteLayer::updateMainImageSingleChannel(int i)
+{
+    const deImage& sourceImage = getSourceImage();
+
+    int s = sourceImage.getChannelIndex(i);
+
+    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
+    {
+        mainLayerImage.disableChannel(i, s);
+        return true;
+    }
+
+    deChannel* sourceChannel = channelManager.getChannel(s);
+    if (sourceChannel)
+    {
+        mainLayerImage.enableChannel(i);
+        int c = mainLayerImage.getChannelIndex(i);
+        deChannel* channel = channelManager.getChannel(c);
+
+        if (channel)
+        {
+            channel->lockWrite();
+            sourceChannel->lockRead();
+
+            deSize size = channelManager.getChannelSize();
+
+            deValue* destination = channel->getPixels();
+
+            deValue x1;
+            deValue y1;
+            deValue x2;
+            deValue y2;
+
+            viewManager.getZoom(x1, y1, x2, y2);
+
+            dePropertyValue* radius1X = getPropertyValue(radius1XIndex);
+            dePropertyValue* radius1Y = getPropertyValue(radius1YIndex);
+            dePropertyValue* center1X = getPropertyValue(center1XIndex);
+            dePropertyValue* center1Y = getPropertyValue(center1YIndex);
+
+            dePropertyValue* light = getPropertyValue(lightIndex);
+            dePropertyValue* darkness = getPropertyValue(darknessIndex);
+            dePropertyValue* spot = getPropertyValue(spotIndex);
+
+            deEllipse ellipse1 = calcEllipse(radius1X->get(), radius1Y->get(), center1X->get(), center1Y->get(), x1, y1, x2, y2);
+
+            if (vignettes == 2)
+            {
+                dePropertyValue* radius2X = getPropertyValue(radius2XIndex);
+                dePropertyValue* radius2Y = getPropertyValue(radius2YIndex);
+                dePropertyValue* center2X = getPropertyValue(center2XIndex);
+                dePropertyValue* center2Y = getPropertyValue(center2YIndex);
+
+                deEllipse ellipse2 = calcEllipse(radius2X->get(), radius2Y->get(), center2X->get(), center2Y->get(), x1, y1, x2, y2);
+                vignetteChannel(destination, size, ellipse1, ellipse2, light->get(), darkness->get(), spot->get());
+            }
+            else
+            {
+                vignetteChannel(destination, size, ellipse1, light->get(), darkness->get(), spot->get());
+            }
+
+            sourceChannel->unlockRead();
+            channel->unlockWrite();
+        }
+    }
+
+    return true;
+
+}
+

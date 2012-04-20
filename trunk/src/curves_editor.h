@@ -23,6 +23,7 @@
 class deCurvesPanel;
 class deGradientPanel1;
 class deLayerProcessor;
+class deChannelManager;
 
 class deCurvesEditor:public deActionFrame
 {
@@ -58,7 +59,7 @@ class deCurvesEditor:public deActionFrame
         wxButton* is2;
 
     public:
-        deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
+        deCurvesEditor(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex, deChannelManager& _channelManager);
         virtual ~deCurvesEditor();
 
         virtual bool onImageClick(deValue x, deValue y);

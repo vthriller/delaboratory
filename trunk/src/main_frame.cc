@@ -78,7 +78,7 @@ EVT_MENU(DE_HISTOGRAM_EVENT, deMainFrame::onHistogramEvent)
 EVT_MENU(DE_INFO_EVENT, deMainFrame::onInfoEvent)
 END_EVENT_TABLE()
 
-deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcraw_version, deOperationProcessor& _operationProcessor)
+deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcraw_version, deOperationProcessor& _operationProcessor, deChannelManager& channelManager)
 : wxFrame() , project(_project), layerProcessor(_layerProcessor), imageSize(0,0)
 {
     project.log("creating main frame");
@@ -154,13 +154,13 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxNotebook* notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("notebook"));
     rightSizer->Add(notebook, 1, wxEXPAND);
 
-    layerGridPanel = new deLayerGridPanel(notebook, project, _layerProcessor);
+    layerGridPanel = new deLayerGridPanel(notebook, project, _layerProcessor, channelManager);
 
     notebook->AddPage(layerGridPanel, _T("layers"));
     samplersPanel = new deSamplersPanel(notebook, project, _samplerManager);
     notebook->AddPage(samplersPanel, _T("samplers"));
 
-    controlPanel = new deControlPanel(this, project, _layerProcessor, layerGridPanel, _operationProcessor);
+    controlPanel = new deControlPanel(this, project, _layerProcessor, layerGridPanel, _operationProcessor, channelManager);
     rightSizer->Add(controlPanel, 0, wxEXPAND);
 
     bool a = controlPanel->getAutoUI();

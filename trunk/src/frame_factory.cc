@@ -33,12 +33,11 @@
 #include "shadows_highlights_frame.h"
 #include "hue_saturation_frame.h"
 
-#include "action_layer.h"
 #include "conversion_bw2hue_layer.h"
 
 #include "logger.h"
 
-deFrame* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager, int layerIndex)
+deFrame* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager, int layerIndex, deChannelManager& channelManager)
 {
     logMessage("creating frame...");
     const std::string type = layer.getType();
@@ -46,67 +45,67 @@ deFrame* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& lay
 
     if (type == "curves")
     {
-        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deCurvesEditor(parent, al, layerProcessor, frameManager, layerIndex);
+        deLayer& al = dynamic_cast<deLayer&>(layer);
+        return new deCurvesEditor(parent, al, layerProcessor, frameManager, layerIndex, channelManager);
     }        
 
     if (type == "mixer")
     {
-        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        deLayer& al = dynamic_cast<deLayer&>(layer);
         return new deMixerEditor(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
     if (type == "apply_image")
     {
-        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        deLayer& al = dynamic_cast<deLayer&>(layer);
         return new deApplyImageFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
     if (type == "blur")
     {
-        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        deLayer& al = dynamic_cast<deLayer&>(layer);
         return new deBlurFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
     if ((type == "equalizer8") || (type == "equalizer16"))
     {
-        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        deLayer& al = dynamic_cast<deLayer&>(layer);
         return new deEqualizerFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
     if (type == "usm")
     {
-        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        deLayer& al = dynamic_cast<deLayer&>(layer);
         return new deUSMFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
     if (type == "basic")
     {
-        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
-        return new deBasicFrame(parent, al, layerProcessor, frameManager, layerIndex);
+        deLayer& al = dynamic_cast<deLayer&>(layer);
+        return new deBasicFrame(parent, al, layerProcessor, frameManager, layerIndex, channelManager);
     }        
 
     if (type == "dodge_burn")
     {
-        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        deLayer& al = dynamic_cast<deLayer&>(layer);
         return new deDodgeBurnFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
     if ((type == "vignette1") || (type == "vignette2"))
     {
-        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        deLayer& al = dynamic_cast<deLayer&>(layer);
         return new deVignetteFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
     if (type == "high_pass")
     {
-        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        deLayer& al = dynamic_cast<deLayer&>(layer);
         return new deHighPassFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
     if (type == "shadows_highlights")
     {
-        deActionLayer& al = dynamic_cast<deActionLayer&>(layer);
+        deLayer& al = dynamic_cast<deLayer&>(layer);
         return new deShadowsHighlightsFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 

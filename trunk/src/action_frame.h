@@ -21,12 +21,13 @@
 
 #include "layer_frame.h"
 #include "value.h"
+#include "layer.h"
 
 class deActionFrame:public deLayerFrame
 {
     private:
     public:
-        deActionFrame(wxWindow *parent, deActionLayer& _layer, deLayerFrameManager& _frameManager, int _layerIndex);
+        deActionFrame(wxWindow *parent, deLayer& _layer, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deActionFrame();
 
         virtual bool onImageClick(deValue x, deValue y) {return false;};

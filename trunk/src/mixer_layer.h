@@ -19,10 +19,10 @@
 #ifndef _DE_MIXER_LAYER_H
 #define _DE_MIXER_LAYER_H
 
-#include "action_layer.h"
+#include "layer.h"
 #include "mixer.h"
 
-class deMixerLayer:public deActionLayer
+class deMixerLayer:public deLayer
 {
     private:
         std::vector<deMixer*> mixers;

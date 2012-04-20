@@ -16,31 +16,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_SHADOWS_HIGHLIGHTS_FRAME_H
-#define _DE_SHADOWS_HIGHLIGHTS_FRAME_H
+#include "opacity_slider.h"
+#include "layer_with_blending.h"
+#include "layer_processor.h"
 
-#include "action_frame.h"
-#include "slider.h"
-#include <vector>
-
-class dePropertyValueSlider;
-class deLayerProcessor;
-
-class deShadowsHighlightsFrame:public deActionFrame
+deOpacitySlider::deOpacitySlider(wxWindow *parent, int range, deLayerWithBlending& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
+:deSlider(parent, "opacity", range, 0.0, 1.0, 1.0), layer(_layer),
+layerProcessor(_layerProcessor), layerIndex(_layerIndex)
 {
-    private:
-        std::vector<dePropertyValueSlider*> valueSliders;
+    setValue(layer.getOpacity());
+}
 
-        deLayerProcessor& layerProcessor;
+deOpacitySlider::~deOpacitySlider()
+{
+}
 
-        void click(wxCommandEvent &event);
+void deOpacitySlider::onValueChange(deValue value, bool finished)
+{
+    layer.setOpacity(value);
 
-    public:
-        deShadowsHighlightsFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deShadowsHighlightsFrame();
+    layerProcessor.markUpdateBlendAllChannels(layerIndex);
+}
 
-
-};
-
-
-#endif

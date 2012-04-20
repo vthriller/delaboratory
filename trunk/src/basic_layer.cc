@@ -19,9 +19,10 @@
 #include "basic_layer.h"
 #include "process_linear.h"
 #include "color_space_utils.h"
+#include "channel_manager.h"
 
 deBasicLayer::deBasicLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager)
+:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager)
 {
     getBasicSettings(colorSpace, settings1, settings2);
 
@@ -142,20 +143,6 @@ void deBasicLayer::updateCurve(int i)
     curves[i].setContrastBrightness(contrast, brightness);
 }
 
-bool deBasicLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
-{
-    if (i == shiftIndex)
-    {
-        shiftChannel(sourceChannel.getPixels(), channel.getPixels(), shiftValue, size.getN());    
-    }
-    else
-    {
-        curves[i].process(sourceChannel, channel, size.getN());
-    }
-
-    return true;
-}
-
 int deBasicLayer::getNumberOfSettings()
 {
     int n = settings.size();
@@ -210,3 +197,46 @@ dePropertyValue* deBasicLayer::getBasicProperty(const std::string& name)
 
     return NULL;
 }
+
+bool deBasicLayer::updateMainImageSingleChannel(int i)
+{
+    const deImage& sourceImage = getSourceImage();
+
+    int s = sourceImage.getChannelIndex(i);
+
+    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
+    {
+        mainLayerImage.disableChannel(i, s);
+        return true;
+    }
+
+    deChannel* sourceChannel = channelManager.getChannel(s);
+    if (sourceChannel)
+    {
+        mainLayerImage.enableChannel(i);
+        int c = mainLayerImage.getChannelIndex(i);
+        deChannel* channel = channelManager.getChannel(c);
+
+        if (channel)
+        {
+            channel->lockWrite();
+            sourceChannel->lockRead();
+
+            if (i == shiftIndex)
+            {
+                shiftChannel(sourceChannel->getPixels(), channel->getPixels(), shiftValue, channelManager.getChannelSize().getN());    
+            }
+            else
+            {
+                curves[i].process(*sourceChannel, *channel, channelManager.getChannelSize().getN());
+            }
+
+            sourceChannel->unlockRead();
+            channel->unlockWrite();
+        }
+    }
+
+    return true;
+
+}
+

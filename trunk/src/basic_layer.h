@@ -19,12 +19,12 @@
 #ifndef _DE_BASIC_LAYER_H
 #define _DE_BASIC_LAYER_H
 
-#include "action_layer.h"
+#include "layer.h"
 #include "property_value.h"
 #include "curve.h"
 #include "basic_setting.h"
 
-class deBasicLayer:public deActionLayer
+class deBasicLayer:public deLayer
 {
     private:
         std::vector<deBasicSetting> settings1;
@@ -47,8 +47,6 @@ class deBasicLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
-
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
 
@@ -62,6 +60,8 @@ class deBasicLayer:public deActionLayer
         virtual void onUpdateProperties();
 
         void reset();
+
+        virtual bool updateMainImageSingleChannel(int i);
 
 };
 

@@ -50,7 +50,7 @@ class deMixerSlider:public deSlider
             if ((finished) || (layerProcessor.isRealtime()))
             {
                 layer.setWeight(s, d, value);
-                layer.setHistogramChannel(d);
+                layerProcessor.setHistogramChannel(d);
 
                 layerProcessor.markUpdateSingleChannel(layerIndex, d);
             }                
@@ -138,7 +138,7 @@ void deMixerEditorChannel::click(wxCommandEvent &event)
 {
     int id = event.GetId();
 
-    layer.setHistogramChannel(index);
+    layerProcessor.setHistogramChannel(index);
 
     if (reset->GetId() == id)
     {

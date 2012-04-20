@@ -19,11 +19,11 @@
 #ifndef _DE_APPLY_IMAGE_LAYER_H
 #define _DE_APPLY_IMAGE_LAYER_H
 
-#include "action_layer.h"
+#include "layer.h"
 #include "property_choice.h"
 #include "property_boolean.h"
 
-class deApplyImageLayer:public deActionLayer
+class deApplyImageLayer:public deLayer
 {
     private:
         dePropertyChoice appliedLayer;

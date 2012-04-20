@@ -46,6 +46,8 @@ const deImage& deBaseLayerWithSource::getOtherLayerImage(int a) const
     deBaseLayer* applied = layerStack.getLayer(a);
 
     const deImage& appliedImage = applied->getLayerImage();
+
+    return appliedImage;
 }    
 
 deColorSpace deBaseLayerWithSource::getSourceColorSpace() const

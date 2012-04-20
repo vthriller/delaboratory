@@ -25,6 +25,8 @@
 #include "wx/wx.h"
 class deCurvesLayer;
 class deLayerProcessor;
+class deChannelManager;
+class deCanvas;
 #include "value.h"
 #include "histogram.h"
 
@@ -64,12 +66,14 @@ private:
 
     int layerIndex;
 
+    deChannelManager& channelManager;
+
     void drawLine(wxDC& dc, deValue x1, deValue y1, deValue x2, deValue y2);
     void drawLines(wxDC& dc);
 
     void generateBackground();
 public:
-    deCurvesPanel(wxWindow* parent, deCurvesLayer& layer, deLayerProcessor& _layerProcessor, int _layerIndex);
+    deCurvesPanel(wxWindow* parent, deCurvesLayer& layer, deLayerProcessor& _layerProcessor, int _layerIndex, deChannelManager& _channelManager);
     ~deCurvesPanel();
 
 	void paintEvent(wxPaintEvent & evt);

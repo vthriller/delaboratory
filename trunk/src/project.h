@@ -58,7 +58,7 @@ class deProject
         deMemoryInfoFrame* memoryInfoFrame;
         deViewManager viewManager;
 
-        deMainWindow& mainWindow;
+
 
         deStaticImage& sourceImage;
 
@@ -79,6 +79,10 @@ class deProject
         deZoomManager& zoomManager;
 
         deOperationProcessor& operationProcessor;
+
+        deMainWindow& mainWindow;
+
+
 
         void onImageNameUpdate();
 

@@ -22,6 +22,8 @@
 #include <wx/thread.h>
 #include "color_space_utils.h"
 #include <iostream>
+#include "str.h"
+#include "xml.h"
 
 class deUpdateBlendThread:public wxThread
 {
@@ -239,5 +241,58 @@ bool deLayerWithBlending::updateImage()
     }
 
     return result;
+}
+
+void deLayerWithBlending::saveBlend(xmlNodePtr root)
+{
+//    saveChild(root, "enabled", str(isEnabled()));
+//    saveChild(root, "blend_mode", getBlendModeName(blendMode));
+//    saveChild(root, "opacity", str(opacity));
+
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        bool c = isChannelEnabled(i);
+        saveChild(root, "channel", str(c));
+    }
+}
+
+void deLayerWithBlending::loadBlend(xmlNodePtr root)
+{
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    int channelIndex = 0;
+    //channels.clear();
+
+    while (child)
+    {
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("channel")))) 
+        {
+            bool c = getBool(getContent(child));
+            if (c)
+            {
+                //channels.insert(channelIndex);
+            }
+            channelIndex++;
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("enabled")))) 
+        {
+            setEnabled(getBool(getContent(child)));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("blend_mode")))) 
+        {
+            //blendMode = blendModeFromString(getContent(child));
+        }
+
+        if ((!xmlStrcmp(child->name, BAD_CAST("opacity"))))
+        {
+            //opacity = getValue(getContent(child));
+        }
+    }        
+
 }
 

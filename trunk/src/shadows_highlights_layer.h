@@ -19,16 +19,19 @@
 #ifndef _DE_SHADOWS_HIGHLIGHTS_LAYER_H
 #define _DE_SHADOWS_HIGHLIGHTS_LAYER_H
 
-#include "action_layer.h"
+#include "layer.h"
 #include "property_value.h"
 
-class deShadowsHighlightsLayer:public deActionLayer
+class deChannel;
+
+class deShadowsHighlightsLayer:public deLayer
 {
     private:
         int blurRadiusIndex;
         int shadowsHighlightsAmountIndex;
         int darkenAmountIndex;
         int lightenAmountIndex;
+        deViewManager& viewManager;
 
     protected:
         virtual std::string getType() const {return "shadows_highlights";};
@@ -40,7 +43,6 @@ class deShadowsHighlightsLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
 
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
@@ -48,6 +50,9 @@ class deShadowsHighlightsLayer:public deActionLayer
         virtual std::string getActionName() {return "s/h";};
 
         void reset();
+
+        bool processSH(const deChannel& sourceChannel, deChannel& channel);
+        virtual bool updateMainImageSingleChannel(int i);
 
 
 };

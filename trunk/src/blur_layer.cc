@@ -25,10 +25,11 @@
 #include "layer_processor.h"
 
 deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer( _colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager),
+:deLayer( _colorSpace, _sourceLayer, _layerStack, _channelManager),
  blurRadius("blur_radius"),
  threshold("threshold"),
- blurType("blur_type")
+ blurType("blur_type"),
+ viewManager(_viewManager)
 {
     blurRadius.setLabel("radius");
     blurRadius.setMin(0);
@@ -46,24 +47,6 @@ void deBlurLayer::reset()
 {
     blurRadius.set(5);
     blurType.set("gaussian");
-}
-
-bool deBlurLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
-{
-    const deValue* source = sourceChannel.getPixels();
-    deValue* destination = channel.getPixels();
-
-    deValue r = viewManager.getRealScale() * blurRadius.get();
-
-    deBlurType type = blurTypeFromString(blurType.get());
-    
-    logMessage("blur r=" + str(r));
-
-    bool result = blurChannel(source, destination, size, r, r, type, threshold.get());
-
-    logMessage("blur done");
-
-    return result;
 }
 
 bool deBlurLayer::isChannelNeutral(int index)
@@ -97,6 +80,45 @@ void deBlurLayer::load(xmlNodePtr root)
         child = child->next;
 
     }        
+
+}
+
+bool deBlurLayer::updateMainImageSingleChannel(int i)
+{
+    const deImage& sourceImage = getSourceImage();
+
+    int s = sourceImage.getChannelIndex(i);
+
+    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
+    {
+        mainLayerImage.disableChannel(i, s);
+        return true;
+    }
+
+    deChannel* sourceChannel = channelManager.getChannel(s);
+    if (sourceChannel)
+    {
+        mainLayerImage.enableChannel(i);
+        int c = mainLayerImage.getChannelIndex(i);
+        deChannel* channel = channelManager.getChannel(c);
+
+        if (channel)
+        {
+            channel->lockWrite();
+            sourceChannel->lockRead();
+
+            deValue r = viewManager.getRealScale() * blurRadius.get();
+
+            deBlurType type = blurTypeFromString(blurType.get());
+            
+            blurChannel(sourceChannel->getPixels(), channel->getPixels(), channelManager.getChannelSize(), r, r, type, threshold.get());
+
+            sourceChannel->unlockRead();
+            channel->unlockWrite();
+        }
+    }
+
+    return true;
 
 }
 

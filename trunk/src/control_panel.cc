@@ -33,8 +33,8 @@
 
 const int g_txt = 220;
 
-deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor,  deLayerGridPanel* _layerGridPanel, deOperationProcessor& _operationProcessor)
-:wxPanel(parent), project(_project), layerGridPanel(_layerGridPanel), layerProcessor(_processor), operationProcessor(_operationProcessor)
+deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor,  deLayerGridPanel* _layerGridPanel, deOperationProcessor& _operationProcessor, deChannelManager& _channelManager)
+:wxPanel(parent), project(_project), layerGridPanel(_layerGridPanel), layerProcessor(_processor), operationProcessor(_operationProcessor), channelManager(_channelManager)
 {
     autoUI = false;
 
@@ -314,7 +314,7 @@ void deControlPanel::onAddLayer()
         deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
         int layerIndex = n;
         project.log("auto UI - creating action frame");
-        deFrame* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex);
+        deFrame* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex, channelManager);
         if (actionFrame)
         {
             project.log("auto UI - created action frame");

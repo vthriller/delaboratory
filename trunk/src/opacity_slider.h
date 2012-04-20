@@ -16,31 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_SHADOWS_HIGHLIGHTS_FRAME_H
-#define _DE_SHADOWS_HIGHLIGHTS_FRAME_H
+#ifndef _DE_OPACITY_SLIDER_H
+#define _DE_OPACITY_SLIDER_H
 
-#include "action_frame.h"
 #include "slider.h"
-#include <vector>
 
-class dePropertyValueSlider;
+class deLayerWithBlending;
 class deLayerProcessor;
 
-class deShadowsHighlightsFrame:public deActionFrame
+class deOpacitySlider:public deSlider
 {
     private:
-        std::vector<dePropertyValueSlider*> valueSliders;
-
+        deLayerWithBlending& layer;
         deLayerProcessor& layerProcessor;
-
-        void click(wxCommandEvent &event);
+        int layerIndex;
 
     public:
-        deShadowsHighlightsFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deShadowsHighlightsFrame();
+        deOpacitySlider(wxWindow *parent, int range, deLayerWithBlending& _layer, deLayerProcessor& _layerProcessor, int _layerIndex);
 
 
-};
+        virtual ~deOpacitySlider();
+
+        virtual void onValueChange(deValue value, bool finished);
+};        
 
 
 #endif

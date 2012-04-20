@@ -19,13 +19,16 @@
 #ifndef _DE_HIGH_PASS_LAYER_H
 #define _DE_HIGH_PASS_LAYER_H
 
-#include "action_layer.h"
+#include "layer.h"
 #include "property_value.h"
 
-class deHighPassLayer:public deActionLayer
+class deChannel;
+
+class deHighPassLayer:public deLayer
 {
     private:
         int blurRadiusIndex;
+        deViewManager& viewManager;
 
     protected:
         virtual std::string getType() const {return "high_pass";};
@@ -37,7 +40,6 @@ class deHighPassLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
 
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
@@ -46,6 +48,8 @@ class deHighPassLayer:public deActionLayer
 
         void reset();
 
+        bool processHP(const deChannel& sourceChannel, deChannel& channel);
+        virtual bool updateMainImageSingleChannel(int i);
 
 };
 

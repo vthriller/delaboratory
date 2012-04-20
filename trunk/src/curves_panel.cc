@@ -23,6 +23,7 @@
 #include "logger.h"
 #include "channels.h"
 #include "color_space_utils.h"
+#include "channel_manager.h"
 
 wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
 {
@@ -46,7 +47,7 @@ wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
         case deColorSpaceCMY:
         {
             int g = 240;
-            int g2 = 50;
+            int g2 = 100;
             switch (channel)
             {
                 case DE_CHANNEL_CYAN:
@@ -74,10 +75,10 @@ BEGIN_EVENT_TABLE(deCurvesPanel, wxPanel)
 EVT_PAINT(deCurvesPanel::paintEvent)
 END_EVENT_TABLE()
 
-deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
+deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex, deChannelManager& _channelManager)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(CURVES_PANEL_SIZE_X, CURVES_PANEL_SIZE_Y)),
 sizeX(CURVES_PANEL_SIZE_X), sizeY(CURVES_PANEL_SIZE_Y), layer(_layer), 
-layerProcessor(_layerProcessor), layerIndex(_layerIndex)
+layerProcessor(_layerProcessor), layerIndex(_layerIndex), channelManager(_channelManager)
 {
     logMessage("creating curves panel... ");
     SetFocus();
@@ -113,8 +114,8 @@ void deCurvesPanel::generateBackground()
     deHistogram histogram(CURVES_PANEL_SIZE_X);
     logMessage("gb2");
 
-    deChannel* c = layer.getSourceChannel(channel);
-    int n = layer.getChannelSize().getN();
+    deChannel* c = channelManager.getChannel(layer.getSourceImage().getChannelIndex(channel));
+    int n = channelManager.getChannelSize().getN();
     logMessage("gb3");
 
     histogram.clear();
@@ -124,8 +125,9 @@ void deCurvesPanel::generateBackground()
     wxImage* image = new wxImage(sizeX, sizeY);
     unsigned char* data = image->GetData();
 
-    unsigned char g1 = 220;
-    unsigned char g2 = 120;
+    unsigned char g1 = 255;
+    unsigned char g2 = 200;
+    wxColour colour = getChannelwxColour(layer.getColorSpace(), channel);
 
     histogram.render(data, sizeX, sizeY, g1, g2);
     logMessage("gb5");
@@ -134,12 +136,6 @@ void deCurvesPanel::generateBackground()
     delete image;
 }
 
-
-void deCurvesPanel::paintEvent(wxPaintEvent & evt)
-{
-    wxPaintDC dc(this);
-    render(dc);
-}
 
 void deCurvesPanel::render(wxDC& dc_orig)
 {
@@ -184,6 +180,7 @@ void deCurvesPanel::drawLines(wxDC& dc)
 
     wxPen pen1(wxColour(g1, g1, g1));
     wxPen pen2(wxColour(g2, g2, g2));
+
 
     dc.SetPen(pen1);
 
@@ -382,7 +379,6 @@ void deCurvesPanel::update(bool finished)
     paint();
     if ((finished) || (layerProcessor.isRealtime()))
     {
-//        int index = layer.getIndex();
         layerProcessor.markUpdateSingleChannel(layerIndex, channel);
     }
 }
@@ -474,8 +470,17 @@ void deCurvesPanel::getPosition(wxMouseEvent &event, deValue& x, deValue &y)
 void deCurvesPanel::paint()
 {
     wxClientDC dc(this);
+
     render(dc);
 }
+
+void deCurvesPanel::paintEvent(wxPaintEvent & evt)
+{
+    wxPaintDC dc(this);
+
+    render(dc);
+}
+
 
 void deCurvesPanel::changeChannel(int _channel)
 {
@@ -484,7 +489,7 @@ void deCurvesPanel::changeChannel(int _channel)
     channel = _channel;
     generateBackground();
     setMarker();
-    layer.setHistogramChannel(channel);
+    layerProcessor.setHistogramChannel(channel);
     paint();
 
     layerProcessor.unlock();
@@ -496,7 +501,7 @@ void deCurvesPanel::onImageClick(deValue x, deValue y)
     {
         return;
     }
-    deSize size = layer.getChannelSize();
+    deSize size = channelManager.getChannelSize();
     clickPosition = (y * size.getH() )  * size.getW() + (x * size.getW());
     setMarker();
     paint();
@@ -510,7 +515,7 @@ void deCurvesPanel::setMarker()
     }
     else
     {
-        deChannel* c = layer.getSourceChannel(channel);
+        deChannel* c = channelManager.getChannel(layer.getSourceImage().getChannelIndex(channel));
         c->lockRead();
         marker = c->getValue(clickPosition);
         c->unlockRead();
@@ -529,7 +534,7 @@ void deCurvesPanel::onKey(int key)
             int i;
             for (i = 0; i < s; i++)
             {
-                deChannel* c = layer.getSourceChannel(i);
+                deChannel* c = channelManager.getChannel(layer.getSourceImage().getChannelIndex(i));
 
                 if (c)
                 {

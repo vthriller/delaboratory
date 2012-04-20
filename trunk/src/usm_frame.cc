@@ -21,8 +21,9 @@
 #include <iostream>
 #include "property_value_slider.h"
 #include "layer_processor.h"
+#include "opacity_slider.h"
 
-deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+deUSMFrame::deUSMFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
 :deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -46,6 +47,10 @@ deUSMFrame::deUSMFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor
             sizer->Add(s);
         }            
     }
+
+    deLayerWithBlending& lwb  = dynamic_cast<deLayerWithBlending&>(_layer);
+    deSlider* alphaSlider = new deOpacitySlider(this, range, lwb, layerProcessor, layerIndex);
+    sizer->Add(alphaSlider, 0);
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
     sizer->Add(sizerB, 0);

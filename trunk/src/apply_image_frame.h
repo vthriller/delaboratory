@@ -39,7 +39,7 @@ class deApplyImageFrame:public deActionFrame
         void setChannels();
 
     public:
-        deApplyImageFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
+        deApplyImageFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deApplyImageFrame();
 
         virtual void onUpdateProperties();

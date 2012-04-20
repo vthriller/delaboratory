@@ -27,9 +27,11 @@
 #include "blend_channel.h"
 #include "process_linear.h"
 #include "layer_processor.h"
+#include "channel_manager.h"
 
 deHighPassLayer::deHighPassLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager)
+:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager),
+ viewManager(_viewManager)
 {
     blurRadiusIndex = registerPropertyValue("blur_radius");
     dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
@@ -51,8 +53,9 @@ deHighPassLayer::~deHighPassLayer()
 {
 }
 
-bool deHighPassLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
+bool deHighPassLayer::processHP(const deChannel& sourceChannel, deChannel& channel)
 {
+    deSize size = channelManager.getChannelSize();
     logMessage("high pass start");
 
     const deValue* source = sourceChannel.getPixels();
@@ -115,3 +118,39 @@ void deHighPassLayer::load(xmlNodePtr root)
     }        
 }
 
+bool deHighPassLayer::updateMainImageSingleChannel(int i)
+{
+    const deImage& sourceImage = getSourceImage();
+
+    int s = sourceImage.getChannelIndex(i);
+
+    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
+    {
+        mainLayerImage.disableChannel(i, s);
+        return true;
+    }
+
+    bool actionResult = false;
+
+    deChannel* sourceChannel = channelManager.getChannel(s);
+    if (sourceChannel)
+    {
+        mainLayerImage.enableChannel(i);
+        int c = mainLayerImage.getChannelIndex(i);
+        deChannel* channel = channelManager.getChannel(c);
+
+        if (channel)
+        {
+            channel->lockWrite();
+            sourceChannel->lockRead();
+
+            actionResult = processHP(*sourceChannel, *channel);
+
+            sourceChannel->unlockRead();
+            channel->unlockWrite();
+        }
+    }
+
+    return actionResult;
+
+}
