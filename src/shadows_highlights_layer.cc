@@ -27,9 +27,11 @@
 #include "blend_channel.h"
 #include "process_linear.h"
 #include "layer_processor.h"
+#include "channel_manager.h"
 
 deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer( _colorSpace,  _sourceLayer, _layerStack, _channelManager, _viewManager)
+:deLayer( _colorSpace,  _sourceLayer, _layerStack, _channelManager),
+ viewManager(_viewManager)
 {
     blurRadiusIndex = registerPropertyValue("blur_radius");
     shadowsHighlightsAmountIndex = registerPropertyValue("shadows_highlights_amount");
@@ -72,8 +74,9 @@ deShadowsHighlightsLayer::~deShadowsHighlightsLayer()
 {
 }
 
-bool deShadowsHighlightsLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
+bool deShadowsHighlightsLayer::processSH(const deChannel& sourceChannel, deChannel& channel)
 {
+    deSize size = channelManager.getChannelSize();
     logMessage("shadows/highlights start");
 
     const deValue* source = sourceChannel.getPixels();
@@ -162,3 +165,39 @@ void deShadowsHighlightsLayer::load(xmlNodePtr root)
     }        
 }
 
+bool deShadowsHighlightsLayer::updateMainImageSingleChannel(int i)
+{
+    const deImage& sourceImage = getSourceImage();
+
+    int s = sourceImage.getChannelIndex(i);
+
+    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
+    {
+        mainLayerImage.disableChannel(i, s);
+        return true;
+    }
+
+    bool actionResult = false;
+
+    deChannel* sourceChannel = channelManager.getChannel(s);
+    if (sourceChannel)
+    {
+        mainLayerImage.enableChannel(i);
+        int c = mainLayerImage.getChannelIndex(i);
+        deChannel* channel = channelManager.getChannel(c);
+
+        if (channel)
+        {
+            channel->lockWrite();
+            sourceChannel->lockRead();
+
+            actionResult = processSH(*sourceChannel, *channel);
+
+            sourceChannel->unlockRead();
+            channel->unlockWrite();
+        }
+    }
+
+    return actionResult;
+
+}

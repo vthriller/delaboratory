@@ -21,9 +21,10 @@
 #include <iostream>
 #include "property_value_slider.h"
 #include "layer_processor.h"
+#include "channel_manager.h"
 
-deBasicFrame::deBasicFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
-:deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
+deBasicFrame::deBasicFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex, deChannelManager& _channelManager)
+:deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor), channelManager(_channelManager)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
@@ -97,11 +98,10 @@ void deBasicFrame::click(wxCommandEvent &event)
     layerProcessor.markUpdateAllChannels(layerIndex);
 }   
 
-void applyWhiteBalanceLAB(deBaseLayer& layer, deValue x, deValue y)
+void applyWhiteBalanceLAB(deBaseLayer& layer, deValue x, deValue y, deSize& size)
 {
     const deImage& image = layer.getLayerImage();
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
-    deSize size = basicLayer.getChannelSize();
     int p = (y * size.getH() )  * size.getW() + (x * size.getW());
 
     const deValue* valuesA = image.getValues(1);
@@ -134,11 +134,10 @@ void applyWhiteBalanceLAB(deBaseLayer& layer, deValue x, deValue y)
     }
 }
 
-void applyWhiteBalanceRGB(deBaseLayer& layer, deValue x, deValue y)
+void applyWhiteBalanceRGB(deBaseLayer& layer, deValue x, deValue y, deSize& size)
 {
     const deImage& image = layer.getLayerImage();
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
-    deSize size = basicLayer.getChannelSize();
     int p = (y * size.getH() )  * size.getW() + (x * size.getW());
 
     const deValue* valuesR = image.getValues(0);
@@ -186,11 +185,10 @@ void applyWhiteBalanceRGB(deBaseLayer& layer, deValue x, deValue y)
 
 }
 
-void applyWhiteBalanceCMYK(deBaseLayer& layer, deValue x, deValue y)
+void applyWhiteBalanceCMYK(deBaseLayer& layer, deValue x, deValue y, deSize& size)
 {
     const deImage& image = layer.getLayerImage();
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
-    deSize size = basicLayer.getChannelSize();
     int p = (y * size.getH() )  * size.getW() + (x * size.getW());
 
     const deValue* valuesR = image.getValues(0);
@@ -245,19 +243,21 @@ bool deBasicFrame::onImageClick(deValue x, deValue y)
         return false;
     }
 
+    deSize size = channelManager.getChannelSize();
+
     if (layer.getColorSpace() == deColorSpaceLAB)
     {
-        applyWhiteBalanceLAB(layer, x, y);
+        applyWhiteBalanceLAB(layer, x, y, size);
     }
 
     if (layer.getColorSpace() == deColorSpaceCMYK)
     {
-        applyWhiteBalanceCMYK(layer, x, y);
+        applyWhiteBalanceCMYK(layer, x, y, size);
     }
 
     if ((layer.getColorSpace() == deColorSpaceRGB) || (layer.getColorSpace() == deColorSpaceProPhoto))
     {
-        applyWhiteBalanceRGB(layer, x, y);
+        applyWhiteBalanceRGB(layer, x, y, size);
     }
 
     std::vector<dePropertyValueSlider*>::iterator i;

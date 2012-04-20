@@ -35,7 +35,7 @@ class deBlurFrame:public deActionFrame
         deLayerProcessor& layerProcessor;
 
     public:
-        deBlurFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
+        deBlurFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deBlurFrame();
 
         virtual void onUpdateProperties();

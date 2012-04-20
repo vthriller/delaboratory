@@ -19,16 +19,17 @@
 #ifndef _DE_USM_LAYER_H
 #define _DE_USM_LAYER_H
 
-#include "action_layer.h"
 #include "property_value.h"
+#include "layer.h"
+class deChannel;
 
-
-class deUSMLayer:public deActionLayer
+class deUSMLayer:public deLayer
 {
     private:
         int blurRadiusPropertyIndex;
         int amountPropertyIndex;
         int thresholdPropertyIndex;
+        deViewManager& viewManager;
 
     protected:
         virtual std::string getType() const {return "usm";};
@@ -40,12 +41,13 @@ class deUSMLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
+        bool processUSM(const deChannel& sourceChannel, deChannel& channel);
 
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
 
         virtual std::string getActionName() {return "usm";};
+        virtual bool updateMainImageSingleChannel(int i);
 
 
 

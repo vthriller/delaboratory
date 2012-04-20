@@ -30,7 +30,6 @@ class deHighPassFrame:public deActionFrame
 {
     private:
         std::vector<dePropertyValueSlider*> valueSliders;
-        //dePropertyValueSlider* radius;
         deLayerProcessor& layerProcessor;
 
         wxButton* reset;
@@ -38,7 +37,7 @@ class deHighPassFrame:public deActionFrame
         void click(wxCommandEvent &event);
 
     public:
-        deHighPassFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
+        deHighPassFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deHighPassFrame();
 
 

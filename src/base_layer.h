@@ -42,7 +42,6 @@ class deBaseLayer
         deBaseLayer(const deBaseLayer& layer);
         deBaseLayer& operator = (const deBaseLayer& layer);
 
-
         deMutex mutex;
 
     protected:
@@ -51,7 +50,7 @@ class deBaseLayer
         deImage mainLayerImage;
         bool errorOnUpdate;
 
-        virtual bool updateBlendAllChannels() {};
+        virtual bool updateBlendAllChannels() {return false;};
         bool updateMainImageAllChannels();
         virtual bool updateMainImageNotThreadedWay() {return false;};
         virtual bool updateImage();
@@ -84,8 +83,7 @@ class deBaseLayer
         virtual const deImage& getLayerImage() const;
 
         virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
-
-        virtual bool updateMainImageSingleChannel(int channel) = 0;
+        virtual bool updateMainImageSingleChannel(int channel) {return false;};
 
         void setErrorOnUpdateFromThread();
 

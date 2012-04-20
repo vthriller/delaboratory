@@ -49,7 +49,7 @@ class deLayer:public deLayerWithBlending
         void loadValueProperties(xmlNodePtr root);
 
     public:
-        deLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
+        deLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
         virtual ~deLayer();
 
         virtual std::string getLabel() const;

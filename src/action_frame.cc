@@ -17,10 +17,9 @@
 */
 
 #include "action_frame.h"
-#include "action_layer.h"
 #include "layer_frame_manager.h"
 
-deActionFrame::deActionFrame(wxWindow *parent, deActionLayer& _layer, deLayerFrameManager& _frameManager, int _layerIndex)
+deActionFrame::deActionFrame(wxWindow *parent, deLayer& _layer, deLayerFrameManager& _frameManager, int _layerIndex)
 :deLayerFrame(parent, _layer, _layer.getLabel(), _frameManager, _layerIndex)
 {
     frameManager.addActionFrame(this);

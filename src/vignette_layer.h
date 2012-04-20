@@ -19,10 +19,10 @@
 #ifndef _DE_VIGNETTE_LAYER_H
 #define _DE_VIGNETTE_LAYER_H
 
-#include "action_layer.h"
+#include "layer.h"
 #include "property_value.h"
 
-class deVignetteLayer:public deActionLayer
+class deVignetteLayer:public deLayer
 {
     private:
         int vignettes;
@@ -41,6 +41,8 @@ class deVignetteLayer:public deActionLayer
         int darknessIndex;
         int spotIndex;
 
+        deViewManager& viewManager;
+
     protected:
         virtual std::string getType() const {return "vignette";};
 
@@ -50,7 +52,6 @@ class deVignetteLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
 
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
@@ -59,8 +60,9 @@ class deVignetteLayer:public deActionLayer
 
         void reset();
 
-
         bool setCenter(deValue x, deValue y);
+
+        virtual bool updateMainImageSingleChannel(int i);
 
 };
 

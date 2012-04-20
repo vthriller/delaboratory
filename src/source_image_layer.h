@@ -29,8 +29,8 @@ class deStaticImage;
 class deSourceImageLayer:public deBaseLayer
 {
     private:
-        deStaticImage& sourceImage;
         deViewManager& viewManager;
+        deStaticImage& sourceImage;
 
         virtual std::string getType() const {return "original";};
 

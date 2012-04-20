@@ -24,7 +24,7 @@
 #include "channel_manager.h"
 
 deApplyLuminanceLayer::deApplyLuminanceLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager) 
+:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager)
 {
     int n = getColorSpaceSize(colorSpace);
     int i;

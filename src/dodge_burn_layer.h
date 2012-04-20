@@ -19,23 +19,26 @@
 #ifndef _DE_DODGE_BURN_LAYER_H
 #define _DE_DODGE_BURN_LAYER_H
 
-#include "action_layer.h"
+#include "layer.h"
 #include "property_value.h"
 #include "property_boolean.h"
 
 class dePresetLayer;
+class deChannel;
 
-class deDodgeBurnLayer:public deActionLayer
+class deDodgeBurnLayer:public deLayer
 {
     private:
         dePropertyBoolean alternate;
         int blurRadiusIndex;
+        int blur2RadiusIndex;
         int dodgeAmountIndex;
         int dodgeMinIndex;
         int dodgeMaxIndex;
         int burnAmountIndex;
         int burnMinIndex;
         int burnMaxIndex;
+        deViewManager& viewManager;
 
     protected:
         virtual std::string getType() const {return "dodge_burn";};
@@ -47,7 +50,6 @@ class deDodgeBurnLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
 
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);
@@ -55,6 +57,9 @@ class deDodgeBurnLayer:public deActionLayer
         virtual std::string getActionName() {return "d/b";};
 
         dePropertyBoolean& getPropertyAlternate() {return alternate;};
+
+        bool processDB(const deChannel& sourceChannel, deChannel& channel);
+        virtual bool updateMainImageSingleChannel(int i);
 
 
 };

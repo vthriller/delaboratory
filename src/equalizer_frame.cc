@@ -55,7 +55,7 @@ class deEqualizerSlider:public deSlider
             if ((finished) || (layerProcessor.isRealtime()))
             {
                 equalizer.setValue(index, value);
-                layer.setHistogramChannel(index);
+                layerProcessor.setHistogramChannel(index);
 
                 layerProcessor.markUpdateSingleChannel(layerIndex, channel);
             }                
@@ -68,7 +68,7 @@ class deEqualizerSlider:public deSlider
 };        
 
 
-deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
 :deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);

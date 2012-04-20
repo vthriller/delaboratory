@@ -23,8 +23,9 @@
 #include "gradient_panel.h"
 #include "color_space_utils.h"
 #include "logger.h"
+#include "opacity_slider.h"
 
-deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+deCurvesEditor::deCurvesEditor(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex, deChannelManager& _channelManager)
 :deActionFrame(parent, _layer, _frameManager, _layerIndex)
 {
     logMessage("creating curves editor...");
@@ -34,6 +35,13 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerP
 
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
+    
+    int range = 250;
+
+    deLayerWithBlending& lwb  = dynamic_cast<deLayerWithBlending&>(_layer);
+    deSlider* alphaSlider = new deOpacitySlider(this, range, lwb, _layerProcessor, layerIndex);
+    sizer->Add(alphaSlider, 0);
+
 
     logMessage("creating curves editor... 2 ");
 
@@ -61,7 +69,7 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deActionLayer& _layer, deLayerP
 
     logMessage("creating curves editor... 4 ");
 
-    curvesPanel = new deCurvesPanel(this, curvesLayer, _layerProcessor, _layerIndex);
+    curvesPanel = new deCurvesPanel(this, curvesLayer, _layerProcessor, _layerIndex, _channelManager);
 
     logMessage("creating curves editor... 5 ");
 

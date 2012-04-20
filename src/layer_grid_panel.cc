@@ -32,7 +32,6 @@
 #include "frame.h"
 
 #include "blend_frame.h"
-#include "action_layer.h"
 
 #include "str.h"
 
@@ -158,8 +157,8 @@ void deLayerGridPanel::clearRows()
     project.log("clear rows end");
 }
 
-deLayerGridPanel::deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(250, 400)), project(_project), layerProcessor(_processor)
+deLayerGridPanel::deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deChannelManager& _channelManager)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(250, 400)), project(_project), layerProcessor(_processor), channelManager(_channelManager)
 {
     maxRows = 10;
 
@@ -239,7 +238,7 @@ void deLayerGridPanel::click(wxCommandEvent &event)
             if (!project.getLayerFrameManager().checkActionFrame(row.index))
             {
                 project.log("creating action frame");
-                deFrame* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex);
+                deFrame* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex, channelManager);
                 if (actionFrame)
                 {
                     project.log("created action frame");
@@ -255,7 +254,8 @@ void deLayerGridPanel::click(wxCommandEvent &event)
 
             deBaseLayer* baseLayer = layerStack.getLayer(row.index);
             deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
-            deActionLayer* al = dynamic_cast<deActionLayer*>(layer);
+            //deActionLayer* al = dynamic_cast<deActionLayer*>(layer);
+            deLayer* al = dynamic_cast<deLayer*>(layer);
             if (al)
             {
                 if (!frameManager.checkBlendFrame(row.index))

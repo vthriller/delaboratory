@@ -164,6 +164,8 @@ class deLayerProcessor
 
         void sendInfoEvent(int i);
 
+        void setHistogramChannel(int channel);
+
 };
 
 #endif

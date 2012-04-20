@@ -38,6 +38,9 @@ class deLayerWithBlending:public deSwitchableLayer
         virtual void processSingleChannel(int channel);
         virtual bool updateImage();
 
+        void loadBlend(xmlNodePtr root);
+        void saveBlend(xmlNodePtr root);
+
     public:
         deLayerWithBlending(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
         virtual ~deLayerWithBlending();

@@ -18,41 +18,13 @@
 
 #include "blend_frame.h"
 #include "layer.h"
-#include "action_layer.h"
 #include "view_manager.h"
 #include "layer_processor.h"
 #include "layer_frame_manager.h"
 #include "color_space_utils.h"
+#include "opacity_slider.h"
 
-class deAlphaSlider:public deSlider
-{
-    private:
-        deActionLayer& layer;
-        deLayerProcessor& layerProcessor;
-        int layerIndex;
-
-    public:
-        deAlphaSlider(wxWindow *parent, int range, deActionLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
-        :deSlider(parent, "opacity", range, 0.0, 1.0, 1.0), layer(_layer),
-        layerProcessor(_layerProcessor), layerIndex(_layerIndex)
-        {
-            setValue(layer.getOpacity());
-        }
-
-        virtual ~deAlphaSlider()
-        {
-        }
-
-        virtual void onValueChange(deValue value, bool finished)
-        {
-            layer.setOpacity(value);
-
-//            int index = layer.getIndex();
-            layerProcessor.markUpdateBlendAllChannels(layerIndex);
-        }
-};        
-
-deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+deBlendFrame::deBlendFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
 :deLayerFrame(parent, _layer, "blend frame", _frameManager, _layerIndex),
  layerProcessor(_layerProcessor)
 {
@@ -64,7 +36,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
     getSupportedBlendModes(blendModes);
 
-    deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
+    deLayer& l = dynamic_cast<deLayer&>(layer);
 
     deBlendMode currentBlendMode = l.getBlendMode();
 
@@ -87,7 +59,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deActionLayer& _layer, deLayerProce
 
     sizer->Add(choice, 0);
 
-    alphaSlider = new deAlphaSlider(this, 100, l, layerProcessor, layerIndex);
+    deSlider* alphaSlider = new deOpacitySlider(this, 100, l, layerProcessor, layerIndex);
     sizer->Add(alphaSlider, 0);
 
     wxSizer* sizerC = new wxStaticBoxSizer(wxVERTICAL, this,  _T("channels"));
@@ -119,7 +91,7 @@ deBlendFrame::~deBlendFrame()
 
 void deBlendFrame::choose(wxCommandEvent &event)
 {
-    deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
+    deLayer& l = dynamic_cast<deLayer&>(layer);
 
     int id = event.GetId();
     if (id == choice->GetId())
@@ -127,7 +99,6 @@ void deBlendFrame::choose(wxCommandEvent &event)
         int i = event.GetInt();
         deBlendMode& mode = blendModes[i];
         l.setBlendMode(mode);
-        //int index = layer.getIndex();
         layerProcessor.markUpdateBlendAllChannels(layerIndex);
     }
     else
@@ -137,7 +108,7 @@ void deBlendFrame::choose(wxCommandEvent &event)
 
 void deBlendFrame::check(wxCommandEvent &event)
 {
-    deActionLayer& l = dynamic_cast<deActionLayer&>(layer);
+    deLayer& l = dynamic_cast<deLayer&>(layer);
     int id = event.GetId();
     deColorSpace colorSpace = layer.getColorSpace();
     int n = getColorSpaceSize(colorSpace);
@@ -155,7 +126,6 @@ void deBlendFrame::check(wxCommandEvent &event)
                 l.disableChannel(i);
             }
 
-//            int l_index = layer.getIndex();   
             layerProcessor.markUpdateSingleChannel(layerIndex, i);
 
             return;

@@ -19,10 +19,10 @@
 #ifndef _DE_CURVES_LAYER_H
 #define _DE_CURVES_LAYER_H
 
-#include "action_layer.h"
+#include "layer.h"
 #include "curve.h"
 
-class deCurvesLayer:public deActionLayer
+class deCurvesLayer:public deLayer
 {
     private:
         deCurve* curves;
@@ -38,7 +38,7 @@ class deCurvesLayer:public deActionLayer
 
         virtual bool isChannelNeutral(int index);
 
-        virtual bool processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size);
+        virtual bool updateMainImageSingleChannel(int i);
 
         virtual void load(xmlNodePtr root);
         virtual void save(xmlNodePtr root);

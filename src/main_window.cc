@@ -36,9 +36,9 @@ class deMainWindowImpl
         {
         }
     
-        void init(int width, int height, deProject& project, deLayerProcessor& layerProcessor, deSamplerManager& samplerManager, deZoomManager& zoomManager, const std::string& dcrawVersion, deOperationProcessor& operationProcessor)
+        void init(int width, int height, deProject& project, deLayerProcessor& layerProcessor, deSamplerManager& samplerManager, deZoomManager& zoomManager, const std::string& dcrawVersion, deOperationProcessor& operationProcessor, deChannelManager& channelManager)
         {
-        	frame = new deMainFrame( wxSize(width,height), project, layerProcessor, samplerManager, zoomManager, dcrawVersion, operationProcessor);
+        	frame = new deMainFrame( wxSize(width,height), project, layerProcessor, samplerManager, zoomManager, dcrawVersion, operationProcessor, channelManager);
 
             rawTimer = new wxTimer(frame, wxID_ANY);
         }            
@@ -124,9 +124,9 @@ deMainWindow::~deMainWindow()
     delete impl;
 }
 
-void deMainWindow::init(int width, int height, deProject& project, deLayerProcessor& layerProcessor, deSamplerManager& samplerManager, deZoomManager& zoomManager, const std::string& dcrawVersion, deOperationProcessor& operationProcessor)
+void deMainWindow::init(int width, int height, deProject& project, deLayerProcessor& layerProcessor, deSamplerManager& samplerManager, deZoomManager& zoomManager, const std::string& dcrawVersion, deOperationProcessor& operationProcessor, deChannelManager& channelManager)
 {
-    impl->init( width, height, project, layerProcessor, samplerManager, zoomManager, dcrawVersion, operationProcessor);
+    impl->init( width, height, project, layerProcessor, samplerManager, zoomManager, dcrawVersion, operationProcessor, channelManager);
 }            
 
 void deMainWindow::show()

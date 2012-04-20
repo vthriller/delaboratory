@@ -31,6 +31,7 @@ class deSamplerManager;
 class deZoomManager;
 class deThreadsPanel;
 class deOperationProcessor;
+class deChannelManager;
 #include "size.h"
 
 enum
@@ -139,7 +140,7 @@ private:
     void hidePanels();
 
 public:
-	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcrawVersion, deOperationProcessor& _operationProcessor);
+	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcrawVersion, deOperationProcessor& _operationProcessor, deChannelManager& channelManager);
 	~deMainFrame();
 
     void rebuild();

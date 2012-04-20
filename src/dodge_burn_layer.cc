@@ -28,12 +28,15 @@
 #include "process_linear.h"
 #include "layer_processor.h"
 #include "preset.h"
+#include "channel_manager.h"
 
 deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager),
- alternate("alternate")
+:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager),
+ alternate("alternate"),
+ viewManager(_viewManager)
 {
     blurRadiusIndex = registerPropertyValue("blur_radius");
+    blur2RadiusIndex = registerPropertyValue("blur2_radius");
     dodgeAmountIndex = registerPropertyValue("dodge_amount");
     dodgeMinIndex = registerPropertyValue("dodge_min");
     dodgeMaxIndex = registerPropertyValue("dodge_max");
@@ -42,6 +45,7 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _sourceLayer, d
     burnMaxIndex = registerPropertyValue("burn_max");
 
     dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
+    dePropertyValue* blur2Radius = getPropertyValue(blur2RadiusIndex);
     dePropertyValue* dodgeAmount = getPropertyValue(dodgeAmountIndex);
     dePropertyValue* dodgeMin = getPropertyValue(dodgeMinIndex);
     dePropertyValue* dodgeMax = getPropertyValue(dodgeMaxIndex);
@@ -49,9 +53,13 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _sourceLayer, d
     dePropertyValue* burnMin = getPropertyValue(burnMinIndex);
     dePropertyValue* burnMax = getPropertyValue(burnMaxIndex);
 
-    blurRadius->setLabel("radius");
+    blurRadius->setLabel("blur 1");
     blurRadius->setMin(1);
     blurRadius->setMax(50);
+
+    blur2Radius->setLabel("blur 2");
+    blur2Radius->setMin(1);
+    blur2Radius->setMax(50);
 
     dodgeAmount->setLabel("dodge amount");
     dodgeMin->setLabel("dodge min");
@@ -67,6 +75,7 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _sourceLayer, d
     {
         dePresetLayer* p = new dePresetLayer(*this);
         p->addPresetValue(new dePresetValue("blur_radius", 5.0));
+        p->addPresetValue(new dePresetValue("blur2_radius", 5.0));
         p->addPresetValue(new dePresetValue("dodge_amount", 0.4));
         p->addPresetValue(new dePresetValue("dodge_min", 0.6));
         p->addPresetValue(new dePresetValue("dodge_max", 0.95));
@@ -79,12 +88,14 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _sourceLayer, d
     {
         dePresetLayer* p = new dePresetLayer(*this);
         p->addPresetValue(new dePresetValue("blur_radius", 20.0));
+        p->addPresetValue(new dePresetValue("blur2_radius", 5.0));
         presets["radius big"] = p;
     }        
 
     {
         dePresetLayer* p = new dePresetLayer(*this);
         p->addPresetValue(new dePresetValue("blur_radius", 5.0));
+        p->addPresetValue(new dePresetValue("blur2_radius", 5.0));
         presets["radius small"] = p;
     }        
 
@@ -157,8 +168,9 @@ deDodgeBurnLayer::~deDodgeBurnLayer()
 {
 }
 
-bool deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
+bool deDodgeBurnLayer::processDB(const deChannel& sourceChannel, deChannel& channel)
 {
+    deSize size = channelManager.getChannelSize();
     logMessage("dodge/burn start");
 
     deBlendMode mode1 = deBlendDodge;
@@ -174,15 +186,13 @@ bool deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
     deValue* destination = channel.getPixels();
 
     deValue* blurMap = NULL;
-    deValue* dodgeMap = NULL;
-    deValue* burnMap = NULL;
+    deValue* dodgeBurnMap = NULL;
     deValue* firstStage = NULL;
 
     try
     {
         blurMap = new deValue [size.getN()];
-        dodgeMap = new deValue [size.getN()];
-        burnMap = new deValue [size.getN()];
+        dodgeBurnMap = new deValue [size.getN()];
         firstStage = new deValue [size.getN()];
     }
     catch (std::bad_alloc)
@@ -192,13 +202,9 @@ bool deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
         {
             delete [] blurMap;
         }
-        if (dodgeMap)
+        if (dodgeBurnMap)
         {
-            delete [] dodgeMap;
-        }
-        if (burnMap)
-        {
-            delete [] burnMap;
+            delete [] dodgeBurnMap;
         }
         if (firstStage)
         {
@@ -208,6 +214,7 @@ bool deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
     }
 
     dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
+    dePropertyValue* blur2Radius = getPropertyValue(blur2RadiusIndex);
     dePropertyValue* dodgeAmount = getPropertyValue(dodgeAmountIndex);
     dePropertyValue* dodgeMin = getPropertyValue(dodgeMinIndex);
     dePropertyValue* dodgeMax = getPropertyValue(dodgeMaxIndex);
@@ -216,39 +223,42 @@ bool deDodgeBurnLayer::processAction(int i, const deChannel& sourceChannel, deCh
     dePropertyValue* burnMax = getPropertyValue(burnMaxIndex);
 
     deValue r = viewManager.getRealScale() * blurRadius->get();
+    deValue r2 = viewManager.getRealScale() * blur2Radius->get();
+
     deBlurType type = deGaussianBlur;
-    bool result = blurChannel(source, blurMap, size, r, r, type, 0.0);
+
+    blurChannel(source, blurMap, size, r, r, type, 0.0);
 
     deValue dmin = dodgeMin->get();
     deValue dmax = dodgeMax->get();
 
-    processLinear(blurMap, dodgeMap, size.getN(), dmin, dmax, false);
+    processLinear(blurMap, dodgeBurnMap, size.getN(), dmin, dmax, false);
+    blurChannel(dodgeBurnMap, dodgeBurnMap, size, r2, r2, type, 0.0);
 
     deValue da = dodgeAmount->get(); 
-    blendChannel(source, source, firstStage, dodgeMap, mode1, da, size.getN());
+    blendChannel(source, source, firstStage, dodgeBurnMap, mode1, da, size.getN());
 
     deValue bmin = burnMin->get();
     deValue bmax = burnMax->get();
-    processLinear(blurMap, burnMap, size.getN(), bmin, bmax, true);
+    processLinear(blurMap, dodgeBurnMap, size.getN(), bmin, bmax, true);
+    blurChannel(dodgeBurnMap, dodgeBurnMap, size, r2, r2, type, 0.0);
 
     deValue ba = burnAmount->get(); 
-    blendChannel(firstStage, firstStage, destination, burnMap, mode2, ba, size.getN());
+    blendChannel(firstStage, source, destination, dodgeBurnMap, mode2, ba, size.getN());
 
     delete [] blurMap;
-    delete [] dodgeMap;
-    delete [] burnMap;
+    delete [] dodgeBurnMap;
     delete [] firstStage;
 
     logMessage("dodge/burn end");
 
-    return result;
+    return true;
 }
 
 
 bool deDodgeBurnLayer::isChannelNeutral(int index)
 {
-    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
-    return (blurRadius->get() == 0);
+    return false;
 }    
 
 void deDodgeBurnLayer::save(xmlNodePtr root)
@@ -275,3 +285,39 @@ void deDodgeBurnLayer::load(xmlNodePtr root)
     }        
 }
 
+bool deDodgeBurnLayer::updateMainImageSingleChannel(int i)
+{
+    const deImage& sourceImage = getSourceImage();
+
+    int s = sourceImage.getChannelIndex(i);
+
+    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
+    {
+        mainLayerImage.disableChannel(i, s);
+        return true;
+    }
+
+    bool actionResult = false;
+
+    deChannel* sourceChannel = channelManager.getChannel(s);
+    if (sourceChannel)
+    {
+        mainLayerImage.enableChannel(i);
+        int c = mainLayerImage.getChannelIndex(i);
+        deChannel* channel = channelManager.getChannel(c);
+
+        if (channel)
+        {
+            channel->lockWrite();
+            sourceChannel->lockRead();
+
+            actionResult = processDB(*sourceChannel, *channel);
+
+            sourceChannel->unlockRead();
+            channel->unlockWrite();
+        }
+    }
+
+    return actionResult;
+
+}

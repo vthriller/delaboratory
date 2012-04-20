@@ -19,9 +19,9 @@
 #ifndef _DE_APPLY_LUMINANCE_LAYER_H
 #define _DE_APPLY_LUMINANCE_LAYER_H
 
-#include "action_layer.h"
+#include "layer.h"
 
-class deApplyLuminanceLayer:public deActionLayer
+class deApplyLuminanceLayer:public deLayer
 {
     private:
         std::vector<dePropertyValue*> mixer;
@@ -43,8 +43,6 @@ class deApplyLuminanceLayer:public deActionLayer
         virtual void save(xmlNodePtr root);
 
         virtual std::string getActionName() {return "apply luminance";};
-
-
 
 };
 

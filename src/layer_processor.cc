@@ -29,7 +29,6 @@
 #include "memory_info_frame.h"
 #include <wx/progdlg.h>
 #include <iostream>
-#include "action_layer.h"
 #include "logger.h"
 #include "renderer.h"
 
@@ -843,4 +842,12 @@ bool deLayerProcessor::isRealtime() const
 void deLayerProcessor::setRealtime(bool r)
 {
     realtime = r;
+}
+
+void deLayerProcessor::setHistogramChannel(int channel)
+{
+    if (viewManager)
+    {
+        viewManager->setHistogramChannel(channel);
+    }
 }

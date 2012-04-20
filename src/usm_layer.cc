@@ -25,9 +25,11 @@
 #include "frame_factory.h"
 #include "layer_processor.h"
 #include "preset.h"
+#include "channel_manager.h"
 
 deUSMLayer::deUSMLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager)
+:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager),
+ viewManager(_viewManager)
 {
     blurRadiusPropertyIndex = registerPropertyValue("blur_radius");
     amountPropertyIndex = registerPropertyValue("amount");
@@ -78,8 +80,76 @@ deUSMLayer::~deUSMLayer()
 {
 }
 
-bool deUSMLayer::processAction(int index, const deChannel& sourceChannel, deChannel& channel, deSize size)
+
+
+bool deUSMLayer::isChannelNeutral(int index)
 {
+    dePropertyValue* blurRadius = getPropertyValue(blurRadiusPropertyIndex);
+    return (blurRadius->get() == 0);
+}    
+
+void deUSMLayer::save(xmlNodePtr root)
+{
+    saveCommon(root);
+    saveBlend(root);
+    saveValueProperties(root);
+}
+
+void deUSMLayer::load(xmlNodePtr root)
+{
+    loadBlend(root);
+
+    xmlNodePtr child = root->xmlChildrenNode;
+
+    while (child)
+    {
+        loadValueProperties(child);
+
+        child = child->next;
+    }        
+}
+
+
+bool deUSMLayer::updateMainImageSingleChannel(int i)
+{
+    const deImage& sourceImage = getSourceImage();
+
+    int s = sourceImage.getChannelIndex(i);
+
+    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
+    {
+        mainLayerImage.disableChannel(i, s);
+        return true;
+    }
+
+    bool actionResult = false;
+
+    deChannel* sourceChannel = channelManager.getChannel(s);
+    if (sourceChannel)
+    {
+        mainLayerImage.enableChannel(i);
+        int c = mainLayerImage.getChannelIndex(i);
+        deChannel* channel = channelManager.getChannel(c);
+
+        if (channel)
+        {
+            channel->lockWrite();
+            sourceChannel->lockRead();
+
+            actionResult = processUSM(*sourceChannel, *channel);
+
+            sourceChannel->unlockRead();
+            channel->unlockWrite();
+        }
+    }
+
+    return actionResult;
+
+}
+
+bool deUSMLayer::processUSM(const deChannel& sourceChannel, deChannel& channel)
+{
+    deSize size = channelManager.getChannelSize();
     logMessage("usm start");
 
     int n = size.getN();
@@ -178,34 +248,3 @@ bool deUSMLayer::processAction(int index, const deChannel& sourceChannel, deChan
 
     return result;
 }
-
-
-bool deUSMLayer::isChannelNeutral(int index)
-{
-    dePropertyValue* blurRadius = getPropertyValue(blurRadiusPropertyIndex);
-    return (blurRadius->get() == 0);
-}    
-
-void deUSMLayer::save(xmlNodePtr root)
-{
-    saveCommon(root);
-    saveBlend(root);
-    saveValueProperties(root);
-}
-
-void deUSMLayer::load(xmlNodePtr root)
-{
-    loadBlend(root);
-
-    xmlNodePtr child = root->xmlChildrenNode;
-
-    while (child)
-    {
-        loadValueProperties(child);
-
-        child = child->next;
-    }        
-}
-
-
-

@@ -100,7 +100,7 @@ void deHistogram::calc(const deChannel* channel, int n)
         deValue value = pixels[j];
         counter++;
         int bar = scale * value;
-        if ((bar >=0) && (bar < size))
+        if ((bar >= 0) && (bar < size))
         {
             bars[bar] ++;    
         }            

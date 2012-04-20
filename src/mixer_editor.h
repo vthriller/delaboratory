@@ -36,7 +36,7 @@ class deMixerEditor:public deActionFrame
         void click(wxCommandEvent &event);
 
     public:
-        deMixerEditor(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
+        deMixerEditor(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deMixerEditor();
 
 

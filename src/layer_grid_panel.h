@@ -25,6 +25,7 @@
 
 class deProject;
 class deLayerProcessor;
+class deChannelManager;
 
 class deLayerGridPanel:public wxPanel
 {
@@ -39,7 +40,6 @@ class deLayerGridPanel:public wxPanel
             int index;
             wxStaticText* id;
             wxRadioButton* view;
-//            wxStaticText* name;
             wxButton* action;
             wxButton* blend;
             wxCheckBox* enabled;
@@ -54,6 +54,7 @@ class deLayerGridPanel:public wxPanel
         wxSizer* mainSizer;
 
         wxFlexGridSizer* gridSizer;
+        deChannelManager& channelManager;
 
         int maxRows;
 
@@ -62,7 +63,7 @@ class deLayerGridPanel:public wxPanel
         void click(wxCommandEvent &event);
     
     public:
-        deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor);
+        deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deChannelManager& _channelManager);
         ~deLayerGridPanel();
 
         void buildRows();

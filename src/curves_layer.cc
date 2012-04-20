@@ -27,9 +27,10 @@
 #include "str.h"
 
 #include "color_space_utils.h"
+#include "channel_manager.h"
 
 deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deActionLayer( _colorSpace,  _sourceLayer, _layerStack,  _channelManager, _viewManager) 
+:deLayer( _colorSpace,  _sourceLayer, _layerStack, _channelManager)
 {
     int n = getColorSpaceSize(colorSpace);
     curves = new deCurve[n];
@@ -40,11 +41,39 @@ deCurvesLayer::~deCurvesLayer()
     delete [] curves;
 }
 
-bool deCurvesLayer::processAction(int i, const deChannel& sourceChannel, deChannel& channel, deSize size)
+bool deCurvesLayer::updateMainImageSingleChannel(int i)
 {
-    logMessage("deCurvesLayer::processAction " + str(i));
-    curves[i].process(sourceChannel, channel, size.getN());
+    const deImage& sourceImage = getSourceImage();
+
+    int s = sourceImage.getChannelIndex(i);
+
+    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
+    {
+        mainLayerImage.disableChannel(i, s);
+        return true;
+    }
+
+    deChannel* sourceChannel = channelManager.getChannel(s);
+    if (sourceChannel)
+    {
+        mainLayerImage.enableChannel(i);
+        int c = mainLayerImage.getChannelIndex(i);
+        deChannel* channel = channelManager.getChannel(c);
+
+        if (channel)
+        {
+            channel->lockWrite();
+            sourceChannel->lockRead();
+
+            curves[i].process(*sourceChannel, *channel, channelManager.getChannelSize().getN());
+
+            sourceChannel->unlockRead();
+            channel->unlockWrite();
+        }
+    }
+
     return true;
+
 }
 
 deCurve* deCurvesLayer::getCurve(int index)

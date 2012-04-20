@@ -21,8 +21,9 @@
 #include <iostream>
 #include "property_value_slider.h"
 #include "layer_processor.h"
+#include "opacity_slider.h"
 
-deVignetteFrame::deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+deVignetteFrame::deVignetteFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
 :deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -46,6 +47,10 @@ deVignetteFrame::deVignetteFrame(wxWindow *parent, deActionLayer& _layer, deLaye
             sizer->Add(s);
         }            
     }
+
+    deLayerWithBlending& lwb  = dynamic_cast<deLayerWithBlending&>(_layer);
+    deSlider* alphaSlider = new deOpacitySlider(this, range, lwb, layerProcessor, layerIndex);
+    sizer->Add(alphaSlider, 0);
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
     sizer->Add(sizerB, 0);
@@ -78,7 +83,6 @@ void deVignetteFrame::click(wxCommandEvent &event)
         (*j)->setFromProperty();
     }
 
-    //int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(layerIndex);
 }   
 
@@ -97,7 +101,6 @@ bool deVignetteFrame::onImageClick(deValue x, deValue y)
         (*j)->setFromProperty();
     }
 
-    //int index = layer.getIndex();
     layerProcessor.markUpdateAllChannels(layerIndex);
 
     return result;

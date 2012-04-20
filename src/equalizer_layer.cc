@@ -43,7 +43,7 @@ deEqualizerLayer16::~deEqualizerLayer16()
 }
 
 deEqualizerLayer::deEqualizerLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _bands)
-:deActionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager),
+:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager),
  bands(_bands)
 {
     int n = getColorSpaceSize(colorSpace);

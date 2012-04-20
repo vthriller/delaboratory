@@ -25,6 +25,7 @@
 
 class dePropertyValueSlider;
 class deLayerProcessor;
+class deChannelManager;
 
 class deBasicFrame:public deActionFrame
 {
@@ -33,12 +34,14 @@ class deBasicFrame:public deActionFrame
 
         deLayerProcessor& layerProcessor;
 
+        deChannelManager& channelManager;
+
         wxButton* reset;
 
         void click(wxCommandEvent &event);
 
     public:
-        deBasicFrame(wxWindow *parent, deActionLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
+        deBasicFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex, deChannelManager& _channelManager);
         virtual ~deBasicFrame();
 
         virtual bool onImageClick(deValue x, deValue y);
