@@ -25,8 +25,7 @@ operations:
   * high pass (monochrome) in LAB/BW/RGB/CMYK
   * equalizer in HSV/HSL/LCH
   * hue shift in HSV/HSL/LCH
-
-
+  * blur AB in LAB
 
 
 
