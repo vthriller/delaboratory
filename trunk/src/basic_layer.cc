@@ -224,11 +224,11 @@ bool deBasicLayer::updateMainImageSingleChannel(int i)
 
             if (i == shiftIndex)
             {
-                shiftChannel(sourceChannel->getPixels(), channel->getPixels(), shiftValue, channelManager.getChannelSize().getN());    
+                shiftChannel(sourceChannel->getPixels(), channel->getPixels(), shiftValue, mainLayerImage.getChannelSize().getN());    
             }
             else
             {
-                curves[i].process(*sourceChannel, *channel, channelManager.getChannelSize().getN());
+                curves[i].process(*sourceChannel, *channel, mainLayerImage.getChannelSize().getN());
             }
 
             sourceChannel->unlockRead();

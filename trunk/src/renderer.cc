@@ -51,7 +51,7 @@ bool renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
         }            
     }
 
-    const deSize& s = channelManager.getChannelSize();
+    const deSize& s = image.getChannelSize();
 
     deChannel* channel0 = channelManager.getChannel(image.getChannelIndex(0));
     deChannel* channel1 = channelManager.getChannel(image.getChannelIndex(1));
@@ -205,7 +205,7 @@ bool renderImage(const deImage& image, unsigned char* data, deChannelManager& ch
 
 void renderChannel(const deImage& image, int c, unsigned char* data, deChannelManager& channelManager, bool reversed)
 {
-    const deSize& s = channelManager.getChannelSize();
+    const deSize& s = image.getChannelSize();
 
     deChannel* channel = channelManager.getChannel(image.getChannelIndex(c));
 
@@ -256,9 +256,7 @@ deRenderer::~deRenderer()
 
 bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor& layerProcessor, deLayerStack& layerStack)
 {
-    const deSize& s = channelManager.getChannelSize();
-
-    if ((s.getW() == 0) || (s.getH() == 0))
+    if (channelManager.isImageEmpty())
     {
         return false;
     }
@@ -346,7 +344,7 @@ bool deRenderer::render(deCanvas& canvas)
 
 unsigned char* deRenderer::getCurrentImageData()
 {
-    const deSize& s = channelManager.getChannelSize();
+    const deSize& s = channelManager.getChannelSizeFromChannelManager();
     renderedImage.setSize(s);
     return renderedImage.getCurrentImageData();
 }    

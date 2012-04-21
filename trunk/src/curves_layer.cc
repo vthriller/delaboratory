@@ -65,7 +65,7 @@ bool deCurvesLayer::updateMainImageSingleChannel(int i)
             channel->lockWrite();
             sourceChannel->lockRead();
 
-            curves[i].process(*sourceChannel, *channel, channelManager.getChannelSize().getN());
+            curves[i].process(*sourceChannel, *channel, sourceImage.getChannelSize().getN());
 
             sourceChannel->unlockRead();
             channel->unlockWrite();

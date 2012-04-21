@@ -19,7 +19,6 @@
 #include "conversion_bw_layer.h"
 #include "layer_stack.h"
 #include "layer_processor.h"
-#include "convert_image.h"
 #include "channel_manager.h"
 #include "view_manager.h"
 #include "frame_factory.h"
@@ -187,7 +186,7 @@ bool deConversionBWLayer::updateMainImageNotThreadedWay()
 
     mainLayerImage.enableAllChannels();
 
-    int n = channelManager.getChannelSize().getN();
+    int n = sourceImage.getChannelSize().getN();
 
     deChannel* sc0 = NULL;
     deChannel* sc1 = NULL;

@@ -76,7 +76,7 @@ deShadowsHighlightsLayer::~deShadowsHighlightsLayer()
 
 bool deShadowsHighlightsLayer::processSH(const deChannel& sourceChannel, deChannel& channel)
 {
-    deSize size = channelManager.getChannelSize();
+    deSize size = mainLayerImage.getChannelSize();
     logMessage("shadows/highlights start");
 
     const deValue* source = sourceChannel.getPixels();

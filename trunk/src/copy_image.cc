@@ -22,26 +22,13 @@
 #include "channel_manager.h"
 #include "color_space_utils.h"
 
-void copyImage(const deImage& sourceImage, const deImage& image, deChannelManager& channelManager)
+void copyImage(const deImage& sourceImage, deImage& image)
 {
     int n = getColorSpaceSize(sourceImage.getColorSpace());
     int i;
 
     for (i = 0; i < n; i++)
     {
-
-       int s = sourceImage.getChannelIndex(i);
-       deChannel* sourceChannel = channelManager.getChannel(s);
-
-       int c = image.getChannelIndex(i);
-       deChannel* channel = channelManager.getChannel(c);
-
-       sourceChannel->lockRead();
-       channel->lockWrite();
-
-       copyChannel(sourceChannel->getPixels(), channel->getPixels(), channelManager.getChannelSize().getN());
-
-       sourceChannel->unlockRead();
-       channel->unlockWrite();
+       copyChannel(sourceImage.getValues(i), image.getValues(i), sourceImage.getChannelSize().getN());
     }
 }

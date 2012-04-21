@@ -27,7 +27,7 @@ int generateInfo(deChannelManager& channelManager, wxWindow* parent, wxSizer* si
     wxSizer* sizerB = new wxStaticBoxSizer(wxVERTICAL, parent,  name);
     sizer->Add(sizerB);
 
-    int size = sizeof(deValue) * channelManager.getChannelSize().getN();
+    int size = sizeof(deValue) * channelManager.getChannelSizeFromChannelManager().getN();
     int n = channelManager.getNumberOfAllocatedChannels();
     int m = n * size / (1024 * 1024);
 
@@ -58,7 +58,7 @@ void deMemoryInfoFrame::update()
     int m1;
     {
         deChannelManager& channelManager = project.getPreviewChannelManager();
-        int size = sizeof(deValue) * channelManager.getChannelSize().getN();
+        int size = sizeof(deValue) * channelManager.getChannelSizeFromChannelManager().getN();
         int n = channelManager.getNumberOfAllocatedChannels();
         m1 = n * size / (1024 * 1024);
 

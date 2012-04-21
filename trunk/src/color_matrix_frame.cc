@@ -26,7 +26,7 @@
 #include "conversion_functions.h"
 #include "wx/notebook.h"
 #include "conversion_functions.h"
-#include "convert_image.h"
+#include "conversion_processor.h"
 
 #define LAB_TILE_SIZE 20
 #define ALL_TILES_SIZE 800
@@ -40,10 +40,6 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
 
     deLayerStack& layerStack = project.getLayerStack();
 
-/*
-    deBaseLayer* baseLayer = layerStack.getLayer(view);
-    deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
-    */
     deBaseLayer* layer = layerStack.getLayer(view);
 
     if (!layer)
@@ -54,12 +50,14 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
     const deImage& originalImage = layer->getLayerImage();
 
     deChannelManager& channelManager = project.getPreviewChannelManager();
-    deSize channelSize = channelManager.getChannelSize();
+    deSize channelSize = originalImage.getChannelSize();
     int n = channelSize.getN();
 
     deImage LABImage(deColorSpaceLAB, channelManager);
     LABImage.enableAllChannels();
-    convertImage(originalImage, LABImage, channelManager);
+
+    deConversionProcessor p;
+    p.convertImage(originalImage, LABImage, channelManager);
 
     int nn = width * height;
 
@@ -246,8 +244,7 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
     palette = new dePalette3(colorSpace);
     paletteLAB = new dePalette3(deColorSpaceLAB);
 
-    deChannelManager& channelManager = project.getPreviewChannelManager();
-    deSize channelSize = channelManager.getChannelSize();
+    deSize channelSize = image.getChannelSize();
 
     int cs = channelSize.getW();
 

@@ -22,6 +22,6 @@
 class deImage;
 class deChannelManager;
 
-void copyImage(const deImage& sourceImage, const deImage& image, deChannelManager& channelManager);
+void copyImage(const deImage& sourceImage, deImage& image);
 
 #endif

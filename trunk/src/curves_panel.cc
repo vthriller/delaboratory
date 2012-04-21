@@ -115,7 +115,7 @@ void deCurvesPanel::generateBackground()
     logMessage("gb2");
 
     deChannel* c = channelManager.getChannel(layer.getSourceImage().getChannelIndex(channel));
-    int n = channelManager.getChannelSize().getN();
+    int n = channelManager.getChannelSizeFromChannelManager().getN();
     logMessage("gb3");
 
     histogram.clear();
@@ -501,7 +501,7 @@ void deCurvesPanel::onImageClick(deValue x, deValue y)
     {
         return;
     }
-    deSize size = channelManager.getChannelSize();
+    deSize size = channelManager.getChannelSizeFromChannelManager();
     clickPosition = (y * size.getH() )  * size.getW() + (x * size.getW());
     setMarker();
     paint();

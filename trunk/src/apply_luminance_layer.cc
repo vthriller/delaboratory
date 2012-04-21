@@ -146,7 +146,7 @@ bool deApplyLuminanceLayer::updateMainImageNotThreadedWay()
         return true;
     }
 
-    int channelSize = channelManager.getChannelSize().getN();
+    int channelSize = mainLayerImage.getChannelSize().getN();
 
     int s[MAX_COLOR_SPACE_SIZE];
     deChannel* sc[MAX_COLOR_SPACE_SIZE];

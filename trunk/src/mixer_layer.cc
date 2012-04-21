@@ -63,7 +63,7 @@ bool deMixerLayer::updateMainImageSingleChannel(int channel)
 
     if ((destination))
     {
-        int channelSize = channelManager.getChannelSize().getN();
+        int channelSize = mainLayerImage.getChannelSize().getN();
     
         mixers[channel]->process(sourceImage, *destination, channelSize);
     }

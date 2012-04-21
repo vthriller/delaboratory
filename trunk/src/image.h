@@ -23,6 +23,7 @@
 #include "value.h"
 #include <map>
 class deChannelManager;
+class deSize;
 
 class deImage
 {
@@ -56,6 +57,8 @@ class deImage
         void unlockRead() const;
 
         const deValue* getValues(int channel) const;
+        deValue* getValues(int channel);
+        const deSize getChannelSize() const;
 
 
 };

@@ -55,7 +55,7 @@ deHighPassLayer::~deHighPassLayer()
 
 bool deHighPassLayer::processHP(const deChannel& sourceChannel, deChannel& channel)
 {
-    deSize size = channelManager.getChannelSize();
+    deSize size = mainLayerImage.getChannelSize();
     logMessage("high pass start");
 
     const deValue* source = sourceChannel.getPixels();

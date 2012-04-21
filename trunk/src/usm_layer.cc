@@ -149,7 +149,7 @@ bool deUSMLayer::updateMainImageSingleChannel(int i)
 
 bool deUSMLayer::processUSM(const deChannel& sourceChannel, deChannel& channel)
 {
-    deSize size = channelManager.getChannelSize();
+    deSize size = mainLayerImage.getChannelSize();
     logMessage("usm start");
 
     int n = size.getN();
