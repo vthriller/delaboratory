@@ -23,10 +23,9 @@
 #include "layer_stack.h"
 #include "layer.h"
 #include "channel_manager.h"
-#include "conversion_functions.h"
 #include "wx/notebook.h"
-#include "conversion_functions.h"
 #include "conversion_processor.h"
+#include "conversion_functions.h"
 
 #define LAB_TILE_SIZE 20
 #define ALL_TILES_SIZE 800
@@ -61,7 +60,6 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
 
     int nn = width * height;
 
-    //int min = (n / 2) / nn;
     int min = (n / 1.5) / nn;
 
     const deValue* valuesVertical = LABImage.getValues(channelVertical);
@@ -78,7 +76,6 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
 
-    //int s = 2;
     int s = 0;
 
     wxSizer* LABMapSizer = new wxFlexGridSizer(tilesW, s, s);
@@ -86,7 +83,6 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
 
     int x;
     int y;
-    //for (y = 0; y < tilesH; y++)
     for (y = tilesH - 1; y >= 0; y--)
     {
         for (x = 0; x < tilesW; x++)
@@ -167,7 +163,6 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
             }                
             else
             {
-//                colorPanel->setRGB(0, 0, 0);
             }
 
         }
@@ -214,10 +209,6 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
 
     deLayerStack& layerStack = project.getLayerStack();
 
-/*
-    deBaseLayer* baseLayer = layerStack.getLayer(view);
-    deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
-    */
     deBaseLayer* layer = layerStack.getLayer(view);
 
     if (!layer)
@@ -228,18 +219,7 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
     const deImage& image = layer->getLayerImage();
     deColorSpace colorSpace = image.getColorSpace();
 
-    deConversion3x3 f3x3 = getConversion3x3(colorSpace, deColorSpaceRGB);
-    if (!f3x3)
-    {
-        return;
-    }
-
-    deConversion3x3 fLAB = getConversion3x3(colorSpace, deColorSpaceLAB);
-    if (!fLAB)
-    {
-        return;
-    }
-
+    deConversionProcessor cp;
 
     palette = new dePalette3(colorSpace);
     paletteLAB = new dePalette3(deColorSpaceLAB);
@@ -314,13 +294,14 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
         deValue g;
         deValue b;
 
-        f3x3(sum1, sum2, sum3, r, g, b);
+        cp.convertToRGB(sum1, sum2, sum3, 0, colorSpace, r, g, b);
 
         deValue L;
         deValue A;
         deValue B;
 
-        fLAB(sum1, sum2, sum3, L, A, B);
+        cp.convertToLAB(sum1, sum2, sum3, 0, colorSpace, L, A, B);
+
         paletteLAB->addColor(deColor3(L, A, B));
 
         colorPanel->setRGB(r, g, b);
@@ -404,7 +385,7 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
 
         deColor3 c = palette2->getColor(i);
 
-        f3x3(c.getV1(), c.getV2(), c.getV3(), r, g, b);
+        cp.convertToRGB(c.getV1(), c.getV2(), c.getV3(), 0, colorSpace, r, g, b);
 
         colorPanel->setRGB(r, g, b);
     }
