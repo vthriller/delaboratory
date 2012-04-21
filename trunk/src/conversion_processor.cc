@@ -820,3 +820,25 @@ bool deConversionProcessor::convertToRGB(deValue v1, deValue v2, deValue v3, deV
     }
     return false;
 }
+
+bool deConversionProcessor::convertToLAB(deValue v1, deValue v2, deValue v3, deValue v4, deColorSpace colorSpace, deValue &rr, deValue& gg, deValue& bb)
+{
+    deConversion1x3 f1x3 = getConversion1x3(colorSpace, deColorSpaceLAB);
+    deConversion3x3 f3x3 = getConversion3x3(colorSpace, deColorSpaceLAB);
+    deConversion4x3 f4x3 = getConversion4x3(colorSpace, deColorSpaceLAB);
+    if (f3x3)
+    {
+        f3x3(v1, v2, v3, rr, gg, bb);
+        return true;
+    } else if (f4x3)
+    {
+        f4x3(v1, v2, v3, v4, rr, gg, bb);
+        return true;
+    } else if (f1x3)
+    {
+        f1x3(v1, rr, gg, bb);
+        return true;
+    }
+    return false;
+}
+
