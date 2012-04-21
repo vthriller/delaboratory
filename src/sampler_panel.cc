@@ -123,10 +123,6 @@ void deSamplerPanel::update()
 
     deLayerStack& layerStack = project.getLayerStack();
 
-/*
-    deBaseLayer* baseLayer = layerStack.getLayer(view);
-    deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
-    */
     deBaseLayer* layer = layerStack.getLayer(view);
 
     if (!layer)
@@ -136,8 +132,7 @@ void deSamplerPanel::update()
 
     const deImage& image = layer->getLayerImage();
 
-    deChannelManager& channelManager = project.getPreviewChannelManager();
-    deSize channelSize = channelManager.getChannelSize();
+    deSize channelSize = image.getChannelSize();
 
     deValue x = sampler.getX();
     deValue y = sampler.getY();

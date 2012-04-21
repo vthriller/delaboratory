@@ -99,7 +99,7 @@ bool deLayerWithBlending::updateBlend(int i)
         return true;
     }
 
-    int channelSize = channelManager.getChannelSize().getN();
+    int channelSize = mainLayerImage.getChannelSize().getN();
 
     int s = getSourceImage().getChannelIndex(i);
 

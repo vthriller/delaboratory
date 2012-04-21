@@ -18,9 +18,9 @@
 
 #include "conversion_layer.h"
 #include "project.h"
-#include "convert_image.h"
 #include "layer_processor.h"
 #include "layer_stack.h"
+#include "conversion_processor.h"
 
 deConversionLayer::deConversionLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
 :deBaseLayerWithSource( _colorSpace, _channelManager, _sourceLayer, _layerStack)
@@ -37,7 +37,9 @@ bool deConversionLayer::updateMainImageNotThreadedWay()
     logMessage("conversion start");
 
     mainLayerImage.enableAllChannels();
-    convertImage(getSourceImage(), mainLayerImage, channelManager);
+
+    deConversionProcessor p;
+    p.convertImage(getSourceImage(), mainLayerImage, channelManager);
 
     logMessage("conversion end");
 

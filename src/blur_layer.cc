@@ -111,7 +111,7 @@ bool deBlurLayer::updateMainImageSingleChannel(int i)
 
             deBlurType type = blurTypeFromString(blurType.get());
             
-            blurChannel(sourceChannel->getPixels(), channel->getPixels(), channelManager.getChannelSize(), r, r, type, threshold.get());
+            blurChannel(sourceChannel->getPixels(), channel->getPixels(), mainLayerImage.getChannelSize(), r, r, type, threshold.get());
 
             sourceChannel->unlockRead();
             channel->unlockWrite();

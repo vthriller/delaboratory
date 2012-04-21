@@ -33,7 +33,6 @@
 #include "view_mode_panel.h"
 #include <sstream>
 #include "layer_factory.h"
-#include "convert_image.h"
 #include "fractal.h"
 #include "xml.h"
 #include "image_area_panel.h"
@@ -51,6 +50,7 @@
 #include "color_space_utils.h"
 #include "operation_processor.h"
 #include "main_window.h"
+#include "conversion_processor.h"
 
 #define ICC_MESSAGE 0
 
@@ -300,28 +300,31 @@ void deProject::saveImage(const std::string& fileName, const deImage& image, con
 
         if (type == "tiff")
         {
-            saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+            saveTIFF(fileName, *r, *g, *b, image.getChannelSize());
         }            
         if (type == "jpeg")
         {
-            saveJPEG(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+            saveJPEG(fileName, *r, *g, *b, image.getChannelSize());
         }            
     }
     else
     {
         deImage finalImage(deColorSpaceRGB, previewChannelManager);
         finalImage.enableAllChannels();
-        convertImage(image, finalImage, previewChannelManager);
+
+        deConversionProcessor p;
+        p.convertImage(image, finalImage, previewChannelManager);
+
         deChannel* r = previewChannelManager.getChannel(finalImage.getChannelIndex(0));
         deChannel* g = previewChannelManager.getChannel(finalImage.getChannelIndex(1));
         deChannel* b = previewChannelManager.getChannel(finalImage.getChannelIndex(2));
         if (type == "tiff")
         {
-            saveTIFF(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+            saveTIFF(fileName, *r, *g, *b, image.getChannelSize());
         }            
         if (type == "jpeg")
         {
-            saveJPEG(fileName, *r, *g, *b, previewChannelManager.getChannelSize());
+            saveJPEG(fileName, *r, *g, *b, image.getChannelSize());
         }            
     }
 }
@@ -353,7 +356,7 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
     }
 
     // remember original size of preview
-    deSize originalSize = previewChannelManager.getChannelSize();
+    deSize originalSize = previewChannelManager.getChannelSizeFromChannelManager();
 
     // calculate final image in full size
     int view = viewManager.getView();
@@ -689,7 +692,7 @@ void deProject::updateMemoryInfo()
 
 bool deProject::isSourceValid() const
 {
-    return (previewChannelManager.getChannelSize().getN() > 0);
+    return (!previewChannelManager.isImageEmpty());
 }
 
 void deProject::log(const std::string& message)

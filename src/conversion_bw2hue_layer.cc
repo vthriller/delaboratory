@@ -19,13 +19,13 @@
 #include "conversion_bw2hue_layer.h"
 #include "layer_stack.h"
 #include "layer_processor.h"
-#include "convert_image.h"
 #include "channel_manager.h"
 #include "view_manager.h"
 #include "frame_factory.h"
 #include "blend_mode.h"
 #include "layer_processor.h"
 #include "logger.h"
+#include "conversion_processor.h"
 
 deConversionBW2HueLayer::deConversionBW2HueLayer(int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deColorSpace _colorSpace)
 :deConversionLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager),
@@ -66,7 +66,9 @@ bool deConversionBW2HueLayer::updateMainImageNotThreadedWay()
     const deImage& sourceImage = getSourceImage();
 
     mainLayerImage.enableAllChannels();
-    convertImage(sourceImage, mainLayerImage, channelManager);
+
+    deConversionProcessor p;
+    p.convertImage(sourceImage, mainLayerImage, channelManager);
 
     deChannel* dc0 = channelManager.getChannel(mainLayerImage.getChannelIndex(0));
     deChannel* dc1 = channelManager.getChannel(mainLayerImage.getChannelIndex(1));
@@ -76,7 +78,7 @@ bool deConversionBW2HueLayer::updateMainImageNotThreadedWay()
     deValue* p1 = dc1->getPixels();
     deValue* p2 = dc2->getPixels();
 
-    int n = channelManager.getChannelSize().getN();
+    int n = sourceImage.getChannelSize().getN();
 
     switch (colorSpace)
     {

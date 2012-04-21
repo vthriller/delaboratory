@@ -123,7 +123,7 @@ void deChannelManager::destroyAllChannels()
     unlock();
 }
 
-deSize deChannelManager::getChannelSize() const
+deSize deChannelManager::getChannelSizeFromChannelManager() const
 {
     return channelSize;
 }
@@ -192,3 +192,8 @@ void deChannelManager::tryDeallocateChannel(int index)
 
     unlock();
 }
+
+bool deChannelManager::isImageEmpty() const
+{
+    return channelSize.getN() == 0;
+}    

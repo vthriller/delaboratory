@@ -41,7 +41,7 @@ bool deSourceImageLayer::updateMainImageNotThreadedWay()
 {
     const deSize ss = sourceImage.getSize();
 
-    const deSize ds = channelManager.getChannelSize();
+    const deSize ds = mainLayerImage.getChannelSize();
 
     deValue z_x1;
     deValue z_y1;

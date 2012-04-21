@@ -106,7 +106,7 @@ void deHistogramPanel::generateHistogram()
             logMessage("generate histogram - NULL channel");
         }            
 
-        int n = channelManager.getChannelSize().getN();
+        int n = image.getChannelSize().getN();
 
         if (n <= 0)
         {

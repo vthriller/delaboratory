@@ -50,7 +50,7 @@ class deChannelManager
         void destroyAllChannels();
 
         void setChannelSize(const deSize& size);
-        deSize getChannelSize() const;
+        deSize getChannelSizeFromChannelManager() const;
 
         int allocateNewChannel();
         void freeChannel(int index);
@@ -63,6 +63,8 @@ class deChannelManager
         int getNumberOfAllocatedChannels() const;
 
         void setPrimary(int index);
+
+        bool isImageEmpty() const;
 
 };
 

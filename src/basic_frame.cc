@@ -243,7 +243,7 @@ bool deBasicFrame::onImageClick(deValue x, deValue y)
         return false;
     }
 
-    deSize size = channelManager.getChannelSize();
+    deSize size = channelManager.getChannelSizeFromChannelManager();
 
     if (layer.getColorSpace() == deColorSpaceLAB)
     {

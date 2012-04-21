@@ -84,7 +84,7 @@ bool deEqualizerLayer::updateMainImageSingleChannel(int channel)
 
     if ((eChannel) && (sChannel) && (destination))
     {
-        int channelSize = channelManager.getChannelSize().getN();
+        int channelSize = mainLayerImage.getChannelSize().getN();
         equalizers[channel]->process(sChannel, eChannel, *destination, channelSize, wrap);
     }
 

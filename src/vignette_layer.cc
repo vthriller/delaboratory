@@ -248,7 +248,7 @@ bool deVignetteLayer::updateMainImageSingleChannel(int i)
             channel->lockWrite();
             sourceChannel->lockRead();
 
-            deSize size = channelManager.getChannelSize();
+            deSize size = mainLayerImage.getChannelSize();
 
             deValue* destination = channel->getPixels();
 
