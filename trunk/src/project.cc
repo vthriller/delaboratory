@@ -24,7 +24,6 @@
 #include "source_image_layer.h"
 #include "curves_layer.h"
 #include "conversion_layer.h"
-#include "conversion_functions.h"
 #include "image_panel.h"
 #include "str.h"
 #include "histogram_panel.h"
