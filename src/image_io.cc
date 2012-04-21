@@ -21,13 +21,10 @@
 #include <tiffio.h>
 #include <wx/wx.h>
 #include "channel.h"
-#include "conversion_functions.h"
 #include "logger.h"
 #include "static_image.h"
 #include "str.h"
 #include "dcraw_support.h"
-#include "rgb2xyz2lab.h"
-#include "conversion_functions.h"
 
 void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size)
 {

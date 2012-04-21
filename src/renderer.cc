@@ -22,7 +22,6 @@
 #include "image.h"
 #include "layer.h"
 #include <iostream>
-#include "conversion_functions.h"
 #include "layer_processor.h"
 #include "str.h"
 #include "logger.h"

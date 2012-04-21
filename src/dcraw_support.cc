@@ -25,7 +25,6 @@
 #include "channel.h"
 #include "size.h"
 #include "static_image.h"
-#include "rgb2xyz2lab.h"
 
 #define DCRAW_EXECUTABLE "dcraw"
 
