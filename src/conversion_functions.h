@@ -43,5 +43,6 @@ bool checkConversion(deColorSpace currentColorSpace, deColorSpace colorSpace);
 void lab2rgb(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3);
 void cmyk2lab(deValue s1, deValue s2, deValue s3, deValue s4, deValue& d1, deValue& d2, deValue& d3);
 void lab2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3, deValue& d4);
+void rgb2cmyk(deValue s1, deValue s2, deValue s3, deValue& d1, deValue& d2, deValue& d3, deValue& d4);
 
 #endif
