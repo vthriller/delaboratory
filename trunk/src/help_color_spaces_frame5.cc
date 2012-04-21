@@ -38,8 +38,6 @@ void generateFelixVonLuschan(wxWindow* window, wxSizer* sizer)
     
     getSkinRanges(ranges);
 
-    deConversion3x4 f = getConversion3x4(deColorSpaceRGB, deColorSpaceCMYK);
-
     std::vector<deSkinRange>::iterator r;
     for (r = ranges.begin(); r != ranges.end(); r++)
     {
@@ -60,7 +58,7 @@ void generateFelixVonLuschan(wxWindow* window, wxSizer* sizer)
             deValue yy;
             deValue kk;
 
-            f(skin.r / 255.0, skin.g / 255.0, skin.b / 255.0, cc, mm, yy, kk);
+            rgb2cmyk(skin.r / 255.0, skin.g / 255.0, skin.b / 255.0, cc, mm, yy, kk);
 
             int c = 100 * cc;
             int m = 100 * mm;
