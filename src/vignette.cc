@@ -108,7 +108,7 @@ void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse, deVal
 
             deValue rr = x * x + y * y;
 
-            deValue r = sqrt(rr);
+            deValue r = 0.5 * sqrt(rr);
 
             deValue v = 1.0 - r;
 
@@ -127,8 +127,6 @@ void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse, deVal
             {
                 v = 1;
             }
-
-
 
             deValue vv = darkness + (light - darkness) * v;
             if (vv < 0)
