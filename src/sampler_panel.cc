@@ -20,7 +20,7 @@
 #include "sampler.h"
 #include "project.h"
 #include "layer.h"
-#include "convert_pixel.h"
+#include "conversion_processor.h"
 #include "image.h"
 #include <sstream>
 #include "channel_manager.h"
@@ -185,8 +185,10 @@ void deSamplerPanel::update()
 
         image.lockRead();
 
-        convertPixel(image, p, deColorSpaceRGB, rr, gg, bb, vv4);
-        convertPixel(image, p, colorSpace, vv1, vv2, vv3, vv4);
+        deConversionProcessor cp;
+
+        cp.convertPixel(image, p, deColorSpaceRGB, rr, gg, bb, vv4);
+        cp.convertPixel(image, p, colorSpace, vv1, vv2, vv3, vv4);
 
         colorPanel->setRGB(rr, gg, bb);
 
