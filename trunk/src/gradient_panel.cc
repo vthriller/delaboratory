@@ -17,7 +17,6 @@
 */
 
 #include "gradient_panel.h"
-#include "conversion_functions.h"
 #include "conversion_processor.h"
 
 deColorPanel::deColorPanel(wxWindow* parent, wxSize _size, dePalette3* _palette, int style)
@@ -271,9 +270,7 @@ void deGradientPanel1::generateBitmap()
         delete bitmap;
     }
 
-    deConversion1x3 f1x3 = getConversion1x3(colorSpace, deColorSpaceRGB);
-    deConversion3x3 f3x3 = getConversion3x3(colorSpace, deColorSpaceRGB);
-    deConversion4x3 f4x3 = getConversion4x3(colorSpace, deColorSpaceRGB);
+    deConversionProcessor cp;
 
     int w = GetSize().GetWidth();
     int h = GetSize().GetHeight();
@@ -309,16 +306,8 @@ void deGradientPanel1::generateBitmap()
             deValue rr = 0;
             deValue gg = 0;
             deValue bb = 0;
-            if (f3x3)
-            {
-                f3x3(v1, v2, v3, rr, gg, bb);
-            } else if (f4x3)
-            {
-                f4x3(v1, v2, v3, v4, rr, gg, bb);
-            } else if (f1x3)
-            {
-                f1x3(v1, rr, gg, bb);
-            }
+
+            cp.convertToRGB(v1, v2, v3, v4, colorSpace, rr, gg, bb);
 
             unsigned char r = 255 * rr;
             unsigned char g = 255 * gg;
@@ -378,9 +367,7 @@ void deGradientPanel2::generateBitmap()
         delete bitmap;
     }
 
-    deConversion1x3 f1x3 = getConversion1x3(colorSpace, deColorSpaceRGB);
-    deConversion3x3 f3x3 = getConversion3x3(colorSpace, deColorSpaceRGB);
-    deConversion4x3 f4x3 = getConversion4x3(colorSpace, deColorSpaceRGB);
+    deConversionProcessor cp;
 
     int w = GetSize().GetWidth();
     int h = GetSize().GetHeight();
@@ -420,19 +407,11 @@ void deGradientPanel2::generateBitmap()
     
             setValues2(v1, v2, v3, v4, colorSpace, c1, c2, c3, c4, u, v);
 
-            deValue rr;
-            deValue gg;
-            deValue bb;
-            if (f3x3)
-            {
-                f3x3(v1, v2, v3, rr, gg, bb);
-            } else if (f4x3)
-            {
-                f4x3(v1, v2, v3, v4, rr, gg, bb);
-            } else if (f1x3)
-            {
-                f1x3(v1, rr, gg, bb);
-            }
+            deValue rr = 0;
+            deValue gg = 0;
+            deValue bb = 0;
+
+            cp.convertToRGB(v1, v2, v3, v4, colorSpace, rr, gg, bb);
 
             unsigned char r = 255 * rr;
             unsigned char g = 255 * gg;
