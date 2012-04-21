@@ -18,6 +18,7 @@
 
 #include "gradient_panel.h"
 #include "conversion_functions.h"
+#include "conversion_processor.h"
 
 deColorPanel::deColorPanel(wxWindow* parent, wxSize _size, dePalette3* _palette, int style)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, _size, style), palette(_palette)
@@ -94,19 +95,9 @@ void deColorPanel::setColor(deColorSpace colorSpace, int channel, deValue value)
             break;
     }
 
-    deConversion1x3 f1x3 = getConversion1x3(colorSpace, deColorSpaceRGB);
-    deConversion3x3 f3x3 = getConversion3x3(colorSpace, deColorSpaceRGB);
-    deConversion4x3 f4x3 = getConversion4x3(colorSpace, deColorSpaceRGB);
-    if (f3x3)
-    {
-        f3x3(v1, v2, v3, rr, gg, bb);
-    } else if (f4x3)
-    {
-        f4x3(v1, v2, v3, v4, rr, gg, bb);
-    } else if (f1x3)
-    {
-        f1x3(v1, rr, gg, bb);
-    }
+    deConversionProcessor p;
+
+    p.convertToRGB(v1, v2, v3, v4, colorSpace, rr, gg, bb);
 
     SetBackgroundColour(wxColour(255 * rr, 255 * gg, 255 * bb));
 }
