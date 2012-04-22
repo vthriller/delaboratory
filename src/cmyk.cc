@@ -31,6 +31,8 @@ void cmy2rgb(deValue c, deValue m, deValue y, deValue& r, deValue& g, deValue& b
     g = 1 - m;
     b = 1 - y;
 
+    /*
+
     if (r < 0)
     {
         r = 0;
@@ -55,6 +57,7 @@ void cmy2rgb(deValue c, deValue m, deValue y, deValue& r, deValue& g, deValue& b
     {
         b = 1;
     }
+    */
 }
 
 void cmy2cmyk(deValue c, deValue m, deValue y, deValue& _c, deValue& _m, deValue& _y, deValue& _k)
