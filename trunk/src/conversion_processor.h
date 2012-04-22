@@ -24,18 +24,42 @@ class deImage;
 class deChannelManager;
 #include "color_space.h"
 
+#define CPU_REGISTER_OVERFLOW 0
+#define CPU_REGISTER_CMYK_KEY_SUB 1
+#define CPU_REGISTER_CMYK_KEY_MAX 2
+#define CPU_REGISTER_CMYK_MIN_SUM 3
+
+#define CPU_REGISTERS 4
+
+class deConversionCPU
+{
+    private:
+    public:
+        deValue* input;
+        deValue* output;
+        deValue* registers;
+
+        deConversionCPU(int size);
+        virtual ~deConversionCPU();
+
+        void switchIO();
+
+};
+
+
 class deConversionProcessor
 {
-private:
-public:
-    deConversionProcessor();
-    virtual ~deConversionProcessor();
+    private:
 
-    void convertImage(const deImage& sourceImage, deImage& image, deChannelManager& channelManager);
-    bool renderImageToRGB(const deImage& image, unsigned char* data, deChannelManager& channelManager);
-    bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue &v1, deValue& v2, deValue& v3, deValue& v4);
-    bool convertToRGB(deValue v1, deValue v2, deValue v3, deValue v4, deColorSpace colorSpace, deValue &rr, deValue& gg, deValue& bb);
-    bool convertToLAB(deValue v1, deValue v2, deValue v3, deValue v4, deColorSpace colorSpace, deValue &rr, deValue& gg, deValue& bb);
+    public:
+        deConversionProcessor();
+        virtual ~deConversionProcessor();
+
+        void convertImage(const deImage& sourceImage, deImage& image, deChannelManager& channelManager);
+        bool renderImageToRGB(const deImage& image, unsigned char* data, deChannelManager& channelManager);
+        bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue &v1, deValue& v2, deValue& v3, deValue& v4);
+        bool convertToRGB(deValue v1, deValue v2, deValue v3, deValue v4, deColorSpace colorSpace, deValue &rr, deValue& gg, deValue& bb);
+        bool convertToLAB(deValue v1, deValue v2, deValue v3, deValue v4, deColorSpace colorSpace, deValue &rr, deValue& gg, deValue& bb);
 
 };
 

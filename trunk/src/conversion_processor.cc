@@ -26,6 +26,116 @@
 
 #include "logger.h"
 
+deConversionCPU::deConversionCPU(int size)
+{
+    input = new deValue [size];
+    output = new deValue [size];
+    registers = new deValue [CPU_REGISTERS];
+
+    registers[CPU_REGISTER_OVERFLOW] = 0;
+    registers[CPU_REGISTER_CMYK_KEY_SUB] = 0;
+    registers[CPU_REGISTER_CMYK_KEY_MAX] = 1.0;
+    registers[CPU_REGISTER_CMYK_MIN_SUM] = 0.0;
+}
+
+deConversionCPU::~deConversionCPU()
+{
+    delete [] input;
+    delete [] output;
+    delete [] registers;
+}
+
+void deConversionCPU::switchIO()
+{
+    deValue* a = input;
+    input = output;
+    output = a;
+}
+
+void rgb2cmy(deConversionCPU& cpu)
+{
+    cpu.output[0] = 1.0 - cpu.input[0];
+    cpu.output[1] = 1.0 - cpu.input[1];
+    cpu.output[2] = 1.0 - cpu.input[2];
+}
+
+void cmy2rgb(deConversionCPU& cpu)
+{
+    cpu.output[0] = 1.0 - cpu.input[0];
+    cpu.output[1] = 1.0 - cpu.input[1];
+    cpu.output[2] = 1.0 - cpu.input[2];
+}
+
+void cmy2cmyk(deConversionCPU& cpu)
+{
+    deValue k;
+    deValue c = cpu.input[0];
+    deValue m = cpu.input[1];
+    deValue y = cpu.input[2];
+
+    if (c < m)
+    {
+        if (c < y)
+        {
+            k = c;
+        }
+        else
+        {
+            k = y;
+        }
+    }
+    else
+    {
+        if (m < y)
+        {
+            k = m;
+        }
+        else
+        {
+            k = y;
+        }
+    }
+
+    k = k - cpu.registers[CPU_REGISTER_CMYK_KEY_SUB];
+
+    if (k < 0.0)
+    {
+        k = 0.0;
+    }
+
+    deValue max = cpu.registers[CPU_REGISTER_CMYK_KEY_MAX];
+    if (k > max)
+    {
+        k = max;
+    }
+
+    if (c + m + y < cpu.registers[CPU_REGISTER_CMYK_MIN_SUM])
+    {
+        k = 0.0;
+    }
+
+    deValue kk = (1 - k);
+
+    cpu.output[0] = (c - k) / kk;
+    cpu.output[1] = (m - k) / kk;
+    cpu.output[2] = (y - k) / kk;
+    cpu.output[3] = k;
+}
+
+void cmyk2cmy(deConversionCPU& cpu)
+{
+    deValue k = cpu.input[3];
+    deValue kk = 1.0 - k;
+
+    deValue c = cpu.input[0] * kk + k;
+    deValue m = cpu.input[1] * kk + k;
+    deValue y = cpu.input[2] * kk + k;
+
+    cpu.output[0] = c;
+    cpu.output[1] = m;
+    cpu.output[2] = y;
+}
+
 bool deConversionProcessor::renderImageToRGB(const deImage& image, unsigned char* data, deChannelManager& channelManager)
 {
     deColorSpace colorSpace = image.getColorSpace();
