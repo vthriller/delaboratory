@@ -1,6 +1,13 @@
 #summary Development News
 
 -----
+*2012.04.28*
+
+I implemented new layer hierarchy, so I was able to start implementing new conversion subsystem which already works. There is now also a warning which tells you about conversion clipping, so if you are converting ProPhoto or LAB into sRGB or CMYK you will see how many pixels are out and in that case decrease contrast - image will be "flat" but you won't lose any details.
+
+There is also a brand new levels layer. With auto levels feature. Levels is just an easy interface to 3-points curve. With opacity slider it's very powerful thing. The best colorspace to start is CMYK. If you will try autolevels with AB channels in LAB you will need to decrease opacity a lot.
+
+-----
 *2012.04.19*
 
 CMYK curves are awesome.
