@@ -66,6 +66,10 @@ void deLogger::setFile(const std::string& fileName)
     }
 
     f = new std::ofstream(fileName.c_str());
+    if (!f)
+    {
+        logError("can't create logfile: " + fileName);
+    }
 
     mutex.unlock();
 #endif    
