@@ -111,7 +111,25 @@ bool deLaboratory::OnInit()
 {
     logMessage("deLaboratory::OnInit");
 
-    logMessage("user config dir: " + getUserConfigDir()); 
+    std::string ucd = getUserConfigDir();
+    wxString ucd_wx = wxString::FromAscii(ucd.c_str()); 
+
+    if (wxDirExists(ucd_wx))
+    {
+        logMessage("user config dir: " + ucd + " is already present"); 
+    }
+    else
+    {
+        logMessage("user config dir: " + ucd + " must be created"); 
+        if (wxMkdir(ucd_wx))
+        {
+            logMessage("user config dir: " + ucd + " has been created"); 
+        }
+        else
+        {
+            logMessage("user config dir: " + ucd + " can't be created"); 
+        }
+    }
 
     rawModule.onInit();
 
