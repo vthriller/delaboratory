@@ -55,8 +55,8 @@ CXXFLAGS+=-Wno-long-long -Wno-variadic-macros
 
 ${APP}: ${OBJECTS}
 	${CXX} -c ${CXXFLAGS} -o logger.o src/logger.cc -DLOGGING
-	${CXX} -o ${APP}-with-logs ${OBJECTS} ${LDFLAGS} logger.o
-	${CXX} -c ${CXXFLAGS} -o logger.o src/logger.cc 
+#	${CXX} -o ${APP}-with-logs ${OBJECTS} ${LDFLAGS} logger.o
+#	${CXX} -c ${CXXFLAGS} -o logger.o src/logger.cc 
 	${CXX} -o ${APP} ${OBJECTS} ${LDFLAGS} logger.o
 ifeq (${DEBUG}, YES)
 else

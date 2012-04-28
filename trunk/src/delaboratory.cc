@@ -47,8 +47,7 @@ class deLaboratory: public wxApp
          operationProcessor(processor),
          project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage, rawModule, zoomManager, operationProcessor, mainWindow)
         {
-            deLogger::getLogger().setFile(LOG_FILE_NAME);
-            deLogger::getLogger().setLocksFile(LOG_LOCKS_FILE_NAME);
+            initLogger();
 
         }
 
@@ -59,6 +58,7 @@ class deLaboratory: public wxApp
     private:
     	virtual bool OnInit();
     	virtual int OnExit();
+        void initLogger();
         deMainWindow mainWindow;
         deSamplerManager samplerManager;
         deLayerStack layerStack;
@@ -107,29 +107,35 @@ int deLaboratory::OnExit()
     return 0;
 }   
 
-bool deLaboratory::OnInit()
+void deLaboratory::initLogger()
 {
-    logMessage("deLaboratory::OnInit");
-
     std::string ucd = getUserConfigDir();
     wxString ucd_wx = wxString::FromAscii(ucd.c_str()); 
 
     if (wxDirExists(ucd_wx))
     {
-        logMessage("user config dir: " + ucd + " is already present"); 
+//        logMessage("user config dir: " + ucd + " is already present"); 
     }
     else
     {
-        logMessage("user config dir: " + ucd + " must be created"); 
+//        logMessage("user config dir: " + ucd + " must be created"); 
         if (wxMkdir(ucd_wx))
         {
-            logMessage("user config dir: " + ucd + " has been created"); 
+//            logMessage("user config dir: " + ucd + " has been created"); 
         }
         else
         {
-            logMessage("user config dir: " + ucd + " can't be created"); 
+//            logMessage("user config dir: " + ucd + " can't be created"); 
         }
     }
+
+    deLogger::getLogger().setFile(ucd + "/" + LOG_FILE_NAME);
+    deLogger::getLogger().setLocksFile(LOG_LOCKS_FILE_NAME);
+}
+
+bool deLaboratory::OnInit()
+{
+    logMessage("deLaboratory::OnInit");
 
     rawModule.onInit();
 
