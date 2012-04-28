@@ -46,4 +46,6 @@ std::string getTmp();
 
 std::string insertIndex(const std::string& s, int index);
 
+std::string getUserConfigDir();
+
 #endif
