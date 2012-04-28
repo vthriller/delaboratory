@@ -32,10 +32,12 @@ class deCurveFunctionBezier
         deValue y3;
 
     public:
-        deCurveFunctionBezier(deValue _x0, deValue _x3, deValue _y0, deValue _y1, deValue _y2, deValue _y3);
+        deCurveFunctionBezier();
         virtual ~deCurveFunctionBezier();
 
         virtual deValue calc(deValue value) const;
+
+        void set(deValue _x0, deValue _x3, deValue _y0, deValue _y1, deValue _y2, deValue _y3);
 };
 
 #endif
