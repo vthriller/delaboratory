@@ -32,6 +32,8 @@
 #include "operation_processor.h"
 #include "main_window.h"
 
+#include <wx/stdpaths.h>
+
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
 
@@ -109,6 +111,25 @@ int deLaboratory::OnExit()
 bool deLaboratory::OnInit()
 {
     logMessage("deLaboratory::OnInit");
+
+    wxStandardPathsBase& paths = wxStandardPaths::Get();
+
+    wxString configDir = paths.GetConfigDir();
+    wxString docsDir = paths.GetDocumentsDir();
+    wxString exePath = paths.GetExecutablePath();
+    wxString localDataDir = paths.GetLocalDataDir();
+    wxString tempDir = paths.GetTempDir();
+    wxString userConfigDir = paths.GetUserConfigDir();
+    wxString userDataDir = paths.GetUserDataDir();
+
+    logMessage("config dir: " + str(configDir)); 
+    logMessage("docs dir: " + str(docsDir)); 
+    logMessage("exe path: " + str(exePath)); 
+    logMessage("local data dir: " + str(localDataDir)); 
+    logMessage("temp dir: " + str(tempDir)); 
+    logMessage("user config dir: " + str(userConfigDir)); 
+    logMessage("user data dir: " + str(userDataDir)); 
+
 
     rawModule.onInit();
 
