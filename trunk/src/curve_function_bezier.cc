@@ -18,14 +18,24 @@
 
 #include "curve_function_bezier.h"
 
-deCurveFunctionBezier::deCurveFunctionBezier(deValue _x0, deValue _x3, deValue _y0, deValue _y1, deValue _y2, deValue _y3)
-:x0(_x0),
- x3(_x3),
- y0(_y0),
- y1(_y1),
- y2(_y2),
- y3(_y3)
+deCurveFunctionBezier::deCurveFunctionBezier()
 {
+    x0 = 0;
+    x3 = 0;
+    y0 = 0;
+    y1 = 0;
+    y2 = 0;
+    y3 = 0;
+}
+
+void deCurveFunctionBezier::set(deValue _x0, deValue _x3, deValue _y0, deValue _y1, deValue _y2, deValue _y3)
+{
+    x0 = _x0;
+    x3 = _x3;
+    y0 = _y0;
+    y1 = _y1;
+    y2 = _y2;
+    y3 = _y3;
 }
 
 deCurveFunctionBezier::~deCurveFunctionBezier()

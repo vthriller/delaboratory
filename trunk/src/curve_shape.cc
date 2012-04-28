@@ -22,13 +22,8 @@
 #include <cassert>
 
 deCurveShape::deCurveShape(int _size)
-:size(_size)
+:size(_size), functions(_size)
 {
-    int i;
-    for (i = 0; i < size; i++)
-    {
-        functions.push_back(deCurveFunctionBezier(0, 0, 0, 0, 0, 0));
-    }
 }
 
 deCurveShape::~deCurveShape()
@@ -39,18 +34,18 @@ deValue deCurveShape::calc(deValue value)
 {
     if ( value <= 0 )
     {
-        return functions[0].calc(0);
+        return functions.at(0).calc(0);
     }
     else if (value >= 1)
     {
-        return functions[size-1].calc(1);
+        return functions.at(size-1).calc(1);
     }
     else
     {
         deValue s = size - 1;
         int p = s * value;
 
-        return functions[p].calc(value);
+        return functions.at(p).calc(value);
     }        
 }
 
@@ -93,7 +88,7 @@ void deCurveShape::getCurvePoints(deCurvePoints& points) const
     for (i = 0; i < size; i++)
     {
         deValue x = i * s;
-        deValue y = functions[i].calc(x);
+        deValue y = functions.at(i).calc(x);
         points.push_back(deCurvePoint(x,y));
     }
 
@@ -178,7 +173,7 @@ void deCurveShape::generateBezier()
         int iii;
         for (iii = p1; iii <= p2; iii++)
         {
-            functions[iii] = deCurveFunctionBezier(x0, x3, y0, y1, y2, y3);
+            functions.at(iii).set(x0, x3, y0, y1, y2, y3);
         }
     }
 
