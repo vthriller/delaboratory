@@ -198,10 +198,13 @@ void deLayerGridPanel::check(wxCommandEvent &event)
             deBaseLayer* baseLayer = layerStack.getLayer(row.index);
             deSwitchableLayer* switchable = dynamic_cast<deSwitchableLayer*>(baseLayer);
 
-            switchable->setEnabled(checked);
-            int index = row.index;
-            layerProcessor.markUpdateAllChannels(index);
-            layerProcessor.onChangeViewMode();
+            if (switchable)
+            {
+                switchable->setEnabled(checked);
+                int index = row.index;
+                layerProcessor.markUpdateAllChannels(index);
+                layerProcessor.onChangeViewMode();
+            }                
         }
     }
 }
