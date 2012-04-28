@@ -289,46 +289,7 @@ deViewManager& deProject::getViewManager()
     return viewManager;
 }
 
-void deProject::saveImage(const std::string& fileName, const deImage& image, const std::string& type)
-{
-    if (image.getColorSpace() == deColorSpaceRGB)
-    {
-        deChannel* r = previewChannelManager.getChannel(image.getChannelIndex(0));
-        deChannel* g = previewChannelManager.getChannel(image.getChannelIndex(1));
-        deChannel* b = previewChannelManager.getChannel(image.getChannelIndex(2));
-
-        if (type == "tiff")
-        {
-            saveTIFF(fileName, *r, *g, *b, image.getChannelSize());
-        }            
-        if (type == "jpeg")
-        {
-            saveJPEG(fileName, *r, *g, *b, image.getChannelSize());
-        }            
-    }
-    else
-    {
-        deImage finalImage(deColorSpaceRGB, previewChannelManager);
-        finalImage.enableAllChannels();
-
-        deConversionProcessor p;
-        p.convertImage(image, finalImage, previewChannelManager);
-
-        deChannel* r = previewChannelManager.getChannel(finalImage.getChannelIndex(0));
-        deChannel* g = previewChannelManager.getChannel(finalImage.getChannelIndex(1));
-        deChannel* b = previewChannelManager.getChannel(finalImage.getChannelIndex(2));
-        if (type == "tiff")
-        {
-            saveTIFF(fileName, *r, *g, *b, image.getChannelSize());
-        }            
-        if (type == "jpeg")
-        {
-            saveJPEG(fileName, *r, *g, *b, image.getChannelSize());
-        }            
-    }
-}
-
-bool deProject::exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog)
+bool deProject::exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog, bool saveAll, const std::string& dir)
 {
     // name is taken from file dialog, it can be empty when we are exporting to external editor
     // but in this case we need correct imageFileName
@@ -344,6 +305,12 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
     {
         // path is a directory for temporary save, used only when exporting to external editor
         std::string path = getTmp();
+
+        if (dir.size() > 0)
+        {
+            // now used also when exporting all images into one dir
+            path = dir;
+        }
 
         // we save file in the temporary directory
         fileName = path + "/" + imageFileName + "." + type;
@@ -362,18 +329,9 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
 
     previewChannelManager.setChannelSize(sourceImage.getSize());
 
-    bool result = layerProcessor.updateImagesSmart(view, progressDialog, memoryInfoFrame);
+    bool result = layerProcessor.updateImagesSmart(view, progressDialog, memoryInfoFrame, fileName, type, saveAll);
 
-    if (result)
-    {
-        // take the final image
-        deBaseLayer* layer = layerStack.getLayer(view);
-        const deImage& image = layer->getLayerImage();
-
-        // save it
-        saveImage(fileName, image, type);
-    }        
-    else
+    if (!result)
     {
         wxMessageBox( _T("exporting final image failed - error during update images\n(probably out of memory)"));
     }
@@ -595,6 +553,8 @@ void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
 bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace colorSpace)
 {
 
+    std::string info;
+
     freeImage();
 
     logMessage("open image " + fileName);
@@ -603,8 +563,16 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
 
     if (raw)
     { 
+        info = getRawInfo(fileName);
+
+        if (info.size() == 0)
+        {
+            logError("not a valid RAW " + fileName);
+            return false;
+        }
+
         layerProcessor.sendInfoEvent(DE_DCRAW_START);
-        if ((rawModule.loadRAW(fileName, sourceImage, colorSpace, true)))
+        if (rawModule.loadRAW(fileName, sourceImage, colorSpace, true))
         {
             logMessage("found RAW " + fileName);
             bool failure = false;
@@ -629,7 +597,7 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
         }
         else
         {
-            logMessage("failed RAW " + fileName);
+            logError("failed RAW " + fileName);
             layerProcessor.sendInfoEvent(DE_DCRAW_END);
             return false;
         }
@@ -644,6 +612,8 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
             }
         }
     }            
+
+    sourceImage.setInfo(info);
 
     imageFileName = removePathAndExtension(fileName);
     onImageNameUpdate();

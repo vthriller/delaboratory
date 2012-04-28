@@ -23,7 +23,7 @@
 class dePropertyValue;
 class deLayerProcessor;
 
-class dePropertyValueSlider:public deSlider
+class dePropertyValueSlider:public deSliderOld
 {
     private:
         dePropertyValue& property;

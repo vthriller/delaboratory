@@ -25,19 +25,18 @@
 #include "equalizer_frame.h"
 #include "usm_frame.h"
 #include "basic_frame.h"
-#include "mixer_bw_editor.h"
-#include "conversion_bw_layer.h"
 #include "dodge_burn_frame.h"
 #include "vignette_frame.h"
 #include "high_pass_frame.h"
 #include "shadows_highlights_frame.h"
-#include "hue_saturation_frame.h"
-
-#include "conversion_bw2hue_layer.h"
 
 #include "logger.h"
 
-deFrame* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager, int layerIndex, deChannelManager& channelManager)
+#include "generic_layer_frame.h"
+
+#include "window_wx.h"
+
+deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager, int layerIndex, deChannelManager& channelManager)
 {
     logMessage("creating frame...");
     const std::string type = layer.getType();
@@ -109,6 +108,7 @@ deFrame* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& lay
         return new deShadowsHighlightsFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
+/*
     if (type == "conversion_bw")
     {
         deConversionBWLayer& bwl = dynamic_cast<deConversionBWLayer&>(layer);
@@ -120,7 +120,7 @@ deFrame* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& lay
         deConversionBW2HueLayer& bwl = dynamic_cast<deConversionBW2HueLayer&>(layer);
         return new deHueSaturationFrame(parent, bwl, layerProcessor, frameManager, layerIndex);
     }        
-
+    */
 
     return NULL;
 }        

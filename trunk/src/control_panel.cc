@@ -118,12 +118,12 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
         mainSizer->Add(sizerE, 0, wxCENTER);
 
         {
-            exportJPEG = new wxButton(this, wxID_ANY, _T("JPEG"));
-            sizerE->Add(exportJPEG, 0);
+            exportSingle = new wxButton(this, wxID_ANY, _T("one image"));
+            sizerE->Add(exportSingle, 0);
         }
         {
-            exportTIFF = new wxButton(this, wxID_ANY, _T("16-bit TIFF"));
-            sizerE->Add(exportTIFF, 0);
+            exportAll = new wxButton(this, wxID_ANY, _T("all images"));
+            sizerE->Add(exportAll, 0);
         }
         {
             externalEditor = new wxButton(this, wxID_ANY, _T("send to GIMP"));
@@ -199,11 +199,11 @@ void deControlPanel::onChangeView()
     setConversions();
 }
 
-bool deControlPanel::generateFinalImage(const std::string& app, const std::string& type, const std::string& name)
+bool deControlPanel::generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir)
 {
     wxProgressDialog* progressDialog = new wxProgressDialog(_T("generate final image"), _T("generate final image"), 100, GetParent(), wxPD_AUTO_HIDE | wxPD_ELAPSED_TIME);
 
-    bool result = project.exportFinalImage(app, type, name, progressDialog);
+    bool result = project.exportFinalImage(app, type, name, progressDialog, saveAll, dir);
 
     delete progressDialog;
 
@@ -223,22 +223,7 @@ void deControlPanel::click(wxCommandEvent &event)
         updateLayerGrid();
     }
 
-    if (exportJPEG->GetId() == id)
-    {
-        std::string f = getSaveFile(this, "export JPEG", "jpeg");
-
-        if (!f.empty())
-        {
-            if (f.rfind(".jpg") != f.size() - 4)
-            {
-                f += ".jpg";
-            }
-
-            generateFinalImage("", "jpeg", f);
-        }
-    }
-
-    if (exportTIFF->GetId() == id)
+    if (exportSingle->GetId() == id)
     {
         std::string f = getSaveFile(this, "export TIFF", "tiff");
 
@@ -249,13 +234,19 @@ void deControlPanel::click(wxCommandEvent &event)
                 f += ".tiff";
             }
 
-            generateFinalImage("", "tiff", f);
+            generateFinalImage("", "tiff", f, false, "");
         }            
+    }
+
+    if (exportAll->GetId() == id)
+    {
+        std::string f = getDir(this, "export all images");
+        generateFinalImage("", "tiff", "", true, f);
     }
 
     if (externalEditor->GetId() == id)
     {
-        generateFinalImage("gimp", "tiff", "");
+        generateFinalImage("gimp", "tiff", "", false, "");
     }
 
     std::map<int, deColorSpace>::iterator c = convertButtonsColorSpaces.find(id);
@@ -314,7 +305,7 @@ void deControlPanel::onAddLayer()
         deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
         int layerIndex = n;
         project.log("auto UI - creating action frame");
-        deFrame* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex, channelManager);
+        deFrameOld* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex, channelManager);
         if (actionFrame)
         {
             project.log("auto UI - created action frame");

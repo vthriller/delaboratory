@@ -32,30 +32,70 @@ void deLayerFrameManager::destroyAllFrames()
 {
     while (actionFrames.size() > 0)
     {
-        std::list<deLayerFrame*>::iterator i = actionFrames.begin();
+        std::list<deLayerFrameOld*>::iterator i = actionFrames.begin();
         actionFrames.remove(*i);
         delete *i;
     }
     while (blendFrames.size() > 0)
     {
-        std::list<deLayerFrame*>::iterator i = blendFrames.begin();
+        std::list<deLayerFrameOld*>::iterator i = blendFrames.begin();
         blendFrames.remove(*i);
         delete *i;
     }
+    while (layerFrames.size() > 0)
+    {
+        std::map<int, deLayerFrame*>::iterator i = layerFrames.begin();
+        layerFrames.erase(i);
+        delete i->second;
+    }
 }
 
-void deLayerFrameManager::addActionFrame(deFrame* frame)
+void deLayerFrameManager::addActionFrame(deFrameOld* frame)
 {
-    deLayerFrame* lf = dynamic_cast<deLayerFrame*>(frame);
+    deLayerFrameOld* lf = dynamic_cast<deLayerFrameOld*>(frame);
     if (lf)
     {
         actionFrames.push_back(lf);
     }
 }
 
-void deLayerFrameManager::removeActionFrame(deFrame* frame)
+bool deLayerFrameManager::addLayerFrame(int index, deLayerFrame* frame)
 {
-    deLayerFrame* lf = dynamic_cast<deLayerFrame*>(frame);
+    std::map<int, deLayerFrame*>::iterator i = layerFrames.find(index);
+    if (i != layerFrames.end())
+    {
+        return false;
+    }
+    layerFrames[index] = frame;
+    return true;
+}
+
+bool deLayerFrameManager::removeLayerFrame(int index)
+{
+    std::map<int, deLayerFrame*>::iterator i = layerFrames.find(index);
+    if (i == layerFrames.end())
+    {
+        return false;
+    }
+    layerFrames.erase(i);
+    return true;
+}
+
+bool deLayerFrameManager::destroyLayerFrame(int index)
+{
+    std::map<int, deLayerFrame*>::iterator i = layerFrames.find(index);
+    if (i == layerFrames.end())
+    {
+        return false;
+    }
+    deLayerFrame* frame = i->second;
+    delete frame;
+    return true;
+}
+
+void deLayerFrameManager::removeActionFrame(deFrameOld* frame)
+{
+    deLayerFrameOld* lf = dynamic_cast<deLayerFrameOld*>(frame);
     if (lf)
     {
         actionFrames.remove(lf);
@@ -64,7 +104,7 @@ void deLayerFrameManager::removeActionFrame(deFrame* frame)
 
 bool deLayerFrameManager::checkActionFrame(int index)
 {
-    std::list<deLayerFrame*>::const_iterator i;
+    std::list<deLayerFrameOld*>::const_iterator i;
     for (i = actionFrames.begin(); i != actionFrames.end(); i++)
     {
         if ((*i)->checkIndex(index))
@@ -75,18 +115,18 @@ bool deLayerFrameManager::checkActionFrame(int index)
     return false;
 }
 
-void deLayerFrameManager::addBlendFrame(deFrame* frame)
+void deLayerFrameManager::addBlendFrame(deFrameOld* frame)
 {
-    deLayerFrame* lf = dynamic_cast<deLayerFrame*>(frame);
+    deLayerFrameOld* lf = dynamic_cast<deLayerFrameOld*>(frame);
     if (lf)
     {
         blendFrames.push_back(lf);
     }
 }
 
-void deLayerFrameManager::removeBlendFrame(deFrame* frame)
+void deLayerFrameManager::removeBlendFrame(deFrameOld* frame)
 {
-    deLayerFrame* lf = dynamic_cast<deLayerFrame*>(frame);
+    deLayerFrameOld* lf = dynamic_cast<deLayerFrameOld*>(frame);
     if (lf)
     {
         blendFrames.remove(lf);
@@ -95,7 +135,7 @@ void deLayerFrameManager::removeBlendFrame(deFrame* frame)
 
 bool deLayerFrameManager::checkBlendFrame(int index)
 {
-    std::list<deLayerFrame*>::const_iterator i;
+    std::list<deLayerFrameOld*>::const_iterator i;
     for (i = blendFrames.begin(); i != blendFrames.end(); i++)
     {
         if ((*i)->checkIndex(index))
@@ -110,11 +150,12 @@ void deLayerFrameManager::onDestroyLayer(int index)
 {
     destroyActionFrame(index);
     destroyBlendFrame(index);
+    destroyLayerFrame(index);
 }
 
 void deLayerFrameManager::destroyActionFrame(int index)
 {
-    std::list<deLayerFrame*>::const_iterator i;
+    std::list<deLayerFrameOld*>::const_iterator i;
     for (i = actionFrames.begin(); i != actionFrames.end(); i++)
     {
         if ((*i)->checkIndex(index))
@@ -128,7 +169,7 @@ void deLayerFrameManager::destroyActionFrame(int index)
 
 void deLayerFrameManager::destroyBlendFrame(int index)
 {
-    std::list<deLayerFrame*>::const_iterator i;
+    std::list<deLayerFrameOld*>::const_iterator i;
     for (i = blendFrames.begin(); i != blendFrames.end(); i++)
     {
         if ((*i)->checkIndex(index))
@@ -142,7 +183,7 @@ void deLayerFrameManager::destroyBlendFrame(int index)
 
 bool deLayerFrameManager::onImageClick(deValue x, deValue y)
 {
-    std::list<deLayerFrame*>::const_iterator i;
+    std::list<deLayerFrameOld*>::const_iterator i;
     for (i = actionFrames.begin(); i != actionFrames.end(); i++)
     {
         deActionFrame* trueActionFrame = dynamic_cast<deActionFrame*>(*i);
@@ -156,7 +197,7 @@ bool deLayerFrameManager::onImageClick(deValue x, deValue y)
 
 void deLayerFrameManager::onKey(int key)
 {
-    std::list<deLayerFrame*>::const_iterator i;
+    std::list<deLayerFrameOld*>::const_iterator i;
     for (i = actionFrames.begin(); i != actionFrames.end(); i++)
     {
         deActionFrame* trueActionFrame = dynamic_cast<deActionFrame*>(*i);
@@ -169,7 +210,7 @@ void deLayerFrameManager::onKey(int key)
 
 void deLayerFrameManager::onUpdateProperties()
 {
-    std::list<deLayerFrame*>::const_iterator i;
+    std::list<deLayerFrameOld*>::const_iterator i;
     for (i = actionFrames.begin(); i != actionFrames.end(); i++)
     {
         deActionFrame* trueActionFrame = dynamic_cast<deActionFrame*>(*i);

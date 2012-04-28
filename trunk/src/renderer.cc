@@ -137,9 +137,15 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
     else
     {
         deConversionProcessor p;
-        if (!p.renderImageToRGB(layerImage, getCurrentImageData(), channelManager))
+        //if (!p.renderImageToRGB(layerImage, getCurrentImageData(), channelManager))
+        if (!p.renderImageToRGBNew(layerImage, getCurrentImageData()))
         {
             logMessage("render image FAILED");
+            renderedImage.setError();
+        }
+        else
+        {
+            renderedImage.clearError();
         }
     }
 

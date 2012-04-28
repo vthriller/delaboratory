@@ -105,6 +105,8 @@ class deLayerProcessor
         void lockUpdateImage();
         void unlockUpdateImage();
 
+        void updateWarning();
+
     public:
         deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deMainWindow& _mainWindow);
         virtual ~deLayerProcessor();
@@ -114,7 +116,7 @@ class deLayerProcessor
         void setViewManager(deViewManager* _viewManager);
 
         void updateAllImages(bool calcHistogram);
-        bool updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame);
+        bool updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame, const std::string& fileName, const std::string& type, bool saveAll);
         void generateChannelUsage(std::map<int, int>& channelUsage);
 
         void markUpdateSingleChannel(int index, int channel);

@@ -30,6 +30,9 @@ class dePreset
         dePreset(const dePreset&);
         dePreset& operator =(const dePreset&);
 
+        std::map<std::string, deValue> numericValues;
+        std::vector<std::string> operations;
+
     protected:
         const std::string name;
 
@@ -45,16 +48,43 @@ class dePreset
 
         std::string getName() {return name;};
 
+        void apply(deBaseLayer& layer) const;
+        void addNumericValue(const std::string& n, deValue v);
+        void addOperation(const std::string& n);
+
 };
 
-class dePresetValue:public dePreset
+class dePresetOld
+{
+    private:
+        dePresetOld(const dePresetOld&);
+        dePresetOld& operator =(const dePresetOld&);
+
+    protected:
+        const std::string name;
+
+    public:
+        dePresetOld(const std::string& _name)
+        :name(_name)
+        {
+        }
+
+        virtual ~dePresetOld()
+        {
+        }
+
+        std::string getName() {return name;};
+
+};
+
+class dePresetValue:public dePresetOld
 {
     private:
         deValue value;
 
     public:
         dePresetValue(const std::string& _name, deValue _value)
-        :dePreset(_name),
+        :dePresetOld(_name),
          value(_value)
         {
         }

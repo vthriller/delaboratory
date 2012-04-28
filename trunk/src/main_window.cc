@@ -111,6 +111,14 @@ class deMainWindowImpl
             rawTimer->Stop();
         }            
 
+        void updateWarning()
+        {
+            if (frame)
+            {
+                frame->updateWarning();
+            }
+        }            
+
 
 };
 
@@ -172,4 +180,9 @@ void deMainWindow::startRawTimer()
 void deMainWindow::stopRawTimer()
 {
     impl->stopRawTimer();
+}
+
+void deMainWindow::updateWarning()
+{
+    impl->updateWarning();
 }

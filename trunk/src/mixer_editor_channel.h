@@ -28,7 +28,7 @@ class deLayerProcessor;
 class deMixerEditorChannel:public wxPanel
 {
     private:
-        std::vector<deSlider*> sliders;
+        std::vector<deSliderOld*> sliders;
         deMixerLayer& layer;
         unsigned int index;
 

@@ -21,11 +21,11 @@
 
 #include <wx/wx.h>
 class deBaseLayer;
-class deFrame;
+class deFrameOld;
 class deLayerProcessor;
 class deLayerFrameManager;
 class deChannelManager;
 
-deFrame* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager, int layerIndex, deChannelManager& channelManager);
+deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager, int layerIndex, deChannelManager& channelManager);
 
 #endif

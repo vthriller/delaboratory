@@ -40,8 +40,8 @@ class deControlPanel:public wxPanel
 
         bool autoUI;
 
-        wxButton* exportJPEG;
-        wxButton* exportTIFF;
+        wxButton* exportSingle;
+        wxButton* exportAll;
         wxButton* externalEditor;
 
         std::map<int, deColorSpace> convertButtonsColorSpaces;
@@ -58,7 +58,7 @@ class deControlPanel:public wxPanel
 
         void setConversions();
 
-        bool generateFinalImage(const std::string& app, const std::string& type, const std::string& name);
+        bool generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir);
 
         void onAddLayer();
 

@@ -31,6 +31,7 @@
 #include <iostream>
 #include "logger.h"
 #include "renderer.h"
+#include "image_io.h"
 
 class deLayerProcessorWorkerThread:public wxThread
 {
@@ -510,11 +511,23 @@ bool deLayerProcessor::updateLayerImage()
 
     unlockUpdateImage();
 
+    updateWarning();
+
     return result;
 
 }
 
-bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame)
+void deLayerProcessor::updateWarning()
+{
+    if (closing)
+    {
+        return;
+    }
+
+    mainWindow.postEvent(DE_WARNING_EVENT, 0 );
+}
+
+bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame, const std::string& fileName, const std::string& type, bool saveAll)
 {
     bool result = true;
 
@@ -549,7 +562,16 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
         progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
 
         bool r = layer->processFull();
-        if (!r)
+        if (r)
+        {
+            if (saveAll)
+            {
+                const deImage& image = layer->getLayerImage();
+                const std::string f = insertIndex(fileName, index);
+                saveImage(f, image, type, previewChannelManager);
+            }                
+        }
+        else
         {
             result = false;
             // stop loop
@@ -576,6 +598,16 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
     progressDialog->Update(100, _T("finished"));
 
     unlock();
+
+    if ((result) && (!saveAll))
+    {
+        // take the final image
+        deBaseLayer* layer = layerStack.getLayer(view);
+        const deImage& image = layer->getLayerImage();
+
+        // save it
+        saveImage(fileName, image, type, previewChannelManager);
+    }
 
     return result;
 }
@@ -627,6 +659,7 @@ void deLayerProcessor::markUpdateBlendAllChannels(int index)
 void deLayerProcessor::onChangeView(int a)
 {
     updateImages(a + 1, -1, true);
+    updateWarning();
 }   
 
 void deLayerProcessor::lock()

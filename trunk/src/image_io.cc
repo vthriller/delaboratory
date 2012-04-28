@@ -25,6 +25,9 @@
 #include "static_image.h"
 #include "str.h"
 #include "dcraw_support.h"
+#include "channel_manager.h"
+#include "image.h"
+#include "conversion_processor.h"
 
 void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size)
 {
@@ -339,5 +342,44 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image, deColorSpace co
     logMessage("loadTIFF " + fileName + " done");
 
     return true;
+}
+
+void saveImage(const std::string& fileName, const deImage& image, const std::string& type, deChannelManager& previewChannelManager)
+{
+    if (image.getColorSpace() == deColorSpaceRGB)
+    {
+        deChannel* r = previewChannelManager.getChannel(image.getChannelIndex(0));
+        deChannel* g = previewChannelManager.getChannel(image.getChannelIndex(1));
+        deChannel* b = previewChannelManager.getChannel(image.getChannelIndex(2));
+
+        if (type == "tiff")
+        {
+            saveTIFF(fileName, *r, *g, *b, image.getChannelSize());
+        }            
+        if (type == "jpeg")
+        {
+            saveJPEG(fileName, *r, *g, *b, image.getChannelSize());
+        }            
+    }
+    else
+    {
+        deImage finalImage(deColorSpaceRGB, previewChannelManager);
+        finalImage.enableAllChannels();
+
+        deConversionProcessor p;
+        p.convertImageNew(image, finalImage);
+
+        deChannel* r = previewChannelManager.getChannel(finalImage.getChannelIndex(0));
+        deChannel* g = previewChannelManager.getChannel(finalImage.getChannelIndex(1));
+        deChannel* b = previewChannelManager.getChannel(finalImage.getChannelIndex(2));
+        if (type == "tiff")
+        {
+            saveTIFF(fileName, *r, *g, *b, image.getChannelSize());
+        }            
+        if (type == "jpeg")
+        {
+            saveJPEG(fileName, *r, *g, *b, image.getChannelSize());
+        }            
+    }
 }
 

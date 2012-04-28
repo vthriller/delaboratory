@@ -26,8 +26,6 @@
 #include "apply_luminance_layer.h"
 #include "equalizer_layer.h"
 #include "conversion_layer.h"
-#include "conversion_bw_layer.h"
-#include "conversion_bw2hue_layer.h"
 #include "usm_layer.h"
 #include "source_image_layer.h"
 #include "dodge_burn_layer.h"
@@ -36,6 +34,7 @@
 #include "basic_layer.h"
 #include <algorithm>
 #include "color_space_utils.h"
+#include "levels_layer.h"
 
 deBaseLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, deStaticImage& sourceImage)
 {
@@ -110,12 +109,16 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
     {
         return new deApplyImageLayer(colorSpace, source, _layerStack, _channelManager, _viewManager, index);
     }
-    
-    bool cbw = false;
-    bool cbwhue = false;
 
+    if (type == "levels")
+    {
+        return new deLevelsLayer(colorSpace, _channelManager, source, _layerStack);
+    }        
+    
     if (type == "conversion")
     {
+        return new deConversionLayer(colorSpace, _channelManager, source, _layerStack);
+        /*
         if (colorSpace == deColorSpaceBW)
         {
             cbw = true;
@@ -145,8 +148,10 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
         {
             return new deConversionLayer(colorSpace, source, _layerStack, _channelManager);
         }
+        */
     }
 
+/*
     if (type == "conversion_bw")
     {
         cbw = true;
@@ -156,7 +161,9 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
     {
         cbwhue = true;
     }
+    */
 
+/*
     if (cbw)
     {
         deBaseLayer* sourceLayer = _layerStack.getLayer(source);
@@ -164,11 +171,14 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
         int n = getColorSpaceSize(sourceColorSpace);
         return new deConversionBWLayer(source, _layerStack, _channelManager, n);
     }
+    */
 
+/*
     if (cbwhue)
     {
         return new deConversionBW2HueLayer(source, _layerStack, _channelManager, colorSpace);
     }
+    */
 
     if (type == "original")
     {
@@ -181,6 +191,7 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
 void getSupportedActions(std::vector<std::string>& actions)
 {
     actions.push_back("curves");
+    actions.push_back("levels");
     actions.push_back("basic");
     actions.push_back("mixer");
     actions.push_back("equalizer8");

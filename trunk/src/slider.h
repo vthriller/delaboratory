@@ -21,9 +21,11 @@
 
 #include <wx/wx.h>
 #include "value.h"
+class dePanel;
+class deWindow;
 class deLayerProcessor;
 
-class deSlider:public wxPanel
+class deSliderOld:public wxPanel
 {
     private:
         wxSizer* sizer;
@@ -47,12 +49,29 @@ class deSlider:public wxPanel
         void click(wxCommandEvent &event);
 
     public:
-        deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue);
-        virtual ~deSlider();
+        deSliderOld(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue);
+        virtual ~deSliderOld();
 
         void setValue(deValue v);
 
         virtual void onValueChange(deValue value, bool finished) = 0;
 };        
+
+class deSliderImpl;
+
+class deSlider
+{
+    private:
+        deSliderImpl* impl;
+    public:
+        deSlider(deWindow& window, const std::string& _name, deValue _min, deValue _max, int _width, int widthn, int widthl);
+        virtual ~deSlider();
+
+        void setValue(deValue v);
+        virtual void onValueChange(deValue value, bool finished) = 0;
+
+        deWindow& getWindow();
+};
+
 
 #endif

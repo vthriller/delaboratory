@@ -49,7 +49,7 @@ deUSMFrame::deUSMFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _lay
     }
 
     deLayerWithBlending& lwb  = dynamic_cast<deLayerWithBlending&>(_layer);
-    deSlider* alphaSlider = new deOpacitySlider(this, range, lwb, layerProcessor, layerIndex);
+    deSliderOld* alphaSlider = new deOpacitySlider(this, range, lwb, layerProcessor, layerIndex);
     sizer->Add(alphaSlider, 0);
 
     wxSizer* sizerB = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));

@@ -17,4 +17,33 @@
 */
 
 #include "preset.h"
+#include "property_numeric.h"
 
+void dePreset::apply(deBaseLayer& layer) const
+{
+    std::map<std::string, deValue>::const_iterator i;
+    for (i = numericValues.begin(); i != numericValues.end(); i++)
+    {
+        dePropertyNumeric* p = layer.getPropertyNumeric(i->first);
+        if (p)
+        {
+            p->set(i->second);
+        }
+    }
+
+    std::vector<std::string>::const_iterator j;
+    for (j = operations.begin(); j != operations.end(); j++)
+    {
+        layer.executeOperation(*j);
+    }
+}
+
+void dePreset::addNumericValue(const std::string& n, deValue v)
+{
+    numericValues[n] = v;
+}
+
+void dePreset::addOperation(const std::string& n)
+{
+    operations.push_back(n);
+}

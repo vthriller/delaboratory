@@ -24,8 +24,8 @@
 #include "color_space_utils.h"
 #include "opacity_slider.h"
 
-deBlendFrame::deBlendFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
-:deLayerFrame(parent, _layer, "blend frame", _frameManager, _layerIndex),
+deBlendFrame::deBlendFrame(wxWindow *parent, deLayerWithBlending& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+:deLayerFrameOld(parent, _layer, "blend frame", _frameManager, _layerIndex),
  layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -36,9 +36,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& 
 
     getSupportedBlendModes(blendModes);
 
-    deLayer& l = dynamic_cast<deLayer&>(layer);
-
-    deBlendMode currentBlendMode = l.getBlendMode();
+    deBlendMode currentBlendMode = _layer.getBlendMode();
 
     wxString* blendModeStrings = new wxString [blendModes.size()];
     unsigned int i;
@@ -59,7 +57,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& 
 
     sizer->Add(choice, 0);
 
-    deSlider* alphaSlider = new deOpacitySlider(this, 100, l, layerProcessor, layerIndex);
+    deSliderOld* alphaSlider = new deOpacitySlider(this, 100, _layer, layerProcessor, layerIndex);
     sizer->Add(alphaSlider, 0);
 
     wxSizer* sizerC = new wxStaticBoxSizer(wxVERTICAL, this,  _T("channels"));
@@ -70,7 +68,7 @@ deBlendFrame::deBlendFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& 
     for (i = 0; i < nc; i++)
     {
         wxCheckBox* cb = new wxCheckBox(this, wxID_ANY, wxString::FromAscii(getChannelName(colorSpace, i).c_str()));
-        cb->SetValue(l.isChannelEnabled(i));
+        cb->SetValue(_layer.isChannelEnabled(i));
         sizerC->Add(cb, 0);
         channels.push_back(cb);
     }
@@ -91,7 +89,7 @@ deBlendFrame::~deBlendFrame()
 
 void deBlendFrame::choose(wxCommandEvent &event)
 {
-    deLayer& l = dynamic_cast<deLayer&>(layer);
+    deLayerWithBlending& l = dynamic_cast<deLayerWithBlending&>(layer);
 
     int id = event.GetId();
     if (id == choice->GetId())
@@ -108,7 +106,7 @@ void deBlendFrame::choose(wxCommandEvent &event)
 
 void deBlendFrame::check(wxCommandEvent &event)
 {
-    deLayer& l = dynamic_cast<deLayer&>(layer);
+    deLayerWithBlending& l = dynamic_cast<deLayerWithBlending&>(layer);
     int id = event.GetId();
     deColorSpace colorSpace = layer.getColorSpace();
     int n = getColorSpaceSize(colorSpace);

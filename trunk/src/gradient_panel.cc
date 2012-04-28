@@ -427,3 +427,103 @@ void deGradientPanel2::generateBitmap()
     delete image;
 }
 
+
+deGradientPanel0::deGradientPanel0(wxWindow* parent, wxSize _size, deColorSpace _colorSpace, int _channel, int _margin)
+:deGradientPanel(parent, _size, _colorSpace), 
+channel(_channel), margin(_margin) 
+{
+    bitmap = NULL;
+    generateBitmap();
+}
+
+deGradientPanel0::~deGradientPanel0()
+{
+}
+
+void deGradientPanel0::changeChannel(int _channel)
+{
+    channel = _channel;
+    generateBitmap();
+    Update();
+    Refresh();
+}
+
+void deGradientPanel0::generateBitmap()
+{
+    if (bitmap)
+    {
+        delete bitmap;
+    }
+
+    deConversionProcessor cp;
+
+    int w = GetSize().GetWidth();
+    int h = GetSize().GetHeight();
+
+    unsigned char gray = 128;
+
+    int ww = w - 2 * margin;
+    wxImage* image = new wxImage(w, h);
+    unsigned char* data = image->GetData();
+
+    int xx;
+    int y;
+    for (xx = 0; xx < w; xx++)
+    {
+        int x = xx - margin;
+        if (x < 0)
+        {
+            x = -1;
+        }
+        if (x >= ww)
+        {
+            x = -1;
+        }
+        for (y = 0; y < h; y++)
+        {
+            unsigned char r = gray;
+            unsigned char g = gray;
+            unsigned char b = gray;
+
+            if (x >= 0)
+            {
+                float v = 0;
+                float u = 0;
+                if (h > ww)
+                {
+                    v = 1.0 - (float) y / h;                        
+                    u = (float) x / ww;                        
+                }
+                else
+                {
+                    v = (float) x / ww;                        
+                    u = 1.0 - (float) y / h;                        
+                }
+
+                deValue v1 = v;
+                deValue v2 = v;
+                deValue v3 = v;
+                deValue v4 = v;
+
+                setValues(v1, v2, v3, v4, colorSpace, channel, -1, u, v, -1, -1, -1);
+
+                deValue rr = 0;
+                deValue gg = 0;
+                deValue bb = 0;
+
+                cp.convertToRGB(v1, v2, v3, v4, colorSpace, rr, gg, bb);
+
+                r = 255 * rr;
+                g = 255 * gg;
+                b = 255 * bb;
+            }
+
+            data[3*(y*w+xx) + 0] = r;
+            data[3*(y*w+xx) + 1] = g;
+            data[3*(y*w+xx) + 2] = b;
+
+        }
+    }
+    bitmap = new wxBitmap(*image);
+    delete image;
+}

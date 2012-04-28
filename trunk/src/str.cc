@@ -136,3 +136,11 @@ std::string getTmp()
         return "/tmp";
     }            
 }        
+
+std::string insertIndex(const std::string& s, int index)
+{
+    std::string b = getBaseName(s);
+    std::string e = getExtension(s);
+
+    return b + "_" + str(index) + "." + e;
+}

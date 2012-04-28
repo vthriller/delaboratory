@@ -36,6 +36,8 @@ class deRenderedImage
         deSize requestedSize;
         deSize bitmapSize;
 
+        bool error;
+
     public:
         deRenderedImage();
 
@@ -45,6 +47,10 @@ class deRenderedImage
         unsigned char* getCurrentImageData();
         unsigned char* getCurrentBitmapData();
         bool render(deCanvas& canvas);
+
+        void setError() {error = true;};
+        void clearError() {error = false;};
+        bool getError() const {return error;};
 };
 
 #endif

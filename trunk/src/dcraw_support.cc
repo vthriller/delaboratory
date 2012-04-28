@@ -69,6 +69,37 @@ std::string getDcrawVersion()
     return vs;
 }
 
+std::string getRawInfo(const std::string& f)
+{
+    std::string command = std::string(DCRAW_EXECUTABLE) + " -i -v \"" + f + "\"";
+    logMessage("calling: " + command);
+
+    const char* c = command.c_str();
+    wxString s(c, wxConvUTF8);
+
+    wxProcess* process = wxProcess::Open(s);
+
+    wxInputStream* input = process->GetInputStream();
+
+    std::string result;
+
+    bool finished = false;
+    while (!finished)
+    {
+        unsigned char c = input->GetC();
+        if (!input->Eof())
+        {
+            result+= c;
+        }
+        else
+        {
+            finished = true;
+        }
+    }
+
+    return result;
+}
+
 deRawLoader::deRawLoader(const std::string& f, deStaticImage& _image, deColorSpace _colorSpace, bool _half)
 :filename(f), image(_image), colorSpace(_colorSpace), half(_half)
 {
@@ -112,13 +143,13 @@ bool deRawLoader::load(bool& failure)
 
     if (c1 != 'P') 
     {
-        logMessage("first character not P");
+        logError("first character not P");
         failure = true;
         return false;
     }
     if (c2 != '6') 
     {
-        logMessage("second character not 6");
+        logError("second character not 6");
         failure = true;
         return false;
     }
@@ -139,6 +170,7 @@ bool deRawLoader::load(bool& failure)
     int w = getInt(ws);
     if (w <= 0)
     {
+        logError("width 0");
         failure = true;
         return false;
     }
@@ -155,6 +187,7 @@ bool deRawLoader::load(bool& failure)
     int h = getInt(hs);
     if (h <= 0)
     {
+        logError("height 0");
         failure = true;
         return false;
     }
@@ -172,6 +205,7 @@ bool deRawLoader::load(bool& failure)
     int max = getInt(ms);
     if (max <= 256)
     {
+        logError("max <= 256");
         failure = true;
         return false;
     }
@@ -195,6 +229,7 @@ bool deRawLoader::load(bool& failure)
     if (!channelRR)
     {
         image.unlock();
+        logError("no channelRR");
         failure = true;
         return false;
     }
@@ -204,6 +239,7 @@ bool deRawLoader::load(bool& failure)
     if (!channelGG)
     {
         image.unlock();
+        logError("no channelGG");
         failure = true;
         return false;
     }
@@ -213,6 +249,7 @@ bool deRawLoader::load(bool& failure)
     if (!channelBB)
     {
         image.unlock();
+        logError("no channelBB");
         failure = true;
         return false;
     }
@@ -243,7 +280,7 @@ bool deRawLoader::load(bool& failure)
 
     logMessage("buffer allocated");
 
-    bool error = false;
+//    bool error = false;
 
     int n = w * h;
 
@@ -368,12 +405,15 @@ bool deRawLoader::load(bool& failure)
     channelB.unlockWrite();
 
     image.unlock();
-    
+   
+   /*
     if (error)
     {
+        logError("unknown error");
         failure = true;
         return false;
     }
+    */
 
     logMessage("loading ppm done");
     return true;

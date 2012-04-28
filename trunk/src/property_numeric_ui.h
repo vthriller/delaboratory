@@ -16,37 +16,30 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_HUE_SATURATION_FRAME_H
-#define _DE_HUE_SATURATION_FRAME_H
+#ifndef _DE_PROPERTY_VALUE_SLIDER_H
+#define _DE_PROPERTY_VALUE_SLIDER_H
 
-#include "layer_frame.h"
+class dePropertyNumeric;
+class deLayerProcessor;
+class deWindow;
 #include "slider.h"
 
-class dePropertyValueSlider;
-class deLayerProcessor;
-class deConversionBW2HueLayer;
-
-class deHueSaturationFrame:public deLayerFrame
+class dePropertyNumericUI:public deSlider
 {
     private:
-        dePropertyValueSlider* hue;
-        dePropertyValueSlider* saturation;
+        dePropertyNumeric& property;
         deLayerProcessor& layerProcessor;
-        deConversionBW2HueLayer& layer;
 
-        wxButton* reset;
-        wxButton* preset1;
-        wxButton* preset2;
-        wxButton* preset3;
-
-        void click(wxCommandEvent &event);
+        int layerIndex;
 
     public:
-        deHueSaturationFrame(wxWindow *parent, deConversionBW2HueLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deHueSaturationFrame();
+        dePropertyNumericUI(deWindow& window, dePropertyNumeric& _property, deLayerProcessor& _layerProcessor, int _layerIndex, int _width, int width, int widthl);
+        virtual ~dePropertyNumericUI();
 
+        virtual void onValueChange(deValue value, bool finished);
 
-};
+        void setFromProperty();
 
+};        
 
 #endif

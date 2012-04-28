@@ -145,6 +145,24 @@ void deCurve::setContrastBrightness(deValue contrast, deValue brightness)
     unlock();
 }
 
+void deCurve::setLevels(deValue min, deValue middle, deValue max)
+{
+    lock();
+
+//    std::cout << "levels: " << min << " " << middle << " " << max << std::endl;
+
+    points.clear();
+    points.push_back(deCurvePoint(0, 0));
+    points.push_back(deCurvePoint(min, 0));
+    points.push_back(deCurvePoint(middle, 0.5));
+    points.push_back(deCurvePoint(max, 1));
+    points.push_back(deCurvePoint(1, 1));
+
+    shape.build(points);
+
+    unlock();
+}
+
 
 void deCurve::fill(int n, deValue a, deValue r)
 {
@@ -197,6 +215,33 @@ void deCurve::process(const deChannel& source, deChannel& destination, int n)
 
     const deValue* pixels = source.getPixels();
     deValue* p = destination.getPixels();
+
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        deValue value = pixels[i];
+        deValue result = shape.calc(value);
+
+        if (result < 0)
+        {
+            p[i] = 0;
+        }
+        else if (result > 1)
+        {
+            p[i] = 1;
+        }
+        else
+        {
+            p[i] = result;
+        }
+    }
+
+    unlock();
+}
+
+void deCurve::process(const deValue* pixels, deValue* p, int n)
+{
+    lock();
 
     int i;
     for (i = 0; i < n; i++)

@@ -77,4 +77,15 @@ std::string getOpenFile(wxWindow* parent, const std::string& info, const std::st
     return str(path);
 }
 
+std::string getDir(wxWindow* parent, const std::string& info)
+{
+    wxDirDialog saveFileDialog(parent, wxString::FromAscii(info.c_str()));
 
+    if (saveFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        return "";
+    }
+
+    wxString path = saveFileDialog.GetPath();
+    return str(path);
+}

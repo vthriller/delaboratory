@@ -39,6 +39,8 @@
 #include "layer_processor.h"
 #include "zoom_panel.h"
 #include "threads_panel.h"
+#include "warning_panel.h"
+#include "layer_stack.h"
 
 #include "image_panel.h"
 
@@ -76,6 +78,7 @@ EVT_MENU(DE_REPAINT_EVENT, deMainFrame::onRepaintEvent)
 EVT_MENU(DE_IMAGE_LOAD_EVENT, deMainFrame::onImageLoadEvent)
 EVT_MENU(DE_HISTOGRAM_EVENT, deMainFrame::onHistogramEvent)
 EVT_MENU(DE_INFO_EVENT, deMainFrame::onInfoEvent)
+EVT_MENU(DE_WARNING_EVENT, deMainFrame::onWarningEvent)
 END_EVENT_TABLE()
 
 deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcraw_version, deOperationProcessor& _operationProcessor, deChannelManager& channelManager)
@@ -110,6 +113,12 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     threadsPanel = new deThreadsPanel(topPanel);
     topSizer->Add(threadsPanel, 0, wxEXPAND);
 
+    deZoomPanel* zoomPanel = new deZoomPanel(topPanel, _zoomManager);
+    topSizer->Add(zoomPanel);
+
+    warningPanel = new deWarningPanel(topPanel);
+    topSizer->Add(warningPanel, 0, wxEXPAND);
+
     wxSizer* sizerR = new wxStaticBoxSizer(wxHORIZONTAL, topPanel,  _T("options"));
     topSizer->Add(sizerR, 0, wxEXPAND);
 
@@ -129,9 +138,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
         realtime->SetValue(0);
     }
 
-    deZoomPanel* zoomPanel = new deZoomPanel(topPanel, _zoomManager);
-    topSizer->Add(zoomPanel);
-
     wxSizer* sizerI = new wxStaticBoxSizer(wxVERTICAL, this,  _T("image"));
     leftSizer->Add(sizerI, 1, wxEXPAND);
 
@@ -143,7 +149,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxSizer* sizerH = new wxStaticBoxSizer(wxVERTICAL, hPanel,  _T("histogram"));
     hPanel->SetSizer(sizerH);
 
-    histogramPanel = new deHistogramPanel(hPanel, &project);
+    histogramPanel = new deHistogramPanel(hPanel, &project, 260, 2);
     sizerH->Add(histogramPanel, 0, wxCENTER);
 
     deHistogramModePanel* histogramModePanel = new deHistogramModePanel(hPanel, project, histogramPanel);
@@ -483,6 +489,18 @@ void deMainFrame::onInfoEvent(wxCommandEvent& event)
     threadsPanel->setInfoColor(i);
 }
 
+void deMainFrame::onWarningEvent(wxCommandEvent& event)
+{
+    int view = project.getViewManager().getView();    
+    deLayerStack& stack = project.getLayerStack();
+    deBaseLayer* layer = stack.getLayer(view);
+    if (layer)
+    {
+        std::string warning = layer->getWarning();
+        warningPanel->setWarning(warning);
+    }
+}
+
 void deMainFrame::repaintMainFrame(bool calcHistogram)
 {
     project.log("repaint main frame start");
@@ -552,3 +570,6 @@ void deMainFrame::onTimerEvent(wxTimerEvent& event)
     project.onTimerUpdate();
 }
 
+void deMainFrame::updateWarning()
+{
+}

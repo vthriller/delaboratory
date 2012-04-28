@@ -24,5 +24,6 @@
 
 std::string getSaveFile(wxWindow* parent, const std::string& info, const std::string& t);
 std::string getOpenFile(wxWindow* parent, const std::string& info, const std::string& t);
+std::string getDir(wxWindow* parent, const std::string& info);
 
 #endif

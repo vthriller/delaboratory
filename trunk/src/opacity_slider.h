@@ -24,7 +24,7 @@
 class deLayerWithBlending;
 class deLayerProcessor;
 
-class deOpacitySlider:public deSlider
+class deOpacitySlider:public deSliderOld
 {
     private:
         deLayerWithBlending& layer;

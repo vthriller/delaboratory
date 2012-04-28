@@ -27,7 +27,7 @@
 #include "wx/notebook.h"
 #include "color_space_utils.h"
 
-class deEqualizerSlider:public deSlider
+class deEqualizerSlider:public deSliderOld
 {
     private:
         deEqualizerLayer& layer;
@@ -39,7 +39,7 @@ class deEqualizerSlider:public deSlider
 
     public:
         deEqualizerSlider(wxWindow *parent, int range, deEqualizerLayer& _layer, deEqualizer& _equalizer, int _index, int _channel, const std::string& name, deLayerProcessor& _layerProcessor, int _layerIndex)
-        :deSlider(parent, name, range, -1.0, 1.0, 0.0), layer(_layer), equalizer(_equalizer), index(_index), channel(_channel),
+        :deSliderOld(parent, name, range, -1.0, 1.0, 0.0), layer(_layer), equalizer(_equalizer), index(_index), channel(_channel),
          layerProcessor(_layerProcessor),
          layerIndex(_layerIndex)
         {

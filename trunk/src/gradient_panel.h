@@ -56,6 +56,21 @@ public:
 	void paintEvent(wxPaintEvent & evt);
 };
 
+class deGradientPanel0:public deGradientPanel
+{
+private:
+    void generateBitmap();
+
+    int channel;
+    int margin;
+
+public:
+    deGradientPanel0(wxWindow* parent, wxSize _size, deColorSpace _colorSpace, int _channel, int _margin);
+    ~deGradientPanel0();
+
+    void changeChannel(int _channel);
+
+};
 
 class deGradientPanel1:public deGradientPanel
 {

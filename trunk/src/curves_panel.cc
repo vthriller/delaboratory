@@ -119,7 +119,7 @@ void deCurvesPanel::generateBackground()
     logMessage("gb3");
 
     histogram.clear();
-    histogram.calc(c, n);
+    histogram.calc(c->getPixels(), n);
     logMessage("gb4");
 
     wxImage* image = new wxImage(sizeX, sizeY);
@@ -129,7 +129,9 @@ void deCurvesPanel::generateBackground()
     unsigned char g2 = 200;
     wxColour colour = getChannelwxColour(layer.getColorSpace(), channel);
 
-    histogram.render(data, sizeX, sizeY, g1, g2);
+    int margin = 0;
+
+    histogram.render(data, sizeX, sizeY, g1, g2, margin);
     logMessage("gb5");
 
     backgroundBitmap = new wxBitmap(*image);

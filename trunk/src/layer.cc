@@ -26,7 +26,6 @@
 #include "preset.h"
 #include "color_space_utils.h"
 
-//deLayer::deLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack)
 deLayer::deLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
 {

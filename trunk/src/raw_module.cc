@@ -46,6 +46,7 @@ bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image, deC
 {
     if (loader)
     {
+        logError("can't load RAW - loader already active");
         return false;
     }
 
@@ -69,7 +70,17 @@ bool deRawModule::updateRawLoading(bool& failure)
         return false;
     }
 
+    if (failure)
+    {
+        logError("failure detected before load ?!");
+    }
+
     bool result = loader->load(failure);
+
+    if (failure)
+    {
+        logError("failure detected in deRawModule");
+    }
 
     if ((result) || (failure))
     {

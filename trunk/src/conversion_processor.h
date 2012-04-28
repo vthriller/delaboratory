@@ -28,13 +28,21 @@ class deChannelManager;
 #define CPU_REGISTER_CMYK_KEY_SUB 1
 #define CPU_REGISTER_CMYK_KEY_MAX 2
 #define CPU_REGISTER_CMYK_MIN_SUM 3
+#define CPU_REGISTER_BW_MIXER_R 4
+#define CPU_REGISTER_BW_MIXER_G 5
+#define CPU_REGISTER_BW_MIXER_B 6
+#define CPU_REGISTER_CONTRAST 7
+#define CPU_REGISTER_SATURATION 8
 
-#define CPU_REGISTERS 4
+#define CPU_REGISTERS 9
+
 
 class deConversionCPU
 {
     private:
     public:
+        typedef void (*deFunction)(deConversionCPU& cpu);
+
         deValue* input;
         deValue* output;
         deValue* registers;
@@ -43,6 +51,17 @@ class deConversionCPU
         virtual ~deConversionCPU();
 
         void switchIO();
+        void incOverflow();
+
+        void convertImage3x3(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
+        void convertImage3x4(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
+        void convertImage4x3(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
+        void convertImage3x1(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
+        void convertImage1x3(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
+
+        bool renderImage1(const deImage& image, deConversionCPU::deFunction f, unsigned char* data);
+        bool renderImage3(const deImage& image, deConversionCPU::deFunction f, unsigned char* data);
+        bool renderImage4(const deImage& image, deConversionCPU::deFunction f, unsigned char* data);
 
 };
 
@@ -55,13 +74,23 @@ class deConversionProcessor
         deConversionProcessor();
         virtual ~deConversionProcessor();
 
-        void convertImage(const deImage& sourceImage, deImage& image, deChannelManager& channelManager);
-        bool renderImageToRGB(const deImage& image, unsigned char* data, deChannelManager& channelManager);
+        void convertImage(const deImage& sourceImage, deImage& image, deConversionCPU& cpu);
+
+        int convertImageNew(const deImage& sourceImage, deImage& image);
+        bool renderImageToRGBNew(const deImage& image, unsigned char* data);
         bool convertPixel(const deImage& image, int p, deColorSpace colorSpace, deValue &v1, deValue& v2, deValue& v3, deValue& v4);
         bool convertToRGB(deValue v1, deValue v2, deValue v3, deValue v4, deColorSpace colorSpace, deValue &rr, deValue& gg, deValue& bb);
         bool convertToLAB(deValue v1, deValue v2, deValue v3, deValue v4, deColorSpace colorSpace, deValue &rr, deValue& gg, deValue& bb);
 
 };
 
+
+
+void rgb2cmy(deConversionCPU& cpu);
+void cmy2rgb(deConversionCPU& cpu);
+void cmy2cmyk(deConversionCPU& cpu);
+void cmyk2cmy(deConversionCPU& cpu);
+void rgb2prophoto(deConversionCPU& cpu);
+void prophoto2rgb(deConversionCPU& cpu);
 
 #endif

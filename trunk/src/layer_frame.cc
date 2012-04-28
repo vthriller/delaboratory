@@ -17,20 +17,21 @@
 */
 
 #include "layer_frame.h"
+#include "layer_frame_manager.h"
 
-deLayerFrame::deLayerFrame(wxWindow *parent, deBaseLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex)
-:deFrame(parent, name),
+deLayerFrameOld::deLayerFrameOld(wxWindow *parent, deBaseLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex)
+:deFrameOld(parent, name),
 layer(_layer),
 frameManager(_frameManager),
 layerIndex(_layerIndex)
 {
 }
 
-deLayerFrame::~deLayerFrame()
+deLayerFrameOld::~deLayerFrameOld()
 {
 }
 
-bool deLayerFrame::checkIndex(int index)
+bool deLayerFrameOld::checkIndex(int index)
 {
     if (layerIndex == index)
     {
@@ -38,4 +39,15 @@ bool deLayerFrame::checkIndex(int index)
     }
 
     return false;
+}
+
+deLayerFrame::deLayerFrame(deWindow& parent, const std::string& name, deBaseLayer& _layer, deLayerFrameManager& _frameManager, int _index)
+:deFrame(parent, name), layer(_layer), frameManager(_frameManager), index(_index)
+{
+    frameManager.addLayerFrame(index, this);
+}
+
+deLayerFrame::~deLayerFrame()
+{
+    frameManager.removeLayerFrame(index);
 }

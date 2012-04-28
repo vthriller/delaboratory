@@ -23,8 +23,6 @@
 #include <list>
 #include "value.h"
 
-class deChannel;
-
 class deHistogram
 {
     private:
@@ -35,14 +33,17 @@ class deHistogram
         virtual ~deHistogram();
 
         void put(deValue value);
-        void calc(const deChannel* channel, int n);
+        void calc(const deValue* pixels, int n);
         int get(int bar) const;
         void clear();
 
         int getMax() const;
         int getSize() const;
 
-        bool render(unsigned char* data, int sizeW, int sizeH, unsigned char g1, unsigned char g2);
+        bool render(unsigned char* data, int sizeW, int sizeH, unsigned char g1, unsigned char g2, int margin);
+
+        deValue getLeft(deValue min) const;
+        deValue getRight(deValue min) const;
 
 };
 

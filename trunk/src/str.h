@@ -44,4 +44,6 @@ bool getBool(const std::string& s);
 
 std::string getTmp();
 
+std::string insertIndex(const std::string& s, int index);
+
 #endif

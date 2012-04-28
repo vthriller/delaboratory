@@ -24,7 +24,7 @@
 #include "str.h"
 #include "color_space_utils.h"
 
-class deMixerSlider:public deSlider
+class deMixerSlider:public deSliderOld
 {
     private:
         deMixerLayer& layer;
@@ -35,7 +35,7 @@ class deMixerSlider:public deSlider
 
     public:
         deMixerSlider(wxWindow *parent, int range, deMixerLayer& _layer, int _s, int _d, const std::string& name, deLayerProcessor& _layerProcessor, int _layerIndex)
-        :deSlider(parent, name, range, -2.0, 2.0, 0.0), layer(_layer), s(_s), d(_d),
+        :deSliderOld(parent, name, range, -2.0, 2.0, 0.0), layer(_layer), s(_s), d(_d),
          layerProcessor(_layerProcessor), layerIndex(_layerIndex)
         {
             setValue(layer.getWeight(s, d));

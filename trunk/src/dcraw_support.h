@@ -25,6 +25,7 @@ class deStaticImage;
 #include <wx/wx.h>
 
 std::string getDcrawVersion();
+std::string getRawInfo(const std::string& f);
 
 class deRawLoader
 {

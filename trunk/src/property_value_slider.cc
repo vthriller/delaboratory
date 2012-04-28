@@ -21,12 +21,12 @@
 #include "layer_processor.h"
 
 dePropertyValueSlider::dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayerProcessor& _layerProcessor, int _layerIndex)
-:deSlider(parent, _property.getLabel(), _sliderRange, _property.getMin(), _property.getMax(), _property.getDefault()),
+:deSliderOld(parent, _property.getLabel(), _sliderRange, _property.getMin(), _property.getMax(), _property.getDefault()),
 property(_property),
 layerProcessor(_layerProcessor),
 layerIndex(_layerIndex)
 {
-    channel = property.getChannel();
+    channel = property.getChannelInProperty();
     setFromProperty();
 }
 

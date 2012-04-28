@@ -32,6 +32,8 @@ class deHistogramPanel:public wxPanel
         deRenderedImage renderedImage;
         int channel;
         bool generated;
+        int width;
+        int margin;
 
         void paintEvent(wxPaintEvent & evt);
         void render(deCanvas& canvas);
@@ -39,7 +41,7 @@ class deHistogramPanel:public wxPanel
         DECLARE_EVENT_TABLE()
 
     public:
-        deHistogramPanel(wxWindow* parent, deProject* _project);
+        deHistogramPanel(wxWindow* parent, deProject* _project, int _width, int _margin);
         virtual ~deHistogramPanel();
 
         void generateHistogram();

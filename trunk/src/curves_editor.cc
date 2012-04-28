@@ -39,7 +39,7 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deLayer& _layer, deLayerProcess
     int range = 250;
 
     deLayerWithBlending& lwb  = dynamic_cast<deLayerWithBlending&>(_layer);
-    deSlider* alphaSlider = new deOpacitySlider(this, range, lwb, _layerProcessor, layerIndex);
+    deSliderOld* alphaSlider = new deOpacitySlider(this, range, lwb, _layerProcessor, layerIndex);
     sizer->Add(alphaSlider, 0);
 
 

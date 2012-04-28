@@ -54,6 +54,7 @@ class deCurve
         void movePoint(int p, deValue x, deValue y);
 
         void process(const deChannel& source, deChannel& destination, int n);
+        void process(const deValue* source, deValue* destination, int n);
 
         const deCurvePoints& getPoints() const;
         void getControlPoints(deCurvePoints& points) const;
@@ -71,6 +72,7 @@ class deCurve
         void fill(int n, deValue a, deValue r);
 
         void setContrastBrightness(deValue contrast, deValue brightness);
+        void setLevels(deValue min, deValue middle, deValue max);
 
         bool isNeutral() const;
 
