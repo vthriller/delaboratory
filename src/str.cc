@@ -18,6 +18,7 @@
 
 #include "str.h"
 #include <sstream>
+#include <wx/stdpaths.h>
 
 std::string getBaseName(const std::string& s)
 {
@@ -143,4 +144,19 @@ std::string insertIndex(const std::string& s, int index)
     std::string e = getExtension(s);
 
     return b + "_" + str(index) + "." + e;
+}
+
+std::string getUserConfigDir()
+{
+    wxStandardPathsBase& paths = wxStandardPaths::Get();
+
+    wxString ucd = paths.GetUserConfigDir();
+    std::string userConfigDir = str(ucd);
+#ifdef _WIN32
+    userConfigDir += "\\delaboratory";
+#else
+    userConfigDir += "/.delaboratory";
+#endif
+
+    return userConfigDir;
 }
