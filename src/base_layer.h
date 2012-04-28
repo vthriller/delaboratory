@@ -23,10 +23,13 @@
 #include "mutex.h"
 #include <libxml/parser.h>
 #include <string>
-#include <map>
+#include <vector>
 #include "image.h"
 class deChannelManager;
 class deViewManager;
+class deProperty;
+class dePreset;
+class dePropertyNumeric;
 
 enum deLayerProcessType
 {   
@@ -49,11 +52,17 @@ class deBaseLayer
         deChannelManager& channelManager;
         deImage mainLayerImage;
         bool errorOnUpdate;
+        std::string warning;
+
+        std::vector<deProperty*> properties;
+        std::vector<dePreset*> presets;
 
         virtual bool updateBlendAllChannels() {return false;};
         bool updateMainImageAllChannels();
         virtual bool updateMainImageNotThreadedWay() {return false;};
         virtual bool updateImage();
+
+        void createPropertyNumeric(const std::string& _name, deValue _min, deValue _max);
 
     public:
         deBaseLayer(deColorSpace _colorSpace, deChannelManager& _channelManager);
@@ -87,6 +96,23 @@ class deBaseLayer
 
         void setErrorOnUpdateFromThread();
 
+        std::string getWarning() const {return warning;};
+
+        deProperty* getProperty(const std::string& _name);
+        const deProperty* getProperty(const std::string& _name) const;
+
+        dePropertyNumeric* getPropertyNumeric(const std::string& _name);
+        const dePropertyNumeric* getPropertyNumeric(const std::string& _name) const;
+
+        void getProperties(std::vector<std::string>& names);
+
+        deValue getNumericValue(const std::string& name) const;
+
+        void applyPreset(const std::string& name);
+        void getPresets(std::vector<std::string>& names);
+        dePreset* createPreset(const std::string& name);
+
+        virtual void executeOperation(const std::string& o) {};
 
 };
 

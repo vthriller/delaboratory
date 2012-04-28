@@ -50,6 +50,13 @@ void deCanvasWX::setPen(int r, int g, int b)
     dc.SetPen(pen);
 }    
 
+void deCanvasWX::setBrush(int r, int g, int b)
+{
+    wxBrush brush(wxColour(r, g, b));
+
+    dc.SetBrush(brush);
+}    
+
 void deCanvasWX::drawBitmap(deBitmap& bitmap)
 {
     deBitmapWX& bitmapWX = dynamic_cast<deBitmapWX&>(bitmap);
@@ -60,3 +67,12 @@ void deCanvasWX::drawBitmap(deBitmap& bitmap)
         dc.DrawBitmap(*b, 0, 0, false);
     }            
 }    
+
+void deCanvasWX::drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3)
+{
+    wxPoint points[3];
+    points[0] = wxPoint(x1, y1);
+    points[1] = wxPoint(x2, y2);
+    points[2] = wxPoint(x3, y3);
+    dc.DrawPolygon(3, points);
+}                     

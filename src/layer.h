@@ -26,7 +26,6 @@
 #include "layer_with_blending.h"
 
 class deProject;
-class deFrame;
 class deBlendFrame;
 class deImage;
 class dePropertyValue;

@@ -24,14 +24,16 @@
 #include "value.h"
 #include "action_frame.h"
 
+class deLayerFrameOld;
 class deLayerFrame;
-class deFrame;
+class deFrameOld;
 
 class deLayerFrameManager
 {
     private:
-        std::list<deLayerFrame*> actionFrames;
-        std::list<deLayerFrame*> blendFrames;
+        std::map<int, deLayerFrame*> layerFrames;
+        std::list<deLayerFrameOld*> actionFrames;
+        std::list<deLayerFrameOld*> blendFrames;
         deLayerFrameManager(const deLayerFrameManager& );
         deLayerFrameManager& operator =(const deLayerFrameManager& );
 
@@ -39,12 +41,12 @@ class deLayerFrameManager
         deLayerFrameManager();
         virtual ~deLayerFrameManager();
 
-        void addActionFrame(deFrame* frame);
-        void removeActionFrame(deFrame* frame);
+        void addActionFrame(deFrameOld* frame);
+        void removeActionFrame(deFrameOld* frame);
         bool checkActionFrame(int index);
 
-        void addBlendFrame(deFrame* frame);
-        void removeBlendFrame(deFrame* frame);
+        void addBlendFrame(deFrameOld* frame);
+        void removeBlendFrame(deFrameOld* frame);
         bool checkBlendFrame(int index);
 
         void onDestroyLayer(int index);
@@ -58,6 +60,10 @@ class deLayerFrameManager
         void destroyAllFrames();
 
         void onUpdateProperties();
+
+        bool addLayerFrame(int index, deLayerFrame* frame);
+        bool removeLayerFrame(int index);
+        bool destroyLayerFrame(int index);
 
 };
 

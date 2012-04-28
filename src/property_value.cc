@@ -92,7 +92,7 @@ void dePropertyValue::setMin(deValue _min)
     min = _min;
 }
 
-void dePropertyValue::setChannel(int _channel)
+void dePropertyValue::setChannelInProperty(int _channel)
 {
     channel = _channel;
 }

@@ -49,8 +49,8 @@ class dePropertyValue:public deProperty
         void setMin(deValue _min);
         void setMax(deValue _max);
 
-        void setChannel(int _channel);
-        int getChannel() const {return channel;};
+        void setChannelInProperty(int _channel);
+        int getChannelInProperty() const {return channel;};
 };
 
 #endif

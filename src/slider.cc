@@ -19,21 +19,23 @@
 #include "slider.h"
 #include <sstream>
 #include "layer_processor.h"
+#include "panel_wx.h"
+#include "window_wx.h"
 
-void deSlider::updateValueFromSlider(bool finished)
+void deSliderOld::updateValueFromSlider(bool finished)
 {
     deValue v = valueMin + slider->GetValue() * ((valueMax-valueMin) / sliderRange);
     setEdit(v);
     onValueChange(v, finished);
 }
 
-void deSlider::setValue(deValue v)
+void deSliderOld::setValue(deValue v)
 {
     setEdit(v);
     setSlider(v);
 }
 
-void deSlider::setEdit(deValue v)
+void deSliderOld::setEdit(deValue v)
 {
     std::ostringstream oss;
     oss.str();
@@ -48,7 +50,7 @@ void deSlider::setEdit(deValue v)
     }
 }
 
-void deSlider::setSlider(deValue v)
+void deSliderOld::setSlider(deValue v)
 {
     if (sliderRange == 0)
     {
@@ -70,17 +72,17 @@ void deSlider::setSlider(deValue v)
     slider->SetValue(sl);
 }
 
-void deSlider::moveSlider(wxCommandEvent &event)
+void deSliderOld::moveSlider(wxCommandEvent &event)
 {
     updateValueFromSlider(false);
 }
 
-void deSlider::finishMoveSlider(wxCommandEvent &event)
+void deSliderOld::finishMoveSlider(wxCommandEvent &event)
 {
     updateValueFromSlider(true);
 }
 
-deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue _defaultValue)
+deSliderOld::deSliderOld(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue _defaultValue)
 :wxPanel(parent), sliderRange(_sliderRange), valueMin(_valueMin), valueMax(_valueMax), defaultValue(_defaultValue)
 {
     sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -106,17 +108,17 @@ deSlider::deSlider(wxWindow *parent, const std::string& labelString, int _slider
 
     SetSizer(sizer);
 
-    Connect(wxEVT_SCROLL_THUMBTRACK, wxCommandEventHandler(deSlider::moveSlider));
-    Connect(wxEVT_SCROLL_CHANGED, wxCommandEventHandler(deSlider::finishMoveSlider));
-    Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deSlider::click));
+    Connect(wxEVT_SCROLL_THUMBTRACK, wxCommandEventHandler(deSliderOld::moveSlider));
+    Connect(wxEVT_SCROLL_CHANGED, wxCommandEventHandler(deSliderOld::finishMoveSlider));
+    Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deSliderOld::click));
 
 }
 
-deSlider::~deSlider()
+deSliderOld::~deSliderOld()
 {
 }
 
-void deSlider::click(wxCommandEvent &event)
+void deSliderOld::click(wxCommandEvent &event)
 {
     int id = event.GetId();
 
@@ -126,3 +128,127 @@ void deSlider::click(wxCommandEvent &event)
         onValueChange(defaultValue, true);
     }
 }            
+
+class deSliderImpl:public dePanelWX
+{
+    private:
+        deSlider& parent;
+        wxSlider* slider;
+        wxStaticText* labelValue;
+        deValue min;
+        deValue max;
+        deValue width;
+    public:
+        deSliderImpl(deSlider& _parent, deWindow& _parentWindow, const std::string& _name, deValue _min, deValue _max, int _width, int widthn, int widthl)
+        :dePanelWX(_parentWindow), parent(_parent), min(_min), max(_max), width(_width)
+        {
+            wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+            SetSizer(sizer);
+
+            if (_name.size() > 0)
+            {
+                wxStaticText* label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(_name.c_str()), wxDefaultPosition, wxSize(widthn, 30));
+                sizer->Add(label, 0, wxCENTER);
+            }
+
+            slider = new wxSlider(this, wxID_ANY, _width, 0,  _width, wxDefaultPosition, wxSize(_width, -1), wxSL_HORIZONTAL);
+            sizer->Add(slider, 0);
+
+            labelValue = new wxStaticText(this, wxID_ANY, _T("inv"), wxDefaultPosition, wxSize(widthl, 30));
+            sizer->Add(labelValue, 0, wxCENTER);
+
+            Connect(wxEVT_SCROLL_THUMBTRACK, wxCommandEventHandler(deSliderImpl::moveSlider));
+            Connect(wxEVT_SCROLL_CHANGED, wxCommandEventHandler(deSliderImpl::finishMoveSlider));
+        }
+
+        virtual ~deSliderImpl()
+        {
+        }
+
+        void moveSlider(wxCommandEvent &event)
+        {
+            updateValueFromSlider(false);
+        }
+
+        void finishMoveSlider(wxCommandEvent &event)
+        {
+            updateValueFromSlider(true);
+        }
+
+        void updateValueFromSlider(bool finished)
+        {
+            deValue v = min + slider->GetValue() * ((max - min) / width);
+            setLabelValue(v);
+            parent.onValueChange(v, finished);
+        }
+
+        void setLabelValue(deValue v)
+        {
+            std::ostringstream oss;
+            oss.str();
+            oss << v;
+            if (labelValue)
+            {
+                std::string s = oss.str();
+                labelValue->SetLabel(wxString::FromAscii(oss.str().c_str()));
+            }
+        }
+
+        void setValue(deValue v)
+        {
+            setLabelValue(v);
+            setSlider(v);
+        }
+
+        void setSlider(deValue v)
+        {
+            if (width == 0)
+            {
+                return;
+            }
+
+            if (max == min)
+            {
+                return;
+            }
+
+            deValue sl = (v - min) / ((max-min) / width);
+
+            slider->SetValue(sl);
+        }
+
+};
+
+deSlider::deSlider(deWindow& window, const std::string& _name, deValue _min, deValue _max, int _width, int widthn, int widthl)
+{
+    deWindowWX* w = dynamic_cast<deWindowWX*>(&window);
+    if (w)
+    {
+        impl = new deSliderImpl(*this, window, _name, _min, _max, _width, widthn, widthl);
+    }
+    else
+    {
+        impl = NULL;
+    }
+}
+
+deSlider::~deSlider()
+{
+    if (impl)
+    {
+        delete impl;
+    }        
+}
+
+void deSlider::setValue(deValue v)
+{
+    if (impl)
+    {
+        impl->setValue(v);
+    }        
+}
+
+deWindow& deSlider::getWindow()
+{
+    return impl->getWindow();
+}

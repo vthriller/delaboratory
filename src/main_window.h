@@ -48,6 +48,7 @@ class deMainWindow
         void setImageName(const std::string& _imageName, const deSize& _size);
         void startRawTimer();
         void stopRawTimer();
+        void updateWarning();
 
 };
 

@@ -21,7 +21,7 @@
 #include "layer_processor.h"
 
 deOpacitySlider::deOpacitySlider(wxWindow *parent, int range, deLayerWithBlending& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
-:deSlider(parent, "opacity", range, 0.0, 1.0, 1.0), layer(_layer),
+:deSliderOld(parent, "opacity", range, 0.0, 1.0, 1.0), layer(_layer),
 layerProcessor(_layerProcessor), layerIndex(_layerIndex)
 {
     setValue(layer.getOpacity());

@@ -54,6 +54,7 @@ bitmapSize(0,0)
     logMessage("create rendered image");
     renderedBitmap = new deBitmapWX();
     internalData = NULL;
+    error = false;
 }
 
 deRenderedImage::~deRenderedImage()
@@ -71,6 +72,12 @@ deRenderedImage::~deRenderedImage()
 
 bool deRenderedImage::render(deCanvas& canvas)
 {
+    if (error)
+    {
+        logMessage("ERROR can't render");
+        return false;
+    }
+
     if (!internalData)
     {
         logMessage("ERROR can't render - no internal data");

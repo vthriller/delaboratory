@@ -21,15 +21,71 @@
 #include "layer_processor.h"
 #include "layer_stack.h"
 #include "conversion_processor.h"
+#include "str.h"
+#include "preset.h"
+#include "films.h"
 
-deConversionLayer::deConversionLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
+deConversionLayer::deConversionLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack)
 :deBaseLayerWithSource( _colorSpace, _channelManager, _sourceLayer, _layerStack)
 {
+    dePreset* reset = createPreset("reset");
+
+    deColorSpace scs = getSourceColorSpace();
+
+    if ((scs == deColorSpaceProPhoto) || (scs == deColorSpaceLAB) || (scs == deColorSpaceLCH))
+    {
+        createPropertyNumeric("contrast", 0, 1);
+        reset->addNumericValue("contrast", 1);
+    }
+
+    if ((scs == deColorSpaceLAB) || (scs == deColorSpaceLCH))
+    {
+        createPropertyNumeric("saturation", 0, 1);
+        reset->addNumericValue("saturation", 1);
+    }
+
+    if (colorSpace == deColorSpaceCMYK)
+    {
+        createPropertyNumeric("GCR substract", 0, 1);
+        reset->addNumericValue("GCR substract", 0.25);
+        createPropertyNumeric("GCR Key max", 0, 1);
+        reset->addNumericValue("GCR Key max", 1.0);
+        createPropertyNumeric("GCR CMY min", 0, 3);
+        reset->addNumericValue("GCR CMY min", 1.0);
+    }
+
+    if (colorSpace == deColorSpaceBW)
+    {
+        createPropertyNumeric("mixer red", -3, 3);
+        reset->addNumericValue("mixer red", 0.3);
+        createPropertyNumeric("mixer green", -3, 3);
+        reset->addNumericValue("mixer green", 0.6);
+        createPropertyNumeric("mixer blue", -3, 3);
+        reset->addNumericValue("mixer blue", 0.1);
+
+    //    addFilms();
+    }
+
+    applyPreset("reset");
 
 }
 
 deConversionLayer::~deConversionLayer()
 {
+}
+
+void deConversionLayer::addFilms()
+{
+    std::vector<deFilm> films;
+    getFilms(films);
+
+    std::vector<deFilm>::iterator i;
+    for (i = films.begin(); i != films.end(); i++)
+    {
+        deFilm& f = *i;
+        dePreset* p = createPreset(f.getName());
+
+    }
 }
 
 bool deConversionLayer::updateMainImageNotThreadedWay()
@@ -39,8 +95,39 @@ bool deConversionLayer::updateMainImageNotThreadedWay()
     mainLayerImage.enableAllChannels();
 
     deConversionProcessor p;
-    p.convertImage(getSourceImage(), mainLayerImage, channelManager);
 
+    dePropertyNumeric* sub = getPropertyNumeric("GCR substract");
+    if (sub)
+    {
+    }
+
+    deConversionCPU cpu(4);
+
+    cpu.registers[CPU_REGISTER_OVERFLOW] = 0;
+    cpu.registers[CPU_REGISTER_CMYK_KEY_SUB] = getNumericValue("GCR substract");
+    cpu.registers[CPU_REGISTER_CMYK_KEY_MAX] = getNumericValue("GCR Key max");
+    cpu.registers[CPU_REGISTER_CMYK_MIN_SUM] = getNumericValue("GCR CMY min");
+    cpu.registers[CPU_REGISTER_BW_MIXER_R] = getNumericValue("mixer red");
+    cpu.registers[CPU_REGISTER_BW_MIXER_G] = getNumericValue("mixer green");
+    cpu.registers[CPU_REGISTER_BW_MIXER_B] = getNumericValue("mixer blue");
+    cpu.registers[CPU_REGISTER_CONTRAST] = getNumericValue("contrast");
+    cpu.registers[CPU_REGISTER_SATURATION] = getNumericValue("saturation");
+
+    p.convertImage(getSourceImage(), mainLayerImage, cpu);
+
+    deValue overflow = cpu.registers[CPU_REGISTER_OVERFLOW];
+    int n = getSourceImage().getChannelSize().getN();
+    int percentage = overflow * 10000 / n;
+
+    if (percentage == 0)
+    {
+        warning = "OK";
+    }
+    else 
+    {
+        deValue p = percentage / 100.0;
+        warning = "conversion OVERFLOW " + str(p) + "%";
+    }
     logMessage("conversion end");
 
     return true;

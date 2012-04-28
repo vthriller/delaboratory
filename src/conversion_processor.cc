@@ -26,6 +26,20 @@
 
 #include "logger.h"
 
+#include "power.h"
+
+#include "str.h"
+
+static const deValue Xn  = 0.951;
+static const deValue Yn  = 1.0;
+static const deValue Zn  = 1.089;
+static const deValue c6_29 = 6.0 / 29.0;
+static const deValue c29_6 = 29.0 / 6.0;
+static const deValue c6_29_2 = c6_29 * c6_29;
+static const deValue c6_29_3 = c6_29 * c6_29 * c6_29;
+static const deValue c29_6_2 = c29_6 * c29_6;
+static const deValue c4_29 = 4.0 / 29.0;
+
 deConversionCPU::deConversionCPU(int size)
 {
     input = new deValue [size];
@@ -33,9 +47,13 @@ deConversionCPU::deConversionCPU(int size)
     registers = new deValue [CPU_REGISTERS];
 
     registers[CPU_REGISTER_OVERFLOW] = 0;
-    registers[CPU_REGISTER_CMYK_KEY_SUB] = 0;
-    registers[CPU_REGISTER_CMYK_KEY_MAX] = 1.0;
-    registers[CPU_REGISTER_CMYK_MIN_SUM] = 0.0;
+    registers[CPU_REGISTER_CMYK_KEY_SUB] = 0.25;
+    registers[CPU_REGISTER_CMYK_KEY_MAX] = 0.8;
+    registers[CPU_REGISTER_CMYK_MIN_SUM] = 1.0;
+    registers[CPU_REGISTER_BW_MIXER_R] = 0.3;
+    registers[CPU_REGISTER_BW_MIXER_G] = 0.6;
+    registers[CPU_REGISTER_BW_MIXER_B] = 0.1;
+    registers[CPU_REGISTER_CONTRAST] = 1.0;
 }
 
 deConversionCPU::~deConversionCPU()
@@ -52,11 +70,356 @@ void deConversionCPU::switchIO()
     output = a;
 }
 
+void deConversionCPU::incOverflow()
+{
+    registers[CPU_REGISTER_OVERFLOW] ++;
+}
+
+bool deConversionCPU::renderImage1(const deImage& image, deConversionCPU::deFunction f, unsigned char* data)
+{
+    int n = image.getChannelSize().getN();
+
+    const deValue* s0 = image.getValues(0);
+    if (!s0)
+    {
+        return false;
+    }
+
+    int i;
+    int pos = 0;
+
+    for (i = 0; i < n; i++)
+    {
+        input[0] = s0[i];
+
+        f(*this);
+
+        unsigned char r = 255 * output[0];
+        data[pos] = r;
+        pos++;
+        unsigned char g = 255 * output[1];
+        data[pos] = g;
+        pos++;
+        unsigned char b = 255 * output[2];
+        data[pos] = b;
+        pos++;
+    }
+
+    return true;
+}    
+
+bool deConversionCPU::renderImage3(const deImage& image, deConversionCPU::deFunction f, unsigned char* data)
+{
+    int n = image.getChannelSize().getN();
+
+    const deValue* s0 = image.getValues(0);
+    if (!s0)
+    {
+        return false;
+    }
+    const deValue* s1 = image.getValues(1);
+    if (!s1)
+    {
+        return false;
+    }
+    const deValue* s2 = image.getValues(2);
+    if (!s2)
+    {
+        return false;
+    }
+
+    int i;
+    int pos = 0;
+
+    for (i = 0; i < n; i++)
+    {
+        input[0] = s0[i];
+        input[1] = s1[i];
+        input[2] = s2[i];
+
+        f(*this);
+
+        unsigned char r = 255 * output[0];
+        data[pos] = r;
+        pos++;
+        unsigned char g = 255 * output[1];
+        data[pos] = g;
+        pos++;
+        unsigned char b = 255 * output[2];
+        data[pos] = b;
+        pos++;
+    }
+
+    return true;
+}    
+
+bool deConversionCPU::renderImage4(const deImage& image, deConversionCPU::deFunction f, unsigned char* data)
+{
+    int n = image.getChannelSize().getN();
+
+    const deValue* s0 = image.getValues(0);
+    if (!s0)
+    {
+        return false;
+    }
+    const deValue* s1 = image.getValues(1);
+    if (!s1)
+    {
+        return false;
+    }
+    const deValue* s2 = image.getValues(2);
+    if (!s2)
+    {
+        return false;
+    }
+    const deValue* s3 = image.getValues(3);
+    if (!s3)
+    {
+        return false;
+    }
+
+    int i;
+    int pos = 0;
+
+    for (i = 0; i < n; i++)
+    {
+        input[0] = s0[i];
+        input[1] = s1[i];
+        input[2] = s2[i];
+        input[3] = s3[i];
+
+        f(*this);
+
+        unsigned char r = 255 * output[0];
+        data[pos] = r;
+        pos++;
+        unsigned char g = 255 * output[1];
+        data[pos] = g;
+        pos++;
+        unsigned char b = 255 * output[2];
+        data[pos] = b;
+        pos++;
+    }
+
+    return true;
+}    
+
+void deConversionCPU::convertImage3x3(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+{
+    int n = sourceImage.getChannelSize().getN();
+
+    const deValue* s0 = sourceImage.getValues(0);
+    const deValue* s1 = sourceImage.getValues(1);
+    const deValue* s2 = sourceImage.getValues(2);
+
+    deValue* d0 = image.getValues(0);
+    deValue* d1 = image.getValues(1);
+    deValue* d2 = image.getValues(2);
+
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        input[0] = s0[i];
+        input[1] = s1[i];
+        input[2] = s2[i];
+
+        f1(*this);
+        f2(*this);
+
+        d0[i] = output[0];
+        d1[i] = output[1];
+        d2[i] = output[2];
+    }
+}
+
+void deConversionCPU::convertImage3x4(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+{
+    int n = sourceImage.getChannelSize().getN();
+
+    const deValue* s0 = sourceImage.getValues(0);
+    const deValue* s1 = sourceImage.getValues(1);
+    const deValue* s2 = sourceImage.getValues(2);
+
+    deValue* d0 = image.getValues(0);
+    deValue* d1 = image.getValues(1);
+    deValue* d2 = image.getValues(2);
+    deValue* d3 = image.getValues(3);
+
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        input[0] = s0[i];
+        input[1] = s1[i];
+        input[2] = s2[i];
+
+        f1(*this);
+        f2(*this);
+
+        d0[i] = output[0];
+        d1[i] = output[1];
+        d2[i] = output[2];
+        d3[i] = output[3];
+    }
+}
+
+void deConversionCPU::convertImage3x1(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+{
+    int n = sourceImage.getChannelSize().getN();
+
+    const deValue* s0 = sourceImage.getValues(0);
+    const deValue* s1 = sourceImage.getValues(1);
+    const deValue* s2 = sourceImage.getValues(2);
+
+    deValue* d0 = image.getValues(0);
+
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        input[0] = s0[i];
+        input[1] = s1[i];
+        input[2] = s2[i];
+
+        f1(*this);
+        f2(*this);
+
+        d0[i] = output[0];
+    }
+}
+
+void deConversionCPU::convertImage4x3(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+{
+    int n = sourceImage.getChannelSize().getN();
+
+    const deValue* s0 = sourceImage.getValues(0);
+    const deValue* s1 = sourceImage.getValues(1);
+    const deValue* s2 = sourceImage.getValues(2);
+    const deValue* s3 = sourceImage.getValues(3);
+
+    deValue* d0 = image.getValues(0);
+    deValue* d1 = image.getValues(1);
+    deValue* d2 = image.getValues(2);
+
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        input[0] = s0[i];
+        input[1] = s1[i];
+        input[2] = s2[i];
+        input[3] = s3[i];
+
+        f1(*this);
+        f2(*this);
+
+        d0[i] = output[0];
+        d1[i] = output[1];
+        d2[i] = output[2];
+    }
+}
+
+void deConversionCPU::convertImage1x3(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+{
+    int n = sourceImage.getChannelSize().getN();
+
+    const deValue* s0 = sourceImage.getValues(0);
+
+    deValue* d0 = image.getValues(0);
+    deValue* d1 = image.getValues(1);
+    deValue* d2 = image.getValues(2);
+
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        input[0] = s0[i];
+
+        f1(*this);
+        f2(*this);
+
+        d0[i] = output[0];
+        d1[i] = output[1];
+        d2[i] = output[2];
+    }
+}
+
+void empty(deConversionCPU& cpu)
+{
+}
+
+void applyContrastRGB(deConversionCPU& cpu)
+{
+    deValue a = cpu.registers[CPU_REGISTER_CONTRAST];
+    deValue b = 0.5 - 0.5 * a;
+
+    cpu.input[0] = a * cpu.input[0] + b;
+    cpu.input[1] = a * cpu.input[1] + b;
+    cpu.input[2] = a * cpu.input[2] + b;
+}
+
+void applyContrastSaturationLAB(deConversionCPU& cpu)
+{
+    deValue a1 = cpu.registers[CPU_REGISTER_CONTRAST];
+    deValue b1 = 0.5 - 0.5 * a1;
+    deValue a2 = cpu.registers[CPU_REGISTER_SATURATION];
+    deValue b2 = 0.5 - 0.5 * a2;
+
+    cpu.input[0] = a1 * cpu.input[0] + b1;
+    cpu.input[1] = a2 * cpu.input[1] + b2;
+    cpu.input[2] = a2 * cpu.input[2] + b2;
+}
+
+void applyContrastSaturationLCH(deConversionCPU& cpu)
+{
+    deValue a1 = cpu.registers[CPU_REGISTER_CONTRAST];
+    deValue b1 = 0.5 - 0.5 * a1;
+    deValue a2 = cpu.registers[CPU_REGISTER_SATURATION];
+
+    cpu.input[0] = a1 * cpu.input[0] + b1;
+    cpu.input[1] = a2 * cpu.input[1];
+}
+
 void rgb2cmy(deConversionCPU& cpu)
 {
     cpu.output[0] = 1.0 - cpu.input[0];
     cpu.output[1] = 1.0 - cpu.input[1];
     cpu.output[2] = 1.0 - cpu.input[2];
+}
+
+void bw2rgb(deConversionCPU& cpu)
+{
+    deValue bw = cpu.input[0];
+    cpu.output[0] = bw;
+    cpu.output[1] = bw;
+    cpu.output[2] = bw;
+}
+
+void rgb2bw(deConversionCPU& cpu)
+{
+    deValue r = cpu.input[0];
+    deValue g = cpu.input[1];
+    deValue b = cpu.input[2];
+
+    deValue mr = cpu.registers[CPU_REGISTER_BW_MIXER_R];
+    deValue mg = cpu.registers[CPU_REGISTER_BW_MIXER_G];
+    deValue mb = cpu.registers[CPU_REGISTER_BW_MIXER_B];
+
+    deValue bw = mr * r + mg * g + mb * b;
+
+    if (bw < 0)
+    {
+        bw = 0;
+        cpu.incOverflow();
+    }
+    else if (bw > 1)
+    {
+        bw = 1;
+        cpu.incOverflow();
+    }
+
+    cpu.output[0] = bw;
 }
 
 void cmy2rgb(deConversionCPU& cpu)
@@ -136,483 +499,472 @@ void cmyk2cmy(deConversionCPU& cpu)
     cpu.output[2] = y;
 }
 
-bool deConversionProcessor::renderImageToRGB(const deImage& image, unsigned char* data, deChannelManager& channelManager)
+void rgb2prophoto(deConversionCPU& cpu)
 {
-    deColorSpace colorSpace = image.getColorSpace();
+    /*
+         from dcraw
 
-    deConversion3x3 conversion3x3 = getConversion3x3(colorSpace, deColorSpaceRGB);
-    deConversion4x3 conversion4x3 = NULL;
-    deConversion1x3 conversion1x3 = NULL;
-    if (!conversion3x3)
+    octave:1> x = [0.529317, 0.330092, 0.140588; 0.098368, 0.873465, 0.028169; 0.016879, 0.117663, 0.865457]
+    x =
+
+       0.529317   0.330092   0.140588
+       0.098368   0.873465   0.028169
+       0.016879   0.117663   0.865457
+
+    */
+
+
+    deValue r = cpu.input[0];
+    deValue g = cpu.input[1];
+    deValue b = cpu.input[2];
+
+    cpu.output[0] = 0.529317 * r + 0.330092 * g + 0.140588 * b;
+    cpu.output[1] = 0.098368 * r + 0.873465 * g + 0.028169 * b;
+    cpu.output[2] = 0.016879 * r + 0.117663 * g + 0.865457 * b;
+
+}
+
+void prophoto2rgb(deConversionCPU& cpu)
+{
+
+    /*
+        invert matrix from dcraw
+
+    octave:2> inv(x)
+    ans =
+
+       2.0341926  -0.7274198  -0.3067655
+      -0.2288108   1.2317292  -0.0029216
+      -0.0085649  -0.1532726   1.1618390
+
+    */
+
+    deValue pr = cpu.input[0];
+    deValue pg = cpu.input[1];
+    deValue pb = cpu.input[2];
+
+    deValue r =  2.0341926 * pr -0.7274198  * pg -0.3067655 * pb;
+    deValue g = -0.2288108 * pr + 1.2317292 * pg -0.0029216 * pb;
+    deValue b = -0.0085649 * pr -0.1532726  * pg + 1.1618390 * pb;
+
+    if (r < 0)
     {
-        conversion4x3 = getConversion4x3(colorSpace, deColorSpaceRGB);
-        if (!conversion4x3)
-        {
-            conversion1x3 = getConversion1x3(colorSpace, deColorSpaceRGB);
-            if (!conversion1x3)
-            {
-                logError("no conversion found");
-                return false;
-            }            
-        }            
+        r = 0;
+        cpu.incOverflow();
+    }
+    else if (r > 1)
+    {
+        r = 1;
+        cpu.incOverflow();
+    }
+    if (g < 0)
+    {
+        g = 0;
+        cpu.incOverflow();
+    }
+    else if (g > 1)
+    {
+        g = 1;
+        cpu.incOverflow();
+    }
+    if (b < 0)
+    {
+        b = 0;
+        cpu.incOverflow();
+    }
+    else if (b > 1)
+    {
+        b = 1;
+        cpu.incOverflow();
     }
 
-    const deSize& s = image.getChannelSize();
+    cpu.output[0] = r;
+    cpu.output[1] = g;
+    cpu.output[2] = b;
 
-    deChannel* channel0 = channelManager.getChannel(image.getChannelIndex(0));
-    deChannel* channel1 = channelManager.getChannel(image.getChannelIndex(1));
-    deChannel* channel2 = channelManager.getChannel(image.getChannelIndex(2));
-    deChannel* channel3 = channelManager.getChannel(image.getChannelIndex(3));
+}
 
-    if (conversion4x3)
+void prophoto2xyz(deConversionCPU& cpu)
+{
+
+    /*
+
+    octave:7> z
+    z =
+
+       2.0341926  -0.7274198  -0.3067655
+      -0.2288108   1.2317292  -0.0029216
+      -0.0085649  -0.1532726   1.1618390
+
+    octave:8> y
+    y =
+
+       0.412400   0.357600   0.180500
+       0.212600   0.715200   0.072200
+       0.019300   0.119200   0.950500
+
+    octave:10> y * z
+    ans =
+
+       0.7555323   0.1128127   0.0821571
+       0.2682055   0.7152170   0.0165769
+       0.0038447  -0.0129027   1.0980591
+
+    */
+
+    deValue pr = cpu.input[0];
+    deValue pg = cpu.input[1];
+    deValue pb = cpu.input[2];
+
+    cpu.output[0] = 0.7555323 * pr + 0.1128127* pg + 0.0821571* pb;
+    cpu.output[1] = 0.2682055 * pr + 0.7152170* pg + 0.0165769* pb;
+    cpu.output[2] = 0.0038447 * pr -0.0129027 * pg + 1.0980591* pb;
+
+}
+
+void rgb2xyz(deConversionCPU& cpu)
+{
+    deValue r = cpu.input[0];
+    deValue g = cpu.input[1];
+    deValue b = cpu.input[2];
+
+    cpu.output[0] = 0.4124 * r + 0.3576 * g + 0.1805 * b;
+    cpu.output[1] = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    cpu.output[2] = 0.0193 * r + 0.1192 * g + 0.9505 * b;
+
+}
+
+void xyz2rgb(deConversionCPU& cpu)
+{
+    deValue x = cpu.input[0];
+    deValue y = cpu.input[1];
+    deValue z = cpu.input[2];
+
+    deValue r =  3.2410 * x - 1.5374 * y - 0.4986 * z;
+    deValue g = -0.9692 * x + 1.8760 * y + 0.0416 * z;
+    deValue b =  0.0556 * x - 0.2040 * y + 1.0570 * z;
+
+    if (r < 0)
     {
-        if (!channel0)
-        {
-            return false;
-        }
-        if (!channel1)
-        {
-            return false;
-        }
-        if (!channel2)
-        {
-            return false;
-        }
-        if (!channel3)
-        {
-            return false;
-        }
-        channel0->lockRead();
-        channel1->lockRead();
-        channel2->lockRead();
-        channel3->lockRead();
-    }        
-    else if (conversion1x3)
+        r = 0;
+        cpu.incOverflow();
+    }
+    else if (r > 1)
     {
-        if (!channel0)
-        {
-            return false;
-        }
-        channel0->lockRead();
-    }        
+        r = 1;
+        cpu.incOverflow();
+    }
+    if (g < 0)
+    {
+        g = 0;
+        cpu.incOverflow();
+    }
+    else if (g > 1)
+    {
+        g = 1;
+        cpu.incOverflow();
+    }
+    if (b < 0)
+    {
+        b = 0;
+        cpu.incOverflow();
+    }
+    else if (b > 1)
+    {
+        b = 1;
+        cpu.incOverflow();
+    }
+
+    cpu.output[0] = r;
+    cpu.output[1] = g;
+    cpu.output[2] = b;
+}
+
+void xyz2lab(deConversionCPU& cpu)
+{
+    static dePower power(1.0 / 3.0, 2);
+
+    deValue xx = cpu.input[0] / Xn;    
+    deValue yy = cpu.input[1] / Yn;    
+    deValue zz = cpu.input[2] / Zn;    
+
+    deValue fx;
+    deValue fy;
+    deValue fz;
+
+    if (xx > c6_29_3)
+    {
+        fx = power.get(xx);
+    }
     else
     {
-        if (!channel0)
-        {
-            logError("no channel 0");
-            return false;
-        }
-        if (!channel1)
-        {
-            logError("no channel 1");
-            return false;
-        }
-        if (!channel2)
-        {
-            logError("no channel 2");
-            return false;
-        }
-        channel0->lockRead();
-        channel1->lockRead();
-        channel2->lockRead();
-    }        
-
-    deValue rr;
-    deValue gg;
-    deValue bb;
-
-    int n = s.getN();
-    int i;
-    int pos = 0;
-
-    if (conversion4x3)
-    {
-        const deValue* p0 = channel0->getPixels();
-        const deValue* p1 = channel1->getPixels();
-        const deValue* p2 = channel2->getPixels();
-        const deValue* p3 = channel3->getPixels();
-        for (i = 0; i < n; i++)
-        {
-            deValue s0 = p0[i];
-            deValue s1 = p1[i];
-            deValue s2 = p2[i];
-            deValue s3 = p3[i];
-            conversion4x3(s0, s1, s2, s3, rr, gg, bb);
-            
-            unsigned char r = 255 * rr;
-            data[pos] = r;
-            pos++;
-            unsigned char g = 255 * gg;
-            data[pos] = g;
-            pos++;
-            unsigned char b = 255 * bb;
-            data[pos] = b;
-            pos++;
-        }
-
-        channel0->unlockRead();
-        channel1->unlockRead();
-        channel2->unlockRead();
-        channel3->unlockRead();
-
+        fx = 1.0 / 3.0 * c29_6_2 * xx + c4_29;
     }
-    else if (conversion1x3)
-    {
-        const deValue* p0 = channel0->getPixels();
-        for (i = 0; i < n; i++)
-        {
-            deValue s0 = p0[i];
-            conversion1x3(s0, rr, gg, bb);
 
-            unsigned char r = 255 * rr;
-            data[pos] = r;
-            pos++;
-            unsigned char g = 255 * gg;
-            data[pos] = g;
-            pos++;
-            unsigned char b = 255 * bb;
-            data[pos] = b;
-            pos++;
-        }
-        channel0->unlockRead();
+    if (yy > c6_29_3)
+    {
+        fy = power.get(yy);
     }
     else
     {
-        const deValue* p0 = channel0->getPixels();
-        const deValue* p1 = channel1->getPixels();
-        const deValue* p2 = channel2->getPixels();
-        for (i = 0; i < n; i++)
-        {
-
-            deValue s1 = p0[i];
-            deValue s2 = p1[i];
-            deValue s3 = p2[i];
-            conversion3x3(s1, s2, s3, rr, gg, bb);
-
-            unsigned char r = 255 * rr;
-            data[pos] = r;
-            pos++;
-            unsigned char g = 255 * gg;
-            data[pos] = g;
-            pos++;
-            unsigned char b = 255 * bb;
-            data[pos] = b;
-            pos++;
-
-        }
-        channel0->unlockRead();
-        channel1->unlockRead();
-        channel2->unlockRead();
+        fy = 1.0 / 3.0 * c29_6_2 * yy + c4_29;
     }
 
-    return true;
+    if (zz > c6_29_3)
+    {
+        fz = power.get(zz);
+    }
+    else
+    {
+        fz = 1.0 / 3.0 * c29_6_2 * zz + c4_29;
+    }
+
+    deValue l = 116.0 * fy - 16.0;
+    deValue a = 500.0 * (fx - fy);
+    deValue b = 200.0 * (fy - fz);
+
+    l /= 100.0;
+    a += 100.0;
+    b += 100.0;
+    a /= 200.0;
+    b /= 200.0;
+
+    if (l < 0)
+    {
+        l = 0;
+        cpu.incOverflow();
+    }
+    else if (l > 1)
+    {
+        l = 1;
+        cpu.incOverflow();
+    }
+
+    if (a < 0)
+    {
+        a = 0;
+        cpu.incOverflow();
+    }
+    else if (a > 1)
+    {
+        a = 1;
+        cpu.incOverflow();
+    }
+
+    if (b < 0)
+    {
+        b = 0;
+        cpu.incOverflow();
+    }
+    else if (b > 1)
+    {
+        b = 1;
+        cpu.incOverflow();
+    }
+
+
+    cpu.output[0] = l;
+    cpu.output[1] = a;
+    cpu.output[2] = b;
 
 }
 
-
-void convertImage3x3(const deImage& sourceImage, deImage& image, deChannelManager& channelManager, deConversion3x3 conversion)
+void lab2lch(deConversionCPU& cpu)
 {
-    int n = sourceImage.getChannelSize().getN();
+    deValue a = cpu.input[1];
+    deValue b = cpu.input[2];
 
-    deChannel* sc1 = channelManager.getChannel(sourceImage.getChannelIndex(0));
-    if (!sc1)
+    a = ( a - 0.5) * 200.0;
+    b = ( b - 0.5) * 200.0;
+
+    deValue _c = sqrt(a * a + b * b);
+    deValue _h = atan2(b, a);
+
+    _c = _c / 100.0;
+    _h = (_h / ( 2 * M_PI ));
+
+    if (_h < 0)
     {
-        return;
-    }
-    deChannel* sc2 = channelManager.getChannel(sourceImage.getChannelIndex(1));
-    if (!sc2)
-    {
-        return;
-    }
-    deChannel* sc3 = channelManager.getChannel(sourceImage.getChannelIndex(2));
-    if (!sc3)
-    {
-        return;
-    }
-
-    sc1->lockRead();
-    sc2->lockRead();
-    sc3->lockRead();
-
-    deValue* s1 = sc1->getPixels();
-    deValue* s2 = sc2->getPixels();
-    deValue* s3 = sc3->getPixels();
-
-    deChannel* dc1 = channelManager.getChannel(image.getChannelIndex(0));
-    deChannel* dc2 = channelManager.getChannel(image.getChannelIndex(1));
-    deChannel* dc3 = channelManager.getChannel(image.getChannelIndex(2));
-
-    dc1->lockWrite();
-    dc2->lockWrite();
-    dc3->lockWrite();
-
-    deValue* d1 = dc1->getPixels();
-    deValue* d2 = dc2->getPixels();
-    deValue* d3 = dc3->getPixels();
-
-    int i;
-
-    for (i = 0; i < n; i++)
-    {
-        conversion(s1[i], s2[i], s3[i], d1[i], d2[i], d3[i]);
+        _h += 1;
     }
 
-    dc1->unlockWrite();
-    dc2->unlockWrite();
-    dc3->unlockWrite();
+    if ( _c > 1)
+    {
+        //logError("a: " + str(a) + " b: " + str(b) + " c: " + str(_c));
+        _c = 1;
+        cpu.incOverflow();
+    }
+    if ( _c < 0)
+    {
+        _c = 0;
+        cpu.incOverflow();
+    }
 
-    sc1->unlockRead();
-    sc2->unlockRead();
-    sc3->unlockRead();
+    cpu.output[0] = cpu.input[0];
 
+    cpu.output[1] = _c;
+    cpu.output[2] = _h;
 }
 
-void convertImage3x4(const deImage& sourceImage, deImage& image, deChannelManager& channelManager, deConversion3x4 conversion)
+void lch2lab(deConversionCPU& cpu)
 {
-    int n = sourceImage.getChannelSize().getN();
+    deValue c = cpu.input[1];
+    deValue h = cpu.input[2];
 
-    deChannel* sc1 = channelManager.getChannel(sourceImage.getChannelIndex(0));
-    if (!sc1)
-    {
-        return;
-    }
-    deChannel* sc2 = channelManager.getChannel(sourceImage.getChannelIndex(1));
-    if (!sc2)
-    {
-        return;
-    }
-    deChannel* sc3 = channelManager.getChannel(sourceImage.getChannelIndex(2));
-    if (!sc3)
-    {
-        return;
-    }
+    c = c * 100.0;
+    h = h * (2 * M_PI);
 
-    deChannel* dc1 = channelManager.getChannel(image.getChannelIndex(0));
-    deChannel* dc2 = channelManager.getChannel(image.getChannelIndex(1));
-    deChannel* dc3 = channelManager.getChannel(image.getChannelIndex(2));
-    deChannel* dc4 = channelManager.getChannel(image.getChannelIndex(3));
+    deValue a = c * cos(h);
+    deValue b = c * sin(h);
 
-    dc1->lockWrite();
-    dc2->lockWrite();
-    dc3->lockWrite();
-    dc4->lockWrite();
+    a = a / 200.0 + 0.5;
+    b = b / 200.0 + 0.5;
 
-    sc1->lockRead();
-    sc2->lockRead();
-    sc3->lockRead();
+    cpu.output[0] = cpu.input[0];
 
-    deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
-    deValue* d2 = channelManager.getChannel(image.getChannelIndex(1))->getPixels();
-    deValue* d3 = channelManager.getChannel(image.getChannelIndex(2))->getPixels();
-    deValue* d4 = channelManager.getChannel(image.getChannelIndex(3))->getPixels();
-
-    deValue* s1 = sc1->getPixels();
-    deValue* s2 = sc2->getPixels();
-    deValue* s3 = sc3->getPixels();
-
-    int i;
-
-    for (i = 0; i < n; i++)
-    {
-        conversion(s1[i], s2[i], s3[i], d1[i], d2[i], d3[i], d4[i]);
-    }
-
-    dc1->unlockWrite();
-    dc2->unlockWrite();
-    dc3->unlockWrite();
-    dc4->unlockWrite();
-
-    sc1->unlockRead();
-    sc2->unlockRead();
-    sc3->unlockRead();
-
+    cpu.output[1] = a;
+    cpu.output[2] = b;
 }
 
-void convertImage4x3(const deImage& sourceImage, deImage& image, deChannelManager& channelManager, deConversion4x3 conversion)
+void prophoto2lab(deConversionCPU& cpu)
 {
-    int n = sourceImage.getChannelSize().getN();
-
-    deChannel* sc1 = channelManager.getChannel(sourceImage.getChannelIndex(0));
-    if (!sc1)
-    {
-        return;
-    }
-    deChannel* sc2 = channelManager.getChannel(sourceImage.getChannelIndex(1));
-    if (!sc2)
-    {
-        return;
-    }
-    deChannel* sc3 = channelManager.getChannel(sourceImage.getChannelIndex(2));
-    if (!sc3)
-    {
-        return;
-    }
-    deChannel* sc4 = channelManager.getChannel(sourceImage.getChannelIndex(3));
-    if (!sc4)
-    {
-        return;
-    }
-
-    sc1->lockRead();
-    sc2->lockRead();
-    sc3->lockRead();
-    sc4->lockRead();
-
-    deValue* s1 = sc1->getPixels();
-    deValue* s2 = sc2->getPixels();
-    deValue* s3 = sc3->getPixels();
-    deValue* s4 = sc4->getPixels();
-
-    deChannel* dc1 = channelManager.getChannel(image.getChannelIndex(0));
-    deChannel* dc2 = channelManager.getChannel(image.getChannelIndex(1));
-    deChannel* dc3 = channelManager.getChannel(image.getChannelIndex(2));
-
-    dc1->lockWrite();
-    dc2->lockWrite();
-    dc3->lockWrite();
-
-    deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
-    deValue* d2 = channelManager.getChannel(image.getChannelIndex(1))->getPixels();
-    deValue* d3 = channelManager.getChannel(image.getChannelIndex(2))->getPixels();
-
-    int i;
-
-    for (i = 0; i < n; i++)
-    {
-        conversion(s1[i], s2[i], s3[i], s4[i], d1[i], d2[i], d3[i]);
-    }
-
-    sc1->unlockRead();
-    sc2->unlockRead();
-    sc3->unlockRead();
-    sc4->unlockRead();
-
-    dc1->unlockWrite();
-    dc2->unlockWrite();
-    dc3->unlockWrite();
-
+    prophoto2xyz(cpu);
+    cpu.switchIO();
+    xyz2lab(cpu);
 }
 
-void convertImage1x3(const deImage& sourceImage, deImage& image, deChannelManager& channelManager, deConversion1x3 conversion)
+void prophoto2cmyk(deConversionCPU& cpu)
 {
-    int n = sourceImage.getChannelSize().getN();
-
-    deChannel* sc1 = channelManager.getChannel(sourceImage.getChannelIndex(0));
-    if (!sc1)
-    {
-        return;
-    }
-
-    sc1->lockRead();
-
-    deValue* s1 = sc1->getPixels();
-
-    deChannel* dc1 = channelManager.getChannel(image.getChannelIndex(0));
-    deChannel* dc2 = channelManager.getChannel(image.getChannelIndex(1));
-    deChannel* dc3 = channelManager.getChannel(image.getChannelIndex(2));
-
-    dc1->lockWrite();
-    dc2->lockWrite();
-    dc3->lockWrite();
-
-    deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
-    deValue* d2 = channelManager.getChannel(image.getChannelIndex(1))->getPixels();
-    deValue* d3 = channelManager.getChannel(image.getChannelIndex(2))->getPixels();
-
-    int i;
-
-    for (i = 0; i < n; i++)
-    {
-        conversion(s1[i], d1[i], d2[i], d3[i]);
-    }
-
-    dc1->unlockWrite();
-    dc2->unlockWrite();
-    dc3->unlockWrite();
-
-    sc1->unlockRead();
-
+    prophoto2rgb(cpu);
+    cpu.switchIO();
+    rgb2cmy(cpu);
+    cpu.switchIO();
+    cmy2cmyk(cpu);
 }
 
-void convertImage1x4(const deImage& sourceImage, deImage& image, deChannelManager& channelManager, deConversion1x4 conversion)
+void rgb2cmyk(deConversionCPU& cpu)
 {
-    int n = sourceImage.getChannelSize().getN();
-
-    deChannel* sc1 = channelManager.getChannel(sourceImage.getChannelIndex(0));
-    if (!sc1)
-    {
-        return;
-    }
-
-    sc1->lockRead();
-
-    deValue* s1 = sc1->getPixels();
-
-    deChannel* dc1 = channelManager.getChannel(image.getChannelIndex(0));
-    deChannel* dc2 = channelManager.getChannel(image.getChannelIndex(1));
-    deChannel* dc3 = channelManager.getChannel(image.getChannelIndex(2));
-    deChannel* dc4 = channelManager.getChannel(image.getChannelIndex(3));
-
-    dc1->lockWrite();
-    dc2->lockWrite();
-    dc3->lockWrite();
-    dc4->lockWrite();
-
-    deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
-    deValue* d2 = channelManager.getChannel(image.getChannelIndex(1))->getPixels();
-    deValue* d3 = channelManager.getChannel(image.getChannelIndex(2))->getPixels();
-    deValue* d4 = channelManager.getChannel(image.getChannelIndex(3))->getPixels();
-
-    int i;
-
-    for (i = 0; i < n; i++)
-    {
-        conversion(s1[i], d1[i], d2[i], d3[i], d4[i]);
-    }
-
-    dc1->unlockWrite();
-    dc2->unlockWrite();
-    dc3->unlockWrite();
-    dc4->unlockWrite();
-
-    sc1->unlockRead();
-
+    rgb2cmy(cpu);
+    cpu.switchIO();
+    cmy2cmyk(cpu);
 }
 
-void convertImage3x1(const deImage& sourceImage, deImage& image, deChannelManager& channelManager, deConversion3x1 conversion)
+void noConversion(deConversionCPU& cpu)
 {
-    int n = sourceImage.getChannelSize().getN();
-
-    deChannel* sc1 = channelManager.getChannel(sourceImage.getChannelIndex(0));
-    if (!sc1)
-    {
-        return;
-    }
-    deChannel* sc2 = channelManager.getChannel(sourceImage.getChannelIndex(1));
-    if (!sc2)
-    {
-        return;
-    }
-    deChannel* sc3 = channelManager.getChannel(sourceImage.getChannelIndex(2));
-    if (!sc3)
-    {
-        return;
-    }
-
-    deValue* s1 = sc1->getPixels();
-    deValue* s2 = sc2->getPixels();
-    deValue* s3 = sc3->getPixels();
-
-    deValue* d1 = channelManager.getChannel(image.getChannelIndex(0))->getPixels();
-
-    int i;
-
-    for (i = 0; i < n; i++)
-    {
-        conversion(s1[i], s2[i], s3[i], d1[i]);
-    }
-
+    cpu.switchIO();
 }
+
+void rgb2lab(deConversionCPU& cpu)
+{
+    rgb2xyz(cpu);
+    cpu.switchIO();
+    xyz2lab(cpu);
+}
+
+void rgb2lch(deConversionCPU& cpu)
+{
+    rgb2lab(cpu);
+    cpu.switchIO();
+    lab2lch(cpu);
+}
+
+void cmyk2rgb(deConversionCPU& cpu)
+{
+    cmyk2cmy(cpu);
+    cpu.switchIO();
+    cmy2rgb(cpu);
+}
+
+void cmyk2lab(deConversionCPU& cpu)
+{
+    cmyk2rgb(cpu);
+    cpu.switchIO();
+    rgb2lab(cpu);
+}
+
+void lab2xyz(deConversionCPU& cpu)
+{
+    deValue l = cpu.input[0];
+    deValue a = cpu.input[1];
+    deValue b = cpu.input[2];
+
+    l *= 100.0;
+    a *= 200.0;
+    b *= 200.0;
+    a -= 100.0;
+    b -= 100.0;
+
+    deValue ll = (l + 16.0) / 116.0;
+    deValue ll_aa = ll + a / 500.0;
+    deValue ll_bb = ll - b / 200.0;
+
+    deValue ffx;
+    deValue ffy;
+    deValue ffz;
+
+    if (ll > c6_29)
+    {
+        ffy = ll * ll * ll;     
+    }
+    else
+    {
+        ffy = 3.0 * c6_29_2 * (ll - c4_29);
+    }
+
+    if (ll_aa > c6_29)
+    {
+        ffx = ll_aa * ll_aa * ll_aa;     
+    }
+    else
+    {
+        ffx = 3.0 * c6_29_2 * (ll_aa - c4_29);
+    }
+
+    if (ll_bb > c6_29)
+    {
+        ffz = ll_bb * ll_bb * ll_bb;     
+    }
+    else
+    {
+        ffz = 3.0 * c6_29_2 * (ll_bb - c4_29);
+    }
+
+    cpu.output[0] = Xn * ffx;
+    cpu.output[1] = Yn * ffy;
+    cpu.output[2] = Zn * ffz;
+}    
+
+void lab2rgb(deConversionCPU& cpu)
+{
+    lab2xyz(cpu);
+    cpu.switchIO();
+    xyz2rgb(cpu);
+}
+
+void lab2bw(deConversionCPU& cpu)
+{
+    lab2rgb(cpu);
+    cpu.switchIO();
+    rgb2bw(cpu);
+}
+
+void lab2cmyk(deConversionCPU& cpu)
+{
+    lab2rgb(cpu);
+    cpu.switchIO();
+    rgb2cmy(cpu);
+    cpu.switchIO();
+    cmy2cmyk(cpu);
+}
+
+void lch2rgb(deConversionCPU& cpu)
+{
+    lch2lab(cpu);
+    cpu.switchIO();
+    lab2rgb(cpu);
+}
+
+
 
 
 deConversionProcessor::deConversionProcessor()
@@ -623,7 +975,88 @@ deConversionProcessor::~deConversionProcessor()
 {
 }
 
-void deConversionProcessor::convertImage(const deImage& sourceImage, deImage& image, deChannelManager& channelManager)
+deConversionCPU::deFunction getConversion(deColorSpace sourceColorSpace, deColorSpace targetColorSpace)
+{
+    if (sourceColorSpace == targetColorSpace)
+    {
+        return noConversion;
+    }
+
+    if ((sourceColorSpace == deColorSpaceProPhoto) && (targetColorSpace == deColorSpaceRGB))
+    {
+        return prophoto2rgb;
+    }
+    if ((sourceColorSpace == deColorSpaceProPhoto) && (targetColorSpace == deColorSpaceLAB))
+    {
+        return prophoto2lab;
+    }
+    if ((sourceColorSpace == deColorSpaceRGB) && (targetColorSpace == deColorSpaceLAB))
+    {
+        return rgb2lab;
+    }
+    if ((sourceColorSpace == deColorSpaceRGB) && (targetColorSpace == deColorSpaceLCH))
+    {
+        return rgb2lch;
+    }
+    if ((sourceColorSpace == deColorSpaceLCH) && (targetColorSpace == deColorSpaceRGB))
+    {
+        return lch2rgb;
+    }
+    if ((sourceColorSpace == deColorSpaceLAB) && (targetColorSpace == deColorSpaceRGB))
+    {
+        return lab2rgb;
+    }
+    if ((sourceColorSpace == deColorSpaceLAB) && (targetColorSpace == deColorSpaceLCH))
+    {
+        return lab2lch;
+    }
+    if ((sourceColorSpace == deColorSpaceLCH) && (targetColorSpace == deColorSpaceLAB))
+    {
+        return lch2lab;
+    }
+    if ((sourceColorSpace == deColorSpaceProPhoto) && (targetColorSpace == deColorSpaceCMYK))
+    {
+        return prophoto2cmyk;
+    }
+    if ((sourceColorSpace == deColorSpaceRGB) && (targetColorSpace == deColorSpaceCMYK))
+    {
+        return rgb2cmyk;
+    }
+    if ((sourceColorSpace == deColorSpaceCMYK) && (targetColorSpace == deColorSpaceRGB))
+    {
+        return cmyk2rgb;
+    }
+    if ((sourceColorSpace == deColorSpaceRGB) && (targetColorSpace == deColorSpaceBW))
+    {
+        return rgb2bw;
+    }
+    if ((sourceColorSpace == deColorSpaceProPhoto) && (targetColorSpace == deColorSpaceBW))
+    {
+        return rgb2bw;
+    }
+    if ((sourceColorSpace == deColorSpaceLAB) && (targetColorSpace == deColorSpaceBW))
+    {
+        return lab2bw;
+    }
+    if ((sourceColorSpace == deColorSpaceBW) && (targetColorSpace == deColorSpaceRGB))
+    {
+        return bw2rgb;
+    }
+    if ((sourceColorSpace == deColorSpaceCMYK) && (targetColorSpace == deColorSpaceLAB))
+    {
+        return cmyk2lab;
+    }
+    if ((sourceColorSpace == deColorSpaceLAB) && (targetColorSpace == deColorSpaceCMYK))
+    {
+        return lab2cmyk;
+    }
+
+    return NULL;
+
+}
+
+
+int deConversionProcessor::convertImageNew(const deImage& sourceImage, deImage& image)
 {
     deColorSpace sourceColorSpace = sourceImage.getColorSpace();
     deColorSpace targetColorSpace = image.getColorSpace();
@@ -631,71 +1064,62 @@ void deConversionProcessor::convertImage(const deImage& sourceImage, deImage& im
     if (sourceColorSpace == targetColorSpace)
     {
         copyImage(sourceImage, image);
-        return;
+        return true;
     }
 
-    int sn = getColorSpaceSize(sourceColorSpace);
-    int tn = getColorSpaceSize(targetColorSpace);
+    deConversionCPU cpu(4);
+    cpu.registers[CPU_REGISTER_OVERFLOW] = 0;
 
-    if ((sn == 3) && (tn == 3))
-    {
-        deConversion3x3 conversion = getConversion3x3(sourceColorSpace, targetColorSpace);
-        if (conversion)
-        {
-            convertImage3x3(sourceImage, image, channelManager, conversion);
-            return;
-        }            
-    }        
+    int ss = getColorSpaceSize(sourceColorSpace);
+    int ds = getColorSpaceSize(targetColorSpace);
 
-    if ((sn == 3) && (tn == 4))
-    {
-        deConversion3x4 conversion = getConversion3x4(sourceColorSpace, targetColorSpace);
-        if (conversion)
-        {
-            convertImage3x4(sourceImage, image, channelManager, conversion);
-            return;
-        }            
-    }        
+    deConversionCPU::deFunction f1 = empty;
+    deConversionCPU::deFunction f2 = getConversion(sourceColorSpace, targetColorSpace);
 
-    if ((sn == 4) && (tn == 3))
+    if ((ss == 3) && (ds == 3))
     {
-        deConversion4x3 conversion = getConversion4x3(sourceColorSpace, targetColorSpace);
-        if (conversion)
+        if (f2)
         {
-            convertImage4x3(sourceImage, image, channelManager, conversion);
-            return;
+            cpu.convertImage3x3(sourceImage, image, f1, f2);
         }            
-    }        
+    }
+    else
+    if ((ss == 3) && (ds == 4))
+    {
+        if (f2)
+        {
+            cpu.convertImage3x4(sourceImage, image, f1, f2);
+        }            
+    }
+    else
+    if ((ss == 4) && (ds == 3))
+    {
+        if (f2)
+        {
+            cpu.convertImage4x3(sourceImage, image, f1, f2);
+        }            
+    }
+    else
+    if ((ss == 3) && (ds == 1))
+    {
+        if (f2)
+        {
+            cpu.convertImage3x1(sourceImage, image, f1, f2);
+        }            
+    }
+    else
+    if ((ss == 1) && (ds == 3))
+    {
+        if (f2)
+        {
+            cpu.convertImage1x3(sourceImage, image, f1, f2);
+        }            
+    }
 
-    if ((sn == 1) && (tn == 3))
-    {
-        deConversion1x3 conversion = getConversion1x3(sourceColorSpace, targetColorSpace);
-        if (conversion)
-        {
-            convertImage1x3(sourceImage, image, channelManager, conversion);
-            return;
-        }            
-    }        
-
-    if ((sn == 1) && (tn == 4))
-    {
-        deConversion1x4 conversion = getConversion1x4(sourceColorSpace, targetColorSpace);
-        if (conversion)
-        {
-            convertImage1x4(sourceImage, image, channelManager, conversion);
-            return;
-        }            
-    }        
-
-    if ((sn == 3) && (tn == 1))
-    {
-        deConversion3x1 conversion = getConversion3x1(sourceColorSpace, targetColorSpace);
-        if (conversion)
-        {
-            convertImage3x1(sourceImage, image, channelManager, conversion);
-            return;
-        }            
-    }        
+    deValue overflow = cpu.registers[CPU_REGISTER_OVERFLOW];
+    int n = sourceImage.getChannelSize().getN();
+    int percentage = overflow * 10000 / n;
+    return percentage;
 
 }
 
@@ -952,3 +1376,117 @@ bool deConversionProcessor::convertToLAB(deValue v1, deValue v2, deValue v3, deV
     return false;
 }
 
+bool deConversionProcessor::renderImageToRGBNew(const deImage& image, unsigned char* data)
+{
+    deColorSpace colorSpace = image.getColorSpace();
+
+    deConversionCPU cpu(4);
+    cpu.registers[CPU_REGISTER_OVERFLOW] = 0;
+
+    int s = getColorSpaceSize(colorSpace);
+
+    deConversionCPU::deFunction f = getConversion(colorSpace, deColorSpaceRGB);
+
+    if (!f)
+    {
+        return false;
+    }
+
+    if (s == 3)
+    {
+        return cpu.renderImage3(image, f, data);
+    } else
+    if (s == 4)
+    {
+        return cpu.renderImage4(image, f, data);
+    } else
+    if (s == 1)
+    {
+        return cpu.renderImage1(image, f, data);
+    };
+
+    return false;
+
+}
+
+void deConversionProcessor::convertImage(const deImage& sourceImage, deImage& image, deConversionCPU& cpu)
+{
+    deColorSpace sourceColorSpace = sourceImage.getColorSpace();
+    deColorSpace targetColorSpace = image.getColorSpace();
+
+    if (sourceColorSpace == targetColorSpace)
+    {
+        copyImage(sourceImage, image);
+        return;
+    }
+
+    int ss = getColorSpaceSize(sourceColorSpace);
+    int ds = getColorSpaceSize(targetColorSpace);
+
+    deConversionCPU::deFunction f1 = empty;
+
+    if (sourceColorSpace == deColorSpaceProPhoto)
+    {
+        if (cpu.registers[CPU_REGISTER_CONTRAST] < 1.0)
+        {
+            f1 = applyContrastRGB;
+        }
+    }
+    if (sourceColorSpace == deColorSpaceLAB)
+    {
+        if ((cpu.registers[CPU_REGISTER_SATURATION] < 1.0) || (cpu.registers[CPU_REGISTER_CONTRAST] < 1.0))
+        {
+            f1 = applyContrastSaturationLAB;
+        }
+    }
+    if (sourceColorSpace == deColorSpaceLCH)
+    {
+        if ((cpu.registers[CPU_REGISTER_SATURATION] < 1.0) || (cpu.registers[CPU_REGISTER_CONTRAST] < 1.0))
+        {
+            f1 = applyContrastSaturationLCH;
+        }
+    }
+
+    deConversionCPU::deFunction f2 = getConversion(sourceColorSpace, targetColorSpace);
+
+    if ((ss == 3) && (ds == 3))
+    {
+        if (f2)
+        {
+            cpu.convertImage3x3(sourceImage, image, f1, f2);
+        }            
+    }
+    else
+    if ((ss == 3) && (ds == 4))
+    {
+        if (f2)
+        {
+            cpu.convertImage3x4(sourceImage, image, f1, f2);
+        }            
+    }
+    else
+    if ((ss == 4) && (ds == 3))
+    {
+        if (f2)
+        {
+            cpu.convertImage4x3(sourceImage, image, f1, f2);
+        }            
+    }
+    else
+    if ((ss == 3) && (ds == 1))
+    {
+        if (f2)
+        {
+            cpu.convertImage3x1(sourceImage, image, f1, f2);
+        }            
+    }
+    else
+    if ((ss == 1) && (ds == 3))
+    {
+        if (f2)
+        {
+            cpu.convertImage1x3(sourceImage, image, f1, f2);
+        }            
+    }
+
+}

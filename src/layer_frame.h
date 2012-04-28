@@ -21,23 +21,34 @@
 
 #include "frame.h"
 class deActionLayer;
-//class deLayer;
 class deBaseLayer;
 class deLayerFrameManager;
 
-class deLayerFrame:public deFrame
+class deLayerFrameOld:public deFrameOld
 {
     protected:
-        //deLayer& layer;
         deBaseLayer& layer;
         deLayerFrameManager& frameManager;
         int layerIndex;
     public:
-        deLayerFrame(wxWindow *parent, deBaseLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deLayerFrame();
+        deLayerFrameOld(wxWindow *parent, deBaseLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex);
+        virtual ~deLayerFrameOld();
 
         bool checkIndex(int index);
 
+};
+
+class deLayerFrame:public deFrame
+{
+    protected:
+        deBaseLayer& layer;
+        deLayerFrameManager& frameManager;
+        int index;
+    public:
+        deLayerFrame(deWindow& parent, const std::string& name, deBaseLayer& _layer, deLayerFrameManager& _frameManager, int _index);
+        virtual ~deLayerFrame();
+        
+        virtual void setUIFromLayer() = 0;
 };
 
 #endif

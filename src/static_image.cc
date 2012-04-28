@@ -103,3 +103,8 @@ void deStaticImage::unlock()
 {
     mutex.unlock();
 }    
+
+void deStaticImage::setInfo(const std::string& s)
+{
+    info = s;
+}

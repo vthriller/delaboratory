@@ -31,10 +31,14 @@ class deCanvasWX:public deCanvas
         ~deCanvasWX();
 
         virtual void clear();
+
+        virtual void setPen(int r, int g, int b);
+        virtual void setBrush(int r, int g, int b);
+
         virtual void drawCircle(int x, int y, int r);
         virtual void drawLine(int x1, int y1, int x2, int y2);
-        virtual void setPen(int r, int g, int b);
         virtual void drawBitmap(deBitmap& bitmap);
+        virtual void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3);
 
 };
 

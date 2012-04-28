@@ -32,6 +32,7 @@ class deStaticImage
         std::vector<deChannel*> channels;
         deSize size;
         mutable deMutex mutex;
+        std::string info;
         
         deStaticImage(const deStaticImage& i);
         deStaticImage& operator = (const deStaticImage& i);
@@ -51,6 +52,8 @@ class deStaticImage
 
         void lock();
         void unlock();
+
+        void setInfo(const std::string& s);
 };
 
 #endif

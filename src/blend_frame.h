@@ -23,9 +23,9 @@
 #include "blend_mode.h"
 #include "slider.h"
 class deLayerProcessor;
-class deLayer;
+class deLayerWithBlending;
 
-class deBlendFrame:public deLayerFrame
+class deBlendFrame:public deLayerFrameOld
 {
     private:
         void choose(wxCommandEvent &event);
@@ -37,7 +37,7 @@ class deBlendFrame:public deLayerFrame
         deLayerProcessor& layerProcessor;
 
     public:
-        deBlendFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
+        deBlendFrame(wxWindow *parent, deLayerWithBlending& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deBlendFrame();
 
 

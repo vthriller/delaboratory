@@ -23,7 +23,7 @@
 #include "value.h"
 #include "layer.h"
 
-class deActionFrame:public deLayerFrame
+class deActionFrame:public deLayerFrameOld
 {
     private:
     public:

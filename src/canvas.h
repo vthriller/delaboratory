@@ -32,7 +32,9 @@ class deCanvas
         virtual void drawCircle(int x, int y, int r) = 0;
         virtual void drawLine(int x1, int y1, int x2, int y2) = 0;
         virtual void setPen(int r, int g, int b) = 0;
+        virtual void setBrush(int r, int g, int b) = 0;
         virtual void drawBitmap(deBitmap& bitmap) = 0;
+        virtual void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3) = 0;
 
 };
 

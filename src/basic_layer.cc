@@ -41,7 +41,7 @@ deBasicLayer::deBasicLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerSt
         int c = setting.getChannel();
         if (c >= 0)
         {
-            p->setChannel(c);
+            p->setChannelInProperty(c);
         }
         basicProperties.push_back(p);
     }

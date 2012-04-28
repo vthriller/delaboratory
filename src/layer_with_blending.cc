@@ -24,6 +24,7 @@
 #include <iostream>
 #include "str.h"
 #include "xml.h"
+#include "property_numeric.h"
 
 class deUpdateBlendThread:public wxThread
 {
@@ -55,7 +56,9 @@ deLayerWithBlending::deLayerWithBlending(deColorSpace _colorSpace, deChannelMana
  imageBlendPass(_colorSpace, _channelManager)
 {
     blendMode = deBlendNormal;
-    opacity = 1.0;
+
+    createPropertyNumeric("opacity", 0, 1);
+    setOpacity(1.0);
 }
 
 deLayerWithBlending::~deLayerWithBlending()
@@ -64,17 +67,18 @@ deLayerWithBlending::~deLayerWithBlending()
 
 deValue deLayerWithBlending::getOpacity() const
 {
-    return opacity;
+    return getNumericValue("opacity");
 }
 
 void deLayerWithBlending::setOpacity(deValue _opacity)
 {
-    opacity = _opacity;
+    dePropertyNumeric* p = getPropertyNumeric("opacity");
+    p->set(_opacity);
 }
 
 bool deLayerWithBlending::isBlendingEnabled() const
 {
-    if (opacity < 1.0)
+    if (getNumericValue("opacity") < 1.0)
     {
         return true;
     }
@@ -154,7 +158,8 @@ bool deLayerWithBlending::updateBlend(int i)
     deValue* overlayPixels = channel->getPixels();
     deValue* resultPixels = blendChannel_->getPixels();
 
-    blendChannel(sourcePixels, overlayPixels, resultPixels, maskPixels, blendMode, opacity, channelSize);
+    deValue o = getOpacity();
+    blendChannel(sourcePixels, overlayPixels, resultPixels, maskPixels, blendMode, o, channelSize);
 
     sourceChannel->unlockRead();
     channel->unlockRead();

@@ -20,7 +20,7 @@
 #include "layer_frame_manager.h"
 
 deActionFrame::deActionFrame(wxWindow *parent, deLayer& _layer, deLayerFrameManager& _frameManager, int _layerIndex)
-:deLayerFrame(parent, _layer, _layer.getLabel(), _frameManager, _layerIndex)
+:deLayerFrameOld(parent, _layer, _layer.getLabel(), _frameManager, _layerIndex)
 {
     frameManager.addActionFrame(this);
 }

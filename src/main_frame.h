@@ -32,6 +32,7 @@ class deZoomManager;
 class deThreadsPanel;
 class deOperationProcessor;
 class deChannelManager;
+class deWarningPanel;
 #include "size.h"
 
 enum
@@ -65,6 +66,7 @@ enum
     DE_REPAINT_EVENT,
     DE_IMAGE_LOAD_EVENT,
     DE_HISTOGRAM_EVENT,
+    DE_WARNING_EVENT,
     DE_INFO_EVENT
 
 };
@@ -82,6 +84,7 @@ private:
     deImageAreaPanel* imageAreaPanel;
     deHistogramPanel* histogramPanel;
     deThreadsPanel* threadsPanel;
+    deWarningPanel* warningPanel;
 
     wxCheckBox* realtime;
     wxCheckBox* autoUI;
@@ -123,6 +126,7 @@ private:
 	void onRepaintEvent(wxCommandEvent& event);
 	void onImageLoadEvent(wxCommandEvent& event);
 	void onInfoEvent(wxCommandEvent& event);
+	void onWarningEvent(wxCommandEvent& event);
     void onHistogramEvent(wxCommandEvent& event);
     void onTimerEvent(wxTimerEvent& event);
 
@@ -148,6 +152,7 @@ public:
     void onKey(int key);
 
     void generateHistogram();
+    void updateWarning();
 
     void setImageName(const std::string& _imageName, const deSize& _size);
 

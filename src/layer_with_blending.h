@@ -26,7 +26,6 @@ class deLayerWithBlending:public deSwitchableLayer
 {
     private:
         deBlendMode blendMode;
-        deValue opacity;
         deImage imageBlendPass;
 
         virtual const deImage& getLayerImage() const;

@@ -78,20 +78,12 @@ int deHistogram::getSize() const
     return size;
 }
 
-void deHistogram::calc(const deChannel* channel, int n)
+void deHistogram::calc(const deValue* pixels, int n)
 {
-    if (!channel)
-    {
-        return;
-    }
 
     logMessage("histogram calc start");
 
     static int counter = 0;
-
-    channel->lockRead();
-
-    const deValue* pixels = channel->getPixels();
 
     int j;
     int scale = size - 1;
@@ -106,14 +98,12 @@ void deHistogram::calc(const deChannel* channel, int n)
         }            
     }
 
-    channel->unlockRead();
-
     logMessage("histogram calc end");
 
 
 }
 
-bool deHistogram::render(unsigned char* data, int sizeW, int sizeH, unsigned char g1, unsigned char g2)
+bool deHistogram::render(unsigned char* data, int sizeW, int sizeH, unsigned char g1, unsigned char g2, int margin)
 {
     int mm = getMax();
     if (mm <= 0)
@@ -121,28 +111,75 @@ bool deHistogram::render(unsigned char* data, int sizeW, int sizeH, unsigned cha
         return false;
     }
 
+    unsigned char g3 = 230;
+
     int x;
     int y;
     for (x = 0; x < sizeW; x++)
     {
-        int hh = get(x);
+        int xx = x - margin;
 
-        int h = sizeH * hh / mm;
-
-        for (y = 0; y < sizeH - h; y++)
+        if ((xx >= 0) && (xx < size))
         {
-            data[3*(y*sizeW+x)] = g1;
-            data[3*(y*sizeW+x)+1] = g1;
-            data[3*(y*sizeW+x)+2] = g1;
+            int hh = get(xx);
+            int h = sizeH * hh / mm;
+            for (y = 0; y < sizeH - h; y++)
+            {
+                data[3*(y*sizeW+x)] = g1;
+                data[3*(y*sizeW+x)+1] = g1;
+                data[3*(y*sizeW+x)+2] = g1;
+            }
+            for (y = sizeH - h; y < sizeH; y++)
+            {
+                data[3*(y*sizeW+x)] = g2;
+                data[3*(y*sizeW+x)+1] = g2;
+                data[3*(y*sizeW+x)+2] = g2;
+            }
         }
-        for (y = sizeH - h; y < sizeH; y++)
+        else
         {
-            data[3*(y*sizeW+x)] = g2;
-            data[3*(y*sizeW+x)+1] = g2;
-            data[3*(y*sizeW+x)+2] = g2;
+            for (y = 0; y < sizeH; y++)
+            {
+                data[3*(y*sizeW+x)] = g3;
+                data[3*(y*sizeW+x)+1] = g3;
+                data[3*(y*sizeW+x)+2] = g3;
+            }
         }
     }
 
     return true;
 }    
+
+
+deValue deHistogram::getLeft(deValue min) const
+{
+    int mm = getMax();
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        deValue b = bars[i];
+        deValue v = b / mm;
+        if (v >= min)
+        {
+            return (deValue) i / (size - 1);
+        }
+    }
+    return 1.0;
+}
+
+deValue deHistogram::getRight(deValue min) const
+{
+    int mm = getMax();
+    int i;
+    for (i = size-1; i >= 0; i--)
+    {
+        deValue b = bars[i];
+        deValue v = b / mm;
+        if (v >= min)
+        {
+            return (deValue) i / (size - 1);
+        }
+    }
+    return 0.0;
+}
 

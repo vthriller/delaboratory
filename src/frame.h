@@ -20,18 +20,45 @@
 #define _DE_FRAME_H
 
 #include <wx/wx.h>
+class deWindow;
+class dePanel;
 
-class deFrame:public wxFrame
+class deFrameOld:public wxFrame
 {
     protected:
     public:
-        deFrame(wxWindow *parent, const std::string& name);
-        virtual ~deFrame();
+        deFrameOld(wxWindow *parent, const std::string& name);
+        virtual ~deFrameOld();
 
         virtual void onKey(int key) {};
 
         virtual void onUpdateProperties() {};
 
 };
+
+
+class deFrameImpl;
+
+class deFrame
+{
+    private:
+        deFrameImpl* impl;
+
+    protected:
+        void addWidget(deWindow& window);
+
+    public:
+        deFrame(deWindow& parent, const std::string& name);
+        virtual ~deFrame();
+
+        void show();
+
+        deWindow& getWindow();
+
+        void fit();
+
+        void clearImpl();
+};
+
 
 #endif

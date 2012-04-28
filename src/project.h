@@ -93,8 +93,6 @@ class deProject
 
         void onScaleSet();
 
-        void saveImage(const std::string& filename, const deImage& image, const std::string& type);
-
     public:
         deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deOperationProcessor& _operationProcessor, deMainWindow& _mainWindow);
 
@@ -118,7 +116,7 @@ class deProject
 
         void onChangeView(int a);
 
-        bool exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog);
+        bool exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog, bool saveAll, const std::string& dir);
 
         void setLastView();
 

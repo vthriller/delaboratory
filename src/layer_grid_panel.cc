@@ -39,6 +39,10 @@
 
 #include "layer_frame_manager.h"
 
+#include "window_wx.h"
+
+#include "generic_layer_frame.h"
+
 void deLayerGridPanel::buildRows()
 {
     project.log("build rows start");
@@ -238,11 +242,22 @@ void deLayerGridPanel::click(wxCommandEvent &event)
             if (!project.getLayerFrameManager().checkActionFrame(row.index))
             {
                 project.log("creating action frame");
-                deFrame* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex, channelManager);
+                deFrameOld* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex, channelManager);
                 if (actionFrame)
                 {
                     project.log("created action frame");
                     actionFrame->Show(true);
+                }
+                else
+                {
+                    deWindowWX window(this);
+                    const std::string name = "name";
+
+                    deFrame* frame = new deGenericLayerFrame(window, name, *layer, layerProcessor, frameManager, layerIndex);
+                    if (frame)
+                    {
+                        frame->show();
+                    }
                 }
             }        
 
@@ -253,15 +268,13 @@ void deLayerGridPanel::click(wxCommandEvent &event)
             project.log("new blend frame requested in row " + str(row.index));
 
             deBaseLayer* baseLayer = layerStack.getLayer(row.index);
-            deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
-            //deActionLayer* al = dynamic_cast<deActionLayer*>(layer);
-            deLayer* al = dynamic_cast<deLayer*>(layer);
-            if (al)
+            deLayerWithBlending* blending = dynamic_cast<deLayerWithBlending*>(baseLayer);
+            if (blending)
             {
                 if (!frameManager.checkBlendFrame(row.index))
                 {
                     project.log("creating blend frame");
-                    deBlendFrame* blendFrame = new deBlendFrame(this, *al, layerProcessor, frameManager, layerIndex);
+                    deBlendFrame* blendFrame = new deBlendFrame(this, *blending, layerProcessor, frameManager, layerIndex);
                     if (blendFrame)
                     {
                         project.log("created blend frame");

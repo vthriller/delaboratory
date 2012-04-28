@@ -29,8 +29,10 @@ class deConversionLayer:public deBaseLayerWithSource
     private:
         virtual std::string getType() const {return "conversion";};
 
+        void addFilms();
+
     public:
-        deConversionLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
+        deConversionLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
         virtual ~deConversionLayer();
 
         virtual bool updateMainImageNotThreadedWay();
@@ -39,9 +41,9 @@ class deConversionLayer:public deBaseLayerWithSource
 
         virtual void load(xmlNodePtr root) {};
         virtual void save(xmlNodePtr root) {saveCommon(root);};
-        
-        virtual bool updateMainImageSingleChannel(int channel) {return false;};
 
+        virtual std::string getActionName() {return "conversion setup";};
+        
 
 };
 

@@ -309,6 +309,44 @@ deValue getPresentationValue(deColorSpace colorSpace, int channel, deValue v)
     return v;
 }
 
+bool shouldUseAutoLevels(deColorSpace colorSpace, int channel)
+{
+    switch (colorSpace)
+    {
+        case deColorSpaceLCH:
+        {
+            if (channel == 2)
+            {
+                return false;
+            }
+            break;
+        }
+        case deColorSpaceHSV:
+        case deColorSpaceHSL:
+        {
+            if (channel == 0)
+            {
+                return false;
+            }
+            break;
+        }
+        case deColorSpaceCMYK:
+        {
+            if (channel == 3)
+            {
+                return false;
+            }
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+
+    return true;
+}
+
 bool shouldChannelBeSharpened(deColorSpace colorSpace, int channel)
 {
     switch (colorSpace)

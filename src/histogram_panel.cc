@@ -34,12 +34,12 @@ BEGIN_EVENT_TABLE(deHistogramPanel, wxPanel)
 EVT_PAINT(deHistogramPanel::paintEvent)
 END_EVENT_TABLE()
 
-deHistogramPanel::deHistogramPanel(wxWindow* parent, deProject* _project)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(256, 200)), project(_project), histogram(256)
+deHistogramPanel::deHistogramPanel(wxWindow* parent, deProject* _project, int _width, int _margin)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(_width, 200)), project(_project), histogram(_width - 2 * _margin), width(_width), margin(_margin)
 {
     channel = 0;
     generated = false;
-    renderedImage.setSize(deSize(256, 256));
+    renderedImage.setSize(deSize(width, width));
 }
 
 deHistogramPanel::~deHistogramPanel()
@@ -116,7 +116,7 @@ void deHistogramPanel::generateHistogram()
         if ((c) && (n > 0))
         {
             histogram.clear();
-            histogram.calc(c, n);
+            histogram.calc(c->getPixels(), n);
         }            
     }        
 
@@ -124,12 +124,11 @@ void deHistogramPanel::generateHistogram()
 
     if (layer)
     {
-        int sizeW = 256;
         int sizeH = 200;
         unsigned char g1 = 50;
         unsigned char g2 = 120;
 
-        generated = histogram.render(renderedImage.getCurrentImageData(), sizeW, sizeH, g1, g2);
+        generated = histogram.render(renderedImage.getCurrentImageData(), width, sizeH, g1, g2, margin);
     }        
 }
 

@@ -43,4 +43,6 @@ bool isChannelWrapped(deColorSpace colorSpace, int channel);
 
 bool isActionSupported(const std::string& action, deColorSpace colorSpace);
 
+bool shouldUseAutoLevels(deColorSpace colorSpace, int channel);
+
 #endif
