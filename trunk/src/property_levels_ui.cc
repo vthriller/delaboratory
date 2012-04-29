@@ -213,8 +213,8 @@ class deChannelHistogramPanel:public dePanelWX
         wxBitmap* backgroundBitmap;
 
     public:
-        deChannelHistogramPanel(deWindow& _parentWindow, const deValue* c, int n, int width, int margin)
-        :dePanelWX(_parentWindow, width, 100)
+        deChannelHistogramPanel(deWindow& _parentWindow, const deValue* c, int n, int width, int height, int margin)
+        :dePanelWX(_parentWindow, width, height)
         {
             deHistogram histogram(width - 2 * margin);
 
@@ -223,7 +223,6 @@ class deChannelHistogramPanel:public dePanelWX
 
             deValue e = 0.02;
 
-            int height = 100;
             wxImage* image = new wxImage(width, height);
             unsigned char* data = image->GetData();
 
@@ -275,10 +274,11 @@ class dePropertyLevelsUIImpl:public dePanelWX
             const deValue* c = sourceImage.getValues(channel);
             int n = sourceImage.getChannelSize().getN();
 
-            histogramPanel = new deChannelHistogramPanel(getWindow(), c, n, width, margin);
+            int h = 50;
+            histogramPanel = new deChannelHistogramPanel(getWindow(), c, n, width, h, margin);
             sizer->Add(histogramPanel);
 
-            deGradientPanel0* gradient = new deGradientPanel0(this, wxSize(width, 10), layer.getColorSpace(), channel, margin);
+            deGradientPanel0* gradient = new deGradientPanel0(this, wxSize(width, 8), layer.getColorSpace(), channel, margin);
             sizer->Add(gradient);
 
             levelsControl = new deLevelsControl(getWindow(), property, width, 10, margin, layerProcessor, layerIndex);
