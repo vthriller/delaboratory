@@ -30,7 +30,7 @@ Color spaces such as LAB or !ProPhoto are very wide. There
 are theories that all processing should be done for example in LAB to "get the best quality". This nonsense also runs counter to the philosophy delaboratory. At least some people understand what is interesting in the LAB (as opposed to CMYK). 
 
 Delaboratory does not support color profiles, the target color space
-is sRGB. Viewing is also done in sRGB. When importing RAW file - !ProPhoto RGB colorspace is used. It is not really good for processing (too wide), but it helps preserving the maximum detail from oryginal source, so it may be a good way
+is sRGB. Display also takes place in sRGB. When importing RAW file - !ProPhoto RGB colorspace is used. It is not really good for processing (too wide), but it helps preserving the maximum detail from original source, so it may be a good way
 transition. 
 
 If the gamut of sRGB limits your photographic style - delaboratory is not an application for you. If your goal is to achieve faithful original colors of photo - you don't need delaboratory, because it meets completely different role. Just use the raw processor - such as !RawTherapee, Darktable or Photivo (in my opinion the best is !RawTherapee).
