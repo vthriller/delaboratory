@@ -4,9 +4,9 @@ Delaboratory is my personal hobby project. I started it in early 2011.
 
 The main inspiration was the book of Dan Margulis "Photoshop correction and separation" and my experiences with !RawTherapee, GIMP and G'MIC. 
 
-Delaboratory is not in any way inspired by interface of Adobe products, it is rather a mixture of GIMP and !RawTherapee. In terms of philosophy of use, however, it is consistent with the teachings of Dan Margulis, which can not be achieved in other free projects.
+Delaboratory is not in any way inspired by interface of Adobe products, it is rather a mixture of GIMP and !RawTherapee. In terms of philosophy of use, however, it is consistent with the techniques of Dan Margulis, which can not be reproduced with other free projects.
 
-My main problem with GIMP can be simply described on an example of curves:
+My main problems with GIMP can be simply described on an example of curves:
 
   * The first problem is that the 8-bit color processing means that each operation is an lossy operation - the image quality is destroyed, in practice, and not theory - this can be seen with the naked eye. GeGL won't fix that problem until layers are still stored as 8-bit.
   * The second problem is that the Gimp does not directly support the LAB space and CMYK, and I need the curves in these colorspaces. 
@@ -17,8 +17,7 @@ All these problems are solved by delaboratory since its first version.
 
 I called delaboratory "color correction utility", since this type of
 term seemed most appropriate, especially after reading Dan Margulis book. Unfortunately for many people "color correction" is associated with
-"color management" and this in turn is associated with calibration, color profiles and in general as the most faithful representation of
-one true picture. This is in clear contradiction with the main objectives of the project. What are the creative manipulation of color and contrast.
+"color management" and this is associated with calibration, color profiles and in general as the most faithful representation of one true picture. This is in clear contradiction with the main objective of the project - which is the creative manipulation of color and contrast of photo.
 
 A similar problem occurs with 32-bit color, I used it because it
 is required by colorspace conversions and operations such as the curves. Unfortunately, many people do not understand the problems of depth of color and think that 16-bit processing is needed only for 16-bit images, so 32-bit processing must produce some incredible depth of color. While the truth is, 32-bit processing is needed, even if we want to make 8-bit JPG.
@@ -26,8 +25,8 @@ is required by colorspace conversions and operations such as the curves. Unfortu
 Color spaces such as LAB or !ProPhoto are very wide. There
 are theories that all processing should be done for example in LAB to "get the best quality". This nonsense also runs counter to the philosophy delaboratory.
 
-The another thing is CMYK. This is the best color space for curves manipulation (so also for levels), it is the best way to correct skin color setting, and
-this is the best space for sharpening portraits. Unfortunately for most (99%?) of the technical people, CMYK is usable only for printing. As far as I know delaboratory is the only open source application (except G'MIC) which supports CMYK operations. Moreover, I met with the opinions that my desire to work in
+The another thing is CMYK. This is the best color space for curves manipulation (so also for levels), it is the best way to correct skin colors, and
+this is the best color space for sharpening portraits. Unfortunately for most technical people, CMYK is usable only for printing. As far as I know delaboratory is the only open source application (except G'MIC) which supports CMYK operations. Moreover, I met with the opinions that my desire to work in
 CMYK is stupid because "it does not matter whether the curves are RGB or CMYK - the result will be the same". And yes - it is a common opinion among developers.
 
 Delaboratory does not support color profiles, the target color space
@@ -38,7 +37,7 @@ If the gamut of sRGB limits your photographic style - delaboratory is not an app
 
 Despite the similar functionality delaboratory is not an alternative to
 any of these programs. Not only does not support color profiles, but also has no
-a typical RAW processor features such as denoising or demosaicing settings. Delaboratory it is not any alternative to GIMP - you can't paint in it.
+typical RAW processor features such as denoising or demosaicing settings. Delaboratory it is not an alternative to GIMP - you can't paint in it.
 
 The closest application in the matter of functionality is G'MIC, that's why I want to integrate it somehow into delaboratory - so it will be possible to use all G'MIC filters inside delaboratory workflow.
 
