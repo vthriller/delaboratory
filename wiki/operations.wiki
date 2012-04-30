@@ -3,8 +3,8 @@
 Casual users don't understand what's the reason to use multiple colorspaces. While they use it in any other program (for instance to change saturation or set white balance), they are not power users and they don't want to think about it. So the idea for 0.8 is to hide colorspaces from them.
 
 There will be three groups of buttons in new interface:
-  * basic - typical operations for casual user (exposure, white balance, levels, vignette, local contrast, equalizer)
-  * advanced - more creative operations (luminance curve, saturation curve, RGB mixer, hue shift, bigger equalizer)
+  * basic - typical operations for casual user (exposure, white balance, levels, vignette, local contrast, equalizer, maybe something like cross processing)
+  * advanced - more creative operations (luminance curve, saturation curve, AB curves, RGB curves, RGB mixer, hue shift, bigger equalizer)
   * expert - the old set of operations (conversions, curves, mixer, apply image, etc)
 
 Examples of operations in groups basic and advanced:
