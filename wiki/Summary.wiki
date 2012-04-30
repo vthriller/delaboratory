@@ -22,16 +22,16 @@ term seemed most appropriate, especially after reading Dan Margulis book. Unfort
 A similar problem occurs with 32-bit color, I used it because it
 is required by colorspace conversions and operations such as the curves. Unfortunately, many people do not understand the problems of depth of color and think that 16-bit processing is needed only for 16-bit images, so 32-bit processing must produce some incredible depth of color. While the truth is, 32-bit processing is needed, even if we want to make 8-bit JPG.
 
-Color spaces such as LAB or !ProPhoto are very wide. There
-are theories that all processing should be done for example in LAB to "get the best quality". This nonsense also runs counter to the philosophy delaboratory.
-
 The another thing is CMYK. This is the best color space for curves manipulation (so also for levels), it is the best way to correct skin colors, and
 this is the best color space for sharpening portraits. Unfortunately for most technical people, CMYK is usable only for printing. As far as I know delaboratory is the only open source application (except G'MIC) which supports CMYK operations. Moreover, I met with the opinions that my desire to work in
 CMYK is stupid because "it does not matter whether the curves are RGB or CMYK - the result will be the same". And yes - it is a common opinion among developers.
 
+Color spaces such as LAB or !ProPhoto are very wide. There
+are theories that all processing should be done for example in LAB to "get the best quality". This nonsense also runs counter to the philosophy delaboratory. At least some people understand what is interesting in the LAB (as opposed to CMYK). 
+
 Delaboratory does not support color profiles, the target color space
 is sRGB. Viewing is also done in sRGB. When importing RAW file - !ProPhoto RGB colorspace is used. It is not really good for processing (too wide), but it helps preserving the maximum detail from oryginal source, so it may be a good way
-transition.
+transition. 
 
 If the gamut of sRGB limits your photographic style - delaboratory is not an application for you. If your goal is to achieve faithful original colors of photo - you don't need delaboratory, because it meets completely different role. Just use the raw processor - such as !RawTherapee, Darktable or Photivo (in my opinion the best is !RawTherapee).
 
