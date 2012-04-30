@@ -1,31 +1,30 @@
 #summary Operations planned for 0.8
 
-typical workflows:
-  * RAW -> !ProPhoto -> CMYK -> LAB -> sRGB 
-  * RAW -> !ProPhoto -> CMYK -> sRGB -> BW
-  * RAW -> !ProPhoto -> LAB -> sRGB
-  * RAW -> !ProPhoto -> sRGB
-  * RAW -> !ProPhoto -> BW
-  * RAW -> !ProPhoto -> HSV/HSL/LCH -> sRGB
+typical workflow:
+  * open RAW file (so we start in ProPhoto RGB)
+  * exposure (brightness, contrast, shadows/highlights, still in ProPhoto)
+  * CMYK levels (extend range of CMY colors, preserve details in K channel)
+  * BW mixer (RGB or ProPhoto to BW)
+  * vignette od dodge/burn, to increase image depth (both in LAB or BW)
+  * local contrast (USM with big radius in LAB or BW)
 
-operations:
-  * original image in !ProPhoto RGB 
-  * apply green channel in luminance mode
-  * low contrast or shadows/highlights in !ProPhoto 
-  * CMYK curves / CMYK levels
-  * White Balance in LAB
-  * exposure (brightness, contrast) in LAB and BW
-  * saturation in LAB 
-  * vignette in LAB and BW
-  * local contrast (USM hiraloam) in LAB and BW (maybe also in CMYK/RGB)
-  * sharpening (USM) in LAB, BW, CMYK (and maybe in RGB)
-  * dodge/burn in LAB and BW
-  * predefined RGB curves like cross processing
-  * RGB -> BW mixer
-  * high pass (monochrome) in LAB/BW/RGB/CMYK
-  * equalizer in HSV/HSL/LCH
-  * hue shift in HSV/HSL/LCH
-  * blur AB in LAB
-
-
-
+other steps:
+  * white balance, click on neutral point (AB shift in LAB)
+  * apply green channel in luminance mode for portraits (RGB or ProPhoto)
+  * CMYK sharpen K for portraits
+  * USM sharpen in LAB/BW
+  * saturation slider in LAB
+  * saturation curve in LCH (chroma)
+  * luminance curve (L in LAB)
+  * hue shift (in LCH or HSV or HSL)
+  * HSV/HSL/LCH equalizer (by hue)
+  * LAB equalizer (by L)
+  * high pass sharpening (must be simpler to use)
+  * blur AB channels in LAB to decrease color noise
+  * vignette in RGB is sometimes better than in LAB
+  * CMYK curves
+  * RGB curves
+  * AB curves (LAB)
+  * RGB levels
+  * AB levels (LAB)
+  * RGB mixer
