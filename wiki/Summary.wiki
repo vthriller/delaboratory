@@ -8,7 +8,7 @@ Delaboratory is not in any way inspired by interface of Adobe products, it is ra
 
 My main problems with GIMP can be simply described on an example of curves:
 
-  * The first problem is that the 8-bit color processing means that each operation is an lossy operation - the image quality is destroyed, in practice, and not theory - this can be seen with the naked eye. GeGL won't fix that problem until layers are still stored as 8-bit.
+  * The first problem is that the 8-bit color processing means that each operation is an lossy operation - the image quality is destroyed, in practice, and not theory - this can be seen with the naked eye. GeGL won't fix that problem if layers are still stored as 8-bit.
   * The second problem is that the Gimp does not directly support the LAB space and CMYK, and I need the curves in these colorspaces. 
   * The third problem is that when user clicks OK, curve can't be edited again. To make any changes in curve we need to start over.
   * The fourth problem is that you can not create color samplers on the picture and observe values during the editing of curves. And this is required by technique called "color by numbers".
