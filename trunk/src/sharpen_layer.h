@@ -16,33 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_USM_FRAME_H
-#define _DE_USM_FRAME_H
+#ifndef _DE_SHARPEN_LAYER_H
+#define _DE_SHARPEN_LAYER_H
 
-#include "action_frame.h"
-#include "slider.h"
-#include <vector>
-#include <map>
+#include "layer_with_blending.h"
 
-class dePropertyValueSlider;
-class deLayerProcessor;
-
-class deUSMFrame:public deActionFrame
+class deSharpenLayer:public deLayerWithBlending
 {
     private:
-        std::vector<dePropertyValueSlider*> valueSliders;
-        std::map<std::string, wxButton*> buttons;
-
-        deLayerProcessor& layerProcessor;
-
-        void click(wxCommandEvent &event);
+        virtual std::string getType() const {return "sharpen";};
+        deViewManager& viewManager;
 
     public:
-        deUSMFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deUSMFrame();
+        deSharpenLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager);
+        virtual ~deSharpenLayer();
 
+        virtual bool isChannelNeutral(int index);
+        virtual bool updateMainImageSingleChannel(int channel);
+
+        virtual void load(xmlNodePtr root) {};
+        virtual void save(xmlNodePtr root) {saveCommon(root);};
+
+        virtual std::string getActionName() {return "sharpen";};
 
 };
-
 
 #endif

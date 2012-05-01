@@ -51,7 +51,8 @@ deValue deCurveShape::calc(deValue value)
 
 void deCurveShape::build(const deCurvePoints& points)
 {
-    nodes.clear();
+    typedef std::map<deValue, deValue> deNodes;
+    deNodes nodes;
     deCurvePoints::const_iterator j;
 
     for (j = points.begin(); j != points.end(); j++)
@@ -62,40 +63,6 @@ void deCurveShape::build(const deCurvePoints& points)
         nodes.insert(std::pair<deValue, deValue>(x, y));
     }        
 
-    generateBezier();
-}
-
-void deCurveShape::getControlPoints(deCurvePoints& points) const
-{
-    points.clear();
-
-    deNodes::const_iterator i;
-    for (i = nodes.begin(); i != nodes.end(); i++)
-    {
-        deValue x = i->first;        
-        deValue y = i->second;
-        points.push_back(deCurvePoint(x,y));
-    }
-
-}
-
-void deCurveShape::getCurvePoints(deCurvePoints& points) const
-{
-    points.clear();
-    int i;
-
-    deValue s = 1.0 / (size - 1);
-    for (i = 0; i < size; i++)
-    {
-        deValue x = i * s;
-        deValue y = functions.at(i).calc(x);
-        points.push_back(deCurvePoint(x,y));
-    }
-
-}
-
-void deCurveShape::generateBezier()
-{
     /* math formulas from GIMP 
        gimp_curve_plot from gimpcurve.c */
 

@@ -31,7 +31,7 @@ class deBasicLayer:public deLayer
         std::vector<deBasicSetting> settings2;
         std::vector<deBasicSetting> settings;
         std::vector<dePropertyValue*> basicProperties;
-        deCurve* curves;
+        deBaseCurve* curves;
         int shiftIndex;
         deValue shiftValue;
 

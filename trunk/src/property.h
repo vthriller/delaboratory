@@ -26,6 +26,7 @@ class deProperty
 {
     private:
         std::string label;
+        bool blendOnly;
 
     protected:        
         std::string name;
@@ -41,6 +42,9 @@ class deProperty
         void setLabel(const std::string& _label);
 
         std::string getName() const;
+
+        virtual bool updateBlendOnly() const {return blendOnly;};
+        void setBlendOnly();
 };
 
 #endif

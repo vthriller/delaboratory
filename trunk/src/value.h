@@ -21,4 +21,6 @@
 
 #define deValue float
 
+void clip(deValue& v);
+
 #endif

@@ -20,6 +20,7 @@
 #define _DE_LAYER_FRAME_H
 
 #include "frame.h"
+#include "value.h"
 class deActionLayer;
 class deBaseLayer;
 class deLayerFrameManager;
@@ -49,6 +50,7 @@ class deLayerFrame:public deFrame
         virtual ~deLayerFrame();
         
         virtual void setUIFromLayer() = 0;
+        virtual bool onImageClick(deValue x, deValue y) {return false;};
 };
 
 #endif

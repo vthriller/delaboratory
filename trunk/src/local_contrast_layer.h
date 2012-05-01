@@ -16,40 +16,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_USM_LAYER_H
-#define _DE_USM_LAYER_H
+#ifndef _DE_LOCAL_CONTRAST_LAYER_H
+#define _DE_LOCAL_CONTRAST_LAYER_H
 
-#include "property_value.h"
-#include "layer.h"
-class deChannel;
+#include "layer_with_blending.h"
 
-class deUSMLayer:public deLayer
+class deLocalContrastLayer:public deLayerWithBlending
 {
     private:
-        int blurRadiusPropertyIndex;
-        int amountPropertyIndex;
-        int thresholdPropertyIndex;
+        virtual std::string getType() const {return "local_contrast";};
         deViewManager& viewManager;
 
-    protected:
-        virtual std::string getType() const {return "usm";};
-        virtual std::string getLabel() const {return "unsharp mask";};
-
     public:
-        deUSMLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
-        virtual ~deUSMLayer();
+        deLocalContrastLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager);
+        virtual ~deLocalContrastLayer();
 
         virtual bool isChannelNeutral(int index);
+        virtual bool updateMainImageSingleChannel(int channel);
 
-        bool processUSM(const deChannel& sourceChannel, deChannel& channel);
+        virtual void load(xmlNodePtr root) {};
+        virtual void save(xmlNodePtr root) {saveCommon(root);};
 
-        virtual void load(xmlNodePtr root);
-        virtual void save(xmlNodePtr root);
-
-        virtual std::string getActionName() {return "usm";};
-        virtual bool updateMainImageSingleChannel(int i);
-
-
+        virtual std::string getActionName() {return "local contrast";};
 
 };
 

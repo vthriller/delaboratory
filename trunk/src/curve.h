@@ -24,11 +24,30 @@
 #include "curve_shape.h"
 #include <list>
 #include "mutex.h"
+#include <vector>
 
 class deChannel;
 
+class deBaseCurve
+{
+    private:
+        deCurvePoints controlPoints;
+        deCurveShape shape;
 
-class deCurve
+        mutable deMutex mutex;
+
+    public:
+        deBaseCurve();
+        virtual ~deBaseCurve();
+
+        void clearPoints();
+        int addPoint(deValue x, deValue y);
+
+        void build();
+        void process(const deValue* source, deValue* destination, int n);
+};
+
+class deCurveOld
 {
     private:
         deCurvePoints points;
@@ -38,15 +57,15 @@ class deCurve
 
         void loadPoint(xmlNodePtr node);
 
-        deCurve(const deCurve& c);
-        deCurve& operator=(const deCurve& c);
+        deCurveOld(const deCurveOld& c);
+        deCurveOld& operator=(const deCurveOld& c);
 
         void lock() const; 
         void unlock() const;
 
     public:    
-        deCurve();
-        virtual ~deCurve();
+        deCurveOld();
+        virtual ~deCurveOld();
 
         int findPoint(deValue x, deValue y) const;
         int addPoint(deValue x, deValue y);
@@ -57,8 +76,7 @@ class deCurve
         void process(const deValue* source, deValue* destination, int n);
 
         const deCurvePoints& getPoints() const;
-        void getControlPoints(deCurvePoints& points) const;
-        void getCurvePoints(deCurvePoints& points) const;
+        const deCurvePoints& getControlPoints() const;
         const deCurvePoint& getPoint(int n) const;
 
         void save(xmlNodePtr node) const;
@@ -70,9 +88,6 @@ class deCurve
         void setS(int a);
         void invert();
         void fill(int n, deValue a, deValue r);
-
-        void setContrastBrightness(deValue contrast, deValue brightness);
-        void setLevels(deValue min, deValue middle, deValue max);
 
         bool isNeutral() const;
 

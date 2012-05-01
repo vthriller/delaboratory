@@ -24,9 +24,10 @@
 #include "property_numeric.h"
 #include "property_levels.h"
 #include "preset_button.h"
+#include "layer_processor.h"
 
 deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& name, deBaseLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _index)
-:deLayerFrame(parent, name, _layer, _frameManager, _index)
+:deLayerFrame(parent, name, _layer, _frameManager, _index), layerProcessor(_layerProcessor)
 {
     std::vector<std::string> names;
     std::vector<std::string>::iterator i;
@@ -78,7 +79,6 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
         addWidget(b->getWindow());
     }
 
-
     fit();
 }
 
@@ -100,3 +100,19 @@ void deGenericLayerFrame::setUIFromLayer()
     }
 }
 
+bool deGenericLayerFrame::onImageClick(deValue x, deValue y)
+{
+    if ((x < 0) || (y < 0) || (x >= 1) || (y >= 1))
+    {
+        return false;
+    }
+
+    if (layer.onImageClick(x, y))
+    {
+        setUIFromLayer();
+        layerProcessor.markUpdateAllChannels(index);
+        return true;
+    }        
+
+    return false;
+}

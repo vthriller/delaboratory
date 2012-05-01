@@ -209,42 +209,35 @@ void deCurvesPanel::drawLines(wxDC& dc)
 
 void deCurvesPanel::drawCurve(wxDC& dc)
 {
-    deCurve* curve = layer.getCurve(channel);
+    deCurveOld* curve = layer.getCurve(channel);
 
     if (!curve)
     {
         return;
     }
 
-    deCurvePoints::const_iterator i;
-
-    deCurvePoints curvePoints;
-    curve->getCurvePoints(curvePoints);
-
-    deValue xp = -1;
-    deValue yp = -1;
-
-    for (i = curvePoints.begin(); i != curvePoints.end(); i++)
+    int i;
+    deValue lastY = 0.0;
+    deValue lastX = 0.0;
+    for (i = 0; i < sizeX; i++)
     {
-        const deCurvePoint& point = *i;
-        deValue x = point.getX();
-        deValue y = point.getY();
-        if (xp >= 0)
+        deValue x = (deValue) i / (sizeX - 1.0);
+        deValue y = curve->calcValue(x);
+        if (i > 0)
         {
-            drawLine(dc, xp, yp, x, y);
+            drawLine(dc, lastX, lastY, x, y);
         }
-        xp = x;
-        yp = y;
+        lastY = y;
+        lastX = x;
     }
 
-    deCurvePoints controlPoints;
-    curve->getControlPoints(controlPoints);
-
+    const deCurvePoints& controlPoints = curve->getControlPoints();
+    deCurvePoints::const_iterator j;
 
     int index = 0;
-    for (i = controlPoints.begin(); i != controlPoints.end(); i++)
+    for (j = controlPoints.begin(); j != controlPoints.end(); j++)
     {
-        const deCurvePoint& point = *i;
+        const deCurvePoint& point = *j;
         deValue x = point.getX();
         deValue y = point.getY();
         drawPoint(dc, x, y);
@@ -256,7 +249,7 @@ void deCurvesPanel::click(wxMouseEvent &event)
 {
     logMessage("deCurvesPanel::click");
 
-    deCurve* curve = layer.getCurve(channel);
+    deCurveOld* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -291,7 +284,7 @@ void deCurvesPanel::click(wxMouseEvent &event)
 void deCurvesPanel::reset()
 {
     lastSelectedPoint = -1;
-    deCurve* curve = layer.getCurve(channel);
+    deCurveOld* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -304,7 +297,7 @@ void deCurvesPanel::reset()
 void deCurvesPanel::invert()
 {
     lastSelectedPoint = -1;
-    deCurve* curve = layer.getCurve(channel);
+    deCurveOld* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -317,7 +310,7 @@ void deCurvesPanel::invert()
 void deCurvesPanel::setConst(deValue v)
 {
     lastSelectedPoint = -1;
-    deCurve* curve = layer.getCurve(channel);
+    deCurveOld* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -330,7 +323,7 @@ void deCurvesPanel::setConst(deValue v)
 void deCurvesPanel::addRandom(int n)
 {
     lastSelectedPoint = -1;
-    deCurve* curve = layer.getCurve(channel);
+    deCurveOld* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -351,7 +344,7 @@ void deCurvesPanel::addRandom(int n)
 void deCurvesPanel::setAngle(int a)
 {
     lastSelectedPoint = -1;
-    deCurve* curve = layer.getCurve(channel);
+    deCurveOld* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -364,7 +357,7 @@ void deCurvesPanel::setAngle(int a)
 void deCurvesPanel::setS(int a)
 {
     lastSelectedPoint = -1;
-    deCurve* curve = layer.getCurve(channel);
+    deCurveOld* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -387,7 +380,7 @@ void deCurvesPanel::update(bool finished)
 
 void deCurvesPanel::release(wxMouseEvent &event)
 {
-    deCurve* curve = layer.getCurve(channel);
+    deCurveOld* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -423,7 +416,7 @@ void deCurvesPanel::move(wxMouseEvent &event)
         return;
     }
 
-    deCurve* curve = layer.getCurve(channel);
+    deCurveOld* curve = layer.getCurve(channel);
 
     if (!curve)
     {
@@ -546,7 +539,7 @@ void deCurvesPanel::onKey(int key)
 
                     c->unlockRead();
 
-                    deCurve* curve = layer.getCurve(i);
+                    deCurveOld* curve = layer.getCurve(i);
 
                     int selectedPoint = curve->addPoint(m, curve->calcValue(m));
        
@@ -578,7 +571,7 @@ void deCurvesPanel::onKey(int key)
         deValue dY = delta / (sizeY - 1);
         if (lastSelectedPoint >= 0)
         {
-            deCurve* curve = layer.getCurve(channel);
+            deCurveOld* curve = layer.getCurve(channel);
             curve->movePointVertically(lastSelectedPoint, dY);
             update(true);
         }
@@ -588,7 +581,7 @@ void deCurvesPanel::onKey(int key)
     {
         if (lastSelectedPoint >= 0)
         {
-            deCurve* curve = layer.getCurve(channel);
+            deCurveOld* curve = layer.getCurve(channel);
             curve->deletePoint(lastSelectedPoint);
             lastSelectedPoint = -1;
             update(true);

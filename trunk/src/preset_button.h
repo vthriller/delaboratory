@@ -31,9 +31,9 @@ class dePresetButton:public deButton
         const std::string preset;
         deLayerProcessor& layerProcessor;
         deBaseLayer& layer;
+        int layerIndex;
         deLayerFrame& frame;
 
-        int layerIndex;
 
     public:
         dePresetButton(deWindow& window, deBaseLayer& _layer, const std::string& name, deLayerProcessor& _layerProcessor, int _layerIndex, deLayerFrame& _frame);

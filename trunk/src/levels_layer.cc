@@ -30,6 +30,9 @@ deLevelsLayer::deLevelsLayer(deColorSpace _colorSpace, deChannelManager& _channe
     dePreset* reset = createPreset("reset");
     reset->addOperation("reset");
 
+    dePreset* autoLevels = createPreset("auto levels");
+    autoLevels->addOperation("auto levels");
+
     dePreset* autoLevelsLight = createPreset("auto levels light");
     autoLevelsLight->addOperation("auto levels light");
 
@@ -84,9 +87,15 @@ bool deLevelsLayer::updateMainImageSingleChannel(int channel)
     deValue* target = mainLayerImage.getValues(channel);
     int n = mainLayerImage.getChannelSize().getN();
 
-    deCurve curve;
+    deBaseCurve curve;
 
-    curve.setLevels(levels.getMin(), levels.getMiddle(), levels.getMax());
+    curve.addPoint(0, 0);
+    curve.addPoint(levels.getMin(), 0);
+    curve.addPoint(levels.getMiddle(), 0.5);
+    curve.addPoint(levels.getMax(), 1);
+    curve.addPoint(1, 1);
+
+    curve.build();
 
     curve.process(source, target, n);
 
@@ -132,14 +141,19 @@ void deLevelsLayer::executeOperation(const std::string& operation)
             deValue middle = 0.5;
             deValue max = 1.0;
 
+            if (operation == "auto levels")
+            {
+                calcAutoLevels(i, min, middle, max, 0.0001);
+            }
+
             if (operation == "auto levels light")
             {
-                calcAutoLevels(i, min, middle, max, 0.01);
+                calcAutoLevels(i, min, middle, max, 0.02);
             }
 
             if (operation == "auto levels heavy")
             {
-                calcAutoLevels(i, min, middle, max, 0.05);
+                calcAutoLevels(i, min, middle, max, 0.1);
             }
 
             levels.setMin(min);

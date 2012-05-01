@@ -17,3 +17,15 @@
 */
 
 #include "value.h"
+
+void clip(deValue& v)
+{
+    if (v < 0)
+    {
+        v = 0;
+    }
+    else if (v > 1)
+    {   
+        v = 1;
+    }
+}

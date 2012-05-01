@@ -26,7 +26,6 @@
 #include "apply_luminance_layer.h"
 #include "equalizer_layer.h"
 #include "conversion_layer.h"
-#include "usm_layer.h"
 #include "source_image_layer.h"
 #include "dodge_burn_layer.h"
 #include "high_pass_layer.h"
@@ -35,6 +34,8 @@
 #include <algorithm>
 #include "color_space_utils.h"
 #include "levels_layer.h"
+#include "local_contrast_layer.h"
+#include "sharpen_layer.h"
 
 deBaseLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, deStaticImage& sourceImage)
 {
@@ -48,21 +49,6 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
     if (type == "blur")
     {
         return new deBlurLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
-    }
-
-    if (type == "vignette1")
-    {
-        return new deVignetteLayer1(colorSpace, source, _layerStack, _channelManager, _viewManager);
-    }
-
-    if (type == "vignette2")
-    {
-        return new deVignetteLayer2(colorSpace, source, _layerStack, _channelManager, _viewManager);
-    }
-
-    if (type == "usm")
-    {
-        return new deUSMLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "basic")
@@ -113,6 +99,21 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
     if (type == "levels")
     {
         return new deLevelsLayer(colorSpace, _channelManager, source, _layerStack);
+    }        
+
+    if (type == "local_contrast")
+    {
+        return new deLocalContrastLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
+    }        
+
+    if (type == "sharpen")
+    {
+        return new deSharpenLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
+    }        
+
+    if (type == "vignette")
+    {
+        return new deVignetteLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
     }        
     
     if (type == "conversion")
@@ -190,8 +191,11 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
 
 void getSupportedActions(std::vector<std::string>& actions)
 {
-    actions.push_back("curves");
     actions.push_back("levels");
+    actions.push_back("curves");
+    actions.push_back("local_contrast");
+    actions.push_back("sharpen");
+    actions.push_back("vignette");
     actions.push_back("basic");
     actions.push_back("mixer");
     actions.push_back("equalizer8");
@@ -199,24 +203,26 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("apply_image");
     actions.push_back("apply_luminance");
 
-    actions.push_back("vignette1");
-    actions.push_back("vignette2");
     actions.push_back("dodge_burn");
     actions.push_back("shadows_highlights");
 
-    actions.push_back("usm");
     actions.push_back("high_pass");
     actions.push_back("blur");
 }
 
 std::string getActionGroup(const std::string n)
 {
+    if ((n == "levels") || (n == "local_contrast") || (n == "sharpen") || (n == "vignette") || (n == "apply_luminance"))
+    {
+        return "basic";
+    }
+
     if ((n == "vignette1") || (n == "vignette2") || (n == "dodge_burn") || (n == "shadows_highlights"))
     {
         return "light";
     }
 
-    if ((n == "blur") || (n == "high_pass") || (n == "usm"))
+    if ((n == "blur") || (n == "high_pass"))
     {
         return "sharp";
     }
@@ -266,6 +272,11 @@ std::string getActionDescription(const std::string& a)
     if (a == "dodge_burn")
     {
         return "d / b";
+    }
+
+    if (a == "local_contrast")
+    {
+        return "local contrast";
     }
 
     return a;

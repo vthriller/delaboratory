@@ -162,10 +162,9 @@ void deLayerGridPanel::clearRows()
 }
 
 deLayerGridPanel::deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deChannelManager& _channelManager)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(250, 400)), project(_project), layerProcessor(_processor), channelManager(_channelManager)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(250, 400)), 
+project(_project), layerProcessor(_processor), channelManager(_channelManager)
 {
-    maxRows = 10;
-
     gridSizer = new wxFlexGridSizer(5);
     gridSizer->SetFlexibleDirection(wxHORIZONTAL);
     SetSizer(gridSizer);
@@ -288,5 +287,13 @@ void deLayerGridPanel::click(wxCommandEvent &event)
         }
     }
 
+}
+
+void deLayerGridPanel::update()
+{
+    clearRows();
+    buildRows();
+    Layout();
+    layerProcessor.onGUIUpdate();
 }
 

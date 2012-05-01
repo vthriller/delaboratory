@@ -213,15 +213,17 @@ bool blurChannel(const deValue* source, deValue* destination, deSize size, deVal
     assert(w > 0);
     assert(h > 0);
 
+    int min = 1;
+
     int blurSizeW = radiusX;
-    if (blurSizeW < 1)
+    if (blurSizeW < min)
     {
-        blurSizeW = 1;
+        blurSizeW = min;
     }
     int blurSizeH = radiusY;
-    if (blurSizeH < 1)
+    if (blurSizeH < min)
     {
-        blurSizeH = 1;
+        blurSizeH = min;
     }
 
     int maxSize = blurSizeW;

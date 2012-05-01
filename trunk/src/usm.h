@@ -16,34 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_VIGNETTE_FRAME_H
-#define _DE_VIGNETTE_FRAME_H
+#ifndef _DE_USM_H
+#define _DE_USM_H
 
-#include "action_frame.h"
-#include "slider.h"
-#include <vector>
+#include "value.h"
+#include "size.h"
+#include "blur.h"
 
-class dePropertyValueSlider;
-class deLayerProcessor;
+bool unsharpMask(const deValue* source, deValue* destination, deSize& size, deValue a, deValue r, deValue t, deBlurType type);
 
-class deVignetteFrame:public deActionFrame
-{
-    private:
-        std::vector<dePropertyValueSlider*> valueSliders;
-        deLayerProcessor& layerProcessor;
-
-        wxButton* reset;
-
-        void click(wxCommandEvent &event);
-
-    public:
-        deVignetteFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deVignetteFrame();
-
-        virtual bool onImageClick(deValue x, deValue y);
-
-
-};
-
-
-#endif
+#endif    

@@ -20,7 +20,7 @@
 #define _DE_CURVE_POINT_H
 
 #include "value.h"
-#include <list>
+#include <vector>
 
 class deCurvePoint
 {
@@ -40,6 +40,6 @@ class deCurvePoint
         
 };
 
-typedef std::list<deCurvePoint> deCurvePoints;
+typedef std::vector<deCurvePoint> deCurvePoints;
 
 #endif

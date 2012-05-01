@@ -19,69 +19,29 @@
 #ifndef _DE_VIGNETTE_LAYER_H
 #define _DE_VIGNETTE_LAYER_H
 
-#include "layer.h"
-#include "property_value.h"
+#include "layer_with_blending.h"
+class deViewManager;
 
-class deVignetteLayer:public deLayer
+class deVignetteLayer:public deLayerWithBlending
 {
     private:
-        int vignettes;
-
-        int radius1XIndex;
-        int radius1YIndex;
-        int center1XIndex;
-        int center1YIndex;
-
-        int radius2XIndex;
-        int radius2YIndex;
-        int center2XIndex;
-        int center2YIndex;
-
-        int lightIndex;
-        int darknessIndex;
-        int spotIndex;
-
+        virtual std::string getType() const {return "vignette";};
         deViewManager& viewManager;
 
-    protected:
-        virtual std::string getType() const {return "vignette";};
-
     public:
-        deVignetteLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _vignettes);
+        deVignetteLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager);
         virtual ~deVignetteLayer();
 
         virtual bool isChannelNeutral(int index);
+        virtual bool updateMainImageSingleChannel(int channel);
 
+        virtual void load(xmlNodePtr root) {};
+        virtual void save(xmlNodePtr root) {saveCommon(root);};
 
-        virtual void load(xmlNodePtr root);
-        virtual void save(xmlNodePtr root);
+        virtual std::string getActionName() {return "vignette";};
 
-        virtual std::string getActionName() {return "vign";};
+        virtual bool onImageClick(deValue x, deValue y);
 
-        void reset();
-
-        bool setCenter(deValue x, deValue y);
-
-        virtual bool updateMainImageSingleChannel(int i);
-
-};
-
-class deVignetteLayer1:public deVignetteLayer
-{
-    public:
-        deVignetteLayer1(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
-        virtual ~deVignetteLayer1();
-
-        virtual std::string getType() const {return "vignette1";};
-};
-
-class deVignetteLayer2:public deVignetteLayer
-{
-    public:
-        deVignetteLayer2(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
-        virtual ~deVignetteLayer2();
-
-        virtual std::string getType() const {return "vignette2";};
 };
 
 #endif
