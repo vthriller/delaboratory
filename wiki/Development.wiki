@@ -1,6 +1,15 @@
 #summary Development News
 
 -----
+*2012.05.01*
+
+Replaced USM with sharpen and local contrast.
+
+New, simpler vignette.
+
+Added fill layer. Examples of use: in RGB set in overlay mode. In LCH disable luminance channel, then set hue/chroma (make sure opacity is 1.0). In LAB disable luminance channel and play with A/B values.
+
+-----
 *2012.04.28*
 
 I implemented new layer hierarchy, so I was able to start implementing new conversion subsystem which already works. There is now also a warning which tells you about conversion clipping, so if you are converting ProPhoto or LAB into sRGB or CMYK you will see how many pixels are out and in that case decrease contrast - image will be "flat" but you won't lose any details.
