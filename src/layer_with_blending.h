@@ -21,12 +21,13 @@
 
 #include "switchable_layer.h"
 #include "blend_mode.h"
+#include "property_choice.h"
 
 class deLayerWithBlending:public deSwitchableLayer
 {
     private:
-        deBlendMode blendMode;
         deImage imageBlendPass;
+        dePropertyChoice blendMode;
 
         virtual const deImage& getLayerImage() const;
         virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
@@ -46,7 +47,7 @@ class deLayerWithBlending:public deSwitchableLayer
 
         bool isBlendingEnabled() const;
 
-        deBlendMode getBlendMode() const {return blendMode;};
+        deBlendMode getBlendMode() const;
         deValue getOpacity() const;
 
         void setBlendMode(deBlendMode mode);

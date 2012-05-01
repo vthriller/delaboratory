@@ -26,15 +26,13 @@
 
 deBlendFrame::deBlendFrame(wxWindow *parent, deLayerWithBlending& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
 :deLayerFrameOld(parent, _layer, "blend frame", _frameManager, _layerIndex),
- layerProcessor(_layerProcessor)
+ layerProcessor(_layerProcessor), blendModes(getSupportedBlendModes())
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
 
     deColorSpace colorSpace = layer.getColorSpace();
     frameManager.addBlendFrame(this);
-
-    getSupportedBlendModes(blendModes);
 
     deBlendMode currentBlendMode = _layer.getBlendMode();
 

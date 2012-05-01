@@ -43,8 +43,9 @@ enum deBlendMode
 };
 
 std::string getBlendModeName(deBlendMode mode);
-void getSupportedBlendModes(std::vector<deBlendMode>& result);
 deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode);
 deBlendMode blendModeFromString(const std::string& s);
+std::vector<deBlendMode> getSupportedBlendModes();
+std::vector<std::string> getSupportedBlendModeNames();
 
 #endif
