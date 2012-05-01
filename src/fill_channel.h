@@ -21,6 +21,6 @@
 
 #include "value.h"
 
-void copyChannel(const deValue* src, deValue* dst, int n);
+void fillChannel(deValue* dst, int n, deValue v);
 
 #endif

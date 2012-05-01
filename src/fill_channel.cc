@@ -16,11 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_COPY_CHANNEL_H
-#define _DE_COPY_CHANNEL_H
+#include "fill_channel.h"
 
-#include "value.h"
+void fillChannel(deValue* dst, int n, deValue v)
+{
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        dst[i] = v;
+    }
+}
 
-void copyChannel(const deValue* src, deValue* dst, int n);
-
-#endif
