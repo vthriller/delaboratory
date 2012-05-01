@@ -16,11 +16,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_COPY_CHANNEL_H
-#define _DE_COPY_CHANNEL_H
+#ifndef _DE_FILL_LAYER_H
+#define _DE_FILL_LAYER_H
 
-#include "value.h"
+#include "layer_with_blending.h"
+class deViewManager;
 
-void copyChannel(const deValue* src, deValue* dst, int n);
+class deFillLayer:public deLayerWithBlending
+{
+    private:
+        virtual std::string getType() const {return "fill";};
+
+    public:
+        deFillLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
+        virtual ~deFillLayer();
+
+        virtual bool isChannelNeutral(int index);
+        virtual bool updateMainImageSingleChannel(int channel);
+
+        virtual std::string getActionName() {return "fill";};
+
+};
 
 #endif

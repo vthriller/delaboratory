@@ -20,6 +20,7 @@
 #include "layer_stack.h"
 #include "curves_layer.h"
 #include "blur_layer.h"
+#include "fill_layer.h"
 #include "vignette_layer.h"
 #include "apply_image_layer.h"
 #include "mixer_layer.h"
@@ -101,6 +102,11 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
         return new deLevelsLayer(colorSpace, _channelManager, source, _layerStack);
     }        
 
+    if (type == "fill")
+    {
+        return new deFillLayer(colorSpace, _channelManager, source, _layerStack);
+    }        
+
     if (type == "local_contrast")
     {
         return new deLocalContrastLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
@@ -119,67 +125,7 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
     if (type == "conversion")
     {
         return new deConversionLayer(colorSpace, _channelManager, source, _layerStack);
-        /*
-        if (colorSpace == deColorSpaceBW)
-        {
-            cbw = true;
-        }
-        else
-        {
-            deBaseLayer* sourceLayer = _layerStack.getLayer(source);
-            deColorSpace sourceColorSpace = sourceLayer->getColorSpace();
-            if (sourceColorSpace == deColorSpaceBW)
-            {
-                switch (colorSpace)
-                {
-                    case deColorSpaceHSL:
-                    case deColorSpaceHSV:
-                    case deColorSpaceLCH:
-                    {
-                        cbwhue = true;
-                        break;
-                    }
-                    default:
-                        break;
-                }
-            }
-        }
-
-        if ((!cbw) && (!cbwhue))
-        {
-            return new deConversionLayer(colorSpace, source, _layerStack, _channelManager);
-        }
-        */
     }
-
-/*
-    if (type == "conversion_bw")
-    {
-        cbw = true;
-    }
-
-    if (type == "conversion_bw2hue")
-    {
-        cbwhue = true;
-    }
-    */
-
-/*
-    if (cbw)
-    {
-        deBaseLayer* sourceLayer = _layerStack.getLayer(source);
-        deColorSpace sourceColorSpace = sourceLayer->getColorSpace();
-        int n = getColorSpaceSize(sourceColorSpace);
-        return new deConversionBWLayer(source, _layerStack, _channelManager, n);
-    }
-    */
-
-/*
-    if (cbwhue)
-    {
-        return new deConversionBW2HueLayer(source, _layerStack, _channelManager, colorSpace);
-    }
-    */
 
     if (type == "original")
     {
@@ -193,6 +139,7 @@ void getSupportedActions(std::vector<std::string>& actions)
 {
     actions.push_back("levels");
     actions.push_back("curves");
+    actions.push_back("fill");
     actions.push_back("local_contrast");
     actions.push_back("sharpen");
     actions.push_back("vignette");

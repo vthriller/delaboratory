@@ -23,7 +23,7 @@
 #include "value.h"
 #include <map>
 class deChannelManager;
-class deSize;
+#include "size.h"
 
 class deImage
 {
