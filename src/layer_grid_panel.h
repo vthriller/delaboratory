@@ -69,6 +69,8 @@ class deLayerGridPanel:public wxPanel
         void buildRows();
         void clearRows();
 
+        void update();
+
 };
 
 #endif

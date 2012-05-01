@@ -24,24 +24,19 @@
 #include "curve_point.h"
 #include <vector>
 
-typedef std::map<deValue, deValue> deNodes;
 class deCurveFunctionBezier;
 
 class deCurveShape
 {
     private:
-        deNodes nodes;
-        std::vector<deCurveFunctionBezier> functions;
         int size;
+        std::vector<deCurveFunctionBezier> functions;
 
-        void generateBezier();
     public:
         deCurveShape(int _size);
         ~deCurveShape();
 
         void build(const deCurvePoints& points);
-        void getControlPoints(deCurvePoints& points) const;
-        void getCurvePoints(deCurvePoints& points) const;
 
         deValue calc(deValue value);
 };

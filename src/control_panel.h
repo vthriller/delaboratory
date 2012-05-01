@@ -68,7 +68,7 @@ class deControlPanel:public wxPanel
 
         void onChangeView();
 
-        void updateLayerGrid();
+        void updateLayerGrid2();
 
         void onKey(int key);
 

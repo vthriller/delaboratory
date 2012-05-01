@@ -30,11 +30,15 @@ class deGenericLayerFrame:public deLayerFrame
     protected:
         std::vector<dePropertyNumericUI*> numerics;
         std::vector<dePropertyLevelsUI*> levels;
+
+        deLayerProcessor& layerProcessor;
     public:
         deGenericLayerFrame(deWindow& parent, const std::string& name, deBaseLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _index);
         virtual ~deGenericLayerFrame();
 
         virtual void setUIFromLayer();
+
+        virtual bool onImageClick(deValue x, deValue y);
 };
 
 #endif

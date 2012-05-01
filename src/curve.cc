@@ -29,17 +29,93 @@
 #define CURVE_POINT_PICK_DISTANCE 0.03
 #define VERTICAL_STEP 0.01
 
-deCurve::deCurve()
-:shape(256)
+#define CURVE_SHAPE_SIZE 256
+
+deBaseCurve::deBaseCurve()
+:shape(CURVE_SHAPE_SIZE)
+{
+}
+
+deBaseCurve::~deBaseCurve()
+{
+}
+
+void deBaseCurve::clearPoints()
+{
+    mutex.lock();
+    controlPoints.clear();
+    mutex.unlock();
+}
+
+int deBaseCurve::addPoint(deValue x, deValue y)
+{
+    if ((x < 0) || (x > 1))
+    {
+        return -1;
+    }
+    if ((y < 0) || (y > 1))
+    {
+        return -1;
+    }
+
+    mutex.lock();
+
+    controlPoints.push_back(deCurvePoint(x,y));
+
+    int p = controlPoints.size() - 1;
+
+    mutex.unlock();
+
+    return p;
+}
+
+void deBaseCurve::build()
+{
+    mutex.lock();
+
+    shape.build(controlPoints);
+
+    mutex.unlock();
+}
+
+void deBaseCurve::process(const deValue* pixels, deValue* p, int n)
+{
+    mutex.lock();
+
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        deValue value = pixels[i];
+        deValue result = shape.calc(value);
+
+        if (result < 0)
+        {
+            p[i] = 0;
+        }
+        else if (result > 1)
+        {
+            p[i] = 1;
+        }
+        else
+        {
+            p[i] = result;
+        }
+    }
+
+    mutex.unlock();
+}
+
+deCurveOld::deCurveOld()
+:shape(CURVE_SHAPE_SIZE)
 {
     reset();
 }
 
-deCurve::~deCurve()
+deCurveOld::~deCurveOld()
 {
 }
 
-void deCurve::reset()
+void deCurveOld::reset()
 {
     lock();
 
@@ -50,7 +126,7 @@ void deCurve::reset()
     unlock();
 }
 
-void deCurve::invert()
+void deCurveOld::invert()
 {
     lock();
 
@@ -62,7 +138,7 @@ void deCurve::invert()
     unlock();
 }
 
-void deCurve::setConst(deValue v)
+void deCurveOld::setConst(deValue v)
 {
     lock();
 
@@ -74,7 +150,7 @@ void deCurve::setConst(deValue v)
     unlock();
 }
 
-void deCurve::setAngle(int a)
+void deCurveOld::setAngle(int a)
 {
     lock();
 
@@ -101,7 +177,7 @@ void deCurve::setAngle(int a)
     unlock();
 }
 
-void deCurve::setS(int a)
+void deCurveOld::setS(int a)
 {
     lock();
 
@@ -121,50 +197,8 @@ void deCurve::setS(int a)
     unlock();
 }
 
-void deCurve::setContrastBrightness(deValue contrast, deValue brightness)
-{
-    lock();
 
-    deValue p1 = 1.0 / 4.0;
-    deValue p2 = 1.0 - 1.0 / 4.0;
-
-    deValue h0 = brightness + 0.0  + (-0.5 * contrast);
-    deValue h1 = brightness + p1   + (p1 - 0.5) * contrast;
-    deValue h2 = brightness + p2   + (1.0 - p2) * contrast;
-    deValue h3 = brightness + 1.0  + 0.5 * contrast;
-
-    points.clear();
-    points.push_back(deCurvePoint(0, h0));
-
-    points.push_back(deCurvePoint(p1, h1));
-    points.push_back(deCurvePoint(p2, h2));
-
-    points.push_back(deCurvePoint(1, h3));
-    shape.build(points);
-
-    unlock();
-}
-
-void deCurve::setLevels(deValue min, deValue middle, deValue max)
-{
-    lock();
-
-//    std::cout << "levels: " << min << " " << middle << " " << max << std::endl;
-
-    points.clear();
-    points.push_back(deCurvePoint(0, 0));
-    points.push_back(deCurvePoint(min, 0));
-    points.push_back(deCurvePoint(middle, 0.5));
-    points.push_back(deCurvePoint(max, 1));
-    points.push_back(deCurvePoint(1, 1));
-
-    shape.build(points);
-
-    unlock();
-}
-
-
-void deCurve::fill(int n, deValue a, deValue r)
+void deCurveOld::fill(int n, deValue a, deValue r)
 {
     lock();
 
@@ -201,7 +235,7 @@ void deCurve::fill(int n, deValue a, deValue r)
     unlock();
 }
 
-deValue deCurve::calcValue(deValue value)
+deValue deCurveOld::calcValue(deValue value)
 {
     lock();
     unlock();
@@ -209,7 +243,7 @@ deValue deCurve::calcValue(deValue value)
     return shape.calc(value);
 }
 
-void deCurve::process(const deChannel& source, deChannel& destination, int n)
+void deCurveOld::process(const deChannel& source, deChannel& destination, int n)
 {
     lock();
 
@@ -239,7 +273,7 @@ void deCurve::process(const deChannel& source, deChannel& destination, int n)
     unlock();
 }
 
-void deCurve::process(const deValue* pixels, deValue* p, int n)
+void deCurveOld::process(const deValue* pixels, deValue* p, int n)
 {
     lock();
 
@@ -266,7 +300,7 @@ void deCurve::process(const deValue* pixels, deValue* p, int n)
     unlock();
 }
 
-int deCurve::findPoint(deValue x, deValue y) const
+int deCurveOld::findPoint(deValue x, deValue y) const
 {
     lock();
 
@@ -290,7 +324,7 @@ int deCurve::findPoint(deValue x, deValue y) const
     return -1;
 }
 
-int deCurve::addPoint(deValue x, deValue y)
+int deCurveOld::addPoint(deValue x, deValue y)
 {
     if ((x <= 0) || (x >= 1))
     {
@@ -313,7 +347,7 @@ int deCurve::addPoint(deValue x, deValue y)
     return points.size() - 1;
 }
 
-void deCurve::deletePoint(int p)
+void deCurveOld::deletePoint(int p)
 {
     lock();
 
@@ -343,7 +377,7 @@ void deCurve::deletePoint(int p)
     unlock();
 }
 
-void deCurve::movePoint(int p, deValue x, deValue y)
+void deCurveOld::movePoint(int p, deValue x, deValue y)
 {
     if (p < 0)
     {
@@ -407,7 +441,7 @@ void deCurve::movePoint(int p, deValue x, deValue y)
     unlock();
 }
 
-void deCurve::movePointVertically(int p, deValue delta)
+void deCurveOld::movePointVertically(int p, deValue delta)
 {
     if (p < 0)
     {
@@ -448,7 +482,7 @@ void deCurve::movePointVertically(int p, deValue delta)
     unlock();
 }
 
-const deCurvePoints& deCurve::getPoints() const
+const deCurvePoints& deCurveOld::getPoints() const
 {
     lock();
     unlock();
@@ -456,7 +490,7 @@ const deCurvePoints& deCurve::getPoints() const
     return points;
 }
 
-const deCurvePoint& deCurve::getPoint(int n) const
+const deCurvePoint& deCurveOld::getPoint(int n) const
 {
     lock();
 
@@ -471,23 +505,15 @@ const deCurvePoint& deCurve::getPoint(int n) const
     return *i;
 }
 
-void deCurve::getControlPoints(deCurvePoints& points) const
+const deCurvePoints& deCurveOld::getControlPoints() const
 {
     lock();
     unlock();
 
-    shape.getControlPoints(points);
+    return points;
 }
 
-void deCurve::getCurvePoints(deCurvePoints& points) const
-{
-    lock();
-    unlock();
-
-    shape.getCurvePoints(points);
-}
-
-void deCurve::save(xmlNodePtr node) const
+void deCurveOld::save(xmlNodePtr node) const
 {
     deCurvePoints::const_iterator i;
     
@@ -502,7 +528,7 @@ void deCurve::save(xmlNodePtr node) const
     }        
 }
 
-void deCurve::loadPoint(xmlNodePtr node) 
+void deCurveOld::loadPoint(xmlNodePtr node) 
 {
     xmlNodePtr child = node->xmlChildrenNode;
 
@@ -538,7 +564,7 @@ void deCurve::loadPoint(xmlNodePtr node)
     points.push_back(deCurvePoint(x,y));
 }
 
-void deCurve::load(xmlNodePtr node) 
+void deCurveOld::load(xmlNodePtr node) 
 {
     points.clear();
 
@@ -557,7 +583,7 @@ void deCurve::load(xmlNodePtr node)
     shape.build(points);
 }
 
-bool deCurve::isNeutral() const
+bool deCurveOld::isNeutral() const
 {
     lock();
     unlock();
@@ -581,17 +607,17 @@ bool deCurve::isNeutral() const
     return true;
 }
 
-void deCurve::lock() const
+void deCurveOld::lock() const
 {
     lockWithLog(mutex, "curve mutex");
 }
 
-void deCurve::unlock() const
+void deCurveOld::unlock() const
 {
     mutex.unlock();
 }
 
-void deCurve::addRandom()
+void deCurveOld::addRandom()
 {
     deValue x = (deValue) rand() / RAND_MAX;
 

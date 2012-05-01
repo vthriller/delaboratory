@@ -183,15 +183,36 @@ void deLayerFrameManager::destroyBlendFrame(int index)
 
 bool deLayerFrameManager::onImageClick(deValue x, deValue y)
 {
-    std::list<deLayerFrameOld*>::const_iterator i;
-    for (i = actionFrames.begin(); i != actionFrames.end(); i++)
     {
-        deActionFrame* trueActionFrame = dynamic_cast<deActionFrame*>(*i);
-        if (trueActionFrame)
+        std::list<deLayerFrameOld*>::const_iterator i;
+        for (i = actionFrames.begin(); i != actionFrames.end(); i++)
         {
-            return trueActionFrame->onImageClick(x, y);
-        }            
+            deActionFrame* trueActionFrame = dynamic_cast<deActionFrame*>(*i);
+            if (trueActionFrame)
+            {
+                bool result = trueActionFrame->onImageClick(x, y);
+                if (result)
+                {
+                    return result;
+                }
+            }            
+        }
     }
+    {
+        std::map<int, deLayerFrame*>::iterator i = layerFrames.begin();
+        for (i = layerFrames.begin(); i != layerFrames.end(); i++)
+        {
+            deLayerFrame* layerFrame = i->second;
+            if (layerFrame)
+            {
+                bool result = layerFrame->onImageClick(x, y);
+                if (result)
+                {
+                    return result;
+                }
+            }            
+        }
+    }        
     return false;
 }
 

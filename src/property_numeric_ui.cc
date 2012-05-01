@@ -33,7 +33,15 @@ dePropertyNumericUI::~dePropertyNumericUI()
 void dePropertyNumericUI::onValueChange(deValue value, bool finished)
 {
     property.set(value);
-    layerProcessor.markUpdateAllChannels(layerIndex);
+
+    if (property.updateBlendOnly())
+    {
+        layerProcessor.markUpdateBlendAllChannels(layerIndex);
+    }
+    else
+    {
+        layerProcessor.markUpdateAllChannels(layerIndex);
+    }
 }
 
 void dePropertyNumericUI::setFromProperty()

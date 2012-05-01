@@ -25,7 +25,7 @@
 class deCurvesLayer:public deLayer
 {
     private:
-        deCurve* curves;
+        deCurveOld* curves;
 
     protected:
         virtual std::string getType() const {return "curves";};
@@ -34,7 +34,7 @@ class deCurvesLayer:public deLayer
         deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deCurvesLayer();
 
-        deCurve* getCurve(int index);
+        deCurveOld* getCurve(int index);
 
         virtual bool isChannelNeutral(int index);
 

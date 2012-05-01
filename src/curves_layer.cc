@@ -33,7 +33,7 @@ deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayer
 :deLayer( _colorSpace,  _sourceLayer, _layerStack, _channelManager)
 {
     int n = getColorSpaceSize(colorSpace);
-    curves = new deCurve[n];
+    curves = new deCurveOld[n];
 }
 
 deCurvesLayer::~deCurvesLayer()
@@ -76,7 +76,7 @@ bool deCurvesLayer::updateMainImageSingleChannel(int i)
 
 }
 
-deCurve* deCurvesLayer::getCurve(int index)
+deCurveOld* deCurvesLayer::getCurve(int index)
 {
     int n = getColorSpaceSize(colorSpace);
     if ((index < 0) || (index >= n))
@@ -100,7 +100,7 @@ void deCurvesLayer::save(xmlNodePtr root)
     int i;
     for (i = 0; i < n; i++)
     {
-        deCurve& curve = curves[i];
+        deCurveOld& curve = curves[i];
         xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("curve"), NULL);
         curve.save(child);
     }
@@ -118,7 +118,7 @@ void deCurvesLayer::load(xmlNodePtr root)
         if ((!xmlStrcmp(child->name, BAD_CAST("curve")))) 
         {
             //assert(i < n);
-            deCurve& curve = curves[i];
+            deCurveOld& curve = curves[i];
             curve.load(child);
             i++;
         }

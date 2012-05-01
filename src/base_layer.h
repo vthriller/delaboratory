@@ -114,6 +114,8 @@ class deBaseLayer
 
         virtual void executeOperation(const std::string& o) {};
 
+        virtual bool onImageClick(deValue x, deValue y) {return false;};
+
 };
 
 #endif

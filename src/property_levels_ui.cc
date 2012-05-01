@@ -118,7 +118,7 @@ class deLevelsControl:public dePanelWX
 
             paint();
 
-            layerProcessor.markUpdateAllChannels(layerIndex);
+            layerProcessor.markUpdateSingleChannel(layerIndex, property.getChannel());
         }
 
         void drawArrow(deCanvas& canvas, deValue v)
@@ -220,8 +220,6 @@ class deChannelHistogramPanel:public dePanelWX
 
             histogram.clear();
             histogram.calc(c, n);
-
-            deValue e = 0.02;
 
             wxImage* image = new wxImage(width, height);
             unsigned char* data = image->GetData();

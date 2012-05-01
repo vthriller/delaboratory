@@ -239,3 +239,25 @@ void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse1, deEl
 
 }
 
+deEllipse calcEllipse(deValue radX, deValue radY, deValue cenX, deValue cenY, deValue x1, deValue y1, deValue x2, deValue y2)
+{
+    deValue w = x2 - x1;
+    deValue h = y2 - y1;
+
+    deValue rx = radX / w;
+    deValue ry = radY / h;
+
+    // 0..1
+    deValue ccx = (cenX + 1.0) / 2.0;
+    deValue ccy = (cenY + 1.0) / 2.0;
+
+    deValue cccx = (ccx - x1) / w;
+    deValue cccy = (ccy - y1) / h;
+
+    // -1..1
+    deValue cx = cccx * 2.0 - 1.0;
+    deValue cy = cccy * 2.0 - 1.0;
+
+    return deEllipse(cx, cy, rx, ry);
+}
+

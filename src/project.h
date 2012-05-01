@@ -93,6 +93,8 @@ class deProject
 
         void onScaleSet();
 
+        void updateLayerGrid();
+
     public:
         deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deOperationProcessor& _operationProcessor, deMainWindow& _mainWindow);
 

@@ -58,6 +58,10 @@ deLayerWithBlending::deLayerWithBlending(deColorSpace _colorSpace, deChannelMana
     blendMode = deBlendNormal;
 
     createPropertyNumeric("opacity", 0, 1);
+
+    deProperty* p = getPropertyNumeric("opacity");
+    p->setBlendOnly();
+
     setOpacity(1.0);
 }
 

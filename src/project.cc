@@ -215,10 +215,7 @@ void deProject::resetLayerStack(deColorSpace colorSpace)
     previewChannelManager.destroyAllChannels();
     layerProcessor.updateAllImages(true);
 
-    if (controlPanel)
-    {
-        controlPanel->updateLayerGrid();
-    }        
+    updateLayerGrid();
 
     setLastView();
 
@@ -529,20 +526,14 @@ void deProject::open(const std::string& fileName, bool image)
     }        
 
     setLastView();
-    if (controlPanel)
-    {
-        controlPanel->updateLayerGrid();
-    }        
+    updateLayerGrid();
 }
 
 void deProject::newProject()
 {
     resetLayerStack(deColorSpaceRGB);
     setLastView();
-    if (controlPanel)
-    {
-        controlPanel->updateLayerGrid();
-    }        
+    updateLayerGrid();
 }
 
 void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
@@ -694,11 +685,7 @@ void deProject::addActionLayer(const std::string& action)
     {
         operationProcessor.addNewLayerOnTop(layer, layerIndex);
         setLastView();
-
-        if (controlPanel)
-        {
-            controlPanel->updateLayerGrid();
-        }                
+        updateLayerGrid();
     }
 }    
 
@@ -717,11 +704,7 @@ void deProject::addConversionLayer(deColorSpace colorSpace)
     {
         operationProcessor.addNewLayerOnTop(layer, layerIndex);
         setLastView();
-
-        if (controlPanel)
-        {
-            controlPanel->updateLayerGrid();
-        }            
+        updateLayerGrid();
         
     }
 }        
@@ -748,4 +731,12 @@ void deProject::onTimerUpdate()
         mainWindow.postEvent(DE_IMAGE_LOAD_EVENT, 0);
     }
 
+}
+
+void deProject::updateLayerGrid()
+{
+    if (controlPanel)
+    {
+        controlPanel->updateLayerGrid2();
+    }        
 }

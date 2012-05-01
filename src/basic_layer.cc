@@ -47,7 +47,7 @@ deBasicLayer::deBasicLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerSt
     }
 
     int nn = getColorSpaceSize(colorSpace);
-    curves = new deCurve[nn];
+    curves = new deBaseCurve[nn];
 
     shiftIndex = -1;
     shiftValue = 0.0;
@@ -140,7 +140,28 @@ void deBasicLayer::updateCurve(int i)
         }
     }
 
-    curves[i].setContrastBrightness(contrast, brightness);
+    deBaseCurve& curve = curves[i];
+
+    deValue p1 = 1.0 / 4.0;
+    deValue p2 = 1.0 - 1.0 / 4.0;
+
+    deValue h0 = brightness + 0.0  + (-0.5 * contrast);
+    deValue h1 = brightness + p1   + (p1 - 0.5) * contrast;
+    deValue h2 = brightness + p2   + (1.0 - p2) * contrast;
+    deValue h3 = brightness + 1.0  + 0.5 * contrast;
+
+    clip(h0);
+    clip(h1);
+    clip(h2);
+    clip(h3);
+
+    curve.clearPoints();
+    curve.addPoint(0, h0);
+    curve.addPoint(p1, h1);
+    curve.addPoint(p2, h2);
+    curve.addPoint(1, h3);
+    curve.build();
+
 }
 
 int deBasicLayer::getNumberOfSettings()
@@ -228,7 +249,7 @@ bool deBasicLayer::updateMainImageSingleChannel(int i)
             }
             else
             {
-                curves[i].process(*sourceChannel, *channel, mainLayerImage.getChannelSize().getN());
+                curves[i].process(sourceChannel->getPixels(), channel->getPixels(), mainLayerImage.getChannelSize().getN());
             }
 
             sourceChannel->unlockRead();

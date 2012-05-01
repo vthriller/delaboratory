@@ -23,10 +23,8 @@
 #include "apply_image_frame.h"
 #include "blur_frame.h"
 #include "equalizer_frame.h"
-#include "usm_frame.h"
 #include "basic_frame.h"
 #include "dodge_burn_frame.h"
-#include "vignette_frame.h"
 #include "high_pass_frame.h"
 #include "shadows_highlights_frame.h"
 
@@ -72,12 +70,6 @@ deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& 
         return new deEqualizerFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
-    if (type == "usm")
-    {
-        deLayer& al = dynamic_cast<deLayer&>(layer);
-        return new deUSMFrame(parent, al, layerProcessor, frameManager, layerIndex);
-    }        
-
     if (type == "basic")
     {
         deLayer& al = dynamic_cast<deLayer&>(layer);
@@ -90,11 +82,13 @@ deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& 
         return new deDodgeBurnFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
+/*
     if ((type == "vignette1") || (type == "vignette2"))
     {
         deLayer& al = dynamic_cast<deLayer&>(layer);
         return new deVignetteFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
+    */
 
     if (type == "high_pass")
     {

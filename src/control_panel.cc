@@ -220,7 +220,7 @@ void deControlPanel::click(wxCommandEvent &event)
         int index = layerStack.getSize() - 1;
         project.getLayerFrameManager().onDestroyLayer(index);
         operationProcessor.removeTopLayer();
-        updateLayerGrid();
+        updateLayerGrid2();
     }
 
     if (exportSingle->GetId() == id)
@@ -269,14 +269,6 @@ void deControlPanel::click(wxCommandEvent &event)
 
 }
 
-void deControlPanel::updateLayerGrid()
-{
-    layerGridPanel->clearRows();
-    layerGridPanel->buildRows();
-    layerGridPanel->Layout();
-    layerProcessor.onGUIUpdate();
-}
-
 void deControlPanel::onKey(int key)
 {
     if (key == 'B')
@@ -322,4 +314,9 @@ bool deControlPanel::getAutoUI() const
 void deControlPanel::setAutoUI(bool a)
 {
     autoUI = a;
+}
+
+void deControlPanel::updateLayerGrid2()
+{
+    layerGridPanel->update();
 }
