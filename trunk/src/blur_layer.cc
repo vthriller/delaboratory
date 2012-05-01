@@ -28,13 +28,12 @@ deBlurLayer::deBlurLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStac
 :deLayer( _colorSpace, _sourceLayer, _layerStack, _channelManager),
  blurRadius("blur_radius"),
  threshold("threshold"),
- blurType("blur_type"),
+ blurType("blur_type", getSupportedBlurTypes()),
  viewManager(_viewManager)
 {
     blurRadius.setLabel("radius");
     blurRadius.setMin(0);
     blurRadius.setMax(50);
-    getSupportedBlurTypes(blurType.getChoices());
     blurType.setLabel("blur type");
     reset();
 }

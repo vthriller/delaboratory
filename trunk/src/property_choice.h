@@ -25,19 +25,19 @@
 class dePropertyChoice:public deProperty
 {
     private:
-        std::string value;
+        int value;
+//        std::string value;
 
         std::vector<std::string> choices;
 
     public:
-        dePropertyChoice(const std::string& _name);
+        dePropertyChoice(const std::string& _name, const std::vector<std::string> _choices);
         virtual ~dePropertyChoice();
-
 
         virtual void save(xmlNodePtr root) const;
         virtual void load(xmlNodePtr root);
 
-        std::vector<std::string>& getChoices() {return choices;};
+        const std::vector<std::string>& getChoices() const {return choices;};
 
         int getIndex() const;
         void setIndex(int index);
@@ -47,5 +47,7 @@ class dePropertyChoice:public deProperty
 
         
 };
+
+std::vector<std::string> createNumbers(int index);
 
 #endif

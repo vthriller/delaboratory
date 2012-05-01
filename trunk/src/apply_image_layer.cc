@@ -26,18 +26,11 @@
 
 deApplyImageLayer::deApplyImageLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _layerIndex)
 :deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager),
-appliedLayer("applied_layer"),
+appliedLayer("applied_layer", createNumbers(_layerIndex)),
 applySingleChannel("apply_single_channel")
 {
     appliedChannel = 0;
     applySingleChannel.set(false);
-
-    std::vector<std::string>& choices = appliedLayer. getChoices();
-    int i;
-    for (i = 0; i < _layerIndex; i++)
-    {
-        choices.push_back(str(i));
-    }
 
     appliedLayer.setIndex(_layerIndex - 1);
 
