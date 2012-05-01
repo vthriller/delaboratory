@@ -19,6 +19,7 @@
 #include "property_choice.h"
 #include "xml.h"
 #include "str.h"
+#include "logger.h"
 
 dePropertyChoice::dePropertyChoice(const std::string& _name, const std::vector<std::string> _choices)
 :deProperty(_name), choices(_choices)
@@ -44,6 +45,7 @@ void dePropertyChoice::set(std::string s)
         i++;
         index++;
     }
+    logError("can't set choice value " + s);
     value = -1;
 }
 

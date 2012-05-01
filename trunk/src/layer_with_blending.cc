@@ -53,9 +53,10 @@ class deUpdateBlendThread:public wxThread
 
 deLayerWithBlending::deLayerWithBlending(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayerIndex, deLayerStack& _layerStack)
 :deSwitchableLayer(_colorSpace, _channelManager, _sourceLayerIndex, _layerStack),
- imageBlendPass(_colorSpace, _channelManager)
+ imageBlendPass(_colorSpace, _channelManager),
+ blendMode("blend mode", getSupportedBlendModeNames())
 {
-    blendMode = deBlendNormal;
+    setBlendMode(deBlendNormal);
 
     createPropertyNumeric("opacity", 0, 1);
 
@@ -87,7 +88,7 @@ bool deLayerWithBlending::isBlendingEnabled() const
         return true;
     }
 
-    if (blendMode != deBlendNormal)
+    if (getBlendMode() != deBlendNormal)
     {
         return true;
     }
@@ -97,7 +98,7 @@ bool deLayerWithBlending::isBlendingEnabled() const
 
 void deLayerWithBlending::setBlendMode(deBlendMode mode)
 {
-    blendMode = mode;
+    blendMode.set(getBlendModeName(mode));
 }
 
 bool deLayerWithBlending::updateBlend(int i)
@@ -118,7 +119,7 @@ bool deLayerWithBlending::updateBlend(int i)
 
     if (isChannelNeutral(i))
     {
-        if (blendMode == deBlendNormal)
+        if (getBlendMode() == deBlendNormal)
         {
             imageBlendPass.disableChannel(i, s);
             return true;
@@ -163,7 +164,7 @@ bool deLayerWithBlending::updateBlend(int i)
     deValue* resultPixels = blendChannel_->getPixels();
 
     deValue o = getOpacity();
-    blendChannel(sourcePixels, overlayPixels, resultPixels, maskPixels, blendMode, o, channelSize);
+    blendChannel(sourcePixels, overlayPixels, resultPixels, maskPixels, getBlendMode(), o, channelSize);
 
     sourceChannel->unlockRead();
     channel->unlockRead();
@@ -305,3 +306,9 @@ void deLayerWithBlending::loadBlend(xmlNodePtr root)
 
 }
 
+deBlendMode deLayerWithBlending::getBlendMode() const
+{
+    std::string m = blendMode.get();
+    deBlendMode mode = blendModeFromString(m);
+    return mode;
+}

@@ -132,8 +132,10 @@ deBlendMode blendModeFromString(const std::string& s)
 
 }
 
-void getSupportedBlendModes(std::vector<deBlendMode>& result)
+std::vector<deBlendMode> getSupportedBlendModes()
 {
+    std::vector<deBlendMode> result;
+
     result.push_back(deBlendNormal);
     result.push_back(deBlendMultiply);
     result.push_back(deBlendScreen);
@@ -148,6 +150,20 @@ void getSupportedBlendModes(std::vector<deBlendMode>& result)
     result.push_back(deBlendLighten);
     result.push_back(deBlendDodge);
     result.push_back(deBlendBurn);
+
+    return result;
+}
+
+std::vector<std::string> getSupportedBlendModeNames()
+{
+     std::vector<deBlendMode> modes = getSupportedBlendModes();
+     std::vector<std::string> result;
+     std::vector<deBlendMode>::const_iterator i;
+     for (i = modes.begin(); i != modes.end(); i++)
+     {
+        result.push_back(getBlendModeName(*i));
+     }
+     return result;
 }
 
 deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode)
