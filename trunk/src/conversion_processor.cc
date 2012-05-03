@@ -132,6 +132,21 @@ int deConversionProcessor::convertImageNew(const deImage& sourceImage, deImage& 
             cpu.convertImage1x3(sourceImage, image, f1, f2);
         }            
     }
+    if ((ss == 4) && (ds == 1))
+    {
+        if (f2)
+        {
+            cpu.convertImage4x1(sourceImage, image, f1, f2);
+        }            
+    }
+    else
+    if ((ss == 1) && (ds == 4))
+    {
+        if (f2)
+        {
+            cpu.convertImage1x4(sourceImage, image, f1, f2);
+        }            
+    }
 
     deValue overflow = cpu.registers[CPU_REGISTER_OVERFLOW];
     int n = sourceImage.getChannelSize().getN();
@@ -503,6 +518,21 @@ void deConversionProcessor::convertImage(const deImage& sourceImage, deImage& im
         if (f2)
         {
             cpu.convertImage1x3(sourceImage, image, f1, f2);
+        }            
+    }
+    if ((ss == 4) && (ds == 1))
+    {
+        if (f2)
+        {
+            cpu.convertImage4x1(sourceImage, image, f1, f2);
+        }            
+    }
+    else
+    if ((ss == 1) && (ds == 4))
+    {
+        if (f2)
+        {
+            cpu.convertImage1x4(sourceImage, image, f1, f2);
         }            
     }
 

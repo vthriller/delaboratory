@@ -289,6 +289,33 @@ void deConversionCPU::convertImage3x1(const deImage& sourceImage, deImage& image
     }
 }
 
+void deConversionCPU::convertImage4x1(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+{
+    int n = sourceImage.getChannelSize().getN();
+
+    const deValue* s0 = sourceImage.getValues(0);
+    const deValue* s1 = sourceImage.getValues(1);
+    const deValue* s2 = sourceImage.getValues(2);
+    const deValue* s3 = sourceImage.getValues(3);
+
+    deValue* d0 = image.getValues(0);
+
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        input[0] = s0[i];
+        input[1] = s1[i];
+        input[2] = s2[i];
+        input[3] = s3[i];
+
+        f1(*this);
+        f2(*this);
+
+        d0[i] = output[0];
+    }
+}
+
 void deConversionCPU::convertImage4x3(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
@@ -342,6 +369,33 @@ void deConversionCPU::convertImage1x3(const deImage& sourceImage, deImage& image
         d0[i] = output[0];
         d1[i] = output[1];
         d2[i] = output[2];
+    }
+}
+
+void deConversionCPU::convertImage1x4(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+{
+    int n = sourceImage.getChannelSize().getN();
+
+    const deValue* s0 = sourceImage.getValues(0);
+
+    deValue* d0 = image.getValues(0);
+    deValue* d1 = image.getValues(1);
+    deValue* d2 = image.getValues(2);
+    deValue* d3 = image.getValues(3);
+
+    int i;
+
+    for (i = 0; i < n; i++)
+    {
+        input[0] = s0[i];
+
+        f1(*this);
+        f2(*this);
+
+        d0[i] = output[0];
+        d1[i] = output[1];
+        d2[i] = output[2];
+        d3[i] = output[3];
     }
 }
 

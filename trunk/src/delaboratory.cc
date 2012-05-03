@@ -31,7 +31,7 @@
 #include "zoom_manager.h"
 #include "operation_processor.h"
 #include "main_window.h"
-
+#include "conversion_cpu.h"
 
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
@@ -183,6 +183,7 @@ bool deLaboratory::OnInit()
 
     logMessage("OnInit done");
 
+    deConversionCPU cp(4);
 
 	return TRUE;
 } 
