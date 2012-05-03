@@ -57,6 +57,8 @@ class deConversionCPU
         void convertImage4x3(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
         void convertImage3x1(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
         void convertImage1x3(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
+        void convertImage4x1(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
+        void convertImage1x4(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
 
         bool renderImage1(const deImage& image, deConversionCPU::deFunction f, unsigned char* data);
         bool renderImage3(const deImage& image, deConversionCPU::deFunction f, unsigned char* data);
