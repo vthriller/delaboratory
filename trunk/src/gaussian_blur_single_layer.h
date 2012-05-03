@@ -16,24 +16,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_GAUSSIAN_BLUR_LAYER_H
-#define _DE_GAUSSIAN_BLUR_LAYER_H
+#ifndef _DE_GAUSSIAN_BLUR_SINGLE_LAYER_H
+#define _DE_GAUSSIAN_BLUR_SINGLE_LAYER_H
 
 #include "layer_with_blending.h"
 
-class deGaussianBlurLayer:public deLayerWithBlending
+class deGaussianBlurSingleLayer:public deLayerWithBlending
 {
     private:
-        virtual std::string getType() const {return "gaussian_blur";};
+        virtual std::string getType() const {return "gaussian_blur_single";};
         deViewManager& viewManager;
 
+        int channel;
+
     public:
-        deGaussianBlurLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager);
-        virtual ~deGaussianBlurLayer();
+        deGaussianBlurSingleLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager);
+        virtual ~deGaussianBlurSingleLayer();
 
-        virtual bool updateMainImageSingleChannel(int channel);
+        virtual bool updateMainImageNotThreadedWay();
 
-        virtual std::string getActionName() {return "gaussian blur";};
+        virtual std::string getActionName() {return "gaussian blur single";};
 
 };
 

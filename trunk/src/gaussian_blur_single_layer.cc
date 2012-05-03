@@ -16,46 +16,55 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "gaussian_blur_layer.h"
+#include "gaussian_blur_single_layer.h"
 #include "blur.h"
 #include "preset.h"
 #include "view_manager.h"
+#include "color_space_utils.h"
+#include "copy_channel.h"
 
-deGaussianBlurLayer::deGaussianBlurLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager)
+deGaussianBlurSingleLayer::deGaussianBlurSingleLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack), viewManager(_viewManager)
 {
     dePreset* reset = createPreset("reset");
     createPropertyNumeric("radius", 2, 600);
     reset->addNumericValue("radius", 200);
+
+    channel = 1;
     applyPreset("reset");
 }
 
-deGaussianBlurLayer::~deGaussianBlurLayer()
+deGaussianBlurSingleLayer::~deGaussianBlurSingleLayer()
 {
 }
-
-bool deGaussianBlurLayer::updateMainImageSingleChannel(int channel)
+bool deGaussianBlurSingleLayer::updateMainImageNotThreadedWay()
 {
-    if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
+    deSize size = mainLayerImage.getChannelSize();
+    int n = size.getN();
+
+    int nc = getColorSpaceSize(colorSpace);
+
+    deBlurType type = deGaussianBlur;
+    deValue r = getNumericValue("radius") * viewManager.getRealScale();
+
+    const deValue* source = getSourceImage().getValues(channel);
+
+    int i;
+    for (i = 0; i < nc; i++)
     {
-        int s = getSourceImage().getChannelIndex(channel);
-        mainLayerImage.disableChannel(channel, s);
-        return true;
+        mainLayerImage.enableChannel(i);
     }
 
-    deValue r = getNumericValue("radius") * viewManager.getRealScale();;
-    
-    deSize size = mainLayerImage.getChannelSize();
+    deValue* destination = mainLayerImage.getValues(0);
 
-    mainLayerImage.enableChannel(channel);
-    const deValue* source = getSourceImage().getValues(channel);
-    deValue* destination = mainLayerImage.getValues(channel);
-    
-    bool result = false;
-    deBlurType type = deGaussianBlur;
+    blurChannel(source, destination, size, r, r, type, 0.0);
 
-    result = blurChannel(source, destination, size, r, r, type, 0.0);
-    
-    return result;
-}
+    for (i = 1; i < nc; i++)
+    {
+        deValue* dd = mainLayerImage.getValues(i);
+        copyChannel(destination, dd, n);
+    }
+
+    return true;
+}    
 
