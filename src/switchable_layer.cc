@@ -18,6 +18,7 @@
 
 #include "switchable_layer.h"
 #include "color_space_utils.h"
+#include "property_boolean.h"
 
 deSwitchableLayer::deSwitchableLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayerIndex, deLayerStack& _layerStack)
 :deBaseLayerWithSource(_colorSpace, _channelManager, _sourceLayerIndex, _layerStack)
@@ -28,7 +29,10 @@ deSwitchableLayer::deSwitchableLayer(deColorSpace _colorSpace, deChannelManager&
     int i;
     for (i = 0; i < n; i++)
     {
-        channels.insert(i);
+        std::string n = getChannelName(colorSpace, i);
+        createPropertyBoolean(n);
+        getPropertyBoolean(n)->setSizer("channels");
+        enableChannel(i);
     }
 }
 
@@ -54,7 +58,7 @@ void deSwitchableLayer::disableNotLuminance()
     {
         if (!isChannelLuminance(colorSpace, i))
         {
-            channels.erase(i);
+            disableChannel(i);
         }            
     }
 }
@@ -67,23 +71,26 @@ void deSwitchableLayer::disableNotForSharpen()
     {
         if (!shouldChannelBeSharpened(colorSpace, i))
         {
-            channels.erase(i);
+            disableChannel(i);
         }            
     }
 }
 
 bool deSwitchableLayer::isChannelEnabled(int index) const
 {
-    return channels.count(index) > 0;
+    std::string n = getChannelName(colorSpace, index);
+    return getPropertyBoolean(n)->get();
 }
 
 void deSwitchableLayer::enableChannel(int index)
 {
-    channels.insert(index);
+    std::string n = getChannelName(colorSpace, index);
+    getPropertyBoolean(n)->set(true);
 }
 
 void deSwitchableLayer::disableChannel(int index)
 {
-    channels.erase(index);
+    std::string n = getChannelName(colorSpace, index);
+    getPropertyBoolean(n)->set(false);
 }
 

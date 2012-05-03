@@ -27,6 +27,7 @@ enum deBlendMode
 {
     deBlendInvalid,
     deBlendNormal,
+    deBlendNone,
     deBlendMultiply,
     deBlendScreen,
     deBlendOverlay,

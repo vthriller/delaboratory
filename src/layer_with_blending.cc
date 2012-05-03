@@ -53,12 +53,16 @@ class deUpdateBlendThread:public wxThread
 
 deLayerWithBlending::deLayerWithBlending(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayerIndex, deLayerStack& _layerStack)
 :deSwitchableLayer(_colorSpace, _channelManager, _sourceLayerIndex, _layerStack),
- imageBlendPass(_colorSpace, _channelManager),
- blendMode("blend mode", getSupportedBlendModeNames())
+ imageBlendPass(_colorSpace, _channelManager)
 {
-    setBlendMode(deBlendNormal);
-
     createPropertyNumeric("opacity", 0, 1);
+    createPropertyChoice("blend mode", getSupportedBlendModeNames());
+
+    dePropertyChoice* blendMode = getPropertyChoice("blend mode");
+    blendMode->setSizer("channels");
+    blendMode->setBlendOnly();
+
+    setBlendMode(deBlendNormal);
 
     deProperty* p = getPropertyNumeric("opacity");
     p->setBlendOnly();
@@ -98,7 +102,11 @@ bool deLayerWithBlending::isBlendingEnabled() const
 
 void deLayerWithBlending::setBlendMode(deBlendMode mode)
 {
-    blendMode.set(getBlendModeName(mode));
+    dePropertyChoice* blendMode = getPropertyChoice("blend mode");
+    if (blendMode)
+    {
+        blendMode->set(getBlendModeName(mode));
+    }
 }
 
 bool deLayerWithBlending::updateBlend(int i)
@@ -308,7 +316,8 @@ void deLayerWithBlending::loadBlend(xmlNodePtr root)
 
 deBlendMode deLayerWithBlending::getBlendMode() const
 {
-    std::string m = blendMode.get();
+    const dePropertyChoice* blendMode = getPropertyChoice("blend mode");
+    std::string m = blendMode->get();
     deBlendMode mode = blendModeFromString(m);
     return mode;
 }

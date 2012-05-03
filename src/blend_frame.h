@@ -32,9 +32,9 @@ class deBlendFrame:public deLayerFrameOld
         void check(wxCommandEvent &event);
 
         wxChoice* choice;
-        std::vector<deBlendMode> blendModes;
         std::vector<wxCheckBox*> channels;
         deLayerProcessor& layerProcessor;
+        std::vector<deBlendMode> blendModes;
 
     public:
         deBlendFrame(wxWindow *parent, deLayerWithBlending& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);

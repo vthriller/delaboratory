@@ -20,15 +20,21 @@
 #include "base_layer.h"
 #include "base_layer_with_source.h"
 #include "property_numeric_ui.h"
+#include "property_choice_ui.h"
+#include "property_boolean_ui.h"
 #include "property_levels_ui.h"
 #include "property_numeric.h"
 #include "property_levels.h"
+#include "property_boolean.h"
 #include "preset_button.h"
 #include "layer_processor.h"
 
 deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& name, deBaseLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _index)
 :deLayerFrame(parent, name, _layer, _frameManager, _index), layerProcessor(_layerProcessor)
 {
+
+    addSizer("channels");
+
     std::vector<std::string> names;
     std::vector<std::string>::iterator i;
 
@@ -56,6 +62,44 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
             addWidget(p->getWindow());
         }            
 
+        dePropertyChoice* choice = dynamic_cast<dePropertyChoice*>(property);
+        if (choice)
+        {
+            dePropertyChoiceUI* p = new dePropertyChoiceUI(window, *choice, _layerProcessor, _index);
+
+            choices.push_back(p);
+
+            std::string s = property->getSizer();
+            if (s.size() > 0)
+            {
+                addWidget(s, p->getWindow());
+            }
+            else
+            {
+                addWidget(p->getWindow());
+            }
+
+
+        }            
+
+        dePropertyBoolean* boolean = dynamic_cast<dePropertyBoolean*>(property);
+        if (boolean)
+        {
+            dePropertyBooleanUI* p = new dePropertyBooleanUI(window, *boolean, _layerProcessor, _index);
+
+            booleans.push_back(p);
+
+            std::string s = property->getSizer();
+            if (s.size() > 0)
+            {
+                addWidget(s, p->getWindow());
+            }
+            else
+            {
+                addWidget(p->getWindow());
+            }
+        }            
+
         dePropertyLevels* propertyLevels = dynamic_cast<dePropertyLevels*>(property);
         if (propertyLevels)
         {
@@ -68,6 +112,8 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
         }            
     }
 
+    addSizer("presets");
+
     names.clear();
     layer.getPresets(names);
 
@@ -76,7 +122,7 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
         std::string n = *i;
         dePresetButton* b = new dePresetButton(window, layer, n, _layerProcessor, _index, *this);
 
-        addWidget(b->getWindow());
+        addWidget("presets", b->getWindow());
     }
 
     fit();
@@ -84,6 +130,28 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
 
 deGenericLayerFrame::~deGenericLayerFrame()
 {
+    // we need to destroy our UI data here
+
+    std::vector<dePropertyNumericUI*>::iterator i;
+    for (i = numerics.begin(); i != numerics.end(); i++)
+    {
+        delete (*i);
+    }
+    std::vector<dePropertyLevelsUI*>::iterator j;
+    for (j = levels.begin(); j != levels.end(); j++)
+    {
+        delete (*j);
+    }
+    std::vector<dePropertyChoiceUI*>::iterator k;
+    for (k = choices.begin(); k != choices.end(); k++)
+    {
+        delete (*k);
+    }
+    std::vector<dePropertyBooleanUI*>::iterator l;
+    for (l = booleans.begin(); l != booleans.end(); l++)
+    {
+        delete (*l);
+    }
 }
 
 void deGenericLayerFrame::setUIFromLayer()
@@ -97,6 +165,16 @@ void deGenericLayerFrame::setUIFromLayer()
     for (j = levels.begin(); j != levels.end(); j++)
     {
         (*j)->setFromProperty();
+    }
+    std::vector<dePropertyChoiceUI*>::iterator k;
+    for (k = choices.begin(); k != choices.end(); k++)
+    {
+        (*k)->setFromProperty();
+    }
+    std::vector<dePropertyBooleanUI*>::iterator l;
+    for (l = booleans.begin(); l != booleans.end(); l++)
+    {
+        (*l)->setFromProperty();
     }
 }
 

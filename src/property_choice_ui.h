@@ -24,7 +24,7 @@ class deLayer;
 class dePropertyChoice;
 class deLayerProcessor;
 
-class dePropertyChoiceUI:public deChoice
+class dePropertyChoiceUIOld:public deChoiceOld
 {
     private:
         dePropertyChoice& property;
@@ -33,13 +33,32 @@ class dePropertyChoiceUI:public deChoice
         int layerIndex;
 
     public:
-        dePropertyChoiceUI(wxWindow *parent, dePropertyChoice& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex);
-        virtual ~dePropertyChoiceUI();
+        dePropertyChoiceUIOld(wxWindow *parent, dePropertyChoice& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex);
+        virtual ~dePropertyChoiceUIOld();
 
         virtual void onChoose(int c);
 
         void setFromProperty();
 
 };        
+
+class dePropertyChoiceUI:public deChoice
+{
+    private:
+        dePropertyChoice& property;
+        deLayerProcessor& layerProcessor;
+
+        int layerIndex;
+
+    public:
+        dePropertyChoiceUI(deWindow& window, dePropertyChoice& _property, deLayerProcessor& _layerProcessor, int _layerIndex);
+        virtual ~dePropertyChoiceUI();
+
+        virtual void onChoose(int index);
+
+        void setFromProperty();
+
+};        
+
 
 #endif

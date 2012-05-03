@@ -26,7 +26,6 @@ class dePropertyChoice:public deProperty
 {
     private:
         int value;
-//        std::string value;
 
         std::vector<std::string> choices;
 

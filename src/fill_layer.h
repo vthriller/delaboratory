@@ -31,7 +31,6 @@ class deFillLayer:public deLayerWithBlending
         deFillLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
         virtual ~deFillLayer();
 
-        virtual bool isChannelNeutral(int index);
         virtual bool updateMainImageSingleChannel(int channel);
 
         virtual std::string getActionName() {return "fill";};

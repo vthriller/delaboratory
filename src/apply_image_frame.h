@@ -21,15 +21,15 @@
 
 #include "action_frame.h"
 #include "color_space.h"
-class dePropertyChoiceUI;
-class dePropertyBooleanUI;
+class dePropertyChoiceUIOld;
+class dePropertyBooleanUIOld;
 class deLayerProcessor;
 
 class deApplyImageFrame:public deActionFrame
 {
     private:
-        dePropertyChoiceUI* appliedLayer;
-        dePropertyBooleanUI* applySingleChannel;
+        dePropertyChoiceUIOld* appliedLayer;
+        dePropertyBooleanUIOld* applySingleChannel;
         wxChoice* layerChoice;
         wxRadioButton* channels[MAX_COLOR_SPACE_SIZE];
         deLayerProcessor& layerProcessor;

@@ -45,7 +45,7 @@ deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int
 
     blurRadius->setLabel("radius");
     blurRadius->setMin(1);
-    blurRadius->setMax(50);
+    blurRadius->setMax(600);
 
     shadowsHighlightsAmount->setLabel("sh/hi");
 

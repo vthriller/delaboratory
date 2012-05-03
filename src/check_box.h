@@ -21,8 +21,9 @@
 
 #include <wx/wx.h>
 #include <string>
+#include "window.h"
 
-class deCheckBox:public wxPanel
+class deCheckBoxOld:public wxPanel
 {
     private:
         wxSizer* sizer;
@@ -31,12 +32,28 @@ class deCheckBox:public wxPanel
         void check(wxCommandEvent &event);
 
     public:
-        deCheckBox(wxWindow *parent, const std::string& labelString);
-        virtual ~deCheckBox();
+        deCheckBoxOld(wxWindow *parent, const std::string& labelString);
+        virtual ~deCheckBoxOld();
 
         virtual void onCheck(bool c) = 0;
 
         void set(bool c);
 };        
+
+class deCheckBoxImpl;
+
+class deCheckBox
+{
+    private:
+        deCheckBoxImpl* impl;
+    public:
+        deCheckBox(deWindow& window, const std::string& _name);
+        virtual ~deCheckBox();
+
+        virtual void onCheck(bool c) = 0;
+        void set(bool c);
+
+        deWindow& getWindow();
+};
 
 #endif

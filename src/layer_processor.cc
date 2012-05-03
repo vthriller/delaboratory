@@ -458,6 +458,7 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
 
 bool deLayerProcessor::updateLayerImage()
 {
+    logMessage("updateLayerImage");
     lockUpdateImage();
 
     lockLayers();
@@ -512,6 +513,8 @@ bool deLayerProcessor::updateLayerImage()
     unlockUpdateImage();
 
     updateWarning();
+
+    logMessage("updateLayerImage DONE");
 
     return result;
 
@@ -676,6 +679,7 @@ void deLayerProcessor::unlock()
 
 void deLayerProcessor::tickWork()
 {
+    logMessage("tickWork");
     sendInfoEvent(DE_PROCESSING_START);
 
     bool result = updateLayerImage();

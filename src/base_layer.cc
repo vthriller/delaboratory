@@ -23,6 +23,7 @@
 #include "semaphore.h"
 #include "str.h"
 #include "property_numeric.h"
+#include "property_boolean.h"
 #include "preset.h"
 
 class deUpdateActionThread:public wxThread
@@ -104,6 +105,7 @@ void deBaseLayer::unlockLayer()
 
 void deBaseLayer::processLayer(deLayerProcessType type, int channel)
 {
+    logMessage("processLayer channel: " + str(channel));
     switch (type)
     {
         case deLayerProcessFull:
@@ -124,6 +126,7 @@ void deBaseLayer::processLayer(deLayerProcessType type, int channel)
         default:
             break;
     }
+    logMessage("processLayer DONE");
 }
 
 bool deBaseLayer::processFull()
@@ -219,6 +222,34 @@ void deBaseLayer::createPropertyNumeric(const std::string& _name, deValue _min, 
     properties.push_back(new dePropertyNumeric(_name, _min, _max));
 }
 
+void deBaseLayer::createPropertyChoice(const std::string& _name, const std::vector<std::string>& _choices)
+{
+    std::vector<deProperty*>::iterator i;
+    for (i = properties.begin(); i != properties.end(); i++)
+    {
+        deProperty* property = *i;
+        if (property->getName() == _name)
+        {
+            return;
+        }
+    }
+    properties.push_back(new dePropertyChoice(_name, _choices));
+}
+
+void deBaseLayer::createPropertyBoolean(const std::string& _name)
+{
+    std::vector<deProperty*>::iterator i;
+    for (i = properties.begin(); i != properties.end(); i++)
+    {
+        deProperty* property = *i;
+        if (property->getName() == _name)
+        {
+            return;
+        }
+    }
+    properties.push_back(new dePropertyBoolean(_name));
+}
+
 deProperty* deBaseLayer::getProperty(const std::string& _name)
 {
     std::vector<deProperty*>::iterator i;
@@ -268,6 +299,26 @@ dePropertyNumeric* deBaseLayer::getPropertyNumeric(const std::string& _name)
 const dePropertyNumeric* deBaseLayer::getPropertyNumeric(const std::string& _name) const
 {
     return dynamic_cast<const dePropertyNumeric*>(getProperty(_name));
+}
+
+dePropertyChoice* deBaseLayer::getPropertyChoice(const std::string& _name)
+{
+    return dynamic_cast<dePropertyChoice*>(getProperty(_name));
+}
+
+const dePropertyChoice* deBaseLayer::getPropertyChoice(const std::string& _name) const
+{
+    return dynamic_cast<const dePropertyChoice*>(getProperty(_name));
+}
+
+dePropertyBoolean* deBaseLayer::getPropertyBoolean(const std::string& _name)
+{
+    return dynamic_cast<dePropertyBoolean*>(getProperty(_name));
+}
+
+const dePropertyBoolean* deBaseLayer::getPropertyBoolean(const std::string& _name) const
+{
+    return dynamic_cast<const dePropertyBoolean*>(getProperty(_name));
 }
 
 deValue deBaseLayer::getNumericValue(const std::string& name) const

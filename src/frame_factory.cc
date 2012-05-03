@@ -21,11 +21,9 @@
 #include "curves_editor.h"
 #include "mixer_editor.h"
 #include "apply_image_frame.h"
-#include "blur_frame.h"
 #include "equalizer_frame.h"
 #include "basic_frame.h"
 #include "dodge_burn_frame.h"
-#include "high_pass_frame.h"
 #include "shadows_highlights_frame.h"
 
 #include "logger.h"
@@ -58,12 +56,6 @@ deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& 
         return new deApplyImageFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
-    if (type == "blur")
-    {
-        deLayer& al = dynamic_cast<deLayer&>(layer);
-        return new deBlurFrame(parent, al, layerProcessor, frameManager, layerIndex);
-    }        
-
     if ((type == "equalizer8") || (type == "equalizer16"))
     {
         deLayer& al = dynamic_cast<deLayer&>(layer);
@@ -89,12 +81,6 @@ deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& 
         return new deVignetteFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
     */
-
-    if (type == "high_pass")
-    {
-        deLayer& al = dynamic_cast<deLayer&>(layer);
-        return new deHighPassFrame(parent, al, layerProcessor, frameManager, layerIndex);
-    }        
 
     if (type == "shadows_highlights")
     {

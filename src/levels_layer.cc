@@ -104,7 +104,7 @@ bool deLevelsLayer::updateMainImageSingleChannel(int channel)
 
 void deLevelsLayer::createPropertyLevels(int channel)
 {
-    const std::string _name = getChannelName(colorSpace, channel);
+    const std::string _name = "levels " + getChannelName(colorSpace, channel);
 
     std::vector<deProperty*>::iterator i;
     for (i = properties.begin(); i != properties.end(); i++)
@@ -120,7 +120,8 @@ void deLevelsLayer::createPropertyLevels(int channel)
 
 dePropertyLevels* deLevelsLayer::getPropertyLevels(int channel)
 {
-    const std::string _name = getChannelName(colorSpace, channel);
+    const std::string _name = "levels " + getChannelName(colorSpace, channel);
+
     deProperty* p = getProperty(_name);
     return dynamic_cast<dePropertyLevels*>(p);
 }

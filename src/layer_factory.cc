@@ -19,9 +19,9 @@
 #include "layer_factory.h"
 #include "layer_stack.h"
 #include "curves_layer.h"
-#include "blur_layer.h"
 #include "fill_layer.h"
 #include "vignette_layer.h"
+#include "gaussian_blur_layer.h"
 #include "apply_image_layer.h"
 #include "mixer_layer.h"
 #include "apply_luminance_layer.h"
@@ -47,11 +47,6 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
         return new deCurvesLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
-    if (type == "blur")
-    {
-        return new deBlurLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
-    }
-
     if (type == "basic")
     {
         return new deBasicLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
@@ -60,11 +55,6 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
     if (type == "dodge_burn")
     {
         return new deDodgeBurnLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
-    }
-
-    if (type == "high_pass")
-    {
-        return new deHighPassLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "shadows_highlights")
@@ -117,9 +107,19 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
         return new deSharpenLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
     }        
 
+    if (type == "high_pass")
+    {
+        return new deHighPassLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
+    }        
+
     if (type == "vignette")
     {
         return new deVignetteLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
+    }        
+
+    if (type == "gaussian_blur")
+    {
+        return new deGaussianBlurLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
     }        
     
     if (type == "conversion")
@@ -143,6 +143,7 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("local_contrast");
     actions.push_back("sharpen");
     actions.push_back("vignette");
+    actions.push_back("gaussian_blur");
     actions.push_back("basic");
     actions.push_back("mixer");
     actions.push_back("equalizer8");
@@ -154,7 +155,6 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("shadows_highlights");
 
     actions.push_back("high_pass");
-    actions.push_back("blur");
 }
 
 std::string getActionGroup(const std::string n)
@@ -167,11 +167,6 @@ std::string getActionGroup(const std::string n)
     if ((n == "vignette1") || (n == "vignette2") || (n == "dodge_burn") || (n == "shadows_highlights"))
     {
         return "light";
-    }
-
-    if ((n == "blur") || (n == "high_pass"))
-    {
-        return "sharp";
     }
 
     return "gen";

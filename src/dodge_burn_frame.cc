@@ -48,7 +48,7 @@ deDodgeBurnFrame::deDodgeBurnFrame(wxWindow *parent, deLayer& _layer, deLayerPro
         }            
     }
 
-    alternate = new dePropertyBooleanUI(this, dodgeBurnLayer.getPropertyAlternate(), dodgeBurnLayer, layerProcessor, layerIndex);
+    alternate = new dePropertyBooleanUIOld(this, dodgeBurnLayer.getPropertyAlternate(), dodgeBurnLayer, layerProcessor, layerIndex);
     sizer->Add(alternate);
 
     wxSizer* sizerB = new wxFlexGridSizer(5);

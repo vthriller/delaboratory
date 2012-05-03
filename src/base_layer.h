@@ -30,6 +30,8 @@ class deViewManager;
 class deProperty;
 class dePreset;
 class dePropertyNumeric;
+class dePropertyChoice;
+class dePropertyBoolean;
 
 enum deLayerProcessType
 {   
@@ -63,6 +65,8 @@ class deBaseLayer
         virtual bool updateImage();
 
         void createPropertyNumeric(const std::string& _name, deValue _min, deValue _max);
+        void createPropertyChoice(const std::string& _name, const std::vector<std::string>& _choices);
+        void createPropertyBoolean(const std::string& _name);
 
     public:
         deBaseLayer(deColorSpace _colorSpace, deChannelManager& _channelManager);
@@ -103,6 +107,12 @@ class deBaseLayer
 
         dePropertyNumeric* getPropertyNumeric(const std::string& _name);
         const dePropertyNumeric* getPropertyNumeric(const std::string& _name) const;
+
+        dePropertyChoice* getPropertyChoice(const std::string& _name);
+        const dePropertyChoice* getPropertyChoice(const std::string& _name) const;
+
+        dePropertyBoolean* getPropertyBoolean(const std::string& _name);
+        const dePropertyBoolean* getPropertyBoolean(const std::string& _name) const;
 
         void getProperties(std::vector<std::string>& names);
 

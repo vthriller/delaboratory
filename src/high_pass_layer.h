@@ -19,37 +19,22 @@
 #ifndef _DE_HIGH_PASS_LAYER_H
 #define _DE_HIGH_PASS_LAYER_H
 
-#include "layer.h"
-#include "property_value.h"
+#include "layer_with_blending.h"
 
-class deChannel;
-
-class deHighPassLayer:public deLayer
+class deHighPassLayer:public deLayerWithBlending
 {
     private:
-        int blurRadiusIndex;
+        virtual std::string getType() const {return "high_pass";};
         deViewManager& viewManager;
 
-    protected:
-        virtual std::string getType() const {return "high_pass";};
-        virtual std::string getLabel() const {return "high pass";};
-
     public:
-        deHighPassLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deHighPassLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager);
         virtual ~deHighPassLayer();
 
         virtual bool isChannelNeutral(int index);
+        virtual bool updateMainImageNotThreadedWay();
 
-
-        virtual void load(xmlNodePtr root);
-        virtual void save(xmlNodePtr root);
-
-        virtual std::string getActionName() {return "hp";};
-
-        void reset();
-
-        bool processHP(const deChannel& sourceChannel, deChannel& channel);
-        virtual bool updateMainImageSingleChannel(int i);
+        virtual std::string getActionName() {return "high pass";};
 
 };
 

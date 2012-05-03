@@ -19,6 +19,7 @@
 #include "frame.h"
 #include "window_wx.h"
 #include "panel_wx.h"
+#include <map>
 
 deFrameOld::deFrameOld(wxWindow *parent, const std::string& name)
 :wxFrame(parent, wxID_ANY, wxString::FromAscii(name.c_str()), wxDefaultPosition, wxDefaultSize, wxCAPTION | wxCLOSE_BOX | wxFRAME_FLOAT_ON_PARENT)
@@ -33,6 +34,7 @@ class deFrameImpl:public wxFrame
 {
     private:
         wxSizer* sizer;
+        std::map<std::string, wxSizer*> sizers;
         deWindowWX window;
         deFrame* frame;
     public:
@@ -52,6 +54,18 @@ class deFrameImpl:public wxFrame
         void addWidget(wxWindow* widget)
         {
             sizer->Add(widget);
+        }
+
+        void addWidget(const std::string& _name, wxWindow* widget)
+        {
+            sizers[_name]->Add(widget);
+        }
+
+        void addSizer(const std::string& _name)
+        {
+            wxSizer* s = new wxBoxSizer(wxHORIZONTAL);
+            sizer->Add(s);
+            sizers[_name] = s;
         }
 
         deWindow& getWindow()
@@ -97,6 +111,23 @@ void deFrame::addWidget(deWindow& window)
     if (impl)
     {
         impl->addWidget(w.getWindow());
+    }
+}
+
+void deFrame::addWidget(const std::string& _name, deWindow& window)
+{
+    deWindowWX& w = dynamic_cast<deWindowWX&>(window);
+    if (impl)
+    {
+        impl->addWidget(_name, w.getWindow());
+    }
+}
+
+void deFrame::addSizer(const std::string& _name)
+{
+    if (impl)
+    {
+        impl->addSizer(_name);
     }
 }
 

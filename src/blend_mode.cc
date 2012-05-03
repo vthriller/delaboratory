@@ -25,6 +25,8 @@ std::string getBlendModeName(deBlendMode mode)
     {
         case deBlendNormal:
             return "normal";
+        case deBlendNone:
+            return "none";
         case deBlendMultiply:
             return "multiply";
         case deBlendScreen:
@@ -61,6 +63,11 @@ deBlendMode blendModeFromString(const std::string& s)
     if (s == "normal")
     {
         return deBlendNormal;
+    }
+
+    if (s == "none")
+    {
+        return deBlendNone;
     }
 
     if (s == "multiply")
@@ -137,6 +144,7 @@ std::vector<deBlendMode> getSupportedBlendModes()
     std::vector<deBlendMode> result;
 
     result.push_back(deBlendNormal);
+    result.push_back(deBlendNone);
     result.push_back(deBlendMultiply);
     result.push_back(deBlendScreen);
     result.push_back(deBlendOverlay);
@@ -172,6 +180,9 @@ deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode)
     {
         case deBlendNormal:
             return v2;
+            break;
+        case deBlendNone:
+            return src;
             break;
         case deBlendMultiply:                    
             return src*v2;

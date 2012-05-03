@@ -16,34 +16,30 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "fill_layer.h"
-#include "fill_channel.h"
+#include "gaussian_blur_layer.h"
+#include "blur.h"
 #include "preset.h"
-#include "color_space_utils.h"
+#include "view_manager.h"
 
-deFillLayer::deFillLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack)
-:deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
+deGaussianBlurLayer::deGaussianBlurLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager)
+:deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack), viewManager(_viewManager)
 {
     dePreset* reset = createPreset("reset");
-    int n = getColorSpaceSize(colorSpace);
-
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        std::string n = "fill " + getChannelName(colorSpace, i);
-        createPropertyNumeric(n, 0, 1);
-        reset->addNumericValue(n, 0.5);
-    }
-
+    createPropertyNumeric("radius", 2, 600);
+    reset->addNumericValue("radius", 200);
     applyPreset("reset");
-    setOpacity(0.5);
 }
 
-deFillLayer::~deFillLayer()
+deGaussianBlurLayer::~deGaussianBlurLayer()
 {
 }
 
-bool deFillLayer::updateMainImageSingleChannel(int channel)
+bool deGaussianBlurLayer::isChannelNeutral(int channel)
+{   
+    return false;
+}
+
+bool deGaussianBlurLayer::updateMainImageSingleChannel(int channel)
 {
     if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
     {
@@ -52,16 +48,19 @@ bool deFillLayer::updateMainImageSingleChannel(int channel)
         return true;
     }
 
+    deValue r = getNumericValue("radius") * viewManager.getRealScale();;
+    
+    deSize size = mainLayerImage.getChannelSize();
+
     mainLayerImage.enableChannel(channel);
-
-    std::string p = "fill " + getChannelName(colorSpace, channel);
-
-    deValue value = getNumericValue(p);
+    const deValue* source = getSourceImage().getValues(channel);
     deValue* destination = mainLayerImage.getValues(channel);
-    int n = mainLayerImage.getChannelSize().getN();
+    
+    bool result = false;
+    deBlurType type = deGaussianBlur;
 
-    fillChannel(destination, n, value);
-
-    return true;
+    result = blurChannel(source, destination, size, r, r, type, 0.0);
+    
+    return result;
 }
 

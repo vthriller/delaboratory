@@ -17,6 +17,7 @@
 */
 
 #include "blend_channel.h"
+#include <iostream>
 
 void blendChannel(const deValue* sourcePixels, const deValue* overlayPixels, deValue* resultPixels, deValue* maskPixels, deBlendMode blendMode, deValue opacity, int channelSize)
 {
