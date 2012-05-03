@@ -45,4 +45,6 @@ bool isActionSupported(const std::string& action, deColorSpace colorSpace);
 
 bool shouldUseAutoLevels(deColorSpace colorSpace, int channel);
 
+std::vector<std::string> getChannelNames(deColorSpace colorSpace);
+
 #endif

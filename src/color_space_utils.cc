@@ -463,3 +463,17 @@ bool isActionSupported(const std::string& action, deColorSpace colorSpace)
     }
     return true;
 }
+
+std::vector<std::string> getChannelNames(deColorSpace colorSpace)
+{
+    std::vector<std::string> result;
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        std::string s = getChannelName(colorSpace, i);
+        result.push_back(s);
+    }
+
+    return result;
+}
