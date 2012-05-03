@@ -22,6 +22,7 @@
 #include "fill_layer.h"
 #include "vignette_layer.h"
 #include "gaussian_blur_layer.h"
+#include "gaussian_blur_single_layer.h"
 #include "apply_image_layer.h"
 #include "mixer_layer.h"
 #include "apply_luminance_layer.h"
@@ -121,6 +122,11 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
     {
         return new deGaussianBlurLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
     }        
+
+    if (type == "gaussian_blur_single")
+    {
+        return new deGaussianBlurSingleLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
+    }        
     
     if (type == "conversion")
     {
@@ -144,6 +150,7 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("sharpen");
     actions.push_back("vignette");
     actions.push_back("gaussian_blur");
+    actions.push_back("gaussian_blur_single");
     actions.push_back("basic");
     actions.push_back("mixer");
     actions.push_back("equalizer8");
@@ -219,6 +226,16 @@ std::string getActionDescription(const std::string& a)
     if (a == "local_contrast")
     {
         return "local contrast";
+    }
+
+    if (a == "gaussian_blur")
+    {
+        return "g. blur";
+    }
+
+    if (a == "gaussian_blur_single")
+    {
+        return "g. blur s";
     }
 
     return a;
