@@ -31,10 +31,10 @@ deApplyImageFrame::deApplyImageFrame(wxWindow *parent, deLayer& _layer, deLayerP
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
 
-    appliedLayer = new dePropertyChoiceUI(this, applyImageLayer.getAppliedLayer(), applyImageLayer, layerProcessor, layerIndex);
+    appliedLayer = new dePropertyChoiceUIOld(this, applyImageLayer.getAppliedLayer(), applyImageLayer, layerProcessor, layerIndex);
     mainSizer->Add(appliedLayer);
 
-    applySingleChannel = new dePropertyBooleanUI(this, applyImageLayer.getApplySingleChannel(), applyImageLayer, layerProcessor, layerIndex);
+    applySingleChannel = new dePropertyBooleanUIOld(this, applyImageLayer.getApplySingleChannel(), applyImageLayer, layerProcessor, layerIndex);
     mainSizer->Add(applySingleChannel);
 
     int i;

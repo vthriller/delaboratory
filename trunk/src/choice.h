@@ -22,8 +22,9 @@
 #include <wx/wx.h>
 #include <vector>
 #include <string>
+#include "window.h"
 
-class deChoice:public wxPanel
+class deChoiceOld:public wxPanel
 {
     private:
         wxSizer* sizer;
@@ -33,12 +34,29 @@ class deChoice:public wxPanel
         void choose(wxCommandEvent &event);
 
     public:
-        deChoice(wxWindow *parent, const std::string& labelString, const std::vector<std::string>& choices);
-        virtual ~deChoice();
+        deChoiceOld(wxWindow *parent, const std::string& labelString, const std::vector<std::string>& choices);
+        virtual ~deChoiceOld();
 
         virtual void onChoose(int c) = 0;
 
         void set(int index);
 };        
+
+class deChoiceImpl;
+
+class deChoice
+{
+    private:
+        deChoiceImpl* impl;
+    public:
+        deChoice(deWindow& window, const std::string& _name, const std::vector<std::string>& choices);
+        virtual ~deChoice();
+
+        virtual void onChoose(int index) = 0;
+        void set(int index);
+
+        deWindow& getWindow();
+};
+
 
 #endif

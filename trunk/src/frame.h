@@ -46,6 +46,8 @@ class deFrame
 
     protected:
         void addWidget(deWindow& window);
+        void addWidget(const std::string& _name, deWindow& window);
+        void addSizer(const std::string& _name);
 
     public:
         deFrame(deWindow& parent, const std::string& name);

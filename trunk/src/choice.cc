@@ -17,8 +17,10 @@
 */
 
 #include "choice.h"
+#include "window_wx.h"
+#include "panel_wx.h"
 
-deChoice::deChoice(wxWindow *parent, const std::string& labelString, const std::vector<std::string>& choices)
+deChoiceOld::deChoiceOld(wxWindow *parent, const std::string& labelString, const std::vector<std::string>& choices)
 :wxPanel(parent)
 {
     sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -37,20 +39,91 @@ deChoice::deChoice(wxWindow *parent, const std::string& labelString, const std::
     choice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), choices.size(), ws);
     sizer->Add(choice);
 
-    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deChoice::choose));
+    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deChoiceOld::choose));
 }
 
-deChoice::~deChoice()
+deChoiceOld::~deChoiceOld()
 {
 }
 
-void deChoice::choose(wxCommandEvent &event)
+void deChoiceOld::choose(wxCommandEvent &event)
 {
     int i = event.GetInt();
     onChoose(i);
 }
 
-void deChoice::set(int index)
+void deChoiceOld::set(int index)
 {
     choice->SetSelection(index);
+}
+
+class deChoiceImpl:public dePanelWX
+{
+    private:
+        deChoice& parent;
+        wxChoice* choice;
+    public:
+        deChoiceImpl(deChoice& _parent, deWindow& _parentWindow, const std::string& _name, const std::vector<std::string>& choices)
+        :dePanelWX(_parentWindow), parent(_parent)
+        {
+            wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+            SetSizer(sizer);
+
+            wxString* ws = new wxString [choices.size()];
+            unsigned int i;
+            for (i = 0; i < choices.size(); i++)
+            {
+                ws[i] = wxString::FromAscii(choices[i].c_str());
+            }        
+
+            choice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), choices.size(), ws);
+            sizer->Add(choice);
+
+            Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deChoiceImpl::choose));
+        }
+
+        void choose(wxCommandEvent &event)
+        {
+            int i = event.GetInt();
+            parent.onChoose(i);
+        }
+
+        void set(int index)
+        {
+            choice->SetSelection(index);
+        }
+};
+
+deChoice::deChoice(deWindow& window, const std::string& _name, const std::vector<std::string>& _choices)
+{
+    deWindowWX* w = dynamic_cast<deWindowWX*>(&window);
+    if (w)
+    {
+        impl = new deChoiceImpl(*this, window, _name, _choices);
+    }
+    else
+    {
+        impl = NULL;
+    }
+}
+
+deChoice::~deChoice()
+{
+    if (impl)
+    {
+        delete impl;
+    }
+}
+
+void deChoice::set(int index)
+{
+    if (impl)
+    {
+        impl->set(index);
+    }
+}
+
+deWindow& deChoice::getWindow()
+{
+    return impl->getWindow();
 }

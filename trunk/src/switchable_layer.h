@@ -27,8 +27,6 @@ class deSwitchableLayer:public deBaseLayerWithSource
     private:
         bool enabled;
 
-        std::set<int> channels;
-
     protected:
         void disableNotLuminance();
         void disableNotForSharpen();

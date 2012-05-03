@@ -986,6 +986,10 @@ deConversionCPU::deFunction getConversion(deColorSpace sourceColorSpace, deColor
     {
         return prophoto2rgb;
     }
+    if ((targetColorSpace == deColorSpaceProPhoto) && (sourceColorSpace == deColorSpaceRGB))
+    {
+        return rgb2prophoto;
+    }
     if ((sourceColorSpace == deColorSpaceProPhoto) && (targetColorSpace == deColorSpaceLAB))
     {
         return prophoto2lab;

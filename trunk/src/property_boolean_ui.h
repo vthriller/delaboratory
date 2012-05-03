@@ -24,7 +24,7 @@ class deLayer;
 class dePropertyBoolean;
 class deLayerProcessor;
 
-class dePropertyBooleanUI:public deCheckBox
+class dePropertyBooleanUIOld:public deCheckBoxOld
 {
     private:
         dePropertyBoolean& property;
@@ -33,7 +33,24 @@ class dePropertyBooleanUI:public deCheckBox
         int layerIndex;
 
     public:
-        dePropertyBooleanUI(wxWindow *parent, dePropertyBoolean& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex);
+        dePropertyBooleanUIOld(wxWindow *parent, dePropertyBoolean& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex);
+        virtual ~dePropertyBooleanUIOld();
+
+        virtual void onCheck(bool c);
+
+        void setFromProperty();
+
+};        
+
+class dePropertyBooleanUI:public deCheckBox
+{
+    private:
+        dePropertyBoolean& property;
+        deLayerProcessor& layerProcessor;
+        int layerIndex;
+
+    public:
+        dePropertyBooleanUI(deWindow& window, dePropertyBoolean& _property, deLayerProcessor& _layerProcessor, int _layerIndex);
         virtual ~dePropertyBooleanUI();
 
         virtual void onCheck(bool c);

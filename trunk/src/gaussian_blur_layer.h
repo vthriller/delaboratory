@@ -16,32 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_HIGH_PASS_FRAME_H
-#define _DE_HIGH_PASS_FRAME_H
+#ifndef _DE_GAUSSIAN_BLUR_LAYER_H
+#define _DE_GAUSSIAN_BLUR_LAYER_H
 
-#include "action_frame.h"
-#include "slider.h"
-#include <vector>
+#include "layer_with_blending.h"
 
-class dePropertyValueSlider;
-class deLayerProcessor;
-
-class deHighPassFrame:public deActionFrame
+class deGaussianBlurLayer:public deLayerWithBlending
 {
     private:
-        std::vector<dePropertyValueSlider*> valueSliders;
-        deLayerProcessor& layerProcessor;
-
-        wxButton* reset;
-
-        void click(wxCommandEvent &event);
+        virtual std::string getType() const {return "gaussian_blur";};
+        deViewManager& viewManager;
 
     public:
-        deHighPassFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deHighPassFrame();
+        deGaussianBlurLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager);
+        virtual ~deGaussianBlurLayer();
 
+        virtual bool isChannelNeutral(int index);
+        virtual bool updateMainImageSingleChannel(int channel);
+
+        virtual void load(xmlNodePtr root) {};
+        virtual void save(xmlNodePtr root) {saveCommon(root);};
+
+        virtual std::string getActionName() {return "gaussian blur";};
 
 };
-
 
 #endif

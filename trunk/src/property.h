@@ -25,6 +25,7 @@
 class deProperty
 {
     private:
+        std::string sizer;
         std::string label;
         bool blendOnly;
 
@@ -45,6 +46,9 @@ class deProperty
 
         virtual bool updateBlendOnly() const {return blendOnly;};
         void setBlendOnly();
+
+        void setSizer(const std::string& _sizer) {sizer = _sizer;};
+        std::string getSizer() const {return sizer;};
 };
 
 #endif

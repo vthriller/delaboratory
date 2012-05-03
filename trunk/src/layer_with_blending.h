@@ -27,13 +27,12 @@ class deLayerWithBlending:public deSwitchableLayer
 {
     private:
         deImage imageBlendPass;
-        dePropertyChoice blendMode;
 
         virtual const deImage& getLayerImage() const;
         virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
     protected:        
-        virtual bool isChannelNeutral(int index) = 0;
+        virtual bool isChannelNeutral(int index) {return false;};
         virtual bool updateBlendAllChannels();
         virtual void processSingleChannel(int channel);
         virtual bool updateImage();

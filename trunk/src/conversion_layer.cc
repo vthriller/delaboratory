@@ -82,8 +82,8 @@ void deConversionLayer::addFilms()
     std::vector<deFilm>::iterator i;
     for (i = films.begin(); i != films.end(); i++)
     {
-        deFilm& f = *i;
-        dePreset* p = createPreset(f.getName());
+        //deFilm& f = *i;
+        //dePreset* p = createPreset(f.getName());
 
     }
 }

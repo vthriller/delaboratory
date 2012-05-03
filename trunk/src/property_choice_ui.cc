@@ -21,10 +21,43 @@
 #include "layer.h"
 #include "layer_processor.h"
 
-dePropertyChoiceUI::dePropertyChoiceUI(wxWindow *parent, dePropertyChoice& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
-:deChoice(parent, _property.getLabel(), _property.getChoices()),
+dePropertyChoiceUIOld::dePropertyChoiceUIOld(wxWindow *parent, dePropertyChoice& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
+:deChoiceOld(parent, _property.getLabel(), _property.getChoices()),
 property(_property),
 layer(_layer),
+layerProcessor(_layerProcessor),
+layerIndex(_layerIndex)
+{
+    setFromProperty();
+}
+
+dePropertyChoiceUIOld::~dePropertyChoiceUIOld()
+{
+}
+
+void dePropertyChoiceUIOld::onChoose(int c)
+{
+    property.setIndex(c);
+
+    if (property.updateBlendOnly())
+    {
+        layerProcessor.markUpdateBlendAllChannels(layerIndex);
+    }
+    else
+    {
+        layerProcessor.markUpdateAllChannels(layerIndex);
+    }
+}
+
+void dePropertyChoiceUIOld::setFromProperty()
+{
+    int index = property.getIndex();
+    set(index);
+}
+
+dePropertyChoiceUI::dePropertyChoiceUI(deWindow& window, dePropertyChoice& _property, deLayerProcessor& _layerProcessor, int _layerIndex)
+:deChoice(window, _property.getName(), _property.getChoices()),
+property(_property),
 layerProcessor(_layerProcessor),
 layerIndex(_layerIndex)
 {
@@ -35,12 +68,18 @@ dePropertyChoiceUI::~dePropertyChoiceUI()
 {
 }
 
-void dePropertyChoiceUI::onChoose(int c)
+void dePropertyChoiceUI::onChoose(int index)
 {
-    property.setIndex(c);
+    property.setIndex(index);
 
-    //int index = layer.getIndex();
-    layerProcessor.markUpdateAllChannels(layerIndex);
+    if (property.updateBlendOnly())
+    {
+        layerProcessor.markUpdateBlendAllChannels(layerIndex);
+    }
+    else
+    {
+        layerProcessor.markUpdateAllChannels(layerIndex);
+    }
 }
 
 void dePropertyChoiceUI::setFromProperty()

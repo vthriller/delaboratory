@@ -23,12 +23,16 @@
 class deLayerProcessor;
 #include <vector>
 class dePropertyNumericUI;
+class dePropertyChoiceUI;
+class dePropertyBooleanUI;
 class dePropertyLevelsUI;
 
 class deGenericLayerFrame:public deLayerFrame
 {
     protected:
         std::vector<dePropertyNumericUI*> numerics;
+        std::vector<dePropertyChoiceUI*> choices;
+        std::vector<dePropertyBooleanUI*> booleans;
         std::vector<dePropertyLevelsUI*> levels;
 
         deLayerProcessor& layerProcessor;

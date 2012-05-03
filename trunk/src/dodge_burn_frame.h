@@ -25,7 +25,7 @@
 #include <map>
 
 class dePropertyValueSlider;
-class dePropertyBooleanUI;
+class dePropertyBooleanUIOld;
 class deLayerProcessor;
 
 class deDodgeBurnFrame:public deActionFrame
@@ -33,7 +33,7 @@ class deDodgeBurnFrame:public deActionFrame
     private:
         std::vector<dePropertyValueSlider*> valueSliders;
 
-        dePropertyBooleanUI* alternate;
+        dePropertyBooleanUIOld* alternate;
 
         std::map<std::string, wxButton*> buttons;
 

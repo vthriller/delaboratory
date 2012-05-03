@@ -25,7 +25,7 @@ deLocalContrastLayer::deLocalContrastLayer(deColorSpace _colorSpace, deChannelMa
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack), viewManager(_viewManager)
 {
     dePreset* reset = createPreset("reset");
-    createPropertyNumeric("radius", 10, 500);
+    createPropertyNumeric("radius", 10, 600);
     reset->addNumericValue("radius", 200);
     applyPreset("reset");
     setOpacity(0.2);
@@ -51,7 +51,7 @@ bool deLocalContrastLayer::updateMainImageSingleChannel(int channel)
     }
 
     deValue r = getNumericValue("radius") * viewManager.getRealScale();;
-    deValue a = 2.0;
+    deValue a = 0.5;
     deValue t = 0.0;
 
     deSize size = mainLayerImage.getChannelSize();

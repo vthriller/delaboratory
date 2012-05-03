@@ -17,8 +17,10 @@
 */
 
 #include "check_box.h"
+#include "window_wx.h"
+#include "panel_wx.h"
 
-deCheckBox::deCheckBox(wxWindow *parent, const std::string& labelString)
+deCheckBoxOld::deCheckBoxOld(wxWindow *parent, const std::string& labelString)
 :wxPanel(parent)
 {
     sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -27,14 +29,14 @@ deCheckBox::deCheckBox(wxWindow *parent, const std::string& labelString)
     checkBox =  new wxCheckBox(this, wxID_ANY, wxString::FromAscii(labelString.c_str()));
     sizer->Add(checkBox);
 
-    Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deCheckBox::check));
+    Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deCheckBoxOld::check));
 }
 
-deCheckBox::~deCheckBox()
+deCheckBoxOld::~deCheckBoxOld()
 {
 }
 
-void deCheckBox::check(wxCommandEvent &event)
+void deCheckBoxOld::check(wxCommandEvent &event)
 {
     if (checkBox->IsChecked())
     {
@@ -46,7 +48,7 @@ void deCheckBox::check(wxCommandEvent &event)
     }
 }
 
-void deCheckBox::set(bool b)
+void deCheckBoxOld::set(bool b)
 {
     if (b)
     {
@@ -56,4 +58,81 @@ void deCheckBox::set(bool b)
     {
         checkBox->SetValue(0);
     }
+}
+
+class deCheckBoxImpl:public dePanelWX
+{
+    private:
+        deCheckBox& parent;
+        wxCheckBox* checkBox;
+    public:
+        deCheckBoxImpl(deCheckBox& _parent, deWindow& _parentWindow, const std::string& _name)
+        :dePanelWX(_parentWindow), parent(_parent)
+        {
+            wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+            SetSizer(sizer);
+
+            checkBox =  new wxCheckBox(this, wxID_ANY, wxString::FromAscii(_name.c_str()));
+            sizer->Add(checkBox);
+
+            Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deCheckBoxImpl::check));
+        }
+
+        void check(wxCommandEvent &event)
+        {
+            if (checkBox->IsChecked())
+            {
+                parent.onCheck(true);
+            }
+            else
+            {
+                parent.onCheck(false);
+            }
+        }
+
+        void set(bool b)
+        {
+            if (b)
+            {
+                checkBox->SetValue(1);
+            }
+            else
+            {
+                checkBox->SetValue(0);
+            }
+        }
+};        
+
+deCheckBox::deCheckBox(deWindow& window, const std::string& _name)
+{
+    deWindowWX* w = dynamic_cast<deWindowWX*>(&window);
+    if (w)
+    {
+        impl = new deCheckBoxImpl(*this, window, _name);
+    }
+    else
+    {
+        impl = NULL;
+    }
+}
+
+deCheckBox::~deCheckBox()
+{
+    if (impl)
+    {
+        delete impl;
+    }
+}
+
+void deCheckBox::set(bool c)
+{
+    if (impl)
+    {
+        impl->set(c);
+    }
+}
+
+deWindow& deCheckBox::getWindow()
+{
+    return impl->getWindow();
 }

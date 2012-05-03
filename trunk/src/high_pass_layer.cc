@@ -17,140 +17,117 @@
 */
 
 #include "high_pass_layer.h"
-#include "project.h"
-#include <iostream>
+#include "preset.h"
+#include "view_manager.h"
+#include "fill_channel.h"
+#include "color_space_utils.h"
 #include "blur.h"
-#include "str.h"
-#include "xml.h"
-#include "frame_factory.h"
-#include "copy_channel.h"
 #include "blend_channel.h"
-#include "process_linear.h"
-#include "layer_processor.h"
-#include "channel_manager.h"
+#include "logger.h"
 
-deHighPassLayer::deHighPassLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager),
- viewManager(_viewManager)
+deHighPassLayer::deHighPassLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager)
+:deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack), viewManager(_viewManager)
 {
-    blurRadiusIndex = registerPropertyValue("blur_radius");
-    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
+    dePreset* reset = createPreset("reset");
 
-    blurRadius->setLabel("radius");
-    blurRadius->setMin(1);
-    blurRadius->setMax(50);
-    reset();
-    disableNotForSharpen();
-}
+    createPropertyNumeric("radius", 1, 20);
+    reset->addNumericValue("radius", 4);
 
-void deHighPassLayer::reset()
-{
-    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
-    blurRadius->set(5);
+    createPropertyNumeric("power", 1.0, 20.0);
+    reset->addNumericValue("power", 1.0);
+
+    applyPreset("reset");
+
 }
 
 deHighPassLayer::~deHighPassLayer()
 {
 }
 
-bool deHighPassLayer::processHP(const deChannel& sourceChannel, deChannel& channel)
+bool deHighPassLayer::isChannelNeutral(int channel)
+{   
+    return false;
+}
+
+bool deHighPassLayer::updateMainImageNotThreadedWay()
 {
     deSize size = mainLayerImage.getChannelSize();
-    logMessage("high pass start");
+    int n = size.getN();
 
-    const deValue* source = sourceChannel.getPixels();
-    deValue* destination = channel.getPixels();
-
-    deValue* blurMap = NULL;
+    deValue* mask = NULL;
     try
     {
-        blurMap = new deValue [size.getN()];
+        mask = new deValue [n];
     }
     catch (std::bad_alloc)
     {
-        logMessage("ERROR allocating memory in high pass");
-        if (blurMap)
+        logMessage("ERROR allocating memory in USM");
+        if (mask)
         {
-            delete [] blurMap;
+            delete [] mask;
         }
         return false;
     }
 
-    dePropertyValue* blurRadius = getPropertyValue(blurRadiusIndex);
+    int channel;
 
-    deValue r = viewManager.getRealScale() * blurRadius->get();
+    int nc = getColorSpaceSize(colorSpace);
+
+    // clear destination
+    fillChannel(mask, n, 0.0);
+
+    deValue t = 0.0;
     deBlurType type = deGaussianBlur;
-    bool result = blurChannel(source, blurMap, size, r, r, type, 0.0);
+    deValue r = getNumericValue("radius") * viewManager.getRealScale();
 
-    blendChannel(source, blurMap, destination, NULL, deBlendGrainExtract, 1.0, size.getN());
+    int i;
 
-    delete [] blurMap;
-
-    logMessage("high pass end");
-
-    return result;
-}
-
-
-bool deHighPassLayer::isChannelNeutral(int index)
-{
-    return false;
-}    
-
-void deHighPassLayer::save(xmlNodePtr root)
-{
-    saveCommon(root);
-    saveBlend(root);
-    saveValueProperties(root);
-}
-
-void deHighPassLayer::load(xmlNodePtr root)
-{
-    loadBlend(root);
-
-    xmlNodePtr child = root->xmlChildrenNode;
-
-    while (child)
+    // calc high pass
+    for (channel = 0; channel < nc; channel++)
     {
-        loadValueProperties(child);
-
-        child = child->next;
-    }        
-}
-
-bool deHighPassLayer::updateMainImageSingleChannel(int i)
-{
-    const deImage& sourceImage = getSourceImage();
-
-    int s = sourceImage.getChannelIndex(i);
-
-    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
-    {
-        mainLayerImage.disableChannel(i, s);
-        return true;
-    }
-
-    bool actionResult = false;
-
-    deChannel* sourceChannel = channelManager.getChannel(s);
-    if (sourceChannel)
-    {
-        mainLayerImage.enableChannel(i);
-        int c = mainLayerImage.getChannelIndex(i);
-        deChannel* channel = channelManager.getChannel(c);
-
-        if (channel)
+        mainLayerImage.enableChannel(channel);
+        const deValue* source = getSourceImage().getValues(channel);
+        deValue* destination = mainLayerImage.getValues(channel);
+        blurChannel(source, destination, size, r, r, type, t);
+        for (i = 0; i < n; i++)
         {
-            channel->lockWrite();
-            sourceChannel->lockRead();
-
-            actionResult = processHP(*sourceChannel, *channel);
-
-            sourceChannel->unlockRead();
-            channel->unlockWrite();
+            deValue d = source[i] - destination[i];
+            mask[i] += d;
         }
     }
 
-    return actionResult;
+    deValue p = getNumericValue("power");
 
-}
+    for (i = 0; i < n; i++)
+    {
+        deValue d = mask[i];
+
+        d = 0.5 + p * d;
+
+        if (d < 0)
+        {
+            d = 0;
+        } 
+        else if (d > 1)
+        {
+            d = 1;
+        }
+        
+        mask[i] = d;
+    }
+
+    for (channel = 0; channel < nc; channel++)
+    {
+        deValue* destination = mainLayerImage.getValues(channel);
+        int i;
+        for (i = 0; i < n; i++)
+        {
+            destination[i] = mask[i];
+        }
+    }
+
+
+    delete [] mask;
+
+    return true;                
+}            
