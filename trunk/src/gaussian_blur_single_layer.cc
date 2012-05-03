@@ -30,7 +30,8 @@ deGaussianBlurSingleLayer::deGaussianBlurSingleLayer(deColorSpace _colorSpace, d
     createPropertyNumeric("radius", 2, 600);
     reset->addNumericValue("radius", 200);
 
-    channel = 1;
+    createPropertyChoice("channel", getChannelNames(colorSpace));
+
     applyPreset("reset");
 }
 
@@ -46,6 +47,8 @@ bool deGaussianBlurSingleLayer::updateMainImageNotThreadedWay()
 
     deBlurType type = deGaussianBlur;
     deValue r = getNumericValue("radius") * viewManager.getRealScale();
+
+    int channel = getPropertyChoice("channel")->getIndex();
 
     const deValue* source = getSourceImage().getValues(channel);
 

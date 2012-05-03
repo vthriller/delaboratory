@@ -27,7 +27,6 @@ class deGaussianBlurSingleLayer:public deLayerWithBlending
         virtual std::string getType() const {return "gaussian_blur_single";};
         deViewManager& viewManager;
 
-        int channel;
 
     public:
         deGaussianBlurSingleLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager);
