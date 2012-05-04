@@ -166,6 +166,7 @@ void getSupportedActions(std::vector<std::string>& actions)
 
 std::string getActionGroup(const std::string n)
 {
+/*
     if ((n == "levels") || (n == "local_contrast") || (n == "sharpen") || (n == "vignette") || (n == "apply_luminance"))
     {
         return "basic";
@@ -175,6 +176,7 @@ std::string getActionGroup(const std::string n)
     {
         return "light";
     }
+    */
 
     return "gen";
 }
@@ -225,7 +227,7 @@ std::string getActionDescription(const std::string& a)
 
     if (a == "local_contrast")
     {
-        return "local contrast";
+        return "loc contrast";
     }
 
     if (a == "gaussian_blur")

@@ -43,7 +43,7 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
     names.clear();
     layer.getProperties(names);
 
-    int width = 600;
+    int width = 400;
     int widthn = 120;
     int widthl = 35;
 
