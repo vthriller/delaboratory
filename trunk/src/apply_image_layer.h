@@ -23,7 +23,7 @@
 #include "property_choice.h"
 #include "property_boolean.h"
 
-class deApplyImageLayer:public deLayer
+class deApplyImageLayer:public deLayerOld
 {
     private:
         dePropertyChoice appliedLayer;

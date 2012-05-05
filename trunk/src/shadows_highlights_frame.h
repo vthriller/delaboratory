@@ -36,7 +36,7 @@ class deShadowsHighlightsFrame:public deActionFrame
         void click(wxCommandEvent &event);
 
     public:
-        deShadowsHighlightsFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
+        deShadowsHighlightsFrame(wxWindow *parent, deLayerOld& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deShadowsHighlightsFrame();
 
 

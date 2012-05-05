@@ -95,7 +95,8 @@ void deMixer::process(const deImage& sourceImage, deChannel& destination, int n)
 
     lock();
 
-    const deValue *p1 = sourceImage.getValues(0);
+    const deValue *p1 = sourceImage.startRead(0);
+
     if (size == 1)
     {
         for (i = 0; i < n; i++)
@@ -103,35 +104,43 @@ void deMixer::process(const deImage& sourceImage, deChannel& destination, int n)
             deValue result = weights[0] * p1[i];
             destination.setValueClip(i, result);
         }
-        unlock();
-        return;
     }        
 
-    const deValue *p2 = sourceImage.getValues(1);
-    const deValue *p3 = sourceImage.getValues(2);
-    if (size == 3)
+    if (size > 2)
     {
-        for (i = 0; i < n; i++)
+        const deValue *p2 = sourceImage.startRead(1);
+        const deValue *p3 = sourceImage.startRead(2);
+
+        if (size == 3)
         {
-            deValue result = weights[0] * p1[i];
-            result += weights[1] * p2[i];
-            result += weights[2] * p3[i];
-            destination.setValueClip(i, result);
-        }
-        unlock();
-        return;
-    }        
+            for (i = 0; i < n; i++)
+            {
+                deValue result = weights[0] * p1[i];
+                result += weights[1] * p2[i];
+                result += weights[2] * p3[i];
+                destination.setValueClip(i, result);
+            }
+        }        
 
-    const deValue *p4 = sourceImage.getValues(3);
-    for (i = 0; i < n; i++)
-    {
-        deValue result = weights[0] * p1[i];
-        result += weights[1] * p2[i];
-        result += weights[2] * p3[i];
-        result += weights[3] * p4[i];
-        destination.setValueClip(i, result);
+        if (size == 4)
+        {
+            const deValue *p4 = sourceImage.startRead(3);
+            for (i = 0; i < n; i++)
+            {
+                deValue result = weights[0] * p1[i];
+                result += weights[1] * p2[i];
+                result += weights[2] * p3[i];
+                result += weights[3] * p4[i];
+                destination.setValueClip(i, result);
+            }
+            sourceImage.finishRead(3);
+        }
+
+        sourceImage.finishRead(1);
+        sourceImage.finishRead(2);
     }
 
+    sourceImage.finishRead(0);
     unlock();
 }
 

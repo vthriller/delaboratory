@@ -57,10 +57,12 @@ bool deFillLayer::updateMainImageSingleChannel(int channel)
     std::string p = "fill " + getChannelName(colorSpace, channel);
 
     deValue value = getNumericValue(p);
-    deValue* destination = mainLayerImage.getValues(channel);
+    deValue* destination = mainLayerImage.startWrite(channel);
     int n = mainLayerImage.getChannelSize().getN();
 
     fillChannel(destination, n, value);
+
+    mainLayerImage.finishWrite(channel);
 
     return true;
 }

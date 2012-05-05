@@ -53,12 +53,15 @@ class deImage
 
         void updateChannelUsage(std::map<int, int>& channelUsage, int index) const;
 
-        void lockRead() const;
-        void unlockRead() const;
+        const deValue* startRead(int channel) const;
+        void finishRead(int channel) const;
 
-        const deValue* getValues(int channel) const;
-        deValue* getValues(int channel);
+        deValue* startWrite(int channel);
+        void finishWrite(int channel);
+
         const deSize getChannelSize() const;
+
+        bool isReady() const;
 
 
 };

@@ -98,47 +98,5 @@ class dePresetValue:public dePresetOld
 
 };
 
-class dePresetLayer
-{
-    private:
-        deLayer& layer;
-        std::vector<dePresetValue*> valuePresets;
-
-        dePresetLayer(const dePresetLayer&);
-        dePresetLayer& operator =(const dePresetLayer&);
-
-    public:
-        dePresetLayer(deLayer& _layer)
-        :layer(_layer)
-        {
-        }
-
-        virtual ~dePresetLayer()
-        {
-        }
-
-        void addPresetValue(dePresetValue* preset)
-        {
-            valuePresets.push_back(preset);
-        }
-
-        bool apply()
-        {
-            std::vector<dePresetValue*>::iterator i;
-            for (i = valuePresets.begin(); i != valuePresets.end(); i++)
-            {
-                dePresetValue* pv = *i;
-                const std::string n = pv->getName();
-                const deValue v = pv->getValue();
-
-                dePropertyValue* property = layer.getPropertyValue(n);
-                property->set(v);
-
-            }
-
-            return true;
-        }
-};
-
 
 #endif

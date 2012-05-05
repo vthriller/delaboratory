@@ -50,7 +50,7 @@ bool deGaussianBlurSingleLayer::updateMainImageNotThreadedWay()
 
     int channel = getPropertyChoice("channel")->getIndex();
 
-    const deValue* source = getSourceImage().getValues(channel);
+    const deValue* source = getSourceImage().startRead(channel);
 
     int i;
     for (i = 0; i < nc; i++)
@@ -58,15 +58,22 @@ bool deGaussianBlurSingleLayer::updateMainImageNotThreadedWay()
         mainLayerImage.enableChannel(i);
     }
 
-    deValue* destination = mainLayerImage.getValues(0);
+    deValue* destination = mainLayerImage.startWrite(0);
 
     blurChannel(source, destination, size, r, r, type, 0.0);
 
+    getSourceImage().finishRead(channel);
+
     for (i = 1; i < nc; i++)
     {
-        deValue* dd = mainLayerImage.getValues(i);
+        deValue* dd = mainLayerImage.startWrite(i);
         copyChannel(destination, dd, n);
+        mainLayerImage.finishWrite(i);
     }
+
+    mainLayerImage.finishWrite(0);
+
+
 
     return true;
 }    

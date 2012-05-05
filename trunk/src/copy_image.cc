@@ -29,6 +29,10 @@ void copyImage(const deImage& sourceImage, deImage& image)
 
     for (i = 0; i < n; i++)
     {
-       copyChannel(sourceImage.getValues(i), image.getValues(i), sourceImage.getChannelSize().getN());
+        const deValue* source = sourceImage.startRead(i);     
+        deValue* destination = image.startWrite(i);
+        copyChannel(source, destination, sourceImage.getChannelSize().getN());
+        image.finishWrite(i);
+        sourceImage.finishRead(i);
     }
 }

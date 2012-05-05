@@ -21,7 +21,7 @@
 #include <iostream>
 #include <cassert>
 
-void scaleChannel(deValue* src, deValue* dst, int x1, int y1, int x2, int y2, int w, int h, int ws)
+void scaleChannel(const deValue* src, deValue* dst, int x1, int y1, int x2, int y2, int w, int h, int ws)
 {
     if (w <= 0)
     {

@@ -24,7 +24,7 @@
 #include "value.h"
 class dePalette3;
 
-class deColorPanel:public wxPanel
+class deColorPanelOld:public wxPanel
 {
 private:
     deValue r;
@@ -36,8 +36,8 @@ protected:
     void click(wxMouseEvent &event);
 
 public:
-    deColorPanel(wxWindow* parent, wxSize _size, dePalette3* _palette, int style);
-    virtual ~deColorPanel();
+    deColorPanelOld(wxWindow* parent, wxSize _size, dePalette3* _palette, int style);
+    virtual ~deColorPanelOld();
 
     void setRGB(deValue rr, deValue gg, deValue bb);
     void setColor(deColorSpace colorSpace, int channel, deValue value);

@@ -27,7 +27,7 @@ class deActionFrame:public deLayerFrameOld
 {
     private:
     public:
-        deActionFrame(wxWindow *parent, deLayer& _layer, deLayerFrameManager& _frameManager, int _layerIndex);
+        deActionFrame(wxWindow *parent, deLayerOld& _layer, deLayerFrameManager& _frameManager, int _layerIndex);
         virtual ~deActionFrame();
 
         virtual bool onImageClick(deValue x, deValue y) {return false;};

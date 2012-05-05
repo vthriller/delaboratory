@@ -167,26 +167,17 @@ bool deConversionProcessor::convertPixel(const deImage& image, int p, deColorSpa
 
         if (conversion)
         {
-            const deValue* values1 = image.getValues(0);
-            if (!values1)
-            {
-                return false;
-            }
-            const deValue* values2 = image.getValues(1);
-            if (!values2)
-            {
-                return false;
-            }
-            const deValue* values3 = image.getValues(2);
-            if (!values3)
-            {
-                return false;
-            }
+            const deValue* values1 = image.startRead(0);
+            const deValue* values2 = image.startRead(1);
+            const deValue* values3 = image.startRead(2);
             deValue s1 = values1[p];
             deValue s2 = values2[p];
             deValue s3 = values3[p];
             conversion(s1, s2, s3, v1, v2, v3);
             v4 = -1;
+            image.finishRead(0);
+            image.finishRead(1);
+            image.finishRead(2);
             return true;
         } 
     }        
@@ -197,25 +188,16 @@ bool deConversionProcessor::convertPixel(const deImage& image, int p, deColorSpa
 
         if (conversion)
         {
-            const deValue* values1 = image.getValues(0);
-            if (!values1)
-            {
-                return false;
-            }
-            const deValue* values2 = image.getValues(1);
-            if (!values2)
-            {
-                return false;
-            }
-            const deValue* values3 = image.getValues(2);
-            if (!values3)
-            {
-                return false;
-            }
+            const deValue* values1 = image.startRead(0);
+            const deValue* values2 = image.startRead(1);
+            const deValue* values3 = image.startRead(2);
             deValue s1 = values1[p];
             deValue s2 = values2[p];
             deValue s3 = values3[p];
             conversion(s1, s2, s3, v1);
+            image.finishRead(0);
+            image.finishRead(1);
+            image.finishRead(2);
             return true;
         } 
     }        
@@ -226,51 +208,26 @@ bool deConversionProcessor::convertPixel(const deImage& image, int p, deColorSpa
 
         if (conversion)
         {
-            const deValue* values1 = image.getValues(0);
-            if (!values1)
-            {
-                return false;
-            }
-            const deValue* values2 = image.getValues(1);
-            if (!values2)
-            {
-                return false;
-            }
-            const deValue* values3 = image.getValues(2);
-            if (!values3)
-            {
-                return false;
-            }
+            const deValue* values1 = image.startRead(0);
+            const deValue* values2 = image.startRead(1);
+            const deValue* values3 = image.startRead(2);
             deValue s1 = values1[p];
             deValue s2 = values2[p];
             deValue s3 = values3[p];
             conversion(s1, s2, s3, v1, v2, v3, v4);
+            image.finishRead(0);
+            image.finishRead(1);
+            image.finishRead(2);
             return true;
         } 
     }        
 
     if ((sn == 4) && (tn == 4))
     {
-        const deValue* values1 = image.getValues(0);
-        if (!values1)
-        {
-            return false;
-        }
-        const deValue* values2 = image.getValues(1);
-        if (!values2)
-        {
-            return false;
-        }
-        const deValue* values3 = image.getValues(2);
-        if (!values3)
-        {
-            return false;
-        }
-        const deValue* values4 = image.getValues(3);
-        if (!values4)
-        {
-            return false;
-        }
+        const deValue* values1 = image.startRead(0);
+        const deValue* values2 = image.startRead(1);
+        const deValue* values3 = image.startRead(2);
+        const deValue* values4 = image.startRead(3);
         deValue s1 = values1[p];
         deValue s2 = values2[p];
         deValue s3 = values3[p];
@@ -279,6 +236,10 @@ bool deConversionProcessor::convertPixel(const deImage& image, int p, deColorSpa
         v2 = s2;
         v3 = s3;
         v4 = s4;
+        image.finishRead(0);
+        image.finishRead(1);
+        image.finishRead(2);
+        image.finishRead(3);
         return true;
     }        
 
@@ -288,31 +249,19 @@ bool deConversionProcessor::convertPixel(const deImage& image, int p, deColorSpa
 
         if (conversion)
         {
-            const deValue* values1 = image.getValues(0);
-            if (!values1)
-            {
-                return false;
-            }
-            const deValue* values2 = image.getValues(1);
-            if (!values2)
-            {
-                return false;
-            }
-            const deValue* values3 = image.getValues(2);
-            if (!values3)
-            {
-                return false;
-            }
-            const deValue* values4 = image.getValues(3);
-            if (!values4)
-            {
-                return false;
-            }
+            const deValue* values1 = image.startRead(0);
+            const deValue* values2 = image.startRead(1);
+            const deValue* values3 = image.startRead(2);
+            const deValue* values4 = image.startRead(3);
             deValue s1 = values1[p];
             deValue s2 = values2[p];
             deValue s3 = values3[p];
             deValue s4 = values4[p];
             conversion(s1, s2, s3, s4, v1, v2, v3);
+            image.finishRead(0);
+            image.finishRead(1);
+            image.finishRead(2);
+            image.finishRead(3);
             return true;
         } 
     }        
@@ -323,13 +272,10 @@ bool deConversionProcessor::convertPixel(const deImage& image, int p, deColorSpa
 
         if (conversion)
         {
-            const deValue* values1 = image.getValues(0);
-            if (!values1)
-            {
-                return false;
-            }
+            const deValue* values1 = image.startRead(0);
             deValue s1 = values1[p];
             conversion(s1, v1, v2, v3);
+            image.finishRead(0);
             return true;
         } 
     }        
@@ -340,72 +286,49 @@ bool deConversionProcessor::convertPixel(const deImage& image, int p, deColorSpa
 
         if (conversion)
         {
-            const deValue* values1 = image.getValues(0);
-            if (!values1)
-            {
-                return false;
-            }
+            const deValue* values1 = image.startRead(0);
             deValue s1 = values1[p];
             conversion(s1, v1, v2, v3, v4);
+            image.finishRead(0);
             return true;
         } 
     }        
 
     if ((sn == 1) && (tn == 1))
     {
-        const deValue* values1 = image.getValues(0);
-        if (!values1)
-        {
-            return false;
-        }
+        const deValue* values1 = image.startRead(0);
         deValue s1 = values1[p];
         v1 = s1;
+        image.finishRead(0);
         return true;
     }        
 
     return false;
 }
 
-bool deConversionProcessor::convertToRGB(deValue v1, deValue v2, deValue v3, deValue v4, deColorSpace colorSpace, deValue &rr, deValue& gg, deValue& bb)
+bool deConversionProcessor::convert(deColorSpace sourceColorSpace, deValue v1, deValue v2, deValue v3, deValue v4, deColorSpace targetColorSpace, deValue &r1, deValue& r2, deValue& r3, deValue& r4)
 {
-    deConversion1x3 f1x3 = getConversion1x3(colorSpace, deColorSpaceRGB);
-    deConversion3x3 f3x3 = getConversion3x3(colorSpace, deColorSpaceRGB);
-    deConversion4x3 f4x3 = getConversion4x3(colorSpace, deColorSpaceRGB);
-    if (f3x3)
-    {
-        f3x3(v1, v2, v3, rr, gg, bb);
-        return true;
-    } else if (f4x3)
-    {
-        f4x3(v1, v2, v3, v4, rr, gg, bb);
-        return true;
-    } else if (f1x3)
-    {
-        f1x3(v1, rr, gg, bb);
-        return true;
-    }
-    return false;
-}
+    deConversionCPU cpu(4);
+    deConversionCPU::deFunction f = getConversion(sourceColorSpace, targetColorSpace);
 
-bool deConversionProcessor::convertToLAB(deValue v1, deValue v2, deValue v3, deValue v4, deColorSpace colorSpace, deValue &rr, deValue& gg, deValue& bb)
-{
-    deConversion1x3 f1x3 = getConversion1x3(colorSpace, deColorSpaceLAB);
-    deConversion3x3 f3x3 = getConversion3x3(colorSpace, deColorSpaceLAB);
-    deConversion4x3 f4x3 = getConversion4x3(colorSpace, deColorSpaceLAB);
-    if (f3x3)
+    if (!f)
     {
-        f3x3(v1, v2, v3, rr, gg, bb);
-        return true;
-    } else if (f4x3)
-    {
-        f4x3(v1, v2, v3, v4, rr, gg, bb);
-        return true;
-    } else if (f1x3)
-    {
-        f1x3(v1, rr, gg, bb);
-        return true;
+        return false;
     }
-    return false;
+    
+    cpu.input[0] = v1;
+    cpu.input[1] = v2;
+    cpu.input[2] = v3;
+    cpu.input[3] = v4;
+
+    f(cpu);
+
+    r1 = cpu.output[0];
+    r2 = cpu.output[1];
+    r3 = cpu.output[2];
+    r4 = cpu.output[3];
+
+    return true;
 }
 
 bool deConversionProcessor::renderImageToRGBNew(const deImage& image, unsigned char* data)

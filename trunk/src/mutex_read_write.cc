@@ -16,37 +16,45 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_DODGE_BURN_FRAME_H
-#define _DE_DODGE_BURN_FRAME_H
+#include "mutex_read_write.h"
+#include "logger.h"
 
-#include "action_frame.h"
-#include "slider.h"
-#include <vector>
-#include <map>
-
-class dePropertyValueSlider;
-class dePropertyBooleanUIOld;
-class deLayerProcessor;
-
-class deDodgeBurnFrame:public deActionFrame
+deMutexReadWrite::deMutexReadWrite(int _maxReaders)
+:maxReaders(_maxReaders),
+readSemaphore(_maxReaders, _maxReaders)
 {
-    private:
-        std::vector<dePropertyValueSlider*> valueSliders;
+}
 
-        dePropertyBooleanUIOld* alternate;
+deMutexReadWrite::~deMutexReadWrite()
+{
+}
 
-        std::map<std::string, wxButton*> buttons;
+void deMutexReadWrite::lockRead() 
+{
+    readSemaphore.wait();
+}
 
-        deLayerProcessor& layerProcessor;
+void deMutexReadWrite::unlockRead()
+{
+    readSemaphore.post();
+}
 
-        void click(wxCommandEvent &event);
+void deMutexReadWrite::lockWrite()
+{
+    int i;
+    for (i = 0; i < maxReaders; i++)
+    {
+        readSemaphore.wait();
+    }
+    lockWithLog(writeMutex, "channel write mutex");
+}
 
-    public:
-        deDodgeBurnFrame(wxWindow *parent, deLayerOld& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deDodgeBurnFrame();
-
-
-};
-
-
-#endif
+void deMutexReadWrite::unlockWrite()
+{
+    writeMutex.unlock();
+    int i;
+    for (i = 0; i < maxReaders; i++)
+    {
+        readSemaphore.post();
+    }
+}

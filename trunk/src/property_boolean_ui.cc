@@ -21,7 +21,7 @@
 #include "layer.h"
 #include "layer_processor.h"
 
-dePropertyBooleanUIOld::dePropertyBooleanUIOld(wxWindow *parent, dePropertyBoolean& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
+dePropertyBooleanUIOld::dePropertyBooleanUIOld(wxWindow *parent, dePropertyBoolean& _property, deLayerOld& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
 :deCheckBoxOld(parent, _property.getLabel()),
 property(_property),
 layer(_layer),

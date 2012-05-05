@@ -20,20 +20,17 @@
 #define _DE_CHANNEL_H
 
 #include "value.h"
-#include "mutex.h"
 #include "semaphore.h"
 
 class deChannel
 {
     private:
         deValue* pixels;
-        mutable deSemaphore readSemaphore;
-        deMutex writeMutex;
-        int maxReaders;
         int magicSize;
 
         deChannel(const deChannel& c);
         deChannel& operator =(const deChannel& c);
+
     public:
         deChannel();
 
@@ -48,14 +45,11 @@ class deChannel
 
         const deValue* getPixels() const;
 
-        deValue getValue(int pos) const;
         void setValue(int pos, const deValue& value);
         void setValueClip(int pos, const deValue& value);
 
-        void lockRead() const;
-        void unlockRead() const;
-        void lockWrite();
-        void unlockWrite();
+        deValue getValue(int pos) const;
+
 };
 
 #endif

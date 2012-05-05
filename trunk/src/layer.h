@@ -32,15 +32,14 @@ class dePropertyValue;
 class deProperty;
 class dePresetLayer;
 
-class deLayer:public deLayerWithBlending
+class deLayerOld:public deLayerWithBlending
 {
     private:
-        deLayer(const deLayer& layer);
-        deLayer& operator = (const deLayer& layer);
+        deLayerOld(const deLayerOld& layer);
+        deLayerOld& operator = (const deLayerOld& layer);
 
     protected:
         std::vector<deProperty*> properties;
-        std::map<std::string, dePresetLayer*> presets;
 
         int registerPropertyValue(const std::string& _name);
 
@@ -48,17 +47,14 @@ class deLayer:public deLayerWithBlending
         void loadValueProperties(xmlNodePtr root);
 
     public:
-        deLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
-        virtual ~deLayer();
+        deLayerOld(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
+        virtual ~deLayerOld();
 
         virtual std::string getLabel() const;
 
         int getNumberOfProperties() const {return properties.size();};
         dePropertyValue* getPropertyValue(int index);
         dePropertyValue* getPropertyValue(const std::string& _name);
-
-        bool applyPreset(const std::string& _name);
-        void getPresets(std::vector<std::string>& result);
 
 
 };

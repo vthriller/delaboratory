@@ -269,12 +269,14 @@ class dePropertyLevelsUIImpl:public dePanelWX
 
             int channel = property.getChannel();
 
-            const deValue* c = sourceImage.getValues(channel);
+            const deValue* c = sourceImage.startRead(channel);
             int n = sourceImage.getChannelSize().getN();
 
             int h = 50;
             histogramPanel = new deChannelHistogramPanel(getWindow(), c, n, width, h, margin);
             sizer->Add(histogramPanel);
+
+            sourceImage.finishRead(channel);
 
             deGradientPanel0* gradient = new deGradientPanel0(this, wxSize(width, 8), layer.getColorSpace(), channel, margin);
             sizer->Add(gradient);

@@ -31,7 +31,7 @@
 #include "channel_manager.h"
 
 deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager),
+:deLayerOld(_colorSpace, _sourceLayer, _layerStack, _channelManager),
  alternate("alternate"),
  viewManager(_viewManager)
 {
@@ -72,6 +72,7 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _sourceLayer, d
     alternate.setLabel("use screen / multiply instead dodge / burn");
     alternate.set(false);
 
+/*
     {
         dePresetLayer* p = new dePresetLayer(*this);
         p->addPresetValue(new dePresetValue("blur_radius", 5.0));
@@ -160,6 +161,7 @@ deDodgeBurnLayer::deDodgeBurnLayer(deColorSpace _colorSpace, int _sourceLayer, d
     }        
 
     applyPreset("reset");
+    */
 
     disableNotLuminance();
 }
@@ -308,13 +310,7 @@ bool deDodgeBurnLayer::updateMainImageSingleChannel(int i)
 
         if (channel)
         {
-            channel->lockWrite();
-            sourceChannel->lockRead();
-
             actionResult = processDB(*sourceChannel, *channel);
-
-            sourceChannel->unlockRead();
-            channel->unlockWrite();
         }
     }
 

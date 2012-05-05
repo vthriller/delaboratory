@@ -26,12 +26,12 @@
 #include "preset.h"
 #include "color_space_utils.h"
 
-deLayer::deLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
+deLayerOld::deLayerOld(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
 {
 }
 
-deLayer::~deLayer()
+deLayerOld::~deLayerOld()
 {
     while (properties.size() > 0)
     {
@@ -40,28 +40,22 @@ deLayer::~deLayer()
        delete p;
        properties.erase(i);
     }       
-    while (presets.size() > 0)
-    {
-        std::map<std::string, dePresetLayer*>::iterator i = presets.begin();
-        delete i->second;
-        presets.erase(i);
-    }
 //    unlockLayer();
 }
 
-std::string deLayer::getLabel() const 
+std::string deLayerOld::getLabel() const 
 {
     return getType();
 }    
 
-int deLayer::registerPropertyValue(const std::string& _name)
+int deLayerOld::registerPropertyValue(const std::string& _name)
 {
     dePropertyValue* p = new dePropertyValue(_name);
     properties.push_back(p);
     return properties.size() - 1;
 }
 
-dePropertyValue* deLayer::getPropertyValue(int index)
+dePropertyValue* deLayerOld::getPropertyValue(int index)
 {
     if ((index < 0) || ((unsigned int)(index) >= properties.size()))
     {
@@ -72,7 +66,7 @@ dePropertyValue* deLayer::getPropertyValue(int index)
     return dynamic_cast<dePropertyValue*>(property);
 }
 
-void deLayer::saveValueProperties(xmlNodePtr root)
+void deLayerOld::saveValueProperties(xmlNodePtr root)
 {
     int n = getNumberOfProperties();
     int i;
@@ -83,7 +77,7 @@ void deLayer::saveValueProperties(xmlNodePtr root)
     }
 }    
 
-void deLayer::loadValueProperties(xmlNodePtr root)
+void deLayerOld::loadValueProperties(xmlNodePtr root)
 {
     int n = getNumberOfProperties();
     int i;
@@ -94,7 +88,7 @@ void deLayer::loadValueProperties(xmlNodePtr root)
     }
 }       
 
-dePropertyValue* deLayer::getPropertyValue(const std::string& _name)
+dePropertyValue* deLayerOld::getPropertyValue(const std::string& _name)
 {
     int n = getNumberOfProperties();
     int i;
@@ -107,31 +101,5 @@ dePropertyValue* deLayer::getPropertyValue(const std::string& _name)
         }
     }
     return NULL;
-}
-
-bool deLayer::applyPreset(const std::string& _name)
-{
-    std::map<std::string, dePresetLayer*>::iterator i = presets.find(_name);
-
-    if (i == presets.end())
-    {
-        return false;
-    }
-
-    dePresetLayer* preset = i->second;
-
-    preset->apply();
-
-    return true;
-}
-
-void deLayer::getPresets(std::vector<std::string>& result)
-{
-    std::map<std::string, dePresetLayer*>::iterator i;
-    for (i = presets.begin(); i != presets.end(); i++)
-    {
-        std::string n = i->first;
-        result.push_back(n);
-    }
 }
 

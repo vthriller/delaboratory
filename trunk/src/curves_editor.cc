@@ -25,7 +25,7 @@
 #include "logger.h"
 #include "opacity_slider.h"
 
-deCurvesEditor::deCurvesEditor(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex, deChannelManager& _channelManager)
+deCurvesEditor::deCurvesEditor(wxWindow *parent, deLayerOld& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex, deChannelManager& _channelManager)
 :deActionFrame(parent, _layer, _frameManager, _layerIndex)
 {
     logMessage("creating curves editor...");

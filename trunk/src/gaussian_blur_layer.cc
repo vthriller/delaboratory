@@ -48,13 +48,16 @@ bool deGaussianBlurLayer::updateMainImageSingleChannel(int channel)
     deSize size = mainLayerImage.getChannelSize();
 
     mainLayerImage.enableChannel(channel);
-    const deValue* source = getSourceImage().getValues(channel);
-    deValue* destination = mainLayerImage.getValues(channel);
+    const deValue* source = getSourceImage().startRead(channel);
+    deValue* destination = mainLayerImage.startWrite(channel);
     
     bool result = false;
     deBlurType type = deGaussianBlur;
 
     result = blurChannel(source, destination, size, r, r, type, 0.0);
+
+    getSourceImage().finishRead(channel);
+    mainLayerImage.finishWrite(channel);
     
     return result;
 }

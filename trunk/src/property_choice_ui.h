@@ -20,7 +20,7 @@
 #define _DE_PROPERTY_CHOICE_UI_H
 
 #include "choice.h"
-class deLayer;
+class deLayerOld;
 class dePropertyChoice;
 class deLayerProcessor;
 
@@ -28,12 +28,12 @@ class dePropertyChoiceUIOld:public deChoiceOld
 {
     private:
         dePropertyChoice& property;
-        deLayer& layer;
+        deLayerOld& layer;
         deLayerProcessor& layerProcessor;
         int layerIndex;
 
     public:
-        dePropertyChoiceUIOld(wxWindow *parent, dePropertyChoice& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex);
+        dePropertyChoiceUIOld(wxWindow *parent, dePropertyChoice& _property, deLayerOld& _layer, deLayerProcessor& _layerProcessor, int _layerIndex);
         virtual ~dePropertyChoiceUIOld();
 
         virtual void onChoose(int c);

@@ -24,7 +24,7 @@
 dePropertyChoice::dePropertyChoice(const std::string& _name, const std::vector<std::string> _choices)
 :deProperty(_name), choices(_choices)
 {
-    value = -1;
+    value = 0;
 }
 
 dePropertyChoice::~dePropertyChoice()

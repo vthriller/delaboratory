@@ -50,7 +50,7 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject&
     colorSpaceChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, colorSpaces.size(), colorSpaceStrings);
     sizerT->Add(colorSpaceChoice);
 
-    colorPanel = new deColorPanel(this, wxSize(60, 25), NULL, 0);
+    colorPanel = new deColorPanelOld(this, wxSize(60, 25), NULL, 0);
     sizerT->Add(colorPanel, 0, wxALIGN_CENTER);
 
     sizerS = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
@@ -183,16 +183,12 @@ void deSamplerPanel::update()
         deValue gg;
         deValue bb;
 
-        image.lockRead();
-
         deConversionProcessor cp;
 
         cp.convertPixel(image, p, deColorSpaceRGB, rr, gg, bb, vv4);
         cp.convertPixel(image, p, colorSpace, vv1, vv2, vv3, vv4);
 
         colorPanel->setRGB(rr, gg, bb);
-
-        image.unlockRead();
 
         std::ostringstream oss;
         oss.setf(std::ios_base::fixed);

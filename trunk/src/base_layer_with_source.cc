@@ -36,9 +36,20 @@ const deBaseLayer& deBaseLayerWithSource::getSourceLayer() const
     return *layer;
 }    
 
+const deBaseLayer& deBaseLayerWithSource::getOriginalLayer() const
+{
+    const deBaseLayer* layer = layerStack.getLayer(0);
+    return *layer;
+}    
+
 const deImage& deBaseLayerWithSource::getSourceImage() const
 {
     return getSourceLayer().getLayerImage();
+}
+
+const deImage& deBaseLayerWithSource::getOriginalImage() const
+{
+    return getOriginalLayer().getLayerImage();
 }
 
 const deImage& deBaseLayerWithSource::getOtherLayerImage(int a) const

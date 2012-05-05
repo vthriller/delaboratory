@@ -30,7 +30,7 @@
 #include "channel_manager.h"
 
 deShadowsHighlightsLayer::deShadowsHighlightsLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayer( _colorSpace,  _sourceLayer, _layerStack, _channelManager),
+:deLayerOld( _colorSpace,  _sourceLayer, _layerStack, _channelManager),
  viewManager(_viewManager)
 {
     blurRadiusIndex = registerPropertyValue("blur_radius");
@@ -188,13 +188,7 @@ bool deShadowsHighlightsLayer::updateMainImageSingleChannel(int i)
 
         if (channel)
         {
-            channel->lockWrite();
-            sourceChannel->lockRead();
-
             actionResult = processSH(*sourceChannel, *channel);
-
-            sourceChannel->unlockRead();
-            channel->unlockWrite();
         }
     }
 
