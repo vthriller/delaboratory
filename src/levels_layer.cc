@@ -23,6 +23,7 @@
 #include "curve.h"
 #include "preset.h"
 #include "histogram.h"
+#include "logger.h"
 
 deLevelsLayer::deLevelsLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
@@ -67,6 +68,8 @@ bool deLevelsLayer::isChannelNeutral(int channel)
 
 bool deLevelsLayer::updateMainImageSingleChannel(int channel)
 {
+    logMessage("deLevelsLayer::updateMainImageSingleChannel 1");
+
     if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
     {
         int s = getSourceImage().getChannelIndex(channel);
@@ -74,18 +77,23 @@ bool deLevelsLayer::updateMainImageSingleChannel(int channel)
         return true;
     }
 
+    logMessage("deLevelsLayer::updateMainImageSingleChannel 2");
+
     dePropertyLevels* propertyLevels = getPropertyLevels(channel);
     if (!propertyLevels)
     {
         return false;
     }
 
+
     const deLevels& levels = propertyLevels->getLevels();
 
-    const deValue* source = getSourceImage().getValues(channel);
+    const deValue* source = getSourceImage().startRead(channel);
     mainLayerImage.enableChannel(channel);
-    deValue* target = mainLayerImage.getValues(channel);
+    deValue* target = mainLayerImage.startWrite(channel);
     int n = mainLayerImage.getChannelSize().getN();
+
+    logMessage("deLevelsLayer::updateMainImageSingleChannel 3");
 
     deBaseCurve curve;
 
@@ -97,7 +105,12 @@ bool deLevelsLayer::updateMainImageSingleChannel(int channel)
 
     curve.build();
 
+    logMessage("deLevelsLayer::updateMainImageSingleChannel 4");
+
     curve.process(source, target, n);
+
+    getSourceImage().finishRead(channel);
+    mainLayerImage.finishWrite(channel);
 
     return true;
 }
@@ -174,7 +187,7 @@ void deLevelsLayer::calcAutoLevels(int channel, deValue& min, deValue& middle, d
         return;
     }
 
-    const deValue* c = getSourceImage().getValues(channel);
+    const deValue* c = getSourceImage().startRead(channel);
     int n = getSourceImage().getChannelSize().getN();
 
     int s = 1024;
@@ -182,6 +195,8 @@ void deLevelsLayer::calcAutoLevels(int channel, deValue& min, deValue& middle, d
 
     histogram.clear();
     histogram.calc(c, n);
+
+    getSourceImage().finishRead(channel);
 
     min = histogram.getLeft(e);
     max = histogram.getRight(e);

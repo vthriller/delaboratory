@@ -614,6 +614,7 @@ void deCurveOld::lock() const
 
 void deCurveOld::unlock() const
 {
+    logMessage("curve mutex unlock");
     mutex.unlock();
 }
 

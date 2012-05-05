@@ -22,32 +22,30 @@
 #include "property_value.h"
 #include "color_space_utils.h"
 #include "channel_manager.h"
+#include "preset.h"
 
-deApplyLuminanceLayer::deApplyLuminanceLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager)
+deApplyLuminanceLayer::deApplyLuminanceLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
+:deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
 {
+    dePreset* reset = createPreset("reset");
     int n = getColorSpaceSize(colorSpace);
+
     int i;
     for (i = 0; i < n; i++)
     {
-        std::string n = getChannelName(colorSpace, i);
-        mixer.push_back(new dePropertyValue(n));
+        std::string n = "mixer " + getChannelName(colorSpace, i);
+        createPropertyNumeric(n, 0, 1);
+        if (i == 1) // green / magenta
+        {
+            reset->addNumericValue(n, 1.0);
+        }
+        else
+        {
+            reset->addNumericValue(n, 0.0);
+        }
     }
 
-    if ( (colorSpace == deColorSpaceRGB) || (colorSpace == deColorSpaceProPhoto))
-    {
-        mixer[0]->set(0.0);
-        mixer[1]->set(1.0);
-        mixer[2]->set(0.0);
-    }
-
-    if (colorSpace == deColorSpaceCMYK)
-    {
-        mixer[0]->set(0.0);
-        mixer[1]->set(1.0);
-        mixer[2]->set(0.0);
-        mixer[3]->set(0.0);
-    }
+    applyPreset("reset");
 }
 
 deApplyLuminanceLayer::~deApplyLuminanceLayer()
@@ -59,9 +57,9 @@ bool deApplyLuminanceLayer::processActionFull(deValue** sp, deValue** dp, int ch
     if (colorSpace == deColorSpaceRGB)
     {
         int i;
-        deValue mr = mixer[0]->get();
-        deValue mg = mixer[1]->get();
-        deValue mb = mixer[2]->get();
+        deValue mr = getNumericValue("mixer red");
+        deValue mg = getNumericValue("mixer green");
+        deValue mb = getNumericValue("mixer blue");
         for (i = 0; i < channelSize; i++)
         {
             deValue r = sp[0][i];
@@ -76,9 +74,9 @@ bool deApplyLuminanceLayer::processActionFull(deValue** sp, deValue** dp, int ch
     if (colorSpace == deColorSpaceProPhoto)
     {
         int i;
-        deValue mr = mixer[0]->get();
-        deValue mg = mixer[1]->get();
-        deValue mb = mixer[2]->get();
+        deValue mr = getNumericValue("mixer red");
+        deValue mg = getNumericValue("mixer green");
+        deValue mb = getNumericValue("mixer blue");
         for (i = 0; i < channelSize; i++)
         {
             deValue r = sp[0][i];
@@ -92,6 +90,7 @@ bool deApplyLuminanceLayer::processActionFull(deValue** sp, deValue** dp, int ch
 
     if (colorSpace == deColorSpaceCMYK)
     {
+    /*
         int i;
         deValue mc = mixer[0]->get();
         deValue mm = mixer[1]->get();
@@ -107,6 +106,7 @@ bool deApplyLuminanceLayer::processActionFull(deValue** sp, deValue** dp, int ch
             applyLuminanceCMYK(sp[0][i], sp[1][i], sp[2][i], sp[3][i], l, l, l, k, dp[0][i], dp[1][i], dp[2][i], dp[3][i]);
         }
         return true;
+        */
     }
 
     int n = getColorSpaceSize(colorSpace);
@@ -169,7 +169,6 @@ bool deApplyLuminanceLayer::updateMainImageNotThreadedWay()
 
         if (sc[i])
         {
-            sc[i]->lockRead();
             sp[i] = sc[i]->getPixels();
         }                    
         else
@@ -179,7 +178,6 @@ bool deApplyLuminanceLayer::updateMainImageNotThreadedWay()
 
         if (dc[i])
         {
-            dc[i]->lockWrite();
             dp[i] = dc[i]->getPixels();
         }                 
         else
@@ -189,18 +187,6 @@ bool deApplyLuminanceLayer::updateMainImageNotThreadedWay()
     }
 
     bool actionResult = processActionFull(sp, dp, channelSize);
-
-    for (i = 0; i < n; i++)
-    {
-        if (sc[i])
-        {
-            sc[i]->unlockRead();
-        }                    
-        if (dc[i])
-        {
-            dc[i]->unlockWrite();
-        }                    
-    }
 
     return actionResult;
 }

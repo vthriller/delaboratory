@@ -25,7 +25,7 @@
 #include "color_space_utils.h"
 
 deApplyImageLayer::deApplyImageLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _layerIndex)
-:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager),
+:deLayerOld(_colorSpace, _sourceLayer, _layerStack, _channelManager),
 appliedLayer("applied_layer", createNumbers(_layerIndex)),
 applySingleChannel("apply_single_channel")
 {

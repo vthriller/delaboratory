@@ -19,13 +19,11 @@
 #ifndef _DE_APPLY_LUMINANCE_LAYER_H
 #define _DE_APPLY_LUMINANCE_LAYER_H
 
-#include "layer.h"
+#include "layer_with_blending.h"
 
-class deApplyLuminanceLayer:public deLayer
+class deApplyLuminanceLayer:public deLayerWithBlending
 {
     private:
-        std::vector<dePropertyValue*> mixer;
-
     protected:
         virtual std::string getType() const {return "apply_luminance";};
         virtual std::string getLabel() const {return "apply luminance";};
@@ -33,7 +31,7 @@ class deApplyLuminanceLayer:public deLayer
         bool updateMainImageNotThreadedWay();
 
     public:
-        deApplyLuminanceLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deApplyLuminanceLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
         virtual ~deApplyLuminanceLayer();
 
         virtual bool isChannelNeutral(int index) {return false;};

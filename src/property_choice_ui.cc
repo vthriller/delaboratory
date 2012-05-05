@@ -21,7 +21,7 @@
 #include "layer.h"
 #include "layer_processor.h"
 
-dePropertyChoiceUIOld::dePropertyChoiceUIOld(wxWindow *parent, dePropertyChoice& _property, deLayer& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
+dePropertyChoiceUIOld::dePropertyChoiceUIOld(wxWindow *parent, dePropertyChoice& _property, deLayerOld& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
 :deChoiceOld(parent, _property.getLabel(), _property.getChoices()),
 property(_property),
 layer(_layer),

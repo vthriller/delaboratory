@@ -24,7 +24,7 @@
 #include "curve.h"
 #include "basic_setting.h"
 
-class deBasicLayer:public deLayer
+class deBasicLayer:public deLayerOld
 {
     private:
         std::vector<deBasicSetting> settings1;

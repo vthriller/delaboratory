@@ -72,6 +72,7 @@ bool deHighPassLayer::updateMainImageNotThreadedWay()
     int channel;
 
     int nc = getColorSpaceSize(colorSpace);
+    int no = 3; // assume original image has 3 channels
 
     // clear destination
     fillChannel(mask, n, 0.0);
@@ -81,19 +82,24 @@ bool deHighPassLayer::updateMainImageNotThreadedWay()
     deValue r = getNumericValue("radius") * viewManager.getRealScale();
 
     int i;
-
-    // calc high pass
     for (channel = 0; channel < nc; channel++)
     {
         mainLayerImage.enableChannel(channel);
-        const deValue* source = getSourceImage().getValues(channel);
-        deValue* destination = mainLayerImage.getValues(channel);
+    }
+
+    // calc high pass
+    for (channel = 0; channel < no; channel++)
+    {
+        const deValue* source = getOriginalImage().startRead(channel);
+        deValue* destination = mainLayerImage.startWrite(0);    // use 0 channel for blur
         blurChannel(source, destination, size, r, r, type, t);
         for (i = 0; i < n; i++)
         {
             deValue d = source[i] - destination[i];
             mask[i] += d;
         }
+        getOriginalImage().finishRead(channel);
+        mainLayerImage.finishWrite(0);
     }
 
     deValue p = getNumericValue("power");
@@ -118,14 +124,22 @@ bool deHighPassLayer::updateMainImageNotThreadedWay()
 
     for (channel = 0; channel < nc; channel++)
     {
-        deValue* destination = mainLayerImage.getValues(channel);
-        int i;
-        for (i = 0; i < n; i++)
+        if (!isChannelEnabled(channel))
         {
-            destination[i] = mask[i];
+            int s = getSourceImage().getChannelIndex(channel);
+            mainLayerImage.disableChannel(channel, s);
+        }
+        else
+        {
+            deValue* destination = mainLayerImage.startWrite(channel);
+            int i;
+            for (i = 0; i < n; i++)
+            {
+                destination[i] = mask[i];
+            }
+            mainLayerImage.finishWrite(channel);
         }
     }
-
 
     delete [] mask;
 

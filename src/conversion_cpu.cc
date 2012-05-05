@@ -79,11 +79,7 @@ bool deConversionCPU::renderImage1(const deImage& image, deConversionCPU::deFunc
 {
     int n = image.getChannelSize().getN();
 
-    const deValue* s0 = image.getValues(0);
-    if (!s0)
-    {
-        return false;
-    }
+    const deValue* s0 = image.startRead(0);
 
     int i;
     int pos = 0;
@@ -104,6 +100,8 @@ bool deConversionCPU::renderImage1(const deImage& image, deConversionCPU::deFunc
         data[pos] = b;
         pos++;
     }
+
+    image.finishRead(0);
 
     return true;
 }    
@@ -112,21 +110,9 @@ bool deConversionCPU::renderImage3(const deImage& image, deConversionCPU::deFunc
 {
     int n = image.getChannelSize().getN();
 
-    const deValue* s0 = image.getValues(0);
-    if (!s0)
-    {
-        return false;
-    }
-    const deValue* s1 = image.getValues(1);
-    if (!s1)
-    {
-        return false;
-    }
-    const deValue* s2 = image.getValues(2);
-    if (!s2)
-    {
-        return false;
-    }
+    const deValue* s0 = image.startRead(0);
+    const deValue* s1 = image.startRead(1);
+    const deValue* s2 = image.startRead(2);
 
     int i;
     int pos = 0;
@@ -149,6 +135,10 @@ bool deConversionCPU::renderImage3(const deImage& image, deConversionCPU::deFunc
         data[pos] = b;
         pos++;
     }
+
+    image.finishRead(0);
+    image.finishRead(1);
+    image.finishRead(2);
 
     return true;
 }    
@@ -157,26 +147,10 @@ bool deConversionCPU::renderImage4(const deImage& image, deConversionCPU::deFunc
 {
     int n = image.getChannelSize().getN();
 
-    const deValue* s0 = image.getValues(0);
-    if (!s0)
-    {
-        return false;
-    }
-    const deValue* s1 = image.getValues(1);
-    if (!s1)
-    {
-        return false;
-    }
-    const deValue* s2 = image.getValues(2);
-    if (!s2)
-    {
-        return false;
-    }
-    const deValue* s3 = image.getValues(3);
-    if (!s3)
-    {
-        return false;
-    }
+    const deValue* s0 = image.startRead(0);
+    const deValue* s1 = image.startRead(1);
+    const deValue* s2 = image.startRead(2);
+    const deValue* s3 = image.startRead(3);
 
     int i;
     int pos = 0;
@@ -201,6 +175,11 @@ bool deConversionCPU::renderImage4(const deImage& image, deConversionCPU::deFunc
         pos++;
     }
 
+    image.finishRead(0);
+    image.finishRead(1);
+    image.finishRead(2);
+    image.finishRead(3);
+
     return true;
 }    
 
@@ -208,13 +187,13 @@ void deConversionCPU::convertImage3x3(const deImage& sourceImage, deImage& image
 {
     int n = sourceImage.getChannelSize().getN();
 
-    const deValue* s0 = sourceImage.getValues(0);
-    const deValue* s1 = sourceImage.getValues(1);
-    const deValue* s2 = sourceImage.getValues(2);
+    const deValue* s0 = sourceImage.startRead(0);
+    const deValue* s1 = sourceImage.startRead(1);
+    const deValue* s2 = sourceImage.startRead(2);
 
-    deValue* d0 = image.getValues(0);
-    deValue* d1 = image.getValues(1);
-    deValue* d2 = image.getValues(2);
+    deValue* d0 = image.startWrite(0);
+    deValue* d1 = image.startWrite(1);
+    deValue* d2 = image.startWrite(2);
 
     int i;
 
@@ -231,20 +210,27 @@ void deConversionCPU::convertImage3x3(const deImage& sourceImage, deImage& image
         d1[i] = output[1];
         d2[i] = output[2];
     }
+
+    sourceImage.finishRead(0);
+    sourceImage.finishRead(1);
+    sourceImage.finishRead(2);
+    image.finishWrite(0);
+    image.finishWrite(1);
+    image.finishWrite(2);
 }
 
 void deConversionCPU::convertImage3x4(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 
-    const deValue* s0 = sourceImage.getValues(0);
-    const deValue* s1 = sourceImage.getValues(1);
-    const deValue* s2 = sourceImage.getValues(2);
+    const deValue* s0 = sourceImage.startRead(0);
+    const deValue* s1 = sourceImage.startRead(1);
+    const deValue* s2 = sourceImage.startRead(2);
 
-    deValue* d0 = image.getValues(0);
-    deValue* d1 = image.getValues(1);
-    deValue* d2 = image.getValues(2);
-    deValue* d3 = image.getValues(3);
+    deValue* d0 = image.startWrite(0);
+    deValue* d1 = image.startWrite(1);
+    deValue* d2 = image.startWrite(2);
+    deValue* d3 = image.startWrite(3);
 
     int i;
 
@@ -262,17 +248,25 @@ void deConversionCPU::convertImage3x4(const deImage& sourceImage, deImage& image
         d2[i] = output[2];
         d3[i] = output[3];
     }
+
+    sourceImage.finishRead(0);
+    sourceImage.finishRead(1);
+    sourceImage.finishRead(2);
+    image.finishWrite(0);
+    image.finishWrite(1);
+    image.finishWrite(2);
+    image.finishWrite(3);
 }
 
 void deConversionCPU::convertImage3x1(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 
-    const deValue* s0 = sourceImage.getValues(0);
-    const deValue* s1 = sourceImage.getValues(1);
-    const deValue* s2 = sourceImage.getValues(2);
+    const deValue* s0 = sourceImage.startRead(0);
+    const deValue* s1 = sourceImage.startRead(1);
+    const deValue* s2 = sourceImage.startRead(2);
 
-    deValue* d0 = image.getValues(0);
+    deValue* d0 = image.startWrite(0);
 
     int i;
 
@@ -287,18 +281,23 @@ void deConversionCPU::convertImage3x1(const deImage& sourceImage, deImage& image
 
         d0[i] = output[0];
     }
+
+    sourceImage.finishRead(0);
+    sourceImage.finishRead(1);
+    sourceImage.finishRead(2);
+    image.finishWrite(0);
 }
 
 void deConversionCPU::convertImage4x1(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 
-    const deValue* s0 = sourceImage.getValues(0);
-    const deValue* s1 = sourceImage.getValues(1);
-    const deValue* s2 = sourceImage.getValues(2);
-    const deValue* s3 = sourceImage.getValues(3);
+    const deValue* s0 = sourceImage.startRead(0);
+    const deValue* s1 = sourceImage.startRead(1);
+    const deValue* s2 = sourceImage.startRead(2);
+    const deValue* s3 = sourceImage.startRead(3);
 
-    deValue* d0 = image.getValues(0);
+    deValue* d0 = image.startWrite(0);
 
     int i;
 
@@ -314,20 +313,26 @@ void deConversionCPU::convertImage4x1(const deImage& sourceImage, deImage& image
 
         d0[i] = output[0];
     }
+
+    sourceImage.finishRead(0);
+    sourceImage.finishRead(1);
+    sourceImage.finishRead(2);
+    sourceImage.finishRead(3);
+    image.finishWrite(0);
 }
 
 void deConversionCPU::convertImage4x3(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 
-    const deValue* s0 = sourceImage.getValues(0);
-    const deValue* s1 = sourceImage.getValues(1);
-    const deValue* s2 = sourceImage.getValues(2);
-    const deValue* s3 = sourceImage.getValues(3);
+    const deValue* s0 = sourceImage.startRead(0);
+    const deValue* s1 = sourceImage.startRead(1);
+    const deValue* s2 = sourceImage.startRead(2);
+    const deValue* s3 = sourceImage.startRead(3);
 
-    deValue* d0 = image.getValues(0);
-    deValue* d1 = image.getValues(1);
-    deValue* d2 = image.getValues(2);
+    deValue* d0 = image.startWrite(0);
+    deValue* d1 = image.startWrite(1);
+    deValue* d2 = image.startWrite(2);
 
     int i;
 
@@ -345,17 +350,24 @@ void deConversionCPU::convertImage4x3(const deImage& sourceImage, deImage& image
         d1[i] = output[1];
         d2[i] = output[2];
     }
+    sourceImage.finishRead(0);
+    sourceImage.finishRead(1);
+    sourceImage.finishRead(2);
+    sourceImage.finishRead(3);
+    image.finishWrite(0);
+    image.finishWrite(1);
+    image.finishWrite(2);
 }
 
 void deConversionCPU::convertImage1x3(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 
-    const deValue* s0 = sourceImage.getValues(0);
+    const deValue* s0 = sourceImage.startRead(0);
 
-    deValue* d0 = image.getValues(0);
-    deValue* d1 = image.getValues(1);
-    deValue* d2 = image.getValues(2);
+    deValue* d0 = image.startWrite(0);
+    deValue* d1 = image.startWrite(1);
+    deValue* d2 = image.startWrite(2);
 
     int i;
 
@@ -370,18 +382,22 @@ void deConversionCPU::convertImage1x3(const deImage& sourceImage, deImage& image
         d1[i] = output[1];
         d2[i] = output[2];
     }
+    sourceImage.finishRead(0);
+    image.finishWrite(0);
+    image.finishWrite(1);
+    image.finishWrite(2);
 }
 
 void deConversionCPU::convertImage1x4(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 
-    const deValue* s0 = sourceImage.getValues(0);
+    const deValue* s0 = sourceImage.startRead(0);
 
-    deValue* d0 = image.getValues(0);
-    deValue* d1 = image.getValues(1);
-    deValue* d2 = image.getValues(2);
-    deValue* d3 = image.getValues(3);
+    deValue* d0 = image.startWrite(0);
+    deValue* d1 = image.startWrite(1);
+    deValue* d2 = image.startWrite(2);
+    deValue* d3 = image.startWrite(3);
 
     int i;
 
@@ -397,6 +413,11 @@ void deConversionCPU::convertImage1x4(const deImage& sourceImage, deImage& image
         d2[i] = output[2];
         d3[i] = output[3];
     }
+    sourceImage.finishRead(0);
+    image.finishWrite(0);
+    image.finishWrite(1);
+    image.finishWrite(2);
+    image.finishWrite(3);
 }
 
 void empty(deConversionCPU& cpu)
@@ -1028,7 +1049,263 @@ void cmyk2lch(deConversionCPU& cpu)
     rgb2lch(cpu);
 }
 
+deValue min3(deValue a, deValue b, deValue c)
+{
+    if (a < b)
+    {
+        if (a < c)
+        {
+            return a;   
+        }
+        else
+        {
+            return c;
+        }
+    }
+    else
+    {
+        if (b < c)
+        {
+            return b;   
+        }
+        else
+        {
+            return c;
+        }
+    }
+}
 
+deValue max3(deValue a, deValue b, deValue c)
+{
+    if (a > b)
+    {
+        if (a > c)
+        {
+            return a;   
+        }
+        else
+        {
+            return c;
+        }
+    }
+    else
+    {
+        if (b > c)
+        {
+            return b;   
+        }
+        else
+        {
+            return c;
+        }
+    }
+}    
+
+void rgb2hsl(deConversionCPU& cpu)
+{
+    deValue r = cpu.input[0];
+    deValue g = cpu.input[1];
+    deValue b = cpu.input[2];
+
+    deValue minVal = min3( r, g, b );
+    deValue maxVal = max3( r, g, b );
+    deValue delta = maxVal - minVal;
+    deValue sum = minVal + maxVal;
+
+    deValue l = sum / 2.0;
+    deValue h;
+    deValue s;
+
+    if (delta == 0)
+    {
+       h = 0;
+       s = 0;
+    }
+    else                                   
+    {
+        if ( l < 0.5 )
+        {
+            s = delta / sum;
+        }
+        else
+        {
+            s = delta / ( 2.0 - sum );
+        }            
+
+        deValue deltaR = ( ( ( maxVal - r ) / 6 ) + ( delta / 2 ) ) / delta;
+        deValue deltaG = ( ( ( maxVal - g ) / 6 ) + ( delta / 2 ) ) / delta;
+        deValue deltaB = ( ( ( maxVal - b ) / 6 ) + ( delta / 2 ) ) / delta;
+
+        if ( r == maxVal )
+        {
+            h = deltaB - deltaG;
+        }            
+        else if ( g == maxVal )
+        {
+            h = ( 1.0 / 3.0 ) + deltaR - deltaB;
+        }            
+        else if ( b == maxVal )
+        {
+            h = ( 2.0 / 3.0 ) + deltaG - deltaR;
+        }            
+
+        if ( h < 0 )
+            h += 1;
+        if ( h > 1 )
+            h -= 1;
+    }
+    cpu.output[0] = h;
+    cpu.output[1] = s;
+    cpu.output[2] = l;
+}
+
+/*
+deValue hue2rgb( deValue v1, deValue v2, deValue vH ) 
+{
+   if ( vH < 0 )
+        vH += 1;
+   if ( vH > 1 ) 
+        vH -= 1;
+   if ( ( 6.0 * vH ) < 1.0 ) 
+        return ( v1 + ( v2 - v1 ) * 6.0 * vH );
+   if ( ( 2.0 * vH ) < 1.0 ) 
+        return ( v2 );
+   if ( ( 3.0 * vH ) < 2.0 ) 
+        return ( v1 + ( v2 - v1 ) * ( ( 2.0 / 3.0 ) - vH ) * 6.0 );
+   return ( v1 );
+}
+
+void hsl2rgb(deValue h, deValue s, deValue l, deValue& r, deValue& g, deValue& b)
+{
+    if ( s == 0 )                       
+    {
+        r = l;
+        g = l;
+        b = l;
+    }
+    else
+    {
+        deValue v1;
+        deValue v2;
+
+        if ( l < 0.5 )
+        {
+            v2 = l * ( 1 + s );
+        }            
+        else
+        {
+            v2 = ( l + s ) - ( s * l );
+        }                
+
+        v1 = 2.0 * l - v2;
+
+        r = hue2rgb( v1, v2, h + ( 1.0 / 3.0 ) );
+        g = hue2rgb( v1, v2, h );
+        b = hue2rgb( v1, v2, h - ( 1.0 / 3.0 ) );
+    }
+}
+
+void rgb2hsv(deValue r, deValue g, deValue b, deValue &h, deValue &s, deValue& v)
+{
+    v = max( r, g, b );
+
+    deValue minVal = min( r, g, b );
+    deValue delta = v - minVal;
+
+    if (delta == 0)
+    {
+       h = 0;
+       s = 0;
+    }
+    else                                   
+    {
+        s = delta / v;
+
+        deValue deltaR = ( ( ( v - r ) / 6.0 ) + ( delta / 2.0 ) ) / delta;
+        deValue deltaG = ( ( ( v - g ) / 6.0 ) + ( delta / 2.0 ) ) / delta;
+        deValue deltaB = ( ( ( v - b ) / 6.0 ) + ( delta / 2.0 ) ) / delta;
+
+        if ( r == v )
+        {
+            h = deltaB - deltaG;
+        }            
+        else if ( g == v )
+        {
+            h = ( 1.0 / 3.0 ) + deltaR - deltaB;
+        }            
+        else if ( b == v )
+        {
+            h = ( 2.0 / 3.0 ) + deltaG - deltaR;
+        }            
+
+        if ( h < 0 )
+            h += 1.0;
+        if ( h > 1 )
+            h -= 1.0;
+    }
+}
+
+void hsv2rgb(deValue h, deValue s, deValue v, deValue& r, deValue& g, deValue& b)
+{
+    if ( s == 0 )
+    {
+       r = v;
+       g = v;
+       b = v;
+    }
+    else
+    {
+        deValue var_h = h * 6.0;
+    
+        if ( var_h == 6.0 )
+        {
+             var_h = 0;
+        }
+
+        deValue var_i = int( var_h);
+        deValue var_1 = v * ( 1.0 - s );
+        deValue var_2 = v * ( 1.0 - s * ( var_h - var_i ) );
+        deValue var_3 = v * ( 1.0 - s * ( 1.0 - ( var_h - var_i ) ) );
+
+        if ( var_i == 0 ) 
+        { 
+            r = v;
+            g = var_3;
+            b = var_1;
+        }
+        else if ( var_i == 1 ) 
+        { 
+            r = var_2;
+            g = v;
+            b = var_1;
+        }
+        else if ( var_i == 2 )
+        {
+            r = var_1;
+            g = v;
+            b = var_3;
+        }
+        else if ( var_i == 3 )
+        {
+            r = var_1;
+            g = var_2;
+            b = v;
+        }
+        else if ( var_i == 4 )
+        {
+            r = var_3;
+            g = var_1;
+            b = v;
+        }
+        else
+        {
+            r = v;
+            g = var_1;
+            b = var_2;
+        }
+    }
+}
+*/
 
 
 deConversionCPU::deFunction getConversion(deColorSpace sourceColorSpace, deColorSpace targetColorSpace)
@@ -1057,6 +1334,10 @@ deConversionCPU::deFunction getConversion(deColorSpace sourceColorSpace, deColor
     if ((sourceColorSpace == deColorSpaceRGB) && (targetColorSpace == deColorSpaceLAB))
     {
         return rgb2lab;
+    }
+    if ((sourceColorSpace == deColorSpaceRGB) && (targetColorSpace == deColorSpaceHSL))
+    {
+        return rgb2hsl;
     }
     if ((sourceColorSpace == deColorSpaceRGB) && (targetColorSpace == deColorSpaceLCH))
     {

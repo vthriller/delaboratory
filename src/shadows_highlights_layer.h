@@ -24,7 +24,7 @@
 
 class deChannel;
 
-class deShadowsHighlightsLayer:public deLayer
+class deShadowsHighlightsLayer:public deLayerOld
 {
     private:
         int blurRadiusIndex;

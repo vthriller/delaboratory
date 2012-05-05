@@ -33,8 +33,7 @@ private:
     deProject& project;
 
     wxChoice* colorSpaceChoice;
-//    wxPanel* colorPanel;
-    deColorPanel* colorPanel;
+    deColorPanelOld* colorPanel;
     wxStaticText* v1;
     wxStaticText* v2;
     wxStaticText* v3;

@@ -511,9 +511,7 @@ void deCurvesPanel::setMarker()
     else
     {
         deChannel* c = channelManager.getChannel(layer.getSourceImage().getChannelIndex(channel));
-        c->lockRead();
         marker = c->getValue(clickPosition);
-        c->unlockRead();
     }        
 }
 
@@ -533,11 +531,7 @@ void deCurvesPanel::onKey(int key)
 
                 if (c)
                 {
-                    c->lockRead();
-
                     deValue m = c->getValue(clickPosition);
-
-                    c->unlockRead();
 
                     deCurveOld* curve = layer.getCurve(i);
 

@@ -40,10 +40,6 @@ void saveJPEG(const std::string& fileName, const deChannel& channelR, const deCh
 
     image->SetOption(wxIMAGE_OPTION_QUALITY,98);
 
-    channelR.lockRead();
-    channelG.lockRead();
-    channelB.lockRead();
-
     int pos = 0;
     int y;
     for (y = 0; y < h; y++)
@@ -60,10 +56,6 @@ void saveJPEG(const std::string& fileName, const deChannel& channelR, const deCh
 
         }
     }
-
-    channelR.unlockRead();
-    channelG.unlockRead();
-    channelB.unlockRead();
 
     const char* c = fileName.c_str();
     wxString s(c, wxConvUTF8);
@@ -101,10 +93,6 @@ void saveTIFF(const std::string& fileName, const deChannel& channelR, const deCh
     buf = _TIFFmalloc(ssize);
     uint16* bb = (uint16*)(buf);
 
-    channelR.lockRead();
-    channelG.lockRead();
-    channelB.lockRead();
-
     int pos = 0;
     int y;
     for (y = 0; y < h; y++)
@@ -125,10 +113,6 @@ void saveTIFF(const std::string& fileName, const deChannel& channelR, const deCh
         }
         TIFFWriteScanline (tif, buf, y, 0);
     }
-
-    channelR.unlockRead();
-    channelG.unlockRead();
-    channelB.unlockRead();
 
     TIFFClose(tif);
 
@@ -185,10 +169,6 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace co
 
     image.setColorSpace(deColorSpaceRGB);
 
-    channelR.lockWrite();
-    channelG.lockWrite();
-    channelB.lockWrite();
-
     unsigned char* data = fileImage.GetData();
 
     int p = 0;
@@ -211,10 +191,6 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace co
             pos++;
         }
     }
-
-    channelR.unlockWrite();
-    channelG.unlockWrite();
-    channelB.unlockWrite();
 
     logMessage("loadJPEG " + fileName + " done");
 
@@ -279,10 +255,6 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image, deColorSpace co
 
     image.setColorSpace(deColorSpaceRGB);
 
-    channelR.lockWrite();
-    channelG.lockWrite();
-    channelB.lockWrite();
-
     deValue* pixelsR = channelR.getPixels();
     deValue* pixelsG = channelG.getPixels();
     deValue* pixelsB = channelB.getPixels();
@@ -332,10 +304,6 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image, deColorSpace co
             pos++;
         }
     }
-
-    channelR.unlockWrite();
-    channelG.unlockWrite();
-    channelB.unlockWrite();
 
     _TIFFfree(buf);
     TIFFClose(tif);

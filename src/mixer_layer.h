@@ -22,7 +22,7 @@
 #include "layer.h"
 #include "mixer.h"
 
-class deMixerLayer:public deLayer
+class deMixerLayer:public deLayerOld
 {
     private:
         std::vector<deMixer*> mixers;

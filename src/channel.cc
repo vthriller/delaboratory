@@ -25,10 +25,8 @@
 #define CHANNEL_LOCKING 1
 
 deChannel::deChannel()
-:readSemaphore(4, 4)
 {
     pixels = NULL;
-    maxReaders = 4;
     magicSize = -1;
 }
 
@@ -102,18 +100,15 @@ void deChannel::setValueClip(int pos, const deValue& value)
 
 void deChannel::deallocate()
 {
-    lockWrite();
     assert(pixels);
     logMessage("deallocate channel");
     delete [] pixels;
     pixels = NULL;
     magicSize = 0;
-    unlockWrite();
 }
 
 void deChannel::allocate(int size)
 {
-    lockWrite();
     assert(!pixels);
     try
     {
@@ -127,43 +122,5 @@ void deChannel::allocate(int size)
         magicSize = 0;
     }
 
-    unlockWrite();
 }
 
-void deChannel::lockRead() const
-{
-#if CHANNEL_LOCKING
-    readSemaphore.wait();
-#endif    
-}
-
-void deChannel::unlockRead() const
-{
-#if CHANNEL_LOCKING
-    readSemaphore.post();
-#endif    
-}
-
-void deChannel::lockWrite()
-{
-#if CHANNEL_LOCKING
-    int i;
-    for (i = 0; i < maxReaders; i++)
-    {
-        readSemaphore.wait();
-    }
-    lockWithLog(writeMutex, "channel write mutex");
-#endif    
-}
-
-void deChannel::unlockWrite()
-{
-#if CHANNEL_LOCKING
-    writeMutex.unlock();
-    int i;
-    for (i = 0; i < maxReaders; i++)
-    {
-        readSemaphore.post();
-    }
-#endif    
-}

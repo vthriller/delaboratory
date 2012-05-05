@@ -482,6 +482,7 @@ bool deLayerProcessor::updateLayerImage()
 
     if ((layer) && (ok))
     {
+        logMessage("updateLayerImage layer && ok");
 
         layer->lockLayer();
         layerStack.unlock();
@@ -503,6 +504,7 @@ bool deLayerProcessor::updateLayerImage()
 
     if ((layer) && (ok))
     {
+        logMessage("updateLayerImage process...");
         layer->processLayer(type, channel);
 
         layer->unlockLayer();
@@ -533,6 +535,7 @@ void deLayerProcessor::updateWarning()
 bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame, const std::string& fileName, const std::string& type, bool saveAll)
 {
     bool result = true;
+    logMessage("updateImagesSmart");
 
     lock();
 
@@ -543,6 +546,7 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
     int progress = 0;
     for (index = 0; index <= (unsigned int)view; index++)
     {
+        logMessage("updateImagesSmart index: " + str(index));
         std::map<int, int>::iterator i;
         int previous = index - 1;
         if (previous >= 0)
@@ -553,6 +557,7 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
                 int l = i->second;
                 if (l == previous)
                 {
+                    logMessage("deallocate " + str(c));
                     previewChannelManager.tryDeallocateChannel(c);
                 }
             }
@@ -564,6 +569,7 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
 
         progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
 
+        logMessage("updateImagesSmart process index: " + str(index));
         bool r = layer->processFull();
         if (r)
         {
@@ -611,6 +617,8 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
         // save it
         saveImage(fileName, image, type, previewChannelManager);
     }
+
+    logMessage("updateImagesSmart DONE");
 
     return result;
 }

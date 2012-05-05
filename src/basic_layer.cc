@@ -22,7 +22,7 @@
 #include "channel_manager.h"
 
 deBasicLayer::deBasicLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager)
+:deLayerOld(_colorSpace, _sourceLayer, _layerStack, _channelManager)
 {
     getBasicSettings(colorSpace, settings1, settings2);
 
@@ -240,9 +240,6 @@ bool deBasicLayer::updateMainImageSingleChannel(int i)
 
         if (channel)
         {
-            channel->lockWrite();
-            sourceChannel->lockRead();
-
             if (i == shiftIndex)
             {
                 shiftChannel(sourceChannel->getPixels(), channel->getPixels(), shiftValue, mainLayerImage.getChannelSize().getN());    
@@ -251,9 +248,6 @@ bool deBasicLayer::updateMainImageSingleChannel(int i)
             {
                 curves[i].process(sourceChannel->getPixels(), channel->getPixels(), mainLayerImage.getChannelSize().getN());
             }
-
-            sourceChannel->unlockRead();
-            channel->unlockWrite();
         }
     }
 

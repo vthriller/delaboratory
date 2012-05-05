@@ -29,11 +29,13 @@ class deBaseLayerWithSource:public deBaseLayer
         deLayerStack& layerStack;
 
         const deBaseLayer& getSourceLayer() const;
+        const deBaseLayer& getOriginalLayer() const;
 
     public:
         deBaseLayerWithSource(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
         virtual ~deBaseLayerWithSource();
 
+        const deImage& getOriginalImage() const;
         const deImage& getSourceImage() const;
         const deImage& getOtherLayerImage(int a) const;
         deColorSpace getSourceColorSpace() const;

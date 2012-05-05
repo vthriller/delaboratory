@@ -16,37 +16,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_DODGE_BURN_FRAME_H
-#define _DE_DODGE_BURN_FRAME_H
+#ifndef _DE_TONE_LAYER_H
+#define _DE_TONE_LAYER_H
 
-#include "action_frame.h"
-#include "slider.h"
-#include <vector>
-#include <map>
+#include "layer_with_blending.h"
 
-class dePropertyValueSlider;
-class dePropertyBooleanUIOld;
-class deLayerProcessor;
-
-class deDodgeBurnFrame:public deActionFrame
+class deToneLayer:public deLayerWithBlending
 {
     private:
-        std::vector<dePropertyValueSlider*> valueSliders;
-
-        dePropertyBooleanUIOld* alternate;
-
-        std::map<std::string, wxButton*> buttons;
-
-        deLayerProcessor& layerProcessor;
-
-        void click(wxCommandEvent &event);
+        virtual std::string getType() const {return "tone";};
 
     public:
-        deDodgeBurnFrame(wxWindow *parent, deLayerOld& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deDodgeBurnFrame();
+        deToneLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
+        virtual ~deToneLayer();
 
+        virtual bool updateMainImageNotThreadedWay();
+
+        virtual std::string getActionName() {return "tone";};
 
 };
-
 
 #endif

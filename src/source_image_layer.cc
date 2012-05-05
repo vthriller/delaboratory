@@ -60,24 +60,23 @@ bool deSourceImageLayer::updateMainImageNotThreadedWay()
     int ws = ss.getW();
     int nn = ss.getN();
 
-    int i;
-    for (i = 0; i < 3; i++)
+    int channel;
+    for (channel = 0; channel < 3; channel++)
     {
-        deChannel* sourceChannel = sourceImage.getChannel(i);
-        mainLayerImage.enableChannel(i);
-        deChannel* channel = channelManager.getChannel(mainLayerImage.getChannelIndex(i));
-        sourceChannel->lockRead();
-        channel->lockWrite();
-        if (ss == ds)
-        {
-            copyChannel(sourceChannel->getPixels(), channel->getPixels(), nn);
+        mainLayerImage.enableChannel(channel);
+        const deValue* source = sourceImage.getChannel(channel)->getPixels();
+        deValue* destination = mainLayerImage.startWrite(channel);
+
+        if ((ss == ds) && (z_x1 == 0.0) && (z_y1 == 0.0) && (z_x2 == 1.0) && (z_y2 == 1.0))
+        {   
+            logMessage("copy source channel");
+            copyChannel(source, destination, nn);
         }
         else
         {
-            scaleChannel(sourceChannel->getPixels(), channel->getPixels(), x1, y1, x2, y2, w, h, ws);
+            scaleChannel(source, destination, x1, y1, x2, y2, w, h, ws);
         }
-        sourceChannel->unlockRead();
-        channel->unlockWrite();
+        mainLayerImage.finishWrite(channel);
     }
 
     return true;

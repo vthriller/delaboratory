@@ -22,6 +22,6 @@
 #include "size.h"
 #include "value.h"
 
-void scaleChannel(deValue* src, deValue* dst, int x1, int y1, int x2, int y2, int w, int h, int ws);
+void scaleChannel(const deValue* src, deValue* dst, int x1, int y1, int x2, int y2, int w, int h, int ws);
 
 #endif

@@ -255,10 +255,6 @@ bool deRawLoader::load(bool& failure)
     }
     deChannel& channelB = *channelBB;
 
-    channelR.lockWrite();
-    channelG.lockWrite();
-    channelB.lockWrite();
-
     deValue* pixels0 = channelR.getPixels();
     deValue* pixels1 = channelG.getPixels();
     deValue* pixels2 = channelB.getPixels();
@@ -279,8 +275,6 @@ bool deRawLoader::load(bool& failure)
     buffer = new char[bufsize];
 
     logMessage("buffer allocated");
-
-//    bool error = false;
 
     int n = w * h;
 
@@ -400,20 +394,9 @@ bool deRawLoader::load(bool& failure)
     logMessage("deallocating buffer");
     delete [] buffer;
 
-    channelR.unlockWrite();
-    channelG.unlockWrite();
-    channelB.unlockWrite();
 
     image.unlock();
    
-   /*
-    if (error)
-    {
-        logError("unknown error");
-        failure = true;
-        return false;
-    }
-    */
 
     logMessage("loading ppm done");
     return true;

@@ -22,7 +22,7 @@
 #include "layer.h"
 class deEqualizer;
 
-class deEqualizerLayer:public deLayer
+class deEqualizerLayer:public deLayerOld
 {
     private:
         std::vector<deEqualizer*> equalizers;

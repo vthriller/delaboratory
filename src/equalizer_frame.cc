@@ -68,7 +68,7 @@ class deEqualizerSlider:public deSliderOld
 };        
 
 
-deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deLayerOld& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
 :deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -107,7 +107,7 @@ deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deLayer& _layer, deLayerPro
                 int h = 30;
                 deValue l = (deValue) i / bands;
 
-                deColorPanel* gradient = new deColorPanel(slidersPanel, wxSize(w, h), NULL, 0);
+                deColorPanelOld* gradient = new deColorPanelOld(slidersPanel, wxSize(w, h), NULL, 0);
                 gradient->setColor(colorSpace, c, l);
                 sSizer->Add(gradient);
 

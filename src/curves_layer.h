@@ -22,7 +22,7 @@
 #include "layer.h"
 #include "curve.h"
 
-class deCurvesLayer:public deLayer
+class deCurvesLayer:public deLayerOld
 {
     private:
         deCurveOld* curves;

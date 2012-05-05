@@ -26,7 +26,7 @@
 class dePresetLayer;
 class deChannel;
 
-class deDodgeBurnLayer:public deLayer
+class deDodgeBurnLayer:public deLayerOld
 {
     private:
         dePropertyBoolean alternate;

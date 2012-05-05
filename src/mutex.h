@@ -25,6 +25,8 @@ class deMutex
 {
     private:
         deMutexImpl* impl;
+        deMutex(const deMutex& m);
+        deMutex& operator = (const deMutex& m);
     public:
         deMutex();
         ~deMutex();

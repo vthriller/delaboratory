@@ -57,8 +57,8 @@ bool deLocalContrastLayer::updateMainImageSingleChannel(int channel)
     deSize size = mainLayerImage.getChannelSize();
 
     mainLayerImage.enableChannel(channel);
-    const deValue* source = getSourceImage().getValues(channel);
-    deValue* destination = mainLayerImage.getValues(channel);
+    const deValue* source = getSourceImage().startRead(channel);
+    deValue* destination = mainLayerImage.startWrite(channel);
     
     bool result = false;
     
@@ -66,6 +66,9 @@ bool deLocalContrastLayer::updateMainImageSingleChannel(int channel)
     {
         result = unsharpMask(source, destination, size, a, r, t, deBoxBlur);
     }        
+
+    getSourceImage().finishRead(channel);
+    mainLayerImage.finishWrite(channel);
 
     return result;
 }

@@ -19,22 +19,22 @@
 #include "gradient_panel.h"
 #include "conversion_processor.h"
 
-deColorPanel::deColorPanel(wxWindow* parent, wxSize _size, dePalette3* _palette, int style)
+deColorPanelOld::deColorPanelOld(wxWindow* parent, wxSize _size, dePalette3* _palette, int style)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, _size, style), palette(_palette)
 {
-    Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deColorPanel::click));
+    Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deColorPanelOld::click));
 }
 
-deColorPanel::~deColorPanel()
+deColorPanelOld::~deColorPanelOld()
 {
 }
 
-void deColorPanel::click(wxMouseEvent &event)
+void deColorPanelOld::click(wxMouseEvent &event)
 {
 
 }
 
-void deColorPanel::setRGB(deValue rr, deValue gg, deValue bb)
+void deColorPanelOld::setRGB(deValue rr, deValue gg, deValue bb)
 {
     r = rr;
     g = gg;
@@ -43,7 +43,7 @@ void deColorPanel::setRGB(deValue rr, deValue gg, deValue bb)
     SetBackgroundColour(wxColour(255 * rr, 255 * gg, 255 * bb));
 }        
 
-void deColorPanel::setColor(deColorSpace colorSpace, int channel, deValue value)
+void deColorPanelOld::setColor(deColorSpace colorSpace, int channel, deValue value)
 {
     deValue rr = 0;
     deValue gg = 0;
@@ -96,7 +96,8 @@ void deColorPanel::setColor(deColorSpace colorSpace, int channel, deValue value)
 
     deConversionProcessor p;
 
-    p.convertToRGB(v1, v2, v3, v4, colorSpace, rr, gg, bb);
+    deValue z;
+    p.convert(colorSpace, v1, v2, v3, v4, deColorSpaceRGB, rr, gg, bb, z);
 
     SetBackgroundColour(wxColour(255 * rr, 255 * gg, 255 * bb));
 }
@@ -307,7 +308,8 @@ void deGradientPanel1::generateBitmap()
             deValue gg = 0;
             deValue bb = 0;
 
-            cp.convertToRGB(v1, v2, v3, v4, colorSpace, rr, gg, bb);
+            deValue z;
+            cp.convert(colorSpace, v1, v2, v3, v4, deColorSpaceRGB, rr, gg, bb, z);
 
             unsigned char r = 255 * rr;
             unsigned char g = 255 * gg;
@@ -411,7 +413,8 @@ void deGradientPanel2::generateBitmap()
             deValue gg = 0;
             deValue bb = 0;
 
-            cp.convertToRGB(v1, v2, v3, v4, colorSpace, rr, gg, bb);
+            deValue z;
+            cp.convert(colorSpace, v1, v2, v3, v4, deColorSpaceRGB, rr, gg, bb, z);
 
             unsigned char r = 255 * rr;
             unsigned char g = 255 * gg;
@@ -511,7 +514,8 @@ void deGradientPanel0::generateBitmap()
                 deValue gg = 0;
                 deValue bb = 0;
 
-                cp.convertToRGB(v1, v2, v3, v4, colorSpace, rr, gg, bb);
+                deValue z;
+                cp.convert(colorSpace, v1, v2, v3, v4, deColorSpaceRGB, rr, gg, bb, z);
 
                 r = 255 * rr;
                 g = 255 * gg;

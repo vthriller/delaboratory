@@ -20,6 +20,7 @@
 #include "layer_stack.h"
 #include "curves_layer.h"
 #include "fill_layer.h"
+#include "tone_layer.h"
 #include "vignette_layer.h"
 #include "gaussian_blur_layer.h"
 #include "gaussian_blur_single_layer.h"
@@ -70,7 +71,7 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
 
     if (type == "apply_luminance")
     {
-        return new deApplyLuminanceLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
+        return new deApplyLuminanceLayer(colorSpace, source, _layerStack, _channelManager);
     }
 
     if (type == "equalizer8")
@@ -96,6 +97,11 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
     if (type == "fill")
     {
         return new deFillLayer(colorSpace, _channelManager, source, _layerStack);
+    }        
+
+    if (type == "tone")
+    {
+        return new deToneLayer(colorSpace, _channelManager, source, _layerStack);
     }        
 
     if (type == "local_contrast")
@@ -146,6 +152,7 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("levels");
     actions.push_back("curves");
     actions.push_back("fill");
+    actions.push_back("tone");
     actions.push_back("local_contrast");
     actions.push_back("sharpen");
     actions.push_back("vignette");

@@ -72,7 +72,7 @@ bool deVignetteLayer::updateMainImageSingleChannel(int channel)
     deSize size = mainLayerImage.getChannelSize();
 
     mainLayerImage.enableChannel(channel);
-    deValue* destination = mainLayerImage.getValues(channel);
+    deValue* destination = mainLayerImage.startWrite(channel);
 
     deValue light = 1.0;
     deValue darkness = 0.0;
@@ -104,6 +104,8 @@ bool deVignetteLayer::updateMainImageSingleChannel(int channel)
     deEllipse ellipse = calcEllipse(rx, ry, cx, cy, x1, y1, x2, y2);
 
     vignetteChannel(destination, size, ellipse, light, darkness, spot);
+
+    mainLayerImage.finishWrite(channel);
 
     return true;
 }

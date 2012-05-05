@@ -30,7 +30,7 @@
 #include "channel_manager.h"
 
 deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayer( _colorSpace,  _sourceLayer, _layerStack, _channelManager)
+:deLayerOld( _colorSpace,  _sourceLayer, _layerStack, _channelManager)
 {
     int n = getColorSpaceSize(colorSpace);
     curves = new deCurveOld[n];
@@ -62,13 +62,7 @@ bool deCurvesLayer::updateMainImageSingleChannel(int i)
 
         if (channel)
         {
-            channel->lockWrite();
-            sourceChannel->lockRead();
-
             curves[i].process(*sourceChannel, *channel, sourceImage.getChannelSize().getN());
-
-            sourceChannel->unlockRead();
-            channel->unlockWrite();
         }
     }
 

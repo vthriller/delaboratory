@@ -43,7 +43,7 @@ deEqualizerLayer16::~deEqualizerLayer16()
 }
 
 deEqualizerLayer::deEqualizerLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _bands)
-:deLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager),
+:deLayerOld(_colorSpace, _sourceLayer, _layerStack, _channelManager),
  bands(_bands)
 {
     int n = getColorSpaceSize(colorSpace);
@@ -77,8 +77,8 @@ bool deEqualizerLayer::updateMainImageSingleChannel(int channel)
     int c = mainLayerImage.getChannelIndex(channel);
     deChannel* destination = channelManager.getChannel(c);
 
-    const deValue* eChannel = sourceImage.getValues(e);
-    const deValue* sChannel = sourceImage.getValues(channel);
+    const deValue* eChannel = sourceImage.startRead(e);
+    const deValue* sChannel = sourceImage.startRead(channel);
 
     bool wrap = isChannelWrapped(colorSpace, e);
 
@@ -87,6 +87,9 @@ bool deEqualizerLayer::updateMainImageSingleChannel(int channel)
         int channelSize = mainLayerImage.getChannelSize().getN();
         equalizers[channel]->process(sChannel, eChannel, *destination, channelSize, wrap);
     }
+
+    sourceImage.finishRead(e);
+    sourceImage.finishRead(channel);
 
     return true;
 }

@@ -294,10 +294,9 @@ void deControlPanel::onAddLayer()
         deLayerStack& layerStack = project.getLayerStack();
         int n = layerStack.getSize() - 1;
         deBaseLayer* baseLayer = layerStack.getLayer(n);
-        deLayer* layer = dynamic_cast<deLayer*>(baseLayer);
         int layerIndex = n;
         project.log("auto UI - creating action frame");
-        deFrameOld* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex, channelManager);
+        deFrameOld* actionFrame = createFrame(this, *baseLayer, layerProcessor, frameManager, layerIndex, channelManager);
         if (actionFrame)
         {
             project.log("auto UI - created action frame");

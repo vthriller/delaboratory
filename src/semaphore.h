@@ -25,6 +25,9 @@ class deSemaphore
 {
     private:
         deSemaphoreImpl* impl;
+        deSemaphore(const deSemaphore& s);
+        deSemaphore& operator =(const deSemaphore& s);
+
     public:
         deSemaphore(int a, int b);
         ~deSemaphore();

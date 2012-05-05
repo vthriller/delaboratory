@@ -38,10 +38,9 @@ void renderChannel(const deImage& image, int c, unsigned char* data, deChannelMa
 
     if (!channel)
     {
+        logError("no channel to render");
         return;
     }
-
-    channel->lockRead();
 
     const deValue* pixels = channel->getPixels();
 
@@ -66,8 +65,6 @@ void renderChannel(const deImage& image, int c, unsigned char* data, deChannelMa
         data[pos] = ss;
         pos++;
     }      
-
-    channel->unlockRead();
 
 }
 
@@ -103,22 +100,25 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
         return false;
     }
 
-    logMessage("renderer getLayer " +str(view));
     deBaseLayer* layer = layerStack.getLayer(view);
     if (!layer)
     {
         logError("no layer");
-        logMessage("unlock renderer mutex");
         mutex.unlock();
         return false;
     }
-    logMessage("renderer lock layer " +str(view));
 
     layer->lockLayer();
 
-    logMessage("renderer get image from layer " +str(view));
-
     const deImage& layerImage = layer->getLayerImage();
+
+    if (!layerImage.isReady())
+    {
+        logError("layer image not ready");
+        mutex.unlock();
+        layer->unlockLayer();
+        return false;
+    }
 
     bool reversed = false;
     deColorSpace colorSpace = layerImage.getColorSpace();
@@ -128,19 +128,17 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
         reversed = true;
     }
 
-    logMessage("renderer before renderer");
-
     if (viewManager.isSingleChannel())
     {
         renderChannel(layerImage, viewManager.getChannel(), getCurrentImageData(), channelManager, reversed);
+        renderedImage.clearError();
     }
     else
     {
         deConversionProcessor p;
-        //if (!p.renderImageToRGB(layerImage, getCurrentImageData(), channelManager))
         if (!p.renderImageToRGBNew(layerImage, getCurrentImageData()))
         {
-            logMessage("render image FAILED");
+            logError("render image FAILED");
             renderedImage.setError();
         }
         else
@@ -149,11 +147,8 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
         }
     }
 
-    logMessage("renderer unlock layer " +str(view));
-
     layer->unlockLayer();
 
-    logMessage("unlock renderer mutex");
     mutex.unlock();
 
     return true;
@@ -170,7 +165,6 @@ bool deRenderer::render(deCanvas& canvas)
         canvas.clear();
     }
 
-    logMessage("unlock renderer mutex");
     mutex.unlock();
 
     return result;

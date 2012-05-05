@@ -40,51 +40,51 @@ deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& 
 
     if (type == "curves")
     {
-        deLayer& al = dynamic_cast<deLayer&>(layer);
+        deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
         return new deCurvesEditor(parent, al, layerProcessor, frameManager, layerIndex, channelManager);
     }        
 
     if (type == "mixer")
     {
-        deLayer& al = dynamic_cast<deLayer&>(layer);
+        deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
         return new deMixerEditor(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
     if (type == "apply_image")
     {
-        deLayer& al = dynamic_cast<deLayer&>(layer);
+        deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
         return new deApplyImageFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
     if ((type == "equalizer8") || (type == "equalizer16"))
     {
-        deLayer& al = dynamic_cast<deLayer&>(layer);
+        deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
         return new deEqualizerFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
     if (type == "basic")
     {
-        deLayer& al = dynamic_cast<deLayer&>(layer);
+        deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
         return new deBasicFrame(parent, al, layerProcessor, frameManager, layerIndex, channelManager);
     }        
 
     if (type == "dodge_burn")
     {
-        deLayer& al = dynamic_cast<deLayer&>(layer);
+        deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
         return new deDodgeBurnFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
 /*
     if ((type == "vignette1") || (type == "vignette2"))
     {
-        deLayer& al = dynamic_cast<deLayer&>(layer);
+        deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
         return new deVignetteFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
     */
 
     if (type == "shadows_highlights")
     {
-        deLayer& al = dynamic_cast<deLayer&>(layer);
+        deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
         return new deShadowsHighlightsFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 

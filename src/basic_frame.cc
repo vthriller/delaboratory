@@ -23,7 +23,7 @@
 #include "layer_processor.h"
 #include "channel_manager.h"
 
-deBasicFrame::deBasicFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex, deChannelManager& _channelManager)
+deBasicFrame::deBasicFrame(wxWindow *parent, deLayerOld& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex, deChannelManager& _channelManager)
 :deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor), channelManager(_channelManager)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -104,17 +104,15 @@ void applyWhiteBalanceLAB(deBaseLayer& layer, deValue x, deValue y, deSize& size
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
     int p = (y * size.getH() )  * size.getW() + (x * size.getW());
 
-    const deValue* valuesA = image.getValues(1);
-    if (!valuesA)
+    const deValue* valuesA = image.startRead(1);
+    const deValue* valuesB = image.startRead(2);
+    if ((!valuesA) || (!valuesB))
     {
+        image.finishRead(1);
+        image.finishRead(2);
         return;
     }
     deValue A = valuesA[p];
-    const deValue* valuesB = image.getValues(2);
-    if (!valuesB)
-    {
-        return;
-    }
     deValue B = valuesB[p];
 
     dePropertyValue* ATint = basicLayer.getBasicProperty("A tint");
@@ -132,10 +130,14 @@ void applyWhiteBalanceLAB(deBaseLayer& layer, deValue x, deValue y, deSize& size
         B = 0.5 - B + old;
         BTint->set(B);
     }
+
+    image.finishRead(1);
+    image.finishRead(2);
 }
 
 void applyWhiteBalanceRGB(deBaseLayer& layer, deValue x, deValue y, deSize& size)
 {
+/*
     const deImage& image = layer.getLayerImage();
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
     int p = (y * size.getH() )  * size.getW() + (x * size.getW());
@@ -182,11 +184,12 @@ void applyWhiteBalanceRGB(deBaseLayer& layer, deValue x, deValue y, deSize& size
         b = old - (b - a);
         bTint->set(b);
     }
-
+    */
 }
 
 void applyWhiteBalanceCMYK(deBaseLayer& layer, deValue x, deValue y, deSize& size)
 {
+/*
     const deImage& image = layer.getLayerImage();
     deBasicLayer& basicLayer = dynamic_cast<deBasicLayer&>(layer);
     int p = (y * size.getH() )  * size.getW() + (x * size.getW());
@@ -233,7 +236,7 @@ void applyWhiteBalanceCMYK(deBaseLayer& layer, deValue x, deValue y, deSize& siz
         b = old - (b - a);
         bTint->set(b);
     }
-
+*/
 }
 
 bool deBasicFrame::onImageClick(deValue x, deValue y)

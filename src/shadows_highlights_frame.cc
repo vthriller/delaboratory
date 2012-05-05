@@ -21,7 +21,7 @@
 #include <iostream>
 #include "property_value_slider.h"
 
-deShadowsHighlightsFrame::deShadowsHighlightsFrame(wxWindow *parent, deLayer& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+deShadowsHighlightsFrame::deShadowsHighlightsFrame(wxWindow *parent, deLayerOld& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
 :deActionFrame(parent, _layer, _frameManager, _layerIndex), layerProcessor(_layerProcessor)
 {
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);

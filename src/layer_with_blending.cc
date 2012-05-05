@@ -25,6 +25,7 @@
 #include "str.h"
 #include "xml.h"
 #include "property_numeric.h"
+#include "logger.h"
 
 class deUpdateBlendThread:public wxThread
 {
@@ -111,8 +112,11 @@ void deLayerWithBlending::setBlendMode(deBlendMode mode)
 
 bool deLayerWithBlending::updateBlend(int i)
 {
+    logMessage("update blend " + str(i));
+
     if (!isEnabled())
     {
+        logMessage("update blend no enabled");
         return true;
     }
 
@@ -122,6 +126,7 @@ bool deLayerWithBlending::updateBlend(int i)
 
     if (!isBlendingEnabled())
     {
+        logMessage("update blend no blend");
         return true;
     }
 
@@ -130,12 +135,14 @@ bool deLayerWithBlending::updateBlend(int i)
         if (getBlendMode() == deBlendNormal)
         {
             imageBlendPass.disableChannel(i, s);
+            logMessage("update blend disable1...");
             return true;
         }
     }
 
     if (!isChannelEnabled(i))
     {
+        logMessage("update blend disable2...");
         imageBlendPass.disableChannel(i, s);
         return true;
     }
@@ -143,6 +150,7 @@ bool deLayerWithBlending::updateBlend(int i)
     deChannel* sourceChannel = channelManager.getChannel(s);
     if (!sourceChannel)
     {
+        logError("update blend no channel s");
         return false;
     }
 
@@ -150,6 +158,7 @@ bool deLayerWithBlending::updateBlend(int i)
     deChannel* channel = channelManager.getChannel(c);
     if (!channel)
     {
+        logError("update blend no channel c");
         return false;
     }
 
@@ -158,12 +167,9 @@ bool deLayerWithBlending::updateBlend(int i)
     deChannel* blendChannel_ = channelManager.getChannel(b);
     if (!blendChannel_)
     {
+        logError("update blend no channel b");
         return false;
     }
-
-    sourceChannel->lockRead();
-    channel->lockRead();
-    blendChannel_->lockWrite();
 
     deValue* maskPixels = NULL;
 
@@ -174,9 +180,7 @@ bool deLayerWithBlending::updateBlend(int i)
     deValue o = getOpacity();
     blendChannel(sourcePixels, overlayPixels, resultPixels, maskPixels, getBlendMode(), o, channelSize);
 
-    sourceChannel->unlockRead();
-    channel->unlockRead();
-    blendChannel_->unlockWrite();
+    logMessage("update blend DONE");
 
     return true;
 
