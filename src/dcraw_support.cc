@@ -72,7 +72,7 @@ std::string getDcrawVersion()
 std::string getRawInfo(const std::string& f)
 {
     std::string command = std::string(DCRAW_EXECUTABLE) + " -i -v \"" + f + "\"";
-    logMessage("calling: " + command);
+    logInfo("calling: " + command);
 
     const char* c = command.c_str();
     wxString s(c, wxConvUTF8);
@@ -114,7 +114,7 @@ deRawLoader::deRawLoader(const std::string& f, deStaticImage& _image, deColorSpa
     }
 
     std::string command = std::string(DCRAW_EXECUTABLE) + " " + options + " \"" + f + "\" >abc ";
-    logMessage("calling: " + command);
+    logInfo("calling: " + command);
 
     const char* c = command.c_str();
     wxString s(c, wxConvUTF8);
@@ -136,7 +136,7 @@ bool deRawLoader::load(bool& failure)
         return false;
     }
 
-    logMessage("deRawLoader::load() - CanRead");
+    logInfo("deRawLoader::load() - CanRead");
 
     char c1 = input->GetC();
     char c2 = input->GetC();
@@ -154,7 +154,7 @@ bool deRawLoader::load(bool& failure)
         return false;
     }
 
-    logMessage("P6 loaded");
+    logInfo("P6 loaded");
 
     char c;
 
@@ -210,13 +210,13 @@ bool deRawLoader::load(bool& failure)
         return false;
     }
 
-    logMessage("w: " + str(w) + " h: " + str(h) + " max: " + str(max));
+    logInfo("w: " + str(w) + " h: " + str(h) + " max: " + str(max));
 
     if (half)
     {
         w *= 2;
         h *= 2;
-        logMessage("after half w: " + str(w) + " h: " + str(h) + " max: " + str(max));
+        logInfo("after half w: " + str(w) + " h: " + str(h) + " max: " + str(max));
     }
 
     image.lock();
@@ -270,11 +270,9 @@ bool deRawLoader::load(bool& failure)
 
     int bufsize=500000;
 
-    logMessage("allocating buffer of size " + str(bufsize));
+    logInfo("allocating buffer of size " + str(bufsize));
 
     buffer = new char[bufsize];
-
-    logMessage("buffer allocated");
 
     int n = w * h;
 
@@ -294,7 +292,7 @@ bool deRawLoader::load(bool& failure)
     int tx = 0;
     int ty = 0;
 
-    logMessage("start loading PPM data");
+    logInfo("start loading PPM data");
 
     while ((pos < n) && (!input->Eof()))
     {
@@ -385,20 +383,20 @@ bool deRawLoader::load(bool& failure)
 
     }
 
-    logMessage("pos: " + str(pos) + " n: " + str(n) + " steps: " + str(steps) + " maxRead: " + str(maxRead));
+    logInfo("pos: " + str(pos) + " n: " + str(n) + " steps: " + str(steps) + " maxRead: " + str(maxRead));
     if (input->Eof())
     {
-        logMessage("input stream EOF");
+        logInfo("input stream EOF");
     }
 
-    logMessage("deallocating buffer");
+    logInfo("deallocating buffer");
     delete [] buffer;
 
 
     image.unlock();
    
 
-    logMessage("loading ppm done");
+    logInfo("loading ppm done");
     return true;
 }
 

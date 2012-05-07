@@ -35,7 +35,7 @@ void prophoto2xyz(deValue pr, deValue pg, deValue pb, deValue &x, deValue &y, de
 void xyz2prophoto(deValue x, deValue y, deValue z, deValue &pr, deValue &pg, deValue& pb);
 
 /* for benchmarks only */
-void initLAB();
+//void initLAB();
 
 
 #endif

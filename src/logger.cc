@@ -31,7 +31,6 @@ deLogger& deLogger::getLogger()
 deLogger::deLogger()
 {
     f = NULL;
-    fl = NULL;
     started = false;
 }
 
@@ -43,12 +42,6 @@ deLogger::~deLogger()
     {
         f->close();
         delete f;
-    }
-
-    if (fl)
-    {
-        fl->close();
-        delete fl;
     }
 
     mutex.unlock();
@@ -70,23 +63,6 @@ void deLogger::setFile(const std::string& fileName)
     {
         logError("can't create logfile: " + fileName);
     }
-
-    mutex.unlock();
-#endif    
-}
-
-void deLogger::setLocksFile(const std::string& fileName)
-{
-#ifdef LOGGING    
-    mutex.lock();
-
-    if (fl)
-    {
-        fl->close();
-        delete fl;
-    }
-
-    fl = new std::ofstream(fileName.c_str());
 
     mutex.unlock();
 #endif    
@@ -129,23 +105,9 @@ void deLogger::log(const std::string& message)
     mutex.unlock();
 }
 
-void deLogger::logLock(const std::string& message, int dt)
+void deLogger::logInfo(const std::string& message)
 {
-    if (dt < LOCK_THRESHOLD)
-    {
-        return;
-    }
-
-    mutex.lock();
-
-    if (f)
-    {
-        int t = sw.Time();
-            
-        (*fl) << t << ": [" << getThreadName() << "] [" << dt << "ms] " << message << std::endl;
-    }
-
-    mutex.unlock();
+    log("INFO " + message);
 }
 
 int deLogger::getTime() const
@@ -154,10 +116,10 @@ int deLogger::getTime() const
     return t;
 }
 
-void logMessage(const std::string& message)
+void logInfo(const std::string& message)
 {
 #ifdef LOGGING    
-    deLogger::getLogger().log(message);
+    deLogger::getLogger().logInfo(message);
 #endif    
 }
 
@@ -172,16 +134,3 @@ void logError(const std::string& message)
 #endif    
 }
 
-void lockWithLog(deMutex& mutex, const std::string& message)
-{
-#ifdef LOGGING    
-    deLogger& logger = deLogger::getLogger();
-    int t1 = logger.getTime();
-    logger.log(message + " lock");
-    mutex.lock();
-    int t2 = logger.getTime();
-    logger.logLock(message, t2-t1);
-#else    
-    mutex.lock();
-#endif    
-}    

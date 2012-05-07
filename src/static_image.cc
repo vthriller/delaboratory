@@ -96,7 +96,7 @@ deSize deStaticImage::getSize() const
 
 void deStaticImage::lock()
 {
-    lockWithLog(mutex, "static image mutex");
+    mutex.lock();
 }    
 
 void deStaticImage::unlock()

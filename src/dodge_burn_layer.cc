@@ -173,7 +173,6 @@ deDodgeBurnLayer::~deDodgeBurnLayer()
 bool deDodgeBurnLayer::processDB(const deChannel& sourceChannel, deChannel& channel)
 {
     deSize size = mainLayerImage.getChannelSize();
-    logMessage("dodge/burn start");
 
     deBlendMode mode1 = deBlendDodge;
     deBlendMode mode2 = deBlendBurn;
@@ -252,7 +251,6 @@ bool deDodgeBurnLayer::processDB(const deChannel& sourceChannel, deChannel& chan
     delete [] dodgeBurnMap;
     delete [] firstStage;
 
-    logMessage("dodge/burn end");
 
     return true;
 }

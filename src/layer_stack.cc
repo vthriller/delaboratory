@@ -34,12 +34,11 @@ deLayerStack::~deLayerStack()
 
 void deLayerStack::lock() const
 {
-    lockWithLog(mutex, "layer stack mutex");
+    mutex.lock();
 }
 
 void deLayerStack::unlock() const
 {
-    logMessage("layer stack unlock");
     mutex.unlock();
 }
 
@@ -53,7 +52,7 @@ void deLayerStack::clear()
 
 void deLayerStack::removeTopLayer()
 {
-    logMessage("layer stack remove top layer...");
+    logInfo("layer stack remove top layer...");
     lock();
 
     std::vector<deBaseLayer*>::iterator i;
@@ -65,15 +64,15 @@ void deLayerStack::removeTopLayer()
     unlock();
 
     layer->lockLayer();
-    logMessage("layer stack before delete layer");
+    logInfo("layer stack before delete layer");
     delete layer;
-    logMessage("layer stack after delete layer");
+    logInfo("layer stack after delete layer");
 
 }
 
 void deLayerStack::addLayer(deBaseLayer* layer)
 {
-    logMessage("layer stack add layer");
+    logInfo("layer stack add layer");
     lock();
 
     layers.push_back(layer);

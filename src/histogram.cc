@@ -80,9 +80,6 @@ int deHistogram::getSize() const
 
 void deHistogram::calc(const deValue* pixels, int n)
 {
-
-    logMessage("histogram calc start");
-
     static int counter = 0;
 
     int j;
@@ -97,9 +94,6 @@ void deHistogram::calc(const deValue* pixels, int n)
             bars[bar] ++;    
         }            
     }
-
-    logMessage("histogram calc end");
-
 
 }
 

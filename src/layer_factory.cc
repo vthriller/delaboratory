@@ -21,10 +21,11 @@
 #include "curves_layer.h"
 #include "fill_layer.h"
 #include "tone_layer.h"
+#include "apply_original_layer.h"
 #include "vignette_layer.h"
 #include "gaussian_blur_layer.h"
 #include "gaussian_blur_single_layer.h"
-#include "apply_image_layer.h"
+//#include "apply_image_layer.h"
 #include "mixer_layer.h"
 #include "apply_luminance_layer.h"
 #include "equalizer_layer.h"
@@ -84,14 +85,21 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
         return new deEqualizerLayer16(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
+/*
     if (type == "apply_image")
     {
         return new deApplyImageLayer(colorSpace, source, _layerStack, _channelManager, _viewManager, index);
     }
+    */
 
     if (type == "levels")
     {
         return new deLevelsLayer(colorSpace, _channelManager, source, _layerStack);
+    }        
+
+    if (type == "apply_original")
+    {
+        return new deApplyOriginalLayer(colorSpace, _channelManager, source, _layerStack);
     }        
 
     if (type == "fill")
@@ -162,7 +170,8 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("mixer");
     actions.push_back("equalizer8");
     actions.push_back("equalizer16");
-    actions.push_back("apply_image");
+//    actions.push_back("apply_image");
+    actions.push_back("apply_original");
     actions.push_back("apply_luminance");
 
     actions.push_back("dodge_burn");
@@ -217,10 +226,12 @@ std::string getActionDescription(const std::string& a)
         return "luminance";
     }
 
+/*
     if (a == "apply_image")
     {
         return "apply image";
     }
+    */
 
     if (a == "high_pass")
     {
@@ -245,6 +256,11 @@ std::string getActionDescription(const std::string& a)
     if (a == "gaussian_blur_single")
     {
         return "g. blur s";
+    }
+
+    if (a == "apply_original")
+    {
+        return "original";
     }
 
     return a;

@@ -45,7 +45,7 @@
 
 void deLayerGridPanel::buildRows()
 {
-    project.log("build rows start");
+    logInfo("build rows");
 
     deLayerStack& layerStack = project.getLayerStack();
     int n = layerStack.getSize();
@@ -53,8 +53,6 @@ void deLayerGridPanel::buildRows()
     int i;
     for (i = n-1; i >=0; i--)
     {
-        project.log("build rows i=" + str(i));
-
         deBaseLayer* baseLayer = layerStack.getLayer(i);
         deBaseLayerWithSource* layer = dynamic_cast<deBaseLayerWithSource*>(baseLayer);
         deSwitchableLayer* switchable = dynamic_cast<deSwitchableLayer*>(baseLayer);
@@ -123,19 +121,16 @@ void deLayerGridPanel::buildRows()
         }
 
     }
-    project.log("build rows end");
-
 }
 
 void deLayerGridPanel::clearRows()
 {
-    project.log("clear rows start");
+    logInfo("clear rows");
     
     std::vector<deLayerRow>::iterator i;
     int index = 0;
     for (i = layerRows.begin(); i != layerRows.end(); i++)
     {
-        project.log("clear rows index=" + str(index));
         index++;
         deLayerRow& row = *i;
 
@@ -158,7 +153,6 @@ void deLayerGridPanel::clearRows()
     gridSizer->Clear();
 
     layerRows.clear();
-    project.log("clear rows end");
 }
 
 deLayerGridPanel::deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deChannelManager& _channelManager)
@@ -225,7 +219,6 @@ void deLayerGridPanel::select(wxCommandEvent &event)
 
 void deLayerGridPanel::click(wxCommandEvent &event)
 {
-    project.log("click in layer grid panel");
     deLayerStack& layerStack = project.getLayerStack();
     int id = event.GetId();
     std::vector<deLayerRow>::const_iterator i;
@@ -237,17 +230,14 @@ void deLayerGridPanel::click(wxCommandEvent &event)
         if (row.action->GetId() == id)
         {
             int layerIndex = row.index;
-            project.log("new action frame requested in row " + str(row.index));
 
             deBaseLayer* layer = layerStack.getLayer(row.index);
 
             if (!project.getLayerFrameManager().checkActionFrame(row.index))
             {
-                project.log("creating action frame");
                 deFrameOld* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex, channelManager);
                 if (actionFrame)
                 {
-                    project.log("created action frame");
                     actionFrame->Show(true);
                 }
                 else
@@ -267,7 +257,6 @@ void deLayerGridPanel::click(wxCommandEvent &event)
         if (row.blend->GetId() == id)
         {
             int layerIndex = row.index;
-            project.log("new blend frame requested in row " + str(row.index));
 
             deBaseLayer* baseLayer = layerStack.getLayer(row.index);
             deLayerWithBlending* blending = dynamic_cast<deLayerWithBlending*>(baseLayer);
@@ -275,11 +264,9 @@ void deLayerGridPanel::click(wxCommandEvent &event)
             {
                 if (!frameManager.checkBlendFrame(row.index))
                 {
-                    project.log("creating blend frame");
                     deBlendFrame* blendFrame = new deBlendFrame(this, *blending, layerProcessor, frameManager, layerIndex);
                     if (blendFrame)
                     {
-                        project.log("created blend frame");
                         blendFrame->Show(true);
                     }
                 }

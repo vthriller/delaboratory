@@ -174,6 +174,19 @@ void deSamplerPanel::update()
             }
         }
 
+        deValue orig[4];
+
+        deColorSpace oc = image.getColorSpace();
+        int on = getColorSpaceSize(oc);
+
+        int i;
+        for (i = 0; i < on; i++)
+        {
+            const deValue* values = image.startRead(i);
+            orig[i] = values[p];
+            image.finishRead(i);
+        }
+
         deValue vv1;
         deValue vv2;
         deValue vv3;
@@ -185,8 +198,8 @@ void deSamplerPanel::update()
 
         deConversionProcessor cp;
 
-        cp.convertPixel(image, p, deColorSpaceRGB, rr, gg, bb, vv4);
-        cp.convertPixel(image, p, colorSpace, vv1, vv2, vv3, vv4);
+        cp.convert(oc, orig[0], orig[1], orig[2], orig[3], deColorSpaceRGB, rr, gg, bb, vv4);
+        cp.convert(oc, orig[0], orig[1], orig[2], orig[3], colorSpace, vv1, vv2, vv3, vv4);
 
         colorPanel->setRGB(rr, gg, bb);
 

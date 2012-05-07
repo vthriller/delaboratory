@@ -28,7 +28,6 @@
 deCurvesEditor::deCurvesEditor(wxWindow *parent, deLayerOld& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex, deChannelManager& _channelManager)
 :deActionFrame(parent, _layer, _frameManager, _layerIndex)
 {
-    logMessage("creating curves editor...");
     deCurvesLayer& curvesLayer = dynamic_cast<deCurvesLayer&>(_layer);
 
     deColorSpace colorSpace = layer.getColorSpace();
@@ -43,7 +42,6 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deLayerOld& _layer, deLayerProc
     sizer->Add(alphaSlider, 0);
 
 
-    logMessage("creating curves editor... 2 ");
 
     int n = getColorSpaceSize(colorSpace);
     wxString* channelStrings = new wxString [n];
@@ -52,7 +50,6 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deLayerOld& _layer, deLayerProc
     {
         channelStrings[i] = wxString::FromAscii(getChannelName(colorSpace,i).c_str());
     }        
-    logMessage("creating curves editor... 3 ");
 
     channelChoice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), n, channelStrings);
     channelChoice->SetSelection(0);
@@ -67,11 +64,9 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deLayerOld& _layer, deLayerProc
     wxSizer* sizerC = new wxFlexGridSizer(2, 8, 8);
     sizerSB->Add(sizerC);
 
-    logMessage("creating curves editor... 4 ");
 
     curvesPanel = new deCurvesPanel(this, curvesLayer, _layerProcessor, _layerIndex, _channelManager);
 
-    logMessage("creating curves editor... 5 ");
 
     int barSize = 16;
 
@@ -143,7 +138,6 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deLayerOld& _layer, deLayerProc
 
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deCurvesEditor::click));
     Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deCurvesEditor::choose));
-    logMessage("created curves editor...");
 }
 
 deCurvesEditor::~deCurvesEditor()

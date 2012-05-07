@@ -80,7 +80,6 @@ deCurvesPanel::deCurvesPanel(wxWindow* parent, deCurvesLayer& _layer, deLayerPro
 sizeX(CURVES_PANEL_SIZE_X), sizeY(CURVES_PANEL_SIZE_Y), layer(_layer), 
 layerProcessor(_layerProcessor), layerIndex(_layerIndex), channelManager(_channelManager)
 {
-    logMessage("creating curves panel... ");
     SetFocus();
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deCurvesPanel::click));
     Connect(wxEVT_LEFT_UP, wxMouseEventHandler(deCurvesPanel::release));
@@ -94,7 +93,6 @@ layerProcessor(_layerProcessor), layerIndex(_layerIndex), channelManager(_channe
     clickPosition = -1;
 
     generateBackground();
-    logMessage("created... ");
 }
 
 deCurvesPanel::~deCurvesPanel()
@@ -104,7 +102,6 @@ deCurvesPanel::~deCurvesPanel()
 
 void deCurvesPanel::generateBackground()
 {
-    logMessage("gb1");
 
     if (backgroundBitmap)
     {
@@ -112,15 +109,12 @@ void deCurvesPanel::generateBackground()
     }
 
     deHistogram histogram(CURVES_PANEL_SIZE_X);
-    logMessage("gb2");
 
     deChannel* c = channelManager.getChannel(layer.getSourceImage().getChannelIndex(channel));
     int n = channelManager.getChannelSizeFromChannelManager().getN();
-    logMessage("gb3");
 
     histogram.clear();
     histogram.calc(c->getPixels(), n);
-    logMessage("gb4");
 
     wxImage* image = new wxImage(sizeX, sizeY);
     unsigned char* data = image->GetData();
@@ -132,7 +126,6 @@ void deCurvesPanel::generateBackground()
     int margin = 0;
 
     histogram.render(data, sizeX, sizeY, g1, g2, margin);
-    logMessage("gb5");
 
     backgroundBitmap = new wxBitmap(*image);
     delete image;
@@ -247,8 +240,6 @@ void deCurvesPanel::drawCurve(wxDC& dc)
 
 void deCurvesPanel::click(wxMouseEvent &event)
 {
-    logMessage("deCurvesPanel::click");
-
     deCurveOld* curve = layer.getCurve(channel);
 
     if (!curve)
@@ -370,7 +361,6 @@ void deCurvesPanel::setS(int a)
 
 void deCurvesPanel::update(bool finished)
 {
-    logMessage("deCurvesPanel::update");
     paint();
     if ((finished) || (layerProcessor.isRealtime()))
     {

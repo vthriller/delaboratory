@@ -16,35 +16,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "power.h"
-#include <cmath>
-#include "logger.h"
-#include "str.h"
+#ifndef _DE_APPLY_ORIGINAL_LAYER_H
+#define _DE_APPLY_ORIGINAL_LAYER_H
 
-dePower::dePower(double _power, int s)
+#include "layer_with_blending.h"
+
+class deApplyOriginalLayer:public deLayerWithBlending
 {
-    power = _power;
+    private:
+        virtual std::string getType() const {return "apply_original";};
 
-    scale = (POWER_CACHE_SIZE - 1.0) / s;
+    public:
+        deApplyOriginalLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
+        virtual ~deApplyOriginalLayer();
 
-    int i;
-    for (i = 0; i < POWER_CACHE_SIZE; i++)
-    {
-        double p = i / scale;
-        values[i] = pow(p, power);
-    }
+        virtual bool updateMainImageSingleChannel(int i);
 
-}
-    
-dePower::~dePower()
-{
-}
+        virtual std::string getActionName() {return "original";};
 
-double dePower::get(double v)
-{
-    int i = v * scale;
-    if ((i >= 0) && (i < POWER_CACHE_SIZE))
-        return values[i];
-    return pow(v, power);
-}
+};
 
+#endif

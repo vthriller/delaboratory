@@ -51,7 +51,6 @@ deRenderedImage::deRenderedImage()
 requestedSize(0,0),
 bitmapSize(0,0)
 {
-    logMessage("create rendered image");
     renderedBitmap = new deBitmapWX();
     internalData = NULL;
     error = false;
@@ -59,7 +58,6 @@ bitmapSize(0,0)
 
 deRenderedImage::~deRenderedImage()
 {
-    logMessage("destroy rendered image");
     if (renderedBitmap)
     {
         delete renderedBitmap;
@@ -74,13 +72,13 @@ bool deRenderedImage::render(deCanvas& canvas)
 {
     if (error)
     {
-        logMessage("ERROR can't render");
+        logError("ERROR can't render");
         return false;
     }
 
     if (!internalData)
     {
-        logMessage("ERROR can't render - no internal data");
+        logError("ERROR can't render - no internal data");
         return false;
     }
 
@@ -98,7 +96,7 @@ bool deRenderedImage::render(deCanvas& canvas)
     wxNativePixelData bitmapData(*(bitmapWX->getBitmap()));
     if (!bitmapData)
     {
-        logMessage("ERROR can't render - wxNativePixelData doesn't work");
+        logError("ERROR can't render - wxNativePixelData doesn't work");
         return false;
     }
 

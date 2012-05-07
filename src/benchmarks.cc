@@ -18,7 +18,6 @@
 
 #include "benchmarks.h"
 #include <wx/wx.h>
-#include "conversion_functions.h"
 
 int benchmarkBlur(deSize size, deValue radius, deBlurType type)
 {
@@ -82,6 +81,7 @@ deBenchmarkColor::~deBenchmarkColor()
 
 int deBenchmarkColor::perform()
 {
+/*
     deValue* s1 = new deValue[size];
     deValue* s2 = new deValue[size];
     deValue* s3 = new deValue[size];
@@ -166,4 +166,6 @@ int deBenchmarkColor::perform()
     delete [] d4;
 
     return t;
+    */
+    return -1;
 }

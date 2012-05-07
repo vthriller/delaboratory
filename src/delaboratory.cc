@@ -84,11 +84,6 @@ int deLaboratory::FilterEvent(wxEvent& event)
         if  (event.GetEventType()==wxEVT_KEY_DOWN )
         {
             int key = ((wxKeyEvent&)event).GetKeyCode();
-            if (key == WXK_RETURN)
-            {
-                logMessage("WXK_RETURN detected");
-                return true;
-            }
 
             project.onKey(key);
             mainWindow.onKey(key);
@@ -102,7 +97,7 @@ int deLaboratory::FilterEvent(wxEvent& event)
 
 int deLaboratory::OnExit()
 {
-    project.log("OnExit");
+    logInfo("OnExit");
     return 0;
 }   
 
@@ -129,12 +124,11 @@ void deLaboratory::initLogger()
     }
 
     deLogger::getLogger().setFile(ucd + "/" + LOG_FILE_NAME);
-    deLogger::getLogger().setLocksFile(LOG_LOCKS_FILE_NAME);
 }
 
 bool deLaboratory::OnInit()
 {
-    logMessage("deLaboratory::OnInit");
+    logInfo("deLaboratory::OnInit");
 
     rawModule.onInit();
 
@@ -156,23 +150,19 @@ bool deLaboratory::OnInit()
 
 	mainWindow.init( width, height, project, processor, samplerManager, zoomManager, dcraw_version, operationProcessor, previewChannelManager);
 
-    logMessage("show main frame");
+    logInfo("show main frame");
 
     mainWindow.show();
 
-    logMessage("set top level");
+    logInfo("set top level");
 
     mainWindow.setTopWindow();
 
-    logMessage("initLAB");
-
-    initLAB();
-
-    logMessage("startWorkerThread...");
+    logInfo("startWorkerThread...");
 
     processor.startWorkerThread();
 
-    logMessage("process argc/argv...");
+    logInfo("process argc/argv...");
 
     if (argc > 1)
     {
@@ -180,7 +170,7 @@ bool deLaboratory::OnInit()
         project.init(str(a));
     }
 
-    logMessage("OnInit done");
+    logInfo("OnInit done");
 
 	return TRUE;
 } 

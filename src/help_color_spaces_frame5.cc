@@ -20,7 +20,7 @@
 #include "color_space.h"
 #include "gradient_panel.h"
 #include <sstream>
-#include "conversion_functions.h"
+#include "conversion_processor.h"
 #include <map>
 #include <iostream>
 
@@ -50,6 +50,8 @@ void generateFelixVonLuschan(wxWindow* window, wxSizer* sizer)
 
         int i;
 
+        deConversionProcessor cp;
+
         for (i = range.first - 1; i <= range.last - 1; i++)
         {
             deSkinRGB& skin = skins[i];
@@ -58,7 +60,8 @@ void generateFelixVonLuschan(wxWindow* window, wxSizer* sizer)
             deValue yy;
             deValue kk;
 
-            rgb2cmyk(skin.r / 255.0, skin.g / 255.0, skin.b / 255.0, cc, mm, yy, kk);
+//            rgb2cmyk(skin.r / 255.0, skin.g / 255.0, skin.b / 255.0, cc, mm, yy, kk);
+            cp.convert(deColorSpaceRGB, skin.r / 255.0, skin.g / 255.0, skin.b / 255.0, 0, deColorSpaceCMYK, cc, mm, yy, kk);
 
             int c = 100 * cc;
             int m = 100 * mm;

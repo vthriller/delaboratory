@@ -21,7 +21,9 @@
 
 #include "value.h"
 
+/*
 void rgb2bw(deValue r, deValue g, deValue b, deValue& bw);
 void bw2rgb(deValue bw, deValue& r, deValue& g, deValue& b);
+*/
 
 #endif

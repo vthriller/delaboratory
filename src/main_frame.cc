@@ -84,7 +84,7 @@ END_EVENT_TABLE()
 deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcraw_version, deOperationProcessor& _operationProcessor, deChannelManager& channelManager)
 : wxFrame() , project(_project), layerProcessor(_layerProcessor), imageSize(0,0)
 {
-    project.log("creating main frame");
+    logInfo("main frame constructor");
 
     imageName = "";
 
@@ -242,8 +242,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     Connect(wxEVT_TIMER, wxTimerEventHandler(deMainFrame::onTimerEvent));
 
-    project.log("main frame created");
-
     threadsPanel->setInfoColor(DE_DCRAW_END);
 }
 
@@ -275,13 +273,10 @@ void deMainFrame::hidePanels()
 
 deMainFrame::~deMainFrame()
 {
-    project.log("closing main frame");
+    logInfo("main frame destructor");
     layerProcessor.stopWorkerThread();
-    project.log("closing main frame lock layerProcessor...");
     layerProcessor.lock();
-    project.log("closing main frame unlock layerProcessor...");
     layerProcessor.unlock();
-    project.log("closing main frame done");
 }
 
 void deMainFrame::showPanels()
@@ -503,20 +498,15 @@ void deMainFrame::onWarningEvent(wxCommandEvent& event)
 
 void deMainFrame::repaintMainFrame(bool calcHistogram)
 {
-    project.log("repaint main frame start");
+    logInfo("repaint main frame");
     if (!project.isSourceValid())
     {
         return;
     }
 
-    project.log("repaint main frame 1");
     imageAreaPanel->getImagePanel()->repaintImagePanel();
-    project.log("repaint main frame 2");
-    project.log("repaint main frame 3");
     samplersPanel->update();
-    project.log("repaint main frame 4");
     project.updateMemoryInfo();
-    project.log("repaint main frame end");
 
 }
 
@@ -531,7 +521,7 @@ void deMainFrame::check(wxCommandEvent &event)
 
 void deMainFrame::onCloseEvent(wxCloseEvent& event)
 {
-    project.log("deMainFrame::onCloseEvent");
+    logInfo("deMainFrame::onCloseEvent");
     this->Destroy();
 }
 

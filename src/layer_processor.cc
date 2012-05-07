@@ -45,9 +45,8 @@ class deLayerProcessorWorkerThread:public wxThread
                     return;
                 }
 
-                logMessage("worker thread before wait");
+                logInfo("worker thread wait...");
                 semaphore.wait();
-                logMessage("worker thread after wait");
                 Sleep(10);
 
                 if (TestDestroy())
@@ -67,7 +66,7 @@ class deLayerProcessorWorkerThread:public wxThread
         virtual void *Entry()
         {
             performTasks();
-            logMessage("worker thread finished");
+            logInfo("worker thread finished");
             return NULL;
         }
         deLayerProcessor& processor;
@@ -78,7 +77,7 @@ class deLayerProcessorWorkerThread:public wxThread
         :processor(_processor),
          semaphore(_semaphore)
         {
-            logMessage("worker thread created");
+            logInfo("worker thread created");
         }
         virtual ~deLayerProcessorWorkerThread()
         {
@@ -97,9 +96,8 @@ class deRenderWorkerThread:public wxThread
                     return;
                 }
 
-                logMessage("render thread before wait");
+                logInfo("render thread wait...");
                 semaphore.wait();
-                logMessage("render thread after wait");
                 Sleep(10);
 
                 if (TestDestroy())
@@ -122,7 +120,7 @@ class deRenderWorkerThread:public wxThread
         virtual void *Entry()
         {
             performTasks();
-            logMessage("render thread finished");
+            logInfo("render thread finished");
             return NULL;
         }
 
@@ -134,7 +132,7 @@ class deRenderWorkerThread:public wxThread
         :processor(_processor),
          semaphore(_semaphore)
         {
-            logMessage("render thread created");
+            logInfo("render thread created");
         }
         virtual ~deRenderWorkerThread()
         {
@@ -153,9 +151,8 @@ class deHistogramWorkerThread:public wxThread
                     return;
                 }
 
-                logMessage("histogram thread before wait");
+                logInfo("histogram thread wait...");
                 semaphore.wait();
-                logMessage("histogram thread after wait");
                 Sleep(10);
 
                 if (TestDestroy())
@@ -176,7 +173,7 @@ class deHistogramWorkerThread:public wxThread
         virtual void *Entry()
         {
             performTasks();
-            logMessage("histogram thread finished");
+            logInfo("histogram thread finished");
             return NULL;
         }
 
@@ -188,7 +185,7 @@ class deHistogramWorkerThread:public wxThread
         :processor(_processor),
          semaphore(_semaphore)
         {
-            logMessage("histogram thread created");
+            logInfo("histogram thread created");
         }
         virtual ~deHistogramWorkerThread()
         {
@@ -207,6 +204,7 @@ renderer(_previewChannelManager),
 previewChannelManager(_previewChannelManager),
 mainWindow(_mainWindow)
 {
+    logInfo("layer processor constructor");
     viewManager = NULL;
 
     histogramWorkerThread = NULL;
@@ -236,37 +234,27 @@ void deLayerProcessor::onDestroyAll()
 
 deLayerProcessor::~deLayerProcessor()
 {
-    logMessage("destroying layer processor");
+    logInfo("layer processor destructor");
 }
 
 void deLayerProcessor::stopWorkerThread()
 {
-    logMessage("stop worker thread");
     closing = true;
 
-    logMessage("worker thread post before delete");
     workerSemaphore.post();
-    logMessage("stop worker thread - workerThread delete");
     workerThread->Delete();
 
-    logMessage("render worker thread post before delete");
     renderWorkerSemaphore.post();
 
-    logMessage("stop worker thread - renderWorkerThread delete");
     renderWorkerThread->Delete();
 
-    logMessage("histogram worker thread post before delete");
     histogramWorkerSemaphore.post();
-    logMessage("stop worker thread - histogramWorkerThread delete");
     histogramWorkerThread->Delete();
 
-    logMessage("stop worker thread done");
 }
 
 void deLayerProcessor::startWorkerThread()
 {
-    logMessage("starting worker threads...");
-
     workerThread = new deLayerProcessorWorkerThread(*this, workerSemaphore);
 
     if ( workerThread->Create() != wxTHREAD_NO_ERROR )
@@ -305,14 +293,11 @@ void deLayerProcessor::setViewManager(deViewManager* _viewManager)
 
 void deLayerProcessor::repaintImageInLayerProcessor()
 {
-
     if (closing)
     {
-        logMessage("skip repaintImage because closing");
+        logInfo("skip repaintImage because closing");
         return;
     }
-
-    logMessage("repaintImage post...");
 
     renderWorkerSemaphore.post();
     generateHistogram();
@@ -323,11 +308,9 @@ void deLayerProcessor::generateHistogram()
 {
     if (closing)
     {
-        logMessage("skip generateHistogram because closing");
+        logInfo("skip generateHistogram because closing");
         return;
     }
-
-    logMessage("generate histogram post...");
 
     histogramWorkerSemaphore.post();
 }
@@ -369,45 +352,41 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
 
 void deLayerProcessor::lockLayers()
 {
-    lockWithLog(layerProcessMutex, "layer process mutex");
+    layerProcessMutex.lock();
 }
 
 void deLayerProcessor::unlockLayers()
 {
-    logMessage("unlockLayers");
     layerProcessMutex.unlock();
 }
 
 void deLayerProcessor::lockHistogram()
 {
-    lockWithLog(histogramMutex, "histogram mutex");
+    histogramMutex.lock();
 }
 
 void deLayerProcessor::unlockHistogram()
 {
-    logMessage("unlockHistogram");
     histogramMutex.unlock();
 }
 
 void deLayerProcessor::lockUpdateImage()
 {
-    lockWithLog(updateImageMutex, "update image mutex");
+    updateImageMutex.lock();
 }
 
 void deLayerProcessor::unlockUpdateImage()
 {
-    logMessage("unlockUpdateImage");
     updateImageMutex.unlock();
 }
 
 void deLayerProcessor::lockPrepareImage()
 {
-    lockWithLog(prepareImageMutex, "prepare image mutex");
+    prepareImageMutex.lock();
 }
 
 void deLayerProcessor::unlockPrepareImage()
 {
-    logMessage("unlockPrepare");
     prepareImageMutex.unlock();
 }
 
@@ -458,7 +437,7 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
 
 bool deLayerProcessor::updateLayerImage()
 {
-    logMessage("updateLayerImage");
+    logInfo("updateLayerImage");
     lockUpdateImage();
 
     lockLayers();
@@ -482,8 +461,6 @@ bool deLayerProcessor::updateLayerImage()
 
     if ((layer) && (ok))
     {
-        logMessage("updateLayerImage layer && ok");
-
         layer->lockLayer();
         layerStack.unlock();
 
@@ -504,7 +481,6 @@ bool deLayerProcessor::updateLayerImage()
 
     if ((layer) && (ok))
     {
-        logMessage("updateLayerImage process...");
         layer->processLayer(type, channel);
 
         layer->unlockLayer();
@@ -515,8 +491,6 @@ bool deLayerProcessor::updateLayerImage()
     unlockUpdateImage();
 
     updateWarning();
-
-    logMessage("updateLayerImage DONE");
 
     return result;
 
@@ -535,7 +509,7 @@ void deLayerProcessor::updateWarning()
 bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame, const std::string& fileName, const std::string& type, bool saveAll)
 {
     bool result = true;
-    logMessage("updateImagesSmart");
+    logInfo("updateImagesSmart");
 
     lock();
 
@@ -546,7 +520,7 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
     int progress = 0;
     for (index = 0; index <= (unsigned int)view; index++)
     {
-        logMessage("updateImagesSmart index: " + str(index));
+        logInfo("updateImagesSmart index: " + str(index));
         std::map<int, int>::iterator i;
         int previous = index - 1;
         if (previous >= 0)
@@ -557,7 +531,7 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
                 int l = i->second;
                 if (l == previous)
                 {
-                    logMessage("deallocate " + str(c));
+                    logInfo("deallocate " + str(c));
                     previewChannelManager.tryDeallocateChannel(c);
                 }
             }
@@ -569,7 +543,7 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
 
         progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
 
-        logMessage("updateImagesSmart process index: " + str(index));
+        logInfo("updateImagesSmart process index: " + str(index));
         bool r = layer->processFull();
         if (r)
         {
@@ -618,7 +592,7 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
         saveImage(fileName, image, type, previewChannelManager);
     }
 
-    logMessage("updateImagesSmart DONE");
+    logInfo("updateImagesSmart DONE");
 
     return result;
 }
@@ -645,7 +619,7 @@ void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
         layer->onUpdateProperties();
     }        
 
-    logMessage("markUpdateSingleChannel");
+    logInfo("markUpdateSingleChannel " +str(index) + " " + str(channel));
     updateImages(index, channel, true);
 }
 
@@ -675,19 +649,16 @@ void deLayerProcessor::onChangeView(int a)
 
 void deLayerProcessor::lock()
 {
-    logMessage("layer processor lock");
-    lockWithLog(updateImagesMutex, "update images mutex");
+    updateImagesMutex.lock();
 }
 
 void deLayerProcessor::unlock()
 {
-    logMessage("layer processor unlock");
     updateImagesMutex.unlock();
 }
 
 void deLayerProcessor::tickWork()
 {
-    logMessage("tickWork");
     sendInfoEvent(DE_PROCESSING_START);
 
     bool result = updateLayerImage();
@@ -719,7 +690,7 @@ void deLayerProcessor::removeTopLayerInLayerProcessor()
     lockUpdateImage();
 
     int index = layerStack.getSize() - 1;
-    logMessage("requested remove top layer " + str(index));
+    logInfo("requested remove top layer " + str(index));
     if (index > 0)
     {
         layerStack.removeTopLayer();
@@ -796,11 +767,12 @@ int deLayerProcessor::getLastLayerToUpdate()
 
 bool deLayerProcessor::prepareImage()
 {
+    logInfo("prepare image start");
+
     sendInfoEvent(DE_RENDERING_START);
 
     bool result = false;
     lockPrepareImage();
-    logMessage("prepare image start");
     lock();
 
     if (!closing)
@@ -812,10 +784,10 @@ bool deLayerProcessor::prepareImage()
     }
 
     unlock();
-    logMessage("prepare image end");
     unlockPrepareImage();
 
     sendInfoEvent(DE_RENDERING_END);
+    logInfo("prepare image DONE");
 
     return result;
 }
@@ -843,8 +815,8 @@ void deLayerProcessor::setPreviewSize(const deSize& size)
     {
         return;
     }
+    logInfo("setPreviewSize start");
 
-    logMessage("set preview size...");
     lockHistogram();
     lockPrepareImage();
     lockUpdateImage();
@@ -856,12 +828,11 @@ void deLayerProcessor::setPreviewSize(const deSize& size)
     unlockUpdateImage();
     unlockPrepareImage();
     unlockHistogram();
-    logMessage("set preview size done");
+    logInfo("setPreviewSize DONE");
 }
 
 void deLayerProcessor::onImageLoad()
 {
-    logMessage("on image load...");
     lockHistogram();
     lockPrepareImage();
     lockUpdateImage();
@@ -871,7 +842,6 @@ void deLayerProcessor::onImageLoad()
     unlockUpdateImage();
     unlockPrepareImage();
     unlockHistogram();
-    logMessage("on image load done...");
 }
 
 void deLayerProcessor::render(deCanvas& canvas)

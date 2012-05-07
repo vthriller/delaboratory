@@ -77,7 +77,6 @@ deShadowsHighlightsLayer::~deShadowsHighlightsLayer()
 bool deShadowsHighlightsLayer::processSH(const deChannel& sourceChannel, deChannel& channel)
 {
     deSize size = mainLayerImage.getChannelSize();
-    logMessage("shadows/highlights start");
 
     const deValue* source = sourceChannel.getPixels();
     deValue* destination = channel.getPixels();
@@ -94,7 +93,7 @@ bool deShadowsHighlightsLayer::processSH(const deChannel& sourceChannel, deChann
     }
     catch (std::bad_alloc)
     {
-        logMessage("ERROR allocating memory in shadows/highlights");
+        logError("ERROR allocating memory in shadows/highlights");
         if (blurMap)
         {
             delete [] blurMap;
@@ -132,7 +131,6 @@ bool deShadowsHighlightsLayer::processSH(const deChannel& sourceChannel, deChann
     delete [] firstStage;
     delete [] secondStage;
     
-    logMessage("shadows/highlights end");
 
     return result;
 }
