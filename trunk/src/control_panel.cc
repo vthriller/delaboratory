@@ -18,7 +18,6 @@
 
 #include "control_panel.h"
 #include "project.h"
-#include "conversion_functions.h"
 #include "layer.h"
 #include "layer_factory.h"
 #include "layer_grid_panel.h"
@@ -157,8 +156,9 @@ void deControlPanel::setConversions()
     }
 
     deColorSpace currentColorSpace = layer->getColorSpace();
-
     std::vector<wxButton*>::iterator i;
+
+/*
     for (i = convertButtons.begin(); i != convertButtons.end(); i++)
     {
         wxButton* b = *i;
@@ -176,6 +176,8 @@ void deControlPanel::setConversions()
             b->Disable();
         }
     }
+    */
+
 
     for (i = actionButtons.begin(); i != actionButtons.end(); i++)
     {
@@ -295,11 +297,9 @@ void deControlPanel::onAddLayer()
         int n = layerStack.getSize() - 1;
         deBaseLayer* baseLayer = layerStack.getLayer(n);
         int layerIndex = n;
-        project.log("auto UI - creating action frame");
         deFrameOld* actionFrame = createFrame(this, *baseLayer, layerProcessor, frameManager, layerIndex, channelManager);
         if (actionFrame)
         {
-            project.log("auto UI - created action frame");
             actionFrame->Show(true);
         }
     }

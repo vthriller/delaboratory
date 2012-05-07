@@ -43,13 +43,10 @@ int deViewManager::getView() const
 
 void deViewManager::setView(int v)
 {
-    logMessage("view manager set view " + str(v) + " start");
-    logMessage("view manager set view " + str(v) + " step a");
+    logInfo("view manager set view " + str(v));
     int old = view;
     view = v;
-    logMessage("view manager set view " + str(v) + " step b");
     project.onChangeView(old);
-    logMessage("view manager set view " + str(v) + " end");
 }
 
 void deViewManager::setSingleChannel(int _channel)

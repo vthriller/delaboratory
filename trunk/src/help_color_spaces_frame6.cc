@@ -20,7 +20,6 @@
 #include "color_space.h"
 #include "gradient_panel.h"
 #include <sstream>
-#include "conversion_functions.h"
 #include <map>
 #include <iostream>
 

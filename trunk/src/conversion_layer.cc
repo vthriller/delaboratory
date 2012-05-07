@@ -90,7 +90,7 @@ void deConversionLayer::addFilms()
 
 bool deConversionLayer::updateMainImageNotThreadedWay()
 {
-    logMessage("conversion start");
+    logInfo("conversion layer start");
 
     mainLayerImage.enableAllChannels();
 
@@ -128,7 +128,8 @@ bool deConversionLayer::updateMainImageNotThreadedWay()
         deValue p = percentage / 100.0;
         warning = "conversion OVERFLOW " + str(p) + "%";
     }
-    logMessage("conversion end");
+
+    logInfo("conversion layer DONE");
 
     return true;
 }

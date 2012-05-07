@@ -65,7 +65,7 @@ void saveJPEG(const std::string& fileName, const deChannel& channelR, const deCh
 
 void saveTIFF(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size)
 {
-    logMessage("save TIFF " + fileName);
+    logInfo("save TIFF " + fileName);
     int w = size.getW();
     int h = size.getH();
 
@@ -73,7 +73,7 @@ void saveTIFF(const std::string& fileName, const deChannel& channelR, const deCh
 
     if (!tif)
     {
-        logMessage("ERROR writing " + fileName);
+        logError("ERROR writing " + fileName);
         return;
     }
 
@@ -116,7 +116,7 @@ void saveTIFF(const std::string& fileName, const deChannel& channelR, const deCh
 
     TIFFClose(tif);
 
-    logMessage("saved TIFF " + fileName);
+    logInfo("saved TIFF " + fileName);
 }
 
 bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
@@ -128,7 +128,7 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace co
         return false;
     }
 
-    logMessage("loadJPEG " + fileName);
+    logInfo("loadJPEG " + fileName);
 
     const char* c = fileName.c_str();
     wxString s(c, wxConvUTF8);
@@ -192,7 +192,7 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace co
         }
     }
 
-    logMessage("loadJPEG " + fileName + " done");
+    logInfo("loadJPEG " + fileName + " done");
 
     return true;
 }
@@ -208,7 +208,7 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image, deColorSpace co
         return false;
     }
 
-    logMessage("load TIFF " + fileName);
+    logInfo("load TIFF " + fileName);
 
     TIFF* tif = TIFFOpen(fileName.c_str(), "r");
     if (!tif)
@@ -227,7 +227,7 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image, deColorSpace co
     TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bps);
     TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &spp);
 
-    logMessage("found TIFF " + str(w) + "x" + str(h) + " bps: " + str(bps) + " spp: " + str(spp));
+    logInfo("found TIFF " + str(w) + "x" + str(h) + " bps: " + str(bps) + " spp: " + str(spp));
 
     deSize size(w, h);
     image.setSize(size);
@@ -307,7 +307,7 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image, deColorSpace co
 
     _TIFFfree(buf);
     TIFFClose(tif);
-    logMessage("loadTIFF " + fileName + " done");
+    logInfo("loadTIFF " + fileName + " done");
 
     return true;
 }

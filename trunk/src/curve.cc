@@ -609,12 +609,11 @@ bool deCurveOld::isNeutral() const
 
 void deCurveOld::lock() const
 {
-    lockWithLog(mutex, "curve mutex");
+    mutex.lock();
 }
 
 void deCurveOld::unlock() const
 {
-    logMessage("curve mutex unlock");
     mutex.unlock();
 }
 

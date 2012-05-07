@@ -52,7 +52,7 @@ bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image, deC
 
     bool status = false;
 
-    lockWithLog(mutex, "raw module mutex");
+    mutex.lock();
 
     loader = new deRawLoader(fileName, image, colorSpace, half);
 

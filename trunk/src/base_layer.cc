@@ -95,7 +95,7 @@ void deBaseLayer::saveCommon(xmlNodePtr node)
 
 void deBaseLayer::lockLayer()
 {
-    lockWithLog(mutex, "layer mutex");
+    mutex.lock();
 }
 
 void deBaseLayer::unlockLayer()
@@ -105,7 +105,7 @@ void deBaseLayer::unlockLayer()
 
 void deBaseLayer::processLayer(deLayerProcessType type, int channel)
 {
-    logMessage("processLayer channel: " + str(channel));
+    logInfo("processLayer channel: " + str(channel));
     switch (type)
     {
         case deLayerProcessFull:
@@ -126,7 +126,7 @@ void deBaseLayer::processLayer(deLayerProcessType type, int channel)
         default:
             break;
     }
-    logMessage("processLayer DONE");
+    logInfo("processLayer DONE");
 }
 
 bool deBaseLayer::processFull()
@@ -151,7 +151,7 @@ void deBaseLayer::setErrorOnUpdateFromThread()
 
 bool deBaseLayer::updateMainImageAllChannels()
 {
-    logMessage("update action all channels start");
+    logInfo("update action all channels start");
 
     int n = getColorSpaceSize(colorSpace);
     int i;
@@ -162,7 +162,7 @@ bool deBaseLayer::updateMainImageAllChannels()
 
     for (i = 0; i < n; i++)
     {
-        logMessage("creating update action thread for channel " + str(i));
+        logInfo("creating update action thread for channel " + str(i));
         deUpdateActionThread* thread = new deUpdateActionThread(*this, i, semaphore);
 
         if ( thread->Create() != wxTHREAD_NO_ERROR )
@@ -176,11 +176,11 @@ bool deBaseLayer::updateMainImageAllChannels()
 
     for (i = 0; i < n; i++)
     {
-        logMessage("waiting for update action thread for channel " + str(i));
+        logInfo("waiting for update action thread for channel " + str(i));
         semaphore.wait();
     }
 
-    logMessage("update action all channels end");
+    logInfo("update action all channels DONE");
 
     if (errorOnUpdate)
     {

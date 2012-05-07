@@ -20,7 +20,7 @@
 
 #include "curves_editor.h"
 #include "mixer_editor.h"
-#include "apply_image_frame.h"
+//#include "apply_image_frame.h"
 #include "equalizer_frame.h"
 #include "basic_frame.h"
 #include "dodge_burn_frame.h"
@@ -34,9 +34,7 @@
 
 deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager, int layerIndex, deChannelManager& channelManager)
 {
-    logMessage("creating frame...");
     const std::string type = layer.getType();
-    logMessage("creating frame of type " + type);
 
     if (type == "curves")
     {
@@ -50,11 +48,11 @@ deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& 
         return new deMixerEditor(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
-    if (type == "apply_image")
+/*    if (type == "apply_image")
     {
         deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
         return new deApplyImageFrame(parent, al, layerProcessor, frameManager, layerIndex);
-    }        
+    }        */
 
     if ((type == "equalizer8") || (type == "equalizer16"))
     {

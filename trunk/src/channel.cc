@@ -101,7 +101,7 @@ void deChannel::setValueClip(int pos, const deValue& value)
 void deChannel::deallocate()
 {
     assert(pixels);
-    logMessage("deallocate channel");
+    logInfo("deallocate channel");
     delete [] pixels;
     pixels = NULL;
     magicSize = 0;
@@ -117,7 +117,7 @@ void deChannel::allocate(int size)
     }
     catch (std::bad_alloc)
     {
-        logMessage("ERROR allocating channel");
+        logError("ERROR allocating channel");
         pixels = NULL;
         magicSize = 0;
     }

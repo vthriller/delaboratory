@@ -20,10 +20,12 @@
 #define _DE_CMYK_H
 
 #include "value.h"
+/*
 
 void rgb2cmy(deValue r, deValue g, deValue b, deValue& c, deValue& m, deValue& y);
 void cmy2rgb(deValue c, deValue m, deValue y, deValue& r, deValue& g, deValue& b);
 void cmy2cmyk(deValue c, deValue m, deValue y, deValue& _c, deValue& _m, deValue& _y, deValue& _k);
 void cmyk2cmy(deValue c, deValue m, deValue y, deValue k, deValue& _c, deValue& _m, deValue& _y);
+*/
 
 #endif

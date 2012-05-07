@@ -69,13 +69,15 @@ bool deSourceImageLayer::updateMainImageNotThreadedWay()
 
         if ((ss == ds) && (z_x1 == 0.0) && (z_y1 == 0.0) && (z_x2 == 1.0) && (z_y2 == 1.0))
         {   
-            logMessage("copy source channel");
+            logInfo("copy source channel");
             copyChannel(source, destination, nn);
         }
         else
         {
+            logInfo("scale source channel");
             scaleChannel(source, destination, x1, y1, x2, y2, w, h, ws);
         }
+
         mainLayerImage.finishWrite(channel);
     }
 

@@ -48,7 +48,6 @@ deHistogramPanel::~deHistogramPanel()
 
 void deHistogramPanel::paintEvent(wxPaintEvent & evt)
 {
-    logMessage("paintEvent in deHistogramPanel");
     wxBufferedPaintDC dc(this);
     deCanvasWX canvas(dc);
 	render(canvas);
@@ -95,29 +94,28 @@ void deHistogramPanel::generateHistogram()
     if (layer)
     {
         const deImage& image = layer->getLayerImage();
-        int channelIndex = image.getChannelIndex(channel);
-
-        logMessage("generate histogram for channel " + str(channelIndex));
-
-        deChannel* c = channelManager.getChannel(channelIndex);
-
-        if (!c)
-        {
-            logMessage("generate histogram - NULL channel");
-        }            
-
         int n = image.getChannelSize().getN();
 
-        if (n <= 0)
-        {
-            logMessage("generate histogram - n: " + str(n));
-        }
+        const deValue* values = image.startRead(channel);
 
-        if ((c) && (n > 0))
+        if ((n > 0) && (values))
         {
             histogram.clear();
-            histogram.calc(c->getPixels(), n);
-        }            
+            histogram.calc(values, n);
+        }
+        else
+        {
+            if (!values)
+            {
+                logError("can't generate histogram - NULL channel");
+            }
+            if (n <= 0)
+            {
+                logError("can't generate histogram - n: " + str(n));
+            }
+        }
+
+        image.finishRead(channel);
     }        
 
     project->getLayerProcessor().unlock();

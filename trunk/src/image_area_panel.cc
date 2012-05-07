@@ -38,7 +38,7 @@ void deImageAreaPanel::resize(wxSizeEvent& event)
 void deImageAreaPanel::updateSize(bool calcHistogram)
 {
     wxSize s = GetSize();
-    logMessage("image area panel update size " + str(s.GetWidth()) + "x" + str(s.GetHeight()));
+    logInfo("image area panel update size " + str(s.GetWidth()) + "x" + str(s.GetHeight()));
 
     const deSize ps(s.GetWidth(), s.GetHeight());
     
@@ -53,7 +53,7 @@ void deImageAreaPanel::updateSize(bool calcHistogram)
 
     project.getLayerProcessor().setPreviewSize(fit);
 
-    logMessage("set image panel size " + str(fit.getW()) + "x" + str(fit.getH()));
+    logInfo("set image panel size " + str(fit.getW()) + "x" + str(fit.getH()));
     imagePanel->SetSize(wxSize(fit.getW(), fit.getH()));
     imagePanel->SetMinSize(wxSize(fit.getW(), fit.getH()));
 

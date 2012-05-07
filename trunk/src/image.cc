@@ -25,7 +25,7 @@
 deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelManager)
 :colorSpace(_colorSpace), channelManager(_channelManager)
 {
-    logMessage("create new image");
+    logInfo("image constructor");
     int i;
     int s = getColorSpaceSize(colorSpace);
     for (i = 0; i < MAX_COLOR_SPACE_SIZE; i++)
@@ -44,7 +44,7 @@ deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelMana
 
 deImage::~deImage()
 {
-    logMessage("destroy image");
+    logInfo("image destructor");
     int i;
     int s = getColorSpaceSize(colorSpace);
     for (i = 0; i < s; i++)
@@ -56,21 +56,57 @@ deImage::~deImage()
 
 void deImage::enableChannel(int n)
 {
-    logMessage("enable channel " + str(n) + " in image");
+    logInfo("enable channel " + str(n) + " in image");
     assert(n >= 0);
     assert(n < MAX_COLOR_SPACE_SIZE);
     assert (channelsAllocated[n] >= 0);
-    channelManager.tryAllocateChannel(channelsAllocated[n]);
-    channelsVisible[n] = channelsAllocated[n];
+
+    int a = channelsAllocated[n];
+    int v = channelsVisible[n];
+
+    if (a >= 0)
+    {
+        channelManager.startWrite(a);
+    }
+    if ((v >=0) && (v != a))
+    {
+        channelManager.startRead(v);
+    }
+
+    channelManager.tryAllocateChannel(a);
+    channelsVisible[n] = a;
+
+    if (a >= 0)
+    {
+        channelManager.finishWrite(a);
+    }
+    if ((v >= 0) && (v != a))
+    {
+        channelManager.finishRead(v);
+    }
 }
 
 void deImage::disableChannel(int n, int c)
 {
-    logMessage("disable channel " + str(n) + " in image, replace with " +str(c));
+    logInfo("disable channel " + str(n) + " in image, replace with " +str(c));
     assert(n >= 0);
     assert(n < MAX_COLOR_SPACE_SIZE);
+
+    int a = channelsAllocated[n];
+    int v = channelsVisible[n];
+
+    if (a >= 0)
+    {
+        channelManager.startWrite(a);
+    }
+
     channelsVisible[n] = c;
     channelManager.tryDeallocateChannel(channelsAllocated[n]);
+
+    if (a >= 0)
+    {
+        channelManager.finishWrite(a);
+    }
 }
 
 int deImage::getChannelIndex(int n) const
@@ -125,7 +161,7 @@ void deImage::updateChannelUsage(std::map<int, int>& channelUsage, int index) co
 
 const deValue* deImage::startRead(int channel) const
 {
-    logMessage("image start read " + str(channel));
+    logInfo("image start read " + str(channel));
     if (channel < 0)
     {
         logError("image start read " + str(channel));
@@ -137,24 +173,32 @@ const deValue* deImage::startRead(int channel) const
         return NULL;
     }
     int index = channelsVisible[channel];
-    channelManager.startRead(index);
-    deChannel* c = channelManager.getChannel(index);
-    if (!c)
-    {
-        return NULL;
-    }
-    return c->getPixels();
+
+    const deValue* values = channelManager.startRead(index);
+
+    return values;
 }
 
 void deImage::finishRead(int channel) const
 {
+    logInfo("image finish read " + str(channel));
+    if (channel < 0)
+    {
+        logError("image finish read " + str(channel));
+        return;
+    }
+    else if (channel >= MAX_COLOR_SPACE_SIZE)
+    {
+        logError("image finish read " + str(channel));
+        return;
+    }
     int index = channelsVisible[channel];
     channelManager.finishRead(index);
 }
 
 deValue* deImage::startWrite(int channel) 
 {
-    logMessage("image start write " + str(channel));
+    logInfo("image start write " + str(channel));
     if (channel < 0)
     {
         logError("image start write " + str(channel));
@@ -167,18 +211,24 @@ deValue* deImage::startWrite(int channel)
     }
 
     int index = channelsVisible[channel];
-    channelManager.startWrite(index);
+    deValue* values = channelManager.startWrite(index);
 
-    deChannel* c = channelManager.getChannel(index);
-    if (!c)
-    {
-        return NULL;
-    }
-    return c->getPixels();
+    return values;
 }
 
 void deImage::finishWrite(int channel) 
 {
+    logInfo("image finish write " + str(channel));
+    if (channel < 0)
+    {
+        logError("image finish write " + str(channel));
+        return;
+    }
+    else if (channel >= MAX_COLOR_SPACE_SIZE)
+    {
+        logError("image finish write " + str(channel));
+        return;
+    }
     int index = channelsVisible[channel];
     channelManager.finishWrite(index);
 }    

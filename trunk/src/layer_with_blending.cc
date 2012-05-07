@@ -112,11 +112,10 @@ void deLayerWithBlending::setBlendMode(deBlendMode mode)
 
 bool deLayerWithBlending::updateBlend(int i)
 {
-    logMessage("update blend " + str(i));
+    logInfo("update blend " + str(i));
 
     if (!isEnabled())
     {
-        logMessage("update blend no enabled");
         return true;
     }
 
@@ -126,7 +125,6 @@ bool deLayerWithBlending::updateBlend(int i)
 
     if (!isBlendingEnabled())
     {
-        logMessage("update blend no blend");
         return true;
     }
 
@@ -135,14 +133,12 @@ bool deLayerWithBlending::updateBlend(int i)
         if (getBlendMode() == deBlendNormal)
         {
             imageBlendPass.disableChannel(i, s);
-            logMessage("update blend disable1...");
             return true;
         }
     }
 
     if (!isChannelEnabled(i))
     {
-        logMessage("update blend disable2...");
         imageBlendPass.disableChannel(i, s);
         return true;
     }
@@ -179,8 +175,6 @@ bool deLayerWithBlending::updateBlend(int i)
 
     deValue o = getOpacity();
     blendChannel(sourcePixels, overlayPixels, resultPixels, maskPixels, getBlendMode(), o, channelSize);
-
-    logMessage("update blend DONE");
 
     return true;
 

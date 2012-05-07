@@ -25,7 +25,6 @@
 #include "channel_manager.h"
 #include "wx/notebook.h"
 #include "conversion_processor.h"
-#include "conversion_functions.h"
 
 #define LAB_TILE_SIZE 20
 #define ALL_TILES_SIZE 800
@@ -80,6 +79,8 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
 
     wxSizer* LABMapSizer = new wxFlexGridSizer(tilesW, s, s);
     mainSizer->Add(LABMapSizer);
+
+    deConversionProcessor cp;
 
     int x;
     int y;
@@ -157,8 +158,8 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
                 deValue r;
                 deValue g;
                 deValue b;
-
-                lab2rgb(v1, v2, v3, r, g, b);
+                deValue z;
+                cp.convert(deColorSpaceLAB, v1, v2, v3, 0, deColorSpaceRGB, r, g, b, z);
                 colorPanel->setRGB(r, g, b);
             }                
             else
@@ -348,6 +349,7 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
     deValue B;
     deValue rB;
 
+
     for (rB = minB; rB < maxB; rB += step)
     {
         B = maxB + minB - rB;
@@ -364,7 +366,8 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
                 deValue r;
                 deValue g;
                 deValue b;
-                lab2rgb(L, A, B, r, g, b);
+                deValue z;
+                cp.convert(deColorSpaceLAB, L, A, B, 0, deColorSpaceRGB, r, g, b, z);
                 colorPanel->setRGB(r, g, b);
             }                
         }

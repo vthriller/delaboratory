@@ -46,7 +46,7 @@ void deMutexReadWrite::lockWrite()
     {
         readSemaphore.wait();
     }
-    lockWithLog(writeMutex, "channel write mutex");
+    writeMutex.lock();
 }
 
 void deMutexReadWrite::unlockWrite()

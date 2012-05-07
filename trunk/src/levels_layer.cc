@@ -68,16 +68,12 @@ bool deLevelsLayer::isChannelNeutral(int channel)
 
 bool deLevelsLayer::updateMainImageSingleChannel(int channel)
 {
-    logMessage("deLevelsLayer::updateMainImageSingleChannel 1");
-
     if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
     {
         int s = getSourceImage().getChannelIndex(channel);
         mainLayerImage.disableChannel(channel, s);
         return true;
     }
-
-    logMessage("deLevelsLayer::updateMainImageSingleChannel 2");
 
     dePropertyLevels* propertyLevels = getPropertyLevels(channel);
     if (!propertyLevels)
@@ -93,8 +89,6 @@ bool deLevelsLayer::updateMainImageSingleChannel(int channel)
     deValue* target = mainLayerImage.startWrite(channel);
     int n = mainLayerImage.getChannelSize().getN();
 
-    logMessage("deLevelsLayer::updateMainImageSingleChannel 3");
-
     deBaseCurve curve;
 
     curve.addPoint(0, 0);
@@ -105,7 +99,6 @@ bool deLevelsLayer::updateMainImageSingleChannel(int channel)
 
     curve.build();
 
-    logMessage("deLevelsLayer::updateMainImageSingleChannel 4");
 
     curve.process(source, target, n);
 

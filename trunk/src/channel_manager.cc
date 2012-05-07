@@ -61,7 +61,7 @@ int deChannelManager::reserveNewChannel()
         int c = *i;
         trashed.erase(c);
         channels[c] = channel;
-        logMessage("reused trashed channel " + str(c));
+        logInfo("reused trashed channel " + str(c));
         unlock();
         return c;
     }
@@ -70,7 +70,7 @@ int deChannelManager::reserveNewChannel()
         channels.push_back(channel);
         mutexes.push_back(new deMutexReadWrite(4));
         int c = channels.size() - 1;
-        logMessage("added channel " + str(c));
+        logInfo("added channel " + str(c));
         unlock();
         return c;
     }        
@@ -80,6 +80,8 @@ int deChannelManager::reserveNewChannel()
 void deChannelManager::freeChannel(int index)
 {
     lock();
+
+    mutexes[index]->lockWrite();
 
     assert(index >= 0);
     assert((unsigned int)index < channels.size());
@@ -93,6 +95,8 @@ void deChannelManager::freeChannel(int index)
     else
     {
     }
+
+    mutexes[index]->unlockWrite();
 
     unlock();
 }
@@ -113,7 +117,9 @@ deChannel* deChannelManager::getChannel(int index)
 
 void deChannelManager::destroyAllChannels()
 {
+    logInfo("destroy all channels start");
     lock();
+
     unsigned int i;
     for (i = 0; i < channels.size(); i++)
     {
@@ -122,7 +128,9 @@ void deChannelManager::destroyAllChannels()
             tryDeallocateChannel(i);
         }            
     }
+
     unlock();
+    logInfo("destroy all channels DONE");
 }
 
 deSize deChannelManager::getChannelSizeFromChannelManager() const
@@ -132,7 +140,7 @@ deSize deChannelManager::getChannelSizeFromChannelManager() const
 
 void deChannelManager::lock() const
 {
-    lockWithLog(mutex, "channel manager mutex");
+    mutex.lock();
 }
 
 void deChannelManager::unlock() const
@@ -162,15 +170,22 @@ int deChannelManager::getNumberOfAllocatedChannels() const
 void deChannelManager::tryAllocateChannel(int index)
 {
     lock();
-//    logMessage("tryAllocateChannel " + str(index));
 
-    assert(index >= 0);
-    assert((unsigned int)index < channels.size());
+    if (index < 0)
+    {
+        logError("tryAllocateChannel index < 0");
+    } 
+    else if ((unsigned int)index >= channels.size())
+    {
+        int s = channels.size();
+        logError("tryAllocateChannel index >= " + str(s));
+    }
+
     if ((channels[index]))
     {
         if (!channels[index]->isAllocated())
         {
-            logMessage("allocate channel " + str(index));
+            logInfo("allocate channel " + str(index));
             channels[index]->allocate(channelSize.getN());
         }
     }
@@ -181,20 +196,22 @@ void deChannelManager::tryAllocateChannel(int index)
 void deChannelManager::tryDeallocateChannel(int index)
 {
     lock();
+
     if (index < 0)
     {
         logError("tryDeallocateChannel index < 0");
     } 
     else if ((unsigned int)index >= channels.size())
     {
-        logError("tryDeallocateChannel index >= " + str(channels.size()));
+        int s = channels.size();
+        logError("tryDeallocateChannel index >= " + str(s));
     }
 
     if ((channels[index]))
     {
         if (channels[index]->isAllocated())
         {
-            logMessage("deallocate channel " + str(index));
+            logInfo("deallocate channel " + str(index));
             channels[index]->deallocate();
         }
     }
@@ -209,15 +226,18 @@ bool deChannelManager::isImageEmpty() const
 
 const deValue* deChannelManager::startRead(int index)
 {
-    logMessage("startRead " + str(index));
+    logInfo("startRead " + str(index));
 
     if (index < 0)
     {
         logError("startRead index < 0");
+        return NULL;
     } 
     else if ((unsigned int)index >= channels.size())
     {
-        logError("startRead index >= " + str(channels.size()));
+        int s = channels.size();
+        logError("startRead index >= " + str(s));
+        return NULL;
     }
 
     mutexes[index]->lockRead();
@@ -227,15 +247,18 @@ const deValue* deChannelManager::startRead(int index)
 
 void deChannelManager::finishRead(int index)
 {
-    logMessage("finishRead " + str(index));
+    logInfo("finishRead " + str(index));
 
     if (index < 0)
     {
         logError("finishRead index < 0");
+        return;
     } 
     else if ((unsigned int)index >= channels.size())
     {
-        logError("finishRead index >= " + str(channels.size()));
+        int s = channels.size();
+        logError("finishRead index >= " + str(s));
+        return;
     }
 
     mutexes[index]->unlockRead();
@@ -243,33 +266,41 @@ void deChannelManager::finishRead(int index)
 
 deValue* deChannelManager::startWrite(int index)
 {
-    logMessage("startWrite " + str(index));
+    logInfo("startWrite " + str(index));
 
     if (index < 0)
     {
         logError("startWrite index < 0");
+        return NULL;
     } 
     else if ((unsigned int)index >= channels.size())
     {
-        logError("startWrite index >= " + str(channels.size()));
+        int s = channels.size();
+        logError("startWrite index >= " + str(s));
+        return NULL;
     }
 
     mutexes[index]->lockWrite();
+
+    logInfo("startWrite " + str(index) + " locked");
 
     return channels[index]->getPixels();
 }
 
 void deChannelManager::finishWrite(int index)
 {
-    logMessage("finishWrite " + str(index));
+    logInfo("finishWrite " + str(index));
 
     if (index < 0)
     {
         logError("finishWrite index < 0");
+        return;
     } 
     else if ((unsigned int)index >= channels.size())
     {
-        logError("finishWrite index >= " + str(channels.size()));
+        int s = channels.size();
+        logError("finishWrite index >= " + str(s));
+        return;
     }
 
     mutexes[index]->unlockWrite();

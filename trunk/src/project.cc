@@ -74,7 +74,7 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
     sourceImageFileName = "";
     receiveKeys = true;
 
-    log("project started");
+    logInfo("project constructor");
 
     layerProcessor.setViewManager(&viewManager);
 
@@ -95,11 +95,10 @@ void deProject::enableKeys()
 
 deProject::~deProject()
 {
-    log("closing project");
+    logInfo("project destructor");
     layerProcessor.lock();
     layerProcessor.unlock();
     layerStack.clear();
-    log("closed project");
 }
 
 void deProject::setHistogramChannel(int channel)
@@ -201,7 +200,7 @@ void deProject::setTestImage(int s)
 
 void deProject::resetLayerStack(deColorSpace colorSpace)
 {
-    logMessage("reset layer stack");
+    logInfo("reset layer stack");
 
     layerProcessor.removeAllLayers();
 
@@ -255,8 +254,7 @@ deLayerProcessor& deProject::getLayerProcessor()
 
 void deProject::onChangeView(int a)
 {
-
-    logMessage("change view from " + str(a) + " start");
+    logInfo("change view from " + str(a) + " START");
     layerProcessor.onChangeView(a);
 
     if (controlPanel)
@@ -273,7 +271,7 @@ void deProject::onChangeView(int a)
     }
     updateMemoryInfo();
     mainWindow.rebuild();
-    logMessage("change view from " + str(a) + " end");
+    logInfo("change view from " + str(a) + " DONE");
 }
 
 const deViewManager& deProject::getViewManager() const
@@ -548,7 +546,7 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
 
     freeImage();
 
-    logMessage("open image " + fileName);
+    logInfo("open image " + fileName);
 
     deColorSpace oldColorSpace = sourceImage.getColorSpace();
 
@@ -565,14 +563,14 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
         layerProcessor.sendInfoEvent(DE_DCRAW_START);
         if (rawModule.loadRAW(fileName, sourceImage, colorSpace, true))
         {
-            logMessage("found RAW " + fileName);
+            logInfo("found RAW " + fileName);
             bool failure = false;
             while (!rawModule.updateRawLoading(failure))
             {
                 wxThread::Sleep(200);
                 if (failure)
                 {
-                    logMessage("failed RAW load " + fileName);
+                    logError("failed RAW load " + fileName);
                     layerProcessor.sendInfoEvent(DE_DCRAW_END);
                     return false;
                 }
@@ -655,11 +653,6 @@ bool deProject::isSourceValid() const
     return (!previewChannelManager.isImageEmpty());
 }
 
-void deProject::log(const std::string& message)
-{
-    logMessage(message);
-}
-
 void deProject::addActionLayer(const std::string& action)
 {
     int layerIndex = layerStack.getSize();
@@ -677,7 +670,7 @@ void deProject::addActionLayer(const std::string& action)
 
     std::string actionDescription = getActionDescription(action);
 
-    log("creating action " + action + " layer");
+    logInfo("creating action layer: " + action);
 
     deBaseLayer* layer = createLayer(action, s, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
 
@@ -696,7 +689,7 @@ void deProject::addConversionLayer(deColorSpace colorSpace)
 
     std::string name = getColorSpaceName(colorSpace);
 
-    log("creating conversion to " + name + " layer");
+    logInfo("creating conversionlayer: " + name);
 
     deBaseLayer* layer = createLayer("conversion", s, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
 

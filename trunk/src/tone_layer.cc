@@ -56,16 +56,12 @@ deToneLayer::~deToneLayer()
 }
 bool deToneLayer::updateMainImageNotThreadedWay()
 {
-    logMessage("tone layer... ");
-
     deSize size = mainLayerImage.getChannelSize();
     int n = size.getN();
 
     int nc = getColorSpaceSize(colorSpace);
 
     int c = getPropertyChoice("channel")->getIndex();
-
-    logMessage("tone layer channel: " + str(c));
 
     const deValue* source = getSourceImage().startRead(c);
 
@@ -99,8 +95,6 @@ bool deToneLayer::updateMainImageNotThreadedWay()
     }        
 
     getSourceImage().finishRead(c);
-
-    logMessage("tone layer DONE");
 
     return true;
 }    

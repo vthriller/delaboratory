@@ -165,7 +165,7 @@ void deEqualizer::load(xmlNodePtr node)
 
 void deEqualizer::lock() const
 {
-    lockWithLog(mutex, "mixer mutex");
+    mutex.lock();
 }
 
 void deEqualizer::unlock() const

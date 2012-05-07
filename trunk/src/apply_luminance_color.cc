@@ -19,7 +19,6 @@
 #include "apply_luminance_color.h"
 #include "rgb2xyz2lab.h"
 #include "cmyk.h"
-#include "conversion_functions.h"
 
 void applyLuminanceRGB(deValue r1, deValue g1, deValue b1, deValue r2, deValue g2, deValue b2, deValue &r, deValue &g, deValue &b)
 {
@@ -133,6 +132,7 @@ void applyLuminanceProPhoto(deValue r1, deValue g1, deValue b1, deValue r2, deVa
 
 void applyLuminanceCMYK(deValue c1, deValue m1, deValue y1, deValue k1, deValue c2, deValue m2, deValue y2, deValue k2, deValue &c, deValue &m, deValue &y, deValue& k)
 {
+/*
     deValue lab_l1;
     deValue lab_a1;
     deValue lab_b1;
@@ -144,6 +144,7 @@ void applyLuminanceCMYK(deValue c1, deValue m1, deValue y1, deValue k1, deValue 
     cmyk2lab(c2, m2, y2, k2, lab_l2, lab_a2, lab_b2);
 
     lab2cmyk(lab_l2, lab_a1, lab_b1, c, m, y, k);
+    */
 }
 
 void applyColor(deValue r1, deValue g1, deValue b1, deValue r2, deValue g2, deValue b2, deValue &r, deValue &g, deValue &b)

@@ -196,7 +196,7 @@ void deMixer::load(xmlNodePtr node)
 
 void deMixer::lock() const
 {
-    lockWithLog(mutex, "mixer mutex");
+    mutex.lock();
 }
 
 void deMixer::unlock() const

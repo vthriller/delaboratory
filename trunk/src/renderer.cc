@@ -34,15 +34,13 @@ void renderChannel(const deImage& image, int c, unsigned char* data, deChannelMa
 {
     const deSize& s = image.getChannelSize();
 
-    deChannel* channel = channelManager.getChannel(image.getChannelIndex(c));
+    const deValue* pixels = image.startRead(c);
 
-    if (!channel)
+    if (!pixels)
     {
-        logError("no channel to render");
+        logError("can't render channel - NULL pixels");
         return;
     }
-
-    const deValue* pixels = channel->getPixels();
 
     int n = s.getN();
     int i;
@@ -66,6 +64,8 @@ void renderChannel(const deImage& image, int c, unsigned char* data, deChannelMa
         pos++;
     }      
 
+    image.finishRead(c);
+
 }
 
 deRenderer::deRenderer(deChannelManager& _channelManager)
@@ -85,7 +85,7 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
         return false;
     }
 
-    lockWithLog(mutex, "renderer mutex");
+    mutex.lock();
 
     int viewV = viewManager.getView();
     int view = layerProcessor.getLastValidLayer();
@@ -156,7 +156,7 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
 
 bool deRenderer::render(deCanvas& canvas)
 {
-    lockWithLog(mutex, "renderer mutex");
+    mutex.lock();
 
     bool result = renderedImage.render(canvas);
 
