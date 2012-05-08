@@ -106,121 +106,16 @@ void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse, deVal
 
             x = ellipse.processX(x);
 
+            deValue r = 1.0;
+
             deValue rr = x * x + y * y;
 
-            deValue r = 0.5 * sqrt(rr);
+            if (rr <= 1.0)
+            {
+                r = sqrt(rr);
+            }                
 
             deValue v = 1.0 - r;
-
-            if (v < 0)
-            {
-                v = 0;
-            }
-
-            if (v > 1 - spot)
-            {
-                deValue over = v - (1 - spot);
-                v += 0.5 * over;
-            }
-
-            if (v > 1)
-            {
-                v = 1;
-            }
-
-            deValue vv = darkness + (light - darkness) * v;
-            if (vv < 0)
-            {
-                vv = 0;
-            }
-            if (vv > 1)
-            {
-                vv = 1;
-            }
-
-            destination[p] = vv;
-            p++;
-        }
-    }
-
-}
-
-void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse1, deEllipse ellipse2, deValue light, deValue darkness, deValue spot)
-{
-    if (!ellipse1.isValid())
-    {
-        return;
-    }
-
-    if (!ellipse2.isValid())
-    {
-        return;
-    }
-
-
-    int w = size.getW();
-    int h = size.getH();
-
-    if (w == 0)
-    {
-        return;
-    }
-
-    if (h == 0)
-    {
-        return;
-    }
-
-    deValue ww = w / 2.0;
-    deValue hh = h / 2.0;
-
-    int i;
-    int j;
-
-    int p = 0;
-
-    for (i = 0; i < h; i++)
-    {
-        deValue y = (i - hh) / hh;
-
-        deValue y1 = ellipse1.processY(y);
-        deValue y2 = ellipse2.processY(y);
-
-        for (j = 0; j < w; j++)
-        {
-            deValue x = (j - ww) / ww;
-
-            deValue x1 = ellipse1.processX(x);
-            deValue x2 = ellipse2.processX(x);
-
-            deValue r1 = sqrt(x1 * x1 + y1 * y1);
-            deValue r2 = sqrt(x2 * x2 + y2 * y2);
-
-            deValue v1 = 1.0 - r1 + spot;
-            if (v1 < 0)
-            {
-                v1 = 0;
-            }
-            if (v1 > 1)
-            {
-                v1 = 1;
-            }
-
-            deValue v2 = 1.0 - r2 + spot;
-            if (v2 < 0)
-            {
-                v2 = 0;
-            }
-            if (v2 > 1)
-            {
-                v2 = 1;
-            }
-
-            deValue v = v1;
-            if (v2 > v)
-            {
-                v = v2;
-            }
 
             deValue vv = darkness + (light - darkness) * v;
             if (vv < 0)

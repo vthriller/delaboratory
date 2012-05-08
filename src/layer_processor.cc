@@ -352,41 +352,53 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
 
 void deLayerProcessor::lockLayers()
 {
+    logInfo("locking layer process mutex...");
     layerProcessMutex.lock();
+    logInfo("layer process mutex locked");
 }
 
 void deLayerProcessor::unlockLayers()
 {
+    logInfo("unlocking layer process mutex");
     layerProcessMutex.unlock();
 }
 
 void deLayerProcessor::lockHistogram()
 {
+    logInfo("locking histogram mutex...");
     histogramMutex.lock();
+    logInfo("histogram mutex locked");
 }
 
 void deLayerProcessor::unlockHistogram()
 {
+    logInfo("unlocking histogram mutex");
     histogramMutex.unlock();
 }
 
 void deLayerProcessor::lockUpdateImage()
 {
+    logInfo("locking update image mutex...");
     updateImageMutex.lock();
+    logInfo("update image mutex locked");
 }
 
 void deLayerProcessor::unlockUpdateImage()
 {
+    logInfo("unlocking update image mutex");
     updateImageMutex.unlock();
 }
 
 void deLayerProcessor::lockPrepareImage()
 {
+    logInfo("locking prepare image mutex...");
     prepareImageMutex.lock();
+    logInfo("prepare image mutex locked");
 }
 
 void deLayerProcessor::unlockPrepareImage()
 {
+    logInfo("unlocking prepare image mutex");
     prepareImageMutex.unlock();
 }
 

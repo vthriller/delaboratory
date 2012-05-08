@@ -49,8 +49,9 @@ deImage::~deImage()
     int s = getColorSpaceSize(colorSpace);
     for (i = 0; i < s; i++)
     {
-        assert (channelsAllocated[i] >= 0);
-        channelManager.freeChannel(channelsAllocated[i]);
+        int a = channelsAllocated[i];
+        logInfo("destroying channel " + str(a));
+        channelManager.freeChannel(a);
     }        
 }
 

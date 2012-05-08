@@ -123,12 +123,13 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace co
 {
     wxLogNull noerrormessages;
 
+    logInfo("loadJPEG " + fileName);
+
     if (colorSpace != deColorSpaceRGB)
     {
         return false;
     }
 
-    logInfo("loadJPEG " + fileName);
 
     const char* c = fileName.c_str();
     wxString s(c, wxConvUTF8);
@@ -141,33 +142,17 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace co
     int w = fileImage.GetWidth();
     int h = fileImage.GetHeight();
 
+    image.lock();
+
     deSize size(w, h);
     image.setSize(size);
+    image.setColorSpace(colorSpace);
 
-    deChannel* channelRR = image.getChannel(0);
-    if (!channelRR)
-    {
-        return false;
-    }
-    deChannel& channelR = *channelRR;
-
-    deChannel* channelGG = image.getChannel(1);
-    if (!channelGG)
-    {
-        return false;
-    }
-    deChannel& channelG = *channelGG;
-
-    deChannel* channelBB = image.getChannel(2);
-    if (!channelBB)
-    {
-        return false;
-    }
-    deChannel& channelB = *channelBB;
+    deValue* pixels0 = image.startWriteStatic(0);
+    deValue* pixels1 = image.startWriteStatic(1);
+    deValue* pixels2 = image.startWriteStatic(2);
 
     int pos = 0;
-
-    image.setColorSpace(deColorSpaceRGB);
 
     unsigned char* data = fileImage.GetData();
 
@@ -185,15 +170,20 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace co
             p++;
             deValue b = data[p] / 255.0; 
             p++;
-            channelR.setValue(pos, r );
-            channelG.setValue(pos, g );
-            channelB.setValue(pos, b );
+            pixels0[pos] = r;
+            pixels1[pos] = g;
+            pixels2[pos] = b;
             pos++;
         }
     }
 
     logInfo("loadJPEG " + fileName + " done");
 
+    image.finishWriteStatic(0);
+    image.finishWriteStatic(1);
+    image.finishWriteStatic(2);
+
+    image.unlock();
     return true;
 }
 
@@ -217,6 +207,8 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image, deColorSpace co
     }
     tdata_t buf;
 
+    image.lock();
+
     int w;
     int h;
     uint16 bps;
@@ -232,32 +224,11 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image, deColorSpace co
     deSize size(w, h);
     image.setSize(size);
 
-    deChannel* channelRR = image.getChannel(0);
-    if (!channelRR)
-    {
-        return false;
-    }
-    deChannel& channelR = *channelRR;
-
-    deChannel* channelGG = image.getChannel(1);
-    if (!channelGG)
-    {
-        return false;
-    }
-    deChannel& channelG = *channelGG;
-
-    deChannel* channelBB = image.getChannel(2);
-    if (!channelBB)
-    {
-        return false;
-    }
-    deChannel& channelB = *channelBB;
-
     image.setColorSpace(deColorSpaceRGB);
 
-    deValue* pixelsR = channelR.getPixels();
-    deValue* pixelsG = channelG.getPixels();
-    deValue* pixelsB = channelB.getPixels();
+    deValue* pixelsR = image.startWriteStatic(0);
+    deValue* pixelsG = image.startWriteStatic(1);
+    deValue* pixelsB = image.startWriteStatic(2);
 
     int pos = 0;
     int y;
@@ -305,6 +276,11 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image, deColorSpace co
         }
     }
 
+    image.finishWriteStatic(0);
+    image.finishWriteStatic(1);
+    image.finishWriteStatic(2);
+    image.unlock();
+
     _TIFFfree(buf);
     TIFFClose(tif);
     logInfo("loadTIFF " + fileName + " done");
@@ -349,5 +325,18 @@ void saveImage(const std::string& fileName, const deImage& image, const std::str
             saveJPEG(fileName, *r, *g, *b, image.getChannelSize());
         }            
     }
+}
+
+bool loadImage(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
+{
+    if (loadTIFF(fileName, image, colorSpace))
+    {
+        return true;
+    }
+    if (loadJPEG(fileName, image, colorSpace))
+    {
+        return true;
+    }
+    return false;
 }
 

@@ -16,24 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_IMAGE_IO_H
-#define _DE_IMAGE_IO_H
+#ifndef _DE_TEST_IMAGE_H
+#define _DE_TEST_IMAGE_H
 
-#include <string>
-#include "size.h"
-#include "channel.h"
-#include "color_space.h"
 class deStaticImage;
-class deImage;
-class deChannelManager;
 
-void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size);
-void saveTIFF(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size);
-
-bool loadImage(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
-
-bool loadPPM(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
-
-void saveImage(const std::string& fileName, const deImage& image, const std::string& type, deChannelManager& previewChannelManager);
+void generateTestImage(deStaticImage& image, int s);
 
 #endif

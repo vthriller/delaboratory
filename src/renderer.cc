@@ -82,6 +82,7 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
 {
     if (channelManager.isImageEmpty())
     {
+        logError("image is empty");
         return false;
     }
 
@@ -96,6 +97,7 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
 
     if (view < 0)
     {
+        logError("view < 0");
         mutex.unlock();
         return false;
     }

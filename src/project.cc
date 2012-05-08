@@ -32,7 +32,6 @@
 #include "view_mode_panel.h"
 #include <sstream>
 #include "layer_factory.h"
-#include "fractal.h"
 #include "xml.h"
 #include "image_area_panel.h"
 #include "memory_info_frame.h"
@@ -50,6 +49,7 @@
 #include "operation_processor.h"
 #include "main_window.h"
 #include "conversion_processor.h"
+#include "test_image.h"
 
 #define ICC_MESSAGE 0
 
@@ -175,6 +175,20 @@ void deProject::freeImage()
 
 void deProject::setTestImage(int s)
 {
+    if (rawModule.isActive())
+    {
+        wxMessageBox(_T("RAW module is already active"));
+        return;
+    }
+
+    generateTestImage(sourceImage, s);
+    if (imageAreaPanel)
+    {
+        imageAreaPanel->updateSize(true);
+    }        
+    resetLayerStack(sourceImage.getColorSpace());
+
+/*
     freeImage();
 
     deSize size(s, s);
@@ -190,12 +204,7 @@ void deProject::setTestImage(int s)
     imageFileName = "delaboratory_test_image";
     onImageNameUpdate();
 
-    previewChannelManager.destroyAllChannels();
-    if (imageAreaPanel)
-    {
-        imageAreaPanel->updateSize(true);
-    }        
-    layerProcessor.updateAllImages(true);
+    */
 }
 
 void deProject::resetLayerStack(deColorSpace colorSpace)
@@ -593,12 +602,11 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
     }
     else
     {
-        if (!loadTIFF(fileName, sourceImage, colorSpace))
+        logInfo("trying JPEG/TIFF image " + fileName);
+        if (!loadImage(fileName, sourceImage, colorSpace))
         {
-            if (!loadJPEG(fileName, sourceImage, colorSpace))
-            {
-                return false;
-            }
+            logInfo("JPEG/TIFF image also failed");
+            return false;
         }
     }            
 

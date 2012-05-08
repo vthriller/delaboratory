@@ -90,3 +90,8 @@ bool deRawModule::updateRawLoading(bool& failure)
 
     return result;
 }
+
+bool deRawModule::isActive() const
+{
+    return (loader);
+}

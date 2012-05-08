@@ -64,7 +64,7 @@ bool deSourceImageLayer::updateMainImageNotThreadedWay()
     for (channel = 0; channel < 3; channel++)
     {
         mainLayerImage.enableChannel(channel);
-        const deValue* source = sourceImage.getChannel(channel)->getPixels();
+        const deValue* source = sourceImage.startReadStatic(channel);
         deValue* destination = mainLayerImage.startWrite(channel);
 
         if ((ss == ds) && (z_x1 == 0.0) && (z_y1 == 0.0) && (z_x2 == 1.0) && (z_y2 == 1.0))
@@ -79,6 +79,7 @@ bool deSourceImageLayer::updateMainImageNotThreadedWay()
         }
 
         mainLayerImage.finishWrite(channel);
+        sourceImage.finishReadStatic(channel);
     }
 
     return true;

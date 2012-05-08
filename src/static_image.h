@@ -20,6 +20,7 @@
 #define _DE_STATIC_IMAGE_H
 
 #include "color_space.h"
+#include "mutex_read_write.h"
 #include "size.h"
 #include "mutex.h"
 #include <vector>
@@ -30,6 +31,7 @@ class deStaticImage
     private:
         deColorSpace colorSpace;
         std::vector<deChannel*> channels;
+        std::vector<deMutexReadWrite*> mutexes;
         deSize size;
         mutable deMutex mutex;
         std::string info;
@@ -45,7 +47,10 @@ class deStaticImage
         void setColorSpace(deColorSpace c);
         deColorSpace getColorSpace() const;
 
-        deChannel* getChannel(int index);
+        const deValue* startReadStatic(int index);
+        deValue* startWriteStatic(int index);
+        void finishReadStatic(int index);
+        void finishWriteStatic(int index);
 
         void setSize(const deSize& _size);
         deSize getSize() const;
