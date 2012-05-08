@@ -54,3 +54,10 @@ bool deApplyOriginalLayer::updateMainImageSingleChannel(int i)
 
     return true;
 }
+
+void deApplyOriginalLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
+{
+    deLayerWithBlending::updateChannelUsage(channelUsage, layerIndex);
+
+    getOriginalImage().updateChannelUsage(channelUsage, layerIndex);
+}
