@@ -33,7 +33,7 @@ class deChannelManager
 {
     private:
         deSize channelSize;
-        mutable deMutex mutex;
+        deMutex mutex;
 
         std::vector<deChannel*> channels;
         std::vector<deMutexReadWrite*> mutexes;
@@ -42,9 +42,6 @@ class deChannelManager
         deChannelManager(const deChannelManager& m);
         deChannelManager& operator =(const deChannelManager& m);
 
-        void lock() const;
-        void unlock() const;
-        
     public:
         deChannelManager();
         virtual ~deChannelManager();

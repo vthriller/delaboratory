@@ -105,6 +105,8 @@ bool deHistogram::render(unsigned char* data, int sizeW, int sizeH, unsigned cha
         return false;
     }
 
+//    mm *= 0.1;
+
     unsigned char g3 = 230;
 
     int x;
@@ -117,6 +119,10 @@ bool deHistogram::render(unsigned char* data, int sizeW, int sizeH, unsigned cha
         {
             int hh = get(xx);
             int h = sizeH * hh / mm;
+            if (h > sizeH)
+            {
+                h = sizeH;
+            }
             for (y = 0; y < sizeH - h; y++)
             {
                 data[3*(y*sizeW+x)] = g1;

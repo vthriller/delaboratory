@@ -40,17 +40,13 @@ deChannelManager::~deChannelManager()
 
 void deChannelManager::setChannelSize(const deSize& size)
 {
-    lock();
-
     channelSize = size;
     destroyAllChannels();
-
-    unlock();
 }
 
 int deChannelManager::reserveNewChannel()
 {
-    lock();
+    mutex.lock();
 
     deChannel* channel = new deChannel();
     channel->allocate(channelSize.getN());
@@ -62,7 +58,7 @@ int deChannelManager::reserveNewChannel()
         trashed.erase(c);
         channels[c] = channel;
         logInfo("reused trashed channel " + str(c));
-        unlock();
+        mutex.unlock();
         return c;
     }
     else
@@ -71,7 +67,7 @@ int deChannelManager::reserveNewChannel()
         mutexes.push_back(new deMutexReadWrite(4));
         int c = channels.size() - 1;
         logInfo("added channel " + str(c));
-        unlock();
+        mutex.unlock();
         return c;
     }        
 
@@ -79,8 +75,20 @@ int deChannelManager::reserveNewChannel()
 
 void deChannelManager::freeChannel(int index)
 {
-    lock();
+    if (index < 0)
+    {
+        logError("freeChannel index < 0");
+        return;
+    } 
+    else if ((unsigned int)index >= channels.size())
+    {
+        int s = channels.size();
+        logError("freeChannel index >= " + str(s));
+        return;
+    }
 
+
+    mutex.lock();
     mutexes[index]->lockWrite();
 
     assert(index >= 0);
@@ -91,45 +99,48 @@ void deChannelManager::freeChannel(int index)
         delete channels[index];
         channels[index] = NULL;
         trashed.insert(index);
+        logInfo("destroyed channel " + str(index));
     }        
     else
     {
     }
 
     mutexes[index]->unlockWrite();
+    mutex.unlock();
 
-    unlock();
 }
 
 deChannel* deChannelManager::getChannel(int index)
 {
     if (index < 0)
     {
+        logError("getChannel index < 0");
+        return NULL;
+    } 
+    else if ((unsigned int)index >= channels.size())
+    {
+        int s = channels.size();
+        logError("getChannel index >= " + str(s));
         return NULL;
     }
-    lock();
-    assert((unsigned int)index < channels.size());
+
+
     tryAllocateChannel(index);
     deChannel* c = channels[index];
-    unlock();
+
     return c;
 }
 
 void deChannelManager::destroyAllChannels()
 {
     logInfo("destroy all channels start");
-    lock();
 
     unsigned int i;
     for (i = 0; i < channels.size(); i++)
     {
-        if (channels[i])
-        {
-            tryDeallocateChannel(i);
-        }            
+        tryDeallocateChannel(i);
     }
 
-    unlock();
     logInfo("destroy all channels DONE");
 }
 
@@ -138,19 +149,8 @@ deSize deChannelManager::getChannelSizeFromChannelManager() const
     return channelSize;
 }
 
-void deChannelManager::lock() const
-{
-    mutex.lock();
-}
-
-void deChannelManager::unlock() const
-{
-    mutex.unlock();
-}
-
 int deChannelManager::getNumberOfAllocatedChannels() const
 {
-    lock();
     int n = 0;
     unsigned int i;
     for (i = 0; i < channels.size(); i++)
@@ -163,13 +163,11 @@ int deChannelManager::getNumberOfAllocatedChannels() const
             }
         }
     }
-    unlock();
     return n;
 }
 
 void deChannelManager::tryAllocateChannel(int index)
 {
-    lock();
 
     if (index < 0)
     {
@@ -181,21 +179,22 @@ void deChannelManager::tryAllocateChannel(int index)
         logError("tryAllocateChannel index >= " + str(s));
     }
 
+    mutex.lock();
+
     if ((channels[index]))
     {
         if (!channels[index]->isAllocated())
         {
-            logInfo("allocate channel " + str(index));
             channels[index]->allocate(channelSize.getN());
         }
     }
 
-    unlock();
+    mutex.unlock();
+
 }
 
 void deChannelManager::tryDeallocateChannel(int index)
 {
-    lock();
 
     if (index < 0)
     {
@@ -207,16 +206,18 @@ void deChannelManager::tryDeallocateChannel(int index)
         logError("tryDeallocateChannel index >= " + str(s));
     }
 
+    mutex.lock();
+
     if ((channels[index]))
     {
         if (channels[index]->isAllocated())
         {
-            logInfo("deallocate channel " + str(index));
             channels[index]->deallocate();
         }
     }
 
-    unlock();
+    mutex.unlock();
+
 }
 
 bool deChannelManager::isImageEmpty() const

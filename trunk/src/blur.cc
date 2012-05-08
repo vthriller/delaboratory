@@ -97,7 +97,6 @@ void gaussianBlur(deValue* source, deValue* destination, int n, int s, deValue* 
             j++;
         }
 
-
         destination[i] = result / sum;
     }
 }

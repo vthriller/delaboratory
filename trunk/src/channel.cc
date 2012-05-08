@@ -110,6 +110,7 @@ void deChannel::deallocate()
 void deChannel::allocate(int size)
 {
     assert(!pixels);
+    logInfo("allocate channel");
     try
     {
         pixels = new deValue [size];

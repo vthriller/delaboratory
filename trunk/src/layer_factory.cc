@@ -25,7 +25,6 @@
 #include "vignette_layer.h"
 #include "gaussian_blur_layer.h"
 #include "gaussian_blur_single_layer.h"
-//#include "apply_image_layer.h"
 #include "mixer_layer.h"
 #include "apply_luminance_layer.h"
 #include "equalizer_layer.h"

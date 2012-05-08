@@ -225,39 +225,9 @@ bool deRawLoader::load(bool& failure)
     deSize size(w, h);
     image.setSize(size);
 
-    deChannel* channelRR = image.getChannel(0);
-    if (!channelRR)
-    {
-        image.unlock();
-        logError("no channelRR");
-        failure = true;
-        return false;
-    }
-    deChannel& channelR = *channelRR;
-
-    deChannel* channelGG = image.getChannel(1);
-    if (!channelGG)
-    {
-        image.unlock();
-        logError("no channelGG");
-        failure = true;
-        return false;
-    }
-    deChannel& channelG = *channelGG;
-
-    deChannel* channelBB = image.getChannel(2);
-    if (!channelBB)
-    {
-        image.unlock();
-        logError("no channelBB");
-        failure = true;
-        return false;
-    }
-    deChannel& channelB = *channelBB;
-
-    deValue* pixels0 = channelR.getPixels();
-    deValue* pixels1 = channelG.getPixels();
-    deValue* pixels2 = channelB.getPixels();
+    deValue* pixels0 = image.startWriteStatic(0);
+    deValue* pixels1 = image.startWriteStatic(1);
+    deValue* pixels2 = image.startWriteStatic(2);
 
     deValue scale = 1.0 / max;
 
@@ -382,6 +352,10 @@ bool deRawLoader::load(bool& failure)
         offset = left;
 
     }
+
+    image.finishWriteStatic(0);
+    image.finishWriteStatic(1);
+    image.finishWriteStatic(2);
 
     logInfo("pos: " + str(pos) + " n: " + str(n) + " steps: " + str(steps) + " maxRead: " + str(maxRead));
     if (input->Eof())

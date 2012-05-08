@@ -48,6 +48,8 @@ class deRawModule
 
         bool updateRawLoading(bool& failure);
 
+        bool isActive() const;
+
 
 };
 

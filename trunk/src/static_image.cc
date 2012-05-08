@@ -20,6 +20,8 @@
 #include "channel.h"
 #include "logger.h"
 #include "color_space_utils.h"
+#include "str.h"
+
 
 deStaticImage::deStaticImage()
 :colorSpace(deColorSpaceInvalid),
@@ -31,6 +33,7 @@ deStaticImage::deStaticImage()
     {
         deChannel* c = new deChannel();
         channels.push_back(c);
+        mutexes.push_back(new deMutexReadWrite(4));
         channels[i]->allocate(size.getN());
     }
 }
@@ -45,32 +48,17 @@ void deStaticImage::setColorSpace(deColorSpace c)
 
 deStaticImage::~deStaticImage()
 {
-    while (!channels.empty())
+    unsigned int i;
+    for (i = 0; i < channels.size(); i++)
     {
-        std::vector<deChannel*>::iterator i = channels.end();
-        i--;
-        delete *i;
-        channels.erase(i);
+        delete channels[i];
+        delete mutexes[i];
     }
 }
 
 deColorSpace deStaticImage::getColorSpace() const
 {
     return colorSpace;
-}
-
-deChannel* deStaticImage::getChannel(int index) 
-{
-    if (index < 0)
-    {
-        return NULL;
-    }
-    int n = 3;
-    if (index >= n)
-    {
-        return NULL;
-    }
-    return channels[index];
 }
 
 void deStaticImage::setSize(const deSize& _size)
@@ -107,4 +95,70 @@ void deStaticImage::unlock()
 void deStaticImage::setInfo(const std::string& s)
 {
     info = s;
+}
+
+const deValue* deStaticImage::startReadStatic(int index)
+{
+    int n = 3;
+    if (index < 0)
+    {
+        logError("deStaticImage::startReadStatic index: " + str(index));
+        return NULL;
+    }
+    if (index >= n)
+    {
+        logError("deStaticImage::startReadStatic index: " + str(index));
+        return NULL;
+    }
+    mutexes[index]->lockRead();
+    return channels[index]->getPixels();
+}
+
+deValue* deStaticImage::startWriteStatic(int index)
+{
+    int n = 3;
+    if (index < 0)
+    {
+        logError("deStaticImage::startWriteStatic index: " + str(index));
+        return NULL;
+    }
+    if (index >= n)
+    {
+        logError("deStaticImage::startWriteStatic index: " + str(index));
+        return NULL;
+    }
+    mutexes[index]->lockWrite();
+    return channels[index]->getPixels();
+}
+
+void deStaticImage::finishReadStatic(int index)
+{
+    int n = 3;
+    if (index < 0)
+    {
+        logError("deStaticImage::finishReadStatic index: " + str(index));
+        return;
+    }
+    if (index >= n)
+    {
+        logError("deStaticImage::finishReadStatic index: " + str(index));
+        return;
+    }
+    mutexes[index]->unlockRead();
+}
+
+void deStaticImage::finishWriteStatic(int index)
+{
+    int n = 3;
+    if (index < 0)
+    {
+        logError("deStaticImage::finishWriteStatic index: " + str(index));
+        return;
+    }
+    if (index >= n)
+    {
+        logError("deStaticImage::finishWriteStatic index: " + str(index));
+        return;
+    }
+    mutexes[index]->unlockWrite();
 }
