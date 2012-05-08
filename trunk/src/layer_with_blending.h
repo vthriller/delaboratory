@@ -29,7 +29,6 @@ class deLayerWithBlending:public deSwitchableLayer
         deImage imageBlendPass;
 
         virtual const deImage& getLayerImage() const;
-        virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
     protected:        
         virtual bool isChannelNeutral(int index) {return false;};
@@ -39,6 +38,8 @@ class deLayerWithBlending:public deSwitchableLayer
 
         void loadBlend(xmlNodePtr root);
         void saveBlend(xmlNodePtr root);
+
+        virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
     public:
         deLayerWithBlending(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);

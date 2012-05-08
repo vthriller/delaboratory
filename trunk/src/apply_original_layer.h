@@ -26,6 +26,8 @@ class deApplyOriginalLayer:public deLayerWithBlending
     private:
         virtual std::string getType() const {return "apply_original";};
 
+        virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
+
     public:
         deApplyOriginalLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
         virtual ~deApplyOriginalLayer();

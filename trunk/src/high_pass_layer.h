@@ -27,6 +27,8 @@ class deHighPassLayer:public deLayerWithBlending
         virtual std::string getType() const {return "high_pass";};
         deViewManager& viewManager;
 
+        virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
+
     public:
         deHighPassLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager);
         virtual ~deHighPassLayer();

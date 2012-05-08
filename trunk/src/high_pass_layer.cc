@@ -145,3 +145,11 @@ bool deHighPassLayer::updateMainImageNotThreadedWay()
 
     return true;                
 }            
+
+void deHighPassLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
+{
+    deLayerWithBlending::updateChannelUsage(channelUsage, layerIndex);
+
+    getOriginalImage().updateChannelUsage(channelUsage, layerIndex);
+}
+
