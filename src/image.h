@@ -24,6 +24,7 @@
 #include <map>
 class deChannelManager;
 #include "size.h"
+#include "mutex.h"
 
 class deImage
 {
@@ -32,6 +33,7 @@ class deImage
         int channelsVisible[MAX_COLOR_SPACE_SIZE];
         int channelsAllocated[MAX_COLOR_SPACE_SIZE];
         deChannelManager& channelManager;
+        mutable deMutex mutex;
 
         deImage(const deImage& i);
         deImage& operator = (const deImage& i);
