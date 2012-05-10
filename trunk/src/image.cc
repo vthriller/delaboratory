@@ -57,6 +57,8 @@ deImage::~deImage()
 
 void deImage::enableChannel(int n)
 {
+    mutex.lock();
+
     logInfo("enable channel " + str(n) + " in image");
     assert(n >= 0);
     assert(n < MAX_COLOR_SPACE_SIZE);
@@ -85,10 +87,14 @@ void deImage::enableChannel(int n)
     {
         channelManager.finishRead(v);
     }
+
+    mutex.unlock();
 }
 
 void deImage::disableChannel(int n, int c)
 {
+    mutex.lock();
+
     logInfo("disable channel " + str(n) + " in image, replace with " +str(c));
     assert(n >= 0);
     assert(n < MAX_COLOR_SPACE_SIZE);
@@ -108,6 +114,8 @@ void deImage::disableChannel(int n, int c)
     {
         channelManager.finishWrite(a);
     }
+
+    mutex.unlock();
 }
 
 int deImage::getChannelIndex(int n) const
@@ -162,6 +170,8 @@ void deImage::updateChannelUsage(std::map<int, int>& channelUsage, int index) co
 
 const deValue* deImage::startRead(int channel) const
 {
+    mutex.lock();
+
     logInfo("image start read " + str(channel));
     if (channel < 0)
     {
@@ -195,10 +205,14 @@ void deImage::finishRead(int channel) const
     }
     int index = channelsVisible[channel];
     channelManager.finishRead(index);
+
+    mutex.unlock();
 }
 
 deValue* deImage::startWrite(int channel) 
 {
+    mutex.lock();
+
     logInfo("image start write " + str(channel));
     if (channel < 0)
     {
@@ -239,6 +253,8 @@ void deImage::finishWrite(int channel)
     }
     int index = channelsVisible[channel];
     channelManager.finishWrite(index);
+
+    mutex.unlock();
 }    
 
 const deSize deImage::getChannelSize() const
