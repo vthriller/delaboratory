@@ -179,11 +179,15 @@ void deSamplerPanel::update()
         deColorSpace oc = image.getColorSpace();
         int on = getColorSpaceSize(oc);
 
+        logInfo("reading values for sampler");
         int i;
         for (i = 0; i < on; i++)
         {
             const deValue* values = image.startRead(i);
-            orig[i] = values[p];
+            if (values)
+            {
+                orig[i] = values[p];
+            }                
             image.finishRead(i);
         }
 
