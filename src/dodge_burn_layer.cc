@@ -198,7 +198,7 @@ bool deDodgeBurnLayer::processDB(const deChannel& sourceChannel, deChannel& chan
     }
     catch (std::bad_alloc)
     {
-        logError("ERROR allocating memory in dodge/burn");
+        logError("allocating memory in dodge/burn");
         if (blurMap)
         {
             delete [] blurMap;

@@ -73,7 +73,7 @@ void saveTIFF(const std::string& fileName, const deChannel& channelR, const deCh
 
     if (!tif)
     {
-        logError("ERROR writing " + fileName);
+        logError("writing " + fileName);
         return;
     }
 
