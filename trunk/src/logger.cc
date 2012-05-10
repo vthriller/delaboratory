@@ -125,12 +125,13 @@ void logInfo(const std::string& message)
 
 void logError(const std::string& message)
 {
+    const std::string m = "ERROR " + message;
     static deMutex mutex;
     mutex.lock();
-    std::cout << message << std::endl;
+    std::cout << m << std::endl;
     mutex.unlock();
 #ifdef LOGGING    
-    deLogger::getLogger().log(message);
+    deLogger::getLogger().log(m);
 #endif    
 }
 

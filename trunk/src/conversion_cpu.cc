@@ -79,6 +79,12 @@ bool deConversionCPU::renderImage1(const deImage& image, deConversionCPU::deFunc
     int n = image.getChannelSize().getN();
 
     const deValue* s0 = image.startRead(0);
+    if (!s0)
+    {
+        logError("NULL in renderImage1");
+        image.finishRead(0);
+        return false;
+    }
 
     int i;
     int pos = 0;
@@ -112,6 +118,14 @@ bool deConversionCPU::renderImage3(const deImage& image, deConversionCPU::deFunc
     const deValue* s0 = image.startRead(0);
     const deValue* s1 = image.startRead(1);
     const deValue* s2 = image.startRead(2);
+    if ((!s0) || (!s1) || (!s2))
+    {
+        logError("NULL in renderImage3");
+        image.finishRead(0);
+        image.finishRead(1);
+        image.finishRead(2);
+        return false;
+    }
 
     int i;
     int pos = 0;
@@ -150,6 +164,16 @@ bool deConversionCPU::renderImage4(const deImage& image, deConversionCPU::deFunc
     const deValue* s1 = image.startRead(1);
     const deValue* s2 = image.startRead(2);
     const deValue* s3 = image.startRead(3);
+
+    if ((!s0) || (!s1) || (!s2) || (!s3))
+    {
+        logError("NULL in renderImage4");
+        image.finishRead(0);
+        image.finishRead(1);
+        image.finishRead(2);
+        image.finishRead(3);
+        return false;
+    }
 
     int i;
     int pos = 0;

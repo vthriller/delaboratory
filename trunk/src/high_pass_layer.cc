@@ -61,7 +61,7 @@ bool deHighPassLayer::updateMainImageNotThreadedWay()
     }
     catch (std::bad_alloc)
     {
-        logError("ERROR allocating memory in USM");
+        logError("allocating memory in USM");
         if (mask)
         {
             delete [] mask;

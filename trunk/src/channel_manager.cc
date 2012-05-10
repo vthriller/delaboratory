@@ -26,16 +26,19 @@
 deChannelManager::deChannelManager()
 :channelSize(0,0)
 {
+    logInfo("channel manager constructor");
 }
 
 deChannelManager::~deChannelManager()
 {
+    logInfo("channel manager destructor");
     unsigned int i;
     for (i = 0; i < channels.size(); i++)
     {
         freeChannel(i);
         delete mutexes[i];
     }
+    logInfo("channel manager destructor DONE");
 }
 
 void deChannelManager::setChannelSize(const deSize& size)
@@ -46,7 +49,9 @@ void deChannelManager::setChannelSize(const deSize& size)
 
 int deChannelManager::reserveNewChannel()
 {
+    logInfo("reserveNewChannel before lock");
     mutex.lock();
+    logInfo("reserveNewChannel after lock");
 
     deChannel* channel = new deChannel();
     channel->allocate(channelSize.getN());
@@ -59,6 +64,7 @@ int deChannelManager::reserveNewChannel()
         channels[c] = channel;
         logInfo("reused trashed channel " + str(c));
         mutex.unlock();
+        logInfo("reserveNewChannel after unlock");
         return c;
     }
     else
@@ -68,6 +74,7 @@ int deChannelManager::reserveNewChannel()
         int c = channels.size() - 1;
         logInfo("added channel " + str(c));
         mutex.unlock();
+        logInfo("reserveNewChannel after unlock");
         return c;
     }        
 
@@ -77,19 +84,21 @@ void deChannelManager::freeChannel(int index)
 {
     if (index < 0)
     {
-        logError("freeChannel index < 0");
+        logInfo("freeChannel index < 0");
         return;
     } 
     else if ((unsigned int)index >= channels.size())
     {
         int s = channels.size();
-        logError("freeChannel index >= " + str(s));
+        logInfo("freeChannel index >= " + str(s));
         return;
     }
 
-
+    logInfo("freeChannel " + str(index) + " before lock");
     mutex.lock();
+    logInfo("freeChannel before lockWrite");
     mutexes[index]->lockWrite();
+    logInfo("freeChannel after locks");
 
     assert(index >= 0);
     assert((unsigned int)index < channels.size());
@@ -107,6 +116,7 @@ void deChannelManager::freeChannel(int index)
 
     mutexes[index]->unlockWrite();
     mutex.unlock();
+    logInfo("freeChannel after unlocks");
 
 }
 
@@ -138,7 +148,10 @@ void deChannelManager::destroyAllChannels()
     unsigned int i;
     for (i = 0; i < channels.size(); i++)
     {
+        logInfo("destroy channel " + str(i));
+        mutexes[i]->lockWrite();
         tryDeallocateChannel(i);
+        mutexes[i]->unlockWrite();
     }
 
     logInfo("destroy all channels DONE");
@@ -172,14 +185,18 @@ void deChannelManager::tryAllocateChannel(int index)
     if (index < 0)
     {
         logError("tryAllocateChannel index < 0");
+        return;
     } 
     else if ((unsigned int)index >= channels.size())
     {
         int s = channels.size();
         logError("tryAllocateChannel index >= " + str(s));
+        return;
     }
 
+    logInfo("tryAllocateChannel before lock");
     mutex.lock();
+    logInfo("tryAllocateChannel after lock");
 
     if ((channels[index]))
     {
@@ -190,6 +207,7 @@ void deChannelManager::tryAllocateChannel(int index)
     }
 
     mutex.unlock();
+    logInfo("tryAllocateChannel after unlock");
 
 }
 
@@ -199,14 +217,18 @@ void deChannelManager::tryDeallocateChannel(int index)
     if (index < 0)
     {
         logError("tryDeallocateChannel index < 0");
+        return;
     } 
     else if ((unsigned int)index >= channels.size())
     {
         int s = channels.size();
         logError("tryDeallocateChannel index >= " + str(s));
+        return;
     }
 
+    logInfo("tryDellocateChannel before lock");
     mutex.lock();
+    logInfo("tryDellocateChannel after lock");
 
     if ((channels[index]))
     {
@@ -217,6 +239,7 @@ void deChannelManager::tryDeallocateChannel(int index)
     }
 
     mutex.unlock();
+    logInfo("tryDellocateChannel after unlock");
 
 }
 

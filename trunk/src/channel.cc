@@ -118,7 +118,7 @@ void deChannel::allocate(int size)
     }
     catch (std::bad_alloc)
     {
-        logError("ERROR allocating channel");
+        logError("allocating channel");
         pixels = NULL;
         magicSize = 0;
     }

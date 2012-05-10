@@ -245,7 +245,7 @@ bool blurChannel(const deValue* source, deValue* destination, deSize size, deVal
     }
     catch (std::bad_alloc)
     {
-        logError("ERROR allocating memory in blur");
+        logError("allocating memory in blur");
         if (tmp)
         {
             delete [] tmp;

@@ -697,6 +697,7 @@ void deLayerProcessor::onGUIUpdate()
 
 void deLayerProcessor::removeTopLayerInLayerProcessor()
 {
+    logInfo("removeTopLayer");
     lockHistogram();
     lockPrepareImage();
     lockUpdateImage();
@@ -717,10 +718,12 @@ void deLayerProcessor::removeTopLayerInLayerProcessor()
     unlockUpdateImage();
     unlockPrepareImage();
     unlockHistogram();
+    logInfo("removeTopLayer DONE");
 }    
 
 void deLayerProcessor::removeAllLayers()
 {
+    logInfo("removeAllLayers");
     lockHistogram();
     lockPrepareImage();
     lockUpdateImage();
@@ -735,6 +738,7 @@ void deLayerProcessor::removeAllLayers()
     unlockUpdateImage();
     unlockPrepareImage();
     unlockHistogram();
+    logInfo("removeAllLayers DONE");
 }    
 
 void deLayerProcessor::addLayerInLayerProcessor(deBaseLayer* layer, int layerIndex)
@@ -845,6 +849,7 @@ void deLayerProcessor::setPreviewSize(const deSize& size)
 
 void deLayerProcessor::onImageLoad()
 {
+    logInfo("onImageLoad");
     lockHistogram();
     lockPrepareImage();
     lockUpdateImage();
@@ -854,6 +859,7 @@ void deLayerProcessor::onImageLoad()
     unlockUpdateImage();
     unlockPrepareImage();
     unlockHistogram();
+    logInfo("onImageLoad DONE");
 }
 
 void deLayerProcessor::render(deCanvas& canvas)

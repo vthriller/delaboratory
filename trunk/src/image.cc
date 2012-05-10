@@ -212,6 +212,13 @@ deValue* deImage::startWrite(int channel)
     }
 
     int index = channelsVisible[channel];
+    int index2 = channelsAllocated[channel];
+    if (index != index2)
+    {
+        logError("image start write - can't write to not own channel - channel visible:" + str(index) + " channel allocated: " + str(index2));
+        return NULL;
+    }
+
     deValue* values = channelManager.startWrite(index);
 
     return values;

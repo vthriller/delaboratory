@@ -93,7 +93,7 @@ bool deShadowsHighlightsLayer::processSH(const deChannel& sourceChannel, deChann
     }
     catch (std::bad_alloc)
     {
-        logError("ERROR allocating memory in shadows/highlights");
+        logError("allocating memory in shadows/highlights");
         if (blurMap)
         {
             delete [] blurMap;

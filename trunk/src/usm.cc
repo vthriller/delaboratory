@@ -89,7 +89,7 @@ bool unsharpMask(const deValue* source, deValue* destination, deSize& size, deVa
     }
     catch (std::bad_alloc)
     {
-        logError("ERROR allocating memory in USM");
+        logError("allocating memory in USM");
         if (mask)
         {
             delete [] mask;

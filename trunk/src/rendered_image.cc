@@ -72,13 +72,13 @@ bool deRenderedImage::render(deCanvas& canvas)
 {
     if (error)
     {
-        logError("ERROR can't render");
+        logError("can't render");
         return false;
     }
 
     if (!internalData)
     {
-        logError("ERROR can't render - no internal data");
+        logError("can't render - no internal data");
         return false;
     }
 
@@ -96,7 +96,7 @@ bool deRenderedImage::render(deCanvas& canvas)
     wxNativePixelData bitmapData(*(bitmapWX->getBitmap()));
     if (!bitmapData)
     {
-        logError("ERROR can't render - wxNativePixelData doesn't work");
+        logError("can't render - wxNativePixelData doesn't work");
         return false;
     }
 
