@@ -16,21 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_ACTION_FRAME_H
-#define _DE_ACTION_FRAME_H
+#ifndef _DE_PROPERTY_MIXER_H
+#define _DE_PROPERTY_MIXER_H
 
-#include "layer_frame.h"
-#include "value.h"
-#include "layer.h"
+#include "property.h"
+#include "mixer.h"
+#include <vector>
+class deMixer;
 
-class deActionFrame:public deLayerFrameOld
+class dePropertyMixer:public deProperty
 {
     private:
-    public:
-        deActionFrame(wxWindow *parent, deLayerWithBlending& _layer, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deActionFrame();
+        std::vector<deMixer*> mixers;
+        int size;
 
-        virtual bool onImageClick(deValue x, deValue y) {return false;};
+    public:
+        dePropertyMixer(const std::string& _name, int _size);
+        virtual ~dePropertyMixer();
+
+        virtual void save(xmlNodePtr root) const {};
+        virtual void load(xmlNodePtr root) {};
+
+        const deMixer* getMixer(int index) const;
+        deMixer* getMixer(int index);
 
 };
 

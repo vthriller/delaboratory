@@ -26,6 +26,7 @@ class dePropertyNumericUI;
 class dePropertyChoiceUI;
 class dePropertyBooleanUI;
 class dePropertyLevelsUI;
+class dePropertyMixerUI;
 
 class deGenericLayerFrame:public deLayerFrame
 {
@@ -34,6 +35,7 @@ class deGenericLayerFrame:public deLayerFrame
         std::vector<dePropertyChoiceUI*> choices;
         std::vector<dePropertyBooleanUI*> booleans;
         std::vector<dePropertyLevelsUI*> levels;
+        std::vector<dePropertyMixerUI*> mixers;
 
         deLayerProcessor& layerProcessor;
     public:

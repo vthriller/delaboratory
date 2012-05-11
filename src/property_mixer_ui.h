@@ -16,22 +16,34 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_ACTION_FRAME_H
-#define _DE_ACTION_FRAME_H
+#ifndef _DE_PROPERTY_MIXER_UI_H
+#define _DE_PROPERTY_MIXER_UI_H
 
-#include "layer_frame.h"
-#include "value.h"
-#include "layer.h"
+class dePropertyMixer;
+class deLayerProcessor;
+class deWindow;
+class dePropertyMixerUIImpl;
+class deBaseLayerWithSource;
 
-class deActionFrame:public deLayerFrameOld
+class dePropertyMixerUI
 {
     private:
+        dePropertyMixer& property;
+        deLayerProcessor& layerProcessor;
+
+        int layerIndex;
+
+        deBaseLayerWithSource& layer;
+
+        dePropertyMixerUIImpl* impl;
+
     public:
-        deActionFrame(wxWindow *parent, deLayerWithBlending& _layer, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deActionFrame();
+        dePropertyMixerUI(deWindow& window, dePropertyMixer& _property, deLayerProcessor& _layerProcessor, int _layerIndex, deBaseLayerWithSource& _layer, int width);
+        virtual ~dePropertyMixerUI();
 
-        virtual bool onImageClick(deValue x, deValue y) {return false;};
+        deWindow& getWindow();
 
-};
+        void setFromProperty();
+};        
 
 #endif

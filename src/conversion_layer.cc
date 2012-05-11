@@ -51,7 +51,7 @@ deConversionLayer::deConversionLayer(deColorSpace _colorSpace, deChannelManager&
         createPropertyNumeric("GCR Key max", 0, 1);
         reset->addNumericValue("GCR Key max", 1.0);
         createPropertyNumeric("GCR CMY min", 0, 3);
-        reset->addNumericValue("GCR CMY min", 1.0);
+        reset->addNumericValue("GCR CMY min", 0.0);
     }
 
     if (colorSpace == deColorSpaceBW)

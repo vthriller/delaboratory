@@ -24,7 +24,7 @@
 #include "str.h"
 #include "color_space_utils.h"
 
-deMixerEditor::deMixerEditor(wxWindow *parent, deLayerOld& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
+deMixerEditor::deMixerEditor(wxWindow *parent, deLayerWithBlending& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex)
 :deActionFrame(parent, _layer, _frameManager, _layerIndex)
 {
 

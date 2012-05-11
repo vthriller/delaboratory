@@ -20,7 +20,6 @@
 
 #include "curves_editor.h"
 #include "mixer_editor.h"
-//#include "apply_image_frame.h"
 #include "equalizer_frame.h"
 #include "basic_frame.h"
 #include "dodge_burn_frame.h"
@@ -44,15 +43,9 @@ deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& 
 
     if (type == "mixer")
     {
-        deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
+        deLayerWithBlending& al = dynamic_cast<deLayerWithBlending&>(layer);
         return new deMixerEditor(parent, al, layerProcessor, frameManager, layerIndex);
     }        
-
-/*    if (type == "apply_image")
-    {
-        deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
-        return new deApplyImageFrame(parent, al, layerProcessor, frameManager, layerIndex);
-    }        */
 
     if ((type == "equalizer8") || (type == "equalizer16"))
     {
@@ -72,33 +65,11 @@ deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& 
         return new deDodgeBurnFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
 
-/*
-    if ((type == "vignette1") || (type == "vignette2"))
-    {
-        deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
-        return new deVignetteFrame(parent, al, layerProcessor, frameManager, layerIndex);
-    }        
-    */
-
     if (type == "shadows_highlights")
     {
         deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
         return new deShadowsHighlightsFrame(parent, al, layerProcessor, frameManager, layerIndex);
     }        
-
-/*
-    if (type == "conversion_bw")
-    {
-        deConversionBWLayer& bwl = dynamic_cast<deConversionBWLayer&>(layer);
-        return new deMixerBWEditor(parent, bwl, layerProcessor, frameManager, layerIndex);
-    }        
-
-    if (type == "conversion_bw2hue")
-    {
-        deConversionBW2HueLayer& bwl = dynamic_cast<deConversionBW2HueLayer&>(layer);
-        return new deHueSaturationFrame(parent, bwl, layerProcessor, frameManager, layerIndex);
-    }        
-    */
 
     return NULL;
 }        

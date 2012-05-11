@@ -22,11 +22,8 @@
 #include "layer.h"
 #include "mixer.h"
 
-class deMixerLayer:public deLayerOld
+class deMixerLayer:public deLayerWithBlending
 {
-    private:
-        std::vector<deMixer*> mixers;
-
     protected:
         virtual std::string getType() const {return "mixer";};
         virtual std::string getLabel() const {return "channel mixer";};
