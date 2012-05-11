@@ -36,8 +36,8 @@ deVignetteLayer::deVignetteLayer(deColorSpace _colorSpace, deChannelManager& _ch
 
     dePreset* reset = createPreset("reset");
 
-    createPropertyNumeric("radius", 0.02, 1.5);
-    reset->addNumericValue("radius", 0.6);
+    createPropertyNumeric("radius", 0.3, 3.0);
+    reset->addNumericValue("radius", 1.0);
 
     createPropertyNumeric("aspect", -0.9, 0.9);
     reset->addNumericValue("aspect", 0.0);

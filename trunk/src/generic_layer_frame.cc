@@ -23,8 +23,10 @@
 #include "property_choice_ui.h"
 #include "property_boolean_ui.h"
 #include "property_levels_ui.h"
+#include "property_mixer_ui.h"
 #include "property_numeric.h"
 #include "property_levels.h"
+#include "property_mixer.h"
 #include "property_boolean.h"
 #include "preset_button.h"
 #include "layer_processor.h"
@@ -107,6 +109,17 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
             dePropertyLevelsUI* p = new dePropertyLevelsUI(window, *propertyLevels, _layerProcessor, _index, layerWithSource, width);
 
             levels.push_back(p);
+
+            addWidget(p->getWindow());
+        }            
+
+        dePropertyMixer* propertyMixer = dynamic_cast<dePropertyMixer*>(property);
+        if (propertyMixer)
+        {
+            deBaseLayerWithSource& layerWithSource = dynamic_cast<deBaseLayerWithSource&>(layer);
+            dePropertyMixerUI* p = new dePropertyMixerUI(window, *propertyMixer, _layerProcessor, _index, layerWithSource, width);
+
+            mixers.push_back(p);
 
             addWidget(p->getWindow());
         }            

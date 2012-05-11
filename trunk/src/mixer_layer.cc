@@ -22,28 +22,19 @@
 #include "frame_factory.h"
 #include "color_space_utils.h"
 #include "channel_manager.h"
+#include "property_mixer.h"
 
 deMixerLayer::deMixerLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayerOld(_colorSpace,  _sourceLayer, _layerStack, _channelManager)
+:deLayerWithBlending(_colorSpace, _channelManager,  _sourceLayer, _layerStack)
 {
     int n = getColorSpaceSize(colorSpace);
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        mixers.push_back( new deMixer(n));
-        mixers[i]->reset(i);
-    }
+
+    properties.push_back(new dePropertyMixer("mixer", n));
 
 }
 
 deMixerLayer::~deMixerLayer()
 {
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        delete mixers[i];
-    }
 }
 
 bool deMixerLayer::updateMainImageSingleChannel(int channel)
@@ -61,11 +52,18 @@ bool deMixerLayer::updateMainImageSingleChannel(int channel)
     int c = mainLayerImage.getChannelIndex(channel);
     deChannel* destination = channelManager.getChannel(c);
 
+    dePropertyMixer* p = dynamic_cast<dePropertyMixer*>(getProperty("mixer"));
+    if (!p)
+    {
+        logError("no property mixer");
+        return false;
+    }
+
     if ((destination))
     {
         int channelSize = mainLayerImage.getChannelSize().getN();
     
-        mixers[channel]->process(sourceImage, *destination, channelSize);
+        p->getMixer(channel)->process(sourceImage, *destination, channelSize);
     }
 
     return true;
@@ -74,31 +72,47 @@ bool deMixerLayer::updateMainImageSingleChannel(int channel)
 
 deMixer* deMixerLayer::getMixer(int index)
 {
-    int n = getColorSpaceSize(colorSpace);
-    if ((index < 0) || (index >= n))
+    dePropertyMixer* p = dynamic_cast<dePropertyMixer*>(getProperty("mixer"));
+    if (!p)
     {
         return NULL;
     }
-    return mixers[index];
+    return p->getMixer(index);
 }
 
 bool deMixerLayer::isChannelNeutral(int index)
 {
-    return mixers[index]->isNeutral(index);
+    dePropertyMixer* p = dynamic_cast<dePropertyMixer*>(getProperty("mixer"));
+    if (!p)
+    {
+        return false;
+    }
+    return p->getMixer(index)->isNeutral(index);
 }    
 
 void deMixerLayer::setWeight(int s, int d, deValue value)
 {
-    mixers[d]->setWeight(s, value);
+    dePropertyMixer* p = dynamic_cast<dePropertyMixer*>(getProperty("mixer"));
+    if (!p)
+    {
+        return;
+    }
+    p->getMixer(d)->setWeight(s, value);
 }
 
 deValue deMixerLayer::getWeight(int s, int d)
 {
-    return mixers[d]->getWeight(s);
+    dePropertyMixer* p = dynamic_cast<dePropertyMixer*>(getProperty("mixer"));
+    if (!p)
+    {
+        return -1;
+    }
+    return p->getMixer(d)->getWeight(s);
 }
 
 void deMixerLayer::save(xmlNodePtr root)
 {
+/*
     saveCommon(root);
     saveBlend(root);
 
@@ -109,10 +123,12 @@ void deMixerLayer::save(xmlNodePtr root)
         xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("mixer"), NULL);
         mixers[i]->save(child);
     }
+    */
 }
 
 void deMixerLayer::load(xmlNodePtr root)
 {
+/*
     loadBlend(root);
 
     xmlNodePtr child = root->xmlChildrenNode;
@@ -127,6 +143,6 @@ void deMixerLayer::load(xmlNodePtr root)
         }
 
         child = child->next;
-    }
+    }*/
 }
 
