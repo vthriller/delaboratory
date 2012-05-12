@@ -19,10 +19,13 @@
 #include "gradient_panel.h"
 #include "conversion_processor.h"
 
-deColorPanelOld::deColorPanelOld(wxWindow* parent, wxSize _size, dePalette3* _palette, int style)
-:wxPanel(parent, wxID_ANY, wxDefaultPosition, _size, style), palette(_palette)
+deColorPanelOld::deColorPanelOld(wxWindow* parent, wxSize _size, int style)
+:wxPanel(parent, wxID_ANY, wxDefaultPosition, _size, style)
 {
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deColorPanelOld::click));
+    Connect(wxEVT_MOTION, wxMouseEventHandler(deColorPanelOld::hover));
+    Connect(wxEVT_ENTER_WINDOW, wxMouseEventHandler(deColorPanelOld::enter));
+    Connect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(deColorPanelOld::leave));
 }
 
 deColorPanelOld::~deColorPanelOld()
@@ -33,6 +36,22 @@ void deColorPanelOld::click(wxMouseEvent &event)
 {
 
 }
+
+void deColorPanelOld::hover(wxMouseEvent &event)
+{
+
+}
+
+void deColorPanelOld::enter(wxMouseEvent &event)
+{
+    SetBackgroundColour(wxColour(255 * r, 255 * g, 255 * b));
+}
+
+void deColorPanelOld::leave(wxMouseEvent &event)
+{
+    SetBackgroundColour(wxColour(100 * r, 100 * g, 100 * b));
+}
+
 
 void deColorPanelOld::setRGB(deValue rr, deValue gg, deValue bb)
 {
