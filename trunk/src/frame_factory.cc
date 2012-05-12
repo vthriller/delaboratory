@@ -41,11 +41,13 @@ deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& 
         return new deCurvesEditor(parent, al, layerProcessor, frameManager, layerIndex, channelManager);
     }        
 
+/*
     if (type == "mixer")
     {
         deLayerWithBlending& al = dynamic_cast<deLayerWithBlending&>(layer);
         return new deMixerEditor(parent, al, layerProcessor, frameManager, layerIndex);
     }        
+*/
 
     if ((type == "equalizer8") || (type == "equalizer16"))
     {

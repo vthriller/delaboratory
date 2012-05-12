@@ -261,6 +261,7 @@ deProperty* deBaseLayer::getProperty(const std::string& _name)
             return property;
         }
     }
+    logError("property " + _name + " not found");
 
     return NULL;
 }

@@ -27,7 +27,7 @@ dePalette3::~dePalette3()
 {
 }
 
-void dePalette3::addColor(const deColor3& color)
+void dePalette3::addColor(const deColor4& color)
 {
     colors.push_back(color);
 }
@@ -115,7 +115,7 @@ void dePalette3::optimize(const dePalette3& source, int n, deValue margin)
     delete [] distances;
 }
 
-deColor3 dePalette3::getColor(int index)
+deColor4 dePalette3::getColor(int index)
 {
     return colors[index];
 }
@@ -128,7 +128,7 @@ void dePalette3::getMinMax(int index, deValue& min, deValue& max)
     max = -1;
     for (i = 0; i < n; i++)
     {
-        deColor3& color = colors[i];
+        deColor4& color = colors[i];
         deValue v;
         switch (index)
         {
@@ -173,7 +173,7 @@ bool dePalette3::find23(deValue minA, deValue maxA, deValue minB, deValue maxB, 
 
     for (i = 0; i < n; i++)
     {
-        deColor3& color = colors[i];
+        deColor4& color = colors[i];
         deValue L = color.getV1();
         deValue A = color.getV2();
         deValue B = color.getV3();

@@ -24,33 +24,37 @@
 #include "color_space.h"
 #include <cmath>
 
-class deColor3
+class deColor4
 {
     private:
         deValue v1;
         deValue v2;
         deValue v3;
+        deValue v4;
     public:
-        deColor3(deValue _v1, deValue _v2, deValue _v3)
+        deColor4(deValue _v1, deValue _v2, deValue _v3, deValue _v4)
         :v1(_v1),
          v2(_v2),
-         v3(_v3)
+         v3(_v3),
+         v4(_v4)
         {
         };
-        virtual ~deColor3()
+        virtual ~deColor4()
         {
         };
 
         deValue getV1() {return v1;};
         deValue getV2() {return v2;};
         deValue getV3() {return v3;};
+        deValue getV4() {return v4;};
 
-        deValue calcDistance(const deColor3& c) const
+        deValue calcDistance(const deColor4& c) const
         {
             deValue d1 = c.v1 - v1;
             deValue d2 = c.v2 - v2;
             deValue d3 = c.v3 - v3;
-            deValue d = d1 * d1 + d2 * d2 + d3 * d3;
+            deValue d4 = c.v4 - v4;
+            deValue d = d1 * d1 + d2 * d2 + d3 * d3 + d4 * d4;
             return sqrt(d);
         };
 };
@@ -59,17 +63,17 @@ class dePalette3
 {
     private:
         deColorSpace colorSpace;
-        std::vector<deColor3> colors;
+        std::vector<deColor4> colors;
 
     public:
         dePalette3(deColorSpace _colorSpace);
         virtual ~dePalette3();
 
-        void addColor(const deColor3& color);
+        void addColor(const deColor4& color);
 
         void optimize(const dePalette3& source, int n, deValue margin);
 
-        deColor3 getColor(int index);
+        deColor4 getColor(int index);
 
         int getSize() const {return colors.size();};
 

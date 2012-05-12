@@ -30,13 +30,15 @@ private:
     deValue r;
     deValue g;
     deValue b;
-    dePalette3* palette;
 
 protected:
     void click(wxMouseEvent &event);
+    void hover(wxMouseEvent &event);
+    void enter(wxMouseEvent &event);
+    void leave(wxMouseEvent &event);
 
 public:
-    deColorPanelOld(wxWindow* parent, wxSize _size, dePalette3* _palette, int style);
+    deColorPanelOld(wxWindow* parent, wxSize _size, int style);
     virtual ~deColorPanelOld();
 
     void setRGB(deValue rr, deValue gg, deValue bb);

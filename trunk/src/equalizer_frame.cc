@@ -107,7 +107,7 @@ deEqualizerFrame::deEqualizerFrame(wxWindow *parent, deLayerOld& _layer, deLayer
                 int h = 30;
                 deValue l = (deValue) i / bands;
 
-                deColorPanelOld* gradient = new deColorPanelOld(slidersPanel, wxSize(w, h), NULL, 0);
+                deColorPanelOld* gradient = new deColorPanelOld(slidersPanel, wxSize(w, h), 0);
                 gradient->setColor(colorSpace, c, l);
                 sSizer->Add(gradient);
 

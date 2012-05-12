@@ -117,6 +117,11 @@ void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse, deVal
 
             deValue v = 1.0 - r;
 
+            if (v > 0)
+            {
+                v = sin(v * M_PI / 2);
+            }
+
             deValue vv = darkness + (light - darkness) * v;
             if (vv < 0)
             {

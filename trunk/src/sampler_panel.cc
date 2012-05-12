@@ -50,7 +50,7 @@ deSamplerPanel::deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject&
     colorSpaceChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, colorSpaces.size(), colorSpaceStrings);
     sizerT->Add(colorSpaceChoice);
 
-    colorPanel = new deColorPanelOld(this, wxSize(60, 25), NULL, 0);
+    colorPanel = new deColorPanelOld(this, wxSize(60, 25), 0);
     sizerT->Add(colorPanel, 0, wxALIGN_CENTER);
 
     sizerS = new wxStaticBoxSizer(wxHORIZONTAL, this, _T(""));
