@@ -34,11 +34,14 @@ deLayerStack::~deLayerStack()
 
 void deLayerStack::lock() const
 {
+    logInfo("layer stack lock...");
     mutex.lock();
+    logInfo("layer stack locked");
 }
 
 void deLayerStack::unlock() const
 {
+    logInfo("layer stack unlock");
     mutex.unlock();
 }
 

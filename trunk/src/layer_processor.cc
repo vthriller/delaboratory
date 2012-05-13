@@ -661,11 +661,14 @@ void deLayerProcessor::onChangeView(int a)
 
 void deLayerProcessor::lock()
 {
+    logInfo("layer processor lock...");
     updateImagesMutex.lock();
+    logInfo("layer processor locked");
 }
 
 void deLayerProcessor::unlock()
 {
+    logInfo("layer processor unlock");
     updateImagesMutex.unlock();
 }
 

@@ -110,7 +110,7 @@ void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse, deVal
 
             deValue rr = x * x + y * y;
 
-            if (rr <= 1.0)
+//            if (rr <= 1.0)
             {
                 r = sqrt(rr);
             }                

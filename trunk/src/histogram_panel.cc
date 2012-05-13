@@ -75,6 +75,8 @@ void deHistogramPanel::render(deCanvas& canvas)
 
 void deHistogramPanel::generateHistogram()
 {
+    logInfo("generate histogram...");
+
     project->getLayerProcessor().lock();
 
     generated = false;
@@ -128,6 +130,7 @@ void deHistogramPanel::generateHistogram()
 
         generated = histogram.render(renderedImage.getCurrentImageData(), width, sizeH, g1, g2, margin);
     }        
+    logInfo("generate histogram DONE");
 }
 
 void deHistogramPanel::setChannel(int _channel)
