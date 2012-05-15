@@ -18,6 +18,8 @@
 
 #include "layer_frame_manager.h"
 #include "layer_frame.h"
+#include "str.h"
+#include "logger.h"
 
 deLayerFrameManager::deLayerFrameManager()
 {
@@ -72,24 +74,36 @@ bool deLayerFrameManager::addLayerFrame(int index, deLayerFrame* frame)
 
 bool deLayerFrameManager::removeLayerFrame(int index)
 {
+    logInfo("remove layer frame " + str(index));
     std::map<int, deLayerFrame*>::iterator i = layerFrames.find(index);
     if (i == layerFrames.end())
     {
         return false;
     }
     layerFrames.erase(i);
+    logInfo("remove layer frame " + str(index) + " DONE");
     return true;
 }
 
 bool deLayerFrameManager::destroyLayerFrame(int index)
 {
+    logInfo("destroy layer frame " + str(index));
     std::map<int, deLayerFrame*>::iterator i = layerFrames.find(index);
     if (i == layerFrames.end())
     {
         return false;
     }
     deLayerFrame* frame = i->second;
-    delete frame;
+    logInfo("b destroy layer frame " + str(index));
+    if (frame)
+    {
+        delete frame;
+    }
+    else
+    {
+        logError("broken layer frame detected!");
+    }
+    logInfo("c destroy layer frame " + str(index));
     return true;
 }
 
@@ -148,9 +162,13 @@ bool deLayerFrameManager::checkBlendFrame(int index)
 
 void deLayerFrameManager::onDestroyLayer(int index)
 {
+    logInfo("onDestroyLayer " + str(index));
     destroyActionFrame(index);
+    logInfo("b onDestroyLayer " + str(index));
     destroyBlendFrame(index);
+    logInfo("c onDestroyLayer " + str(index));
     destroyLayerFrame(index);
+    logInfo("onDestroyLayer " + str(index) + " DONE");
 }
 
 void deLayerFrameManager::destroyActionFrame(int index)
@@ -158,11 +176,19 @@ void deLayerFrameManager::destroyActionFrame(int index)
     std::list<deLayerFrameOld*>::const_iterator i;
     for (i = actionFrames.begin(); i != actionFrames.end(); i++)
     {
-        if ((*i)->checkIndex(index))
+        deLayerFrameOld* f = *i;
+        if (f)
         {
-            actionFrames.remove(*i);
-            delete *i;
-            return;
+            if (f->checkIndex(index))
+            {
+                actionFrames.remove(*i);
+                delete *i;
+                return;
+            }
+        }        
+        else
+        {
+            logError("broken Action Frame detected!");
         }
     }
 }
@@ -172,11 +198,19 @@ void deLayerFrameManager::destroyBlendFrame(int index)
     std::list<deLayerFrameOld*>::const_iterator i;
     for (i = blendFrames.begin(); i != blendFrames.end(); i++)
     {
-        if ((*i)->checkIndex(index))
+        deLayerFrameOld* f = *i;
+        if (f)
         {
-            blendFrames.remove(*i);
-            delete *i;
-            return;
+            if ((*i)->checkIndex(index))
+            {
+                blendFrames.remove(*i);
+                delete *i;
+                return;
+            }
+        }
+        else
+        {
+            logError("broken Blend Frame detected!");
         }
     }
 }

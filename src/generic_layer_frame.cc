@@ -165,6 +165,13 @@ deGenericLayerFrame::~deGenericLayerFrame()
     {
         delete (*l);
     }
+    {
+        std::vector<dePropertyMixerUI*>::iterator l;
+        for (l = mixers.begin(); l != mixers.end(); l++)
+        {
+            delete (*l);
+        }
+    }
 }
 
 void deGenericLayerFrame::setUIFromLayer()
@@ -188,6 +195,13 @@ void deGenericLayerFrame::setUIFromLayer()
     for (l = booleans.begin(); l != booleans.end(); l++)
     {
         (*l)->setFromProperty();
+    }
+    {
+        std::vector<dePropertyMixerUI*>::iterator l;
+        for (l = mixers.begin(); l != mixers.end(); l++)
+        {
+            (*l)->setFromProperty();
+        }
     }
 }
 

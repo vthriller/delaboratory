@@ -28,7 +28,7 @@ dePropertyMixer::dePropertyMixer(const std::string& _name, int _size)
     for (i = 0; i < size; i++)
     {
         mixers.push_back( new deMixer(size));
-        mixers[i]->reset(i);
+        //mixers[i]->reset(i);
     }
 }
 

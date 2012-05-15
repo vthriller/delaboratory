@@ -16,30 +16,30 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_MIXER_EDITOR_H
-#define _DE_MIXER_EDITOR_H
+#ifndef _DE_CHANNEL_SELECTOR_H
+#define _DE_CHANNEL_SELECTOR_H
 
-#include "action_frame.h"
-class deMixerEditorChannel;
-#include <vector>
+#include <wx/wx.h>
+#include "value.h"
+#include "color_space.h"
+class dePanel;
+class deWindow;
 class deLayerProcessor;
 
-class deMixerEditor:public deActionFrame
+class deChannelSelectorImpl;
+
+class deChannelSelector
 {
     private:
-        std::vector<deMixerEditorChannel*> channels;
-        wxButton* reset;
-        wxButton* random1;
-        wxButton* random2;
-        wxButton* random3;
-
-        void click(wxCommandEvent &event);
-
+        deChannelSelectorImpl* impl;
     public:
-        deMixerEditor(wxWindow *parent, deLayerWithBlending& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deMixerEditor();
+        deChannelSelector(deWindow& window, deColorSpace colorSpace);
+        virtual ~deChannelSelector();
 
+        void setValue(int channel);
+        virtual void onValueChange(int channel) = 0;
 
+        deWindow& getWindow();
 };
 
 

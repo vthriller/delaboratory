@@ -25,38 +25,139 @@
 #include <wx/dcbuffer.h>
 #include "canvas_wx.h"
 #include "gradient_panel.h"
+#include "color_space_utils.h"
+#include "slider.h"
+#include "logger.h"
+#include "channel_selector.h"
+
+class deMixerChannelSelector:public deChannelSelector
+{
+    private:
+        dePropertyMixerUIImpl& ui;
+    public:
+        deMixerChannelSelector(deWindow& window, deColorSpace colorSpace, dePropertyMixerUIImpl& _ui)
+        :deChannelSelector(window, colorSpace), ui(_ui)
+        {
+        }
+        virtual ~deMixerChannelSelector()
+        {
+        }
+        virtual void onValueChange(int channel);
+};
+
+class deMixerSlider:public deSlider
+{
+    private:
+        dePropertyMixerUIImpl& ui;
+        int index;
+    public:
+        deMixerSlider(deWindow& window, const std::string& _name, deValue _min, deValue _max, int _width, int widthn, int widthl, dePropertyMixerUIImpl& _ui, int _index)
+        :deSlider(window, _name, _min, _max, _width, widthn, widthl),
+         ui(_ui), index(_index)
+        {
+            logInfo("deMixerSlider constructor");
+        }
+        
+        virtual ~deMixerSlider()
+        {
+            logInfo("deMixerSlider destructor");
+        }
+
+        virtual void onValueChange(deValue value, bool finished);
+};
 
 class dePropertyMixerUIImpl:public dePanelWX
 {
     private:
         dePropertyMixerUI& parent;
         dePropertyMixer& property;
+        deMixerChannelSelector *channelSelector;
+        std::vector<deMixerSlider*> sliders;
+        int channel;
+        deLayerProcessor& layerProcessor;
+        deGradientPanel0* gradient;
+        int layerIndex;
 
     public:
-        dePropertyMixerUIImpl(dePropertyMixerUI& _parent, deWindow& _parentWindow, dePropertyMixer& _property, deBaseLayerWithSource& layer, deLayerProcessor& layerProcessor, int layerIndex, int width)
-        :dePanelWX(_parentWindow), parent(_parent), property(_property)
+        dePropertyMixerUIImpl(dePropertyMixerUI& _parent, deWindow& _parentWindow, dePropertyMixer& _property, deBaseLayerWithSource& layer, deLayerProcessor& _layerProcessor, int _layerIndex, int width)
+        :dePanelWX(_parentWindow), parent(_parent), property(_property), layerProcessor(_layerProcessor), layerIndex(_layerIndex)
         {
             int margin = 10;
 
             wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
             SetSizer(sizer);
 
+            deColorSpace colorSpace = layer.getColorSpace();
+
+            {
+                channelSelector = new deMixerChannelSelector(getWindow(), colorSpace, *this);
+                deWindowWX& w = dynamic_cast<deWindowWX&>(channelSelector->getWindow());
+                sizer->Add(w.getWindow());
+            }                
+
             const deImage& sourceImage = layer.getSourceImage();
 
-            int channel = 0;
+            channel = 0;
 
-            deGradientPanel0* gradient = new deGradientPanel0(this, wxSize(width, 8), layer.getColorSpace(), channel, margin);
+            int n = getColorSpaceSize(layer.getColorSpace());
+
+            deValue min = -3;
+            deValue max = 3;
+            int w = 400;
+            int wn = 80;
+            int wl = 40;
+            int i;
+            for (i = 0; i < n; i++)
+            {
+                std::string c = getChannelName(layer.getColorSpace(), i);
+                deMixerSlider* s = new deMixerSlider(getWindow(), c, min, max, w, wn, wl, *this, i);
+                sliders.push_back(s);
+                deWindowWX& w = dynamic_cast<deWindowWX&>(s->getWindow());
+                sizer->Add(w.getWindow());
+            }
+
+            gradient = new deGradientPanel0(this, wxSize(width, 8), layer.getColorSpace(), channel, margin);
             sizer->Add(gradient);
+
+            setFromProperty();
 
             Fit();
         }
 
         virtual ~dePropertyMixerUIImpl()
         {
+            delete channelSelector;
         }
 
         void setFromProperty()
         {
+            deMixer* mixer = property.getMixer(channel);
+
+            int n = sliders.size();
+            int i;
+            for (i = 0; i < n; i++)
+            {
+                deValue w = mixer->getWeight(i);
+                deMixerSlider* s = sliders[i];
+                s->setValue(w);
+            }
+        }
+
+        void setFromSlider(int index, deValue v)
+        {
+            deMixer* mixer = property.getMixer(channel);
+            mixer->setWeight(index, v);
+
+            layerProcessor.markUpdateSingleChannel(layerIndex, channel);
+        }
+
+        void setChannel(int _channel)
+        {
+            channel = _channel;
+            gradient->changeChannel(channel);
+            setFromProperty();
+            layerProcessor.setHistogramChannel(channel);
+
         }
 
 
@@ -96,3 +197,14 @@ void dePropertyMixerUI::setFromProperty()
         impl->setFromProperty();
     }
 }
+
+void deMixerSlider::onValueChange(deValue value, bool finished)
+{
+    ui.setFromSlider(index, value);
+};
+
+
+void deMixerChannelSelector::onValueChange(int channel)
+{
+    ui.setChannel(channel);
+};

@@ -18,6 +18,8 @@
 
 #include "layer_frame.h"
 #include "layer_frame_manager.h"
+#include "logger.h"
+#include "str.h"
 
 deLayerFrameOld::deLayerFrameOld(wxWindow *parent, deBaseLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex)
 :deFrameOld(parent, name),
@@ -49,5 +51,7 @@ deLayerFrame::deLayerFrame(deWindow& parent, const std::string& name, deBaseLaye
 
 deLayerFrame::~deLayerFrame()
 {
+    logInfo(str((int)this) + " ~deLayerFrame");
     frameManager.removeLayerFrame(index);
+    logInfo(str((int)this) + " ~deLayerFrame DONE");
 }

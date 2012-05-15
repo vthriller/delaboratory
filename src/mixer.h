@@ -50,7 +50,7 @@ class deMixer
 
         bool isNeutral(int index) const;
 
-        void reset(int index);
+//        void reset(int index);
 
         void save(xmlNodePtr node);
         void load(xmlNodePtr node);

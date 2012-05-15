@@ -46,6 +46,8 @@ class deMixerLayer:public deLayerWithBlending
 
         virtual bool updateMainImageSingleChannel(int i);
 
+        virtual void executeOperation(const std::string& operation);
+
 
 
 

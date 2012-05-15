@@ -21,6 +21,8 @@
 #include "layer_processor.h"
 #include "panel_wx.h"
 #include "window_wx.h"
+#include "logger.h"
+#include "str.h"
 
 void deSliderOld::updateValueFromSlider(bool finished)
 {
@@ -142,6 +144,10 @@ class deSliderImpl:public dePanelWX
         deSliderImpl(deSlider& _parent, deWindow& _parentWindow, const std::string& _name, deValue _min, deValue _max, int _width, int widthn, int widthl)
         :dePanelWX(_parentWindow), parent(_parent), min(_min), max(_max), width(_width)
         {
+            if (width == 0)
+            {
+                logError("slider with width 0 created");
+            }
             wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
             SetSizer(sizer);
 
@@ -163,6 +169,7 @@ class deSliderImpl:public dePanelWX
 
         virtual ~deSliderImpl()
         {
+            logInfo("~deSliderImpl");
         }
 
         void moveSlider(wxCommandEvent &event)
@@ -178,8 +185,11 @@ class deSliderImpl:public dePanelWX
         void updateValueFromSlider(bool finished)
         {
             deValue v = min + slider->GetValue() * ((max - min) / width);
+            logInfo("update value from slider " + str(v));
             setLabelValue(v);
+            logInfo("b update value from slider " + str(v));
             parent.onValueChange(v, finished);
+            logInfo("c update value from slider " + str(v));
         }
 
         void setLabelValue(deValue v)
@@ -221,6 +231,7 @@ class deSliderImpl:public dePanelWX
 
 deSlider::deSlider(deWindow& window, const std::string& _name, deValue _min, deValue _max, int _width, int widthn, int widthl)
 {
+    logInfo("deSlider constructor");
     deWindowWX* w = dynamic_cast<deWindowWX*>(&window);
     if (w)
     {
@@ -234,6 +245,7 @@ deSlider::deSlider(deWindow& window, const std::string& _name, deValue _min, deV
 
 deSlider::~deSlider()
 {
+    logInfo("deSlider destructor");
     if (impl)
     {
         delete impl;
