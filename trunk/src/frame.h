@@ -59,7 +59,7 @@ class deFrame
 
         void fit();
 
-        void clearImpl();
+        bool clearImpl();
 };
 
 

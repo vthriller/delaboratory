@@ -218,6 +218,7 @@ void deControlPanel::click(wxCommandEvent &event)
 
     if (deleteLayer->GetId() == id)
     {
+        logInfo("delete layer clicked");
         deLayerStack& layerStack = project.getLayerStack();
         int index = layerStack.getSize() - 1;
         project.getLayerFrameManager().onDestroyLayer(index);

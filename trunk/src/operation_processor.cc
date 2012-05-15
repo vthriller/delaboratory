@@ -18,6 +18,7 @@
 
 #include "operation_processor.h"
 #include "layer_processor.h"
+#include "logger.h"
 
 deOperationProcessor::deOperationProcessor(deLayerProcessor& _layerProcessor)
 :layerProcessor(_layerProcessor)
@@ -30,10 +31,14 @@ deOperationProcessor::~deOperationProcessor()
 
 void deOperationProcessor::addNewLayerOnTop(deBaseLayer* layer, int layerIndex)
 {
+    logInfo("before add new layer on top");
     layerProcessor.addLayerInLayerProcessor(layer, layerIndex);
+    logInfo("after add new layer on top");
 }
 
 void deOperationProcessor::removeTopLayer()
 {
+    logInfo("before remove top layer");
     layerProcessor.removeTopLayerInLayerProcessor();
+    logInfo("after remove top layer");
 }

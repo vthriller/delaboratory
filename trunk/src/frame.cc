@@ -20,6 +20,8 @@
 #include "window_wx.h"
 #include "panel_wx.h"
 #include <map>
+#include "logger.h"
+#include "str.h"
 
 deFrameOld::deFrameOld(wxWindow *parent, const std::string& name)
 :wxFrame(parent, wxID_ANY, wxString::FromAscii(name.c_str()), wxDefaultPosition, wxDefaultSize, wxCAPTION | wxCLOSE_BOX | wxFRAME_FLOAT_ON_PARENT)
@@ -47,8 +49,12 @@ class deFrameImpl:public wxFrame
 
         virtual ~deFrameImpl()
         {
-            frame->clearImpl();
-            delete frame;
+            logInfo(str((int)this) + " ~deFrameImpl");
+            if (frame->clearImpl())
+            {
+                delete frame;
+            }                
+            logInfo(str((int)this) + " ~deFrameImpl DONE");
         }
 
         void addWidget(wxWindow* widget)
@@ -86,15 +92,21 @@ deFrame::deFrame(deWindow& parent, const std::string& name)
 
 deFrame::~deFrame()
 {
+    logInfo(str((int)this) + " ~deFrame");
     if (impl)
     {
-        delete impl;
+        deFrameImpl* i = impl;
+        clearImpl();
+        delete i;
     }        
+    logInfo(str((int)this) + " ~deFrame DONE");
 }
 
-void deFrame::clearImpl()
+bool deFrame::clearImpl()
 {
+    bool result = (impl != NULL);
     impl = NULL;
+    return result;
 }
 
 void deFrame::show()

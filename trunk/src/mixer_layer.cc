@@ -23,13 +23,19 @@
 #include "color_space_utils.h"
 #include "channel_manager.h"
 #include "property_mixer.h"
+#include "preset.h"
 
 deMixerLayer::deMixerLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
 :deLayerWithBlending(_colorSpace, _channelManager,  _sourceLayer, _layerStack)
 {
+    dePreset* reset = createPreset("reset");
+    reset->addOperation("reset");
+
     int n = getColorSpaceSize(colorSpace);
 
     properties.push_back(new dePropertyMixer("mixer", n));
+
+    applyPreset("reset");
 
 }
 
@@ -146,3 +152,22 @@ void deMixerLayer::load(xmlNodePtr root)
     }*/
 }
 
+void deMixerLayer::executeOperation(const std::string& operation)
+{
+    int n = getColorSpaceSize(colorSpace);
+
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        int j;
+        for (j = 0; j < n; j++)
+        {
+            deValue v = 0.0;
+            if (i == j)
+            {
+                v = 1.0;
+            }
+            setWeight(i, j, v);
+        }
+    }
+}

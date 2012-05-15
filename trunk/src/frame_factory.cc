@@ -19,7 +19,6 @@
 #include "frame_factory.h"
 
 #include "curves_editor.h"
-#include "mixer_editor.h"
 #include "equalizer_frame.h"
 #include "basic_frame.h"
 #include "dodge_burn_frame.h"
@@ -40,14 +39,6 @@ deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& 
         deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
         return new deCurvesEditor(parent, al, layerProcessor, frameManager, layerIndex, channelManager);
     }        
-
-/*
-    if (type == "mixer")
-    {
-        deLayerWithBlending& al = dynamic_cast<deLayerWithBlending&>(layer);
-        return new deMixerEditor(parent, al, layerProcessor, frameManager, layerIndex);
-    }        
-*/
 
     if ((type == "equalizer8") || (type == "equalizer16"))
     {

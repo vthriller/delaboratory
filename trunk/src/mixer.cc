@@ -36,6 +36,7 @@ deMixer::~deMixer()
     delete [] weights;
 }
 
+/*
 void deMixer::reset(int index)
 {
     lock();
@@ -55,6 +56,7 @@ void deMixer::reset(int index)
 
     unlock();
 }
+*/
 
 deValue deMixer::getWeight(int c) const
 {
