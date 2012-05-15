@@ -71,7 +71,7 @@ class deChannelSelectorImpl:public dePanelWX
         void select(wxCommandEvent &event)
         {
             int i = event.GetId();
-            int j;
+            unsigned int j;
             for (j = 0; j < buttons.size(); j++)
             {
                 if (buttons[j]->GetId() == i)

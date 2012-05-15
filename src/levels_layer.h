@@ -43,7 +43,7 @@ class deLevelsLayer:public deLayerWithBlending
 
         virtual std::string getActionName() {return "levels";};
 
-        dePropertyLevels* getPropertyLevels(int channel);
+        dePropertyLevels* getPropertyLevels();
 
         virtual void executeOperation(const std::string& o);
 

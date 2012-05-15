@@ -255,7 +255,13 @@ bool blurChannel(const deValue* source, deValue* destination, deSize size, deVal
 
     deValue* sourceBuffer = new deValue[max];
     deValue* destinationBuffer = new deValue[max];
-    deValue* weights = new deValue[maxSize];
+    deValue* weights = NULL;
+
+
+    if (type != deBoxBlur)
+    {
+        weights = new deValue[maxSize];
+    }        
 
     int i;
     int j;
@@ -341,7 +347,10 @@ bool blurChannel(const deValue* source, deValue* destination, deSize size, deVal
     }        
 
     delete [] tmp;
-    delete [] weights;
+    if (type != deBoxBlur)
+    {
+        delete [] weights;
+    }
     delete [] destinationBuffer;
     delete [] sourceBuffer;
 
