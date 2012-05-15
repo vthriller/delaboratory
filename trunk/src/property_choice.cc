@@ -55,7 +55,7 @@ std::string dePropertyChoice::get() const
     {
         return "";
     }
-    if (value >= choices.size())
+    if ((unsigned)value >= choices.size())
     {
         return "";
     }

@@ -21,6 +21,7 @@
 
 #include "property.h"
 #include "value.h"
+#include <vector>
 
 class deLevels
 {
@@ -48,17 +49,17 @@ class deLevels
 class dePropertyLevels:public deProperty
 {
     private:
-        deLevels levels;
-        int channel;
+        std::vector<deLevels> levels;
+        int size;
 
     public:
-        dePropertyLevels(const std::string& _name, int _channel);
+        dePropertyLevels(const std::string& _name, int _size);
         virtual ~dePropertyLevels();
 
-        int getChannel() const;
+        int getSize() const;
 
-        const deLevels& getLevels() const {return levels;};
-        deLevels& getLevels() {return levels;};
+        const deLevels& getLevels(int index) const {return levels[index];};
+        deLevels& getLevels(int index) {return levels[index];};
 
         virtual void save(xmlNodePtr root) const;
         virtual void load(xmlNodePtr root);

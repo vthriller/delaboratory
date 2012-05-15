@@ -42,8 +42,6 @@
 
 deBaseLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, deStaticImage& sourceImage)
 {
-    int index = _layerStack.getSize();
-
     if (type == "curves")
     {
         return new deCurvesLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
@@ -83,13 +81,6 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
     {
         return new deEqualizerLayer16(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
-
-/*
-    if (type == "apply_image")
-    {
-        return new deApplyImageLayer(colorSpace, source, _layerStack, _channelManager, _viewManager, index);
-    }
-    */
 
     if (type == "levels")
     {
@@ -169,7 +160,6 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("mixer");
     actions.push_back("equalizer8");
     actions.push_back("equalizer16");
-//    actions.push_back("apply_image");
     actions.push_back("apply_original");
     actions.push_back("apply_luminance");
 

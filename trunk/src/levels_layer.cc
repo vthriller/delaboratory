@@ -42,11 +42,8 @@ deLevelsLayer::deLevelsLayer(deColorSpace _colorSpace, deChannelManager& _channe
 
     int n = getColorSpaceSize(colorSpace);
 
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        createPropertyLevels(i);
-    }
+    properties.push_back(new dePropertyLevels("levels", n));
+
 }
 
 deLevelsLayer::~deLevelsLayer()
@@ -55,13 +52,13 @@ deLevelsLayer::~deLevelsLayer()
 
 bool deLevelsLayer::isChannelNeutral(int channel)
 {
-    dePropertyLevels* propertyLevels = getPropertyLevels(channel);
+    dePropertyLevels* propertyLevels = getPropertyLevels();
     if (!propertyLevels)
     {
         return true;
     }
 
-    const deLevels& levels = propertyLevels->getLevels();
+    const deLevels& levels = propertyLevels->getLevels(channel);
     return levels.isNeutral();
 
 }
@@ -75,14 +72,14 @@ bool deLevelsLayer::updateMainImageSingleChannel(int channel)
         return true;
     }
 
-    dePropertyLevels* propertyLevels = getPropertyLevels(channel);
+    dePropertyLevels* propertyLevels = getPropertyLevels();
     if (!propertyLevels)
     {
         return false;
     }
 
 
-    const deLevels& levels = propertyLevels->getLevels();
+    const deLevels& levels = propertyLevels->getLevels(channel);
 
     const deValue* source = getSourceImage().startRead(channel);
     mainLayerImage.enableChannel(channel);
@@ -108,27 +105,9 @@ bool deLevelsLayer::updateMainImageSingleChannel(int channel)
     return true;
 }
 
-void deLevelsLayer::createPropertyLevels(int channel)
+dePropertyLevels* deLevelsLayer::getPropertyLevels()
 {
-    const std::string _name = "levels " + getChannelName(colorSpace, channel);
-
-    std::vector<deProperty*>::iterator i;
-    for (i = properties.begin(); i != properties.end(); i++)
-    {
-        deProperty* property = *i;
-        if (property->getName() == _name)
-        {
-            return;
-        }
-    }
-    properties.push_back(new dePropertyLevels(_name, channel));
-}
-
-dePropertyLevels* deLevelsLayer::getPropertyLevels(int channel)
-{
-    const std::string _name = "levels " + getChannelName(colorSpace, channel);
-
-    deProperty* p = getProperty(_name);
+    deProperty* p = getProperty("levels");
     return dynamic_cast<dePropertyLevels*>(p);
 }
 
@@ -139,10 +118,10 @@ void deLevelsLayer::executeOperation(const std::string& operation)
     int i;
     for (i = 0; i < n; i++)
     {
-        dePropertyLevels* propertyLevels = getPropertyLevels(i);
+        dePropertyLevels* propertyLevels = getPropertyLevels();
         if (propertyLevels)
         {
-            deLevels& levels = propertyLevels->getLevels();
+            deLevels& levels = propertyLevels->getLevels(i);
 
             deValue min = 0.0;
             deValue middle = 0.5;

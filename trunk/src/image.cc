@@ -100,7 +100,6 @@ void deImage::disableChannel(int n, int c)
     assert(n < MAX_COLOR_SPACE_SIZE);
 
     int a = channelsAllocated[n];
-    int v = channelsVisible[n];
 
     if (a >= 0)
     {

@@ -25,6 +25,23 @@
 #include <wx/dcbuffer.h>
 #include "canvas_wx.h"
 #include "gradient_panel.h"
+#include "channel_selector.h"
+
+class deLevelsChannelSelector:public deChannelSelector
+{
+    private:
+        dePropertyLevelsUIImpl& ui;
+    public:
+        deLevelsChannelSelector(deWindow& window, deColorSpace colorSpace, dePropertyLevelsUIImpl& _ui)
+        :deChannelSelector(window, colorSpace), ui(_ui)
+        {
+        }
+        virtual ~deLevelsChannelSelector()
+        {
+        }
+        virtual void onValueChange(int channel);
+};
+
 
 class deLevelsControl:public dePanelWX
 {
@@ -38,6 +55,8 @@ class deLevelsControl:public dePanelWX
         deLayerProcessor& layerProcessor;
         int layerIndex;
 
+        int channel;
+
         enum 
         {
             deModeNothing,
@@ -50,7 +69,7 @@ class deLevelsControl:public dePanelWX
         {
             deValue v = getValue(event.GetX());
 
-            const deLevels& levels = property.getLevels();
+            const deLevels& levels = property.getLevels(channel);
 
             deValue min = levels.getMin();
             deValue middle = levels.getMiddle();
@@ -90,7 +109,7 @@ class deLevelsControl:public dePanelWX
                 return;
             }
 
-            deLevels& levels = property.getLevels();
+            deLevels& levels = property.getLevels(channel);
 
             switch (mode)
             {
@@ -118,7 +137,7 @@ class deLevelsControl:public dePanelWX
 
             paint();
 
-            layerProcessor.markUpdateSingleChannel(layerIndex, property.getChannel());
+            layerProcessor.markUpdateSingleChannel(layerIndex, channel);
         }
 
         void drawArrow(deCanvas& canvas, deValue v)
@@ -155,6 +174,8 @@ class deLevelsControl:public dePanelWX
         {
             SetMinSize(wxSize(width, height));
 
+            channel = -1;
+
             mode = deModeNothing;
 
             Connect(wxEVT_PAINT, wxPaintEventHandler(deLevelsControl::paintEvent));
@@ -166,6 +187,12 @@ class deLevelsControl:public dePanelWX
 
         ~deLevelsControl()
         {
+        }
+
+        void setChannel(int _channel)
+        {
+            channel = _channel;
+            paint();
         }
 
         void paint()
@@ -193,7 +220,7 @@ class deLevelsControl:public dePanelWX
             canvas.clear();
             canvas.drawLine(0, h, width, h);
 
-            const deLevels& levels = property.getLevels();
+            const deLevels& levels = property.getLevels(channel);
             deValue min = levels.getMin();
             deValue middle = levels.getMiddle();
             deValue max = levels.getMax();
@@ -203,7 +230,6 @@ class deLevelsControl:public dePanelWX
             drawArrow(canvas, min);
             drawArrow(canvas, middle);
             drawArrow(canvas, max);
-
         }
 };
 
@@ -211,11 +237,45 @@ class deChannelHistogramPanel:public dePanelWX
 {
     private:
         wxBitmap* backgroundBitmap;
+        int width;
+        int height;
+        int margin;
 
     public:
-        deChannelHistogramPanel(deWindow& _parentWindow, const deValue* c, int n, int width, int height, int margin)
-        :dePanelWX(_parentWindow, width, height)
+        deChannelHistogramPanel(deWindow& _parentWindow, const deValue* c, int n, int _width, int _height, int _margin)
+        :dePanelWX(_parentWindow, _width, _height), width(_width), height(_height), margin(_margin)
         {
+            backgroundBitmap = NULL;
+
+            generate(c, n);
+
+            Connect(wxEVT_PAINT, wxPaintEventHandler(deChannelHistogramPanel::paintEvent));
+        }
+
+        virtual ~deChannelHistogramPanel()
+        {
+        }
+
+        void paintEvent(wxPaintEvent & evt)
+        {
+            wxPaintDC dc(this);
+            dc.DrawBitmap(*backgroundBitmap, 0, 0, false);
+        }
+
+        void paint()
+        {
+            wxClientDC dc(this);
+            dc.DrawBitmap(*backgroundBitmap, 0, 0, false);
+        }
+
+        void generate(const deValue* c, int n)
+        {
+            if (backgroundBitmap)
+            {
+                delete backgroundBitmap;
+                backgroundBitmap = NULL;
+            }
+
             deHistogram histogram(width - 2 * margin);
 
             histogram.clear();
@@ -232,17 +292,7 @@ class deChannelHistogramPanel:public dePanelWX
             backgroundBitmap = new wxBitmap(*image);
             delete image;
 
-            Connect(wxEVT_PAINT, wxPaintEventHandler(deChannelHistogramPanel::paintEvent));
-        }
-
-        virtual ~deChannelHistogramPanel()
-        {
-        }
-
-        void paintEvent(wxPaintEvent & evt)
-        {
-            wxPaintDC dc(this);
-            dc.DrawBitmap(*backgroundBitmap, 0, 0, false);
+            paint();
         }
 };
 
@@ -250,39 +300,47 @@ class deChannelHistogramPanel:public dePanelWX
 class dePropertyLevelsUIImpl:public dePanelWX
 {
     private:
+        deBaseLayerWithSource& layer;
         dePropertyLevelsUI& parent;
         dePropertyLevels& property;
 
+        deLevelsChannelSelector *channelSelector;
         deChannelHistogramPanel* histogramPanel;
         deLevelsControl* levelsControl;
+        deGradientPanel0* gradient;
+
+        int channel;
 
     public:
-        dePropertyLevelsUIImpl(dePropertyLevelsUI& _parent, deWindow& _parentWindow, dePropertyLevels& _property, deBaseLayerWithSource& layer, deLayerProcessor& layerProcessor, int layerIndex, int width)
-        :dePanelWX(_parentWindow), parent(_parent), property(_property)
+        dePropertyLevelsUIImpl(dePropertyLevelsUI& _parent, deWindow& _parentWindow, dePropertyLevels& _property, deBaseLayerWithSource& _layer, deLayerProcessor& layerProcessor, int layerIndex, int width)
+        :dePanelWX(_parentWindow), layer(_layer), parent(_parent), property(_property)
         {
             int margin = 10;
 
             wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
             SetSizer(sizer);
 
-            const deImage& sourceImage = layer.getSourceImage();
+            channel = -1;
 
-            int channel = property.getChannel();
+            deColorSpace colorSpace = layer.getColorSpace();
 
-            const deValue* c = sourceImage.startRead(channel);
-            int n = sourceImage.getChannelSize().getN();
+            {
+                channelSelector = new deLevelsChannelSelector(getWindow(), colorSpace, *this);
+                deWindowWX& w = dynamic_cast<deWindowWX&>(channelSelector->getWindow());
+                sizer->Add(w.getWindow());
+            }                
 
-            int h = 50;
-            histogramPanel = new deChannelHistogramPanel(getWindow(), c, n, width, h, margin);
+            int h = 80;
+            histogramPanel = new deChannelHistogramPanel(getWindow(), NULL, 0, width, h, margin);
             sizer->Add(histogramPanel);
 
-            sourceImage.finishRead(channel);
-
-            deGradientPanel0* gradient = new deGradientPanel0(this, wxSize(width, 8), layer.getColorSpace(), channel, margin);
+            gradient = new deGradientPanel0(this, wxSize(width, 8), layer.getColorSpace(), 0, margin);
             sizer->Add(gradient);
 
             levelsControl = new deLevelsControl(getWindow(), property, width, 10, margin, layerProcessor, layerIndex);
             sizer->Add(levelsControl);
+
+            setChannel(0);
 
             Fit();
         }
@@ -291,9 +349,29 @@ class dePropertyLevelsUIImpl:public dePanelWX
         {
         }
 
+        void generate()
+        {
+            const deImage& sourceImage = layer.getSourceImage();
+
+            const deValue* c = sourceImage.startRead(channel);
+            int n = sourceImage.getChannelSize().getN();
+
+            histogramPanel->generate(c, n);
+
+            sourceImage.finishRead(channel);
+        }
+
         void setFromProperty()
         {
             levelsControl->paint();
+        }
+
+        void setChannel(int _channel)
+        {
+            channel = _channel;
+            levelsControl->setChannel(channel);
+            gradient->changeChannel(channel);
+            generate();
         }
 
 
@@ -332,4 +410,9 @@ void dePropertyLevelsUI::setFromProperty()
     {
         impl->setFromProperty();
     }
+}
+
+void deLevelsChannelSelector::onValueChange(int channel)
+{
+    ui.setChannel(channel);
 }

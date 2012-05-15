@@ -95,8 +95,6 @@ class dePropertyMixerUIImpl:public dePanelWX
                 sizer->Add(w.getWindow());
             }                
 
-            const deImage& sourceImage = layer.getSourceImage();
-
             channel = 0;
 
             int n = getColorSpaceSize(layer.getColorSpace());
@@ -201,10 +199,10 @@ void dePropertyMixerUI::setFromProperty()
 void deMixerSlider::onValueChange(deValue value, bool finished)
 {
     ui.setFromSlider(index, value);
-};
+}
 
 
 void deMixerChannelSelector::onValueChange(int channel)
 {
     ui.setChannel(channel);
-};
+}

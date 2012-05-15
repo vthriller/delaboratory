@@ -115,9 +115,14 @@ bool deLevels::isNeutral() const
 }
 
 
-dePropertyLevels::dePropertyLevels(const std::string& _name, int _channel)
-:deProperty(_name), channel(_channel)
+dePropertyLevels::dePropertyLevels(const std::string& _name, int _size)
+:deProperty(_name), size(_size)
 {
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        levels.push_back( deLevels());
+    }
 }
 
 dePropertyLevels::~dePropertyLevels()
@@ -135,8 +140,4 @@ void dePropertyLevels::load(xmlNodePtr child)
     }
 }    
 
-int dePropertyLevels::getChannel() const
-{
-    return channel;
-}
 

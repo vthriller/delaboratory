@@ -82,7 +82,6 @@ void deHistogramPanel::generateHistogram()
     generated = false;
     deLayerStack& layerStack = project->getLayerStack();
     deViewManager& viewManager = project->getViewManager();
-    deChannelManager& channelManager = project->getPreviewChannelManager();
 
     int viewV = viewManager.getView();
     int view = project->getLayerProcessor().getLastValidLayer();
