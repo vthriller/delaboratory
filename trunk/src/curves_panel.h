@@ -27,8 +27,11 @@ class deCurvesLayer;
 class deLayerProcessor;
 class deChannelManager;
 class deCanvas;
+class dePropertyCurves;
 #include "value.h"
 #include "histogram.h"
+#include "color_space.h"
+#include "size.h"
 
 class deCurvesPanel:public wxPanel
 {
@@ -37,7 +40,6 @@ private:
     wxBitmap* backgroundBitmap;
     int sizeX;
     int sizeY;
-    deCurvesLayer& layer;
     int channel;
     
     bool realtime;
@@ -66,14 +68,15 @@ private:
 
     int layerIndex;
 
-    deChannelManager& channelManager;
+    dePropertyCurves& property;
+
+    deColorSpace colorSpace;
 
     void drawLine(wxDC& dc, deValue x1, deValue y1, deValue x2, deValue y2);
     void drawLines(wxDC& dc);
 
-    void generateBackground();
 public:
-    deCurvesPanel(wxWindow* parent, deCurvesLayer& layer, deLayerProcessor& _layerProcessor, int _layerIndex, deChannelManager& _channelManager);
+    deCurvesPanel(wxWindow* parent, deLayerProcessor& _layerProcessor, int _layerIndex, dePropertyCurves& _property, deColorSpace _colorSpace);
     ~deCurvesPanel();
 
 	void paintEvent(wxPaintEvent & evt);
@@ -81,7 +84,7 @@ public:
     void paint();
 
     void changeChannel(int _channel);
-    void onImageClick(deValue x, deValue y);
+    void onImageClick(deValue x, deValue y, const deValue* c, const deSize& size);
 
     void reset();
     void invert();
@@ -91,9 +94,11 @@ public:
 
     void onKey(int key);
 
-    void setMarker();
+    void setMarker(const deValue* c, int n);
 
     void addRandom(int n);
+
+    void generateBackground(const deValue* c, int n);
 
 	DECLARE_EVENT_TABLE()
 

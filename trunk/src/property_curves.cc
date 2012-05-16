@@ -16,29 +16,39 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_CURVE_SHAPE_H
-#define _DE_CURVE_SHAPE_H
+#include "property_curves.h"
+#include "str.h"
+#include "xml.h"
 
-#include <map>
-#include "value.h"
-#include "curve_point.h"
-#include <vector>
 
-class deCurveFunctionBezier;
-
-class deCurveShape
+dePropertyCurves::dePropertyCurves(const std::string& _name, int _size)
+:deProperty(_name), size(_size)
 {
-    private:
-        int size;
-        std::vector<deCurveFunctionBezier> functions;
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        curves.push_back( new deCurveOld());
+    }
+}
 
-    public:
-        deCurveShape(int _size);
-        ~deCurveShape();
+dePropertyCurves::~dePropertyCurves()
+{
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        delete curves[i];
+    }
+}
 
-        void build(const deCurvePoints& points);
+void dePropertyCurves::save(xmlNodePtr root) const
+{
+}    
 
-        deValue calc(deValue value) const;
-};
+void dePropertyCurves::load(xmlNodePtr child)
+{
+    if ((!xmlStrcmp(child->name, BAD_CAST(name.c_str())))) 
+    {
+    }
+}    
 
-#endif
+

@@ -16,40 +16,31 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_CURVES_LAYER_H
-#define _DE_CURVES_LAYER_H
+#ifndef _DE_PROPERTY_CURVES_H
+#define _DE_PROPERTY_CURVES_H
 
-#include "layer_with_blending.h"
+#include "property.h"
+#include "value.h"
+#include <vector>
 #include "curve.h"
 
-class dePropertyCurves;
-
-class deCurvesLayer:public deLayerWithBlending
+class dePropertyCurves:public deProperty
 {
     private:
-        dePropertyCurves* getPropertyCurves();
-
-    protected:
-        virtual std::string getType() const {return "curves";};
+        std::vector<deCurveOld*> curves;
+        int size;
 
     public:
-        deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
-        virtual ~deCurvesLayer();
+        dePropertyCurves(const std::string& _name, int _size);
+        virtual ~dePropertyCurves();
 
-        virtual bool isChannelNeutral(int index);
+        int getSize() const;
 
-        virtual bool updateMainImageSingleChannel(int i);
+        const deCurveOld* getCurve(int index) const {return (curves[index]);};
+        deCurveOld* getCurve(int index) {return (curves[index]);};
 
+        virtual void save(xmlNodePtr root) const;
         virtual void load(xmlNodePtr root);
-        virtual void save(xmlNodePtr root);
-
-        virtual std::string getActionName() {return "curves";};
-
-        dePropertyCurves& getCurves() {return *getPropertyCurves();};
-
-        virtual void executeOperation(const std::string& operation);
-
-
 };
 
 #endif

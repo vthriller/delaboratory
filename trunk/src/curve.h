@@ -72,8 +72,8 @@ class deCurveOld
         void deletePoint(int p);
         void movePoint(int p, deValue x, deValue y);
 
-        void process(const deChannel& source, deChannel& destination, int n);
-        void process(const deValue* source, deValue* destination, int n);
+        void process(const deChannel& source, deChannel& destination, int n) const;
+        void process(const deValue* source, deValue* destination, int n) const;
 
         const deCurvePoints& getPoints() const;
         const deCurvePoints& getControlPoints() const;
