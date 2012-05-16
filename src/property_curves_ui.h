@@ -16,29 +16,37 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_CURVE_SHAPE_H
-#define _DE_CURVE_SHAPE_H
+#ifndef _DE_PROPERTY_CURVES_UI_H
+#define _DE_PROPERTY_CURVES_UI_H
 
-#include <map>
+class dePropertyCurves;
+class deLayerProcessor;
+class deWindow;
+class dePropertyCurvesUIImpl;
+class deBaseLayerWithSource;
 #include "value.h"
-#include "curve_point.h"
-#include <vector>
 
-class deCurveFunctionBezier;
-
-class deCurveShape
+class dePropertyCurvesUI
 {
     private:
-        int size;
-        std::vector<deCurveFunctionBezier> functions;
+        dePropertyCurves& property;
+        deLayerProcessor& layerProcessor;
+
+        int layerIndex;
+
+        deBaseLayerWithSource& layer;
+
+        dePropertyCurvesUIImpl* impl;
 
     public:
-        deCurveShape(int _size);
-        ~deCurveShape();
+        dePropertyCurvesUI(deWindow& window, dePropertyCurves& _property, deLayerProcessor& _layerProcessor, int _layerIndex, deBaseLayerWithSource& _layer, int width);
+        virtual ~dePropertyCurvesUI();
 
-        void build(const deCurvePoints& points);
+        deWindow& getWindow();
 
-        deValue calc(deValue value) const;
-};
+        void setFromProperty();
+
+        void onImageClick(deValue x, deValue y);
+};        
 
 #endif

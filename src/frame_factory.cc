@@ -18,7 +18,6 @@
 
 #include "frame_factory.h"
 
-#include "curves_editor.h"
 #include "equalizer_frame.h"
 #include "basic_frame.h"
 #include "dodge_burn_frame.h"
@@ -30,15 +29,19 @@
 
 #include "window_wx.h"
 
+#include "curves_layer.h"
+
 deFrameOld* createFrame(wxWindow *parent, deBaseLayer& layer, deLayerProcessor& layerProcessor, deLayerFrameManager& frameManager, int layerIndex, deChannelManager& channelManager)
 {
     const std::string type = layer.getType();
 
+/*
     if (type == "curves")
     {
-        deLayerOld& al = dynamic_cast<deLayerOld&>(layer);
+        deCurvesLayer& al = dynamic_cast<deCurvesLayer&>(layer);
         return new deCurvesEditor(parent, al, layerProcessor, frameManager, layerIndex, channelManager);
     }        
+    */
 
     if ((type == "equalizer8") || (type == "equalizer16"))
     {

@@ -30,7 +30,7 @@ deCurveShape::~deCurveShape()
 {
 }
 
-deValue deCurveShape::calc(deValue value)
+deValue deCurveShape::calc(deValue value) const
 {
     if ( value <= 0 )
     {

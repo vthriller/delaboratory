@@ -243,7 +243,7 @@ deValue deCurveOld::calcValue(deValue value)
     return shape.calc(value);
 }
 
-void deCurveOld::process(const deChannel& source, deChannel& destination, int n)
+void deCurveOld::process(const deChannel& source, deChannel& destination, int n) const
 {
     lock();
 
@@ -273,7 +273,7 @@ void deCurveOld::process(const deChannel& source, deChannel& destination, int n)
     unlock();
 }
 
-void deCurveOld::process(const deValue* pixels, deValue* p, int n)
+void deCurveOld::process(const deValue* pixels, deValue* p, int n) const
 {
     lock();
 

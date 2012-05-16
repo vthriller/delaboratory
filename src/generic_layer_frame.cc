@@ -23,9 +23,11 @@
 #include "property_choice_ui.h"
 #include "property_boolean_ui.h"
 #include "property_levels_ui.h"
+#include "property_curves_ui.h"
 #include "property_mixer_ui.h"
 #include "property_numeric.h"
 #include "property_levels.h"
+#include "property_curves.h"
 #include "property_mixer.h"
 #include "property_boolean.h"
 #include "preset_button.h"
@@ -113,6 +115,17 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
             addWidget(p->getWindow());
         }            
 
+        dePropertyCurves* propertyCurves = dynamic_cast<dePropertyCurves*>(property);
+        if (propertyCurves)
+        {
+            deBaseLayerWithSource& layerWithSource = dynamic_cast<deBaseLayerWithSource&>(layer);
+            dePropertyCurvesUI* p = new dePropertyCurvesUI(window, *propertyCurves, _layerProcessor, _index, layerWithSource, width);
+
+            curves.push_back(p);
+
+            addWidget(p->getWindow());
+        }            
+
         dePropertyMixer* propertyMixer = dynamic_cast<dePropertyMixer*>(property);
         if (propertyMixer)
         {
@@ -155,6 +168,13 @@ deGenericLayerFrame::~deGenericLayerFrame()
     {
         delete (*j);
     }
+    {
+        std::vector<dePropertyCurvesUI*>::iterator j;
+        for (j = curves.begin(); j != curves.end(); j++)
+        {
+            delete (*j);
+        }
+    }
     std::vector<dePropertyChoiceUI*>::iterator k;
     for (k = choices.begin(); k != choices.end(); k++)
     {
@@ -186,6 +206,13 @@ void deGenericLayerFrame::setUIFromLayer()
     {
         (*j)->setFromProperty();
     }
+    {
+        std::vector<dePropertyCurvesUI*>::iterator j;
+        for (j = curves.begin(); j != curves.end(); j++)
+        {
+            (*j)->setFromProperty();
+        }
+    }
     std::vector<dePropertyChoiceUI*>::iterator k;
     for (k = choices.begin(); k != choices.end(); k++)
     {
@@ -210,6 +237,14 @@ bool deGenericLayerFrame::onImageClick(deValue x, deValue y)
     if ((x < 0) || (y < 0) || (x >= 1) || (y >= 1))
     {
         return false;
+    }
+
+    {
+        std::vector<dePropertyCurvesUI*>::iterator j;
+        for (j = curves.begin(); j != curves.end(); j++)
+        {
+            (*j)->onImageClick(x,y);
+        }
     }
 
     if (layer.onImageClick(x, y))

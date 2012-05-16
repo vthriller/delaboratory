@@ -25,7 +25,7 @@
 #include "logger.h"
 #include "opacity_slider.h"
 
-deCurvesEditor::deCurvesEditor(wxWindow *parent, deLayerOld& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex, deChannelManager& _channelManager)
+deCurvesEditor::deCurvesEditor(wxWindow *parent, deLayerWithBlending& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex, deChannelManager& _channelManager)
 :deActionFrame(parent, _layer, _frameManager, _layerIndex)
 {
     deCurvesLayer& curvesLayer = dynamic_cast<deCurvesLayer&>(_layer);
@@ -64,8 +64,9 @@ deCurvesEditor::deCurvesEditor(wxWindow *parent, deLayerOld& _layer, deLayerProc
     wxSizer* sizerC = new wxFlexGridSizer(2, 8, 8);
     sizerSB->Add(sizerC);
 
+    dePropertyCurves& property = curvesLayer.getCurves();
 
-    curvesPanel = new deCurvesPanel(this, curvesLayer, _layerProcessor, _layerIndex, _channelManager);
+    curvesPanel = new deCurvesPanel(this, curvesLayer, _layerProcessor, _layerIndex, _channelManager, property, colorSpace);
 
 
     int barSize = 16;

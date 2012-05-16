@@ -22,23 +22,28 @@
 #include <cassert>
 
 #include "frame_factory.h"
-#include "curves_editor.h"
 
 #include "str.h"
 
 #include "color_space_utils.h"
 #include "channel_manager.h"
 
+#include "property_curves.h"
+
+#include "preset.h"
+
 deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deLayerOld( _colorSpace,  _sourceLayer, _layerStack, _channelManager)
+:deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
 {
+    dePreset* reset = createPreset("reset");
+    reset->addOperation("reset");
+
     int n = getColorSpaceSize(colorSpace);
-    curves = new deCurveOld[n];
+    properties.push_back(new dePropertyCurves("curves", n));
 }
 
 deCurvesLayer::~deCurvesLayer()
 {
-    delete [] curves;
 }
 
 bool deCurvesLayer::updateMainImageSingleChannel(int i)
@@ -53,6 +58,13 @@ bool deCurvesLayer::updateMainImageSingleChannel(int i)
         return true;
     }
 
+    dePropertyCurves* p = getPropertyCurves();
+    if (!p)
+    {
+        return false;
+    }
+    const deCurveOld* curve = p->getCurve(i);
+
     deChannel* sourceChannel = channelManager.getChannel(s);
     if (sourceChannel)
     {
@@ -62,7 +74,7 @@ bool deCurvesLayer::updateMainImageSingleChannel(int i)
 
         if (channel)
         {
-            curves[i].process(*sourceChannel, *channel, sourceImage.getChannelSize().getN());
+            curve->process(*sourceChannel, *channel, sourceImage.getChannelSize().getN());
         }
     }
 
@@ -70,19 +82,15 @@ bool deCurvesLayer::updateMainImageSingleChannel(int i)
 
 }
 
-deCurveOld* deCurvesLayer::getCurve(int index)
-{
-    int n = getColorSpaceSize(colorSpace);
-    if ((index < 0) || (index >= n))
-    {
-        return NULL;
-    }
-    return &(curves[index]);
-}
-
 bool deCurvesLayer::isChannelNeutral(int index)
 {
-    return curves[index].isNeutral();
+    dePropertyCurves* p = getPropertyCurves();
+    if (!p)
+    {
+        return false;
+    }
+    deCurveOld* curve = p->getCurve(index);
+    return curve->isNeutral();
 }    
 
 void deCurvesLayer::save(xmlNodePtr root)
@@ -90,13 +98,15 @@ void deCurvesLayer::save(xmlNodePtr root)
     saveCommon(root);
     saveBlend(root);
 
+    dePropertyCurves* p = getPropertyCurves();
+
     int n = getColorSpaceSize(colorSpace);
     int i;
     for (i = 0; i < n; i++)
     {
-        deCurveOld& curve = curves[i];
+        deCurveOld* curve = p->getCurve(i);
         xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("curve"), NULL);
-        curve.save(child);
+        curve->save(child);
     }
 }
 
@@ -106,14 +116,15 @@ void deCurvesLayer::load(xmlNodePtr root)
 
     xmlNodePtr child = root->xmlChildrenNode;
 
+    dePropertyCurves* p = getPropertyCurves();
+
     int i = 0;
     while (child)
     {
         if ((!xmlStrcmp(child->name, BAD_CAST("curve")))) 
         {
-            //assert(i < n);
-            deCurveOld& curve = curves[i];
-            curve.load(child);
+            deCurveOld* curve = p->getCurve(i);
+            curve->load(child);
             i++;
         }
 
@@ -121,3 +132,20 @@ void deCurvesLayer::load(xmlNodePtr root)
     }
 }
 
+dePropertyCurves* deCurvesLayer::getPropertyCurves()
+{
+    deProperty* p = getProperty("curves");
+    return dynamic_cast<dePropertyCurves*>(p);
+}
+
+void deCurvesLayer::executeOperation(const std::string& operation)
+{
+    int n = getColorSpaceSize(colorSpace);
+    dePropertyCurves* p = getPropertyCurves();
+
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        p->getCurve(i)->reset();
+    }
+}
