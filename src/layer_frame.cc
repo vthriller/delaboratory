@@ -51,7 +51,7 @@ deLayerFrame::deLayerFrame(deWindow& parent, const std::string& name, deBaseLaye
 
 deLayerFrame::~deLayerFrame()
 {
-    logInfo(str((int)this) + " ~deLayerFrame");
+    logInfo(" ~deLayerFrame");
     frameManager.removeLayerFrame(index);
-    logInfo(str((int)this) + " ~deLayerFrame DONE");
+    logInfo(" ~deLayerFrame DONE");
 }
