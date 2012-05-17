@@ -49,12 +49,12 @@ class deFrameImpl:public wxFrame
 
         virtual ~deFrameImpl()
         {
-            logInfo(str((int)this) + " ~deFrameImpl");
+            logInfo(" ~deFrameImpl");
             if (frame->clearImpl())
             {
                 delete frame;
             }                
-            logInfo(str((int)this) + " ~deFrameImpl DONE");
+            logInfo(" ~deFrameImpl DONE");
         }
 
         void addWidget(wxWindow* widget)
@@ -92,14 +92,14 @@ deFrame::deFrame(deWindow& parent, const std::string& name)
 
 deFrame::~deFrame()
 {
-    logInfo(str((int)this) + " ~deFrame");
+    logInfo(" ~deFrame");
     if (impl)
     {
         deFrameImpl* i = impl;
         clearImpl();
         delete i;
     }        
-    logInfo(str((int)this) + " ~deFrame DONE");
+    logInfo(" ~deFrame DONE");
 }
 
 bool deFrame::clearImpl()
