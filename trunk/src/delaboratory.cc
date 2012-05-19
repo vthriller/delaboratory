@@ -35,6 +35,31 @@
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
 
+class deInitLogger
+{
+    public:
+        deInitLogger()
+        {
+            std::string ucd = getUserConfigDir();
+            wxString ucd_wx = wxString::FromAscii(ucd.c_str()); 
+
+            if (wxDirExists(ucd_wx))
+            {
+            }
+            else
+            {
+                if (wxMkdir(ucd_wx))
+                {
+                }
+                else
+                {
+                }
+            }
+
+            deLogger::getLogger().setFile(ucd + "/" + LOG_FILE_NAME);
+        }
+};        
+
 
 class deLaboratory: public wxApp
 {	
@@ -46,18 +71,19 @@ class deLaboratory: public wxApp
          operationProcessor(processor),
          project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage, rawModule, zoomManager, operationProcessor, mainWindow)
         {
-            initLogger();
+            logInfo("deLaboratory constructor");
 
         }
 
         ~deLaboratory()
         {
+            logInfo("deLaboratory destructor");
         }
 
     private:
     	virtual bool OnInit();
     	virtual int OnExit();
-        void initLogger();
+        deInitLogger initLogger;
         deMainWindow mainWindow;
         deSamplerManager samplerManager;
         deLayerStack layerStack;
@@ -100,31 +126,6 @@ int deLaboratory::OnExit()
     logInfo("OnExit");
     return 0;
 }   
-
-void deLaboratory::initLogger()
-{
-    std::string ucd = getUserConfigDir();
-    wxString ucd_wx = wxString::FromAscii(ucd.c_str()); 
-
-    if (wxDirExists(ucd_wx))
-    {
-//        logMessage("user config dir: " + ucd + " is already present"); 
-    }
-    else
-    {
-//        logMessage("user config dir: " + ucd + " must be created"); 
-        if (wxMkdir(ucd_wx))
-        {
-//            logMessage("user config dir: " + ucd + " has been created"); 
-        }
-        else
-        {
-//            logMessage("user config dir: " + ucd + " can't be created"); 
-        }
-    }
-
-    deLogger::getLogger().setFile(ucd + "/" + LOG_FILE_NAME);
-}
 
 bool deLaboratory::OnInit()
 {
