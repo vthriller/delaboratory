@@ -35,8 +35,6 @@ const int g_txt = 220;
 deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor,  deLayerGridPanel* _layerGridPanel, deOperationProcessor& _operationProcessor, deChannelManager& _channelManager)
 :wxPanel(parent), project(_project), layerGridPanel(_layerGridPanel), layerProcessor(_processor), operationProcessor(_operationProcessor), channelManager(_channelManager)
 {
-    autoUI = false;
-
     project.setControlPanel(this);
 
     mainSizer = new wxBoxSizer(wxVERTICAL);
@@ -258,7 +256,6 @@ void deControlPanel::click(wxCommandEvent &event)
         deColorSpace colorSpace = c->second;
 
         project.addConversionLayer(colorSpace);
-        onAddLayer();
     }
 
     std::map<int, std::string>::iterator a = actionButtonsNames.find(id);
@@ -267,7 +264,6 @@ void deControlPanel::click(wxCommandEvent &event)
         std::string action = a->second;
 
         project.addActionLayer(action);
-        onAddLayer();
     }
 
 }
@@ -288,33 +284,6 @@ void deControlPanel::onKey(int key)
     }
 }
 
-
-void deControlPanel::onAddLayer()
-{
-    if (autoUI)
-    {
-        deLayerFrameManager& frameManager = project.getLayerFrameManager();
-        deLayerStack& layerStack = project.getLayerStack();
-        int n = layerStack.getSize() - 1;
-        deBaseLayer* baseLayer = layerStack.getLayer(n);
-        int layerIndex = n;
-        deFrameOld* actionFrame = createFrame(this, *baseLayer, layerProcessor, frameManager, layerIndex, channelManager);
-        if (actionFrame)
-        {
-            actionFrame->Show(true);
-        }
-    }
-}
-
-bool deControlPanel::getAutoUI() const
-{
-    return autoUI;
-}
-
-void deControlPanel::setAutoUI(bool a)
-{
-    autoUI = a;
-}
 
 void deControlPanel::updateLayerGrid2()
 {
