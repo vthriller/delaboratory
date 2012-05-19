@@ -561,11 +561,18 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
 
     if (raw)
     { 
+        bool valid = isRawValid(fileName);
+        if (!valid)
+        {
+            logError("not a valid RAW " + fileName);
+            return false;
+        }
+
         info = getRawInfo(fileName);
 
         if (info.size() == 0)
         {
-            logError("not a valid RAW " + fileName);
+            logError("empty RAW info in " + fileName);
             return false;
         }
 
