@@ -26,6 +26,7 @@ class deStaticImage;
 
 std::string getDcrawVersion();
 std::string getRawInfo(const std::string& f);
+bool isRawValid(const std::string& f);
 
 class deRawLoader
 {

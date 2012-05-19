@@ -69,6 +69,20 @@ std::string getDcrawVersion()
     return vs;
 }
 
+bool isRawValid(const std::string& f)
+{
+    std::string command = std::string(DCRAW_EXECUTABLE) + " -i -v \"" + f + "\"";
+    logInfo("calling: " + command);
+
+    const char* c = command.c_str();
+    wxString s(c, wxConvUTF8);
+
+    int result = wxExecute(s, wxEXEC_SYNC);
+    logInfo("result: " + str(result));
+
+    return (result == 0);
+}
+
 std::string getRawInfo(const std::string& f)
 {
     std::string command = std::string(DCRAW_EXECUTABLE) + " -i -v \"" + f + "\"";
