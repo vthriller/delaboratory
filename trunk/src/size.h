@@ -40,6 +40,8 @@ class deSize
         float getAspect() const {return (float) w / h;};
 
         std::string str() const;
+
+        bool isEmpty() const;
 };
 
 bool operator ==(const deSize& a, const deSize& b);

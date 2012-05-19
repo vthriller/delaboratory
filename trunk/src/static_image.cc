@@ -162,3 +162,8 @@ void deStaticImage::finishWriteStatic(int index)
     }
     mutexes[index]->unlockWrite();
 }
+
+bool deStaticImage::isEmpty() const
+{
+    return size.isEmpty();
+}

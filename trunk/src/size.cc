@@ -79,3 +79,16 @@ std::string deSize::str() const
     oss << "[w: " << w << " h: " << h << "]";
     return oss.str();
 }
+
+bool deSize::isEmpty() const
+{
+    if (w > 0)
+    {
+        return false;
+    }
+    if (h > 0)
+    {
+        return false;
+    }
+    return true;
+}
