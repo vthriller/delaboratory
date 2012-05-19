@@ -84,6 +84,7 @@ std::string getRawInfo(const std::string& f)
     std::string result;
 
     bool finished = false;
+    logInfo("before input reading...");
     while (!finished)
     {
         unsigned char c = input->GetC();
@@ -96,6 +97,7 @@ std::string getRawInfo(const std::string& f)
             finished = true;
         }
     }
+    logInfo("after input reading...");
 
     return result;
 }
@@ -103,6 +105,8 @@ std::string getRawInfo(const std::string& f)
 deRawLoader::deRawLoader(const std::string& f, deStaticImage& _image, deColorSpace _colorSpace, bool _half)
 :filename(f), image(_image), colorSpace(_colorSpace), half(_half)
 {
+    logInfo("deRawLoader constructor");
+
     std::string options = "-w -c -6 -o 4 -W";
     if (half)
     {
@@ -126,6 +130,7 @@ deRawLoader::deRawLoader(const std::string& f, deStaticImage& _image, deColorSpa
 
 deRawLoader::~deRawLoader()
 {
+    logInfo("deRawLoader destructor");
 }
 
 
@@ -133,6 +138,7 @@ bool deRawLoader::load(bool& failure)
 {
     if (!input->CanRead())
     {
+        logInfo("deRawLoader load - can't read yet");
         return false;
     }
 
