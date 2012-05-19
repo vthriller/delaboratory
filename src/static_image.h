@@ -59,6 +59,8 @@ class deStaticImage
         void unlock();
 
         void setInfo(const std::string& s);
+
+        bool isEmpty() const;
 };
 
 #endif

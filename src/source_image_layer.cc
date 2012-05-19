@@ -41,6 +41,12 @@ bool deSourceImageLayer::updateMainImageNotThreadedWay()
 {
     const deSize ss = sourceImage.getSize();
 
+    if (ss.isEmpty())
+    {
+        logInfo("skip source image layer update, no source image yet");
+        return false;
+    }
+
     const deSize ds = mainLayerImage.getChannelSize();
 
     deValue z_x1;
