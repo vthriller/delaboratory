@@ -99,6 +99,8 @@ std::string getRawInfo(const std::string& f)
     }
     logInfo("after input reading...");
 
+    logInfo("raw info: " + result);
+
     return result;
 }
 
