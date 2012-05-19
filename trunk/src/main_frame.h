@@ -88,7 +88,6 @@ private:
     deWarningPanel* warningPanel;
 
     wxCheckBox* realtime;
-    wxCheckBox* autoUI;
 
     std::string imageName;
 

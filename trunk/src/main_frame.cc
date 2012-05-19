@@ -127,9 +127,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     realtime = new wxCheckBox(topPanel, wxID_ANY, _T("real time"));
     sizerR->Add(realtime);
 
-    autoUI = new wxCheckBox(topPanel, wxID_ANY, _T("auto UI"));
-    sizerR->Add(autoUI);
-
     bool r = layerProcessor.isRealtime();
     if (r)
     {
@@ -170,16 +167,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     controlPanel = new deControlPanel(this, project, _layerProcessor, layerGridPanel, _operationProcessor, channelManager);
     rightSizer->Add(controlPanel, 0, wxEXPAND);
-
-    bool a = controlPanel->getAutoUI();
-    if (a)
-    {
-        autoUI->SetValue(1);
-    }
-    else
-    {
-        autoUI->SetValue(0);
-    }
 
     mainSizer->Add(rightSizer, 0, wxEXPAND);
 
@@ -523,9 +510,6 @@ void deMainFrame::check(wxCommandEvent &event)
 {
     bool r = realtime->IsChecked();
     layerProcessor.setRealtime(r);
-
-    bool aui = autoUI->IsChecked();
-    controlPanel->setAutoUI(aui);
 }
 
 void deMainFrame::onCloseEvent(wxCloseEvent& event)
