@@ -100,7 +100,7 @@ void saveTIFF(const std::string& fileName, const deChannel& channelR, const deCh
         int x;
         for (x = 0; x < w; x++)
         {
-            deValue d = 256 * 256 - 1 ;;
+            deValue d = 256 * 256 - 1 ;
             deValue r = d * channelR.getValue(pos);
             deValue g = d * channelG.getValue(pos);
             deValue b = d * channelB.getValue(pos);
@@ -119,17 +119,11 @@ void saveTIFF(const std::string& fileName, const deChannel& channelR, const deCh
     logInfo("saved TIFF " + fileName);
 }
 
-bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
+bool loadJPEG(const std::string& fileName, deStaticImage& image)
 {
     wxLogNull noerrormessages;
 
     logInfo("loadJPEG " + fileName);
-
-    if (colorSpace != deColorSpaceRGB)
-    {
-        return false;
-    }
-
 
     const char* c = fileName.c_str();
     wxString s(c, wxConvUTF8);
@@ -146,7 +140,7 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace co
 
     deSize size(w, h);
     image.setSize(size);
-    image.setColorSpace(colorSpace);
+    image.setColorSpace(deColorSpaceRGB);
 
     deValue* pixels0 = image.startWriteStatic(0);
     deValue* pixels1 = image.startWriteStatic(1);
@@ -189,14 +183,9 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image, deColorSpace co
 
 
 
-bool loadTIFF(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
+bool loadTIFF(const std::string& fileName, deStaticImage& image)
 {
     wxLogNull noerrormessages;
-
-    if (colorSpace != deColorSpaceRGB)
-    {
-        return false;
-    }
 
     logInfo("load TIFF " + fileName);
 
@@ -329,11 +318,16 @@ void saveImage(const std::string& fileName, const deImage& image, const std::str
 
 bool loadImage(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
 {
-    if (loadTIFF(fileName, image, colorSpace))
+    if (colorSpace != deColorSpaceRGB)
+    {
+        return false;
+    }
+
+    if (loadTIFF(fileName, image))
     {
         return true;
     }
-    if (loadJPEG(fileName, image, colorSpace))
+    if (loadJPEG(fileName, image))
     {
         return true;
     }
