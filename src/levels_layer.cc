@@ -129,17 +129,17 @@ void deLevelsLayer::executeOperation(const std::string& operation)
 
             if (operation == "auto levels")
             {
-                calcAutoLevels(i, min, middle, max, 0.0001);
+                calcAutoLevels(i, min, middle, max, 0.0005, 0.4);
             }
 
             if (operation == "auto levels light")
             {
-                calcAutoLevels(i, min, middle, max, 0.02);
+                calcAutoLevels(i, min, middle, max, 0.005, 0.4);
             }
 
             if (operation == "auto levels heavy")
             {
-                calcAutoLevels(i, min, middle, max, 0.1);
+                calcAutoLevels(i, min, middle, max, 0.02, 0.4);
             }
 
             levels.setMin(min);
@@ -152,7 +152,7 @@ void deLevelsLayer::executeOperation(const std::string& operation)
     
 }
 
-void deLevelsLayer::calcAutoLevels(int channel, deValue& min, deValue& middle, deValue& max, deValue e)
+void deLevelsLayer::calcAutoLevels(int channel, deValue& min, deValue& middle, deValue& max, deValue margin1, deValue margin2)
 {
     if (!shouldUseAutoLevels(colorSpace, channel))
     {
@@ -170,7 +170,5 @@ void deLevelsLayer::calcAutoLevels(int channel, deValue& min, deValue& middle, d
 
     getSourceImage().finishRead(channel);
 
-    min = histogram.getLeft(e);
-    max = histogram.getRight(e);
-    middle = (min + max) / 2.0;
+    histogram.calcLevels(margin1, margin2, min, middle, max);
 }

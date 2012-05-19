@@ -28,6 +28,7 @@ class deHistogram
     private:
         std::vector<int> bars;
         int size;
+
     public:
         deHistogram(int _size);
         virtual ~deHistogram();
@@ -42,8 +43,7 @@ class deHistogram
 
         bool render(unsigned char* data, int sizeW, int sizeH, unsigned char g1, unsigned char g2, int margin);
 
-        deValue getLeft(deValue min) const;
-        deValue getRight(deValue min) const;
+        void calcLevels(deValue margin1, deValue margin2, deValue& min, deValue& middle, deValue& max);
 
 };
 

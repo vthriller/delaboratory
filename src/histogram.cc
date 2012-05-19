@@ -150,36 +150,59 @@ bool deHistogram::render(unsigned char* data, int sizeW, int sizeH, unsigned cha
     return true;
 }    
 
-
-deValue deHistogram::getLeft(deValue min) const
+void deHistogram::calcLevels(deValue margin1, deValue margin2, deValue& min, deValue& middle, deValue& max)
 {
-    int mm = getMax();
     int i;
+
+    deValue sum = 0.0;
     for (i = 0; i < size; i++)
     {
         deValue b = bars[i];
-        deValue v = b / mm;
-        if (v >= min)
-        {
-            return (deValue) i / (size - 1);
-        }
-    }
-    return 1.0;
-}
+        sum += b;
+    }       
 
-deValue deHistogram::getRight(deValue min) const
-{
-    int mm = getMax();
-    int i;
-    for (i = size-1; i >= 0; i--)
+    deValue left = -1;
+    deValue right = -1;
+    deValue leftMiddle = -1;
+    deValue rightMiddle = -1;
+
+    deValue s = 0.0;
+    for (i = 0; i < size; i++)
     {
         deValue b = bars[i];
-        deValue v = b / mm;
-        if (v >= min)
+        s += b;
+
+        deValue p = s / sum;
+        if ((p >= 1.0 - margin1) && (right < 0))
         {
-            return (deValue) i / (size - 1);
+            right = (deValue) i / (size - 1);
+        }
+        if ((p >= 1.0 - margin2) && (rightMiddle < 0))
+        {
+            rightMiddle = (deValue) i / (size - 1);
         }
     }
-    return 0.0;
+
+    s = 0.0;
+    for (i = size - 1; i >= 0; i--)
+    {
+        deValue b = bars[i];
+        s += b;
+
+        deValue p = s / sum;
+        if ((p >= 1.0 - margin1) && (left < 0))
+        {
+            left = (deValue) i / (size - 1);
+        }
+        if ((p >= 1.0 - margin2) && (leftMiddle < 0))
+        {
+            leftMiddle = (deValue) i / (size - 1);
+        }
+    }
+
+    min = left;
+    max = right;
+    middle = (leftMiddle + rightMiddle) / 2.0;
+
 }
 

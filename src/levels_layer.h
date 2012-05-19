@@ -29,7 +29,7 @@ class deLevelsLayer:public deLayerWithBlending
 
         void createPropertyLevels(int channel);
 
-        void calcAutoLevels(int channel, deValue& min, deValue& middle, deValue& max, deValue e);
+        void calcAutoLevels(int channel, deValue& min, deValue& middle, deValue& max, deValue margin1, deValue margin2);
 
     public:
         deLevelsLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
