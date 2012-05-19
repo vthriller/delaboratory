@@ -96,7 +96,6 @@ bool deLevelsLayer::updateMainImageSingleChannel(int channel)
 
     curve.build();
 
-
     curve.process(source, target, n);
 
     getSourceImage().finishRead(channel);
@@ -115,50 +114,52 @@ void deLevelsLayer::executeOperation(const std::string& operation)
 {
     int n = getColorSpaceSize(colorSpace);
 
+    dePropertyLevels* propertyLevels = getPropertyLevels();
+    if (!propertyLevels)
+    {
+        return;
+    }
+
     int i;
     for (i = 0; i < n; i++)
     {
-        dePropertyLevels* propertyLevels = getPropertyLevels();
-        if (propertyLevels)
+        deLevels& levels = propertyLevels->getLevels(i);
+
+        deValue min = 0.0;
+        deValue middle = 0.5;
+        deValue max = 1.0;
+
+        if (operation == "auto levels")
         {
-            deLevels& levels = propertyLevels->getLevels(i);
+            calcAutoLevels(i, min, middle, max, 0.0005, 0.4);
+        }
 
-            deValue min = 0.0;
-            deValue middle = 0.5;
-            deValue max = 1.0;
+        if (operation == "auto levels light")
+        {
+            calcAutoLevels(i, min, middle, max, 0.005, 0.4);
+        }
 
-            if (operation == "auto levels")
-            {
-                calcAutoLevels(i, min, middle, max, 0.0005, 0.4);
-            }
+        if (operation == "auto levels heavy")
+        {
+            calcAutoLevels(i, min, middle, max, 0.02, 0.4);
+        }
 
-            if (operation == "auto levels light")
-            {
-                calcAutoLevels(i, min, middle, max, 0.005, 0.4);
-            }
+        levels.setMin(min);
+        levels.setMiddle(middle);
+        levels.setMax(max);
 
-            if (operation == "auto levels heavy")
-            {
-                calcAutoLevels(i, min, middle, max, 0.02, 0.4);
-            }
-
-            levels.setMin(min);
-            levels.setMiddle(middle);
-            levels.setMax(max);
-        }            
-        
-
+        if (!shouldUseAutoLevels(colorSpace, i))
+        {
+            disableChannel(i);
+        }
     }
+
+    setOpacity(0.7);
     
 }
 
 void deLevelsLayer::calcAutoLevels(int channel, deValue& min, deValue& middle, deValue& max, deValue margin1, deValue margin2)
 {
-    if (!shouldUseAutoLevels(colorSpace, channel))
-    {
-        return;
-    }
-
     const deValue* c = getSourceImage().startRead(channel);
     int n = getSourceImage().getChannelSize().getN();
 
