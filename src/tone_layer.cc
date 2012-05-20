@@ -23,6 +23,7 @@
 #include "copy_channel.h"
 #include "logger.h"
 #include "str.h"
+#include "curve.h"
 
 deToneLayer::deToneLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
@@ -38,14 +39,14 @@ deToneLayer::deToneLayer(deColorSpace _colorSpace, deChannelManager& _channelMan
     {
         std::string nd = "dark " + getChannelName(colorSpace, i);
         createPropertyNumeric(nd, 0, 1);
-        reset->addNumericValue(nd, 0.0);
+        reset->addNumericValue(nd, 0.25);
     }
 
     for (i = 0; i < n; i++)
     {
         std::string nl = "light " + getChannelName(colorSpace, i);
         createPropertyNumeric(nl, 0, 1);
-        reset->addNumericValue(nl, 1.0);
+        reset->addNumericValue(nl, 0.75);
     }
 
     applyPreset("reset");
@@ -83,13 +84,17 @@ bool deToneLayer::updateMainImageNotThreadedWay()
 
         deValue* destination = mainLayerImage.startWrite(channel);
 
-        int i;
-        for (i = 0; i < n; i++)
-        {
-            deValue v = source[i];
-            v = (light - dark) * v + dark;
-            destination[i] = v;
-        }
+        deBaseCurve curve;
+
+        curve.addPoint(0, 0);
+        curve.addPoint(0.25, dark);
+        curve.addPoint(0.5, 0.5);
+        curve.addPoint(0.75, light);
+        curve.addPoint(1, 1);
+
+        curve.build();
+
+        curve.process(source, destination, n);
 
         mainLayerImage.finishWrite(channel);
     }        
