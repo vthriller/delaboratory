@@ -20,6 +20,7 @@
 #define _DE_FRAME_H
 
 #include <wx/wx.h>
+#include <string>
 class deWindow;
 class dePanel;
 
