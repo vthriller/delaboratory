@@ -44,6 +44,13 @@ deToneLayer::deToneLayer(deColorSpace _colorSpace, deChannelManager& _channelMan
 
     for (i = 0; i < n; i++)
     {
+        std::string nl = "half " + getChannelName(colorSpace, i);
+        createPropertyNumeric(nl, 0, 1);
+        reset->addNumericValue(nl, 0.5);
+    }
+
+    for (i = 0; i < n; i++)
+    {
         std::string nl = "light " + getChannelName(colorSpace, i);
         createPropertyNumeric(nl, 0, 1);
         reset->addNumericValue(nl, 0.75);
@@ -76,9 +83,11 @@ bool deToneLayer::updateMainImageNotThreadedWay()
     for (channel = 0; channel < nc; channel++)
     {
         std::string nd = "dark " + getChannelName(colorSpace, channel);
+        std::string nh = "half " + getChannelName(colorSpace, channel);
         std::string nl = "light " + getChannelName(colorSpace, channel);
         deValue dark = getNumericValue(nd);
         deValue light = getNumericValue(nl);
+        deValue half = getNumericValue(nh);
 
         mainLayerImage.enableChannel(channel);
 
@@ -88,7 +97,7 @@ bool deToneLayer::updateMainImageNotThreadedWay()
 
         curve.addPoint(0, 0);
         curve.addPoint(0.25, dark);
-        curve.addPoint(0.5, 0.5);
+        curve.addPoint(0.5, half);
         curve.addPoint(0.75, light);
         curve.addPoint(1, 1);
 
