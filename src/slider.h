@@ -25,38 +25,6 @@ class dePanel;
 class deWindow;
 class deLayerProcessor;
 
-class deSliderOld:public wxPanel
-{
-    private:
-        wxSizer* sizer;
-        wxStaticText* label;
-        wxStaticText* labelValue;
-        wxButton* reset;
-        wxSlider* slider;
-        int sliderRange;
-        deValue valueMin;
-        deValue valueMax;
-        deValue defaultValue;
-
-        void moveSlider(wxCommandEvent &event);
-        void finishMoveSlider(wxCommandEvent &event);
-
-        void updateValueFromSlider(bool finished);
-
-        void setEdit(deValue v);
-        void setSlider(deValue v);
-
-        void click(wxCommandEvent &event);
-
-    public:
-        deSliderOld(wxWindow *parent, const std::string& labelString, int _sliderRange, deValue _valueMin, deValue _valueMax, deValue defaultValue);
-        virtual ~deSliderOld();
-
-        void setValue(deValue v);
-
-        virtual void onValueChange(deValue value, bool finished) = 0;
-};        
-
 class deSliderImpl;
 
 class deSlider

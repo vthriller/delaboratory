@@ -19,21 +19,19 @@
 #include "layer_factory.h"
 #include "layer_stack.h"
 #include "curves_layer.h"
+#include "equalizer_layer.h"
 #include "fill_layer.h"
 #include "tone_layer.h"
 #include "apply_original_layer.h"
 #include "vignette_layer.h"
+#include "gradient_layer.h"
 #include "gaussian_blur_layer.h"
 #include "gaussian_blur_single_layer.h"
 #include "mixer_layer.h"
 #include "apply_luminance_layer.h"
-#include "equalizer_layer.h"
 #include "conversion_layer.h"
 #include "source_image_layer.h"
-#include "dodge_burn_layer.h"
 #include "high_pass_layer.h"
-#include "shadows_highlights_layer.h"
-#include "basic_layer.h"
 #include <algorithm>
 #include "color_space_utils.h"
 #include "levels_layer.h"
@@ -47,19 +45,9 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
         return new deCurvesLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
-    if (type == "basic")
+    if (type == "equalizer")
     {
-        return new deBasicLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
-    }
-
-    if (type == "dodge_burn")
-    {
-        return new deDodgeBurnLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
-    }
-
-    if (type == "shadows_highlights")
-    {
-        return new deShadowsHighlightsLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
+        return new deEqualizerLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "mixer")
@@ -70,16 +58,6 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
     if (type == "apply_luminance")
     {
         return new deApplyLuminanceLayer(colorSpace, source, _layerStack, _channelManager);
-    }
-
-    if (type == "equalizer8")
-    {
-        return new deEqualizerLayer8(colorSpace, source, _layerStack, _channelManager, _viewManager);
-    }
-
-    if (type == "equalizer16")
-    {
-        return new deEqualizerLayer16(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
     if (type == "levels")
@@ -122,6 +100,11 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
         return new deVignetteLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
     }        
 
+    if (type == "gradient")
+    {
+        return new deGradientLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
+    }        
+
     if (type == "gaussian_blur")
     {
         return new deGaussianBlurLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
@@ -149,59 +132,21 @@ void getSupportedActions(std::vector<std::string>& actions)
 {
     actions.push_back("levels");
     actions.push_back("curves");
+    actions.push_back("equalizer");
     actions.push_back("fill");
     actions.push_back("tone");
     actions.push_back("local_contrast");
     actions.push_back("sharpen");
     actions.push_back("vignette");
+    actions.push_back("gradient");
     actions.push_back("gaussian_blur");
     actions.push_back("gaussian_blur_single");
-    actions.push_back("basic");
     actions.push_back("mixer");
-    actions.push_back("equalizer8");
-    actions.push_back("equalizer16");
     actions.push_back("apply_original");
     actions.push_back("apply_luminance");
 
-    actions.push_back("dodge_burn");
-    actions.push_back("shadows_highlights");
-
     actions.push_back("high_pass");
 }
-
-std::string getActionGroup(const std::string n)
-{
-/*
-    if ((n == "levels") || (n == "local_contrast") || (n == "sharpen") || (n == "vignette") || (n == "apply_luminance"))
-    {
-        return "basic";
-    }
-
-    if ((n == "vignette1") || (n == "vignette2") || (n == "dodge_burn") || (n == "shadows_highlights"))
-    {
-        return "light";
-    }
-    */
-
-    return "gen";
-}
-
-void getSupportedActionGroups(std::vector<std::string>& names)
-{
-    std::vector<std::string> actions;
-    getSupportedActions(actions);
-    std::vector<std::string>::const_iterator i;
-    for (i = actions.begin(); i != actions.end(); i++)
-    {
-        std::string n = getActionGroup(*i);
-        std::vector<std::string>::iterator j = find(names.begin(), names.end(), n);
-        if (j == names.end())
-        {
-            names.push_back(n);
-        }
-    }
-}
-
 
 std::string getActionDescription(const std::string& a)
 {
@@ -214,13 +159,6 @@ std::string getActionDescription(const std::string& a)
     {
         return "luminance";
     }
-
-/*
-    if (a == "apply_image")
-    {
-        return "apply image";
-    }
-    */
 
     if (a == "high_pass")
     {

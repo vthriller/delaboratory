@@ -20,6 +20,7 @@
 #include "blur.h"
 #include "preset.h"
 #include "view_manager.h"
+#include "logger.h"
 
 deGaussianBlurLayer::deGaussianBlurLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack), viewManager(_viewManager)
@@ -36,6 +37,8 @@ deGaussianBlurLayer::~deGaussianBlurLayer()
 
 bool deGaussianBlurLayer::updateMainImageSingleChannel(int channel)
 {
+    logInfo("blur start");
+
     if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
     {
         int s = getSourceImage().getChannelIndex(channel);
@@ -58,6 +61,8 @@ bool deGaussianBlurLayer::updateMainImageSingleChannel(int channel)
 
     getSourceImage().finishRead(channel);
     mainLayerImage.finishWrite(channel);
+    
+    logInfo("blur DONE");
     
     return result;
 }

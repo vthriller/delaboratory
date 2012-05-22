@@ -16,37 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_DODGE_BURN_FRAME_H
-#define _DE_DODGE_BURN_FRAME_H
+#ifndef _DE_GRADIENT_H
+#define _DE_GRADIENT_H
 
-#include "action_frame.h"
-#include "slider.h"
-#include <vector>
-#include <map>
+#include "value.h"
+#include "size.h"
 
-class dePropertyValueSlider;
-class dePropertyBooleanUIOld;
-class deLayerProcessor;
-
-class deDodgeBurnFrame:public deActionFrame
-{
-    private:
-        std::vector<dePropertyValueSlider*> valueSliders;
-
-        dePropertyBooleanUIOld* alternate;
-
-        std::map<std::string, wxButton*> buttons;
-
-        deLayerProcessor& layerProcessor;
-
-        void click(wxCommandEvent &event);
-
-    public:
-        deDodgeBurnFrame(wxWindow *parent, deLayerOld& _layer, deLayerProcessor& _layerProcessor, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deDodgeBurnFrame();
+void gradientChannel(deValue* destination, deSize size, deValue cx, deValue cy, deValue r, deValue a);
 
 
-};
-
-
-#endif
+#endif    

@@ -40,12 +40,7 @@ class deCurvesLayer:public deLayerWithBlending
 
         virtual bool updateMainImageSingleChannel(int i);
 
-        virtual void load(xmlNodePtr root);
-        virtual void save(xmlNodePtr root);
-
         virtual std::string getActionName() {return "curves";};
-
-        dePropertyCurves& getCurves() {return *getPropertyCurves();};
 
         virtual void executeOperation(const std::string& operation);
 

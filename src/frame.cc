@@ -23,15 +23,6 @@
 #include "logger.h"
 #include "str.h"
 
-deFrameOld::deFrameOld(wxWindow *parent, const std::string& name)
-:wxFrame(parent, wxID_ANY, wxString::FromAscii(name.c_str()), wxDefaultPosition, wxDefaultSize, wxCAPTION | wxCLOSE_BOX | wxFRAME_FLOAT_ON_PARENT)
-{
-}
-
-deFrameOld::~deFrameOld()
-{
-}
-
 class deFrameImpl:public wxFrame
 {
     private:

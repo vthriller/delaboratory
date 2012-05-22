@@ -19,7 +19,7 @@
 #include "image_panel.h"
 #include <wx/dcbuffer.h>
 #include "project.h"
-#include "layer.h"
+#include "base_layer.h"
 #include "layer_processor.h"
 #include <iostream>
 #include "str.h"

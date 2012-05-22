@@ -18,42 +18,8 @@
 
 #include "property_choice_ui.h"
 #include "property_choice.h"
-#include "layer.h"
+#include "base_layer.h"
 #include "layer_processor.h"
-
-dePropertyChoiceUIOld::dePropertyChoiceUIOld(wxWindow *parent, dePropertyChoice& _property, deLayerOld& _layer, deLayerProcessor& _layerProcessor, int _layerIndex)
-:deChoiceOld(parent, _property.getLabel(), _property.getChoices()),
-property(_property),
-layer(_layer),
-layerProcessor(_layerProcessor),
-layerIndex(_layerIndex)
-{
-    setFromProperty();
-}
-
-dePropertyChoiceUIOld::~dePropertyChoiceUIOld()
-{
-}
-
-void dePropertyChoiceUIOld::onChoose(int c)
-{
-    property.setIndex(c);
-
-    if (property.updateBlendOnly())
-    {
-        layerProcessor.markUpdateBlendAllChannels(layerIndex);
-    }
-    else
-    {
-        layerProcessor.markUpdateAllChannels(layerIndex);
-    }
-}
-
-void dePropertyChoiceUIOld::setFromProperty()
-{
-    int index = property.getIndex();
-    set(index);
-}
 
 dePropertyChoiceUI::dePropertyChoiceUI(deWindow& window, dePropertyChoice& _property, deLayerProcessor& _layerProcessor, int _layerIndex)
 :deChoice(window, _property.getName(), _property.getChoices()),

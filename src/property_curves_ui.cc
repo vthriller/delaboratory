@@ -26,6 +26,7 @@
 #include "gradient_panel.h"
 #include "channel_selector.h"
 #include "curves_panel.h"
+#include "base_layer_with_source.h"
 
 class deCurvesChannelSelector:public deChannelSelector
 {

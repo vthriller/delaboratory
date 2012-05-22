@@ -20,46 +20,6 @@
 #include "window_wx.h"
 #include "panel_wx.h"
 
-deCheckBoxOld::deCheckBoxOld(wxWindow *parent, const std::string& labelString)
-:wxPanel(parent)
-{
-    sizer = new wxBoxSizer(wxHORIZONTAL);
-    SetSizer(sizer);
-    
-    checkBox =  new wxCheckBox(this, wxID_ANY, wxString::FromAscii(labelString.c_str()));
-    sizer->Add(checkBox);
-
-    Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deCheckBoxOld::check));
-}
-
-deCheckBoxOld::~deCheckBoxOld()
-{
-}
-
-void deCheckBoxOld::check(wxCommandEvent &event)
-{
-    if (checkBox->IsChecked())
-    {
-        onCheck(true);
-    }
-    else
-    {
-        onCheck(false);
-    }
-}
-
-void deCheckBoxOld::set(bool b)
-{
-    if (b)
-    {
-        checkBox->SetValue(1);
-    }
-    else
-    {
-        checkBox->SetValue(0);
-    }
-}
-
 class deCheckBoxImpl:public dePanelWX
 {
     private:

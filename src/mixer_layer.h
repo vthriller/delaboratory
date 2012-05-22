@@ -19,7 +19,7 @@
 #ifndef _DE_MIXER_LAYER_H
 #define _DE_MIXER_LAYER_H
 
-#include "layer.h"
+#include "layer_with_blending.h"
 #include "mixer.h"
 
 class deMixerLayer:public deLayerWithBlending

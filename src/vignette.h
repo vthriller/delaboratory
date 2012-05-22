@@ -41,7 +41,6 @@ class deEllipse
 };
 
 void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse, deValue light, deValue darkness, deValue spot);
-//void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse1, deEllipse ellipse2, deValue light, deValue darkness, deValue spot);
 
 deEllipse calcEllipse(deValue radX, deValue radY, deValue cenX, deValue cenY, deValue x1, deValue y1, deValue x2, deValue y2);
 

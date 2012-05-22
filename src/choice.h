@@ -24,24 +24,6 @@
 #include <string>
 #include "window.h"
 
-class deChoiceOld:public wxPanel
-{
-    private:
-        wxSizer* sizer;
-        wxStaticText* label;
-        wxChoice* choice;
-
-        void choose(wxCommandEvent &event);
-
-    public:
-        deChoiceOld(wxWindow *parent, const std::string& labelString, const std::vector<std::string>& choices);
-        virtual ~deChoiceOld();
-
-        virtual void onChoose(int c) = 0;
-
-        void set(int index);
-};        
-
 class deChoiceImpl;
 
 class deChoice

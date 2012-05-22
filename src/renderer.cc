@@ -20,7 +20,7 @@
 #include <wx/wx.h>
 #include "project.h"
 #include "image.h"
-#include "layer.h"
+#include "base_layer.h"
 #include <iostream>
 #include "layer_processor.h"
 #include "str.h"

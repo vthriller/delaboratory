@@ -41,7 +41,6 @@ class deLayerGridPanel:public wxPanel
             wxStaticText* id;
             wxRadioButton* view;
             wxButton* action;
-            wxButton* blend;
             wxCheckBox* enabled;
     };
 

@@ -20,43 +20,6 @@
 #include "window_wx.h"
 #include "panel_wx.h"
 
-deChoiceOld::deChoiceOld(wxWindow *parent, const std::string& labelString, const std::vector<std::string>& choices)
-:wxPanel(parent)
-{
-    sizer = new wxBoxSizer(wxHORIZONTAL);
-    SetSizer(sizer);
-    
-    label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(labelString.c_str()), wxDefaultPosition, wxSize(100, 30));
-    sizer->Add(label, 0, wxCENTER);
-
-    wxString* ws = new wxString [choices.size()];
-    unsigned int i;
-    for (i = 0; i < choices.size(); i++)
-    {
-        ws[i] = wxString::FromAscii(choices[i].c_str());
-    }        
-
-    choice =  new wxChoice(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1), choices.size(), ws);
-    sizer->Add(choice);
-
-    Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(deChoiceOld::choose));
-}
-
-deChoiceOld::~deChoiceOld()
-{
-}
-
-void deChoiceOld::choose(wxCommandEvent &event)
-{
-    int i = event.GetInt();
-    onChoose(i);
-}
-
-void deChoiceOld::set(int index)
-{
-    choice->SetSelection(index);
-}
-
 class deChoiceImpl:public dePanelWX
 {
     private:

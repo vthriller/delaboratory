@@ -29,6 +29,7 @@
 #include "slider.h"
 #include "logger.h"
 #include "channel_selector.h"
+#include "base_layer_with_source.h"
 
 class deMixerChannelSelector:public deChannelSelector
 {

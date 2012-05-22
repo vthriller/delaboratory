@@ -204,7 +204,7 @@ void deCurvesPanel::drawLines(wxDC& dc)
 
 void deCurvesPanel::drawCurve(wxDC& dc)
 {
-    deCurveOld* curve = property.getCurve(channel);
+    deBaseCurve* curve = property.getCurve(channel);
 
     if (!curve)
     {
@@ -242,7 +242,7 @@ void deCurvesPanel::drawCurve(wxDC& dc)
 
 void deCurvesPanel::click(wxMouseEvent &event)
 {
-    deCurveOld* curve = property.getCurve(channel);
+    deBaseCurve* curve = property.getCurve(channel);
 
     if (!curve)
     {
@@ -263,6 +263,7 @@ void deCurvesPanel::click(wxMouseEvent &event)
     else
     {
         selectedPoint = curve->addPoint(x, y);
+        curve->build();
     }
 
     lastSelectedPoint = selectedPoint;
@@ -273,93 +274,6 @@ void deCurvesPanel::click(wxMouseEvent &event)
 
     update(false);
 }
-
-void deCurvesPanel::reset()
-{
-    lastSelectedPoint = -1;
-    deCurveOld* curve = property.getCurve(channel);
-
-    if (!curve)
-    {
-        return;
-    }
-    curve->reset();
-    update(true);
-}
-
-void deCurvesPanel::invert()
-{
-    lastSelectedPoint = -1;
-    deCurveOld* curve = property.getCurve(channel);
-
-    if (!curve)
-    {
-        return;
-    }
-    curve->invert();
-    update(true);
-}
-
-void deCurvesPanel::setConst(deValue v)
-{
-    lastSelectedPoint = -1;
-    deCurveOld* curve = property.getCurve(channel);
-
-    if (!curve)
-    {
-        return;
-    }
-    curve->setConst(v);
-    update(true);
-}
-
-void deCurvesPanel::addRandom(int n)
-{
-    lastSelectedPoint = -1;
-    deCurveOld* curve = property.getCurve(channel);
-
-    if (!curve)
-    {
-        return;
-    }
-
-    curve->reset();
-
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        curve->addRandom();
-    }
-
-    update(true);
-}
-
-void deCurvesPanel::setAngle(int a)
-{
-    lastSelectedPoint = -1;
-    deCurveOld* curve = property.getCurve(channel);
-
-    if (!curve)
-    {
-        return;
-    }
-    curve->setAngle(a);
-    update(true);
-}
-
-void deCurvesPanel::setS(int a)
-{
-    lastSelectedPoint = -1;
-    deCurveOld* curve = property.getCurve(channel);
-
-    if (!curve)
-    {
-        return;
-    }
-    curve->setS(a);
-    update(true);
-}
-
 
 void deCurvesPanel::update(bool finished)
 {
@@ -372,7 +286,7 @@ void deCurvesPanel::update(bool finished)
 
 void deCurvesPanel::release(wxMouseEvent &event)
 {
-    deCurveOld* curve = property.getCurve(channel);
+    deBaseCurve* curve = property.getCurve(channel);
 
     if (!curve)
     {
@@ -387,6 +301,7 @@ void deCurvesPanel::release(wxMouseEvent &event)
         if ((x < -0.1) || (y < -0.1) || (x>1.1) || (y>1.1))
         {
             curve->deletePoint(selectedPoint);
+            curve->build();
             lastSelectedPoint = -1;
             selectedPoint = -1;
             update(true);
@@ -408,7 +323,7 @@ void deCurvesPanel::move(wxMouseEvent &event)
         return;
     }
 
-    deCurveOld* curve = property.getCurve(channel);
+    deBaseCurve* curve = property.getCurve(channel);
 
     if (!curve)
     {
@@ -442,6 +357,7 @@ void deCurvesPanel::move(wxMouseEvent &event)
         }
 
         curve->movePoint(selectedPoint, x, y);
+        curve->build();
         update(false);
     }
 }
@@ -521,7 +437,7 @@ void deCurvesPanel::onKey(int key)
                 {
                     deValue m = c->getValue(clickPosition);
 
-                    deCurveOld* curve = property.getCurve(i);
+                    deBaseCurve* curve = property.getCurve(i);
 
                     int selectedPoint = curve->addPoint(m, curve->calcValue(m));
        
@@ -553,7 +469,7 @@ void deCurvesPanel::onKey(int key)
         deValue dY = delta / (sizeY - 1);
         if (lastSelectedPoint >= 0)
         {
-            deCurveOld* curve = property.getCurve(channel);
+            deBaseCurve* curve = property.getCurve(channel);
             curve->movePointVertically(lastSelectedPoint, dY);
             update(true);
         }
@@ -563,11 +479,11 @@ void deCurvesPanel::onKey(int key)
     {
         if (lastSelectedPoint >= 0)
         {
-            deCurveOld* curve = property.getCurve(channel);
+            deBaseCurve* curve = property.getCurve(channel);
             curve->deletePoint(lastSelectedPoint);
             lastSelectedPoint = -1;
             update(true);
         }
     }
-*/
+    */
 }

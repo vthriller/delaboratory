@@ -26,6 +26,7 @@
 #include "canvas_wx.h"
 #include "gradient_panel.h"
 #include "channel_selector.h"
+#include "base_layer_with_source.h"
 
 class deLevelsChannelSelector:public deChannelSelector
 {

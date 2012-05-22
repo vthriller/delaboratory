@@ -18,7 +18,7 @@
 
 #include "control_panel.h"
 #include "project.h"
-#include "layer.h"
+#include "base_layer.h"
 #include "layer_factory.h"
 #include "layer_grid_panel.h"
 #include "file_dialogs.h"
@@ -26,7 +26,6 @@
 #include "wx/notebook.h"
 #include "layer_stack.h"
 #include "layer_frame_manager.h"
-#include "frame_factory.h"
 #include "color_space_utils.h"
 #include "operation_processor.h"
 
@@ -43,19 +42,12 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
     wxNotebook* notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("notebook"));
     mainSizer->Add(notebook, 1, wxEXPAND);
 
-    std::vector<std::string> actionGroups;
-    getSupportedActionGroups(actionGroups);
-
     std::vector<std::string> actions;
     getSupportedActions(actions);
 
-    std::vector<std::string>::iterator i;
-    for (i = actionGroups.begin(); i != actionGroups.end(); i++)
     {
-        std::string n = *i;
-
         wxPanel* actionsPanel = new wxPanel(notebook);
-        notebook->AddPage(actionsPanel, wxString::FromAscii(n.c_str()));
+        notebook->AddPage(actionsPanel, _T("actions"));
 
         wxSizer* gridSizer = new wxGridSizer(3);
         actionsPanel->SetSizer(gridSizer);
@@ -63,15 +55,11 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
         std::vector<std::string>::iterator j;
         for (j = actions.begin(); j != actions.end(); j++)
         {
-            std::string an = getActionGroup(*j);
-            if (an == n)
-            {
-                std::string actionDescription = getActionDescription(*j);
-                wxButton* b = new wxButton(actionsPanel, wxID_ANY, wxString::FromAscii(actionDescription.c_str()));
-                gridSizer->Add(b);
-                actionButtons.push_back(b);
-                actionButtonsNames[b->GetId()] = *j;
-            }
+            std::string actionDescription = getActionDescription(*j);
+            wxButton* b = new wxButton(actionsPanel, wxID_ANY, wxString::FromAscii(actionDescription.c_str()));
+            gridSizer->Add(b);
+            actionButtons.push_back(b);
+            actionButtonsNames[b->GetId()] = *j;
         }
         
     }
@@ -156,27 +144,6 @@ void deControlPanel::setConversions()
     deColorSpace currentColorSpace = layer->getColorSpace();
     std::vector<wxButton*>::iterator i;
 
-/*
-    for (i = convertButtons.begin(); i != convertButtons.end(); i++)
-    {
-        wxButton* b = *i;
-        int id = b->GetId();
-        deColorSpace colorSpace = convertButtonsColorSpaces[id];
-
-        bool valid = checkConversion(currentColorSpace, colorSpace);
-
-        if ((currentColorSpace != colorSpace) && (valid))
-        {
-            b->Enable();
-        }
-        else
-        {
-            b->Disable();
-        }
-    }
-    */
-
-
     for (i = actionButtons.begin(); i != actionButtons.end(); i++)
     {
         wxButton* b = *i;
@@ -220,7 +187,7 @@ void deControlPanel::click(wxCommandEvent &event)
         deLayerStack& layerStack = project.getLayerStack();
         int index = layerStack.getSize() - 1;
         project.getLayerFrameManager().onDestroyLayer(index);
-        operationProcessor.removeTopLayer();
+        operationProcessor.execute("remove");
         updateLayerGrid2();
     }
 
@@ -255,7 +222,9 @@ void deControlPanel::click(wxCommandEvent &event)
     {
         deColorSpace colorSpace = c->second;
 
-        project.addConversionLayer(colorSpace);
+        //project.addConversionLayer(colorSpace);
+
+        operationProcessor.execute(getColorSpaceName(colorSpace));
     }
 
     std::map<int, std::string>::iterator a = actionButtonsNames.find(id);
@@ -263,13 +232,16 @@ void deControlPanel::click(wxCommandEvent &event)
     {
         std::string action = a->second;
 
-        project.addActionLayer(action);
+        //project.addActionLayer(action);
+
+        operationProcessor.execute(action);
     }
 
 }
 
 void deControlPanel::onKey(int key)
 {
+/*
     if (key == 'B')
     {
         project.addActionLayer("blur");
@@ -282,6 +254,7 @@ void deControlPanel::onKey(int key)
     {
         project.addActionLayer("mixer");
     }
+    */
 }
 
 

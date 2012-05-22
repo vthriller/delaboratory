@@ -34,7 +34,6 @@
 #include "layer_factory.h"
 #include "xml.h"
 #include "image_area_panel.h"
-#include "memory_info_frame.h"
 #include <iostream>
 #include "main_frame.h"
 #include "layer_processor.h"
@@ -53,12 +52,11 @@
 
 #define ICC_MESSAGE 0
 
-deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deOperationProcessor& _operationProcessor, deMainWindow& _mainWindow)
+deProject::deProject(deLayerProcessor& _processor, deChannelManager& _channelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deMainWindow& _mainWindow)
 :layerProcessor(_processor),
  viewModePanel(NULL),
- previewChannelManager(_previewChannelManager),
+ channelManager(_channelManager),
  controlPanel(NULL),
- memoryInfoFrame(NULL),
  viewManager(*this, _processor, _zoomManager),
  sourceImage(_sourceImage),
  layerStack(_layerStack),
@@ -67,12 +65,10 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
  imageAreaPanel(NULL),
  rawModule(_rawModule),
  zoomManager(_zoomManager),
- operationProcessor(_operationProcessor),
  mainWindow(_mainWindow)
 {
     imageFileName = "";
     sourceImageFileName = "";
-    receiveKeys = true;
 
     logInfo("project constructor");
 
@@ -81,16 +77,6 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _previewCha
     resetLayerStack(deColorSpaceRGB);
 
 
-}
-
-void deProject::disableKeys()
-{
-    receiveKeys = false;
-}
-
-void deProject::enableKeys()
-{
-    receiveKeys = true;
 }
 
 deProject::~deProject()
@@ -188,23 +174,6 @@ void deProject::setTestImage(int s)
     }        
     resetLayerStack(sourceImage.getColorSpace());
 
-/*
-    freeImage();
-
-    deSize size(s, s);
-
-    sourceImage.setColorSpace(deColorSpaceRGB);
-    sourceImage.setSize(size);
-    deChannel* channelRR = sourceImage.getChannel(0);
-    deChannel* channelGG = sourceImage.getChannel(1);
-    deChannel* channelBB = sourceImage.getChannel(2);
-
-    generateFractal(channelRR->getPixels(), channelGG->getPixels(), channelBB->getPixels(), size);
-
-    imageFileName = "delaboratory_test_image";
-    onImageNameUpdate();
-
-    */
 }
 
 void deProject::resetLayerStack(deColorSpace colorSpace)
@@ -213,25 +182,25 @@ void deProject::resetLayerStack(deColorSpace colorSpace)
 
     layerProcessor.removeAllLayers();
 
-    deBaseLayer* layer = createLayer("original", -1, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
+    deBaseLayer* layer = createLayer("original", -1, colorSpace, layerStack, channelManager, viewManager, sourceImage);
 
     if (layer)
     {
-        operationProcessor.addNewLayerOnTop(layer, 0);
+        layerProcessor.addLayerInLayerProcessor(layer);
     }        
 
-    previewChannelManager.destroyAllChannels();
+    channelManager.destroyAllChannels();
     layerProcessor.updateAllImages(true);
 
     updateLayerGrid();
 
-    setLastView();
+    viewManager.setLastView();
 
 }
 
 deChannelManager& deProject::getPreviewChannelManager() 
 {
-    return previewChannelManager;
+    return channelManager;
 }
 
 deSize deProject::getSourceImageSize() 
@@ -278,7 +247,6 @@ void deProject::onChangeView(int a)
     {
         histogramModePanel->updateNames();
     }
-    updateMemoryInfo();
     mainWindow.rebuild();
     logInfo("change view from " + str(a) + " DONE");
 }
@@ -326,14 +294,14 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
     }
 
     // remember original size of preview
-    deSize originalSize = previewChannelManager.getChannelSizeFromChannelManager();
+    deSize originalSize = channelManager.getChannelSizeFromChannelManager();
 
     // calculate final image in full size
     int view = viewManager.getView();
 
-    previewChannelManager.setChannelSize(sourceImage.getSize());
+    channelManager.setChannelSize(sourceImage.getSize());
 
-    bool result = layerProcessor.updateImagesSmart(view, progressDialog, memoryInfoFrame, fileName, type, saveAll);
+    bool result = layerProcessor.updateImagesSmart(view, progressDialog, fileName, type, saveAll);
 
     if (!result)
     {
@@ -341,7 +309,7 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
     }
 
     // bring back original size of preview
-    previewChannelManager.setChannelSize(originalSize);
+    channelManager.setChannelSize(originalSize);
 
     if (result)
     {
@@ -356,13 +324,6 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
     layerProcessor.updateAllImages(true);
 
     return result;
-}
-
-void deProject::setLastView()
-{
-    int n = layerStack.getSize();
-    n--;
-    viewManager.setView(n);
 }
 
 void deProject::setViewModePanel(deViewModePanel* _viewModePanel)
@@ -455,11 +416,11 @@ void deProject::loadLayer(xmlNodePtr root, int layerIndex)
         child = child->next;
     }
        
-    deBaseLayer* layer = createLayer(type, source, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
+    deBaseLayer* layer = createLayer(type, source, colorSpace, layerStack, channelManager, viewManager, sourceImage);
 
     if (layer)
     {
-        operationProcessor.addNewLayerOnTop(layer, layerIndex);
+        //operationProcessor.addNewLayerOnTop(layer, layerIndex);
         layer->load(root);
     }        
 
@@ -485,7 +446,7 @@ void deProject::loadLayers(xmlNodePtr root)
         child = child->next;
     }
 
-    previewChannelManager.destroyAllChannels();
+    channelManager.destroyAllChannels();
     layerProcessor.updateAllImages(true);
 }
 
@@ -532,14 +493,14 @@ void deProject::open(const std::string& fileName, bool image)
         }
     }        
 
-    setLastView();
+    viewManager.setLastView();
     updateLayerGrid();
 }
 
 void deProject::newProject()
 {
     resetLayerStack(deColorSpaceRGB);
-    setLastView();
+    viewManager.setLastView();
     updateLayerGrid();
 }
 
@@ -623,7 +584,7 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
     onImageNameUpdate();
     sourceImageFileName = fileName;
 
-    previewChannelManager.destroyAllChannels();
+    channelManager.destroyAllChannels();
     if (imageAreaPanel)
     {
         imageAreaPanel->updateSize(true);
@@ -641,81 +602,33 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
     return true;
 }
 
-void deProject::openMemoryInfoFrame(wxWindow* parent)
-{
-    if (!memoryInfoFrame)
-    {
-        memoryInfoFrame = new deMemoryInfoFrame(parent, *this);
-        memoryInfoFrame->Show();
-    }
-}
-
-void deProject::closeMemoryInfoFrame()
-{
-    memoryInfoFrame = NULL;
-}
-
-void deProject::updateMemoryInfo()
-{
-    if (memoryInfoFrame)
-    {
-        memoryInfoFrame->update();
-    }
-}
-
 bool deProject::isSourceValid() const
 {
-    return (!previewChannelManager.isImageEmpty());
+    return (!channelManager.isImageEmpty());
 }
 
-void deProject::addActionLayer(const std::string& action)
+deBaseLayer* deProject::createNewLayer(const std::string& type)
 {
-    int layerIndex = layerStack.getSize();
-
     int s = viewManager.getView();
+
+    deBaseLayer* layer = NULL;
 
     deBaseLayer* vLayer = layerStack.getLayer(s);
-
-    if (!vLayer)
+    if (vLayer)
     {
-        return;
+        deColorSpace colorSpace = vLayer->getColorSpace();
+
+        layer = createLayer(type, s, colorSpace, layerStack, channelManager, viewManager, sourceImage);
     }
 
-    deColorSpace colorSpace = vLayer->getColorSpace();
-
-    std::string actionDescription = getActionDescription(action);
-
-    logInfo("creating action layer: " + action);
-
-    deBaseLayer* layer = createLayer(action, s, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
-
-    if (layer)
+    if (!layer)
     {
-        operationProcessor.addNewLayerOnTop(layer, layerIndex);
-        setLastView();
-        updateLayerGrid();
+        deColorSpace colorSpace = colorSpaceFromString(type);
+        layer = createLayer("conversion", s, colorSpace, layerStack, channelManager, viewManager, sourceImage);
     }
-}    
 
-void deProject::addConversionLayer(deColorSpace colorSpace)
-{
-    int layerIndex = layerStack.getSize();
-    int s = viewManager.getView();
-
-    std::string name = getColorSpaceName(colorSpace);
-
-    logInfo("creating conversionlayer: " + name);
-
-    deBaseLayer* layer = createLayer("conversion", s, colorSpace, layerStack, previewChannelManager, viewManager, sourceImage);
-
-    if (layer)
-    {
-        operationProcessor.addNewLayerOnTop(layer, layerIndex);
-        setLastView();
-        updateLayerGrid();
-        
-    }
-}        
+    return layer;
+}
 
 void deProject::onImageNameUpdate()
 {
@@ -748,3 +661,9 @@ void deProject::updateLayerGrid()
         controlPanel->updateLayerGrid2();
     }        
 }
+
+void deProject::onAddNewLayer()
+{
+    viewManager.setLastView();
+    updateLayerGrid();
+}        

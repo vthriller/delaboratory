@@ -21,28 +21,6 @@
 #include "logger.h"
 #include "str.h"
 
-deLayerFrameOld::deLayerFrameOld(wxWindow *parent, deBaseLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex)
-:deFrameOld(parent, name),
-layer(_layer),
-frameManager(_frameManager),
-layerIndex(_layerIndex)
-{
-}
-
-deLayerFrameOld::~deLayerFrameOld()
-{
-}
-
-bool deLayerFrameOld::checkIndex(int index)
-{
-    if (layerIndex == index)
-    {
-        return true;
-    }
-
-    return false;
-}
-
 deLayerFrame::deLayerFrame(deWindow& parent, const std::string& name, deBaseLayer& _layer, deLayerFrameManager& _frameManager, int _index)
 :deFrame(parent, name), layer(_layer), frameManager(_frameManager), index(_index)
 {

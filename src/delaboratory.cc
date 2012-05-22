@@ -68,8 +68,8 @@ class deLaboratory: public wxApp
         :wxApp(),
          sourceImage(),
          processor(previewChannelManager, layerStack, layerFrameManager, mainWindow),
-         operationProcessor(processor),
-         project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage, rawModule, zoomManager, operationProcessor, mainWindow)
+         project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage, rawModule, zoomManager, mainWindow),
+         operationProcessor(processor, project)
         {
             logInfo("deLaboratory constructor");
 
@@ -93,8 +93,8 @@ class deLaboratory: public wxApp
         deLayerProcessor processor;
         deRawModule rawModule;
         deZoomManager zoomManager;
-        deOperationProcessor operationProcessor;
         deProject project;
+        deOperationProcessor operationProcessor;
 
         virtual int FilterEvent(wxEvent& event);
 
@@ -105,16 +105,13 @@ IMPLEMENT_APP(deLaboratory)
 
 int deLaboratory::FilterEvent(wxEvent& event)
 {
-    if (project.shouldReceiveKeys())
+    if  (event.GetEventType()==wxEVT_KEY_DOWN )
     {
-        if  (event.GetEventType()==wxEVT_KEY_DOWN )
-        {
-            int key = ((wxKeyEvent&)event).GetKeyCode();
+        int key = ((wxKeyEvent&)event).GetKeyCode();
 
-            project.onKey(key);
-            mainWindow.onKey(key);
-            return true;
-        }
+        project.onKey(key);
+        mainWindow.onKey(key);
+        return true;
     }
 
     return -1;

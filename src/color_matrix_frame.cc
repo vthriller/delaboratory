@@ -21,7 +21,7 @@
 #include "gradient_panel.h"
 #include "project.h"
 #include "layer_stack.h"
-#include "layer.h"
+#include "base_layer.h"
 #include "channel_manager.h"
 #include "wx/notebook.h"
 #include "conversion_processor.h"
