@@ -19,55 +19,32 @@
 #ifndef _DE_EQUALIZER_LAYER_H
 #define _DE_EQUALIZER_LAYER_H
 
-#include "layer.h"
-class deEqualizer;
+#include "layer_with_blending.h"
+#include "curve.h"
 
-class deEqualizerLayer:public deLayerOld
+class dePropertyCurves;
+
+class deEqualizerLayer:public deLayerWithBlending
 {
     private:
-        std::vector<deEqualizer*> equalizers;
-        int bands;
+        dePropertyCurves* getPropertyCurves();
 
     protected:
+        virtual std::string getType() const {return "curves";};
 
     public:
-        deEqualizerLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _bands);
+        deEqualizerLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
         virtual ~deEqualizerLayer();
 
         virtual bool isChannelNeutral(int index);
 
-        virtual void load(xmlNodePtr root);
-        virtual void save(xmlNodePtr root);
-
         virtual bool updateMainImageSingleChannel(int i);
 
-        int getBands() const {return bands;};
-        deEqualizer* getEqualizer(int index);
+        virtual std::string getActionName() {return "curves";};
 
-        void reset();
+        virtual void executeOperation(const std::string& operation);
+
+
 };
-
-class deEqualizerLayer8:public deEqualizerLayer
-{
-    public:
-        deEqualizerLayer8(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
-        virtual ~deEqualizerLayer8();
-
-        virtual std::string getActionName() {return "eq8";};
-        virtual std::string getType() const {return "equalizer8";};
-        virtual std::string getLabel() const {return "equalizer8";};
-};
-
-class deEqualizerLayer16:public deEqualizerLayer
-{
-    public:
-        deEqualizerLayer16(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
-        virtual ~deEqualizerLayer16();
-
-        virtual std::string getActionName() {return "eq16";};
-        virtual std::string getType() const {return "equalizer16";};
-        virtual std::string getLabel() const {return "equalizer16";};
-};
-
 
 #endif

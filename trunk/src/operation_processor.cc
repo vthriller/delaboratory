@@ -19,9 +19,10 @@
 #include "operation_processor.h"
 #include "layer_processor.h"
 #include "logger.h"
+#include "project.h"
 
-deOperationProcessor::deOperationProcessor(deLayerProcessor& _layerProcessor)
-:layerProcessor(_layerProcessor)
+deOperationProcessor::deOperationProcessor(deLayerProcessor& _layerProcessor, deProject& _project)
+:layerProcessor(_layerProcessor), project(_project)
 {
 }
 
@@ -29,10 +30,10 @@ deOperationProcessor::~deOperationProcessor()
 {
 }
 
-void deOperationProcessor::addNewLayerOnTop(deBaseLayer* layer, int layerIndex)
+void deOperationProcessor::addNewLayerOnTop(deBaseLayer* layer)
 {
     logInfo("before add new layer on top");
-    layerProcessor.addLayerInLayerProcessor(layer, layerIndex);
+    layerProcessor.addLayerInLayerProcessor(layer);
     logInfo("after add new layer on top");
 }
 
@@ -41,4 +42,21 @@ void deOperationProcessor::removeTopLayer()
     logInfo("before remove top layer");
     layerProcessor.removeTopLayerInLayerProcessor();
     logInfo("after remove top layer");
+}
+
+void deOperationProcessor::execute(const std::string& operation)
+{
+    if (operation == "remove")
+    {
+        removeTopLayer();
+        return;
+    }
+
+    deBaseLayer* layer = project.createNewLayer(operation);
+
+    if (layer)
+    {
+        addNewLayerOnTop(layer);
+        project.onAddNewLayer();
+    }
 }

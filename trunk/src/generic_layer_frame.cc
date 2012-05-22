@@ -30,6 +30,7 @@
 #include "property_curves.h"
 #include "property_mixer.h"
 #include "property_boolean.h"
+#include "property_choice.h"
 #include "preset_button.h"
 #include "layer_processor.h"
 

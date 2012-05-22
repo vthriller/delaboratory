@@ -19,7 +19,6 @@
 #ifndef _DE_CURVE_H
 #define _DE_CURVE_H
 
-#include <libxml/parser.h>
 #include "curve_point.h"
 #include "curve_shape.h"
 #include <list>
@@ -30,11 +29,14 @@ class deChannel;
 
 class deBaseCurve
 {
-    private:
+    protected:
         deCurvePoints controlPoints;
         deCurveShape shape;
 
         mutable deMutex mutex;
+
+        deBaseCurve(const deBaseCurve& c);
+        deBaseCurve& operator =(const deBaseCurve& c);
 
     public:
         deBaseCurve();
@@ -44,60 +46,18 @@ class deBaseCurve
         int addPoint(deValue x, deValue y);
 
         void build();
-        void process(const deValue* source, deValue* destination, int n);
-};
-
-class deCurveOld
-{
-    private:
-        deCurvePoints points;
-        deCurveShape shape;
-
-        mutable deMutex mutex;
-
-        void loadPoint(xmlNodePtr node);
-
-        deCurveOld(const deCurveOld& c);
-        deCurveOld& operator=(const deCurveOld& c);
-
-        void lock() const; 
-        void unlock() const;
-
-    public:    
-        deCurveOld();
-        virtual ~deCurveOld();
+        void process(const deValue* source, deValue* destination, int n) const;
 
         int findPoint(deValue x, deValue y) const;
-        int addPoint(deValue x, deValue y);
         void deletePoint(int p);
         void movePoint(int p, deValue x, deValue y);
 
-        void process(const deChannel& source, deChannel& destination, int n) const;
-        void process(const deValue* source, deValue* destination, int n) const;
+        bool isNeutral() const;
 
-        const deCurvePoints& getPoints() const;
         const deCurvePoints& getControlPoints() const;
         const deCurvePoint& getPoint(int n) const;
 
-        void save(xmlNodePtr node) const;
-        void load(xmlNodePtr node);
-
-        void reset();
-        void setConst(deValue v);
-        void setAngle(int a);
-        void setS(int a);
-        void invert();
-        void fill(int n, deValue a, deValue r);
-
-        bool isNeutral() const;
-
-        deValue calcValue(deValue value);
-
-        void movePointVertically(int p, deValue delta);
-
-        void addRandom();
-
-
+        deValue calcValue(deValue value) const;
 
 };
 

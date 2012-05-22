@@ -24,20 +24,6 @@
 class deWindow;
 class dePanel;
 
-class deFrameOld:public wxFrame
-{
-    protected:
-    public:
-        deFrameOld(wxWindow *parent, const std::string& name);
-        virtual ~deFrameOld();
-
-        virtual void onKey(int key) {};
-
-        virtual void onUpdateProperties() {};
-
-};
-
-
 class deFrameImpl;
 
 class deFrame

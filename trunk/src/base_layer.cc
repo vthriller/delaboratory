@@ -24,6 +24,7 @@
 #include "str.h"
 #include "property_numeric.h"
 #include "property_boolean.h"
+#include "property_choice.h"
 #include "preset.h"
 
 class deUpdateActionThread:public wxThread

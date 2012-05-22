@@ -16,30 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_PROPERTY_VALUE_SLIDER_H
-#define _DE_PROPERTY_VALUE_SLIDER_H
+#ifndef _DE_GRADIENT_LAYER_H
+#define _DE_GRADIENT_LAYER_H
 
-#include "slider.h"
-class dePropertyValue;
-class deLayerProcessor;
+#include "layer_with_blending.h"
+class deViewManager;
 
-class dePropertyValueSlider:public deSliderOld
+class deGradientLayer:public deLayerWithBlending
 {
     private:
-        dePropertyValue& property;
-        deLayerProcessor& layerProcessor;
-
-        int channel;
-
-        int layerIndex;
+        virtual std::string getType() const {return "gradient";};
+        deViewManager& viewManager;
 
     public:
-        dePropertyValueSlider(wxWindow *parent, int _sliderRange, dePropertyValue& _property, deLayerProcessor& _layerProcessor, int _layerIndex);
-        virtual ~dePropertyValueSlider();
+        deGradientLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager);
+        virtual ~deGradientLayer();
 
-        virtual void onValueChange(deValue value, bool finished);
+        virtual bool isChannelNeutral(int index);
+        virtual bool updateMainImageSingleChannel(int channel);
 
-        void setFromProperty();
-};        
+        virtual std::string getActionName() {return "gradient";};
+
+        virtual bool onImageClick(deValue x, deValue y);
+
+};
 
 #endif

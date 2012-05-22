@@ -86,17 +86,19 @@ public:
     void changeChannel(int _channel);
     void onImageClick(deValue x, deValue y, const deValue* c, const deSize& size);
 
+/*
     void reset();
     void invert();
     void setConst(deValue v);
     void setAngle(int a);
     void setS(int a);
+    void addRandom(int n);
+    */
 
     void onKey(int key);
 
     void setMarker(const deValue* c, int n);
 
-    void addRandom(int n);
 
     void generateBackground(const deValue* c, int n);
 

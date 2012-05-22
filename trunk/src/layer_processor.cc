@@ -23,10 +23,9 @@
 #include "layer_stack.h"
 #include "view_manager.h"
 #include <string>
-#include "layer.h"
+#include "base_layer.h"
 #include "channel_manager.h"
 #include "str.h"
-#include "memory_info_frame.h"
 #include <wx/progdlg.h>
 #include <iostream>
 #include "logger.h"
@@ -518,7 +517,7 @@ void deLayerProcessor::updateWarning()
     mainWindow.postEvent(DE_WARNING_EVENT, 0 );
 }
 
-bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame, const std::string& fileName, const std::string& type, bool saveAll)
+bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDialog, const std::string& fileName, const std::string& type, bool saveAll)
 {
     bool result = true;
     logInfo("updateImagesSmart");
@@ -571,11 +570,6 @@ bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDia
             result = false;
             // stop loop
             index = view + 1;
-        }
-
-        if (memoryInfoFrame)
-        {
-            memoryInfoFrame->update();
         }
 
         if (view > 0)
@@ -744,11 +738,13 @@ void deLayerProcessor::removeAllLayers()
     logInfo("removeAllLayers DONE");
 }    
 
-void deLayerProcessor::addLayerInLayerProcessor(deBaseLayer* layer, int layerIndex)
+void deLayerProcessor::addLayerInLayerProcessor(deBaseLayer* layer)
 {
     layerStack.addLayer(layer);
 
-    markUpdateAllChannels(layerIndex);
+    int n = layerStack.getSize();
+
+    markUpdateAllChannels(n-1);
 
 }    
 

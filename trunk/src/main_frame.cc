@@ -408,7 +408,6 @@ void deMainFrame::onLABColors5(wxCommandEvent& event)
 
 void deMainFrame::onMemoryInfo(wxCommandEvent& event)
 {
-    project.openMemoryInfoFrame(this);
 }
 
 void deMainFrame::onColorMatrix1(wxCommandEvent& event)
@@ -502,7 +501,6 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
 
     imageAreaPanel->getImagePanel()->repaintImagePanel();
     samplersPanel->update();
-    project.updateMemoryInfo();
 
 }
 

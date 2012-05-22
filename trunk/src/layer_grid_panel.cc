@@ -20,18 +20,15 @@
 
 #include "project.h"
 #include <sstream>
-#include "layer.h"
+#include "base_layer_with_source.h"
+#include "switchable_layer.h"
 
 #include <iostream>
 
 #include "layer_factory.h"
 #include "layer_processor.h"
 
-#include "frame_factory.h"
-
 #include "frame.h"
-
-#include "blend_frame.h"
 
 #include "str.h"
 
@@ -56,7 +53,6 @@ void deLayerGridPanel::buildRows()
         deBaseLayer* baseLayer = layerStack.getLayer(i);
         deBaseLayerWithSource* layer = dynamic_cast<deBaseLayerWithSource*>(baseLayer);
         deSwitchableLayer* switchable = dynamic_cast<deSwitchableLayer*>(baseLayer);
-        deLayerWithBlending* blending = dynamic_cast<deLayerWithBlending*>(baseLayer);
 
         layerRows.push_back(deLayerRow(i));
         deLayerRow& row = layerRows.back();
@@ -91,17 +87,6 @@ void deLayerGridPanel::buildRows()
         {
             gridSizer->Add(row.action, 0);
             row.action->Hide();
-        }
-
-        row.blend = new wxButton(this, wxID_ANY, _T("b"), wxDefaultPosition, wxSize(20,25));
-        if (blending)
-        {
-            gridSizer->Add(row.blend, 0);
-        }
-        else
-        {
-            gridSizer->Add(row.blend, 0);
-            row.blend->Hide();
         }
 
         row.enabled = new wxCheckBox(this, wxID_ANY, _T(""));
@@ -143,9 +128,6 @@ void deLayerGridPanel::clearRows()
         gridSizer->Detach(row.action);
         delete row.action;
 
-        gridSizer->Detach(row.blend);
-        delete row.blend;
-
         gridSizer->Detach(row.enabled);
         delete row.enabled;
     }
@@ -159,7 +141,7 @@ deLayerGridPanel::deLayerGridPanel(wxWindow* parent, deProject& _project, deLaye
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(250, 400)), 
 project(_project), layerProcessor(_processor), channelManager(_channelManager)
 {
-    gridSizer = new wxFlexGridSizer(5);
+    gridSizer = new wxFlexGridSizer(4);
     gridSizer->SetFlexibleDirection(wxHORIZONTAL);
     SetSizer(gridSizer);
 
@@ -233,44 +215,18 @@ void deLayerGridPanel::click(wxCommandEvent &event)
 
             deBaseLayer* layer = layerStack.getLayer(row.index);
 
-            if (!project.getLayerFrameManager().checkActionFrame(row.index))
+            if (!project.getLayerFrameManager().checkLayerFrame(row.index))
             {
-                deFrameOld* actionFrame = createFrame(this, *layer, layerProcessor, frameManager, layerIndex, channelManager);
-                if (actionFrame)
-                {
-                    actionFrame->Show(true);
-                }
-                else
-                {
-                    deWindowWX window(this);
-                    const std::string name = "name";
+                deWindowWX window(this);
+                const std::string name = "name";
 
-                    deFrame* frame = new deGenericLayerFrame(window, name, *layer, layerProcessor, frameManager, layerIndex);
-                    if (frame)
-                    {
-                        frame->show();
-                    }
+                deFrame* frame = new deGenericLayerFrame(window, name, *layer, layerProcessor, frameManager, layerIndex);
+                if (frame)
+                {
+                    frame->show();
                 }
             }        
 
-        }
-        if (row.blend->GetId() == id)
-        {
-            int layerIndex = row.index;
-
-            deBaseLayer* baseLayer = layerStack.getLayer(row.index);
-            deLayerWithBlending* blending = dynamic_cast<deLayerWithBlending*>(baseLayer);
-            if (blending)
-            {
-                if (!frameManager.checkBlendFrame(row.index))
-                {
-                    deBlendFrame* blendFrame = new deBlendFrame(this, *blending, layerProcessor, frameManager, layerIndex);
-                    if (blendFrame)
-                    {
-                        blendFrame->Show(true);
-                    }
-                }
-            }
         }
     }
 

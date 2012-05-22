@@ -21,7 +21,7 @@
 #include "color_space.h"
 #include "channel.h"
 #include <sstream>
-#include "layer.h"
+#include "base_layer.h"
 #include "image.h"
 #include "layer_processor.h"
 #include <wx/dcbuffer.h>

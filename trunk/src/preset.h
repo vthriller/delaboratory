@@ -21,8 +21,7 @@
 
 #include <string>
 #include "value.h"
-#include "layer.h"
-#include "property_value.h"
+#include "base_layer.h"
 
 class dePreset
 {
@@ -51,50 +50,6 @@ class dePreset
         void apply(deBaseLayer& layer) const;
         void addNumericValue(const std::string& n, deValue v);
         void addOperation(const std::string& n);
-
-};
-
-class dePresetOld
-{
-    private:
-        dePresetOld(const dePresetOld&);
-        dePresetOld& operator =(const dePresetOld&);
-
-    protected:
-        const std::string name;
-
-    public:
-        dePresetOld(const std::string& _name)
-        :name(_name)
-        {
-        }
-
-        virtual ~dePresetOld()
-        {
-        }
-
-        std::string getName() {return name;};
-
-};
-
-class dePresetValue:public dePresetOld
-{
-    private:
-        deValue value;
-
-    public:
-        dePresetValue(const std::string& _name, deValue _value)
-        :dePresetOld(_name),
-         value(_value)
-        {
-        }
-
-        virtual ~dePresetValue()
-        {
-        }
-
-        deValue getValue() {return value;};
-
 
 };
 

@@ -27,7 +27,7 @@ dePropertyCurves::dePropertyCurves(const std::string& _name, int _size)
     int i;
     for (i = 0; i < size; i++)
     {
-        curves.push_back( new deCurveOld());
+        curves.push_back( new deBaseCurve());
     }
 }
 

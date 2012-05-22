@@ -19,7 +19,6 @@
 #include "apply_luminance_layer.h"
 #include "apply_luminance_color.h"
 #include "copy_channel.h"
-#include "property_value.h"
 #include "color_space_utils.h"
 #include "channel_manager.h"
 #include "preset.h"

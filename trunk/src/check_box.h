@@ -23,23 +23,6 @@
 #include <string>
 #include "window.h"
 
-class deCheckBoxOld:public wxPanel
-{
-    private:
-        wxSizer* sizer;
-        wxCheckBox* checkBox;
-
-        void check(wxCommandEvent &event);
-
-    public:
-        deCheckBoxOld(wxWindow *parent, const std::string& labelString);
-        virtual ~deCheckBoxOld();
-
-        virtual void onCheck(bool c) = 0;
-
-        void set(bool c);
-};        
-
 class deCheckBoxImpl;
 
 class deCheckBox

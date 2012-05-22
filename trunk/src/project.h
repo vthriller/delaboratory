@@ -33,7 +33,6 @@ class deControlPanel;
 class deViewModePanel;
 class deHistogramModePanel;
 class deImageAreaPanel;
-class deMemoryInfoFrame;
 class deMainWindow;
 class deLayerProcessor;
 class deLayerStack;
@@ -42,7 +41,7 @@ class deLayer;
 class deStaticImage;
 class deRawModule;
 class deZoomManager;
-class deOperationProcessor;
+class deBaseLayer;
 
 class deProject
 {
@@ -51,38 +50,20 @@ class deProject
         deProject& operator =(const deProject& project);
 
         deLayerProcessor& layerProcessor;
-        deViewModePanel* viewModePanel;
-        deChannelManager& previewChannelManager;
-
-        deControlPanel* controlPanel;
-        deMemoryInfoFrame* memoryInfoFrame;
-        deViewManager viewManager;
-
-
-
-        deStaticImage& sourceImage;
-
-        deLayerStack& layerStack;
-
-        deLayerFrameManager& layerFrameManager;
-
         std::string imageFileName;
         std::string sourceImageFileName;
-
-        bool receiveKeys;
-
+        deViewModePanel* viewModePanel;
+        deChannelManager& channelManager;
+        deControlPanel* controlPanel;
+        deViewManager viewManager;
+        deStaticImage& sourceImage;
+        deLayerStack& layerStack;
+        deLayerFrameManager& layerFrameManager;
         deHistogramModePanel* histogramModePanel;
         deImageAreaPanel* imageAreaPanel;
-
         deRawModule& rawModule;
-
         deZoomManager& zoomManager;
-
-        deOperationProcessor& operationProcessor;
-
         deMainWindow& mainWindow;
-
-
 
         void onImageNameUpdate();
 
@@ -96,7 +77,7 @@ class deProject
         void updateLayerGrid();
 
     public:
-        deProject(deLayerProcessor& _processor, deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deOperationProcessor& _operationProcessor, deMainWindow& _mainWindow);
+        deProject(deLayerProcessor& _processor, deChannelManager& _channelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deMainWindow& _mainWindow);
 
         virtual ~deProject();
         void onKey(int key);
@@ -113,19 +94,9 @@ class deProject
         const deViewManager& getViewManager() const;
         deViewManager& getViewManager();
 
-        void addLAB();
-        void addRGB();
-
         void onChangeView(int a);
 
         bool exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog, bool saveAll, const std::string& dir);
-
-        void setLastView();
-
-        bool shouldReceiveKeys() const {return receiveKeys;};
-
-        void disableKeys();
-        void enableKeys();
 
         void setViewModePanel(deViewModePanel* _viewModePanel);
         void setHistogramModePanel(deHistogramModePanel* _histogramModePanel);
@@ -140,19 +111,15 @@ class deProject
 
         void setImageAreaPanel(deImageAreaPanel* _imageAreaPanel);
 
-        void openMemoryInfoFrame(wxWindow* parent);
-        void closeMemoryInfoFrame();
-
-        void updateMemoryInfo();
-
         void setHistogramChannel(int channel);
 
-        deLayerFrameManager& getLayerFrameManager() {return layerFrameManager;};
-
-        void addActionLayer(const std::string& action);
-        void addConversionLayer(deColorSpace colorSpace);
-
         void onTimerUpdate();
+
+        deBaseLayer* createNewLayer(const std::string& type);
+
+        void onAddNewLayer();
+
+        deLayerFrameManager& getLayerFrameManager() {return layerFrameManager;};
 
 };
 

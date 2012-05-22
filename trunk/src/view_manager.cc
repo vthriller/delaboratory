@@ -18,7 +18,7 @@
 
 #include "view_manager.h"
 #include "project.h"
-#include "layer.h"
+#include "base_layer.h"
 #include "layer_processor.h"
 #include "str.h"
 #include "channel_manager.h"
@@ -47,6 +47,13 @@ void deViewManager::setView(int v)
     int old = view;
     view = v;
     project.onChangeView(old);
+}
+
+void deViewManager::setLastView()
+{
+    int n = project.getLayerStack().getSize();
+    n--;
+    setView(n);
 }
 
 void deViewManager::setSingleChannel(int _channel)

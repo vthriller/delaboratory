@@ -21,18 +21,24 @@
 
 class deLayerProcessor;
 class deBaseLayer;
+class deProject;
+#include <string>
 
 class deOperationProcessor
 {
     private:
         deLayerProcessor& layerProcessor;
+        deProject& project;
+
+        void removeTopLayer();
+        void addNewLayerOnTop(deBaseLayer* layer);
 
     public:
-        deOperationProcessor(deLayerProcessor& _layerProcessor);
+        deOperationProcessor(deLayerProcessor& _layerProcessor, deProject& _project);
         virtual ~deOperationProcessor();
 
-        void addNewLayerOnTop(deBaseLayer* layer, int layerIndex);
-        void removeTopLayer();
+
+        void execute(const std::string& operation);
 
 
 };

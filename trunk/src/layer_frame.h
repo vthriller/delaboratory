@@ -25,20 +25,6 @@ class deActionLayer;
 class deBaseLayer;
 class deLayerFrameManager;
 
-class deLayerFrameOld:public deFrameOld
-{
-    protected:
-        deBaseLayer& layer;
-        deLayerFrameManager& frameManager;
-        int layerIndex;
-    public:
-        deLayerFrameOld(wxWindow *parent, deBaseLayer& _layer, const std::string& name, deLayerFrameManager& _frameManager, int _layerIndex);
-        virtual ~deLayerFrameOld();
-
-        bool checkIndex(int index);
-
-};
-
 class deLayerFrame:public deFrame
 {
     protected:

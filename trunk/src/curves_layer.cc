@@ -21,8 +21,6 @@
 #include <iostream>
 #include <cassert>
 
-#include "frame_factory.h"
-
 #include "str.h"
 
 #include "color_space_utils.h"
@@ -40,6 +38,8 @@ deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayer
 
     int n = getColorSpaceSize(colorSpace);
     properties.push_back(new dePropertyCurves("curves", n));
+
+    applyPreset("reset");
 }
 
 deCurvesLayer::~deCurvesLayer()
@@ -63,20 +63,14 @@ bool deCurvesLayer::updateMainImageSingleChannel(int i)
     {
         return false;
     }
-    const deCurveOld* curve = p->getCurve(i);
+    const deBaseCurve* curve = p->getCurve(i);
 
-    deChannel* sourceChannel = channelManager.getChannel(s);
-    if (sourceChannel)
-    {
-        mainLayerImage.enableChannel(i);
-        int c = mainLayerImage.getChannelIndex(i);
-        deChannel* channel = channelManager.getChannel(c);
-
-        if (channel)
-        {
-            curve->process(*sourceChannel, *channel, sourceImage.getChannelSize().getN());
-        }
-    }
+    mainLayerImage.enableChannel(i);
+    const deValue* source = getSourceImage().startRead(i);
+    deValue* destination = mainLayerImage.startWrite(i);
+    curve->process(source, destination, mainLayerImage.getChannelSize().getN());
+    getSourceImage().finishRead(i);
+    mainLayerImage.finishWrite(i);
 
     return true;
 
@@ -89,48 +83,9 @@ bool deCurvesLayer::isChannelNeutral(int index)
     {
         return false;
     }
-    deCurveOld* curve = p->getCurve(index);
+    deBaseCurve* curve = p->getCurve(index);
     return curve->isNeutral();
 }    
-
-void deCurvesLayer::save(xmlNodePtr root)
-{
-    saveCommon(root);
-    saveBlend(root);
-
-    dePropertyCurves* p = getPropertyCurves();
-
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        deCurveOld* curve = p->getCurve(i);
-        xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("curve"), NULL);
-        curve->save(child);
-    }
-}
-
-void deCurvesLayer::load(xmlNodePtr root)
-{
-    loadBlend(root);
-
-    xmlNodePtr child = root->xmlChildrenNode;
-
-    dePropertyCurves* p = getPropertyCurves();
-
-    int i = 0;
-    while (child)
-    {
-        if ((!xmlStrcmp(child->name, BAD_CAST("curve")))) 
-        {
-            deCurveOld* curve = p->getCurve(i);
-            curve->load(child);
-            i++;
-        }
-
-        child = child->next;
-    }
-}
 
 dePropertyCurves* deCurvesLayer::getPropertyCurves()
 {
@@ -146,6 +101,14 @@ void deCurvesLayer::executeOperation(const std::string& operation)
     int i;
     for (i = 0; i < n; i++)
     {
-        p->getCurve(i)->reset();
+        deBaseCurve* curve = p->getCurve(i);
+
+        curve->clearPoints();
+
+        curve->addPoint(0, 0);
+        curve->addPoint(1, 1);
+
+        curve->build();
+
     }
 }

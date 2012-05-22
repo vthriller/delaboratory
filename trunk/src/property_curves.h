@@ -27,7 +27,7 @@
 class dePropertyCurves:public deProperty
 {
     private:
-        std::vector<deCurveOld*> curves;
+        std::vector<deBaseCurve*> curves;
         int size;
 
     public:
@@ -36,8 +36,8 @@ class dePropertyCurves:public deProperty
 
         int getSize() const;
 
-        const deCurveOld* getCurve(int index) const {return (curves[index]);};
-        deCurveOld* getCurve(int index) {return (curves[index]);};
+        const deBaseCurve* getCurve(int index) const {return (curves[index]);};
+        deBaseCurve* getCurve(int index) {return (curves[index]);};
 
         virtual void save(xmlNodePtr root) const;
         virtual void load(xmlNodePtr root);

@@ -19,7 +19,7 @@
 #include "sampler_panel.h"
 #include "sampler.h"
 #include "project.h"
-#include "layer.h"
+#include "base_layer.h"
 #include "conversion_processor.h"
 #include "image.h"
 #include <sstream>

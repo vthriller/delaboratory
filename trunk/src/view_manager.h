@@ -56,6 +56,8 @@ class deViewManager
 
         void getZoom(deValue& _x1, deValue& _y1, deValue& _x2, deValue& _y2);
 
+        void setLastView();
+
 };
 
 #endif

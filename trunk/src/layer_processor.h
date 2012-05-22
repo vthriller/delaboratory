@@ -24,16 +24,15 @@ class deLayerStack;
 class deViewManager;
 class deChannelManager;
 class wxProgressDialog;
-class deMemoryInfoFrame;
 class deLayer;
 class deLogger;
 class deLayerFrameManager;
 #include <map>
 #include <wx/wx.h>
-#include "layer.h"
 #include "size.h"
 #include "renderer.h"
 #include "semaphore.h"
+#include "base_layer.h"
 
 enum
 {
@@ -116,7 +115,7 @@ class deLayerProcessor
         void setViewManager(deViewManager* _viewManager);
 
         void updateAllImages(bool calcHistogram);
-        bool updateImagesSmart(int view, wxProgressDialog* progressDialog, deMemoryInfoFrame* memoryInfoFrame, const std::string& fileName, const std::string& type, bool saveAll);
+        bool updateImagesSmart(int view, wxProgressDialog* progressDialog, const std::string& fileName, const std::string& type, bool saveAll);
         void generateChannelUsage(std::map<int, int>& channelUsage);
 
         void markUpdateSingleChannel(int index, int channel);
@@ -140,7 +139,7 @@ class deLayerProcessor
         void onGUIUpdate();
 
         void removeTopLayerInLayerProcessor();
-        void addLayerInLayerProcessor(deBaseLayer* layer, int layerIndex);
+        void addLayerInLayerProcessor(deBaseLayer* layer);
 
         void stopWorkerThread();
 

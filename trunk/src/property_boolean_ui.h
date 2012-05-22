@@ -20,27 +20,8 @@
 #define _DE_PROPERTY_BOOLEAN_UI_H
 
 #include "check_box.h"
-class deLayerOld;
 class dePropertyBoolean;
 class deLayerProcessor;
-
-class dePropertyBooleanUIOld:public deCheckBoxOld
-{
-    private:
-        dePropertyBoolean& property;
-        deLayerOld& layer;
-        deLayerProcessor& layerProcessor;
-        int layerIndex;
-
-    public:
-        dePropertyBooleanUIOld(wxWindow *parent, dePropertyBoolean& _property, deLayerOld& _layer, deLayerProcessor& _layerProcessor, int _layerIndex);
-        virtual ~dePropertyBooleanUIOld();
-
-        virtual void onCheck(bool c);
-
-        void setFromProperty();
-
-};        
 
 class dePropertyBooleanUI:public deCheckBox
 {

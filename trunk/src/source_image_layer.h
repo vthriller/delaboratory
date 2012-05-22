@@ -19,12 +19,12 @@
 #ifndef _DE_SOURCE_IMAGE_LAYER_H
 #define _DE_SOURCE_IMAGE_LAYER_H
 
-#include "layer.h"
 class deProject;
 #include "image.h"
 class deChannelManager;
 class deViewManager;
 class deStaticImage;
+#include "base_layer.h"
 
 class deSourceImageLayer:public deBaseLayer
 {

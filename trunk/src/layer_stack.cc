@@ -17,10 +17,9 @@
 */
 
 #include "layer_stack.h"
-#include "layer.h"
+#include "base_layer.h"
 #include "channel_manager.h"
 #include "str.h"
-#include "memory_info_frame.h"
 #include "project.h"
 
 deLayerStack::deLayerStack()

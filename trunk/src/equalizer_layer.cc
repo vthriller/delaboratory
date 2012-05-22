@@ -19,129 +19,140 @@
 #include "equalizer_layer.h"
 #include "project.h"
 #include <iostream>
-#include "frame_factory.h"
-#include "equalizer.h"
+#include <cassert>
+
+#include "str.h"
+
 #include "color_space_utils.h"
 #include "channel_manager.h"
 
-deEqualizerLayer8::deEqualizerLayer8(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deEqualizerLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager, 8)
-{
-}
+#include "property_curves.h"
 
-deEqualizerLayer8::~deEqualizerLayer8()
-{
-}
+#include "preset.h"
 
-deEqualizerLayer16::deEqualizerLayer16(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
-:deEqualizerLayer(_colorSpace, _sourceLayer, _layerStack, _channelManager, _viewManager, 16)
+deEqualizerLayer::deEqualizerLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+:deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
 {
-}
+    dePreset* reset = createPreset("reset");
+    reset->addOperation("reset");
 
-deEqualizerLayer16::~deEqualizerLayer16()
-{
-}
+    createPropertyChoice("channel", getChannelNames(colorSpace));
 
-deEqualizerLayer::deEqualizerLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, int _bands)
-:deLayerOld(_colorSpace, _sourceLayer, _layerStack, _channelManager),
- bands(_bands)
-{
     int n = getColorSpaceSize(colorSpace);
-    int i;
+    properties.push_back(new dePropertyCurves("curves", n));
 
-    for (i = 0; i < n; i++)
-    {
-        equalizers.push_back( new deEqualizer(bands));
-    }
+    setBlendMode(deBlendOverlay);
 
+    applyPreset("reset");
 }
 
 deEqualizerLayer::~deEqualizerLayer()
 {
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        delete equalizers[i];
-    }
 }
 
-bool deEqualizerLayer::updateMainImageSingleChannel(int channel)
+bool deEqualizerLayer::updateMainImageSingleChannel(int i)
 {
     const deImage& sourceImage = getSourceImage();
 
-    int e = getEqualizerChannel(colorSpace);
+    int s = sourceImage.getChannelIndex(i);
 
-    mainLayerImage.enableChannel(channel);
-
-    int c = mainLayerImage.getChannelIndex(channel);
-    deChannel* destination = channelManager.getChannel(c);
-
-    const deValue* eChannel = sourceImage.startRead(e);
-    const deValue* sChannel = sourceImage.startRead(channel);
-
-    bool wrap = isChannelWrapped(colorSpace, e);
-
-    if ((eChannel) && (sChannel) && (destination))
+    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
     {
-        int channelSize = mainLayerImage.getChannelSize().getN();
-        equalizers[channel]->process(sChannel, eChannel, *destination, channelSize, wrap);
+        mainLayerImage.disableChannel(i, s);
+        return true;
     }
 
-    sourceImage.finishRead(e);
-    sourceImage.finishRead(channel);
+    dePropertyCurves* p = getPropertyCurves();
+    if (!p)
+    {
+        return false;
+    }
+    const deBaseCurve* curve = p->getCurve(i);
+
+    int channel = getPropertyChoice("channel")->getIndex();
+
+    mainLayerImage.enableChannel(i);
+
+    const deValue* sourceEq = NULL;
+    const deValue* source = getSourceImage().startRead(i);
+    if (i == channel)
+    {
+        sourceEq = source;
+    }
+    else
+    {
+        sourceEq = getSourceImage().startRead(channel);
+    }        
+    deValue* destination = mainLayerImage.startWrite(i);
+
+    int n = mainLayerImage.getChannelSize().getN();
+
+    int j;
+    for (j = 0; j < n; j++)
+    {
+        deValue eq = sourceEq[j];
+        deValue v = source[j];
+        deValue c = curve->calcValue(eq);
+        v = c;
+        if (v < 0)
+        {
+            destination[j] = 0;
+        }
+        else if (v > 1)
+        {
+            destination[j] = 1;
+        }
+        else
+        {
+            destination[j] = v;
+        }
+
+    }
+
+    getSourceImage().finishRead(i);
+    mainLayerImage.finishWrite(i);
+    if (i != channel)
+    {
+        getSourceImage().finishRead(channel);
+    }
 
     return true;
+
 }
 
 bool deEqualizerLayer::isChannelNeutral(int index)
 {
-    return false;
+    dePropertyCurves* p = getPropertyCurves();
+    if (!p)
+    {
+        return false;
+    }
+    deBaseCurve* curve = p->getCurve(index);
+    return curve->isNeutral();
 }    
 
-
-void deEqualizerLayer::save(xmlNodePtr root)
+dePropertyCurves* deEqualizerLayer::getPropertyCurves()
 {
-    saveCommon(root);
-    saveBlend(root);
+    deProperty* p = getProperty("curves");
+    return dynamic_cast<dePropertyCurves*>(p);
+}
 
+void deEqualizerLayer::executeOperation(const std::string& operation)
+{
     int n = getColorSpaceSize(colorSpace);
+    dePropertyCurves* p = getPropertyCurves();
+
     int i;
     for (i = 0; i < n; i++)
     {
+        deBaseCurve* curve = p->getCurve(i);
+
+        curve->clearPoints();
+
+        curve->addPoint(0, 0.5);
+        curve->addPoint(1, 0.5);
+
+        curve->build();
+
     }
 }
-
-void deEqualizerLayer::load(xmlNodePtr root)
-{
-    loadBlend(root);
-
-    xmlNodePtr child = root->xmlChildrenNode;
-
-    while (child)
-    {
-
-        child = child->next;
-    }
-}
-
-void deEqualizerLayer::reset()
-{
-    std::vector<deEqualizer*>::iterator i;
-    for (i = equalizers.begin(); i != equalizers.end(); i++)
-    {
-        (*i)->reset();
-    }
-}
-
-deEqualizer* deEqualizerLayer::getEqualizer(int index)
-{
-    int n = getColorSpaceSize(colorSpace);
-    if ((index >= 0) && ( index < n))
-    {
-        return equalizers[index];
-    }
-    return NULL;
-}
-
-
