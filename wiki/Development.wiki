@@ -1,6 +1,13 @@
 #summary Development News
 
 -----
+*2012.05.22*
+
+First changes after 0.7.1 release.
+
+Massive cleanup. Rewritten equalizer layer - now it uses curve. Added gradient layer (similar to vignette).
+
+-----
 *2012.05.01*
 
 Replaced USM with sharpen and local contrast.
