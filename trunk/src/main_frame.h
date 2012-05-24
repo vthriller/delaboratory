@@ -43,10 +43,6 @@ enum
     ID_TestImageBig,
     ID_OpenImage,
     ID_OpenRawImageProPhoto,
-    ID_OpenProject,
-    ID_SaveProject,
-    ID_OpenLayerStack,
-    ID_SaveLayerStack,
     ID_HelpColorSpaces,
     ID_HelpColorSpaces2,
     ID_HelpColorSpaces3,
@@ -55,15 +51,12 @@ enum
     ID_LABColors1,
     ID_LABColors2,
     ID_LABColors5,
-    ID_MemoryInfo,
     ID_ColorMatrix1,
     ID_ColorMatrix2,
     ID_ColorMatrix3,
     ID_ColorMatrix4,
     ID_ColorMatrix5,
     ID_PaletteFrame,
-    ID_BenchmarkBlur,
-    ID_BenchmarkColor,
     DE_REPAINT_EVENT,
     DE_IMAGE_LOAD_EVENT,
     DE_HISTOGRAM_EVENT,
@@ -103,10 +96,6 @@ private:
 	void onOpenRawImageProPhoto(wxCommandEvent& event);
 	void onQuit(wxCommandEvent& event);
 	void onNewProject(wxCommandEvent& event);
-	void onOpenProject(wxCommandEvent& event);
-	void onSaveProject(wxCommandEvent& event);
-	void onOpenLayerStack(wxCommandEvent& event);
-	void onSaveLayerStack(wxCommandEvent& event);
 	void onHelpColorSpaces(wxCommandEvent& event);
 	void onHelpColorSpaces2(wxCommandEvent& event);
 	void onHelpColorSpaces3(wxCommandEvent& event);
@@ -115,15 +104,12 @@ private:
 	void onLABColors1(wxCommandEvent& event);
 	void onLABColors2(wxCommandEvent& event);
 	void onLABColors5(wxCommandEvent& event);
-	void onMemoryInfo(wxCommandEvent& event);
 	void onColorMatrix1(wxCommandEvent& event);
 	void onColorMatrix2(wxCommandEvent& event);
 	void onColorMatrix3(wxCommandEvent& event);
 	void onColorMatrix4(wxCommandEvent& event);
 	void onColorMatrix5(wxCommandEvent& event);
 	void onPaletteFrame(wxCommandEvent& event);
-	void onBenchmarkBlur(wxCommandEvent& event);
-	void onBenchmarkColor(wxCommandEvent& event);
 	void onRepaintEvent(wxCommandEvent& event);
 	void onImageLoadEvent(wxCommandEvent& event);
 	void onInfoEvent(wxCommandEvent& event);
@@ -156,6 +142,7 @@ public:
     void updateWarning();
 
     void setImageName(const std::string& _imageName, const deSize& _size);
+    void forceUpdateSize();
 
 	DECLARE_EVENT_TABLE()
 

@@ -41,6 +41,8 @@ class deSourceImageLayer:public deBaseLayer
         virtual ~deSourceImageLayer();
 
         virtual bool updateMainImageSingleChannel(int channel) {return false;};
+        
+        deValue getAspect() const;
 
 };
 

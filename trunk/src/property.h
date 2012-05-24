@@ -20,7 +20,6 @@
 #define _DE_PROPERTY_H
 
 #include <string>
-#include <libxml/parser.h>
 
 class deProperty
 {
@@ -28,6 +27,7 @@ class deProperty
         std::string sizer;
         std::string label;
         bool blendOnly;
+        bool size;
 
     protected:        
         std::string name;
@@ -35,9 +35,6 @@ class deProperty
     public:
         deProperty(const std::string& _name);
         virtual ~deProperty();
-
-        virtual void save(xmlNodePtr root) const = 0;
-        virtual void load(xmlNodePtr root) = 0;
 
         std::string getLabel() const;
         void setLabel(const std::string& _label);
@@ -49,6 +46,9 @@ class deProperty
 
         void setSizer(const std::string& _sizer) {sizer = _sizer;};
         std::string getSizer() const {return sizer;};
+
+        bool affectsSize() const {return size;};
+        void setSize();
 };
 
 #endif

@@ -35,6 +35,7 @@ class deStaticImage
         deSize size;
         mutable deMutex mutex;
         std::string info;
+        int lastRotate;
 
         int rotation;
 
@@ -69,6 +70,8 @@ class deStaticImage
         bool isEmpty() const;
 
         void copyToChannel(int channel, deValue* destination, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, deSize destinationSize, bool mirrorX, bool mirrorY, int rotate);
+
+        deValue getAspect() const;
 };
 
 #endif

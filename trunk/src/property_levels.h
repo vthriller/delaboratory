@@ -61,8 +61,6 @@ class dePropertyLevels:public deProperty
         const deLevels& getLevels(int index) const {return levels[index];};
         deLevels& getLevels(int index) {return levels[index];};
 
-        virtual void save(xmlNodePtr root) const;
-        virtual void load(xmlNodePtr root);
 };
 
 #endif

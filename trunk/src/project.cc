@@ -22,6 +22,7 @@
 #include <wx/wx.h>
 #include <iostream>
 #include "source_image_layer.h"
+#include "layer_grid_panel.h"
 #include "curves_layer.h"
 #include "conversion_layer.h"
 #include "image_panel.h"
@@ -32,7 +33,6 @@
 #include "view_mode_panel.h"
 #include <sstream>
 #include "layer_factory.h"
-#include "xml.h"
 #include "image_area_panel.h"
 #include <iostream>
 #include "main_frame.h"
@@ -50,17 +50,15 @@
 #include "conversion_processor.h"
 #include "test_image.h"
 
-#define ICC_MESSAGE 0
-
 deProject::deProject(deLayerProcessor& _processor, deChannelManager& _channelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deMainWindow& _mainWindow)
 :layerProcessor(_processor),
  viewModePanel(NULL),
  channelManager(_channelManager),
- controlPanel(NULL),
  viewManager(*this, _processor, _zoomManager),
  sourceImage(_sourceImage),
  layerStack(_layerStack),
  layerFrameManager(_layerFrameManager),
+ layerGridPanel(NULL),
  histogramModePanel(NULL),
  imageAreaPanel(NULL),
  rawModule(_rawModule),
@@ -136,10 +134,6 @@ void deProject::onKey(int key)
     }
 
     layerFrameManager.onKey(key);
-    if (controlPanel)
-    {
-        controlPanel->onKey(key);
-    }        
 }
 
 void deProject::init(const std::string& fileName)
@@ -152,7 +146,6 @@ void deProject::init(const std::string& fileName)
     {
         return;
     }
-    open(fileName, true);
 }
 
 void deProject::freeImage()
@@ -170,7 +163,7 @@ void deProject::setTestImage(int s)
     generateTestImage(sourceImage, s);
     if (imageAreaPanel)
     {
-        imageAreaPanel->updateSize(true);
+        imageAreaPanel->updateSize();
     }        
     resetLayerStack(sourceImage.getColorSpace());
 
@@ -220,6 +213,18 @@ deSize deProject::getSourceImageSize()
     return deSize(w, h);
 }
 
+deValue deProject::getSourceAspect() const
+{
+    deBaseLayer* layer = layerStack.getLayer(0);
+    deSourceImageLayer* source = dynamic_cast<deSourceImageLayer*>(layer);
+    if (source)
+    {
+        return source->getAspect();
+    }
+    logError("can't get aspect because source image layer not exist");
+    return -1;
+}    
+
 deLayerStack& deProject::getLayerStack()
 {
     return layerStack;
@@ -235,10 +240,6 @@ void deProject::onChangeView(int a)
     logInfo("change view from " + str(a) + " START");
     layerProcessor.onChangeView(a);
 
-    if (controlPanel)
-    {
-        controlPanel->onChangeView();
-    }
     if (viewModePanel)
     {
         viewModePanel->updateNames();
@@ -337,9 +338,9 @@ void deProject::setHistogramModePanel(deHistogramModePanel* _histogramModePanel)
 }
 
 
-void deProject::setControlPanel(deControlPanel* _controlPanel)
+void deProject::setLayerGridPanel(deLayerGridPanel* _panel)
 {
-    controlPanel = _controlPanel;
+    layerGridPanel = _panel;
 }
 
 void deProject::onChangeViewMode()
@@ -348,153 +349,6 @@ void deProject::onChangeViewMode()
     {
         viewModePanel->updateMode();
     }
-}
-
-void deProject::save(const std::string& fileName, bool image)
-{
-    std::string f = fileName;
-
-    size_t pos = f.rfind(".delab");
-    if (pos != f.size() - 6) 
-    {
-        f += ".delab";
-    }
-
-    xmlDocPtr doc = xmlNewDoc(BAD_CAST("1.0"));
-
-    xmlNodePtr root = xmlNewNode(NULL, BAD_CAST("project"));
-    xmlDocSetRootElement(doc, root);
-
-    {
-        xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("layer_stack"), NULL);
-        layerStack.save(child);
-
-        if (image)
-        {
-            saveChild(root, "original", sourceImageFileName);
-        }
-    }
-
-    xmlSaveFormatFile (f.c_str(), doc, 1); 
-}
-
-void deProject::loadLayer(xmlNodePtr root, int layerIndex)
-{
-    xmlNodePtr child = root->xmlChildrenNode;
-
-    std::string type = "";
-    std::string name = "";
-    int source = -1;
-    deColorSpace colorSpace = deColorSpaceInvalid;
-
-    while (child)
-    {
-        if ((!xmlStrcmp(child->name, BAD_CAST("source")))) 
-        {
-            source = getInt(getContent(child));
-        }
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("color_space")))) 
-        {
-            colorSpace = colorSpaceFromString(getContent(child));
-        }
-
-        if (type == "")
-        // this is fix for multiple "type" node in single layer
-        {
-            if ((!xmlStrcmp(child->name, BAD_CAST("type")))) 
-            {
-                type = getContent(child);
-            }
-        }
-        
-        if ((!xmlStrcmp(child->name, BAD_CAST("name")))) 
-        {
-            name = getContent(child);
-        }
-
-        child = child->next;
-    }
-       
-    deBaseLayer* layer = createLayer(type, source, colorSpace, layerStack, channelManager, viewManager, sourceImage);
-
-    if (layer)
-    {
-        //operationProcessor.addNewLayerOnTop(layer, layerIndex);
-        layer->load(root);
-    }        
-
-
-}
-
-void deProject::loadLayers(xmlNodePtr root)
-{
-    layerStack.clear();
-
-    xmlNodePtr child = root->xmlChildrenNode;
-
-    int layerIndex = 0;
-
-    while (child)
-    {
-        if ((!xmlStrcmp(child->name, BAD_CAST("layer")))) 
-        {
-            loadLayer(child, layerIndex);
-            layerIndex++;
-        }
-
-        child = child->next;
-    }
-
-    channelManager.destroyAllChannels();
-    layerProcessor.updateAllImages(true);
-}
-
-void deProject::open(const std::string& fileName, bool image)
-{
-    xmlDocPtr doc = xmlParseFile(fileName.c_str());
-
-    if (!doc)
-    {
-        return;
-    }
-
-    xmlNodePtr root = xmlDocGetRootElement(doc);
-
-    if (!root)
-    {
-        return;
-    }
-
-    xmlNodePtr child = root->xmlChildrenNode;
-
-    std::string imageFile = "";
-
-    while (child)
-    {
-        if ((!xmlStrcmp(child->name, BAD_CAST("layer_stack")))) 
-        {
-            loadLayers(child);
-        }
-
-        if ((!xmlStrcmp(child->name, BAD_CAST("original")))) 
-        {
-            imageFile = getContent(child);
-        }
-
-        child = child->next;
-    }
-
-    if (image)
-    {
-        if (!openImage(imageFile, true, deColorSpaceProPhoto)) 
-        {
-            openImage(imageFile, false, deColorSpaceRGB);
-        }
-    }        
-
-    viewManager.setLastView();
-    updateLayerGrid();
 }
 
 void deProject::newProject()
@@ -587,7 +441,7 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
     channelManager.destroyAllChannels();
     if (imageAreaPanel)
     {
-        imageAreaPanel->updateSize(true);
+        imageAreaPanel->updateSize();
     }        
     layerProcessor.updateAllImages(true);
 
@@ -656,9 +510,9 @@ void deProject::onTimerUpdate()
 
 void deProject::updateLayerGrid()
 {
-    if (controlPanel)
+    if (layerGridPanel)
     {
-        controlPanel->updateLayerGrid2();
+        layerGridPanel->update();
     }        
 }
 

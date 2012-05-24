@@ -31,27 +31,18 @@ void deImageAreaPanel::paint(wxPaintEvent& event)
 
 void deImageAreaPanel::resize(wxSizeEvent& event)
 {
-    updateSize(true);
+    updateSize();
     Refresh();
 }
 
-void deImageAreaPanel::updateSize(bool calcHistogram)
+void deImageAreaPanel::updateSize()
 {
     wxSize s = GetSize();
     logInfo("image area panel update size " + str(s.GetWidth()) + "x" + str(s.GetHeight()));
 
     const deSize ps(s.GetWidth(), s.GetHeight());
     
-    const deSize& ss = project.getSourceImageSize();
-
-    if (ss.getN() <= 0)
-    {
-        return;
-    };
-
-    deValue aspect = ss.getAspect();
-
-    //aspect = 1.0 / aspect;
+    deValue aspect = project.getSourceAspect();
 
     deSize fit = fitInside(ps, aspect);
 

@@ -18,7 +18,6 @@
 
 #include "property_levels.h"
 #include "str.h"
-#include "xml.h"
 
 deLevels::deLevels()
 {
@@ -128,16 +127,5 @@ dePropertyLevels::dePropertyLevels(const std::string& _name, int _size)
 dePropertyLevels::~dePropertyLevels()
 {
 }
-
-void dePropertyLevels::save(xmlNodePtr root) const
-{
-}    
-
-void dePropertyLevels::load(xmlNodePtr child)
-{
-    if ((!xmlStrcmp(child->name, BAD_CAST(name.c_str())))) 
-    {
-    }
-}    
 
 

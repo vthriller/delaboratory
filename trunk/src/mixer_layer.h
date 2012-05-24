@@ -39,9 +39,6 @@ class deMixerLayer:public deLayerWithBlending
         void setWeight(int s, int d, deValue value);
         deValue getWeight(int s, int d);
 
-        virtual void load(xmlNodePtr root);
-        virtual void save(xmlNodePtr root);
-
         virtual std::string getActionName() {return "mixer";};
 
         virtual bool updateMainImageSingleChannel(int i);

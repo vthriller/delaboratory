@@ -17,7 +17,6 @@
 */
 
 #include "base_layer.h"
-#include "xml.h"
 #include "color_space_utils.h"
 #include "logger.h"
 #include "semaphore.h"
@@ -86,12 +85,6 @@ deBaseLayer::~deBaseLayer()
 deColorSpace deBaseLayer::getColorSpace() const
 {
     return colorSpace;
-}
-
-void deBaseLayer::saveCommon(xmlNodePtr node)
-{
-    saveChild(node, "type", getType());
-    saveChild(node, "color_space", getColorSpaceName(colorSpace));
 }
 
 void deBaseLayer::lockLayer()

@@ -40,7 +40,6 @@ class deBaseLayerWithSource:public deBaseLayer
         const deImage& getOtherLayerImage(int a) const;
         deColorSpace getSourceColorSpace() const;
 
-        virtual std::string getActionName() {return "";};
 
 };
 

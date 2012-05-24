@@ -37,9 +37,6 @@ class deApplyLuminanceLayer:public deLayerWithBlending
         virtual bool isChannelNeutral(int index) {return false;};
         virtual bool processActionFull(deValue** sp, deValue** dp, int channelSize);
 
-        virtual void load(xmlNodePtr root);
-        virtual void save(xmlNodePtr root);
-
         virtual std::string getActionName() {return "apply luminance";};
 
 };

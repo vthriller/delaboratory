@@ -33,9 +33,6 @@ class dePropertyChoice:public deProperty
         dePropertyChoice(const std::string& _name, const std::vector<std::string> _choices);
         virtual ~dePropertyChoice();
 
-        virtual void save(xmlNodePtr root) const;
-        virtual void load(xmlNodePtr root);
-
         const std::vector<std::string>& getChoices() const {return choices;};
 
         int getIndex() const;

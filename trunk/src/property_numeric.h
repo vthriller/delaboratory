@@ -37,9 +37,6 @@ class dePropertyNumeric:public deProperty
         void set(deValue _value);
         deValue get() const;
 
-        virtual void save(xmlNodePtr root) const;
-        virtual void load(xmlNodePtr root);
-
         deValue getMin() const;
         deValue getMax() const;
 };

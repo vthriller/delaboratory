@@ -16,44 +16,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "property_numeric.h"
-#include "str.h"
+#ifndef _DE_WHITE_BALANCE_LAYER_H
+#define _DE_WHITE_BALANCE_LAYER_H
 
-dePropertyNumeric::dePropertyNumeric(const std::string& _name, deValue _min, deValue _max)
-:deProperty(_name), min(_min), max(_max)
+#include "layer_with_blending.h"
+
+class deWhiteBalanceLayer:public deLayerWithBlending
 {
-    value = (min + max) / 2.0;
-}
+    private:
+        virtual std::string getType() const {return "white balance";};
 
-dePropertyNumeric::~dePropertyNumeric()
-{
-}
+    public:
+        deWhiteBalanceLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
+        virtual ~deWhiteBalanceLayer();
 
-void dePropertyNumeric::set(deValue _value)
-{
-    value = _value;
-    if (value > max)
-    {
-        value = max;
-    }
-    if (value < min)
-    {
-        value = min;
-    }
-}
+        virtual bool updateMainImageSingleChannel(int i);
 
-deValue dePropertyNumeric::get() const
-{
-    return value;
-}
+};
 
-deValue dePropertyNumeric::getMin() const
-{
-    return min;
-}
-
-deValue dePropertyNumeric::getMax() const
-{
-    return max;
-}
-
+#endif

@@ -32,9 +32,6 @@ class dePropertyBoolean:public deProperty
 
         void set(bool _value);
         bool get() const;
-
-        virtual void save(xmlNodePtr root) const;
-        virtual void load(xmlNodePtr root);
 };
 
 #endif

@@ -21,7 +21,6 @@
 
 #include "color_space.h"
 #include "mutex.h"
-#include <libxml/parser.h>
 #include <string>
 #include <vector>
 #include "image.h"
@@ -74,8 +73,6 @@ class deBaseLayer
 
         deColorSpace getColorSpace() const;
 
-        void saveCommon(xmlNodePtr node);
-
         void lockLayer();
         void unlockLayer();
 
@@ -87,9 +84,6 @@ class deBaseLayer
         bool updateImageThreadCall();
 
         virtual void onUpdateProperties() {};
-
-        virtual void load(xmlNodePtr root) {};
-        virtual void save(xmlNodePtr root) {saveCommon(root);};
 
         virtual std::string getType() const = 0;
 

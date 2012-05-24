@@ -24,6 +24,7 @@
 #include "logger.h"
 #include "str.h"
 #include "curve.h"
+#include "property_boolean.h"
 
 deToneLayer::deToneLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
@@ -31,6 +32,10 @@ deToneLayer::deToneLayer(deColorSpace _colorSpace, deChannelManager& _channelMan
     dePreset* reset = createPreset("reset");
 
     createPropertyChoice("channel", getChannelNames(colorSpace));
+
+    createPropertyBoolean("dark");
+    createPropertyBoolean("half");
+    createPropertyBoolean("light");
 
     int n = getColorSpaceSize(colorSpace);
 
@@ -56,6 +61,8 @@ deToneLayer::deToneLayer(deColorSpace _colorSpace, deChannelManager& _channelMan
         reset->addNumericValue(nl, 0.75);
     }
 
+    getPropertyBoolean("half")->set(true);
+
     applyPreset("reset");
 }
 
@@ -79,6 +86,10 @@ bool deToneLayer::updateMainImageNotThreadedWay()
         return false;
     }
 
+    bool useD = getPropertyBoolean("dark")->get();
+    bool useH = getPropertyBoolean("half")->get();
+    bool useL = getPropertyBoolean("light")->get();
+
     int channel;
     for (channel = 0; channel < nc; channel++)
     {
@@ -96,9 +107,18 @@ bool deToneLayer::updateMainImageNotThreadedWay()
         deBaseCurve curve;
 
         curve.addPoint(0, 0);
-        curve.addPoint(0.25, dark);
-        curve.addPoint(0.5, half);
-        curve.addPoint(0.75, light);
+        if (useD)
+        {
+            curve.addPoint(0.25, dark);
+        }
+        if (useH)
+        {
+            curve.addPoint(0.5, half);
+        }
+        if (useL)
+        {
+            curve.addPoint(0.75, light);
+        }            
         curve.addPoint(1, 1);
 
         curve.build();

@@ -38,6 +38,11 @@ void dePropertyChoiceUI::onChoose(int index)
 {
     property.setIndex(index);
 
+    if (property.affectsSize())
+    {
+        layerProcessor.forceUpdateSize();
+    }
+
     if (property.updateBlendOnly())
     {
         layerProcessor.markUpdateBlendAllChannels(layerIndex);

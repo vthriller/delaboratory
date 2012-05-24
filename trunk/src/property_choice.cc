@@ -17,7 +17,6 @@
 */
 
 #include "property_choice.h"
-#include "xml.h"
 #include "str.h"
 #include "logger.h"
 
@@ -65,20 +64,6 @@ std::string dePropertyChoice::get() const
 int dePropertyChoice::getIndex() const
 {
     return value;
-}
-
-void dePropertyChoice::save(xmlNodePtr root) const
-{
-    //saveChild(root, name, value);
-}
-
-void dePropertyChoice::load(xmlNodePtr root)
-{
-/*
-    if ((!xmlStrcmp(root->name, BAD_CAST(name.c_str())))) 
-    {
-        value = getContent(root);
-    }*/
 }
 
 void dePropertyChoice::setIndex(int index)

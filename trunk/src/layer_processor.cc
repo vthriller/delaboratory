@@ -823,6 +823,11 @@ void deLayerProcessor::onGenerateHistogram()
     sendInfoEvent(DE_HISTOGRAM_END);
 }
 
+void deLayerProcessor::forceUpdateSize()
+{
+    mainWindow.forceUpdateSize();
+}
+
 void deLayerProcessor::setPreviewSize(const deSize& size)
 {
     deSize oldSize = previewChannelManager.getChannelSizeFromChannelManager();
