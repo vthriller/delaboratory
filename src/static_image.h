@@ -35,6 +35,14 @@ class deStaticImage
         deSize size;
         mutable deMutex mutex;
         std::string info;
+
+        int rotation;
+
+        const deValue* startReadStatic(int index);
+        void finishReadStatic(int index);
+
+        void scaleChannel(const deValue* src, deValue* dst, deValue x1, deValue y1, deValue x2, deValue y2, int w, int h, bool mirrorX, bool mirrorY, int rotate);
+        deValue samplePixel(const deValue* src, int xx1, int xx2, int yy1, int yy2, bool mirrorX, bool mirrorY);
         
         deStaticImage(const deStaticImage& i);
         deStaticImage& operator = (const deStaticImage& i);
@@ -47,13 +55,11 @@ class deStaticImage
         void setColorSpace(deColorSpace c);
         deColorSpace getColorSpace() const;
 
-        const deValue* startReadStatic(int index);
         deValue* startWriteStatic(int index);
-        void finishReadStatic(int index);
         void finishWriteStatic(int index);
 
         void setSize(const deSize& _size);
-        deSize getSize() const;
+        deSize getStaticImageSize() const;
 
         void lock();
         void unlock();
@@ -61,6 +67,8 @@ class deStaticImage
         void setInfo(const std::string& s);
 
         bool isEmpty() const;
+
+        void copyToChannel(int channel, deValue* destination, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, deSize destinationSize, bool mirrorX, bool mirrorY, int rotate);
 };
 
 #endif

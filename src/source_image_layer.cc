@@ -18,19 +18,27 @@
 
 #include "source_image_layer.h"
 #include "channel_manager.h"
-#include "scale_channel.h"
 #include <iostream>
 #include "view_manager.h"
 #include "logger.h"
 #include "static_image.h"
-#include "copy_channel.h"
 #include "str.h"
+#include "property_boolean.h"
+#include "property_choice.h"
 
 deSourceImageLayer::deSourceImageLayer(deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace)
 :deBaseLayer(_colorSpace, _previewChannelManager) ,
 viewManager(_viewManager),
 sourceImage(_sourceImage)
 {
+    std::vector<std::string> r;
+    r.push_back("0");
+    r.push_back("90");
+    r.push_back("180");
+    r.push_back("270");
+    createPropertyChoice("rotate", r);
+    createPropertyBoolean("horizontal mirror");
+    createPropertyBoolean("vertical mirror");
 }
 
 deSourceImageLayer::~deSourceImageLayer()
@@ -39,7 +47,7 @@ deSourceImageLayer::~deSourceImageLayer()
 
 bool deSourceImageLayer::updateMainImageNotThreadedWay()
 {
-    const deSize ss = sourceImage.getSize();
+    const deSize ss = sourceImage.getStaticImageSize();
 
     if (ss.isEmpty())
     {
@@ -55,37 +63,19 @@ bool deSourceImageLayer::updateMainImageNotThreadedWay()
     deValue z_y2;
     viewManager.getZoom(z_x1, z_y1, z_x2, z_y2);
 
-    int x1 = ss.getW() * z_x1;
-    int y1 = ss.getH() * z_y1;
-    int x2 = ss.getW() * z_x2;
-    int y2 = ss.getH() * z_y2;
-
-    int w = ds.getW();
-    int h = ds.getH();
-
-    int ws = ss.getW();
-    int nn = ss.getN();
+    bool mirrorX = getPropertyBoolean("horizontal mirror")->get();
+    bool mirrorY = getPropertyBoolean("vertical mirror")->get();
+    int rotate = getInt(getPropertyChoice("rotate")->get());
 
     int channel;
     for (channel = 0; channel < 3; channel++)
     {
         mainLayerImage.enableChannel(channel);
-        const deValue* source = sourceImage.startReadStatic(channel);
         deValue* destination = mainLayerImage.startWrite(channel);
 
-        if ((ss == ds) && (z_x1 == 0.0) && (z_y1 == 0.0) && (z_x2 == 1.0) && (z_y2 == 1.0))
-        {   
-            logInfo("copy source channel");
-            copyChannel(source, destination, nn);
-        }
-        else
-        {
-            logInfo("scale source channel");
-            scaleChannel(source, destination, x1, y1, x2, y2, w, h, ws);
-        }
+        sourceImage.copyToChannel(channel, destination, z_x1, z_y1, z_x2, z_y2, ds, mirrorX, mirrorY, rotate);
 
         mainLayerImage.finishWrite(channel);
-        sourceImage.finishReadStatic(channel);
     }
 
     return true;

@@ -205,7 +205,7 @@ deChannelManager& deProject::getPreviewChannelManager()
 
 deSize deProject::getSourceImageSize() 
 {
-    deSize size = sourceImage.getSize();
+    deSize size = sourceImage.getStaticImageSize();
 
     deValue x1;
     deValue y1;
@@ -299,7 +299,7 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
     // calculate final image in full size
     int view = viewManager.getView();
 
-    channelManager.setChannelSize(sourceImage.getSize());
+    channelManager.setChannelSize(sourceImage.getStaticImageSize());
 
     bool result = layerProcessor.updateImagesSmart(view, progressDialog, fileName, type, saveAll);
 
@@ -632,7 +632,7 @@ deBaseLayer* deProject::createNewLayer(const std::string& type)
 
 void deProject::onImageNameUpdate()
 {
-    mainWindow.setImageName(imageFileName, sourceImage.getSize());
+    mainWindow.setImageName(imageFileName, sourceImage.getStaticImageSize());
 }
 
 void deProject::onTimerUpdate()

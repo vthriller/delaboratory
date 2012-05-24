@@ -50,9 +50,8 @@ void deLayerGridPanel::buildRows()
     int i;
     for (i = n-1; i >=0; i--)
     {
-        deBaseLayer* baseLayer = layerStack.getLayer(i);
-        deBaseLayerWithSource* layer = dynamic_cast<deBaseLayerWithSource*>(baseLayer);
-        deSwitchableLayer* switchable = dynamic_cast<deSwitchableLayer*>(baseLayer);
+        deBaseLayer* layer = layerStack.getLayer(i);
+        deSwitchableLayer* switchable = dynamic_cast<deSwitchableLayer*>(layer);
 
         layerRows.push_back(deLayerRow(i));
         deLayerRow& row = layerRows.back();
@@ -72,11 +71,7 @@ void deLayerGridPanel::buildRows()
         row.view = new wxRadioButton(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, style);
         gridSizer->Add(row.view, 0, wxALIGN_CENTER);
 
-        std::string action = "";
-        if (layer)
-        {
-            action = layer->getActionName();
-        }            
+        std::string action = layer->getType();
 
         row.action = new wxButton(this, wxID_ANY, wxString::FromAscii(action.c_str()), wxDefaultPosition, wxSize(160,25));
         if (action.size() > 0)

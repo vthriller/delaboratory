@@ -47,6 +47,6 @@ class deSize
 bool operator ==(const deSize& a, const deSize& b);
 bool operator !=(const deSize& a, const deSize& b);
 
-deSize fitInside(const deSize& area, const deSize& rect, deValue scale);
+deSize fitInside(const deSize& area, deValue aspect);
 
 #endif
