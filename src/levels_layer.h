@@ -38,9 +38,6 @@ class deLevelsLayer:public deLayerWithBlending
         virtual bool isChannelNeutral(int index);
         virtual bool updateMainImageSingleChannel(int channel);
 
-        virtual void load(xmlNodePtr root) {};
-        virtual void save(xmlNodePtr root) {saveCommon(root);};
-
         virtual std::string getActionName() {return "levels";};
 
         dePropertyLevels* getPropertyLevels();

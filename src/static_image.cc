@@ -29,6 +29,7 @@ deStaticImage::deStaticImage()
  size(0,0)
 {
     rotation = 0;
+    lastRotate = -1;
 
     int n = 3;
     int i;
@@ -168,6 +169,8 @@ bool deStaticImage::isEmpty() const
 
 void deStaticImage::copyToChannel(int channel, deValue* destination, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, deSize ds, bool mirrorX, bool mirrorY, int rotate)
 {
+    lastRotate = rotate;
+
     int w = ds.getW();
     int h = ds.getH();
     if (w <= 0)
@@ -180,7 +183,6 @@ void deStaticImage::copyToChannel(int channel, deValue* destination, deValue z_x
         logError("h: " + str(h));
         return;
     }
-
     const deValue* source = startReadStatic(channel);
 
     scaleChannel(source, destination, z_x1, z_y1, z_x2, z_y2, w, h, mirrorX, mirrorY, rotate);
@@ -274,7 +276,14 @@ deValue deStaticImage::samplePixel(const deValue* src, int xx1, int xx2, int yy1
 
 deSize deStaticImage::getStaticImageSize() const
 {
-    return size;
+    if ((lastRotate == 90) || (lastRotate==270))
+    {
+        return size.rotated();
+    }
+    else
+    {
+        return size;
+    }
 }
 
 void deStaticImage::scaleChannel(const deValue* src, deValue* dst, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, int w, int h, bool mirrorX, bool mirrorY, int rotate)
@@ -364,3 +373,9 @@ void deStaticImage::scaleChannel(const deValue* src, deValue* dst, deValue z_x1,
     }        
 }
 
+
+deValue deStaticImage::getAspect() const
+{
+    deValue aspect = size.getAspect();
+    return aspect;
+}

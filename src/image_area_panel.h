@@ -39,7 +39,7 @@ class deImageAreaPanel:public wxPanel
         deImageAreaPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, deZoomPanel* zoomPanel);
         virtual ~deImageAreaPanel();
         
-        void updateSize(bool calcHistogram);
+        void updateSize();
 
         deImagePanel* getImagePanel();
 

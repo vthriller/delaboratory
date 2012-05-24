@@ -54,19 +54,13 @@ class deControlPanel:public wxPanel
 
         void click(wxCommandEvent &event);
 
-        void setConversions();
-
         bool generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir);
 
     public:
         deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deLayerGridPanel* _layerGridPanel, deOperationProcessor& _operationProcessor, deChannelManager& _channelManager);
         ~deControlPanel();
 
-        void onChangeView();
-
         void updateLayerGrid2();
-
-        void onKey(int key);
 
 };
 

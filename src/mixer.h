@@ -19,7 +19,6 @@
 #ifndef _DE_MIXER_H
 #define _DE_MIXER_H
 
-#include <libxml/parser.h>
 #include "value.h"
 #include "mutex.h"
 class deChannel;
@@ -49,11 +48,6 @@ class deMixer
         void process(const deImage& sourceImage, deChannel& destination, int n);
 
         bool isNeutral(int index) const;
-
-//        void reset(int index);
-
-        void save(xmlNodePtr node);
-        void load(xmlNodePtr node);
     
 };
 

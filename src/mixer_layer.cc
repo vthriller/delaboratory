@@ -115,42 +115,6 @@ deValue deMixerLayer::getWeight(int s, int d)
     return p->getMixer(d)->getWeight(s);
 }
 
-void deMixerLayer::save(xmlNodePtr root)
-{
-/*
-    saveCommon(root);
-    saveBlend(root);
-
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        xmlNodePtr child = xmlNewChild(root, NULL, BAD_CAST("mixer"), NULL);
-        mixers[i]->save(child);
-    }
-    */
-}
-
-void deMixerLayer::load(xmlNodePtr root)
-{
-/*
-    loadBlend(root);
-
-    xmlNodePtr child = root->xmlChildrenNode;
-
-    int i = 0;
-    while (child)
-    {
-        if ((!xmlStrcmp(child->name, BAD_CAST("mixer")))) 
-        {
-            mixers[i]->load(child);
-            i++;
-        }
-
-        child = child->next;
-    }*/
-}
-
 void deMixerLayer::executeOperation(const std::string& operation)
 {
     int n = getColorSpaceSize(colorSpace);

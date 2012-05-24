@@ -34,8 +34,6 @@ const int g_txt = 220;
 deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor,  deLayerGridPanel* _layerGridPanel, deOperationProcessor& _operationProcessor, deChannelManager& _channelManager)
 :wxPanel(parent), project(_project), layerGridPanel(_layerGridPanel), layerProcessor(_processor), operationProcessor(_operationProcessor), channelManager(_channelManager)
 {
-    project.setControlPanel(this);
-
     mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
 
@@ -116,9 +114,6 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
         }
     }
 
-
-    setConversions();
-
     Layout();
     Fit();
 
@@ -127,43 +122,6 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
 
 deControlPanel::~deControlPanel()
 {
-}
-
-void deControlPanel::setConversions()
-{
-    deViewManager& viewManager = project.getViewManager();
-    int view = viewManager.getView();
-    deLayerStack& layerStack = project.getLayerStack();
-    deBaseLayer* layer = layerStack.getLayer(view);
-
-    if (!layer)
-    {
-        return;
-    }
-
-    deColorSpace currentColorSpace = layer->getColorSpace();
-    std::vector<wxButton*>::iterator i;
-
-    for (i = actionButtons.begin(); i != actionButtons.end(); i++)
-    {
-        wxButton* b = *i;
-        std::string action = actionButtonsNames[b->GetId()];
-
-        if (isActionSupported(action, currentColorSpace))
-        {
-            b->Enable();
-        }
-        else
-        {
-            b->Disable();
-        }
-
-    }
-}
-
-void deControlPanel::onChangeView()
-{
-    setConversions();
 }
 
 bool deControlPanel::generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir)
@@ -222,8 +180,6 @@ void deControlPanel::click(wxCommandEvent &event)
     {
         deColorSpace colorSpace = c->second;
 
-        //project.addConversionLayer(colorSpace);
-
         operationProcessor.execute(getColorSpaceName(colorSpace));
     }
 
@@ -232,29 +188,9 @@ void deControlPanel::click(wxCommandEvent &event)
     {
         std::string action = a->second;
 
-        //project.addActionLayer(action);
-
         operationProcessor.execute(action);
     }
 
-}
-
-void deControlPanel::onKey(int key)
-{
-/*
-    if (key == 'B')
-    {
-        project.addActionLayer("blur");
-    }
-    if (key == 'C')
-    {
-        project.addActionLayer("curves");
-    }
-    if (key == 'M')
-    {
-        project.addActionLayer("mixer");
-    }
-    */
 }
 
 

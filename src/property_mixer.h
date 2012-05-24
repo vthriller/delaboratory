@@ -34,9 +34,6 @@ class dePropertyMixer:public deProperty
         dePropertyMixer(const std::string& _name, int _size);
         virtual ~dePropertyMixer();
 
-        virtual void save(xmlNodePtr root) const {};
-        virtual void load(xmlNodePtr root) {};
-
         const deMixer* getMixer(int index) const;
         deMixer* getMixer(int index);
 

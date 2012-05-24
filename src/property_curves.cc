@@ -18,8 +18,6 @@
 
 #include "property_curves.h"
 #include "str.h"
-#include "xml.h"
-
 
 dePropertyCurves::dePropertyCurves(const std::string& _name, int _size)
 :deProperty(_name), size(_size)
@@ -39,16 +37,5 @@ dePropertyCurves::~dePropertyCurves()
         delete curves[i];
     }
 }
-
-void dePropertyCurves::save(xmlNodePtr root) const
-{
-}    
-
-void dePropertyCurves::load(xmlNodePtr child)
-{
-    if ((!xmlStrcmp(child->name, BAD_CAST(name.c_str())))) 
-    {
-    }
-}    
 
 

@@ -32,6 +32,8 @@ class deSize
         deSize(int _w, int _h);
         virtual ~deSize();
 
+        deSize rotated() const;
+
         int getW() const {return w;};
         int getH() const {return h;};
     

@@ -21,7 +21,6 @@
 
 #include <vector>
 #include <map>
-#include <libxml/parser.h>
 #include "mutex.h"
 
 class deBaseLayer;
@@ -51,8 +50,6 @@ class deLayerStack
 
         int getSize() const;
         deBaseLayer* getLayer(int id) const;
-
-        void save(xmlNodePtr node);
 
 };
 

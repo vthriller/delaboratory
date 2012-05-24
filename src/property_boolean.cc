@@ -18,7 +18,6 @@
 
 #include "property_boolean.h"
 #include "str.h"
-#include "xml.h"
 
 dePropertyBoolean::dePropertyBoolean(const std::string& _name)
 :deProperty(_name)
@@ -40,17 +39,4 @@ bool dePropertyBoolean::get() const
 {
     return value;
 }
-
-void dePropertyBoolean::save(xmlNodePtr root) const
-{
-    saveChild(root, name, str(value));
-}    
-
-void dePropertyBoolean::load(xmlNodePtr child)
-{
-    if ((!xmlStrcmp(child->name, BAD_CAST(name.c_str())))) 
-    {
-        value = getBool(getContent(child));
-    }
-}    
 

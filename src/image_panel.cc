@@ -131,7 +131,7 @@ bool deImagePanel::onRelease()
     {
         bool result = zoomManager.onRelease();
         zoomPanel->updateButtons();
-        area->updateSize(true);
+        area->updateSize();
         return result;
     }
 

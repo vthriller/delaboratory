@@ -30,6 +30,7 @@
 class deImagePanel;
 class deHistogramPanel;
 class deControlPanel;
+class deLayerGridPanel;
 class deViewModePanel;
 class deHistogramModePanel;
 class deImageAreaPanel;
@@ -54,7 +55,7 @@ class deProject
         std::string sourceImageFileName;
         deViewModePanel* viewModePanel;
         deChannelManager& channelManager;
-        deControlPanel* controlPanel;
+        deLayerGridPanel* layerGridPanel;
         deViewManager viewManager;
         deStaticImage& sourceImage;
         deLayerStack& layerStack;
@@ -100,11 +101,9 @@ class deProject
 
         void setViewModePanel(deViewModePanel* _viewModePanel);
         void setHistogramModePanel(deHistogramModePanel* _histogramModePanel);
-        void setControlPanel(deControlPanel* _controlPanel);
+        void setLayerGridPanel(deLayerGridPanel* _Panel);
         void onChangeViewMode();
 
-        void save(const std::string& fileName, bool image);
-        void open(const std::string& fileName, bool image);
         bool openImage(const std::string& fileName, bool raw, deColorSpace colorSpace);
         void newProject();
         void setTestImage(int s);
@@ -120,6 +119,7 @@ class deProject
         void onAddNewLayer();
 
         deLayerFrameManager& getLayerFrameManager() {return layerFrameManager;};
+        deValue getSourceAspect() const;
 
 };
 

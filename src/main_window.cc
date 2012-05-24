@@ -117,7 +117,15 @@ class deMainWindowImpl
             {
                 frame->updateWarning();
             }
-        }            
+        }   
+
+        void forceUpdateSize()
+        {
+            if (frame)
+            {
+                frame->forceUpdateSize();
+            }
+        }
 
 
 };
@@ -185,4 +193,9 @@ void deMainWindow::stopRawTimer()
 void deMainWindow::updateWarning()
 {
     impl->updateWarning();
+}
+
+void deMainWindow::forceUpdateSize()
+{
+    impl->forceUpdateSize();
 }

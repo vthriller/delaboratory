@@ -39,6 +39,7 @@ sourceImage(_sourceImage)
     createPropertyChoice("rotate", r);
     createPropertyBoolean("horizontal mirror");
     createPropertyBoolean("vertical mirror");
+    getPropertyChoice("rotate")->setSize();
 }
 
 deSourceImageLayer::~deSourceImageLayer()
@@ -47,14 +48,6 @@ deSourceImageLayer::~deSourceImageLayer()
 
 bool deSourceImageLayer::updateMainImageNotThreadedWay()
 {
-    const deSize ss = sourceImage.getStaticImageSize();
-
-    if (ss.isEmpty())
-    {
-        logInfo("skip source image layer update, no source image yet");
-        return false;
-    }
-
     const deSize ds = mainLayerImage.getChannelSize();
 
     deValue z_x1;
@@ -80,4 +73,14 @@ bool deSourceImageLayer::updateMainImageNotThreadedWay()
 
     return true;
 }
- 
+
+deValue deSourceImageLayer::getAspect() const
+{
+    deValue aspect = sourceImage.getAspect();
+    int rotate = getInt(getPropertyChoice("rotate")->get());
+    if ((rotate == 90) || (rotate == 270))
+    {
+        aspect = 1.0 / aspect;
+    }
+    return aspect;
+}

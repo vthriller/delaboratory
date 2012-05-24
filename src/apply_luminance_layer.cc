@@ -118,26 +118,6 @@ bool deApplyLuminanceLayer::processActionFull(deValue** sp, deValue** dp, int ch
     return true;
 }
 
-void deApplyLuminanceLayer::save(xmlNodePtr root)
-{
-    saveCommon(root);
-    saveBlend(root);
-}
-
-void deApplyLuminanceLayer::load(xmlNodePtr root)
-{
-    loadBlend(root);
-
-    xmlNodePtr child = root->xmlChildrenNode;
-
-    while (child)
-    {
-
-        child = child->next;
-    }
-}
-
-
 bool deApplyLuminanceLayer::updateMainImageNotThreadedWay()
 {
     if (!isEnabled())

@@ -49,6 +49,7 @@ class deMainWindow
         void startRawTimer();
         void stopRawTimer();
         void updateWarning();
+        void forceUpdateSize();
 
 };
 

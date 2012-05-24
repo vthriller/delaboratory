@@ -103,12 +103,3 @@ deBaseLayer* deLayerStack::getLayer(int id) const
     return layers[i];
 }
 
-void deLayerStack::save(xmlNodePtr node)
-{
-    std::vector<deBaseLayer*>::iterator i;
-    for (i = layers.begin(); i != layers.end(); i++)
-    {
-        xmlNodePtr child = xmlNewChild(node, NULL, BAD_CAST("layer"), NULL);
-        (*i)->save(child);
-    }
-}

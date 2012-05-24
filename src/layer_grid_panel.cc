@@ -136,6 +136,8 @@ deLayerGridPanel::deLayerGridPanel(wxWindow* parent, deProject& _project, deLaye
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(250, 400)), 
 project(_project), layerProcessor(_processor), channelManager(_channelManager)
 {
+    project.setLayerGridPanel(this);
+
     gridSizer = new wxFlexGridSizer(4);
     gridSizer->SetFlexibleDirection(wxHORIZONTAL);
     SetSizer(gridSizer);
@@ -213,7 +215,7 @@ void deLayerGridPanel::click(wxCommandEvent &event)
             if (!project.getLayerFrameManager().checkLayerFrame(row.index))
             {
                 deWindowWX window(this);
-                const std::string name = "name";
+                const std::string name = layer->getType();
 
                 deFrame* frame = new deGenericLayerFrame(window, name, *layer, layerProcessor, frameManager, layerIndex);
                 if (frame)

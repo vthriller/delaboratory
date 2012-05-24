@@ -32,7 +32,6 @@ class deCanvas;
 class deImagePanel:public wxPanel
 {
 private:
-	
     deImageAreaPanel* area;
 
     deProject& project;

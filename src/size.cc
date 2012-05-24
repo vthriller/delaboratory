@@ -84,3 +84,9 @@ bool deSize::isEmpty() const
     }
     return true;
 }
+
+deSize deSize::rotated() const
+{
+    deSize s(h, w);
+    return s;
+}

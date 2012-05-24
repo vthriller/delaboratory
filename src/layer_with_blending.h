@@ -36,9 +36,6 @@ class deLayerWithBlending:public deSwitchableLayer
         virtual void processSingleChannel(int channel);
         virtual bool updateImage();
 
-        void loadBlend(xmlNodePtr root);
-        void saveBlend(xmlNodePtr root);
-
         virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
     public:

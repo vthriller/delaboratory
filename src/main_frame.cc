@@ -29,7 +29,6 @@
 #include "help_color_spaces_frame4.h"
 #include "help_color_spaces_frame5.h"
 #include "help_color_spaces_frame6.h"
-#include "benchmark_frame.h"
 #include "color_matrix_frame.h"
 #include "palette_frame.h"
 #include "project.h"
@@ -55,10 +54,6 @@ EVT_MENU(ID_TestImageSmall, deMainFrame::onTestImageSmall)
 EVT_MENU(ID_TestImageBig, deMainFrame::onTestImageBig)
 EVT_MENU(ID_OpenImage, deMainFrame::onOpenImage)
 EVT_MENU(ID_OpenRawImageProPhoto, deMainFrame::onOpenRawImageProPhoto)
-EVT_MENU(ID_OpenProject, deMainFrame::onOpenProject)
-EVT_MENU(ID_SaveProject, deMainFrame::onSaveProject)
-EVT_MENU(ID_OpenLayerStack, deMainFrame::onOpenLayerStack)
-EVT_MENU(ID_SaveLayerStack, deMainFrame::onSaveLayerStack)
 EVT_MENU(ID_HelpColorSpaces, deMainFrame::onHelpColorSpaces)
 EVT_MENU(ID_HelpColorSpaces2, deMainFrame::onHelpColorSpaces2)
 EVT_MENU(ID_HelpColorSpaces3, deMainFrame::onHelpColorSpaces3)
@@ -67,15 +62,12 @@ EVT_MENU(ID_HelpColorSpaces5, deMainFrame::onHelpColorSpaces5)
 EVT_MENU(ID_LABColors1, deMainFrame::onLABColors1)
 EVT_MENU(ID_LABColors2, deMainFrame::onLABColors2)
 EVT_MENU(ID_LABColors5, deMainFrame::onLABColors5)
-EVT_MENU(ID_MemoryInfo, deMainFrame::onMemoryInfo)
 EVT_MENU(ID_ColorMatrix1, deMainFrame::onColorMatrix1)
 EVT_MENU(ID_ColorMatrix2, deMainFrame::onColorMatrix2)
 EVT_MENU(ID_ColorMatrix3, deMainFrame::onColorMatrix3)
 EVT_MENU(ID_ColorMatrix4, deMainFrame::onColorMatrix4)
 EVT_MENU(ID_ColorMatrix5, deMainFrame::onColorMatrix5)
 EVT_MENU(ID_PaletteFrame, deMainFrame::onPaletteFrame)
-EVT_MENU(ID_BenchmarkBlur, deMainFrame::onBenchmarkBlur)
-EVT_MENU(ID_BenchmarkColor, deMainFrame::onBenchmarkColor)
 EVT_MENU(DE_REPAINT_EVENT, deMainFrame::onRepaintEvent)
 EVT_MENU(DE_IMAGE_LOAD_EVENT, deMainFrame::onImageLoadEvent)
 EVT_MENU(DE_HISTOGRAM_EVENT, deMainFrame::onHistogramEvent)
@@ -183,12 +175,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     menuFile->Append( ID_TestImageSmall, _("Generate test image (small)") );
     menuFile->Append( ID_TestImageBig, _("Generate test image (big, slow)") );
     menuFile->AppendSeparator();
-    menuFile->Append( ID_OpenLayerStack, _("Open layer stack") );
-    menuFile->Append( ID_SaveLayerStack, _("Save layer stack") );
-    menuFile->AppendSeparator();
-    menuFile->Append( ID_OpenProject, _("Open project ( stack + image )") );
-    menuFile->Append( ID_SaveProject, _("Save project ( stack + image )") );
-    menuFile->AppendSeparator();
     menuFile->Append( ID_Quit, _("E&xit") );
 
     wxMenu *menuHelp = new wxMenu;
@@ -201,12 +187,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     menuHelp->Append( ID_LABColors2, _("LAB colors 2") );
     menuHelp->Append( ID_LABColors5, _("LAB colors 5") );
 
-    wxMenu *menuInfo = new wxMenu;
-    menuInfo->Append( ID_MemoryInfo, _("memory info") );
-    menuInfo->AppendSeparator();
-    menuInfo->Append( ID_BenchmarkColor, _("benchmark color conversion") );
-    menuInfo->Append( ID_BenchmarkBlur, _("benchmark blur (slow!)") );
-
     wxMenu *menuPalette = new wxMenu;
     menuPalette->Append( ID_ColorMatrix1, _("LAB color matrix 40x40") );
     menuPalette->Append( ID_ColorMatrix2, _("LAB color matrix 20x20") );
@@ -217,7 +197,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, _("&File") );
-    menuBar->Append( menuInfo, _("&Info") );
     menuBar->Append( menuPalette, _("&Palette") );
     menuBar->Append( menuHelp, _("&Channels") );
 
@@ -307,30 +286,6 @@ void deMainFrame::onQuit(wxCommandEvent& WXUNUSED(event))
 	Close(TRUE);
 }
 
-void deMainFrame::onSaveProject(wxCommandEvent& WXUNUSED(event))
-{
-    std::string fileName = getSaveFile(this, "save project", "delab");
-    project.save(fileName, true);
-}
-
-void deMainFrame::onSaveLayerStack(wxCommandEvent& WXUNUSED(event))
-{
-    std::string fileName = getSaveFile(this, "save layer stack", "delab");
-    project.save(fileName, false);
-}
-
-void deMainFrame::onOpenProject(wxCommandEvent& WXUNUSED(event))
-{
-    std::string fileName = getOpenFile(this, "open project", "delab");
-    project.open(fileName, true);
-}
-
-void deMainFrame::onOpenLayerStack(wxCommandEvent& WXUNUSED(event))
-{
-    std::string fileName = getOpenFile(this, "open layer stack", "delab");
-    project.open(fileName, false);
-}
-
 void deMainFrame::onNewProject(wxCommandEvent& WXUNUSED(event))
 {
     project.newProject();
@@ -406,10 +361,6 @@ void deMainFrame::onLABColors5(wxCommandEvent& event)
     help->Show();
 }
 
-void deMainFrame::onMemoryInfo(wxCommandEvent& event)
-{
-}
-
 void deMainFrame::onColorMatrix1(wxCommandEvent& event)
 {
     dePalette3* palette = NULL;
@@ -448,20 +399,6 @@ void deMainFrame::onPaletteFrame(wxCommandEvent& event)
     help->Show();
 }
 
-
-void deMainFrame::onBenchmarkBlur(wxCommandEvent& event)
-{
-    deBenchmarkFrame* help = new deBenchmarkFrame(this, "blur");
-    help->Show();
-    help->perform();
-}
-
-void deMainFrame::onBenchmarkColor(wxCommandEvent& event)
-{
-    deBenchmarkFrame* help = new deBenchmarkFrame(this, "color");
-    help->Show();
-    help->perform();
-}
 
 void deMainFrame::onRepaintEvent(wxCommandEvent& event)
 {
@@ -553,4 +490,9 @@ void deMainFrame::onTimerEvent(wxTimerEvent& event)
 
 void deMainFrame::updateWarning()
 {
+}
+
+void deMainFrame::forceUpdateSize()
+{
+    imageAreaPanel->updateSize();
 }

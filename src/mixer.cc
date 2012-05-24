@@ -19,7 +19,6 @@
 #include "mixer.h"
 #include "channel.h"
 #include "str.h"
-#include "xml.h"
 #include <sstream>
 #include <cassert>
 #include "logger.h"
@@ -35,28 +34,6 @@ deMixer::~deMixer()
 {
     delete [] weights;
 }
-
-/*
-void deMixer::reset(int index)
-{
-    lock();
-
-    int i;
-    for (i = 0; i < size; i++)
-    {
-        if (i == index)
-        {
-            weights[i] = 1.0;
-        }
-        else
-        {
-            weights[i] = 0.0;
-        }
-    }
-
-    unlock();
-}
-*/
 
 deValue deMixer::getWeight(int c) const
 {
@@ -167,33 +144,6 @@ bool deMixer::isNeutral(int index) const
         }
     }
     return true;
-}
-
-void deMixer::save(xmlNodePtr node) 
-{
-    int i;
-    for (i = 0; i < size; i++)
-    {
-        saveChild(node, "weight", str(weights[i]));
-    }
-}
-
-void deMixer::load(xmlNodePtr node) 
-{
-    xmlNodePtr child = node->xmlChildrenNode;
-
-    int i = 0;
-    while (child)
-    {
-        if ((!xmlStrcmp(child->name, BAD_CAST("weight")))) 
-        {
-            assert(i < size);
-            weights[i] = getValue(getContent(child));
-            i++;
-        }            
-
-        child = child->next;
-    }
 }
 
 void deMixer::lock() const

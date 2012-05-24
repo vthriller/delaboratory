@@ -23,7 +23,6 @@
 #include <sstream>
 #include <ctime>
 #include "str.h"
-#include "xml.h"
 #include "logger.h"
 
 #define CURVE_POINT_PICK_DISTANCE 0.03
@@ -53,10 +52,19 @@ int deBaseCurve::addPoint(deValue x, deValue y)
     {
         return -1;
     }
+    if (y < 0)
+    {
+        y = 0;
+    }
+    if (y > 1)
+    {
+        y = 1;
+    }
+    /*
     if ((y < 0) || (y > 1))
     {
         return -1;
-    }
+    }*/
 
     mutex.lock();
 

@@ -153,6 +153,7 @@ class deLayerProcessor
 
         void setPreviewSize(const deSize& size);
         void onImageLoad();
+        void forceUpdateSize();
 
         bool isClosing() const {return closing;};
 

@@ -39,9 +39,6 @@ class deConversionLayer:public deBaseLayerWithSource
 
         virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
-        virtual void load(xmlNodePtr root) {};
-        virtual void save(xmlNodePtr root) {saveCommon(root);};
-
         virtual std::string getActionName() {return "conversion setup";};
         
 

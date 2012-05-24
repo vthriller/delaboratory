@@ -22,6 +22,9 @@
 #include "equalizer_layer.h"
 #include "fill_layer.h"
 #include "tone_layer.h"
+#include "saturation_layer.h"
+#include "white_balance_layer.h"
+#include "exposure_layer.h"
 #include "apply_original_layer.h"
 #include "vignette_layer.h"
 #include "gradient_layer.h"
@@ -80,6 +83,21 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
         return new deToneLayer(colorSpace, _channelManager, source, _layerStack);
     }        
 
+    if (type == "exposure")
+    {
+        return new deExposureLayer(colorSpace, _channelManager, source, _layerStack);
+    }        
+
+    if (type == "saturation")
+    {
+        return new deSaturationLayer(colorSpace, _channelManager, source, _layerStack);
+    }        
+
+    if (type == "white_balance")
+    {
+        return new deWhiteBalanceLayer(colorSpace, _channelManager, source, _layerStack);
+    }        
+
     if (type == "local_contrast")
     {
         return new deLocalContrastLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
@@ -133,6 +151,9 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("levels");
     actions.push_back("curves");
     actions.push_back("equalizer");
+    actions.push_back("exposure");
+    actions.push_back("saturation");
+    actions.push_back("white_balance");
     actions.push_back("fill");
     actions.push_back("tone");
     actions.push_back("local_contrast");
@@ -188,6 +209,11 @@ std::string getActionDescription(const std::string& a)
     if (a == "apply_original")
     {
         return "original";
+    }
+
+    if (a == "white_balance")
+    {
+        return "wb";
     }
 
     return a;
