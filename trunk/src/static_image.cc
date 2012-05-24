@@ -21,12 +21,15 @@
 #include "logger.h"
 #include "color_space_utils.h"
 #include "str.h"
+#include "copy_channel.h"
 
 
 deStaticImage::deStaticImage()
 :colorSpace(deColorSpaceInvalid),
  size(0,0)
 {
+    rotation = 0;
+
     int n = 3;
     int i;
     for (i = 0; i < n; i++)
@@ -75,11 +78,6 @@ void deStaticImage::setSize(const deSize& _size)
         channels[i]->deallocate();
         channels[i]->allocate(size.getN());
     }
-}
-
-deSize deStaticImage::getSize() const
-{
-    return size;
 }
 
 void deStaticImage::lock()
@@ -167,3 +165,202 @@ bool deStaticImage::isEmpty() const
 {
     return size.isEmpty();
 }
+
+void deStaticImage::copyToChannel(int channel, deValue* destination, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, deSize ds, bool mirrorX, bool mirrorY, int rotate)
+{
+    int w = ds.getW();
+    int h = ds.getH();
+    if (w <= 0)
+    {
+        logError("w: " + str(w));
+        return;
+    }
+    if (h <= 0)
+    {
+        logError("h: " + str(h));
+        return;
+    }
+
+    const deValue* source = startReadStatic(channel);
+
+    scaleChannel(source, destination, z_x1, z_y1, z_x2, z_y2, w, h, mirrorX, mirrorY, rotate);
+
+    finishReadStatic(channel);
+}
+
+deValue deStaticImage::samplePixel(const deValue* src, int xx1, int xx2, int yy1, int yy2, bool mirrorX, bool mirrorY)
+{
+    int ws = size.getW();
+    int hs = size.getH();
+    if ((xx1 >= ws) || (xx1 < 0))
+    {
+        logError("xx1: " + str(xx1));
+        return 0.0;
+    }
+    if ((yy1 >= hs) || (yy1 < 0))
+    {
+        logError("yy1: " + str(yy1));
+        return 0.0;
+    }
+    if ((xx2 >= ws) || (xx2 < 0))
+    {
+        //logError("xx2: " + str(xx2));
+        return 0.0;
+    }
+    if ((yy2 >= hs) || (yy2 < 0))
+    {
+        //logError("yy2: " + str(yy2));
+        return 0.0;
+    }
+
+    int n = 0;
+    int x0;
+    int y0;
+    deValue value = 0.0;
+
+    if ((!mirrorX) && (!mirrorY))
+    {
+        for (x0 = xx1; x0 <= xx2; x0++)
+        {
+            for (y0 = yy1; y0 <= yy2; y0++)
+            {
+                value += src[x0 + y0 * ws];
+                n++;
+            }
+        }
+    }
+    if ((mirrorX) && (!mirrorY))
+    {
+        for (x0 = xx1; x0 <= xx2; x0++)
+        {
+            for (y0 = yy1; y0 <= yy2; y0++)
+            {
+                value += src[(ws - 1 - x0) + y0 * ws];
+                n++;
+            }
+        }
+    }
+    if ((!mirrorX) && (mirrorY))
+    {
+        for (x0 = xx1; x0 <= xx2; x0++)
+        {
+            for (y0 = yy1; y0 <= yy2; y0++)
+            {
+                value += src[x0 + (hs - 1 - y0) * ws];
+                n++;
+            }
+        }
+    }
+    if ((mirrorX) && (mirrorY))
+    {
+        for (x0 = xx1; x0 <= xx2; x0++)
+        {
+            for (y0 = yy1; y0 <= yy2; y0++)
+            {
+                value += src[(ws - 1 - x0) + (hs - 1 - y0) * ws];
+                n++;
+            }
+        }
+    }
+
+    if (n == 0)
+    {
+        logError("n = 0");
+        return 0.0;
+    }
+
+    return value / n;
+}
+
+deSize deStaticImage::getStaticImageSize() const
+{
+    return size;
+}
+
+void deStaticImage::scaleChannel(const deValue* src, deValue* dst, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, int w, int h, bool mirrorX, bool mirrorY, int rotate)
+{
+    int ws = size.getW();
+    int hs = size.getH();
+
+    int x1;
+    int y1;
+    int x2;
+    int y2;
+    x1 = ws * z_x1;
+    y1 = hs * z_y1;
+    x2 = ws * z_x2;
+    y2 = hs * z_y2;
+    if ((rotate == 90) || (rotate == 270))
+    {
+        x1 = hs * z_x1;
+        y1 = ws * z_y1;
+        x2 = hs * z_x2;
+        y2 = ws * z_y2;
+    }
+
+    deValue scaleW;
+    deValue scaleH;
+
+    deValue dx = x2 - x1;
+    deValue dy = y2 - y1;
+
+    scaleW = dx / w;
+    scaleH = dy / h;
+
+    if (scaleW <= 0)
+    {
+        logError("scaleW: " + str(scaleW));
+        logError("x1: " + str(x1));
+        logError("x2: " + str(x2));
+    }
+    if (scaleH <= 0)
+    {
+        logError("scaleH: " + str(scaleH));
+    }
+
+    logInfo("scaleW: " + str(scaleW));
+    logInfo("scaleH: " + str(scaleH));
+
+    int yy1;
+    int yy2;
+    int xx1;
+    int xx2;
+
+    int x;
+    for (x = 0; x < w; x++)
+    {
+        
+        xx1 = scaleW * x;
+        xx2 = scaleW * (x + 1);
+
+        int y;
+        for (y = 0; y < h; y++)
+        {
+            yy1 = scaleH * y;
+            yy2 = scaleH * (y + 1);
+
+            deValue v = 1;
+
+            if (rotate == 0)
+            {
+                v = samplePixel(src, x1 + xx1, x1 + xx2, y1 + yy1, y1 + yy2, mirrorX, mirrorY);
+            }   
+            if (rotate == 90)
+            {
+                v = samplePixel(src, ws - 1 - yy2 - y1, ws - 1 - yy1 - y1, xx1 + x1, xx2 + x1,  mirrorX, mirrorY);
+            }   
+            if (rotate == 180)
+            {
+                v = samplePixel(src, ws - 1 - xx2 - x1, ws - 1 - xx1 - x1, hs - 1 - yy2 - y1, hs - 1 - yy1 - y1, mirrorX, mirrorY);
+            }   
+            if (rotate == 270)
+            {
+                v = samplePixel(src, y1 + yy1, y1 + yy2, hs - 1 - xx2 - x1, hs - 1 - xx1 - x1, mirrorX, mirrorY);
+            }   
+
+            dst[y * w + x] = v;
+        }
+
+    }        
+}
+

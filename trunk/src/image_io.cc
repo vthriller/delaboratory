@@ -202,11 +202,18 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image)
     int h;
     uint16 bps;
     uint16 spp;
+    uint16 photometric;
 
     TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
     TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
     TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bps);
     TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &spp);
+    TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric);
+
+    if (photometric != PHOTOMETRIC_RGB)
+    {
+        logError("photometric " + str(photometric));
+    }
 
     logInfo("found TIFF " + str(w) + "x" + str(h) + " bps: " + str(bps) + " spp: " + str(spp));
 

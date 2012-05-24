@@ -47,9 +47,13 @@ void deImageAreaPanel::updateSize(bool calcHistogram)
     if (ss.getN() <= 0)
     {
         return;
-    }
+    };
 
-    deSize fit = fitInside(ps, ss, 1.0);
+    deValue aspect = ss.getAspect();
+
+    //aspect = 1.0 / aspect;
+
+    deSize fit = fitInside(ps, aspect);
 
     project.getLayerProcessor().setPreviewSize(fit);
 
