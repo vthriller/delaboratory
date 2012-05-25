@@ -25,7 +25,6 @@
 class deSwitchableLayer:public deBaseLayerWithSource
 {
     private:
-        bool enabled;
 
     protected:
         void disableNotLuminance();
@@ -34,9 +33,6 @@ class deSwitchableLayer:public deBaseLayerWithSource
     public:
         deSwitchableLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
         virtual ~deSwitchableLayer();
-
-        bool isEnabled() const;
-        void setEnabled(bool e);
 
         bool isChannelEnabled(int index) const;
         void enableChannel(int index);
