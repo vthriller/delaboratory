@@ -23,8 +23,6 @@
 deSwitchableLayer::deSwitchableLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayerIndex, deLayerStack& _layerStack)
 :deBaseLayerWithSource(_colorSpace, _channelManager, _sourceLayerIndex, _layerStack)
 {
-    enabled = true;
-
     int n = getColorSpaceSize(colorSpace);
     int i;
     for (i = 0; i < n; i++)
@@ -38,16 +36,6 @@ deSwitchableLayer::deSwitchableLayer(deColorSpace _colorSpace, deChannelManager&
 
 deSwitchableLayer::~deSwitchableLayer()
 {
-}
-
-bool deSwitchableLayer::isEnabled() const
-{
-    return enabled;
-}
-
-void deSwitchableLayer::setEnabled(bool e)
-{
-    enabled = e;
 }
 
 void deSwitchableLayer::disableNotLuminance()

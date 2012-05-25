@@ -113,11 +113,6 @@ bool deLayerWithBlending::updateBlend(int i)
 {
     logInfo("update blend " + str(i));
 
-    if (!isEnabled())
-    {
-        return true;
-    }
-
     int channelSize = mainLayerImage.getChannelSize().getN();
 
     int s = getSourceImage().getChannelIndex(i);
@@ -181,11 +176,6 @@ bool deLayerWithBlending::updateBlend(int i)
 
 const deImage& deLayerWithBlending::getLayerImage() const
 {
-    if (!isEnabled())
-    {
-        return getSourceImage();
-    }
-
     if (isBlendingEnabled())
     {
         return imageBlendPass;
@@ -196,11 +186,6 @@ const deImage& deLayerWithBlending::getLayerImage() const
 
 void deLayerWithBlending::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
 {
-    if (!isEnabled())
-    {
-        return;
-    }
-
     getSourceImage().updateChannelUsage(channelUsage, layerIndex);
 
     mainLayerImage.updateChannelUsage(channelUsage, layerIndex);

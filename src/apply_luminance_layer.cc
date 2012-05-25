@@ -120,11 +120,6 @@ bool deApplyLuminanceLayer::processActionFull(deValue** sp, deValue** dp, int ch
 
 bool deApplyLuminanceLayer::updateMainImageNotThreadedWay()
 {
-    if (!isEnabled())
-    {
-        return true;
-    }
-
     int channelSize = mainLayerImage.getChannelSize().getN();
 
     int s[MAX_COLOR_SPACE_SIZE];

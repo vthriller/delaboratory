@@ -41,7 +41,6 @@ class deLayerGridPanel:public wxPanel
             wxStaticText* id;
             wxRadioButton* view;
             wxButton* action;
-            wxCheckBox* enabled;
     };
 
     private:
@@ -57,7 +56,6 @@ class deLayerGridPanel:public wxPanel
 
         int maxRows;
 
-        void check(wxCommandEvent &event);
         void select(wxCommandEvent &event);
         void click(wxCommandEvent &event);
     

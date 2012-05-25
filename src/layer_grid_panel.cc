@@ -47,6 +47,9 @@ void deLayerGridPanel::buildRows()
     deLayerStack& layerStack = project.getLayerStack();
     int n = layerStack.getSize();
 
+    int idWidth = 24;
+    int actionWidth = 200;
+
     int i;
     for (i = n-1; i >=0; i--)
     {
@@ -59,7 +62,7 @@ void deLayerGridPanel::buildRows()
         std::ostringstream oss;
         oss << i;
 
-        row.id = new wxStaticText(this, wxID_ANY, wxString::FromAscii(oss.str().c_str()), wxDefaultPosition, wxSize(18, -1));
+        row.id = new wxStaticText(this, wxID_ANY, wxString::FromAscii(oss.str().c_str()), wxDefaultPosition, wxSize(idWidth, -1));
         gridSizer->Add(row.id, 0, wxALIGN_CENTER);
 
         int style = 0;
@@ -73,7 +76,7 @@ void deLayerGridPanel::buildRows()
 
         std::string action = layer->getType();
 
-        row.action = new wxButton(this, wxID_ANY, wxString::FromAscii(action.c_str()), wxDefaultPosition, wxSize(160,25));
+        row.action = new wxButton(this, wxID_ANY, wxString::FromAscii(action.c_str()), wxDefaultPosition, wxSize(actionWidth,25));
         if (action.size() > 0)
         {
             gridSizer->Add(row.action, 0);
@@ -82,22 +85,6 @@ void deLayerGridPanel::buildRows()
         {
             gridSizer->Add(row.action, 0);
             row.action->Hide();
-        }
-
-        row.enabled = new wxCheckBox(this, wxID_ANY, _T(""));
-        if ((switchable) && (switchable->isEnabled()))
-        {
-            row.enabled->SetValue(true);
-        }
-
-        if (switchable)
-        {
-            gridSizer->Add(row.enabled, 0, wxALIGN_CENTER);
-        }
-        else
-        {
-            gridSizer->Add(row.enabled, 0, wxALIGN_CENTER);
-            row.enabled->Hide();
         }
 
     }
@@ -123,8 +110,6 @@ void deLayerGridPanel::clearRows()
         gridSizer->Detach(row.action);
         delete row.action;
 
-        gridSizer->Detach(row.enabled);
-        delete row.enabled;
     }
 
     gridSizer->Clear();
@@ -138,7 +123,7 @@ project(_project), layerProcessor(_processor), channelManager(_channelManager)
 {
     project.setLayerGridPanel(this);
 
-    gridSizer = new wxFlexGridSizer(4);
+    gridSizer = new wxFlexGridSizer(3);
     gridSizer->SetFlexibleDirection(wxHORIZONTAL);
     SetSizer(gridSizer);
 
@@ -146,39 +131,12 @@ project(_project), layerProcessor(_processor), channelManager(_channelManager)
 
     SetMinSize(wxSize(300, 360));
 
-    Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deLayerGridPanel::check));
     Connect(wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler(deLayerGridPanel::select));
     Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deLayerGridPanel::click));
 }
 
 deLayerGridPanel::~deLayerGridPanel()
 {
-}
-
-void deLayerGridPanel::check(wxCommandEvent &event)
-{
-    int id = event.GetId();
-    bool checked = (event.GetInt() == 1);
-    std::vector<deLayerRow>::const_iterator i;
-    for (i = layerRows.begin(); i != layerRows.end(); i++)
-    {
-        const deLayerRow& row = *i;
-        if (row.enabled->GetId() == id)
-        {
-            deLayerStack& layerStack = project.getLayerStack();
-
-            deBaseLayer* baseLayer = layerStack.getLayer(row.index);
-            deSwitchableLayer* switchable = dynamic_cast<deSwitchableLayer*>(baseLayer);
-
-            if (switchable)
-            {
-                switchable->setEnabled(checked);
-                int index = row.index;
-                layerProcessor.markUpdateAllChannels(index);
-                layerProcessor.onChangeViewMode();
-            }                
-        }
-    }
 }
 
 void deLayerGridPanel::select(wxCommandEvent &event)
