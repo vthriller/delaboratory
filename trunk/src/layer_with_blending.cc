@@ -283,6 +283,10 @@ void deLayerWithBlending::blendSpecial()
 
     if (mode == deBlendLuminosity)
     {
+        if (colorSpace == deColorSpaceRGB)
+        {
+            blendLuminosityRGB(source0, source1, source2, overlay0, overlay1, overlay2, destination0, destination1, destination2, n, o);
+        }
     }
 
     getSourceImage().finishRead(0);
