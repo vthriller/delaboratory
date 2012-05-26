@@ -29,7 +29,6 @@
 
 class deImagePanel;
 class deHistogramPanel;
-class deControlPanel;
 class deLayerGridPanel;
 class deViewModePanel;
 class deHistogramModePanel;
@@ -117,6 +116,7 @@ class deProject
         deBaseLayer* createNewLayer(const std::string& type);
 
         void onAddNewLayer();
+        void onRemoveTopLayer();
 
         deLayerFrameManager& getLayerFrameManager() {return layerFrameManager;};
         deValue getSourceAspect() const;

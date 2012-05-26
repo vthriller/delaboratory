@@ -16,14 +16,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "gaussian_blur_single_layer.h"
-#include "blur.h"
+#include "recover_shadows_layer.h"
+#include "usm.h"
 #include "preset.h"
 #include "view_manager.h"
 #include "color_space_utils.h"
 #include "copy_channel.h"
+#include "logger.h"
 
-deGaussianBlurSingleLayer::deGaussianBlurSingleLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager)
+deRecoverShadowsLayer::deRecoverShadowsLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack), viewManager(_viewManager)
 {
     dePreset* reset = createPreset("reset");
@@ -33,47 +34,21 @@ deGaussianBlurSingleLayer::deGaussianBlurSingleLayer(deColorSpace _colorSpace, d
     createPropertyChoice("channel", getChannelNames(colorSpace));
 
     applyPreset("reset");
+    setOpacity(0.5);
 }
 
-deGaussianBlurSingleLayer::~deGaussianBlurSingleLayer()
+deRecoverShadowsLayer::~deRecoverShadowsLayer()
 {
 }
-bool deGaussianBlurSingleLayer::updateMainImageNotThreadedWay()
+
+bool deRecoverShadowsLayer::updateMainImageNotThreadedWay()
 {
-    deSize size = mainLayerImage.getChannelSize();
-    int n = size.getN();
-
-    int nc = getColorSpaceSize(colorSpace);
-
-    deBlurType type = deGaussianBlur;
     deValue r = getNumericValue("radius") * viewManager.getRealScale();
 
     int channel = getPropertyChoice("channel")->getIndex();
 
-    const deValue* source = getSourceImage().startRead(channel);
+    bool result = shadowsHighlights(r, channel, getSourceImage(), mainLayerImage, true);
 
-    int i;
-    for (i = 0; i < nc; i++)
-    {
-        mainLayerImage.enableChannel(i);
-    }
-
-    deValue* destination = mainLayerImage.startWrite(0);
-
-    blurChannel(source, destination, size, r, r, type, 0.0);
-
-    getSourceImage().finishRead(channel);
-
-    for (i = 1; i < nc; i++)
-    {
-        deValue* dd = mainLayerImage.startWrite(i);
-        copyChannel(destination, dd, n);
-        mainLayerImage.finishWrite(i);
-    }
-
-    mainLayerImage.finishWrite(0);
-
-
-    return true;
+    return result;
 }    
 

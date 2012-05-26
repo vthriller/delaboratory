@@ -16,27 +16,32 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "local_contrast_layer.h"
+#include "auto_burn_layer.h"
 #include "usm.h"
 #include "preset.h"
 #include "view_manager.h"
+#include "logger.h"
 
-deLocalContrastLayer::deLocalContrastLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager)
+deAutoBurnLayer::deAutoBurnLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack), viewManager(_viewManager)
 {
     dePreset* reset = createPreset("reset");
-    createPropertyNumeric("radius", 10, 600);
-    reset->addNumericValue("radius", 200);
+    createPropertyNumeric("radius 1", 10, 100);
+    reset->addNumericValue("radius 1", 20);
+    createPropertyNumeric("radius 2", 5, 50);
+    reset->addNumericValue("radius 2", 10);
+    createPropertyNumeric("threshold", 0.0, 1.0);
+    reset->addNumericValue("threshold", 0.5);
     applyPreset("reset");
-    setOpacity(0.2);
+    setOpacity(0.5);
     disableNotForSharpen();
 }
 
-deLocalContrastLayer::~deLocalContrastLayer()
+deAutoBurnLayer::~deAutoBurnLayer()
 {
 }
 
-bool deLocalContrastLayer::updateMainImageSingleChannel(int channel)
+bool deAutoBurnLayer::updateMainImageSingleChannel(int channel)
 {
     if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
     {
@@ -45,9 +50,9 @@ bool deLocalContrastLayer::updateMainImageSingleChannel(int channel)
         return true;
     }
 
-    deValue r = getNumericValue("radius") * viewManager.getRealScale();;
-    deValue a = 0.5;
-    deValue t = 0.0;
+    deValue r1 = getNumericValue("radius 1") * viewManager.getRealScale();;
+    deValue r2 = getNumericValue("radius 2") * viewManager.getRealScale();;
+    deValue t = getNumericValue("threshold");
 
     deSize size = mainLayerImage.getChannelSize();
 
@@ -59,7 +64,7 @@ bool deLocalContrastLayer::updateMainImageSingleChannel(int channel)
     
     if ((source) && (destination))
     {
-        result = unsharpMask(source, destination, size, a, r, t, deBoxBlur);
+        result = autoDodgeBurn(source, destination, size, r1, r2, t, true);
     }        
 
     getSourceImage().finishRead(channel);

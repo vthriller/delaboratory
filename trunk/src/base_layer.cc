@@ -188,7 +188,9 @@ bool deBaseLayer::updateMainImageAllChannels()
 
 void deBaseLayer::processSingleChannel(int channel)
 {
+    logInfo("base layer process single channel");
     updateMainImageSingleChannel(channel);
+    logInfo("base layer process single channel DONE");
 }    
 
 bool deBaseLayer::updateImage()

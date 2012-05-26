@@ -27,6 +27,7 @@ class deSwitchableLayer:public deBaseLayerWithSource
     private:
 
     protected:
+        void disableAll();
         void disableNotLuminance();
         void disableNotForSharpen();
 

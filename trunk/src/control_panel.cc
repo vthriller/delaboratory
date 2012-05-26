@@ -20,7 +20,6 @@
 #include "project.h"
 #include "base_layer.h"
 #include "layer_factory.h"
-#include "layer_grid_panel.h"
 #include "file_dialogs.h"
 #include "layer_processor.h"
 #include "wx/notebook.h"
@@ -31,8 +30,8 @@
 
 const int g_txt = 220;
 
-deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor,  deLayerGridPanel* _layerGridPanel, deOperationProcessor& _operationProcessor, deChannelManager& _channelManager)
-:wxPanel(parent), project(_project), layerGridPanel(_layerGridPanel), layerProcessor(_processor), operationProcessor(_operationProcessor), channelManager(_channelManager)
+deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deOperationProcessor& _operationProcessor, deChannelManager& _channelManager)
+:wxPanel(parent), project(_project), layerProcessor(_processor), operationProcessor(_operationProcessor), channelManager(_channelManager)
 {
     mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
@@ -95,6 +94,7 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
     }
 
 
+/*
     {
 
         wxSizer* sizerE = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T("export"));
@@ -113,6 +113,7 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
             sizerE->Add(externalEditor, 0);
         }
     }
+    */
 
     Layout();
     Fit();
@@ -124,6 +125,7 @@ deControlPanel::~deControlPanel()
 {
 }
 
+/*
 bool deControlPanel::generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir)
 {
     wxProgressDialog* progressDialog = new wxProgressDialog(_T("generate final image"), _T("generate final image"), 100, GetParent(), wxPD_AUTO_HIDE | wxPD_ELAPSED_TIME);
@@ -134,6 +136,7 @@ bool deControlPanel::generateFinalImage(const std::string& app, const std::strin
 
     return result;
 }
+*/
 
 void deControlPanel::click(wxCommandEvent &event)
 {
@@ -146,9 +149,28 @@ void deControlPanel::click(wxCommandEvent &event)
         int index = layerStack.getSize() - 1;
         project.getLayerFrameManager().onDestroyLayer(index);
         operationProcessor.execute("remove");
-        updateLayerGrid2();
+    //    updateLayerGrid2();
     }
 
+
+    std::map<int, deColorSpace>::iterator c = convertButtonsColorSpaces.find(id);
+    if (c != convertButtonsColorSpaces.end())
+    {
+        deColorSpace colorSpace = c->second;
+
+        operationProcessor.execute(getColorSpaceName(colorSpace));
+    }
+
+    std::map<int, std::string>::iterator a = actionButtonsNames.find(id);
+    if (a != actionButtonsNames.end())
+    {
+        std::string action = a->second;
+
+        operationProcessor.execute(action);
+    }
+
+
+    /*
     if (exportSingle->GetId() == id)
     {
         std::string f = getSaveFile(this, "export TIFF", "tiff");
@@ -174,27 +196,8 @@ void deControlPanel::click(wxCommandEvent &event)
     {
         generateFinalImage("gimp", "tiff", "", false, "");
     }
-
-    std::map<int, deColorSpace>::iterator c = convertButtonsColorSpaces.find(id);
-    if (c != convertButtonsColorSpaces.end())
-    {
-        deColorSpace colorSpace = c->second;
-
-        operationProcessor.execute(getColorSpaceName(colorSpace));
-    }
-
-    std::map<int, std::string>::iterator a = actionButtonsNames.find(id);
-    if (a != actionButtonsNames.end())
-    {
-        std::string action = a->second;
-
-        operationProcessor.execute(action);
-    }
+    */
 
 }
 
 
-void deControlPanel::updateLayerGrid2()
-{
-    layerGridPanel->update();
-}

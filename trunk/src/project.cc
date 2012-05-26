@@ -29,7 +29,6 @@
 #include "str.h"
 #include "histogram_panel.h"
 #include "histogram_mode_panel.h"
-#include "control_panel.h"
 #include "view_mode_panel.h"
 #include <sstream>
 #include "layer_factory.h"
@@ -163,9 +162,10 @@ void deProject::setTestImage(int s)
     generateTestImage(sourceImage, s);
     if (imageAreaPanel)
     {
-        imageAreaPanel->updateSize();
+        imageAreaPanel->updateSize(false);
     }        
     resetLayerStack(sourceImage.getColorSpace());
+    imageFileName = "test";
 
 }
 
@@ -441,7 +441,7 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
     channelManager.destroyAllChannels();
     if (imageAreaPanel)
     {
-        imageAreaPanel->updateSize();
+        imageAreaPanel->updateSize(false);
     }        
     layerProcessor.updateAllImages(true);
 
@@ -517,6 +517,12 @@ void deProject::updateLayerGrid()
 }
 
 void deProject::onAddNewLayer()
+{
+    viewManager.setLastView();
+    updateLayerGrid();
+}        
+
+void deProject::onRemoveTopLayer()
 {
     viewManager.setLastView();
     updateLayerGrid();

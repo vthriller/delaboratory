@@ -24,6 +24,7 @@
 #include "logger.h"
 #include "str.h"
 #include "curve.h"
+#include "property_numeric.h"
 
 deWhiteBalanceLayer::deWhiteBalanceLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
@@ -43,6 +44,14 @@ deWhiteBalanceLayer::deWhiteBalanceLayer(deColorSpace _colorSpace, deChannelMana
     reset->addNumericValue("blue / yellow finetune", 0.0);
 
     applyPreset("reset");
+    if (colorSpace != deColorSpaceLAB)
+    {
+        disableAll();
+    }
+    else
+    {
+        disableChannel(0);
+    }
 }
 
 deWhiteBalanceLayer::~deWhiteBalanceLayer()
@@ -121,6 +130,39 @@ bool deWhiteBalanceLayer::updateMainImageSingleChannel(int channel)
 
     getSourceImage().finishRead(channel);
     mainLayerImage.finishWrite(channel);
+
+    return true;
+}
+
+bool deWhiteBalanceLayer::onImageClick(deValue x, deValue y)
+{
+    if (colorSpace != deColorSpaceLAB)
+    {
+        return false;
+    }
+
+    const deImage& source = getSourceImage();
+
+    const deSize size = source.getChannelSize();
+
+    int p = (y * size.getH() )  * size.getW() + (x * size.getW());
+
+    const deValue* pixelsA = source.startRead(1);
+    const deValue* pixelsB = source.startRead(2);
+
+    deValue a = pixelsA[p] - 0.5;
+    deValue b = pixelsB[p] - 0.5;
+
+    source.finishRead(1);
+    source.finishRead(2);
+
+    a = -2 * a;
+    b = -2 * b;
+
+    getPropertyNumeric("green / magenta")->set(a);
+    getPropertyNumeric("green / magenta finetune")->set(0.0);
+    getPropertyNumeric("blue / yellow")->set(b);
+    getPropertyNumeric("blue / yellow finetune")->set(0.0);
 
     return true;
 }

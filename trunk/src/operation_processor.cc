@@ -49,6 +49,7 @@ void deOperationProcessor::execute(const std::string& operation)
     if (operation == "remove")
     {
         removeTopLayer();
+        project.onRemoveTopLayer();
         return;
     }
 

@@ -17,6 +17,8 @@
 */
 
 #include "zoom_manager.h"
+#include "str.h"
+#include "logger.h"
 
 deZoomManager::deZoomManager()
 {
@@ -95,6 +97,7 @@ bool deZoomManager::onRelease()
         z_x2 = x2;
         z_y1 = y1;
         z_y2 = y2;
+        logInfo("set zoom x1: " + str(z_x1) + " x2: " + str(z_x2) + " y1: " + str(z_y1) + " y2: " + str(z_y2));
     }
     else
     {

@@ -40,6 +40,14 @@ deSaturationLayer::deSaturationLayer(deColorSpace _colorSpace, deChannelManager&
     reset->addNumericValue("blue / yellow", 0.0);
 
     applyPreset("reset");
+    if (colorSpace != deColorSpaceLAB)
+    {
+        disableAll();
+    }
+    else
+    {
+        disableChannel(0);
+    }
 }
 
 deSaturationLayer::~deSaturationLayer()

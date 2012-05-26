@@ -63,7 +63,7 @@ void deZoomPanel::click(wxCommandEvent &event)
         zoomManager.fullZoomOut();
         if (imageAreaPanel)
         {
-            imageAreaPanel->updateSize();
+            imageAreaPanel->updateSize(false);
         }
     }      
 
@@ -82,7 +82,6 @@ void deZoomPanel::updateButtons()
 
     if (zoomManager.isZoomed())
     {
-        //zoomIn->Disable();
         zoomIn->Enable();
         zoomOut->Enable();
     }

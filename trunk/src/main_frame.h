@@ -57,6 +57,10 @@ enum
     ID_ColorMatrix4,
     ID_ColorMatrix5,
     ID_PaletteFrame,
+    ID_ExportGIMP,
+    ID_ExportTIFF,
+    ID_ExportJPG,
+    ID_ExportAll,
     DE_REPAINT_EVENT,
     DE_IMAGE_LOAD_EVENT,
     DE_HISTOGRAM_EVENT,
@@ -116,6 +120,9 @@ private:
 	void onWarningEvent(wxCommandEvent& event);
     void onHistogramEvent(wxCommandEvent& event);
     void onTimerEvent(wxTimerEvent& event);
+    void onExportGIMP(wxCommandEvent& event);
+    void onExportTIFF(wxCommandEvent& event);
+    void onExportAll(wxCommandEvent& event);
 
 	void onCloseEvent(wxCloseEvent& event);
 
@@ -129,6 +136,8 @@ private:
 
     void showPanels();
     void hidePanels();
+
+    bool generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir);
 
 public:
 	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcrawVersion, deOperationProcessor& _operationProcessor, deChannelManager& channelManager);
