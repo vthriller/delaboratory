@@ -206,3 +206,109 @@ void blendLuminosityProPhoto(const deValue* source0, const deValue* source1, con
         destination2[i] = (1 - o) * bs + o * b;
     }
 }
+
+void blendColorCMYK(const deValue* source0, const deValue* source1, const deValue* source2, const deValue* source3, const deValue* overlay0, const deValue* overlay1, const deValue* overlay2, const deValue* overlay3, deValue* destination0, deValue* destination1, deValue* destination2, deValue* destination3, int n, deValue o)
+{
+    deConversionCPU cpu(4);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        deValue cs = source0[i];
+        deValue ms = source1[i];
+        deValue ys = source2[i];
+        deValue ks = source3[i];
+
+        cpu.input[0] = cs;
+        cpu.input[1] = ms;
+        cpu.input[2] = ys;
+        cpu.input[3] = ks;
+
+        cmyk2lab(cpu);
+
+        deValue L = cpu.output[0];
+
+        deValue co = overlay0[i];
+        deValue mo = overlay1[i];
+        deValue yo = overlay2[i];
+        deValue ko = overlay3[i];
+
+        cpu.input[0] = co;
+        cpu.input[1] = mo;
+        cpu.input[2] = yo;
+        cpu.input[3] = ko;
+
+        cmyk2lab(cpu);
+
+        deValue A = cpu.output[1];
+        deValue B = cpu.output[2];
+
+        cpu.input[0] = L;
+        cpu.input[1] = A;
+        cpu.input[2] = B;
+
+        lab2cmyk(cpu);
+
+        deValue c = cpu.output[0];
+        deValue m = cpu.output[1];
+        deValue y = cpu.output[2];
+        deValue k = cpu.output[3];
+
+        destination0[i] = (1 - o) * cs + o * c;
+        destination1[i] = (1 - o) * ms + o * m;
+        destination2[i] = (1 - o) * ys + o * y;
+        destination3[i] = (1 - o) * ks + o * k;
+    }
+}
+
+void blendLuminosityCMYK(const deValue* source0, const deValue* source1, const deValue* source2, const deValue* source3, const deValue* overlay0, const deValue* overlay1, const deValue* overlay2, const deValue* overlay3, deValue* destination0, deValue* destination1, deValue* destination2, deValue* destination3, int n, deValue o)
+{
+    deConversionCPU cpu(4);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        deValue cs = source0[i];
+        deValue ms = source1[i];
+        deValue ys = source2[i];
+        deValue ks = source3[i];
+
+        cpu.input[0] = cs;
+        cpu.input[1] = ms;
+        cpu.input[2] = ys;
+        cpu.input[3] = ks;
+
+        cmyk2lab(cpu);
+
+        deValue A = cpu.output[1];
+        deValue B = cpu.output[2];
+
+        deValue co = overlay0[i];
+        deValue mo = overlay1[i];
+        deValue yo = overlay2[i];
+        deValue ko = overlay3[i];
+
+        cpu.input[0] = co;
+        cpu.input[1] = mo;
+        cpu.input[2] = yo;
+        cpu.input[3] = ko;
+
+        cmyk2lab(cpu);
+
+        deValue L = cpu.output[0];
+
+        cpu.input[0] = L;
+        cpu.input[1] = A;
+        cpu.input[2] = B;
+
+        lab2cmyk(cpu);
+
+        deValue c = cpu.output[0];
+        deValue m = cpu.output[1];
+        deValue y = cpu.output[2];
+        deValue k = cpu.output[3];
+
+        destination0[i] = (1 - o) * cs + o * c;
+        destination1[i] = (1 - o) * ms + o * m;
+        destination2[i] = (1 - o) * ys + o * y;
+        destination3[i] = (1 - o) * ks + o * k;
+    }
+}

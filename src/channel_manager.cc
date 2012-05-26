@@ -266,6 +266,11 @@ const deValue* deChannelManager::startRead(int index)
 
     mutexes[index]->lockRead();
 
+    if (channels[index] == NULL)
+    {
+        return NULL;
+    }
+
     return channels[index]->getPixels();
 }
 
@@ -307,6 +312,11 @@ deValue* deChannelManager::startWrite(int index)
     mutexes[index]->lockWrite();
 
     logInfo("startWrite " + str(index) + " locked");
+
+    if (channels[index] == NULL)
+    {
+        return NULL;
+    }
 
     return channels[index]->getPixels();
 }
