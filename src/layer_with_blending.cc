@@ -279,6 +279,10 @@ void deLayerWithBlending::blendSpecial()
         {
             blendColorRGB(source0, source1, source2, overlay0, overlay1, overlay2, destination0, destination1, destination2, n, o);
         }
+        if (colorSpace == deColorSpaceProPhoto)
+        {
+            blendColorProPhoto(source0, source1, source2, overlay0, overlay1, overlay2, destination0, destination1, destination2, n, o);
+        }
     }
 
     if (mode == deBlendLuminosity)
@@ -286,6 +290,10 @@ void deLayerWithBlending::blendSpecial()
         if (colorSpace == deColorSpaceRGB)
         {
             blendLuminosityRGB(source0, source1, source2, overlay0, overlay1, overlay2, destination0, destination1, destination2, n, o);
+        }
+        if (colorSpace == deColorSpaceProPhoto)
+        {
+            blendLuminosityProPhoto(source0, source1, source2, overlay0, overlay1, overlay2, destination0, destination1, destination2, n, o);
         }
     }
 

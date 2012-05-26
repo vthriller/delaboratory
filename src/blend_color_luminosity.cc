@@ -112,3 +112,97 @@ void blendLuminosityRGB(const deValue* source0, const deValue* source1, const de
         destination2[i] = (1 - o) * bs + o * b;
     }
 }
+
+void blendColorProPhoto(const deValue* source0, const deValue* source1, const deValue* source2, const deValue* overlay0, const deValue* overlay1, const deValue* overlay2, deValue* destination0, deValue* destination1, deValue* destination2, int n, deValue o)
+{
+    deConversionCPU cpu(3);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        deValue rs = source0[i];
+        deValue gs = source1[i];
+        deValue bs = source2[i];
+
+        cpu.input[0] = rs;
+        cpu.input[1] = gs;
+        cpu.input[2] = bs;
+
+        prophoto2lab(cpu);
+
+        deValue L = cpu.output[0];
+
+        deValue ro = overlay0[i];
+        deValue go = overlay1[i];
+        deValue bo = overlay2[i];
+
+        cpu.input[0] = ro;
+        cpu.input[1] = go;
+        cpu.input[2] = bo;
+
+        prophoto2lab(cpu);
+
+        deValue A = cpu.output[1];
+        deValue B = cpu.output[2];
+
+        cpu.input[0] = L;
+        cpu.input[1] = A;
+        cpu.input[2] = B;
+
+        lab2prophoto(cpu);
+
+        deValue r = cpu.output[0];
+        deValue g = cpu.output[1];
+        deValue b = cpu.output[2];
+
+        destination0[i] = (1 - o) * rs + o * r;
+        destination1[i] = (1 - o) * gs + o * g;
+        destination2[i] = (1 - o) * bs + o * b;
+    }
+}
+
+void blendLuminosityProPhoto(const deValue* source0, const deValue* source1, const deValue* source2, const deValue* overlay0, const deValue* overlay1, const deValue* overlay2, deValue* destination0, deValue* destination1, deValue* destination2, int n, deValue o)
+{
+    deConversionCPU cpu(3);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        deValue rs = source0[i];
+        deValue gs = source1[i];
+        deValue bs = source2[i];
+
+        cpu.input[0] = rs;
+        cpu.input[1] = gs;
+        cpu.input[2] = bs;
+
+        prophoto2lab(cpu);
+
+        deValue A = cpu.output[1];
+        deValue B = cpu.output[2];
+
+        deValue ro = overlay0[i];
+        deValue go = overlay1[i];
+        deValue bo = overlay2[i];
+
+        cpu.input[0] = ro;
+        cpu.input[1] = go;
+        cpu.input[2] = bo;
+
+        prophoto2lab(cpu);
+
+        deValue L = cpu.output[0];
+
+        cpu.input[0] = L;
+        cpu.input[1] = A;
+        cpu.input[2] = B;
+
+        lab2prophoto(cpu);
+
+        deValue r = cpu.output[0];
+        deValue g = cpu.output[1];
+        deValue b = cpu.output[2];
+
+        destination0[i] = (1 - o) * rs + o * r;
+        destination1[i] = (1 - o) * gs + o * g;
+        destination2[i] = (1 - o) * bs + o * b;
+    }
+}
