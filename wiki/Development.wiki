@@ -3,7 +3,7 @@
 -----
 *2012.05.26*
 
-Color and luminosity blending work in sRGB, ProPhoto and CMYK
+Color and luminosity blending work in sRGB, !ProPhoto and CMYK
 
 Auto dodge, auto burn, recover highlights, recover shadows layers.
 
