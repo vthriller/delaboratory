@@ -25,5 +25,7 @@ void blendColorRGB(const deValue* source0, const deValue* source1, const deValue
 void blendLuminosityRGB(const deValue* source0, const deValue* source1, const deValue* source2, const deValue* overlay0, const deValue* overlay1, const deValue* overlay2, deValue* destination0, deValue* destination1, deValue* destination2, int n, deValue o);
 void blendColorProPhoto(const deValue* source0, const deValue* source1, const deValue* source2, const deValue* overlay0, const deValue* overlay1, const deValue* overlay2, deValue* destination0, deValue* destination1, deValue* destination2, int n, deValue o);
 void blendLuminosityProPhoto(const deValue* source0, const deValue* source1, const deValue* source2, const deValue* overlay0, const deValue* overlay1, const deValue* overlay2, deValue* destination0, deValue* destination1, deValue* destination2, int n, deValue o);
+void blendColorCMYK(const deValue* source0, const deValue* source1, const deValue* source2, const deValue* source3, const deValue* overlay0, const deValue* overlay1, const deValue* overlay2, const deValue* overlay3, deValue* destination0, deValue* destination1, deValue* destination2, deValue* destination3, int n, deValue o);
+void blendLuminosityCMYK(const deValue* source0, const deValue* source1, const deValue* source2, const deValue* source3, const deValue* overlay0, const deValue* overlay1, const deValue* overlay2, const deValue* overlay3, deValue* destination0, deValue* destination1, deValue* destination2, deValue* destination3, int n, deValue o);
 
 #endif

@@ -173,7 +173,7 @@ std::vector<deBlendMode> getSupportedBlendModes(deColorSpace colorSpace)
     result.push_back(deBlendDodge);
     result.push_back(deBlendBurn);
 
-    if ((colorSpace == deColorSpaceRGB) || (colorSpace == deColorSpaceProPhoto))
+    if ((colorSpace == deColorSpaceRGB) || (colorSpace == deColorSpaceProPhoto) || (colorSpace == deColorSpaceCMYK))
     {
         result.push_back(deBlendColor);
         result.push_back(deBlendLuminosity);

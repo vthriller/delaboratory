@@ -256,18 +256,22 @@ void deLayerWithBlending::blendSpecial()
     const deValue* source0 = getSourceImage().startRead(0);
     const deValue* source1 = getSourceImage().startRead(1);
     const deValue* source2 = getSourceImage().startRead(2);
+    const deValue* source3 = getSourceImage().startRead(3);
 
     const deValue* overlay0 = mainLayerImage.startRead(0);
     const deValue* overlay1 = mainLayerImage.startRead(1);
     const deValue* overlay2 = mainLayerImage.startRead(2);
+    const deValue* overlay3 = mainLayerImage.startRead(3);
 
     imageBlendPass.enableChannel(0);
     imageBlendPass.enableChannel(1);
     imageBlendPass.enableChannel(2);
+    imageBlendPass.enableChannel(3);
 
     deValue* destination0 = imageBlendPass.startWrite(0);
     deValue* destination1 = imageBlendPass.startWrite(1);
     deValue* destination2 = imageBlendPass.startWrite(2);
+    deValue* destination3 = imageBlendPass.startWrite(3);
 
     int n = mainLayerImage.getChannelSize().getN();
 
@@ -283,6 +287,10 @@ void deLayerWithBlending::blendSpecial()
         {
             blendColorProPhoto(source0, source1, source2, overlay0, overlay1, overlay2, destination0, destination1, destination2, n, o);
         }
+        if (colorSpace == deColorSpaceCMYK)
+        {
+            blendColorCMYK(source0, source1, source2, source3, overlay0, overlay1, overlay2, overlay3, destination0, destination1, destination2, destination3, n, o);
+        }
     }
 
     if (mode == deBlendLuminosity)
@@ -295,17 +303,24 @@ void deLayerWithBlending::blendSpecial()
         {
             blendLuminosityProPhoto(source0, source1, source2, overlay0, overlay1, overlay2, destination0, destination1, destination2, n, o);
         }
+        if (colorSpace == deColorSpaceCMYK)
+        {
+            blendLuminosityCMYK(source0, source1, source2, source3, overlay0, overlay1, overlay2, overlay3, destination0, destination1, destination2, destination3, n, o);
+        }
     }
 
     getSourceImage().finishRead(0);
     getSourceImage().finishRead(1);
     getSourceImage().finishRead(2);
+    getSourceImage().finishRead(3);
     mainLayerImage.finishRead(0);
     mainLayerImage.finishRead(1);
     mainLayerImage.finishRead(2);
+    mainLayerImage.finishRead(3);
     imageBlendPass.finishWrite(0);
     imageBlendPass.finishWrite(1);
     imageBlendPass.finishWrite(2);
+    imageBlendPass.finishWrite(3);
 }
 
 bool deLayerWithBlending::tryBlendSpecial()
