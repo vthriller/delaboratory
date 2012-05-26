@@ -113,10 +113,6 @@ bool deLayerWithBlending::updateBlend(int i)
 {
     logInfo("update blend " + str(i));
 
-    int channelSize = mainLayerImage.getChannelSize().getN();
-
-    int s = getSourceImage().getChannelIndex(i);
-
     if (!isBlendingEnabled())
     {
         return true;
@@ -126,6 +122,7 @@ bool deLayerWithBlending::updateBlend(int i)
     {
         if (getBlendMode() == deBlendNormal)
         {
+            int s = getSourceImage().getChannelIndex(i);
             imageBlendPass.disableChannel(i, s);
             return true;
         }
@@ -133,42 +130,28 @@ bool deLayerWithBlending::updateBlend(int i)
 
     if (!isChannelEnabled(i))
     {
+        int s = getSourceImage().getChannelIndex(i);
         imageBlendPass.disableChannel(i, s);
         return true;
     }
 
-    deChannel* sourceChannel = channelManager.getChannel(s);
-    if (!sourceChannel)
-    {
-        logError("update blend no channel s");
-        return false;
-    }
+    const deValue* source = getSourceImage().startRead(i);
 
-    int c = mainLayerImage.getChannelIndex(i);
-    deChannel* channel = channelManager.getChannel(c);
-    if (!channel)
-    {
-        logError("update blend no channel c");
-        return false;
-    }
+    const deValue* overlay = mainLayerImage.startRead(i);
 
     imageBlendPass.enableChannel(i);
-    int b = imageBlendPass.getChannelIndex(i);
-    deChannel* blendChannel_ = channelManager.getChannel(b);
-    if (!blendChannel_)
-    {
-        logError("update blend no channel b");
-        return false;
-    }
+    deValue* destination = imageBlendPass.startWrite(i);
 
     deValue* maskPixels = NULL;
 
-    deValue* sourcePixels = sourceChannel->getPixels();
-    deValue* overlayPixels = channel->getPixels();
-    deValue* resultPixels = blendChannel_->getPixels();
+    int channelSize = mainLayerImage.getChannelSize().getN();
 
     deValue o = getOpacity();
-    blendChannel(sourcePixels, overlayPixels, resultPixels, maskPixels, getBlendMode(), o, channelSize);
+    blendChannel(source, overlay, destination, maskPixels, getBlendMode(), o, channelSize);
+
+    getSourceImage().finishRead(i);
+    mainLayerImage.finishRead(i);
+    imageBlendPass.finishWrite(i);
 
     return true;
 
