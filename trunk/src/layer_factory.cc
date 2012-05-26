@@ -33,7 +33,6 @@
 #include "recover_highlights_layer.h"
 #include "recover_shadows_layer.h"
 #include "mixer_layer.h"
-#include "apply_luminance_layer.h"
 #include "conversion_layer.h"
 #include "source_image_layer.h"
 #include "high_pass_layer.h"
@@ -60,11 +59,6 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
     if (type == "mixer")
     {
         return new deMixerLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
-    }
-
-    if (type == "apply_luminance")
-    {
-        return new deApplyLuminanceLayer(colorSpace, source, _layerStack, _channelManager);
     }
 
     if (type == "levels")
@@ -191,7 +185,6 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("recover_shadows");
     actions.push_back("mixer");
     actions.push_back("apply_original");
-    actions.push_back("apply_luminance");
 
     actions.push_back("high_pass");
 }
@@ -201,11 +194,6 @@ std::string getActionDescription(const std::string& a)
     if (a == "shadows_highlights")
     {
         return "sh / hi";
-    }
-
-    if (a == "apply_luminance")
-    {
-        return "luminance";
     }
 
     if (a == "high_pass")
