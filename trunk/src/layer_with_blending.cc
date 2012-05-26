@@ -56,7 +56,7 @@ deLayerWithBlending::deLayerWithBlending(deColorSpace _colorSpace, deChannelMana
  imageBlendPass(_colorSpace, _channelManager)
 {
     createPropertyNumeric("opacity", 0, 1);
-    createPropertyChoice("blend mode", getSupportedBlendModeNames());
+    createPropertyChoice("blend mode", getSupportedBlendModeNames(colorSpace));
 
     dePropertyChoice* blendMode = getPropertyChoice("blend mode");
     blendMode->setSizer("channels");
@@ -229,7 +229,10 @@ void deLayerWithBlending::processSingleChannel(int channel)
 {
     logInfo("layer with blending processs single channel " + str(channel));
     deBaseLayer::processSingleChannel(channel);
-    updateBlend(channel);
+    if (!tryBlendSpecial())
+    {
+        updateBlend(channel);
+    }        
     logInfo("layer with blending processs single channel DONE");
 }    
 
@@ -241,7 +244,10 @@ bool deLayerWithBlending::updateImage()
 
     if (result)
     {
-        result = updateBlendAllChannels();
+        if (!tryBlendSpecial())
+        {
+            result = updateBlendAllChannels();
+        }            
     }
 
     logInfo("layer with blending update image DONE");
@@ -255,4 +261,16 @@ deBlendMode deLayerWithBlending::getBlendMode() const
     std::string m = blendMode->get();
     deBlendMode mode = blendModeFromString(m);
     return mode;
+}
+
+bool deLayerWithBlending::tryBlendSpecial()
+{
+    deBlendMode mode = getBlendMode();
+    if (mode == deBlendColor)
+    {
+    }
+    if (mode == deBlendLuminosity)
+    {
+    }
+    return false;
 }

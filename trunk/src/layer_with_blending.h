@@ -30,6 +30,8 @@ class deLayerWithBlending:public deSwitchableLayer
 
         virtual const deImage& getLayerImage() const;
 
+        bool tryBlendSpecial();
+
     protected:        
         virtual bool isChannelNeutral(int index) {return false;};
         virtual bool updateBlendAllChannels();

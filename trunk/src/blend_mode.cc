@@ -53,6 +53,10 @@ std::string getBlendModeName(deBlendMode mode)
             return "dodge";
         case deBlendBurn:
             return "burn";
+        case deBlendColor:
+            return "color";
+        case deBlendLuminosity:
+            return "luminosity";
         default:
             return "unknown";
     }
@@ -134,12 +138,22 @@ deBlendMode blendModeFromString(const std::string& s)
     {
         return deBlendBurn;
     }
+
+    if (s == "color")
+    {
+        return deBlendColor;
+    }
+
+    if (s == "luminosity")
+    {
+        return deBlendLuminosity;
+    }
     
     return deBlendInvalid;
 
 }
 
-std::vector<deBlendMode> getSupportedBlendModes()
+std::vector<deBlendMode> getSupportedBlendModes(deColorSpace colorSpace)
 {
     std::vector<deBlendMode> result;
 
@@ -159,12 +173,18 @@ std::vector<deBlendMode> getSupportedBlendModes()
     result.push_back(deBlendDodge);
     result.push_back(deBlendBurn);
 
+    if (colorSpace == deColorSpaceRGB)
+    {
+        result.push_back(deBlendColor);
+        result.push_back(deBlendLuminosity);
+    }        
+
     return result;
 }
 
-std::vector<std::string> getSupportedBlendModeNames()
+std::vector<std::string> getSupportedBlendModeNames(deColorSpace colorSpace)
 {
-     std::vector<deBlendMode> modes = getSupportedBlendModes();
+     std::vector<deBlendMode> modes = getSupportedBlendModes(colorSpace);
      std::vector<std::string> result;
      std::vector<deBlendMode>::const_iterator i;
      for (i = modes.begin(); i != modes.end(); i++)
