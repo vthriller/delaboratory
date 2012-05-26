@@ -34,8 +34,6 @@ class deGaussianBlurSingleLayer:public deLayerWithBlending
 
         virtual bool updateMainImageNotThreadedWay();
 
-        virtual std::string getActionName() {return "gaussian blur single";};
-
 };
 
 #endif

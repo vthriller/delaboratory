@@ -31,10 +31,8 @@ class deLocalContrastLayer:public deLayerWithBlending
         deLocalContrastLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager);
         virtual ~deLocalContrastLayer();
 
-        virtual bool isChannelNeutral(int index);
         virtual bool updateMainImageSingleChannel(int channel);
 
-        virtual std::string getActionName() {return "local contrast";};
 
 };
 

@@ -64,6 +64,16 @@ void deSwitchableLayer::disableNotForSharpen()
     }
 }
 
+void deSwitchableLayer::disableAll()
+{
+    int n = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        disableChannel(i);
+    }
+}
+
 bool deSwitchableLayer::isChannelEnabled(int index) const
 {
     std::string n = getChannelName(colorSpace, index);

@@ -31,6 +31,7 @@ class deWhiteBalanceLayer:public deLayerWithBlending
         virtual ~deWhiteBalanceLayer();
 
         virtual bool updateMainImageSingleChannel(int i);
+        virtual bool onImageClick(deValue x, deValue y);
 
 };
 

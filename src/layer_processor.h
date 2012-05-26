@@ -151,7 +151,7 @@ class deLayerProcessor
         void onGenerateHistogram();
         void sendHistogramEvent();
 
-        void setPreviewSize(const deSize& size);
+        void setPreviewSize(const deSize& size, bool canSkip);
         void onImageLoad();
         void forceUpdateSize();
 

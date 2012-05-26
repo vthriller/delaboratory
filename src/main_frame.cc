@@ -73,6 +73,9 @@ EVT_MENU(DE_IMAGE_LOAD_EVENT, deMainFrame::onImageLoadEvent)
 EVT_MENU(DE_HISTOGRAM_EVENT, deMainFrame::onHistogramEvent)
 EVT_MENU(DE_INFO_EVENT, deMainFrame::onInfoEvent)
 EVT_MENU(DE_WARNING_EVENT, deMainFrame::onWarningEvent)
+EVT_MENU(ID_ExportGIMP, deMainFrame::onExportGIMP)
+EVT_MENU(ID_ExportTIFF, deMainFrame::onExportTIFF)
+EVT_MENU(ID_ExportAll, deMainFrame::onExportAll)
 END_EVENT_TABLE()
 
 deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcraw_version, deOperationProcessor& _operationProcessor, deChannelManager& channelManager)
@@ -157,7 +160,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     samplersPanel = new deSamplersPanel(notebook, project, _samplerManager);
     notebook->AddPage(samplersPanel, _T("samplers"));
 
-    controlPanel = new deControlPanel(this, project, _layerProcessor, layerGridPanel, _operationProcessor, channelManager);
+    controlPanel = new deControlPanel(this, project, _layerProcessor, _operationProcessor, channelManager);
     rightSizer->Add(controlPanel, 0, wxEXPAND);
 
     mainSizer->Add(rightSizer, 0, wxEXPAND);
@@ -176,6 +179,12 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     menuFile->Append( ID_TestImageBig, _("Generate test image (big, slow)") );
     menuFile->AppendSeparator();
     menuFile->Append( ID_Quit, _("E&xit") );
+
+    wxMenu *menuExport = new wxMenu;
+    menuExport->Append( ID_ExportGIMP, _("Send to GIMP") );
+    menuExport->Append( ID_ExportTIFF, _("Export 16-bit TIFF") );
+    menuExport->Append( ID_ExportAll, _("Export all layers to 16-bit TIFFs") );
+    menuExport->Append( ID_ExportJPG, _("Export JPG") );
 
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append( ID_HelpColorSpaces, _("channels") );
@@ -197,6 +206,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, _("&File") );
+    menuBar->Append( menuExport, _("&Export") );
     menuBar->Append( menuPalette, _("&Palette") );
     menuBar->Append( menuHelp, _("&Channels") );
 
@@ -494,5 +504,42 @@ void deMainFrame::updateWarning()
 
 void deMainFrame::forceUpdateSize()
 {
-    imageAreaPanel->updateSize();
+    imageAreaPanel->updateSize(false);
+}
+
+void deMainFrame::onExportGIMP(wxCommandEvent& event)
+{
+    generateFinalImage("gimp", "tiff", "", false, "");
+}
+
+void deMainFrame::onExportAll(wxCommandEvent& event)
+{
+    std::string f = getDir(this, "export all images");
+    generateFinalImage("", "tiff", "", true, f);
+}    
+
+void deMainFrame::onExportTIFF(wxCommandEvent& event)
+{
+    std::string f = getSaveFile(this, "export TIFF", "tiff");
+
+    if (!f.empty())
+    {
+        if (f.rfind(".tiff") != f.size() - 5)
+        {
+            f += ".tiff";
+        }
+
+        generateFinalImage("", "tiff", f, false, "");
+    }            
+}    
+
+bool deMainFrame::generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir)
+{
+    wxProgressDialog* progressDialog = new wxProgressDialog(_T("generate final image"), _T("generate final image"), 100, this, wxPD_AUTO_HIDE | wxPD_ELAPSED_TIME);
+
+    bool result = project.exportFinalImage(app, type, name, progressDialog, saveAll, dir);
+
+    delete progressDialog;
+
+    return result;
 }

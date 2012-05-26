@@ -30,6 +30,8 @@
 #include "gradient_layer.h"
 #include "gaussian_blur_layer.h"
 #include "gaussian_blur_single_layer.h"
+#include "recover_highlights_layer.h"
+#include "recover_shadows_layer.h"
 #include "mixer_layer.h"
 #include "apply_luminance_layer.h"
 #include "conversion_layer.h"
@@ -40,6 +42,8 @@
 #include "levels_layer.h"
 #include "local_contrast_layer.h"
 #include "sharpen_layer.h"
+#include "auto_dodge_layer.h"
+#include "auto_burn_layer.h"
 
 deBaseLayer* createLayer(const std::string& type, int source, deColorSpace colorSpace, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager, deStaticImage& sourceImage)
 {
@@ -103,6 +107,16 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
         return new deLocalContrastLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
     }        
 
+    if (type == "auto_dodge")
+    {
+        return new deAutoDodgeLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
+    }        
+
+    if (type == "auto_burn")
+    {
+        return new deAutoBurnLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
+    }        
+
     if (type == "sharpen")
     {
         return new deSharpenLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
@@ -132,6 +146,16 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
     {
         return new deGaussianBlurSingleLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
     }        
+
+    if (type == "recover_highlights")
+    {
+        return new deRecoverHighlightsLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
+    }        
+
+    if (type == "recover_shadows")
+    {
+        return new deRecoverShadowsLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
+    }        
     
     if (type == "conversion")
     {
@@ -157,11 +181,14 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("fill");
     actions.push_back("tone");
     actions.push_back("local_contrast");
+    actions.push_back("auto_dodge");
+    actions.push_back("auto_burn");
     actions.push_back("sharpen");
     actions.push_back("vignette");
     actions.push_back("gradient");
     actions.push_back("gaussian_blur");
-    actions.push_back("gaussian_blur_single");
+    actions.push_back("recover_highlights");
+    actions.push_back("recover_shadows");
     actions.push_back("mixer");
     actions.push_back("apply_original");
     actions.push_back("apply_luminance");
@@ -214,6 +241,16 @@ std::string getActionDescription(const std::string& a)
     if (a == "white_balance")
     {
         return "wb";
+    }
+
+    if (a == "recover_highlights")
+    {
+        return "highlights";
+    }
+
+    if (a == "recover_shadows")
+    {
+        return "shadows";
     }
 
     return a;

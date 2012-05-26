@@ -31,11 +31,11 @@ void deImageAreaPanel::paint(wxPaintEvent& event)
 
 void deImageAreaPanel::resize(wxSizeEvent& event)
 {
-    updateSize();
+    updateSize(true);
     Refresh();
 }
 
-void deImageAreaPanel::updateSize()
+void deImageAreaPanel::updateSize(bool canSkip)
 {
     wxSize s = GetSize();
     logInfo("image area panel update size " + str(s.GetWidth()) + "x" + str(s.GetHeight()));
@@ -46,7 +46,7 @@ void deImageAreaPanel::updateSize()
 
     deSize fit = fitInside(ps, aspect);
 
-    project.getLayerProcessor().setPreviewSize(fit);
+    project.getLayerProcessor().setPreviewSize(fit, canSkip);
 
     logInfo("set image panel size " + str(fit.getW()) + "x" + str(fit.getH()));
     imagePanel->SetSize(wxSize(fit.getW(), fit.getH()));

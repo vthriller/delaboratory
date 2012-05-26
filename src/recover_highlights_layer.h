@@ -16,16 +16,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_USM_H
-#define _DE_USM_H
+#ifndef _DE_RECOVER_HIGHLIGHTS_LAYER_H
+#define _DE_RECOVER_HIGHLIGHTS_LAYER_H
 
-#include "value.h"
-#include "size.h"
-#include "blur.h"
-class deImage;
+#include "layer_with_blending.h"
 
-bool unsharpMask(const deValue* source, deValue* destination, deSize& size, deValue a, deValue r, deValue t, deBlurType type);
-bool autoDodgeBurn(const deValue* source, deValue* destination, deSize& size, deValue r1, deValue r2, deValue t, bool burn);
-bool shadowsHighlights(deValue r, int channel, const deImage& sourceImage, deImage& mainLayerImage, bool shadows);
+class deRecoverHighlightsLayer:public deLayerWithBlending
+{
+    private:
+        virtual std::string getType() const {return "recover_highlights";};
+        deViewManager& viewManager;
 
-#endif    
+    public:
+        deRecoverHighlightsLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager);
+        virtual ~deRecoverHighlightsLayer();
+
+        virtual bool updateMainImageNotThreadedWay();
+
+};
+
+#endif

@@ -24,7 +24,6 @@
 #include <vector>
 #include "color_space.h"
 class deProject;
-class deLayerGridPanel;
 class deLayerProcessor;
 class deOperationProcessor;
 class deChannelManager;
@@ -33,7 +32,6 @@ class deControlPanel:public wxPanel
 {
     private:
         deProject& project;
-        deLayerGridPanel* layerGridPanel;
         deLayerProcessor& layerProcessor;
         deOperationProcessor& operationProcessor;
         wxSizer* mainSizer;
@@ -54,13 +52,12 @@ class deControlPanel:public wxPanel
 
         void click(wxCommandEvent &event);
 
-        bool generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir);
+        //bool generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir);
 
     public:
-        deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deLayerGridPanel* _layerGridPanel, deOperationProcessor& _operationProcessor, deChannelManager& _channelManager);
+        deControlPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deOperationProcessor& _operationProcessor, deChannelManager& _channelManager);
         ~deControlPanel();
 
-        void updateLayerGrid2();
 
 };
 

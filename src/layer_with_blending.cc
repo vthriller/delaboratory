@@ -227,18 +227,24 @@ bool deLayerWithBlending::updateBlendAllChannels()
 
 void deLayerWithBlending::processSingleChannel(int channel)
 {
+    logInfo("layer with blending processs single channel " + str(channel));
     deBaseLayer::processSingleChannel(channel);
     updateBlend(channel);
+    logInfo("layer with blending processs single channel DONE");
 }    
 
 bool deLayerWithBlending::updateImage()
 {
+    logInfo("layer with blending update image");
+
     bool result = deBaseLayer::updateImage();
 
     if (result)
     {
         result = updateBlendAllChannels();
     }
+
+    logInfo("layer with blending update image DONE");
 
     return result;
 }

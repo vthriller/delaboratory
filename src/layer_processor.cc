@@ -297,6 +297,7 @@ void deLayerProcessor::repaintImageInLayerProcessor()
         logInfo("skip repaintImage because closing");
         return;
     }
+    logInfo("repaintImage");
 
     renderWorkerSemaphore.post();
     generateHistogram();
@@ -828,11 +829,12 @@ void deLayerProcessor::forceUpdateSize()
     mainWindow.forceUpdateSize();
 }
 
-void deLayerProcessor::setPreviewSize(const deSize& size)
+void deLayerProcessor::setPreviewSize(const deSize& size, bool canSkip)
 {
     deSize oldSize = previewChannelManager.getChannelSizeFromChannelManager();
-    if (oldSize == size)
+    if ((oldSize == size) && (canSkip))
     {
+        logInfo("skip set preview size");
         return;
     }
     logInfo("setPreviewSize start");

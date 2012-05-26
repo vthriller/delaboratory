@@ -30,17 +30,20 @@ deExposureLayer::deExposureLayer(deColorSpace _colorSpace, deChannelManager& _ch
 {
     dePreset* reset = createPreset("reset");
 
-    createPropertyNumeric("black", 0, 1);
-    reset->addNumericValue("black", 0.0);
-
-    createPropertyNumeric("shadows", -1, 1);
-    reset->addNumericValue("shadows", 0.0);
+    createPropertyNumeric("exposure", -1, 1);
+    reset->addNumericValue("exposure", 0.0);
 
     createPropertyNumeric("brightness", -1, 1);
     reset->addNumericValue("brightness", 0.0);
 
+    createPropertyNumeric("shadows", -1, 1);
+    reset->addNumericValue("shadows", 0.0);
+
     createPropertyNumeric("lights", -1, 1);
     reset->addNumericValue("lights", 0.0);
+
+    createPropertyNumeric("black", 0, 1);
+    reset->addNumericValue("black", 0.0);
 
     createPropertyNumeric("highlights", 0, 1);
     reset->addNumericValue("highlights", 1.0);
@@ -62,6 +65,7 @@ bool deExposureLayer::updateMainImageSingleChannel(int channel)
         return true;
     }
 
+    deValue exposure = getNumericValue("exposure");
     deValue black = getNumericValue("black");
     deValue shadows = getNumericValue("shadows");
     deValue brightness = getNumericValue("brightness");
@@ -74,11 +78,11 @@ bool deExposureLayer::updateMainImageSingleChannel(int channel)
     deValue x1 = (x0 + x2) / 2.0;
     deValue x3 = (x2 + x4) / 2.0;
 
-    deValue y0 = 0.0;
-    deValue y1 = 0.25 + shadows/4.0 + brightness;
-    deValue y2 = 0.5 + brightness;
-    deValue y3 = 0.75 + lights/4.0 + brightness;
-    deValue y4 = 1.0;
+    deValue y0 = exposure + 0.0;
+    deValue y1 = exposure + 0.25 + shadows/4.0 + brightness;
+    deValue y2 = exposure + 0.5 + brightness;
+    deValue y3 = exposure + 0.75 + lights/4.0 + brightness;
+    deValue y4 = exposure + 1.0;
 
     const deValue* source = getSourceImage().startRead(channel);
     mainLayerImage.enableChannel(channel);
@@ -87,24 +91,38 @@ bool deExposureLayer::updateMainImageSingleChannel(int channel)
 
     deBaseCurve curve;
 
-    curve.addPoint(0, 0);
     if (colorSpace == deColorSpaceCMYK)
     {
+        if (x4 < 1)
+        {
+            curve.addPoint(0, 1 - y4);
+        }        
         curve.addPoint(1 - x4, 1 - y4);
         curve.addPoint(1 - x3, 1 - y3);
         curve.addPoint(1 - x2, 1 - y2);
         curve.addPoint(1 - x1, 1 - y1);
         curve.addPoint(1 - x0, 1 - y0);
+        if (x0 > 0)
+        {
+            curve.addPoint(1, 1 - y0);
+        }        
     }
     else
     {
+        if (x0 > 0)
+        {
+            curve.addPoint(0, y0);
+        }        
         curve.addPoint(x0, y0);
         curve.addPoint(x1, y1);
         curve.addPoint(x2, y2);
         curve.addPoint(x3, y3);
         curve.addPoint(x4, y4);
+        if (x4 < 1)
+        {
+            curve.addPoint(1, y4);
+        }        
     }
-    curve.addPoint(1, 1);
 
     curve.build();
 
