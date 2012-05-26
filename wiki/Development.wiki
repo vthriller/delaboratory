@@ -1,6 +1,13 @@
 #summary Development News
 
 -----
+*2012.05.26*
+
+Color and luminosity blending work in sRGB.
+
+Auto dodge, auto burn, recover highlights, recover shadows layers.
+
+-----
 *2012.05.22*
 
 First changes after 0.7.1 release.
