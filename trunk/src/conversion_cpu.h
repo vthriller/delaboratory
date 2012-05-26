@@ -73,6 +73,8 @@ void cmyk2cmy(deConversionCPU& cpu);
 void rgb2prophoto(deConversionCPU& cpu);
 void prophoto2rgb(deConversionCPU& cpu);
 void empty(deConversionCPU& cpu);
+void rgb2lab(deConversionCPU& cpu);
+void lab2rgb(deConversionCPU& cpu);
 
 deConversionCPU::deFunction getConversion(deColorSpace sourceColorSpace, deColorSpace targetColorSpace);
 

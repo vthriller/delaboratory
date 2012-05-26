@@ -25,6 +25,7 @@
 #include "str.h"
 #include "property_numeric.h"
 #include "logger.h"
+#include "blend_color_luminosity.h"
 
 class deUpdateBlendThread:public wxThread
 {
@@ -181,6 +182,11 @@ void deLayerWithBlending::updateChannelUsage(std::map<int, int>& channelUsage, i
 
 bool deLayerWithBlending::updateBlendAllChannels()
 {
+    if (tryBlendSpecial())
+    {
+        return true;
+    }
+
     int n = getColorSpaceSize(colorSpace);
     int i;
 
@@ -227,10 +233,7 @@ bool deLayerWithBlending::updateImage()
 
     if (result)
     {
-        if (!tryBlendSpecial())
-        {
-            result = updateBlendAllChannels();
-        }            
+        result = updateBlendAllChannels();
     }
 
     logInfo("layer with blending update image DONE");
@@ -246,14 +249,65 @@ deBlendMode deLayerWithBlending::getBlendMode() const
     return mode;
 }
 
+void deLayerWithBlending::blendSpecial()
+{
+    deBlendMode mode = getBlendMode();
+
+    const deValue* source0 = getSourceImage().startRead(0);
+    const deValue* source1 = getSourceImage().startRead(1);
+    const deValue* source2 = getSourceImage().startRead(2);
+
+    const deValue* overlay0 = mainLayerImage.startRead(0);
+    const deValue* overlay1 = mainLayerImage.startRead(1);
+    const deValue* overlay2 = mainLayerImage.startRead(2);
+
+    imageBlendPass.enableChannel(0);
+    imageBlendPass.enableChannel(1);
+    imageBlendPass.enableChannel(2);
+
+    deValue* destination0 = imageBlendPass.startWrite(0);
+    deValue* destination1 = imageBlendPass.startWrite(1);
+    deValue* destination2 = imageBlendPass.startWrite(2);
+
+    int n = mainLayerImage.getChannelSize().getN();
+
+    deValue o = getOpacity();
+
+    if (mode == deBlendColor)
+    {
+        if (colorSpace == deColorSpaceRGB)
+        {
+            blendColorRGB(source0, source1, source2, overlay0, overlay1, overlay2, destination0, destination1, destination2, n, o);
+        }
+    }
+
+    if (mode == deBlendLuminosity)
+    {
+    }
+
+    getSourceImage().finishRead(0);
+    getSourceImage().finishRead(1);
+    getSourceImage().finishRead(2);
+    mainLayerImage.finishRead(0);
+    mainLayerImage.finishRead(1);
+    mainLayerImage.finishRead(2);
+    imageBlendPass.finishWrite(0);
+    imageBlendPass.finishWrite(1);
+    imageBlendPass.finishWrite(2);
+}
+
 bool deLayerWithBlending::tryBlendSpecial()
 {
     deBlendMode mode = getBlendMode();
     if (mode == deBlendColor)
     {
+        blendSpecial();
+        return true;
     }
     if (mode == deBlendLuminosity)
     {
+        blendSpecial();
+        return true;
     }
     return false;
 }

@@ -29,12 +29,13 @@ class deLayerWithBlending:public deSwitchableLayer
         deImage imageBlendPass;
 
         virtual const deImage& getLayerImage() const;
+        virtual bool updateBlendAllChannels();
 
         bool tryBlendSpecial();
+        void blendSpecial();
 
     protected:        
         virtual bool isChannelNeutral(int index) {return false;};
-        virtual bool updateBlendAllChannels();
         virtual void processSingleChannel(int channel);
         virtual bool updateImage();
 
