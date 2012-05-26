@@ -50,14 +50,6 @@ void rgb2xyz(deValue r, deValue g, deValue b, deValue &x, deValue &y, deValue& z
     y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
     z = 0.0193 * r + 0.1192 * g + 0.9505 * b;
 
-/*
-    assert(x >= 0);
-    assert(y >= 0);
-    assert(z >= 0);
-    assert(x <= 1);
-    assert(y <= 1);
-    assert(z <= 1);
-    */
 }
 
 void xyz2rgb(deValue x, deValue y, deValue z, deValue &r, deValue &g, deValue& b)
@@ -90,73 +82,6 @@ void xyz2rgb(deValue x, deValue y, deValue z, deValue &r, deValue &g, deValue& b
     {
         b = 1;
     }
-}
-
-void rgb2prophoto(deValue r, deValue g, deValue b, deValue &pr, deValue &pg, deValue& pb)
-{
-    /*
-         from dcraw
-
-    octave:1> x = [0.529317, 0.330092, 0.140588; 0.098368, 0.873465, 0.028169; 0.016879, 0.117663, 0.865457]
-    x =
-
-       0.529317   0.330092   0.140588
-       0.098368   0.873465   0.028169
-       0.016879   0.117663   0.865457
-
-    */
-
-
-    pr = 0.529317 * r + 0.330092 * g + 0.140588 * b;
-    pg = 0.098368 * r + 0.873465 * g + 0.028169 * b;
-    pb = 0.016879 * r + 0.117663 * g + 0.865457 * b;
-
-}
-
-void prophoto2rgb(deValue pr, deValue pg, deValue pb, deValue &r, deValue &g, deValue& b)
-{
-
-    /*
-        invert matrix from dcraw
-
-    octave:2> inv(x)
-    ans =
-
-       2.0341926  -0.7274198  -0.3067655
-      -0.2288108   1.2317292  -0.0029216
-      -0.0085649  -0.1532726   1.1618390
-
-    */
-
-    r =  2.0341926 * pr -0.7274198  * pg -0.3067655 * pb;
-    g = -0.2288108 * pr + 1.2317292 * pg -0.0029216 * pb;
-    b = -0.0085649 * pr -0.1532726  * pg + 1.1618390 * pb;
-
-    if (r < 0)
-    {
-        r = 0;
-    }
-    else if (r > 1)
-    {
-        r = 1;
-    }
-    if (g < 0)
-    {
-        g = 0;
-    }
-    else if (g > 1)
-    {
-        g = 1;
-    }
-    if (b < 0)
-    {
-        b = 0;
-    }
-    else if (b > 1)
-    {
-        b = 1;
-    }
-
 }
 
 void prophoto2xyz(deValue pr, deValue pg, deValue pb, deValue &x, deValue &y, deValue& z)
@@ -213,55 +138,6 @@ void xyz2prophoto(deValue x, deValue y, deValue z, deValue &pr, deValue &pg, deV
     pg = -0.525984* x + 1.481448* y + 0.016990* z;
     pb = -0.011094* x + 0.018189* y + 0.911253* z;
 
-}
-
-void lab2lch(deValue l, deValue a, deValue b, deValue &_l, deValue &_c, deValue& _h)
-{
-    _l = l;
-
-    a = ( a - 0.5) * 200.0;
-    b = ( b - 0.5) * 200.0;
-
-    _c = sqrt(a * a + b * b);
-    _h = atan2(b, a);
-
-    _c = _c / 100.0;
-    _h = (_h / ( 2 * M_PI )) - lch_hue_shift;
-
-    if (_h < 0)
-    {
-        _h += 1;
-    }
-
-    if ( _c > 1)
-    {
-        _c = 1;
-    }
-
-    assert(_c >= 0.0);
-    assert(_c <= 1.0);
-    assert(_h >= 0.0);
-    assert(_h <= 1.0);
-
-}
-
-void lch2lab(deValue l, deValue c, deValue h, deValue &_l, deValue &_a, deValue& _b)
-{
-    _l = l;
-
-    c = c * 100.0;
-    h = (h + lch_hue_shift) * (2 * M_PI);
-
-    _a = c * cos(h);
-    _b = c * sin(h);
-
-    _a = _a / 200.0 + 0.5;
-    _b = _b / 200.0 + 0.5;
-
-    assert(_a >= 0.0);
-    assert(_a <= 1.0);
-    assert(_b >= 0.0);
-    assert(_b <= 1.0);
 }
 
 
@@ -328,26 +204,10 @@ void xyz2lab(deValue x, deValue y, deValue z, deValue &l, deValue &a, deValue& b
         b = 0;
     }
 
-/*
-    assert(l >= 0);
-    assert(a >= 0);
-    assert(b >= 0);
-    assert(l <= 1);
-    assert(a <= 1);
-    assert(b <= 1);
-    */
 }
 
 void lab2xyz(deValue l, deValue a, deValue b, deValue &x, deValue &y, deValue& z)
 {
-/*
-    assert( l >= 0);
-    assert( l <= 1);
-    assert( a >= 0);
-    assert( a <= 1);
-    assert( b >= 0);
-    assert( b <= 1);
-    */
 
     l *= 100.0;
     a *= 200.0;
@@ -394,28 +254,6 @@ void lab2xyz(deValue l, deValue a, deValue b, deValue &x, deValue &y, deValue& z
     y = Yn * ffy;
     z = Zn * ffz;
 
-/*
-    assert(x >= 0);
-    assert(y >= 0);
-    assert(z >= 0);
-    assert(x <= 1);
-    assert(y <= 1);
-    assert(z <= 1);
-    */
 
 }
 
-void initLAB()
-{
-    /* this code just calls LAB conversion to create dePower function
-       calling this is not important for functionality but will affect benchmarks */
-
-    deValue x = 0.4;
-    deValue y = 0.4;
-    deValue z = 0.4;
-    deValue l;
-    deValue a;
-    deValue b;
-    xyz2lab(x, y, z, l, a, b);
-    
-}
