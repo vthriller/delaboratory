@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include "value.h"
+#include "color_space.h"
 
 enum deBlendMode
 {
@@ -40,13 +41,14 @@ enum deBlendMode
     deBlendSub,
     deBlendDifference,
     deBlendDarken,
-    deBlendLighten
+    deBlendLighten,
+    deBlendColor,
+    deBlendLuminosity
 };
 
 std::string getBlendModeName(deBlendMode mode);
 deValue calcBlendResult(deValue src, deValue v2, deBlendMode mode);
 deBlendMode blendModeFromString(const std::string& s);
-std::vector<deBlendMode> getSupportedBlendModes();
-std::vector<std::string> getSupportedBlendModeNames();
+std::vector<std::string> getSupportedBlendModeNames(deColorSpace colorSpace);
 
 #endif
