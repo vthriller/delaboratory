@@ -1,6 +1,17 @@
 #summary Development News
 
 -----
+*2012.05.27*
+
+Initial version of c2g.
+
+Please notice that there is same problem as with sharpen - you need to look at result when zoomed in, or it will be not accurate.
+
+This is very slow algorithm so default radius is 4 and max is 10.
+
+Implementation in GIMP uses random points, while I analyze all points. Will try to also use some kind of random later.
+
+-----
 *2012.05.26*
 
 Color and luminosity blending work in sRGB, !ProPhoto and CMYK
