@@ -20,12 +20,14 @@
 #include "property_choice.h"
 #include "base_layer.h"
 #include "layer_processor.h"
+#include "layer_frame.h"
 
-dePropertyChoiceUI::dePropertyChoiceUI(deWindow& window, dePropertyChoice& _property, deLayerProcessor& _layerProcessor, int _layerIndex)
+dePropertyChoiceUI::dePropertyChoiceUI(deWindow& window, dePropertyChoice& _property, deLayerProcessor& _layerProcessor, int _layerIndex, deLayerFrame& _parent)
 :deChoice(window, _property.getName(), _property.getChoices()),
 property(_property),
 layerProcessor(_layerProcessor),
-layerIndex(_layerIndex)
+layerIndex(_layerIndex),
+parent(_parent)
 {
     setFromProperty();
 }
@@ -38,7 +40,12 @@ void dePropertyChoiceUI::onChoose(int index)
 {
     property.setIndex(index);
 
-    if (property.affectsSize())
+    if (property.affectOthers())
+    {
+        parent.setUIFromLayer();
+    }
+
+    if (property.affectSize())
     {
         layerProcessor.forceUpdateSize();
     }

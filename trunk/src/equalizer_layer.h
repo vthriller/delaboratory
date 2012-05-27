@@ -28,6 +28,7 @@ class deEqualizerLayer:public deLayerWithBlending
 {
     private:
         dePropertyCurves* getPropertyCurves();
+        void setHorizontalChannel();
 
     protected:
         virtual std::string getType() const {return "curves";};
@@ -43,6 +44,9 @@ class deEqualizerLayer:public deLayerWithBlending
         virtual std::string getActionName() {return "curves";};
 
         virtual void executeOperation(const std::string& operation);
+
+        virtual void beforeSetUIFromLayer();
+
 
 
 };

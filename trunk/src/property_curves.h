@@ -29,6 +29,7 @@ class dePropertyCurves:public deProperty
     private:
         std::vector<deBaseCurve*> curves;
         int size;
+        int horizontalChannel;
 
     public:
         dePropertyCurves(const std::string& _name, int _size);
@@ -38,6 +39,8 @@ class dePropertyCurves:public deProperty
 
         const deBaseCurve* getCurve(int index) const {return (curves[index]);};
         deBaseCurve* getCurve(int index) {return (curves[index]);};
+        void setHorizontalChannel(int channel);
+        int getHorizontalChannel() const;
 
 };
 

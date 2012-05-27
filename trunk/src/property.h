@@ -28,6 +28,7 @@ class deProperty
         std::string label;
         bool blendOnly;
         bool size;
+        bool others;
 
     protected:        
         std::string name;
@@ -47,8 +48,11 @@ class deProperty
         void setSizer(const std::string& _sizer) {sizer = _sizer;};
         std::string getSizer() const {return sizer;};
 
-        bool affectsSize() const {return size;};
+        bool affectSize() const {return size;};
         void setSize();
+
+        bool affectOthers() const {return others;};
+        void setOthers();
 };
 
 #endif

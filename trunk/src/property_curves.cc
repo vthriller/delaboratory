@@ -22,6 +22,7 @@
 dePropertyCurves::dePropertyCurves(const std::string& _name, int _size)
 :deProperty(_name), size(_size)
 {
+    horizontalChannel = -1;
     int i;
     for (i = 0; i < size; i++)
     {
@@ -38,4 +39,12 @@ dePropertyCurves::~dePropertyCurves()
     }
 }
 
+void dePropertyCurves::setHorizontalChannel(int channel)
+{
+    horizontalChannel = channel;
+}
 
+int dePropertyCurves::getHorizontalChannel() const
+{
+    return horizontalChannel;
+}

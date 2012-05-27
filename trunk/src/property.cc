@@ -24,6 +24,7 @@ deProperty::deProperty(const std::string& _name)
     label = "";
     blendOnly = false;
     size = false;
+    others = false;
 }
 
 deProperty::~deProperty()
@@ -60,4 +61,9 @@ void deProperty::setBlendOnly()
 void deProperty::setSize()
 {
     size = true;
+}
+
+void deProperty::setOthers()
+{
+    others = true;
 }

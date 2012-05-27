@@ -37,6 +37,7 @@ deEqualizerLayer::deEqualizerLayer(deColorSpace _colorSpace, int _sourceLayer, d
     reset->addOperation("reset");
 
     createPropertyChoice("channel", getChannelNames(colorSpace));
+    getPropertyChoice("channel")->setOthers();
 
     int n = getColorSpaceSize(colorSpace);
     properties.push_back(new dePropertyCurves("curves", n));
@@ -44,6 +45,8 @@ deEqualizerLayer::deEqualizerLayer(deColorSpace _colorSpace, int _sourceLayer, d
     setBlendMode(deBlendOverlay);
 
     applyPreset("reset");
+
+    setHorizontalChannel();
 }
 
 deEqualizerLayer::~deEqualizerLayer()
@@ -155,4 +158,15 @@ void deEqualizerLayer::executeOperation(const std::string& operation)
         curve->build();
 
     }
+}
+
+void deEqualizerLayer::setHorizontalChannel()
+{
+    int channel = getPropertyChoice("channel")->getIndex();
+    getPropertyCurves()->setHorizontalChannel(channel);
+}
+
+void deEqualizerLayer::beforeSetUIFromLayer()
+{
+    setHorizontalChannel();
 }

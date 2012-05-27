@@ -70,7 +70,7 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
         dePropertyChoice* choice = dynamic_cast<dePropertyChoice*>(property);
         if (choice)
         {
-            dePropertyChoiceUI* p = new dePropertyChoiceUI(window, *choice, _layerProcessor, _index);
+            dePropertyChoiceUI* p = new dePropertyChoiceUI(window, *choice, _layerProcessor, _index, *this);
 
             choices.push_back(p);
 
@@ -197,6 +197,8 @@ deGenericLayerFrame::~deGenericLayerFrame()
 
 void deGenericLayerFrame::setUIFromLayer()
 {
+    layer.beforeSetUIFromLayer();
+
     std::vector<dePropertyNumericUI*>::iterator i;
     for (i = numerics.begin(); i != numerics.end(); i++)
     {

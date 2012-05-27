@@ -126,6 +126,7 @@ class dePropertyCurvesUIImpl:public dePanelWX
         void setFromProperty()
         {
             curvesPanel->paint();
+            updateBars();
         }
 
         void setChannel(int _channel)
@@ -134,8 +135,21 @@ class dePropertyCurvesUIImpl:public dePanelWX
             generate();
             curvesPanel->changeChannel(channel);
             setMarker();
+            updateBars();
+        }
+
+        void updateBars()
+        {
             leftBar->changeChannel(channel);
-            bottomBar->changeChannel(channel);
+            int hc = property.getHorizontalChannel();
+            if (hc < 0)
+            {
+                bottomBar->changeChannel(channel);
+            }
+            else
+            {
+                bottomBar->changeChannel(hc);
+            }
         }
 
         void onImageClick(deValue x, deValue y)
