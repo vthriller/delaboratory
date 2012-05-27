@@ -159,6 +159,10 @@ bool autoDodgeBurn(const deValue* source, deValue* destination, deSize& size, de
             else
             {
                 v = s * (v - t);
+                if (v < 0)
+                {
+                    v = 0;
+                }
             }
             mask1[i] = v;
         }
@@ -178,6 +182,10 @@ bool autoDodgeBurn(const deValue* source, deValue* destination, deSize& size, de
             else
             {
                 v = s * (v - t);
+                if (v > 1)
+                {
+                    v = 1;
+                }
             }
             mask1[i] = v;
         }
