@@ -44,12 +44,12 @@ void deColorPanelOld::hover(wxMouseEvent &event)
 
 void deColorPanelOld::enter(wxMouseEvent &event)
 {
-    SetBackgroundColour(wxColour(255 * r, 255 * g, 255 * b));
+//    SetBackgroundColour(wxColour(255 * r, 255 * g, 255 * b));
 }
 
 void deColorPanelOld::leave(wxMouseEvent &event)
 {
-    SetBackgroundColour(wxColour(100 * r, 100 * g, 100 * b));
+//    SetBackgroundColour(wxColour(100 * r, 100 * g, 100 * b));
 }
 
 
