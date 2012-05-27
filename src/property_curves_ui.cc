@@ -103,12 +103,20 @@ class dePropertyCurvesUIImpl:public dePanelWX
         {
             const deImage& sourceImage = layer.getSourceImage();
 
-            const deValue* c = sourceImage.startRead(channel);
+            int chan = channel;
+            int hc = property.getHorizontalChannel();
+            if (hc >=0 )
+            {
+                chan = hc;
+            }
+
+            const deValue* c = sourceImage.startRead(chan);
+
             int n = sourceImage.getChannelSize().getN();
 
             curvesPanel->generateBackground(c, n);
 
-            sourceImage.finishRead(channel);
+            sourceImage.finishRead(chan);
         }
 
         void setMarker()
@@ -125,8 +133,9 @@ class dePropertyCurvesUIImpl:public dePanelWX
 
         void setFromProperty()
         {
-            curvesPanel->paint();
+            generate();
             updateBars();
+            curvesPanel->paint();
         }
 
         void setChannel(int _channel)
