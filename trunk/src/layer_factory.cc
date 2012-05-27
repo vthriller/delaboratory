@@ -36,6 +36,7 @@
 #include "conversion_layer.h"
 #include "source_image_layer.h"
 #include "high_pass_layer.h"
+#include "c2g_layer.h"
 #include <algorithm>
 #include "color_space_utils.h"
 #include "levels_layer.h"
@@ -121,6 +122,11 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
         return new deHighPassLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
     }        
 
+    if (type == "c2g")
+    {
+        return new deC2GLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
+    }        
+
     if (type == "vignette")
     {
         return new deVignetteLayer(colorSpace, _channelManager, source, _layerStack, _viewManager);
@@ -185,8 +191,8 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("recover_shadows");
     actions.push_back("mixer");
     actions.push_back("apply_original");
-
     actions.push_back("high_pass");
+    actions.push_back("c2g");
 }
 
 std::string getActionDescription(const std::string& a)
