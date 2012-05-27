@@ -219,7 +219,26 @@ deValue deProject::getSourceAspect() const
     deSourceImageLayer* source = dynamic_cast<deSourceImageLayer*>(layer);
     if (source)
     {
-        return source->getAspect();
+        deValue x1;
+        deValue y1;
+        deValue x2;
+        deValue y2;
+
+        zoomManager.getZoom(x1, y1, x2, y2);
+
+        deValue dx = x2 - x1;
+        if (dx <= 0) 
+        {
+            return -1;               
+        }
+        deValue dy = y2 - y1;
+        if (dy <= 0) 
+        {
+            return -1;               
+        }
+        deValue a = dy / dx;
+
+        return source->getAspect() / a;
     }
     logError("can't get aspect because source image layer not exist");
     return -1;
