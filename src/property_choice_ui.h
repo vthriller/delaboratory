@@ -22,17 +22,19 @@
 #include "choice.h"
 class dePropertyChoice;
 class deLayerProcessor;
+class deLayerFrame;
 
 class dePropertyChoiceUI:public deChoice
 {
     private:
         dePropertyChoice& property;
         deLayerProcessor& layerProcessor;
+        deLayerFrame& parent;
 
         int layerIndex;
 
     public:
-        dePropertyChoiceUI(deWindow& window, dePropertyChoice& _property, deLayerProcessor& _layerProcessor, int _layerIndex);
+        dePropertyChoiceUI(deWindow& window, dePropertyChoice& _property, deLayerProcessor& _layerProcessor, int _layerIndex, deLayerFrame& _parent);
         virtual ~dePropertyChoiceUI();
 
         virtual void onChoose(int index);
