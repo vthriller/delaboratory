@@ -1236,7 +1236,58 @@ void rgb2hsl(deConversionCPU& cpu)
     cpu.output[2] = l;
 }
 
-/*
+deValue min(deValue a, deValue b, deValue c)
+{
+    if (a < b)
+    {
+        if (a < c)
+        {
+            return a;   
+        }
+        else
+        {
+            return c;
+        }
+    }
+    else
+    {
+        if (b < c)
+        {
+            return b;   
+        }
+        else
+        {
+            return c;
+        }
+    }
+}
+
+deValue max(deValue a, deValue b, deValue c)
+{
+    if (a > b)
+    {
+        if (a > c)
+        {
+            return a;   
+        }
+        else
+        {
+            return c;
+        }
+    }
+    else
+    {
+        if (b > c)
+        {
+            return b;   
+        }
+        else
+        {
+            return c;
+        }
+    }
+}    
+
 deValue hue2rgb( deValue v1, deValue v2, deValue vH ) 
 {
    if ( vH < 0 )
@@ -1252,8 +1303,16 @@ deValue hue2rgb( deValue v1, deValue v2, deValue vH )
    return ( v1 );
 }
 
-void hsl2rgb(deValue h, deValue s, deValue l, deValue& r, deValue& g, deValue& b)
+void hsl2rgb(deConversionCPU& cpu)
 {
+    deValue h = cpu.input[0];
+    deValue s = cpu.input[1];
+    deValue l = cpu.input[2];
+
+    deValue r = 0.0;
+    deValue g = 0.0;
+    deValue b = 0.0;
+
     if ( s == 0 )                       
     {
         r = l;
@@ -1280,11 +1339,21 @@ void hsl2rgb(deValue h, deValue s, deValue l, deValue& r, deValue& g, deValue& b
         g = hue2rgb( v1, v2, h );
         b = hue2rgb( v1, v2, h - ( 1.0 / 3.0 ) );
     }
+
+    cpu.output[0] = r;
+    cpu.output[1] = g;
+    cpu.output[2] = b;
 }
 
-void rgb2hsv(deValue r, deValue g, deValue b, deValue &h, deValue &s, deValue& v)
+void rgb2hsv(deConversionCPU& cpu)
 {
-    v = max( r, g, b );
+    deValue r = cpu.input[0];
+    deValue g = cpu.input[1];
+    deValue b = cpu.input[2];
+
+    deValue h = 0.0;
+    deValue s = 0.0;
+    deValue v = max( r, g, b );
 
     deValue minVal = min( r, g, b );
     deValue delta = v - minVal;
@@ -1320,10 +1389,22 @@ void rgb2hsv(deValue r, deValue g, deValue b, deValue &h, deValue &s, deValue& v
         if ( h > 1 )
             h -= 1.0;
     }
+
+    cpu.output[0] = h;
+    cpu.output[1] = s;
+    cpu.output[2] = v;
 }
 
-void hsv2rgb(deValue h, deValue s, deValue v, deValue& r, deValue& g, deValue& b)
+void hsv2rgb(deConversionCPU& cpu)
 {
+    deValue h = cpu.input[0];
+    deValue s = cpu.input[1];
+    deValue v = cpu.input[2];
+
+    deValue r = 0.0;
+    deValue g = 0.0;
+    deValue b = 0.0;
+    
     if ( s == 0 )
     {
        r = v;
@@ -1381,8 +1462,11 @@ void hsv2rgb(deValue h, deValue s, deValue v, deValue& r, deValue& g, deValue& b
             b = var_2;
         }
     }
+
+    cpu.output[0] = r;
+    cpu.output[1] = g;
+    cpu.output[2] = b;
 }
-*/
 
 
 deConversionCPU::deFunction getConversion(deColorSpace sourceColorSpace, deColorSpace targetColorSpace)
@@ -1423,6 +1507,18 @@ deConversionCPU::deFunction getConversion(deColorSpace sourceColorSpace, deColor
     if ((sourceColorSpace == deColorSpaceRGB) && (targetColorSpace == deColorSpaceHSL))
     {
         return rgb2hsl;
+    }
+    if ((sourceColorSpace == deColorSpaceRGB) && (targetColorSpace == deColorSpaceHSV))
+    {
+        return rgb2hsv;
+    }
+    if ((sourceColorSpace == deColorSpaceHSL) && (targetColorSpace == deColorSpaceRGB))
+    {
+        return hsl2rgb;
+    }
+    if ((sourceColorSpace == deColorSpaceHSV) && (targetColorSpace == deColorSpaceRGB))
+    {
+        return hsv2rgb;
     }
     if ((sourceColorSpace == deColorSpaceRGB) && (targetColorSpace == deColorSpaceLCH))
     {
