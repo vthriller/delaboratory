@@ -19,6 +19,7 @@
 #include "c2g.h"
 #include <cmath>
 #include <cstdlib>
+#include <iostream>
 
 void c2g(const deValue* source0, const deValue* source1, const deValue* source2, deValue* mask, const deSize& size, deValue r, int samples)
 {
@@ -164,10 +165,14 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
             deValue n = sqrt(n0 * n0 + n1 * n1 + n2 * n2);
             deValue d = sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 
-            deValue result = 0.5;
+            deValue result = (v0 + v1 + v2) / 3.0;
+
             if (d != 0)
             {
-                result = n / d;
+                deValue a = n / d;
+
+                result = a / 3.0;
+
                 if (result < 0)
                 {
                     result = 0;
@@ -177,7 +182,6 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
                     result = 1;
                 }
             }
-
 
             mask[p] = result;
         }
