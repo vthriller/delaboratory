@@ -161,7 +161,7 @@ class dePropertyCurvesUIImpl:public dePanelWX
             }
         }
 
-        void onImageClick(deValue x, deValue y)
+        bool onImageClick(deValue x, deValue y)
         {
             const deImage& sourceImage = layer.getSourceImage();
 
@@ -170,6 +170,13 @@ class dePropertyCurvesUIImpl:public dePanelWX
             curvesPanel->onImageClick(x, y, c, sourceImage.getChannelSize());
 
             sourceImage.finishRead(channel);
+
+            return true;
+        }
+
+        bool onKey(int key)
+        {
+            return true;
         }
 
 
@@ -210,11 +217,19 @@ void dePropertyCurvesUI::setFromProperty()
     }
 }
 
-void dePropertyCurvesUI::onImageClick(deValue x, deValue y)
+bool dePropertyCurvesUI::onImageClick(deValue x, deValue y)
 {
     if (impl)
     {
         impl->onImageClick(x,y);
+    }
+}
+
+bool dePropertyCurvesUI::onKey(int key)
+{
+    if (impl)
+    {
+        impl->onKey(key);
     }
 }
 

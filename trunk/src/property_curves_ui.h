@@ -46,7 +46,8 @@ class dePropertyCurvesUI
 
         void setFromProperty();
 
-        void onImageClick(deValue x, deValue y);
+        bool onImageClick(deValue x, deValue y);
+        bool onKey(int key);
 };        
 
 #endif

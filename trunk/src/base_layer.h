@@ -83,8 +83,6 @@ class deBaseLayer
 
         bool updateImageThreadCall();
 
-        virtual void onUpdateProperties() {};
-
         virtual std::string getType() const = 0;
 
         virtual const deImage& getLayerImage() const;

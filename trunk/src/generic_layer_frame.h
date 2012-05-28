@@ -47,6 +47,7 @@ class deGenericLayerFrame:public deLayerFrame
         virtual void setUIFromLayer();
 
         virtual bool onImageClick(deValue x, deValue y);
+        virtual bool onKey(int key);
 };
 
 #endif
