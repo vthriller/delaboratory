@@ -193,9 +193,12 @@ class dePropertyCurvesUIImpl:public dePanelWX
                 for (i = 0; i < n; i++)
                 {
                     const deValue* c = sourceImage.startRead(i);
-                    deValue v = c[p];
+                    if (c)
+                    {
+                        deValue v = c[p];
+                        property.onKey(key, i, v);
+                    }                        
                     sourceImage.finishRead(i);
-                    property.onKey(key, i, v);
                 }
                 return true;
             }

@@ -155,6 +155,29 @@ bool dePropertyCurves::onKey(int key, int i, deValue p)
         }
     }
 
+    if (key == 'H')
+    {
+        if (size == 4)
+        {
+            if (i == 0)
+            {
+                v = 12.0 / 100.0;
+            }
+            if (i == 1)
+            {
+                v = 17.0 / 100.0;
+            }
+            if (i == 2)
+            {
+                v = 22.0 / 100.0;
+            }
+            if (i == 3)
+            {
+                v = 0.0 / 100.0;
+            }
+        }
+    }
+
     if (v >= 0)
     {
         curves[i]->addPoint(p, v);
