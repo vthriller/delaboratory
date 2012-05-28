@@ -52,6 +52,7 @@ int dePropertyCurves::getHorizontalChannel() const
 bool dePropertyCurves::onKey(int key, int i, deValue p)
 {
     deValue v = -1;
+
     if (key == 'W')
     {
         v = 1.0;            
@@ -60,6 +61,98 @@ bool dePropertyCurves::onKey(int key, int i, deValue p)
     if (key == 'B')
     {
         v = 0.0;            
+    }
+
+    if (key == 'A')
+    {
+        if (size == 4)
+        {
+            if (i == 0)
+            {
+                v = 4.0 / 100.0;
+            }
+            if (i == 1)
+            {
+                v = 3.0 / 100.0;
+            }
+            if (i == 2)
+            {
+                v = 15.0 / 100.0;
+            }
+            if (i == 3)
+            {
+                v = 0;
+            }
+        }
+    }
+
+    if (key == 'S')
+    {
+        if (size == 4)
+        {
+            if (i == 0)
+            {
+                v = 15.0 / 100.0;
+            }
+            if (i == 1)
+            {
+                v = 35.0 / 100.0;
+            }
+            if (i == 2)
+            {
+                v = 55.0 / 100.0;
+            }
+            if (i == 3)
+            {
+                v = 0;
+            }
+        }
+    }
+
+    if (key == 'D')
+    {
+        if (size == 4)
+        {
+            if (i == 0)
+            {
+                v = 69.0 / 100.0;
+            }
+            if (i == 1)
+            {
+                v = 53.0 / 100.0;
+            }
+            if (i == 2)
+            {
+                v = 54.0 / 100.0;
+            }
+            if (i == 3)
+            {
+                v = 53.0 / 100.0;
+            }
+        }
+    }
+
+    if (key == 'G')
+    {
+        if (size == 4)
+        {
+            if (i == 0)
+            {
+                v = 9.0 / 100.0;
+            }
+            if (i == 1)
+            {
+                v = 7.0 / 100.0;
+            }
+            if (i == 2)
+            {
+                v = 9.0 / 100.0;
+            }
+            if (i == 3)
+            {
+                v = 0.0 / 100.0;
+            }
+        }
     }
 
     if (v >= 0)

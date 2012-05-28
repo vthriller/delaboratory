@@ -54,11 +54,11 @@ class deProject
         std::string sourceImageFileName;
         deViewModePanel* viewModePanel;
         deChannelManager& channelManager;
-        deLayerGridPanel* layerGridPanel;
         deViewManager viewManager;
         deStaticImage& sourceImage;
         deLayerStack& layerStack;
         deLayerFrameManager& layerFrameManager;
+        deLayerGridPanel* layerGridPanel;
         deHistogramModePanel* histogramModePanel;
         deImageAreaPanel* imageAreaPanel;
         deRawModule& rawModule;

@@ -244,16 +244,18 @@ bool dePropertyCurvesUI::onImageClick(deValue x, deValue y)
 {
     if (impl)
     {
-        impl->onImageClick(x,y);
+        return impl->onImageClick(x,y);
     }
+    return false;
 }
 
 bool dePropertyCurvesUI::onKey(int key)
 {
     if (impl)
     {
-        impl->onKey(key);
+        return impl->onKey(key);
     }
+    return false;
 }
 
 void deCurvesChannelSelector::onValueChange(int channel)

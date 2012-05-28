@@ -30,8 +30,11 @@ deC2GLayer::deC2GLayer(deColorSpace _colorSpace, deChannelManager& _channelManag
 {
     dePreset* reset = createPreset("reset");
 
-    createPropertyNumeric("radius", 1, 10);
-    reset->addNumericValue("radius", 4);
+    createPropertyNumeric("radius", 1, 1000);
+    reset->addNumericValue("radius", 300);
+
+    createPropertyNumeric("samples", 1, 50);
+    reset->addNumericValue("samples", 10);
 
     applyPreset("reset");
 
@@ -66,12 +69,13 @@ bool deC2GLayer::updateMainImageNotThreadedWay()
     fillChannel(mask, n, 0.0);
 
     deValue r = getNumericValue("radius") * viewManager.getRealScale();
+    deValue samples = getNumericValue("samples");
 
     const deValue* source0 = getOriginalImage().startRead(0);
     const deValue* source1 = getOriginalImage().startRead(1);
     const deValue* source2 = getOriginalImage().startRead(2);
 
-    c2g(source0, source1, source2, mask, size, r);
+    c2g(source0, source1, source2, mask, size, r, samples);
 
     getOriginalImage().finishRead(0);
     getOriginalImage().finishRead(1);

@@ -22,6 +22,6 @@
 #include "value.h"
 #include "size.h"
 
-void c2g(const deValue* source0, const deValue* source1, const deValue* source2, deValue* mask, const deSize& size, deValue r);
+void c2g(const deValue* source0, const deValue* source1, const deValue* source2, deValue* mask, const deSize& size, deValue r, int samples);
 
 #endif    
