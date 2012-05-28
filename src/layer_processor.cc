@@ -621,11 +621,6 @@ void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 {
     deBaseLayer* layer = layerStack.getLayer(index);
 
-    if (layer)
-    {
-        layer->onUpdateProperties();
-    }        
-
     logInfo("markUpdateSingleChannel " +str(index) + " " + str(channel));
     updateImages(index, channel, true);
 }
@@ -633,12 +628,6 @@ void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 void deLayerProcessor::markUpdateAllChannels(int index)
 {
     deBaseLayer* layer = layerStack.getLayer(index);
-
-    if (layer)
-    {
-        layerFrameManager.onUpdateProperties();
-        layer->onUpdateProperties();
-    }        
 
     updateImages(index, -1, true);
 }

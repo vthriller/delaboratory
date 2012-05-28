@@ -44,8 +44,6 @@ class deLayerFrameManager
 
         void destroyAllFrames();
 
-        void onUpdateProperties();
-
         bool addLayerFrame(int index, deLayerFrame* frame);
         bool removeLayerFrame(int index);
         bool destroyLayerFrame(int index);

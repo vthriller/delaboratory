@@ -37,6 +37,7 @@ class deLayerFrame:public deFrame
         
         virtual void setUIFromLayer() = 0;
         virtual bool onImageClick(deValue x, deValue y) {return false;};
+        virtual bool onKey(int key) {return false;};
 };
 
 #endif

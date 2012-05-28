@@ -259,3 +259,17 @@ bool deGenericLayerFrame::onImageClick(deValue x, deValue y)
 
     return false;
 }
+
+bool deGenericLayerFrame::onKey(int key)
+{
+    {
+        std::vector<dePropertyCurvesUI*>::iterator j;
+        for (j = curves.begin(); j != curves.end(); j++)
+        {
+            (*j)->onKey(key);
+        }
+    }
+
+    return true;
+}
+

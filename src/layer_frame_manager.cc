@@ -116,10 +116,15 @@ bool deLayerFrameManager::onImageClick(deValue x, deValue y)
 
 void deLayerFrameManager::onKey(int key)
 {
-}
-
-void deLayerFrameManager::onUpdateProperties()
-{
+    std::map<int, deLayerFrame*>::iterator i = layerFrames.begin();
+    for (i = layerFrames.begin(); i != layerFrames.end(); i++)
+    {
+        deLayerFrame* layerFrame = i->second;
+        if (layerFrame)
+        {
+            layerFrame->onKey(key);
+        }            
+    }
 }
 
 bool deLayerFrameManager::checkLayerFrame(int index)

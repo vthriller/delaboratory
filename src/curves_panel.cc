@@ -417,4 +417,5 @@ void deCurvesPanel::setMarker(const deValue* c, int n)
     {
         marker = c[clickPosition];
     }        
+    paint();
 }

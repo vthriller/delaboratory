@@ -169,9 +169,9 @@ void deImage::updateChannelUsage(std::map<int, int>& channelUsage, int index) co
 
 const deValue* deImage::startRead(int channel) const
 {
+    logInfo("image start read " + str(channel));
     mutex.lock();
 
-    logInfo("image start read " + str(channel));
     if (channel < 0)
     {
         logError("image start read " + str(channel));
@@ -210,9 +210,9 @@ void deImage::finishRead(int channel) const
 
 deValue* deImage::startWrite(int channel) 
 {
+    logInfo("image start write " + str(channel));
     mutex.lock();
 
-    logInfo("image start write " + str(channel));
     if (channel < 0)
     {
         logError("image start write " + str(channel));

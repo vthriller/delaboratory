@@ -85,21 +85,28 @@ void deLayerStack::addLayer(deBaseLayer* layer)
 int deLayerStack::getSize() const
 {
     lock();
+
     int n = layers.size();
+
     unlock();
     return n;
 }
 
 deBaseLayer* deLayerStack::getLayer(int id) const
 {
+
     lock();
+
     unsigned int i = id;
     if ((i >= layers.size()) || (id < 0))
     {
         unlock();
         return 0;
     }
+    deBaseLayer* layer = layers[i];
+
     unlock();
-    return layers[i];
+
+    return layer;
 }
 
