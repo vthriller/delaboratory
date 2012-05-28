@@ -619,16 +619,12 @@ void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
 
 void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 {
-    deBaseLayer* layer = layerStack.getLayer(index);
-
     logInfo("markUpdateSingleChannel " +str(index) + " " + str(channel));
     updateImages(index, channel, true);
 }
 
 void deLayerProcessor::markUpdateAllChannels(int index)
 {
-    deBaseLayer* layer = layerStack.getLayer(index);
-
     updateImages(index, -1, true);
 }
 

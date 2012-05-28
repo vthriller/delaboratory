@@ -29,9 +29,10 @@ class dePropertyChoiceUI:public deChoice
     private:
         dePropertyChoice& property;
         deLayerProcessor& layerProcessor;
-        deLayerFrame& parent;
 
         int layerIndex;
+
+        deLayerFrame& parent;
 
     public:
         dePropertyChoiceUI(deWindow& window, dePropertyChoice& _property, deLayerProcessor& _layerProcessor, int _layerIndex, deLayerFrame& _parent);

@@ -54,7 +54,6 @@ void deLayerGridPanel::buildRows()
     for (i = n-1; i >=0; i--)
     {
         deBaseLayer* layer = layerStack.getLayer(i);
-        deSwitchableLayer* switchable = dynamic_cast<deSwitchableLayer*>(layer);
 
         layerRows.push_back(deLayerRow(i));
         deLayerRow& row = layerRows.back();

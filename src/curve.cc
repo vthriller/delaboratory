@@ -68,9 +68,28 @@ int deBaseCurve::addPoint(deValue x, deValue y)
 
     mutex.lock();
 
-    controlPoints.push_back(deCurvePoint(x,y));
+    bool moved = false;
+    int p = -1;
+    int i = 0;
 
-    int p = controlPoints.size() - 1;
+    deCurvePoints::iterator j;
+    for (j = controlPoints.begin(); j != controlPoints.end(); j++)
+    {
+        deCurvePoint& point = *j;
+        if (point.getX() == x)
+        {
+            point.move(x, y);
+            moved = true;
+            p = i;
+        }
+        i++;
+    }
+
+    if (!moved)
+    {
+        controlPoints.push_back(deCurvePoint(x,y));
+        p = controlPoints.size() - 1;
+    }        
 
     mutex.unlock();
 

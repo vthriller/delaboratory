@@ -18,13 +18,14 @@
 
 #include "c2g.h"
 #include <cmath>
+#include <cstdlib>
 
-void c2g(const deValue* source0, const deValue* source1, const deValue* source2, deValue* mask, const deSize& size, deValue r)
+void c2g(const deValue* source0, const deValue* source1, const deValue* source2, deValue* mask, const deSize& size, deValue r, int samples)
 {
     int w = size.getW();
     int h = size.getH();
 
-    int rr = r;
+    srand(0);
 
     int x;
     for (x = 0; x < w; x++)
@@ -65,6 +66,7 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
             deValue min2 = 1.0;
             deValue max2 = 0.0;
 
+/*
             int xx;
             for (xx = xx1; xx <= xx2; xx++)
             {
@@ -105,6 +107,51 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
                     }
 
                 }
+            }
+            */
+
+            int dxx = xx2 - xx1 + 1;
+            int dyy = yy2 - yy1 + 1;
+
+            int i;
+            for (i = 0; i < samples; i++)
+            {
+                int xx = xx1 + (rand() % dxx);
+                int yy = yy1 + (rand() % dyy);
+
+                int pp = w * yy + xx;
+
+                deValue vv0 = source0[pp];
+                deValue vv1 = source1[pp];
+                deValue vv2 = source2[pp];
+
+                if (vv0 < min0)
+                {
+                    min0 = vv0;
+                }
+                if (vv0 > max0)
+                {
+                    max0 = vv0;
+                }
+
+                if (vv1 < min1)
+                {
+                    min1 = vv1;
+                }
+                if (vv1 > max1)
+                {
+                    max1 = vv1;
+                }
+
+                if (vv2 < min2)
+                {
+                    min2 = vv2;
+                }
+                if (vv2 > max2)
+                {
+                    max2 = vv2;
+                }
+                
             }
 
             deValue n0 = v0 - min0;
