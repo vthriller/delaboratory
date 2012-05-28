@@ -419,3 +419,8 @@ void deCurvesPanel::setMarker(const deValue* c, int n)
     }        
     paint();
 }
+
+int deCurvesPanel::getClickPosition() const
+{
+    return clickPosition;
+}
