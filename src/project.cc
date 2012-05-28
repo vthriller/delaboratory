@@ -141,10 +141,14 @@ void deProject::init(const std::string& fileName)
     {
         return;
     }
-    if (openImage(fileName, false, deColorSpaceRGB));
+    if (openImage(fileName, false, deColorSpaceRGB))
     {
         return;
     }
+    std::string s = "unable to open image: " + fileName;
+    logError(s);
+    wxString ws = wxString::FromAscii(s.c_str());
+    wxMessageBox(ws);
 }
 
 void deProject::freeImage()
@@ -384,7 +388,6 @@ void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
 
 bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace colorSpace)
 {
-
     std::string info;
 
     freeImage();
@@ -446,7 +449,7 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
         logInfo("trying JPEG/TIFF image " + fileName);
         if (!loadImage(fileName, sourceImage, colorSpace))
         {
-            logInfo("JPEG/TIFF image also failed");
+            logError("load JPEG/TIFF image failed: " + fileName);
             return false;
         }
     }            
