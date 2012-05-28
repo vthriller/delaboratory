@@ -168,7 +168,16 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
             if (d != 0)
             {
                 result = n / d;
+                if (result < 0)
+                {
+                    result = 0;
+                }
+                else if (result > 1)
+                {
+                    result = 1;
+                }
             }
+
 
             mask[p] = result;
         }
