@@ -2,6 +2,8 @@
 
 http://delaboratory.googlecode.com/svn/trunk/screenshots/devel.jpg
 
+http://delaboratory.googlecode.com/svn/trunk/screenshots/c2g.jpg
+
 -----
 *2012.05.27*
 
