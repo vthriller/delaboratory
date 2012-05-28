@@ -41,6 +41,7 @@ class dePropertyCurves:public deProperty
         deBaseCurve* getCurve(int index) {return (curves[index]);};
         void setHorizontalChannel(int channel);
         int getHorizontalChannel() const;
+        bool onKey(int key, int i, deValue v);
 
 };
 

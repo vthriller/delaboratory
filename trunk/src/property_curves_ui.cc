@@ -27,6 +27,8 @@
 #include "channel_selector.h"
 #include "curves_panel.h"
 #include "base_layer_with_source.h"
+#include "logger.h"
+#include "color_space_utils.h"
 
 class deCurvesChannelSelector:public deChannelSelector
 {
@@ -176,7 +178,28 @@ class dePropertyCurvesUIImpl:public dePanelWX
 
         bool onKey(int key)
         {
-            return true;
+            int p = curvesPanel->getClickPosition();
+            if (p >= 0)
+            {
+                const deImage& sourceImage = layer.getSourceImage();
+                if (p >= sourceImage.getChannelSize().getN())
+                {
+                    logError("click position outside channel");
+                    return false;
+                }
+                deColorSpace colorSpace = layer.getColorSpace();
+                int n = getColorSpaceSize(colorSpace);
+                int i;
+                for (i = 0; i < n; i++)
+                {
+                    const deValue* c = sourceImage.startRead(i);
+                    deValue v = c[p];
+                    sourceImage.finishRead(i);
+                    property.onKey(key, i, v);
+                }
+                return true;
+            }
+            return false;
         }
 
 

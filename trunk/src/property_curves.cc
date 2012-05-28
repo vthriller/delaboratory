@@ -48,3 +48,28 @@ int dePropertyCurves::getHorizontalChannel() const
 {
     return horizontalChannel;
 }
+
+bool dePropertyCurves::onKey(int key, int i, deValue p)
+{
+    deValue v = -1;
+    if (key == 'W')
+    {
+        v = 1.0;            
+    }
+
+    if (key == 'B')
+    {
+        v = 0.0;            
+    }
+
+    if (v >= 0)
+    {
+        curves[i]->addPoint(p, v);
+        curves[i]->build();
+        return true;
+    }
+
+    return false;
+
+
+}

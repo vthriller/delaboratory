@@ -89,6 +89,7 @@ public:
     void setMarker(const deValue* c, int n);
 
     void generateBackground(const deValue* c, int n);
+    int getClickPosition() const;
 
 	DECLARE_EVENT_TABLE()
 
