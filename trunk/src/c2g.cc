@@ -31,30 +31,9 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
     int x;
     for (x = 0; x < w; x++)
     {
-        int xx1 = x - r;
-        int xx2 = x + r;
-        if (xx1 < 0)
-        {
-            xx1 = 0;
-        }
-        if (xx2 >= w)
-        {
-            xx2 = w -1;
-        }
         int y;
         for (y = 0; y < h; y++)
         {
-            int yy1 = y - r;
-            int yy2 = y + r;
-            if (yy1 < 0)
-            {
-                yy1 = 0;
-            }
-            if (yy2 >= h)
-            {
-                yy2 = h -1;
-            }
-
             int p = w * y + x;
             deValue v0 = source0[p];
             deValue v1 = source1[p];
@@ -67,14 +46,34 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
             deValue min2 = 1.0;
             deValue max2 = 0.0;
 
-            int dxx = xx2 - xx1 + 1;
-            int dyy = yy2 - yy1 + 1;
+            int rr = r;
 
             int i;
             for (i = 0; i < samples; i++)
             {
-                int xx = xx1 + (rand() % dxx);
-                int yy = yy1 + (rand() % dyy);
+                deValue radius = 1 + rand() % rr;
+
+                deValue angle = (rand () % 1024) / 1024.0 * 2 * M_PI;
+
+                int xx = x + sin(angle) * radius;
+                int yy = y + cos(angle) * radius;
+
+                if (xx < 0) 
+                {
+                    xx = 0;
+                }
+                else if (xx >= w)
+                {
+                    xx = w - 1;
+                }
+                if (yy < 0) 
+                {
+                    yy = 0;
+                }
+                else if (yy >= h)
+                {
+                    yy = h - 1;
+                }
 
                 int pp = w * yy + xx;
 
