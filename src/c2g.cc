@@ -67,50 +67,6 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
             deValue min2 = 1.0;
             deValue max2 = 0.0;
 
-/*
-            int xx;
-            for (xx = xx1; xx <= xx2; xx++)
-            {
-                int yy;
-                for (yy = yy1; yy <= yy2; yy++)
-                {
-                    int pp = w * yy + xx;
-
-                    deValue vv0 = source0[pp];
-                    deValue vv1 = source1[pp];
-                    deValue vv2 = source2[pp];
-
-                    if (vv0 < min0)
-                    {
-                        min0 = vv0;
-                    }
-                    if (vv0 > max0)
-                    {
-                        max0 = vv0;
-                    }
-
-                    if (vv1 < min1)
-                    {
-                        min1 = vv1;
-                    }
-                    if (vv1 > max1)
-                    {
-                        max1 = vv1;
-                    }
-
-                    if (vv2 < min2)
-                    {
-                        min2 = vv2;
-                    }
-                    if (vv2 > max2)
-                    {
-                        max2 = vv2;
-                    }
-
-                }
-            }
-            */
-
             int dxx = xx2 - xx1 + 1;
             int dyy = yy2 - yy1 + 1;
 
@@ -165,13 +121,15 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
             deValue n = sqrt(n0 * n0 + n1 * n1 + n2 * n2);
             deValue d = sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 
+            d = d + n;
+
             deValue result = (v0 + v1 + v2) / 3.0;
 
             if (d != 0)
             {
                 deValue a = n / d;
 
-                result = a / 3.0;
+                result = a;
 
                 if (result < 0)
                 {
