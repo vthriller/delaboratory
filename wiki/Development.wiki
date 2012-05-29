@@ -7,7 +7,7 @@ http://delaboratory.googlecode.com/svn/trunk/screenshots/c2g.jpg
 -----
 *2012.05.29*
 
-Improved c2g. Screenshot above (original, c2g, c2g in color blend mode, converted to CMYK + curves).
+Improved c2g. Screenshot above (original, c2g, c2g in luminosity blend mode, converted to CMYK + curves).
 
 Default radius is 300 (like in GIMP), time cost depends on number of samples and size of image. Realtime preview is quite fast, because visible image is small, c2g on final image takes about minute or two, so be patient when sending the result to GIMP.
 
