@@ -34,8 +34,14 @@ deConversionLayer::deConversionLayer(deColorSpace _colorSpace, deChannelManager&
 
     if ((scs == deColorSpaceProPhoto) || (scs == deColorSpaceLAB) || (scs == deColorSpaceLCH))
     {
-        createPropertyNumeric("contrast", 0, 1);
-        reset->addNumericValue("contrast", 1);
+        deValue c = 1.0;
+        if ((scs == deColorSpaceProPhoto) && (colorSpace == deColorSpaceCMYK))
+        {
+            // use 90% contrast for ProPhoto -> CMYK by default
+            c = 0.9;
+        }
+        createPropertyNumeric("contrast", 0, c);
+        reset->addNumericValue("contrast", c);
     }
 
     if ((scs == deColorSpaceLAB) || (scs == deColorSpaceLCH))
