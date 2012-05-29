@@ -22,19 +22,24 @@
 deThreadsPanel::deThreadsPanel(wxWindow* parent)
 :wxPanel(parent)
 {
-    wxSizer* sizerP = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T("thread activity"));
+    //wxSizer* sizerP = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T("thread activity"));
+    wxSizer* sizerP = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T("threads"));
     SetSizer(sizerP);
 
-    processingInfo = new wxStaticText(this, wxID_ANY, _T("[processing]"), wxDefaultPosition);
+    //processingInfo = new wxStaticText(this, wxID_ANY, _T("[processing]"), wxDefaultPosition);
+    processingInfo = new wxStaticText(this, wxID_ANY, _T("[p]"), wxDefaultPosition);
     sizerP->Add(processingInfo, 0, wxEXPAND);
 
-    renderingInfo = new wxStaticText(this, wxID_ANY, _T("[rendering]"), wxDefaultPosition);
+    //renderingInfo = new wxStaticText(this, wxID_ANY, _T("[rendering]"), wxDefaultPosition);
+    renderingInfo = new wxStaticText(this, wxID_ANY, _T("[r]"), wxDefaultPosition);
     sizerP->Add(renderingInfo, 0, wxEXPAND);
 
-    histogramInfo = new wxStaticText(this, wxID_ANY, _T("[histogram]"), wxDefaultPosition);
+    //histogramInfo = new wxStaticText(this, wxID_ANY, _T("[histogram]"), wxDefaultPosition);
+    histogramInfo = new wxStaticText(this, wxID_ANY, _T("[h]"), wxDefaultPosition);
     sizerP->Add(histogramInfo, 0, wxEXPAND);
 
-    dcrawInfo = new wxStaticText(this, wxID_ANY, _T("[dcraw]"), wxDefaultPosition);
+    //dcrawInfo = new wxStaticText(this, wxID_ANY, _T("[dcraw]"), wxDefaultPosition);
+    dcrawInfo = new wxStaticText(this, wxID_ANY, _T("[d]"), wxDefaultPosition);
     sizerP->Add(dcrawInfo, 0, wxEXPAND);
 }
 
