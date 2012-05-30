@@ -2,12 +2,19 @@
 
 http://delaboratory.googlecode.com/svn/trunk/screenshots/devel.jpg
 
-http://delaboratory.googlecode.com/svn/trunk/screenshots/c2g.jpg
+-----
+*2012.05.30*
+
+More work on c2g.
+
+here you can compare same settings on delaboratory and GIMP:
 
 http://delaboratory.googlecode.com/svn/trunk/screenshots/c2g_de_gimp.jpg
 
 -----
 *2012.05.29*
+
+http://delaboratory.googlecode.com/svn/trunk/screenshots/c2g.jpg
 
 Improved c2g. Screenshot above (original, c2g, c2g in luminosity blend mode, converted to CMYK + curves).
 
