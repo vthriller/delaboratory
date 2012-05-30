@@ -4,6 +4,8 @@ http://delaboratory.googlecode.com/svn/trunk/screenshots/devel.jpg
 
 http://delaboratory.googlecode.com/svn/trunk/screenshots/c2g.jpg
 
+http://delaboratory.googlecode.com/svn/trunk/screenshots/c2g_de_gimp.jpg
+
 -----
 *2012.05.29*
 
