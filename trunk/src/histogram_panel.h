@@ -23,6 +23,7 @@
 #include "histogram.h"
 class deProject;
 #include "rendered_image.h"
+#include "mutex.h"
 
 class deHistogramPanel:public wxPanel
 {
@@ -34,6 +35,7 @@ class deHistogramPanel:public wxPanel
         bool generated;
         int width;
         int margin;
+        deMutex mutex;
 
         void paintEvent(wxPaintEvent & evt);
         void render(deCanvas& canvas);

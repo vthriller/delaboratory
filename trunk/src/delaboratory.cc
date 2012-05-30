@@ -36,6 +36,9 @@ const std::string LOG_LOCKS_FILE_NAME = "locks.log";
 
 class deInitLogger
 {
+    private:
+        wxString message;
+
     public:
         deInitLogger()
         {
@@ -44,18 +47,26 @@ class deInitLogger
 
             if (wxDirExists(ucd_wx))
             {
+                message = _T("");
             }
             else
             {
                 if (wxMkdir(ucd_wx))
                 {
+                    message = _T("created user config dir ") + ucd_wx;
                 }
                 else
                 {
+                    message = _T("unable to create user config dir ") + ucd_wx;
                 }
             }
 
             deLogger::getLogger().setFile(ucd + "/" + LOG_FILE_NAME);
+        }
+
+        wxString getMessage()
+        {
+            return message;
         }
 };        
 
@@ -156,6 +167,12 @@ bool deLaboratory::OnInit()
     mainWindow.setTopWindow();
 
     logInfo("startWorkerThread...");
+
+    wxString ws = initLogger.getMessage();
+    if (ws.size() > 0)
+    {
+        wxMessageBox(ws);
+    }        
 
     processor.startWorkerThread();
 

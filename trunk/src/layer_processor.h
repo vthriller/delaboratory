@@ -60,7 +60,7 @@ class deLayerProcessor
         deSemaphore workerSemaphore;
         deSemaphore renderWorkerSemaphore;
         deSemaphore histogramWorkerSemaphore;
-        deMutex layerProcessMutex;
+        mutable deMutex layerProcessMutex;
         deMutex histogramMutex;
         deMutex prepareImageMutex;
         deMutex updateImageMutex;
@@ -92,8 +92,8 @@ class deLayerProcessor
 
         int getLastLayerToUpdate();
 
-        void lockLayers();
-        void unlockLayers();
+        void lockLayers() const;
+        void unlockLayers() const;
 
         void lockHistogram();
         void unlockHistogram();
@@ -110,7 +110,7 @@ class deLayerProcessor
         deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deMainWindow& _mainWindow);
         virtual ~deLayerProcessor();
 
-        int getLastValidLayer() const {return lastValidLayer;};
+        int getLastValidLayer() const;
 
         void setViewManager(deViewManager* _viewManager);
 

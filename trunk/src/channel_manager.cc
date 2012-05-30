@@ -44,6 +44,16 @@ deChannelManager::~deChannelManager()
 void deChannelManager::setChannelSize(const deSize& size)
 {
     channelSize = size;
+
+    if (channelSize.getW() < 0)
+    {
+        logError("w: " + str(channelSize.getW()) + " when setting channel size in channel manager");
+    }
+    if (channelSize.getH() < 0)
+    {
+        logError("h: " + str(channelSize.getH()) + " when setting channel size in channel manager");
+    }
+
     destroyAllChannels();
 }
 
@@ -159,6 +169,15 @@ void deChannelManager::destroyAllChannels()
 
 deSize deChannelManager::getChannelSizeFromChannelManager() const
 {
+    if (channelSize.getW() < 0)
+    {
+        logError("w: " + str(channelSize.getW()) + " when getting channel size from channel manager");
+    }
+    if (channelSize.getH() < 0)
+    {
+        logError("h: " + str(channelSize.getH()) + " when getting channel size from channel manager");
+    }
+
     return channelSize;
 }
 

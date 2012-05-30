@@ -350,14 +350,14 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
     updateImages(0, -1, true);
 }    
 
-void deLayerProcessor::lockLayers()
+void deLayerProcessor::lockLayers() const
 {
     logInfo("locking layer process mutex...");
     layerProcessMutex.lock();
     logInfo("layer process mutex locked");
 }
 
-void deLayerProcessor::unlockLayers()
+void deLayerProcessor::unlockLayers() const
 {
     logInfo("unlocking layer process mutex");
     layerProcessMutex.unlock();
@@ -822,6 +822,17 @@ void deLayerProcessor::setPreviewSize(const deSize& size, bool canSkip)
         logInfo("skip set preview size");
         return;
     }
+
+    if (size.getW() < 0)
+    {
+        logError("broken size passed to setPreviewSize, w: " + str(size.getW()));
+    }
+
+    if (size.getH() < 0)
+    {
+        logError("broken size passed to setPreviewSize, h: " + str(size.getH()));
+    }
+
     logInfo("setPreviewSize start");
 
     lockHistogram();
@@ -874,4 +885,12 @@ void deLayerProcessor::setHistogramChannel(int channel)
     {
         viewManager->setHistogramChannel(channel);
     }
+}
+
+int deLayerProcessor::getLastValidLayer() const
+{
+    lockLayers();
+    int l = lastValidLayer;
+    unlockLayers();
+    return l;
 }
