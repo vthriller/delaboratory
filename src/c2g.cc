@@ -18,15 +18,17 @@
 
 #include "c2g.h"
 #include <cmath>
-#include <cstdlib>
 #include <iostream>
+
+#include "radial_lut.h"
 
 void c2g(const deValue* source0, const deValue* source1, const deValue* source2, deValue* mask, const deSize& size, deValue r, int samples)
 {
     int w = size.getW();
     int h = size.getH();
 
-    srand(0);
+    int lutsize = 10 * 1024;
+    deRadialLUT lut(lutsize, r);
 
     int x;
     for (x = 0; x < w; x++)
@@ -46,21 +48,23 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
             deValue min2 = 1.0;
             deValue max2 = 0.0;
 
+            deValue sum = 0.0;
+            int nn = 0;
+
             int rr = r;
+            int offset = lut.getStart(samples);
 
-            int i;
-            for (i = 0; i < samples; i++)
+            int i = 0;
+            while ((i < samples) && (offset < lutsize))
             {
-                deValue radius = 1 + rand() % rr;
-
-                deValue angle = (rand () % 1024) / 1024.0 * 2 * M_PI;
-
-                int xx = x + sin(angle) * radius;
-                int yy = y + cos(angle) * radius;
+                int xx;
+                int yy;
+                lut.get(offset, xx, yy);
+                xx += x;
+                yy += y;
 
                 if ((xx >= 0) && (xx < w) && (yy >= 0) && (yy < h))
                 {
-
                     int pp = w * yy + xx;
 
                     deValue vv0 = source0[pp];
@@ -94,8 +98,10 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
                         max2 = vv2;
                     }
 
+                    i++;
                 }
-                
+
+                offset++;
             }
 
             deValue n0 = v0 - min0;
@@ -110,13 +116,11 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
 
             d = d + n;
 
-            deValue result = (v0 + v1 + v2) / 3.0;
+            deValue result;
 
             if (d != 0)
             {
-                deValue a = n / d;
-
-                result = a;
+                result = n / d;
 
                 if (result < 0)
                 {
@@ -126,6 +130,10 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
                 {
                     result = 1;
                 }
+            }
+            else
+            {
+                result = (v0 + v1 + v2) / 3.0;
             }
 
             mask[p] = result;

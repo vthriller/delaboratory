@@ -175,12 +175,12 @@ void deStaticImage::copyToChannel(int channel, deValue* destination, deValue z_x
     int h = ds.getH();
     if (w <= 0)
     {
-        logError("w: " + str(w));
+        logError("can't copy static image w: " + str(w));
         return;
     }
     if (h <= 0)
     {
-        logError("h: " + str(h));
+        logError("can't copy static image h: " + str(h));
         return;
     }
     const deValue* source = startReadStatic(channel);
@@ -194,25 +194,38 @@ deValue deStaticImage::samplePixel(const deValue* src, int xx1, int xx2, int yy1
 {
     int ws = size.getW();
     int hs = size.getH();
-    if ((xx1 >= ws) || (xx1 < 0))
+
+    if (xx1 < 0)
     {
-        logError("xx1: " + str(xx1));
-        return 0.0;
+        xx1 = 0;
     }
-    if ((yy1 >= hs) || (yy1 < 0))
+    else if (xx1 >= ws)
     {
-        logError("yy1: " + str(yy1));
-        return 0.0;
+        xx1 = ws - 1;
     }
-    if ((xx2 >= ws) || (xx2 < 0))
+    if (xx2 < 0)
     {
-        //logError("xx2: " + str(xx2));
-        return 0.0;
+        xx2 = 0;
     }
-    if ((yy2 >= hs) || (yy2 < 0))
+    else if (xx2 >= ws)
     {
-        //logError("yy2: " + str(yy2));
-        return 0.0;
+        xx2 = ws - 1;
+    }
+    if (yy1 < 0)
+    {
+        yy1 = 0;
+    }
+    else if (yy1 >= hs)
+    {
+        yy1 = hs - 1;
+    }
+    if (yy2 < 0)
+    {
+        yy2 = 0;
+    }
+    else if (yy2 >= hs)
+    {
+        yy2 = hs - 1;
     }
 
     int n = 0;
@@ -267,7 +280,7 @@ deValue deStaticImage::samplePixel(const deValue* src, int xx1, int xx2, int yy1
 
     if (n == 0)
     {
-        logError("n = 0");
+        logError("sample pixel failed, no pixels inside box");
         return 0.0;
     }
 
@@ -319,8 +332,6 @@ void deStaticImage::scaleChannel(const deValue* src, deValue* dst, deValue z_x1,
     if (scaleW <= 0)
     {
         logError("scaleW: " + str(scaleW));
-        logError("x1: " + str(x1));
-        logError("x2: " + str(x2));
     }
     if (scaleH <= 0)
     {
@@ -338,7 +349,6 @@ void deStaticImage::scaleChannel(const deValue* src, deValue* dst, deValue z_x1,
     int x;
     for (x = 0; x < w; x++)
     {
-        
         xx1 = scaleW * x;
         xx2 = scaleW * (x + 1);
 

@@ -93,28 +93,6 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
         sizerD->Add(deleteLayer, 0, wxCENTER);
     }
 
-
-/*
-    {
-
-        wxSizer* sizerE = new wxStaticBoxSizer(wxHORIZONTAL, this,  _T("export"));
-        mainSizer->Add(sizerE, 0, wxCENTER);
-
-        {
-            exportSingle = new wxButton(this, wxID_ANY, _T("one image"));
-            sizerE->Add(exportSingle, 0);
-        }
-        {
-            exportAll = new wxButton(this, wxID_ANY, _T("all images"));
-            sizerE->Add(exportAll, 0);
-        }
-        {
-            externalEditor = new wxButton(this, wxID_ANY, _T("send to GIMP"));
-            sizerE->Add(externalEditor, 0);
-        }
-    }
-    */
-
     Layout();
     Fit();
 
@@ -124,19 +102,6 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
 deControlPanel::~deControlPanel()
 {
 }
-
-/*
-bool deControlPanel::generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir)
-{
-    wxProgressDialog* progressDialog = new wxProgressDialog(_T("generate final image"), _T("generate final image"), 100, GetParent(), wxPD_AUTO_HIDE | wxPD_ELAPSED_TIME);
-
-    bool result = project.exportFinalImage(app, type, name, progressDialog, saveAll, dir);
-
-    delete progressDialog;
-
-    return result;
-}
-*/
 
 void deControlPanel::click(wxCommandEvent &event)
 {
@@ -149,7 +114,6 @@ void deControlPanel::click(wxCommandEvent &event)
         int index = layerStack.getSize() - 1;
         project.getLayerFrameManager().onDestroyLayer(index);
         operationProcessor.execute("remove");
-    //    updateLayerGrid2();
     }
 
 
@@ -168,35 +132,6 @@ void deControlPanel::click(wxCommandEvent &event)
 
         operationProcessor.execute(action);
     }
-
-
-    /*
-    if (exportSingle->GetId() == id)
-    {
-        std::string f = getSaveFile(this, "export TIFF", "tiff");
-
-        if (!f.empty())
-        {
-            if (f.rfind(".tiff") != f.size() - 5)
-            {
-                f += ".tiff";
-            }
-
-            generateFinalImage("", "tiff", f, false, "");
-        }            
-    }
-
-    if (exportAll->GetId() == id)
-    {
-        std::string f = getDir(this, "export all images");
-        generateFinalImage("", "tiff", "", true, f);
-    }
-
-    if (externalEditor->GetId() == id)
-    {
-        generateFinalImage("gimp", "tiff", "", false, "");
-    }
-    */
 
 }
 

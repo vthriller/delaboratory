@@ -41,6 +41,11 @@ bool operator !=(const deSize& a, const deSize& b)
 
 deSize fitInside(const deSize& area, deValue aspect)
 {
+    if (aspect == 0)
+    {
+        return deSize(0,0);
+    }
+
     int w = area.getW();
     int h = w / aspect;
 
@@ -49,18 +54,6 @@ deSize fitInside(const deSize& area, deValue aspect)
         h = area.getH();
         w = h * aspect;
     }
-
-/*
-    if ( w > area.getW( ))
-    {
-        w = area.getW();
-    }
-
-    if ( h > area.getH( ))
-    {
-        h = area.getH();
-    }
-    */
 
     return deSize(w,h);
 }
