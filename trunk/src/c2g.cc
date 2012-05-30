@@ -58,54 +58,42 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
                 int xx = x + sin(angle) * radius;
                 int yy = y + cos(angle) * radius;
 
-                if (xx < 0) 
+                if ((xx >= 0) && (xx < w) && (yy >= 0) && (yy < h))
                 {
-                    xx = 0;
-                }
-                else if (xx >= w)
-                {
-                    xx = w - 1;
-                }
-                if (yy < 0) 
-                {
-                    yy = 0;
-                }
-                else if (yy >= h)
-                {
-                    yy = h - 1;
-                }
 
-                int pp = w * yy + xx;
+                    int pp = w * yy + xx;
 
-                deValue vv0 = source0[pp];
-                deValue vv1 = source1[pp];
-                deValue vv2 = source2[pp];
+                    deValue vv0 = source0[pp];
+                    deValue vv1 = source1[pp];
+                    deValue vv2 = source2[pp];
 
-                if (vv0 < min0)
-                {
-                    min0 = vv0;
-                }
-                if (vv0 > max0)
-                {
-                    max0 = vv0;
-                }
+                    if (vv0 < min0)
+                    {
+                        min0 = vv0;
+                    }
+                    if (vv0 > max0)
+                    {
+                        max0 = vv0;
+                    }
 
-                if (vv1 < min1)
-                {
-                    min1 = vv1;
-                }
-                if (vv1 > max1)
-                {
-                    max1 = vv1;
-                }
+                    if (vv1 < min1)
+                    {
+                        min1 = vv1;
+                    }
+                    if (vv1 > max1)
+                    {
+                        max1 = vv1;
+                    }
 
-                if (vv2 < min2)
-                {
-                    min2 = vv2;
-                }
-                if (vv2 > max2)
-                {
-                    max2 = vv2;
+                    if (vv2 < min2)
+                    {
+                        min2 = vv2;
+                    }
+                    if (vv2 > max2)
+                    {
+                        max2 = vv2;
+                    }
+
                 }
                 
             }
