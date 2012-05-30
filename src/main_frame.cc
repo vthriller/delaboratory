@@ -239,34 +239,12 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
 #define MAR2 0.06
 
 
-void deMainFrame::hidePanels()
-{
-    topPanel->Hide();
-    hPanel->Hide();
-    layerGridPanel->Hide();
-    controlPanel->Hide();
-    mainSizer->Layout();
-    full = true;
-    imageAreaPanel->SetFocus();
-}
-
 deMainFrame::~deMainFrame()
 {
     logInfo("main frame destructor");
     layerProcessor.stopWorkerThread();
     layerProcessor.lock();
     layerProcessor.unlock();
-}
-
-void deMainFrame::showPanels()
-{
-    topPanel->Show();
-    hPanel->Show();
-    layerGridPanel->Show();
-    controlPanel->Show();
-    mainSizer->Layout();
-    full = false;
-    imageAreaPanel->SetFocus();
 }
 
 void deMainFrame::rebuild()
@@ -278,17 +256,6 @@ void deMainFrame::rebuild()
 
 void deMainFrame::onKey(int key)
 {
-    if (key == 'F')
-    {
-        if (full)
-        {
-           showPanels();
-        }        
-        else
-        {
-           hidePanels();
-        }        
-    }
 }
 
 void deMainFrame::onQuit(wxCommandEvent& WXUNUSED(event))

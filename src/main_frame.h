@@ -134,9 +134,6 @@ private:
 
     void paintHistogram();
 
-    void showPanels();
-    void hidePanels();
-
     bool generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir);
 
 public:
