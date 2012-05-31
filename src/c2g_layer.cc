@@ -24,6 +24,7 @@
 #include "blend_channel.h"
 #include "logger.h"
 #include "c2g.h"
+#include "str.h"
 
 deC2GLayer::deC2GLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack, deViewManager& _viewManager)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack), viewManager(_viewManager)
@@ -33,7 +34,7 @@ deC2GLayer::deC2GLayer(deColorSpace _colorSpace, deChannelManager& _channelManag
     createPropertyNumeric("radius", 1, 1000);
     reset->addNumericValue("radius", 300);
 
-    createPropertyNumeric("samples", 1, 50);
+    createPropertyNumeric("samples", 1, 500);
     reset->addNumericValue("samples", 10);
 
     applyPreset("reset");
@@ -46,6 +47,10 @@ deC2GLayer::~deC2GLayer()
 
 bool deC2GLayer::updateMainImageNotThreadedWay()
 {
+    deValue samples = getNumericValue("samples");
+
+    logInfo("c2g_layer START samples: " + str(samples));
+
     deSize size = mainLayerImage.getChannelSize();
     int n = size.getN();
 
@@ -69,13 +74,14 @@ bool deC2GLayer::updateMainImageNotThreadedWay()
     fillChannel(mask, n, 0.0);
 
     deValue r = getNumericValue("radius") * viewManager.getRealScale();
-    deValue samples = getNumericValue("samples");
 
     const deValue* source0 = getOriginalImage().startRead(0);
     const deValue* source1 = getOriginalImage().startRead(1);
     const deValue* source2 = getOriginalImage().startRead(2);
 
+    logInfo("c2g_layer before c2g");
     c2g(source0, source1, source2, mask, size, r, samples);
+    logInfo("c2g_layer after c2g");
 
     getOriginalImage().finishRead(0);
     getOriginalImage().finishRead(1);
@@ -104,6 +110,8 @@ bool deC2GLayer::updateMainImageNotThreadedWay()
     }
 
     delete [] mask;
+
+    logInfo("c2g_layer DONE");
 
     return true;                
 }            
