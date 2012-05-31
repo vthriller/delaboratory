@@ -59,6 +59,13 @@ std::string str(int n)
     return oss.str();
 }    
 
+std::string str(long n)
+{
+    std::ostringstream oss;
+    oss << n;
+    return oss.str();
+}    
+
 std::string str(unsigned int n)
 {
     std::ostringstream oss;
