@@ -21,6 +21,8 @@
 #include <iostream>
 
 #include "radial_lut.h"
+#include "logger.h"
+#include "str.h"
 
 void c2g(const deValue* source0, const deValue* source1, const deValue* source2, deValue* mask, const deSize& size, deValue r, int samples)
 {
@@ -29,6 +31,8 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
 
     int lutsize = 10 * 1024;
     deRadialLUT lut(lutsize, r);
+
+    int* offsets = new int [samples];
 
     int x;
     for (x = 0; x < w; x++)
@@ -55,53 +59,61 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
             int offset = lut.getStart(samples);
 
             int i = 0;
-            while ((i < samples) && (offset < lutsize))
+            while (i < samples)
             {
                 int xx;
                 int yy;
                 lut.get(offset, xx, yy);
                 xx += x;
                 yy += y;
-
                 if ((xx >= 0) && (xx < w) && (yy >= 0) && (yy < h))
                 {
                     int pp = w * yy + xx;
-
-                    deValue vv0 = source0[pp];
-                    deValue vv1 = source1[pp];
-                    deValue vv2 = source2[pp];
-
-                    if (vv0 < min0)
-                    {
-                        min0 = vv0;
-                    }
-                    if (vv0 > max0)
-                    {
-                        max0 = vv0;
-                    }
-
-                    if (vv1 < min1)
-                    {
-                        min1 = vv1;
-                    }
-                    if (vv1 > max1)
-                    {
-                        max1 = vv1;
-                    }
-
-                    if (vv2 < min2)
-                    {
-                        min2 = vv2;
-                    }
-                    if (vv2 > max2)
-                    {
-                        max2 = vv2;
-                    }
-
+                    offsets[i] = pp;
                     i++;
-                }
+                }       
 
                 offset++;
+                if (offset >= lutsize)
+                {
+                    offset = 0;
+                }
+            }
+
+            for (i = 0; i < samples; i++)
+            {
+                int pp = offsets[i];
+
+                deValue vv0 = source0[pp];
+                deValue vv1 = source1[pp];
+                deValue vv2 = source2[pp];
+
+                if (vv0 < min0)
+                {
+                    min0 = vv0;
+                }
+                if (vv0 > max0)
+                {
+                    max0 = vv0;
+                }
+
+                if (vv1 < min1)
+                {
+                    min1 = vv1;
+                }
+                if (vv1 > max1)
+                {
+                    max1 = vv1;
+                }
+
+                if (vv2 < min2)
+                {
+                    min2 = vv2;
+                }
+                if (vv2 > max2)
+                {
+                    max2 = vv2;
+                }
             }
 
             deValue n0 = v0 - min0;
@@ -139,6 +151,8 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
             mask[p] = result;
         }
     }
+
+    delete [] offsets;
 
 }
 
