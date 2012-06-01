@@ -84,8 +84,6 @@ private:
     deThreadsPanel* threadsPanel;
     deWarningPanel* warningPanel;
 
-    wxCheckBox* realtime;
-
     std::string imageName;
 
     deLayerProcessor& layerProcessor;

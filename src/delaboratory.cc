@@ -43,7 +43,7 @@ class deInitLogger
         deInitLogger()
         {
             std::string ucd = getUserConfigDir();
-            wxString ucd_wx = wxString::FromAscii(ucd.c_str()); 
+            wxString ucd_wx = str2wx(ucd);
 
             if (wxDirExists(ucd_wx))
             {

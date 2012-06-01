@@ -112,8 +112,6 @@ void deLayerWithBlending::setBlendMode(deBlendMode mode)
 
 bool deLayerWithBlending::updateBlend(int i)
 {
-    logInfo("update blend " + str(i));
-
     if (!isBlendingEnabled())
     {
         return true;
@@ -136,6 +134,8 @@ bool deLayerWithBlending::updateBlend(int i)
         return true;
     }
 
+    logInfo("update blend " + str(i) + " START");
+
     const deValue* source = getSourceImage().startRead(i);
 
     const deValue* overlay = mainLayerImage.startRead(i);
@@ -153,6 +153,8 @@ bool deLayerWithBlending::updateBlend(int i)
     getSourceImage().finishRead(i);
     mainLayerImage.finishRead(i);
     imageBlendPass.finishWrite(i);
+
+    logInfo("update blend " + str(i) + " DONE");
 
     return true;
 
@@ -187,6 +189,8 @@ bool deLayerWithBlending::updateBlendAllChannels()
         return true;
     }
 
+    logInfo("update blend all channels START");
+
     int n = getColorSpaceSize(colorSpace);
     int i;
 
@@ -209,6 +213,7 @@ bool deLayerWithBlending::updateBlendAllChannels()
     {
         semaphore.wait();
     }
+    logInfo("update blend all channels DONE");
 
     return true;
 
@@ -251,6 +256,8 @@ deBlendMode deLayerWithBlending::getBlendMode() const
 
 void deLayerWithBlending::blendSpecial()
 {
+    logInfo("blend special START");
+
     deBlendMode mode = getBlendMode();
     int cs = getColorSpaceSize(colorSpace);
 
@@ -340,6 +347,7 @@ void deLayerWithBlending::blendSpecial()
         mainLayerImage.finishRead(3);
         imageBlendPass.finishWrite(3);
     }
+    logInfo("blend special DONE");
 }
 
 bool deLayerWithBlending::tryBlendSpecial()

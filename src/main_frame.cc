@@ -116,22 +116,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     warningPanel = new deWarningPanel(topPanel);
     topSizer->Add(warningPanel, 0, wxEXPAND);
 
-    wxSizer* sizerR = new wxStaticBoxSizer(wxHORIZONTAL, topPanel,  _T("options"));
-    topSizer->Add(sizerR, 0, wxEXPAND);
-
-    realtime = new wxCheckBox(topPanel, wxID_ANY, _T("real time"));
-    sizerR->Add(realtime);
-
-    bool r = layerProcessor.isRealtime();
-    if (r)
-    {
-        realtime->SetValue(1);
-    }
-    else
-    {
-        realtime->SetValue(0);
-    }
-
     wxSizer* sizerI = new wxStaticBoxSizer(wxVERTICAL, this,  _T("image"));
     leftSizer->Add(sizerI, 1, wxEXPAND);
 
@@ -420,8 +404,6 @@ void deMainFrame::repaintMainFrame(bool calcHistogram)
 
 void deMainFrame::check(wxCommandEvent &event)
 {
-    bool r = realtime->IsChecked();
-    layerProcessor.setRealtime(r);
 }
 
 void deMainFrame::onCloseEvent(wxCloseEvent& event)
@@ -450,7 +432,7 @@ void deMainFrame::updateTitle()
 {
     std::string s = imageName + " " + str(imageSize.getW()) + "x" + str(imageSize.getH()) + " - " + getApplicationName() + " " + getVersion() + " " + getCopyright();
 
-    SetTitle(wxString::FromAscii(s.c_str()));
+    SetTitle(str2wx(s));
 }
 
 void deMainFrame::setImageName(const std::string& _imageName, const deSize& _size)

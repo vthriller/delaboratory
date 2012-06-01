@@ -21,7 +21,7 @@
 
 #include <string>
 #include "value.h"
-#include "base_layer.h"
+#include "base_layer_with_properties.h"
 
 class dePreset
 {
@@ -47,7 +47,7 @@ class dePreset
 
         std::string getName() {return name;};
 
-        void apply(deBaseLayer& layer) const;
+        void apply(deBaseLayerWithProperties& layer) const;
         void addNumericValue(const std::string& n, deValue v);
         void addOperation(const std::string& n);
 

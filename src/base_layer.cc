@@ -66,20 +66,6 @@ deBaseLayer::deBaseLayer(deColorSpace _colorSpace, deChannelManager& _channelMan
 
 deBaseLayer::~deBaseLayer()
 {
-    std::vector<deProperty*>::iterator i;
-    while (properties.size() > 0)
-    {
-        i = properties.begin();
-        delete *i;
-        properties.erase(i);
-    }
-    std::vector<dePreset*>::iterator j;
-    while (presets.size() > 0)
-    {
-        j = presets.begin();
-        delete *j;
-        presets.erase(j);
-    }
 }
 
 deColorSpace deBaseLayer::getColorSpace() const
@@ -89,12 +75,15 @@ deColorSpace deBaseLayer::getColorSpace() const
 
 void deBaseLayer::lockLayer()
 {
+    logInfo("base layer before lock");
     mutex.lock();
+    logInfo("base layer locked");
 }
 
 void deBaseLayer::unlockLayer()
 {
     mutex.unlock();
+    logInfo("base layer unlocked");
 }
 
 void deBaseLayer::processLayer(deLayerProcessType type, int channel)
@@ -204,156 +193,3 @@ bool deBaseLayer::updateImage()
     return result;
 }
 
-void deBaseLayer::createPropertyNumeric(const std::string& _name, deValue _min, deValue _max)
-{
-    std::vector<deProperty*>::iterator i;
-    for (i = properties.begin(); i != properties.end(); i++)
-    {
-        deProperty* property = *i;
-        if (property->getName() == _name)
-        {
-            return;
-        }
-    }
-    properties.push_back(new dePropertyNumeric(_name, _min, _max));
-}
-
-void deBaseLayer::createPropertyChoice(const std::string& _name, const std::vector<std::string>& _choices)
-{
-    std::vector<deProperty*>::iterator i;
-    for (i = properties.begin(); i != properties.end(); i++)
-    {
-        deProperty* property = *i;
-        if (property->getName() == _name)
-        {
-            return;
-        }
-    }
-    properties.push_back(new dePropertyChoice(_name, _choices));
-}
-
-void deBaseLayer::createPropertyBoolean(const std::string& _name)
-{
-    std::vector<deProperty*>::iterator i;
-    for (i = properties.begin(); i != properties.end(); i++)
-    {
-        deProperty* property = *i;
-        if (property->getName() == _name)
-        {
-            return;
-        }
-    }
-    properties.push_back(new dePropertyBoolean(_name));
-}
-
-deProperty* deBaseLayer::getProperty(const std::string& _name)
-{
-    std::vector<deProperty*>::iterator i;
-    for (i = properties.begin(); i != properties.end(); i++)
-    {
-        deProperty* property = *i;
-        if (property->getName() == _name)
-        {
-            return property;
-        }
-    }
-    logError("property " + _name + " not found");
-
-    return NULL;
-}
-
-const deProperty* deBaseLayer::getProperty(const std::string& _name) const
-{
-    std::vector<deProperty*>::const_iterator i;
-    for (i = properties.begin(); i != properties.end(); i++)
-    {
-        deProperty* property = *i;
-        if (property->getName() == _name)
-        {
-            return property;
-        }
-    }
-
-    return NULL;
-}
-
-void deBaseLayer::getProperties(std::vector<std::string>& names)
-{
-    std::vector<deProperty*>::iterator i;
-    for (i = properties.begin(); i != properties.end(); i++)
-    {
-        deProperty* property = *i;
-        names.push_back(property->getName());
-    }
-
-}
-
-dePropertyNumeric* deBaseLayer::getPropertyNumeric(const std::string& _name)
-{
-    return dynamic_cast<dePropertyNumeric*>(getProperty(_name));
-}
-
-const dePropertyNumeric* deBaseLayer::getPropertyNumeric(const std::string& _name) const
-{
-    return dynamic_cast<const dePropertyNumeric*>(getProperty(_name));
-}
-
-dePropertyChoice* deBaseLayer::getPropertyChoice(const std::string& _name)
-{
-    return dynamic_cast<dePropertyChoice*>(getProperty(_name));
-}
-
-const dePropertyChoice* deBaseLayer::getPropertyChoice(const std::string& _name) const
-{
-    return dynamic_cast<const dePropertyChoice*>(getProperty(_name));
-}
-
-dePropertyBoolean* deBaseLayer::getPropertyBoolean(const std::string& _name)
-{
-    return dynamic_cast<dePropertyBoolean*>(getProperty(_name));
-}
-
-const dePropertyBoolean* deBaseLayer::getPropertyBoolean(const std::string& _name) const
-{
-    return dynamic_cast<const dePropertyBoolean*>(getProperty(_name));
-}
-
-deValue deBaseLayer::getNumericValue(const std::string& name) const
-{
-    const dePropertyNumeric* p = getPropertyNumeric(name);
-    if (p)
-    {
-        return p->get();
-    }
-    return 0;
-}
-
-void deBaseLayer::applyPreset(const std::string& name)
-{
-    std::vector<dePreset*>::iterator i;
-    for (i = presets.begin(); i != presets.end(); i++)
-    {
-        dePreset* preset = *i;
-        if (preset->getName() == name)
-        {
-            preset->apply(*this);
-        }
-    }
-}
-
-void deBaseLayer::getPresets(std::vector<std::string>& names)
-{
-    std::vector<dePreset*>::iterator i;
-    for (i = presets.begin(); i != presets.end(); i++)
-    {
-        dePreset* preset = *i;
-        names.push_back(preset->getName());
-    }
-}
-
-dePreset* deBaseLayer::createPreset(const std::string& name)
-{
-    dePreset* preset = new dePreset(name);
-    presets.push_back(preset);
-    return preset;
-}

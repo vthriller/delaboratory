@@ -69,8 +69,6 @@ class deLayerProcessor
         deChannelManager& previewChannelManager;
         deMainWindow& mainWindow;
 
-        bool realtime;
-
         bool closing;
 
         deLayerProcessType layerProcessType;
@@ -158,9 +156,6 @@ class deLayerProcessor
         bool isClosing() const {return closing;};
 
         void render(deCanvas& canvas);
-
-        bool isRealtime() const;
-        void setRealtime(bool r);
 
         void removeAllLayers();
 

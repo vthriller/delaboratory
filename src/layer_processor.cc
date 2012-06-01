@@ -218,8 +218,6 @@ mainWindow(_mainWindow)
 
     closing = false;
 
-    realtime = true;
-
 }
 
 void deLayerProcessor::onDestroyAll()
@@ -867,16 +865,6 @@ void deLayerProcessor::onImageLoad()
 void deLayerProcessor::render(deCanvas& canvas)
 {
     renderer.render(canvas);
-}
-
-bool deLayerProcessor::isRealtime() const
-{
-    return realtime;
-}
-
-void deLayerProcessor::setRealtime(bool r)
-{
-    realtime = r;
 }
 
 void deLayerProcessor::setHistogramChannel(int channel)

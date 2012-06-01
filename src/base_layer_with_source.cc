@@ -20,7 +20,7 @@
 #include "layer_stack.h"
 
 deBaseLayerWithSource::deBaseLayerWithSource(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayerIndex, deLayerStack& _layerStack)
-:deBaseLayer(_colorSpace, _channelManager),
+:deBaseLayerWithProperties(_colorSpace, _channelManager),
 sourceLayerIndex(_sourceLayerIndex),
 layerStack(_layerStack)
 {

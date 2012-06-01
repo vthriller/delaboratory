@@ -55,17 +55,10 @@ class deBaseLayer
         bool errorOnUpdate;
         std::string warning;
 
-        std::vector<deProperty*> properties;
-        std::vector<dePreset*> presets;
-
         virtual bool updateBlendAllChannels() {return false;};
         bool updateMainImageAllChannels();
         virtual bool updateMainImageNotThreadedWay() {return false;};
         virtual bool updateImage();
-
-        void createPropertyNumeric(const std::string& _name, deValue _min, deValue _max);
-        void createPropertyChoice(const std::string& _name, const std::vector<std::string>& _choices);
-        void createPropertyBoolean(const std::string& _name);
 
     public:
         deBaseLayer(deColorSpace _colorSpace, deChannelManager& _channelManager);
@@ -93,28 +86,6 @@ class deBaseLayer
         void setErrorOnUpdateFromThread();
 
         std::string getWarning() const {return warning;};
-
-        deProperty* getProperty(const std::string& _name);
-        const deProperty* getProperty(const std::string& _name) const;
-
-        dePropertyNumeric* getPropertyNumeric(const std::string& _name);
-        const dePropertyNumeric* getPropertyNumeric(const std::string& _name) const;
-
-        dePropertyChoice* getPropertyChoice(const std::string& _name);
-        const dePropertyChoice* getPropertyChoice(const std::string& _name) const;
-
-        dePropertyBoolean* getPropertyBoolean(const std::string& _name);
-        const dePropertyBoolean* getPropertyBoolean(const std::string& _name) const;
-
-        void getProperties(std::vector<std::string>& names);
-
-        deValue getNumericValue(const std::string& name) const;
-
-        void applyPreset(const std::string& name);
-        void getPresets(std::vector<std::string>& names);
-        dePreset* createPreset(const std::string& name);
-
-        virtual void executeOperation(const std::string& o) {};
 
         virtual bool onImageClick(deValue x, deValue y) {return false;};
         virtual void beforeSetUIFromLayer() {};

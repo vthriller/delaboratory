@@ -19,10 +19,10 @@
 #ifndef _DE_BASE_LAYER_WITH_SOURCE_H
 #define _DE_BASE_LAYER_WITH_SOURCE_H
 
-#include "base_layer.h"
+#include "base_layer_with_properties.h"
 class deLayerStack;
 
-class deBaseLayerWithSource:public deBaseLayer
+class deBaseLayerWithSource:public deBaseLayerWithProperties
 {
     private:
         int sourceLayerIndex;

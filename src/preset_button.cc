@@ -19,8 +19,9 @@
 #include "preset_button.h"
 #include "layer_processor.h"
 #include "layer_frame.h"
+#include "base_layer_with_properties.h"
 
-dePresetButton::dePresetButton(deWindow& window, deBaseLayer& _layer, const std::string& name, deLayerProcessor& _layerProcessor, int _layerIndex, deLayerFrame& _frame)
+dePresetButton::dePresetButton(deWindow& window, deBaseLayerWithProperties& _layer, const std::string& name, deLayerProcessor& _layerProcessor, int _layerIndex, deLayerFrame& _frame)
 :deButton(window, name), preset(name), layerProcessor(_layerProcessor), layer(_layer), layerIndex(_layerIndex), frame(_frame)
 {
 }

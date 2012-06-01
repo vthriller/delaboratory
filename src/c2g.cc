@@ -52,10 +52,6 @@ void c2g(const deValue* source0, const deValue* source1, const deValue* source2,
             deValue min2 = 1.0;
             deValue max2 = 0.0;
 
-            deValue sum = 0.0;
-            int nn = 0;
-
-            int rr = r;
             int offset = lut.getStart(samples);
 
             int i = 0;

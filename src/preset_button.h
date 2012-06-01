@@ -21,7 +21,7 @@
 
 class deLayerProcessor;
 class deWindow;
-class deBaseLayer;
+class deBaseLayerWithProperties;
 class deLayerFrame;
 #include "button.h"
 
@@ -30,13 +30,13 @@ class dePresetButton:public deButton
     private:
         const std::string preset;
         deLayerProcessor& layerProcessor;
-        deBaseLayer& layer;
+        deBaseLayerWithProperties& layer;
         int layerIndex;
         deLayerFrame& frame;
 
 
     public:
-        dePresetButton(deWindow& window, deBaseLayer& _layer, const std::string& name, deLayerProcessor& _layerProcessor, int _layerIndex, deLayerFrame& _frame);
+        dePresetButton(deWindow& window, deBaseLayerWithProperties& _layer, const std::string& name, deLayerProcessor& _layerProcessor, int _layerIndex, deLayerFrame& _frame);
         virtual ~dePresetButton();
 
         virtual void onClick();
