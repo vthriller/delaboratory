@@ -112,6 +112,8 @@ dePropertyLevels* deLevelsLayer::getPropertyLevels()
 
 void deLevelsLayer::executeOperation(const std::string& operation)
 {
+    logInfo("levels layer operation: " + operation);
+
     int n = getColorSpaceSize(colorSpace);
 
     dePropertyLevels* propertyLevels = getPropertyLevels();

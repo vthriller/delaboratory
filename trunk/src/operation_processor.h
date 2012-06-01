@@ -37,8 +37,9 @@ class deOperationProcessor
         deOperationProcessor(deLayerProcessor& _layerProcessor, deProject& _project);
         virtual ~deOperationProcessor();
 
-
         void execute(const std::string& operation);
+
+        void initProfile(const std::string& profile);
 
 
 };

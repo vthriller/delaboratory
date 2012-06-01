@@ -182,6 +182,11 @@ bool deLaboratory::OnInit()
     {
         wxString a = argv[1];
         project.init(str(a));
+        if (argc > 2)
+        {
+            wxString a2 = argv[2];
+            operationProcessor.initProfile(str(a2));
+        }            
     }
 
     logInfo("OnInit done");
