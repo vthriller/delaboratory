@@ -9,7 +9,7 @@ You can find them in the *Downloads* section.
 
 .deb packages were created by Dariusz Duma
 
-Please read detailed informations here: [DebianUbuntuInstallation] 
+https://launchpad.net/~dhor/+archive/myway
 
 = OpenSUSE =  
 
