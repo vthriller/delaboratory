@@ -45,6 +45,7 @@ deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelMana
 deImage::~deImage()
 {
     logInfo("image destructor");
+    mutex.lock();
     int i;
     int s = getColorSpaceSize(colorSpace);
     for (i = 0; i < s; i++)
@@ -53,6 +54,7 @@ deImage::~deImage()
         logInfo("destroying channel " + str(a));
         channelManager.freeChannel(a);
     }        
+    mutex.unlock();
 }
 
 void deImage::enableChannel(int n)
@@ -66,6 +68,8 @@ void deImage::enableChannel(int n)
 
     int a = channelsAllocated[n];
     int v = channelsVisible[n];
+
+    channelManager.lock();
 
     if (a >= 0)
     {
@@ -88,6 +92,8 @@ void deImage::enableChannel(int n)
         channelManager.finishRead(v);
     }
 
+    channelManager.unlock();
+
     mutex.unlock();
 }
 
@@ -101,6 +107,8 @@ void deImage::disableChannel(int n, int c)
 
     int a = channelsAllocated[n];
 
+    channelManager.lock();
+
     if (a >= 0)
     {
         channelManager.startWrite(a);
@@ -113,6 +121,8 @@ void deImage::disableChannel(int n, int c)
     {
         channelManager.finishWrite(a);
     }
+
+    channelManager.unlock();
 
     mutex.unlock();
 }

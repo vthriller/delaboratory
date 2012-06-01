@@ -72,8 +72,6 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _channelMan
     layerProcessor.setViewManager(&viewManager);
 
     resetLayerStack(deColorSpaceRGB);
-
-
 }
 
 deProject::~deProject()
@@ -137,17 +135,21 @@ void deProject::onKey(int key)
 
 void deProject::init(const std::string& fileName)
 {
+    bool ok = false;
     if (openImage(fileName, true, deColorSpaceProPhoto))
     {
-        return;
-    }
-    if (openImage(fileName, false, deColorSpaceRGB))
+        ok = true;
+    } else if (openImage(fileName, false, deColorSpaceRGB))
     {
-        return;
+        ok = true;
     }
-    std::string s = "unable to open image: " + fileName;
-    logError(s);
-    wxMessageBox(str2wx(s));
+    if (!ok)
+    {
+        std::string s = "unable to open image: " + fileName;
+        logError(s);
+        wxMessageBox(str2wx(s));
+        return;
+    }        
 }
 
 void deProject::freeImage()
@@ -385,10 +387,63 @@ void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
     imageAreaPanel = _imageAreaPanel;
 }
 
-bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace colorSpace)
+bool deProject::openImageRAW(const std::string& fileName)
 {
     std::string info;
 
+    bool valid = isRawValid(fileName);
+    if (!valid)
+    {
+        logError("not a valid RAW " + fileName);
+        return false;
+    }
+
+    info = getRawInfo(fileName);
+
+    if (info.size() == 0)
+    {
+        logError("empty RAW info in " + fileName);
+        return false;
+    }
+
+    layerProcessor.sendInfoEvent(DE_DCRAW_START);
+    if (rawModule.loadRAW(fileName, sourceImage, deColorSpaceProPhoto, true))
+    {
+        logInfo("found RAW " + fileName);
+        bool failure = false;
+        while (!rawModule.updateRawLoading(failure))
+        {
+            wxThread::Sleep(200);
+            if (failure)
+            {
+                logError("failed RAW load " + fileName);
+                layerProcessor.sendInfoEvent(DE_DCRAW_END);
+                return false;
+            }
+        }
+        bool result = rawModule.loadRAW(fileName, sourceImage, deColorSpaceProPhoto, false);
+        if (!result)
+        {
+            return false;
+        }
+
+        mainWindow.startRawTimer();
+
+    }
+    else
+    {
+        logError("failed RAW " + fileName);
+        layerProcessor.sendInfoEvent(DE_DCRAW_END);
+        return false;
+    }
+
+    sourceImage.setInfo(info);
+
+    return true;
+}
+
+bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace colorSpace)
+{
     freeImage();
 
     logInfo("open image " + fileName);
@@ -397,49 +452,8 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
 
     if (raw)
     { 
-        bool valid = isRawValid(fileName);
-        if (!valid)
+        if (!openImageRAW(fileName))
         {
-            logError("not a valid RAW " + fileName);
-            return false;
-        }
-
-        info = getRawInfo(fileName);
-
-        if (info.size() == 0)
-        {
-            logError("empty RAW info in " + fileName);
-            return false;
-        }
-
-        layerProcessor.sendInfoEvent(DE_DCRAW_START);
-        if (rawModule.loadRAW(fileName, sourceImage, colorSpace, true))
-        {
-            logInfo("found RAW " + fileName);
-            bool failure = false;
-            while (!rawModule.updateRawLoading(failure))
-            {
-                wxThread::Sleep(200);
-                if (failure)
-                {
-                    logError("failed RAW load " + fileName);
-                    layerProcessor.sendInfoEvent(DE_DCRAW_END);
-                    return false;
-                }
-            }
-            bool result = rawModule.loadRAW(fileName, sourceImage, colorSpace, false);
-            if (!result)
-            {
-                return false;
-            }
-
-            mainWindow.startRawTimer();
-
-        }
-        else
-        {
-            logError("failed RAW " + fileName);
-            layerProcessor.sendInfoEvent(DE_DCRAW_END);
             return false;
         }
     }
@@ -453,7 +467,6 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
         }
     }            
 
-    sourceImage.setInfo(info);
 
     imageFileName = removePathAndExtension(fileName);
     onImageNameUpdate();
@@ -548,3 +561,4 @@ void deProject::onRemoveTopLayer()
     viewManager.setLastView();
     updateLayerGrid();
 }        
+

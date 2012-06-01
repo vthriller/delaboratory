@@ -76,6 +76,8 @@ class deProject
 
         void updateLayerGrid();
 
+        bool openImageRAW(const std::string& fileName);
+
     public:
         deProject(deLayerProcessor& _processor, deChannelManager& _channelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deMainWindow& _mainWindow);
 

@@ -20,6 +20,8 @@
 #include "layer_processor.h"
 #include "logger.h"
 #include "project.h"
+#include "layer_stack.h"
+#include "base_layer_with_properties.h"
 
 deOperationProcessor::deOperationProcessor(deLayerProcessor& _layerProcessor, deProject& _project)
 :layerProcessor(_layerProcessor), project(_project)
@@ -59,5 +61,27 @@ void deOperationProcessor::execute(const std::string& operation)
     {
         addNewLayerOnTop(layer);
         project.onAddNewLayer();
+    }
+}
+
+void deOperationProcessor::initProfile(const std::string& profile)
+{
+    if (profile == "cmyk_auto_levels")
+    {
+        execute("CMYK");
+        execute("levels");
+    }
+    if (profile == "bw")
+    {
+        execute("BW");
+    }
+    if (profile == "c2g")
+    {
+        execute("c2g");
+    }
+    if (profile == "vignette")
+    {
+        execute("LAB");
+        execute("vignette");
     }
 }

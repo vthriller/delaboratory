@@ -70,6 +70,9 @@ class deChannelManager
         deValue* startWrite(int index);
         void finishWrite(int index);
 
+        void lock();
+        void unlock();
+
 
 };
 
