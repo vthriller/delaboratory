@@ -44,7 +44,7 @@ void deImageAreaPanel::updateSize(bool canSkip)
     
     deValue aspect = project.getSourceAspect();
 
-    if (aspect == 0)
+    if (aspect <= 0)
     {
         logInfo("image area panel update size skipped, aspect is 0");
         return;

@@ -39,7 +39,7 @@ class deSize
     
         int getN() const {return w*h;};
 
-        float getAspect() const {return (float) w / h;};
+        float getAspect() const;
 
         std::string str() const;
 

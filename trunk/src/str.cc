@@ -167,3 +167,11 @@ std::string getUserConfigDir()
 
     return userConfigDir;
 }
+
+wxString str2wx(const std::string& s)
+{
+    const char* c = s.c_str();
+    wxString result(c, wxConvUTF8);
+
+    return result;
+}    

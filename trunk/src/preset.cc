@@ -19,7 +19,7 @@
 #include "preset.h"
 #include "property_numeric.h"
 
-void dePreset::apply(deBaseLayer& layer) const
+void dePreset::apply(deBaseLayerWithProperties& layer) const
 {
     std::map<std::string, deValue>::const_iterator i;
     for (i = numericValues.begin(); i != numericValues.end(); i++)

@@ -83,3 +83,12 @@ deSize deSize::rotated() const
     deSize s(h, w);
     return s;
 }
+
+float deSize::getAspect() const
+{
+    if (h > 0)
+    {
+        return (float) w / h;
+    }
+    return 0;
+}

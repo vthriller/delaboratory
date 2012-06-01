@@ -278,10 +278,7 @@ void deCurvesPanel::click(wxMouseEvent &event)
 void deCurvesPanel::update(bool finished)
 {
     paint();
-    if ((finished) || (layerProcessor.isRealtime()))
-    {
-        layerProcessor.markUpdateSingleChannel(layerIndex, channel);
-    }
+    layerProcessor.markUpdateSingleChannel(layerIndex, channel);
 }
 
 void deCurvesPanel::release(wxMouseEvent &event)

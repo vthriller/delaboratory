@@ -24,9 +24,9 @@ class deProject;
 class deChannelManager;
 class deViewManager;
 class deStaticImage;
-#include "base_layer.h"
+#include "base_layer_with_properties.h"
 
-class deSourceImageLayer:public deBaseLayer
+class deSourceImageLayer:public deBaseLayerWithProperties
 {
     private:
         deViewManager& viewManager;

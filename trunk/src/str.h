@@ -49,4 +49,6 @@ std::string insertIndex(const std::string& s, int index);
 
 std::string getUserConfigDir();
 
+wxString str2wx(const std::string& s);
+
 #endif

@@ -27,7 +27,7 @@
 #include "property_choice.h"
 
 deSourceImageLayer::deSourceImageLayer(deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace)
-:deBaseLayer(_colorSpace, _previewChannelManager) ,
+:deBaseLayerWithProperties(_colorSpace, _previewChannelManager) ,
 viewManager(_viewManager),
 sourceImage(_sourceImage)
 {
@@ -77,6 +77,12 @@ bool deSourceImageLayer::updateMainImageNotThreadedWay()
 deValue deSourceImageLayer::getAspect() const
 {
     deValue aspect = sourceImage.getAspect();
+
+    if (aspect == 0)
+    {
+        return 0;
+    }
+
     int rotate = getInt(getPropertyChoice("rotate")->get());
     if ((rotate == 90) || (rotate == 270))
     {

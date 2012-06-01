@@ -72,6 +72,7 @@ void deStaticImage::setSize(const deSize& _size)
         return;
     }
     size = _size;
+    logInfo("static image set size " + str(size.getW()) + "x" + str(size.getH())); 
     int n = 3;
     int i;
     for (i = 0; i < n; i++)
@@ -301,6 +302,8 @@ deSize deStaticImage::getStaticImageSize() const
 
 void deStaticImage::scaleChannel(const deValue* src, deValue* dst, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, int w, int h, bool mirrorX, bool mirrorY, int rotate)
 {
+    logInfo("scale channel START");
+
     int ws = size.getW();
     int hs = size.getH();
 
@@ -381,6 +384,8 @@ void deStaticImage::scaleChannel(const deValue* src, deValue* dst, deValue z_x1,
         }
 
     }        
+
+    logInfo("scale channel DONE");
 }
 
 

@@ -38,6 +38,8 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
 :deLayerFrame(parent, name, _layer, _frameManager, _index), layerProcessor(_layerProcessor)
 {
 
+    deBaseLayerWithProperties* layerWP = dynamic_cast<deBaseLayerWithProperties*>(&layer);
+
     addSizer("channels");
 
     std::vector<std::string> names;
@@ -46,7 +48,10 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
     deWindow& window = getWindow();
 
     names.clear();
-    layer.getProperties(names);
+    if (layerWP)
+    {
+        layerWP->getProperties(names);
+    }        
 
     int width = 400;
     int widthn = 120;
@@ -55,7 +60,7 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
     for (i = names.begin(); i != names.end(); i++)
     {
         std::string n = *i;
-        deProperty* property = layer.getProperty(n);
+        deProperty* property = layerWP->getProperty(n);
 
         dePropertyNumeric* numeric = dynamic_cast<dePropertyNumeric*>(property);
         if (numeric)
@@ -142,14 +147,17 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
     addSizer("presets");
 
     names.clear();
-    layer.getPresets(names);
-
-    for (i = names.begin(); i != names.end(); i++)
+    if (layerWP)
     {
-        std::string n = *i;
-        dePresetButton* b = new dePresetButton(window, layer, n, _layerProcessor, _index, *this);
+        layerWP->getPresets(names);
 
-        addWidget("presets", b->getWindow());
+        for (i = names.begin(); i != names.end(); i++)
+        {
+            std::string n = *i;
+            dePresetButton* b = new dePresetButton(window, *layerWP, n, _layerProcessor, _index, *this);
+
+            addWidget("presets", b->getWindow());
+        }
     }
 
     fit();

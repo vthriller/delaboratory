@@ -147,8 +147,7 @@ void deProject::init(const std::string& fileName)
     }
     std::string s = "unable to open image: " + fileName;
     logError(s);
-    wxString ws = wxString::FromAscii(s.c_str());
-    wxMessageBox(ws);
+    wxMessageBox(str2wx(s));
 }
 
 void deProject::freeImage()

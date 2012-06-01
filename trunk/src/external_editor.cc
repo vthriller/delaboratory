@@ -18,8 +18,9 @@
 
 #include "external_editor.h"
 #include <wx/wx.h>
+#include "str.h"
 
-#define WINDOWS_GIMP_EXE "gimp-2.7.exe"
+#define WINDOWS_GIMP_EXE "gimp-2.8.exe"
 
 void executeExternalEditor(const std::string& fileName, const std::string& app)
 {
@@ -35,7 +36,7 @@ void executeExternalEditor(const std::string& fileName, const std::string& app)
 #endif    
 
 
-    const wxString command = wxString::FromAscii(executable.c_str()) + _T(" ") + s;
+    const wxString command = str2wx(executable) + _T(" ") + s;
     wxExecute(command);
 
 }
