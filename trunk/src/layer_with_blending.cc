@@ -24,6 +24,7 @@
 #include <iostream>
 #include "str.h"
 #include "property_numeric.h"
+#include "property_boolean.h"
 #include "logger.h"
 #include "blend_color_luminosity.h"
 
@@ -60,8 +61,11 @@ deLayerWithBlending::deLayerWithBlending(deColorSpace _colorSpace, deChannelMana
     createPropertyChoice("blend mode", getSupportedBlendModeNames(colorSpace));
 
     dePropertyChoice* blendMode = getPropertyChoice("blend mode");
-//    blendMode->setSizer("channels");
+    blendMode->setSizer("blend");
     blendMode->setBlendOnly();
+
+    createPropertyBoolean("invert");
+    getPropertyBoolean("invert")->setSizer("blend");
 
     setBlendMode(deBlendNormal);
 
@@ -88,6 +92,12 @@ void deLayerWithBlending::setOpacity(deValue _opacity)
 
 bool deLayerWithBlending::isBlendingEnabled() const
 {
+    bool inverted = getPropertyBoolean("invert")->get();
+    if (inverted)
+    {
+        return true;
+    }
+
     if (getNumericValue("opacity") < 1.0)
     {
         return true;
@@ -148,7 +158,16 @@ bool deLayerWithBlending::updateBlend(int i)
     int channelSize = mainLayerImage.getChannelSize().getN();
 
     deValue o = getOpacity();
-    blendChannel(source, overlay, destination, maskPixels, getBlendMode(), o, channelSize);
+    bool inverted = getPropertyBoolean("invert")->get();
+
+    if (inverted)
+    {
+        blendChannel(overlay, source, destination, maskPixels, getBlendMode(), o, channelSize);
+    }        
+    else
+    {
+        blendChannel(source, overlay, destination, maskPixels, getBlendMode(), o, channelSize);
+    }        
 
     getSourceImage().finishRead(i);
     mainLayerImage.finishRead(i);

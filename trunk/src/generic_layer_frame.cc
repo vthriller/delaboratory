@@ -41,6 +41,7 @@ deGenericLayerFrame::deGenericLayerFrame(deWindow& parent, const std::string& na
     deBaseLayerWithProperties* layerWP = dynamic_cast<deBaseLayerWithProperties*>(&layer);
 
     addSizer("channels");
+    addSizer("blend");
 
     std::vector<std::string> names;
     std::vector<std::string>::iterator i;
