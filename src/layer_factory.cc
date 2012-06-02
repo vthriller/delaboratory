@@ -25,7 +25,7 @@
 #include "saturation_layer.h"
 #include "white_balance_layer.h"
 #include "exposure_layer.h"
-#include "apply_original_layer.h"
+//#include "apply_original_layer.h"
 #include "vignette_layer.h"
 #include "gradient_layer.h"
 #include "gaussian_blur_layer.h"
@@ -33,6 +33,7 @@
 #include "recover_highlights_layer.h"
 #include "recover_shadows_layer.h"
 #include "mixer_layer.h"
+#include "copy_layer.h"
 #include "conversion_layer.h"
 #include "source_image_layer.h"
 #include "high_pass_layer.h"
@@ -62,15 +63,22 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
         return new deMixerLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
     }
 
+    if (type == "copy")
+    {
+        return new deCopyLayer(colorSpace, _channelManager, source, _layerStack);
+    }
+
     if (type == "levels")
     {
         return new deLevelsLayer(colorSpace, _channelManager, source, _layerStack);
     }        
 
+/*
     if (type == "apply_original")
     {
         return new deApplyOriginalLayer(colorSpace, _channelManager, source, _layerStack);
     }        
+    */
 
     if (type == "fill")
     {
@@ -190,9 +198,10 @@ void getSupportedActions(std::vector<std::string>& actions)
     actions.push_back("recover_highlights");
     actions.push_back("recover_shadows");
     actions.push_back("mixer");
-    actions.push_back("apply_original");
     actions.push_back("high_pass");
     actions.push_back("c2g");
+//    actions.push_back("apply_original");
+    actions.push_back("copy");
 }
 
 std::string getActionDescription(const std::string& a)

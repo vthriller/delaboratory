@@ -16,30 +16,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_BASE_LAYER_WITH_SOURCE_H
-#define _DE_BASE_LAYER_WITH_SOURCE_H
+#ifndef _DE_COPY_LAYER_H
+#define _DE_COPY_LAYER_H
 
-#include "base_layer_with_properties.h"
+#include "layer_with_blending.h"
+#include "image.h"
 class deLayerStack;
+class deChannelManager;
 
-class deBaseLayerWithSource:public deBaseLayerWithProperties
+class deCopyLayer:public deLayerWithBlending
 {
     private:
-        int sourceLayerIndex;
-        deLayerStack& layerStack;
-
-        const deBaseLayer& getSourceLayer() const;
-        const deBaseLayer& getOriginalLayer() const;
+        virtual std::string getType() const {return "copy";};
 
     public:
-        deBaseLayerWithSource(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
-        virtual ~deBaseLayerWithSource();
+        deCopyLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
+        virtual ~deCopyLayer();
 
-        const deImage& getOriginalImage() const;
-        const deImage& getSourceImage() const;
-        const deImage& getOtherLayerImage(int a) const;
-        deColorSpace getSourceColorSpace() const;
-        int getLayerStackSize() const;
+        virtual bool updateMainImageNotThreadedWay();
+
+        virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
 
 };

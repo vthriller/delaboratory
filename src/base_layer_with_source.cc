@@ -65,3 +65,8 @@ deColorSpace deBaseLayerWithSource::getSourceColorSpace() const
 {
     return getSourceLayer().getColorSpace();
 }
+
+int deBaseLayerWithSource::getLayerStackSize() const
+{
+    return layerStack.getSize();
+}
