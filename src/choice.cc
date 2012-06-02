@@ -32,6 +32,13 @@ class deChoiceImpl:public dePanelWX
             wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
             SetSizer(sizer);
 
+            if (_name.size() > 0)
+            {
+                int widthn = 80;
+                wxStaticText* label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(_name.c_str()), wxDefaultPosition, wxSize(widthn, 30));
+                sizer->Add(label, 0, wxCENTER);
+            }
+
             wxString* ws = new wxString [choices.size()];
             unsigned int i;
             for (i = 0; i < choices.size(); i++)

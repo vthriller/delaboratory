@@ -60,7 +60,7 @@ deLayerWithBlending::deLayerWithBlending(deColorSpace _colorSpace, deChannelMana
     createPropertyChoice("blend mode", getSupportedBlendModeNames(colorSpace));
 
     dePropertyChoice* blendMode = getPropertyChoice("blend mode");
-    blendMode->setSizer("channels");
+//    blendMode->setSizer("channels");
     blendMode->setBlendOnly();
 
     setBlendMode(deBlendNormal);
