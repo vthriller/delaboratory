@@ -33,9 +33,10 @@ deRadialLUT::deRadialLUT(int _size, int r)
     for (i = 0; i < size; i++)
     {
         deValue angle = (rand () % 1024) / 1024.0 * 2 * M_PI;
-        deValue radius = (rand () % 1024) / 1024.0 * r + 1.0;
-        int xx = sin(angle) * radius;
-        int yy = cos(angle) * radius;
+        deValue radius_1 = ((rand () % 1024) / 1024.0 * r + 1.0);
+        deValue radius_2 = ((rand () % 1024) / 1024.0 * radius_1 + 1.0);
+        int xx = sin(angle) * radius_2;
+        int yy = cos(angle) * radius_2;
         lut[2*i+0] = xx;
         lut[2*i+1] = yy;
     }
