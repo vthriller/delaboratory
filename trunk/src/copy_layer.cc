@@ -77,6 +77,6 @@ void deCopyLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layer
     const deImage& image = getOtherLayerImage(l);
     image.updateChannelUsage(channelUsage, layerIndex);
 
-    deBaseLayer::updateChannelUsage(channelUsage, layerIndex);
+    deLayerWithBlending::updateChannelUsage(channelUsage, layerIndex);
 }
 
