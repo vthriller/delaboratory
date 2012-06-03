@@ -1,6 +1,5 @@
 #summary Development News
 
-http://delaboratory.googlecode.com/svn/trunk/screenshots/devel.jpg
 
 -----
 *2012.05.30*
