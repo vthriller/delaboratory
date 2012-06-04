@@ -16,12 +16,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_FRACTAL_H
-#define _DE_FRACTAL_H
+#ifndef _DE_LOAD_TIFF_H
+#define _DE_LOAD_TIFF_H
 
+class deStaticImage;
+#include <string>
 #include "value.h"
 #include "size.h"
 
-void generateFractal(deValue* r, deValue* g, deValue* b, deSize size);
+bool loadTIFF(const std::string& fileName, deStaticImage& image);
+void saveTIFF(const std::string& fileName, const deValue* channelR, const deValue* channelG, const deValue* channelB, deSize size);
 
 #endif

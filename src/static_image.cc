@@ -17,12 +17,11 @@
 */
 
 #include "static_image.h"
-#include "channel.h"
 #include "logger.h"
 #include "color_space_utils.h"
 #include "str.h"
 #include "copy_channel.h"
-
+#include "scale_channel.h"
 
 deStaticImage::deStaticImage()
 :colorSpace(deColorSpaceInvalid),
@@ -35,10 +34,8 @@ deStaticImage::deStaticImage()
     int i;
     for (i = 0; i < n; i++)
     {
-        deChannel* c = new deChannel();
-        channels.push_back(c);
+        channels.push_back(NULL);
         mutexes.push_back(new deMutexReadWrite(4));
-        channels[i]->allocate(size.getN());
     }
 }
 
@@ -55,7 +52,10 @@ deStaticImage::~deStaticImage()
     unsigned int i;
     for (i = 0; i < channels.size(); i++)
     {
-        delete channels[i];
+        if (channels[i])
+        {
+            delete [] channels[i];
+        }
         delete mutexes[i];
     }
 }
@@ -77,8 +77,11 @@ void deStaticImage::setSize(const deSize& _size)
     int i;
     for (i = 0; i < n; i++)
     {
-        channels[i]->deallocate();
-        channels[i]->allocate(size.getN());
+        if (channels[i])
+        {
+            delete [] channels[i];
+        }            
+        channels[i] = new deValue[size.getN()];
     }
 }
 
@@ -111,7 +114,7 @@ const deValue* deStaticImage::startReadStatic(int index)
         return NULL;
     }
     mutexes[index]->lockRead();
-    return channels[index]->getPixels();
+    return channels[index];
 }
 
 deValue* deStaticImage::startWriteStatic(int index)
@@ -128,7 +131,7 @@ deValue* deStaticImage::startWriteStatic(int index)
         return NULL;
     }
     mutexes[index]->lockWrite();
-    return channels[index]->getPixels();
+    return channels[index];
 }
 
 void deStaticImage::finishReadStatic(int index)
@@ -186,106 +189,12 @@ void deStaticImage::copyToChannel(int channel, deValue* destination, deValue z_x
     }
     const deValue* source = startReadStatic(channel);
 
-    scaleChannel(source, destination, z_x1, z_y1, z_x2, z_y2, w, h, mirrorX, mirrorY, rotate);
-
-    finishReadStatic(channel);
-}
-
-deValue deStaticImage::samplePixel(const deValue* src, int xx1, int xx2, int yy1, int yy2, bool mirrorX, bool mirrorY)
-{
     int ws = size.getW();
     int hs = size.getH();
 
-    if (xx1 < 0)
-    {
-        xx1 = 0;
-    }
-    else if (xx1 >= ws)
-    {
-        xx1 = ws - 1;
-    }
-    if (xx2 < 0)
-    {
-        xx2 = 0;
-    }
-    else if (xx2 >= ws)
-    {
-        xx2 = ws - 1;
-    }
-    if (yy1 < 0)
-    {
-        yy1 = 0;
-    }
-    else if (yy1 >= hs)
-    {
-        yy1 = hs - 1;
-    }
-    if (yy2 < 0)
-    {
-        yy2 = 0;
-    }
-    else if (yy2 >= hs)
-    {
-        yy2 = hs - 1;
-    }
+    scaleChannel(source, destination, z_x1, z_y1, z_x2, z_y2, w, h, mirrorX, mirrorY, rotate, ws, hs);
 
-    int n = 0;
-    int x0;
-    int y0;
-    deValue value = 0.0;
-
-    if ((!mirrorX) && (!mirrorY))
-    {
-        for (x0 = xx1; x0 <= xx2; x0++)
-        {
-            for (y0 = yy1; y0 <= yy2; y0++)
-            {
-                value += src[x0 + y0 * ws];
-                n++;
-            }
-        }
-    }
-    if ((mirrorX) && (!mirrorY))
-    {
-        for (x0 = xx1; x0 <= xx2; x0++)
-        {
-            for (y0 = yy1; y0 <= yy2; y0++)
-            {
-                value += src[(ws - 1 - x0) + y0 * ws];
-                n++;
-            }
-        }
-    }
-    if ((!mirrorX) && (mirrorY))
-    {
-        for (x0 = xx1; x0 <= xx2; x0++)
-        {
-            for (y0 = yy1; y0 <= yy2; y0++)
-            {
-                value += src[x0 + (hs - 1 - y0) * ws];
-                n++;
-            }
-        }
-    }
-    if ((mirrorX) && (mirrorY))
-    {
-        for (x0 = xx1; x0 <= xx2; x0++)
-        {
-            for (y0 = yy1; y0 <= yy2; y0++)
-            {
-                value += src[(ws - 1 - x0) + (hs - 1 - y0) * ws];
-                n++;
-            }
-        }
-    }
-
-    if (n == 0)
-    {
-        logError("sample pixel failed, no pixels inside box");
-        return 0.0;
-    }
-
-    return value / n;
+    finishReadStatic(channel);
 }
 
 deSize deStaticImage::getStaticImageSize() const
@@ -299,95 +208,6 @@ deSize deStaticImage::getStaticImageSize() const
         return size;
     }
 }
-
-void deStaticImage::scaleChannel(const deValue* src, deValue* dst, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, int w, int h, bool mirrorX, bool mirrorY, int rotate)
-{
-    logInfo("scale channel START");
-
-    int ws = size.getW();
-    int hs = size.getH();
-
-    int x1;
-    int y1;
-    int x2;
-    int y2;
-    x1 = ws * z_x1;
-    y1 = hs * z_y1;
-    x2 = ws * z_x2;
-    y2 = hs * z_y2;
-    if ((rotate == 90) || (rotate == 270))
-    {
-        x1 = hs * z_x1;
-        y1 = ws * z_y1;
-        x2 = hs * z_x2;
-        y2 = ws * z_y2;
-    }
-
-    deValue scaleW;
-    deValue scaleH;
-
-    deValue dx = x2 - x1;
-    deValue dy = y2 - y1;
-
-    scaleW = dx / w;
-    scaleH = dy / h;
-
-    if (scaleW <= 0)
-    {
-        logError("scaleW: " + str(scaleW));
-    }
-    if (scaleH <= 0)
-    {
-        logError("scaleH: " + str(scaleH));
-    }
-
-    logInfo("scaleW: " + str(scaleW));
-    logInfo("scaleH: " + str(scaleH));
-
-    int yy1;
-    int yy2;
-    int xx1;
-    int xx2;
-
-    int x;
-    for (x = 0; x < w; x++)
-    {
-        xx1 = scaleW * x;
-        xx2 = scaleW * (x + 1);
-
-        int y;
-        for (y = 0; y < h; y++)
-        {
-            yy1 = scaleH * y;
-            yy2 = scaleH * (y + 1);
-
-            deValue v = 1;
-
-            if (rotate == 0)
-            {
-                v = samplePixel(src, x1 + xx1, x1 + xx2, y1 + yy1, y1 + yy2, mirrorX, mirrorY);
-            }   
-            if (rotate == 90)
-            {
-                v = samplePixel(src, ws - 1 - yy2 - y1, ws - 1 - yy1 - y1, xx1 + x1, xx2 + x1,  mirrorX, mirrorY);
-            }   
-            if (rotate == 180)
-            {
-                v = samplePixel(src, ws - 1 - xx2 - x1, ws - 1 - xx1 - x1, hs - 1 - yy2 - y1, hs - 1 - yy1 - y1, mirrorX, mirrorY);
-            }   
-            if (rotate == 270)
-            {
-                v = samplePixel(src, y1 + yy1, y1 + yy2, hs - 1 - xx2 - x1, hs - 1 - xx1 - x1, mirrorX, mirrorY);
-            }   
-
-            dst[y * w + x] = v;
-        }
-
-    }        
-
-    logInfo("scale channel DONE");
-}
-
 
 deValue deStaticImage::getAspect() const
 {

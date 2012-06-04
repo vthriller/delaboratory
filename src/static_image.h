@@ -24,13 +24,12 @@
 #include "size.h"
 #include "mutex.h"
 #include <vector>
-class deChannel;
 
 class deStaticImage
 {
     private:
         deColorSpace colorSpace;
-        std::vector<deChannel*> channels;
+        std::vector<deValue*> channels;
         std::vector<deMutexReadWrite*> mutexes;
         deSize size;
         mutable deMutex mutex;
@@ -42,9 +41,6 @@ class deStaticImage
         const deValue* startReadStatic(int index);
         void finishReadStatic(int index);
 
-        void scaleChannel(const deValue* src, deValue* dst, deValue x1, deValue y1, deValue x2, deValue y2, int w, int h, bool mirrorX, bool mirrorY, int rotate);
-        deValue samplePixel(const deValue* src, int xx1, int xx2, int yy1, int yy2, bool mirrorX, bool mirrorY);
-        
         deStaticImage(const deStaticImage& i);
         deStaticImage& operator = (const deStaticImage& i);
 
