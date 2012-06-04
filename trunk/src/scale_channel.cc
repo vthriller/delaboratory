@@ -17,72 +17,82 @@
 */
 
 #include "scale_channel.h"
-#include "channel.h"
-#include <iostream>
-#include <cassert>
+#include "sample_pixel.h"
 
-void scaleChannel(const deValue* src, deValue* dst, int x1, int y1, int x2, int y2, int w, int h, int ws)
+void scaleChannel(const deValue* src, deValue* dst, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, int w, int h, bool mirrorX, bool mirrorY, int rotate, int ws, int hs)
 {
-    if (w <= 0)
+    int x1;
+    int y1;
+    int x2;
+    int y2;
+    x1 = ws * z_x1;
+    y1 = hs * z_y1;
+    x2 = ws * z_x2;
+    y2 = hs * z_y2;
+    if ((rotate == 90) || (rotate == 270))
     {
-        return;
-    }
-    if (h <= 0)
-    {
-        return;
+        x1 = hs * z_x1;
+        y1 = ws * z_y1;
+        x2 = hs * z_x2;
+        y2 = ws * z_y2;
     }
 
-    deValue ww = x2 - x1;
-    deValue scaleW = ww / w;
+    deValue scaleW;
+    deValue scaleH;
 
-    deValue hh = y2 - y1;
-    deValue scaleH = hh / h;
+    deValue dx = x2 - x1;
+    deValue dy = y2 - y1;
+
+    scaleW = dx / w;
+    scaleH = dy / h;
+
+    if (scaleW <= 0)
+    {
+    }
+    if (scaleH <= 0)
+    {
+    }
+
+    int yy1;
+    int yy2;
+    int xx1;
+    int xx2;
 
     int x;
     for (x = 0; x < w; x++)
     {
+        xx1 = scaleW * x;
+        xx2 = scaleW * (x + 1);
+
         int y;
-
-        int xx1 = x1 + scaleW * x;
-        int xx2 = x1 + scaleW * (x + 1);
-        if (xx2 >= x2)
-        {
-            xx2 = x2 - 1;
-        }
-
         for (y = 0; y < h; y++)
         {
-            int yy1 = y1 + scaleH * y;
-            int yy2 = y1 + scaleH * (y + 1);
-            if (yy2 >= y2)
+            yy1 = scaleH * y;
+            yy2 = scaleH * (y + 1);
+
+            deValue v = 1;
+
+            if (rotate == 0)
             {
-                yy2 = y2 - 1;
-            }
-
-            deValue value = 0.0;
-            int n = 0;
-
-            int x0;
-            int y0;
-
-            for (x0 = xx1; x0 <= xx2; x0++)
+                v = samplePixel(src, x1 + xx1, x1 + xx2, y1 + yy1, y1 + yy2, mirrorX, mirrorY, ws, hs);
+            }   
+            if (rotate == 90)
             {
-                for (y0 = yy1; y0 <= yy2; y0++)
-                {
-                    value += src[x0 + y0 * ws];
-                    n++;
-                }
-            }
-
-            if (n > 0)
+                v = samplePixel(src, ws - 1 - yy2 - y1, ws - 1 - yy1 - y1, xx1 + x1, xx2 + x1,  mirrorX, mirrorY, ws, hs);
+            }   
+            if (rotate == 180)
             {
-               deValue v = value / n;
-               dst[y*w+x] = v;
-            }           
+                v = samplePixel(src, ws - 1 - xx2 - x1, ws - 1 - xx1 - x1, hs - 1 - yy2 - y1, hs - 1 - yy1 - y1, mirrorX, mirrorY, ws, hs);
+            }   
+            if (rotate == 270)
+            {
+                v = samplePixel(src, y1 + yy1, y1 + yy2, hs - 1 - xx2 - x1, hs - 1 - xx1 - x1, mirrorX, mirrorY, ws, hs);
+            }   
+
+            dst[y * w + x] = v;
         }
 
     }        
 
-
-
 }
+

@@ -16,11 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_SCALE_CHANNEL_H
-#define _DE_SCALE_CHANNEL_H
+#ifndef _DE_SAMPLE_PIXEL_H
+#define _DE_SAMPLE_PIXEL_H
 
 #include "value.h"
 
-void scaleChannel(const deValue* src, deValue* dst, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, int w, int h, bool mirrorX, bool mirrorY, int rotate, int ws, int hs);
+deValue samplePixel(const deValue* src, int xx1, int xx2, int yy1, int yy2, bool mirrorX, bool mirrorY, int ws, int hs);
 
 #endif
