@@ -17,7 +17,6 @@
 */
 
 #include "curve.h"
-#include "channel.h"
 #include <cmath>
 #include <iostream>
 #include <sstream>

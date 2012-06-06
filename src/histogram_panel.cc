@@ -19,7 +19,6 @@
 #include "histogram_panel.h"
 #include "project.h"
 #include "color_space.h"
-#include "channel.h"
 #include <sstream>
 #include "base_layer.h"
 #include "image.h"
@@ -83,20 +82,25 @@ void deHistogramPanel::generateHistogram()
 
     logInfo("generate histogram...");
 
-    project->getLayerProcessor().lock();
+    //bool error = false;
 
     generated = false;
+
     deLayerStack& layerStack = project->getLayerStack();
     deViewManager& viewManager = project->getViewManager();
 
     int viewV = viewManager.getView();
+
+    project->getLayerProcessor().lock();
+
     int view = project->getLayerProcessor().getLastValidLayer();
     if (view > viewV)
     {
         view = viewV;
     }
+    const deBaseLayer* layer = layerStack.startReadLayer(view);
 
-    deBaseLayer* layer = layerStack.getLayer(view);
+    project->getLayerProcessor().unlock();
 
     if (layer)
     {
@@ -125,7 +129,6 @@ void deHistogramPanel::generateHistogram()
         image.finishRead(channel);
     }        
 
-    project->getLayerProcessor().unlock();
 
     if (layer)
     {
@@ -135,6 +138,9 @@ void deHistogramPanel::generateHistogram()
 
         generated = histogram.render(renderedImage.getCurrentImageData(), width, sizeH, g1, g2, margin);
     }        
+
+    layerStack.finishReadLayer(view);
+
     logInfo("generate histogram DONE");
 
     mutex.unlock();

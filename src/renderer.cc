@@ -102,54 +102,50 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
         return false;
     }
 
-    deBaseLayer* layer = layerStack.getLayer(view);
-    if (!layer)
+    const deBaseLayer* layer = layerStack.startReadLayer(view);
+
+    if (layer)
     {
-        logError("no layer");
-        mutex.unlock();
-        return false;
-    }
+        const deImage& layerImage = layer->getLayerImage();
 
-    layer->lockLayer();
-
-    const deImage& layerImage = layer->getLayerImage();
-
-    if (!layerImage.isReady())
-    {
-        logError("layer image not ready");
-        mutex.unlock();
-        layer->unlockLayer();
-        return false;
-    }
-
-    bool reversed = false;
-    deColorSpace colorSpace = layerImage.getColorSpace();
-
-    if ((colorSpace == deColorSpaceCMYK))
-    {
-        reversed = true;
-    }
-
-    if (viewManager.isSingleChannel())
-    {
-        renderChannel(layerImage, viewManager.getChannel(), getCurrentImageData(), channelManager, reversed);
-        renderedImage.clearError();
-    }
-    else
-    {
-        deConversionProcessor p;
-        if (!p.renderImageToRGBNew(layerImage, getCurrentImageData()))
+        if (!layerImage.isReady())
         {
-            logError("render image FAILED");
-            renderedImage.setError();
+            logError("layer image not ready");
         }
         else
         {
-            renderedImage.clearError();
-        }
+            if (viewManager.isSingleChannel())
+            {
+                bool reversed = false;
+                deColorSpace colorSpace = layerImage.getColorSpace();
+                if (colorSpace == deColorSpaceCMYK)
+                {
+                    reversed = true;
+                }
+                renderChannel(layerImage, viewManager.getChannel(), getCurrentImageData(), channelManager, reversed);
+                renderedImage.clearError();
+            }
+            else
+            {
+                deConversionProcessor p;
+                if (!p.renderImageToRGBNew(layerImage, getCurrentImageData()))
+                {
+                    logError("render image FAILED");
+                    renderedImage.setError();
+                }
+                else
+                {
+                    renderedImage.clearError();
+                }
+            }
+        }            
+    }        
+    else
+    {
+        logError("no layer in renderer");
     }
 
-    layer->unlockLayer();
+    layerStack.finishReadLayer(view);
 
     mutex.unlock();
 

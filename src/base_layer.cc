@@ -31,7 +31,7 @@ class deUpdateActionThread:public wxThread
     private:
         virtual void *Entry()
         {
-            bool result = layer.updateMainImageSingleChannel(channel);
+            bool result = layer.processMainImageSingleChannel(channel);
             if (!result)
             {
                 logError("update action failed");
@@ -58,10 +58,8 @@ class deUpdateActionThread:public wxThread
 
 deBaseLayer::deBaseLayer(deColorSpace _colorSpace, deChannelManager& _channelManager)
 :colorSpace(_colorSpace),
- channelManager(_channelManager),
  mainLayerImage(_colorSpace, _channelManager)
 {
-    warning = "OK";
 }
 
 deBaseLayer::~deBaseLayer()
@@ -177,10 +175,21 @@ bool deBaseLayer::updateMainImageAllChannels()
 
 void deBaseLayer::processSingleChannel(int channel)
 {
-    logInfo("base layer process single channel");
-    updateMainImageSingleChannel(channel);
-    logInfo("base layer process single channel DONE");
+    processMainImageSingleChannel(channel);
 }    
+
+bool deBaseLayer::processMainImageSingleChannel(int channel)
+{
+    bool result = true;
+    logInfo("base layer process main image single channel");
+    if (setChannelInMainImage(channel))
+    {
+        logInfo("base layer process main image single channel after set");
+        result = updateMainImageSingleChannel(channel);
+    }
+    logInfo("base layer process main image single channel DONE");
+    return result;
+}
 
 bool deBaseLayer::updateImage()
 {
@@ -192,4 +201,3 @@ bool deBaseLayer::updateImage()
 
     return result;
 }
-

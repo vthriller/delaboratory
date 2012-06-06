@@ -92,3 +92,18 @@ void deSwitchableLayer::disableChannel(int index)
     getPropertyBoolean(n)->set(false);
 }
 
+bool deSwitchableLayer::setChannelInMainImage(int i)
+{
+    // enable/disable channels
+    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
+    {
+        const deImage& sourceImage = getSourceImage();
+        int s = sourceImage.getChannelIndex(i);
+        mainLayerImage.disableChannel(i, s);
+        return false;
+    }
+
+    mainLayerImage.enableChannel(i);
+    return true;
+}
+

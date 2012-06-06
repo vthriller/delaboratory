@@ -48,12 +48,13 @@ class deBaseLayer
 
         deMutex mutex;
 
+        virtual bool setChannelInMainImage(int channel) {return true;};
+        virtual bool updateMainImageSingleChannel(int channel) {return false;};
+
     protected:
         deColorSpace colorSpace;
-        deChannelManager& channelManager;
         deImage mainLayerImage;
         bool errorOnUpdate;
-        std::string warning;
 
         virtual bool updateBlendAllChannels() {return false;};
         bool updateMainImageAllChannels();
@@ -81,14 +82,15 @@ class deBaseLayer
         virtual const deImage& getLayerImage() const;
 
         virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
-        virtual bool updateMainImageSingleChannel(int channel) {return false;};
 
         void setErrorOnUpdateFromThread();
 
-        std::string getWarning() const {return warning;};
+        virtual std::string getWarning() const {return "OK";};
 
         virtual bool onImageClick(deValue x, deValue y) {return false;};
         virtual void beforeSetUIFromLayer() {};
+
+        bool processMainImageSingleChannel(int channel);
 
 };
 

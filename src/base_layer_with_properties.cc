@@ -17,7 +17,6 @@
 */
 
 #include "base_layer_with_properties.h"
-
 #include "color_space_utils.h"
 #include "logger.h"
 #include "semaphore.h"
@@ -123,9 +122,9 @@ const deProperty* deBaseLayerWithProperties::getProperty(const std::string& _nam
     return NULL;
 }
 
-void deBaseLayerWithProperties::getProperties(std::vector<std::string>& names)
+void deBaseLayerWithProperties::getProperties(std::vector<std::string>& names) const
 {
-    std::vector<deProperty*>::iterator i;
+    std::vector<deProperty*>::const_iterator i;
     for (i = properties.begin(); i != properties.end(); i++)
     {
         deProperty* property = *i;

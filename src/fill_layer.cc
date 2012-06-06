@@ -45,14 +45,15 @@ deFillLayer::~deFillLayer()
 
 bool deFillLayer::updateMainImageSingleChannel(int channel)
 {
+/*
     if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
     {
         int s = getSourceImage().getChannelIndex(channel);
         mainLayerImage.disableChannel(channel, s);
         return true;
     }
-
-    mainLayerImage.enableChannel(channel);
+*/
+//    mainLayerImage.enableChannel(channel);
 
     std::string p = "fill " + getChannelName(colorSpace, channel);
 

@@ -44,18 +44,19 @@ deMixerLayer::~deMixerLayer()
 
 bool deMixerLayer::updateMainImageSingleChannel(int channel)
 {
+/*
     if (!isChannelEnabled(channel))
     {
         mainLayerImage.disableChannel(channel, getSourceImage().getChannelIndex(channel));
         return true;
     }
+    */
 
     const deImage& sourceImage = getSourceImage();
 
-    mainLayerImage.enableChannel(channel);
+    //mainLayerImage.enableChannel(channel);
 
-    int c = mainLayerImage.getChannelIndex(channel);
-    deChannel* destination = channelManager.getChannel(c);
+    //int c = mainLayerImage.getChannelIndex(channel);
 
     dePropertyMixer* p = dynamic_cast<dePropertyMixer*>(getProperty("mixer"));
     if (!p)
@@ -64,12 +65,10 @@ bool deMixerLayer::updateMainImageSingleChannel(int channel)
         return false;
     }
 
-    if ((destination))
-    {
-        int channelSize = mainLayerImage.getChannelSize().getN();
-    
-        p->getMixer(channel)->process(sourceImage, *destination, channelSize);
-    }
+    int channelSize = mainLayerImage.getChannelSize().getN();
+    deValue* destination = mainLayerImage.startWrite(channel);
+    p->getMixer(channel)->process(sourceImage, destination, channelSize);
+    mainLayerImage.finishWrite(channel);
 
     return true;
 }

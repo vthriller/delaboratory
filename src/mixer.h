@@ -45,7 +45,7 @@ class deMixer
         deValue getWeight(int c) const;
         void setWeight(int c, deValue value);
 
-        void process(const deImage& sourceImage, deChannel& destination, int n);
+        void process(const deImage& sourceImage, deValue* destination, int n);
 
         bool isNeutral(int index) const;
     

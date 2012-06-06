@@ -97,12 +97,14 @@ bool deWhiteBalanceLayer::updateMainImageSingleChannel(int channel)
         e = false;
     }
 
+/*
     if (!e)
     {
         int s = getSourceImage().getChannelIndex(channel);
         mainLayerImage.disableChannel(channel, s);
         return true;
     }
+    */
 
     if (s > 0.49)
     {
@@ -114,7 +116,7 @@ bool deWhiteBalanceLayer::updateMainImageSingleChannel(int channel)
     }
 
     const deValue* source = getSourceImage().startRead(channel);
-    mainLayerImage.enableChannel(channel);
+//    mainLayerImage.enableChannel(channel);
     deValue* target = mainLayerImage.startWrite(channel);
     int n = mainLayerImage.getChannelSize().getN();
 

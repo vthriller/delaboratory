@@ -38,12 +38,7 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
 
     deLayerStack& layerStack = project.getLayerStack();
 
-    deBaseLayer* layer = layerStack.getLayer(view);
-
-    if (!layer)
-    {
-        return;
-    }
+    const deBaseLayer* layer = layerStack.startReadLayer(view);
 
     const deImage& originalImage = layer->getLayerImage();
 
@@ -172,6 +167,8 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
     LABImage.finishRead(channelHorizontal);
     LABImage.finishRead(channelAverage);
     Fit();
+
+    layerStack.finishReadLayer(view);
 }
 
 deColorMatrixFrame2::~deColorMatrixFrame2()
@@ -213,12 +210,7 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
 
     deLayerStack& layerStack = project.getLayerStack();
 
-    deBaseLayer* layer = layerStack.getLayer(view);
-
-    if (!layer)
-    {
-        return;
-    }
+    const deBaseLayer* layer = layerStack.startReadLayer(view);
 
     const deImage& image = layer->getLayerImage();
     deColorSpace colorSpace = image.getColorSpace();
@@ -404,6 +396,8 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
     }
 
     Fit();
+
+    layerStack.finishReadLayer(view);
 
 }
 

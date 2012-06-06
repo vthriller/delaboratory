@@ -20,7 +20,6 @@
 #include "image_io.h"
 #include <tiffio.h>
 #include <wx/wx.h>
-#include "channel.h"
 #include "logger.h"
 #include "static_image.h"
 #include "str.h"
@@ -30,9 +29,9 @@
 #include "conversion_processor.h"
 #include "tiff.h"
 
+/*
 void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size)
 {
-
     wxImage* image;
     int w = size.getW();
     int h = size.getH();
@@ -63,6 +62,7 @@ void saveJPEG(const std::string& fileName, const deChannel& channelR, const deCh
     image->SaveFile(s);
     delete image;
 }
+    */
 
 bool loadJPEG(const std::string& fileName, deStaticImage& image)
 {
@@ -159,9 +159,11 @@ void saveImage(const std::string& fileName, const deImage& image, const std::str
         deConversionProcessor p;
         p.convertImageNew(image, finalImage);
 
+/*
         deChannel* r = previewChannelManager.getChannel(finalImage.getChannelIndex(0));
         deChannel* g = previewChannelManager.getChannel(finalImage.getChannelIndex(1));
         deChannel* b = previewChannelManager.getChannel(finalImage.getChannelIndex(2));
+        */
         if (type == "tiff")
         {
             const deValue* vr = finalImage.startRead(0);

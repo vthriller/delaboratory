@@ -35,7 +35,6 @@ class deLayerWithBlending:public deSwitchableLayer
         void blendSpecial();
 
     protected:        
-        virtual bool isChannelNeutral(int index) {return false;};
         virtual void processSingleChannel(int channel);
         virtual bool updateImage();
 

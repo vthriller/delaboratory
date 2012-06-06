@@ -22,7 +22,6 @@
 #include "value.h"
 #include "blur_type.h"
 #include "size.h"
-#include "channel.h"
 
 bool blurChannel(const deValue* source, deValue* destination, deSize size, deValue radiusX, deValue radiusY, deBlurType type, deValue t);
 

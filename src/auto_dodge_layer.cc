@@ -43,12 +43,14 @@ deAutoDodgeLayer::~deAutoDodgeLayer()
 
 bool deAutoDodgeLayer::updateMainImageSingleChannel(int channel)
 {
+/*
     if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
     {
         int s = getSourceImage().getChannelIndex(channel);
         mainLayerImage.disableChannel(channel, s);
         return true;
     }
+    */
 
     deValue r1 = getNumericValue("radius 1") * viewManager.getRealScale();;
     deValue r2 = getNumericValue("radius 2") * viewManager.getRealScale();;
@@ -56,7 +58,7 @@ bool deAutoDodgeLayer::updateMainImageSingleChannel(int channel)
 
     deSize size = mainLayerImage.getChannelSize();
 
-    mainLayerImage.enableChannel(channel);
+//    mainLayerImage.enableChannel(channel);
     const deValue* source = getSourceImage().startRead(channel);
     deValue* destination = mainLayerImage.startWrite(channel);
     

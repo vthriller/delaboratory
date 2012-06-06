@@ -53,7 +53,7 @@ void deLayerGridPanel::buildRows()
     int i;
     for (i = n-1; i >=0; i--)
     {
-        deBaseLayer* layer = layerStack.getLayer(i);
+        const deBaseLayer* layer = layerStack.startReadLayer(i);
 
         layerRows.push_back(deLayerRow(i));
         deLayerRow& row = layerRows.back();
@@ -85,6 +85,8 @@ void deLayerGridPanel::buildRows()
             gridSizer->Add(row.action, 0);
             row.action->Hide();
         }
+
+        layerStack.finishReadLayer(i);
 
     }
 }

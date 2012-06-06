@@ -38,12 +38,14 @@ deLocalContrastLayer::~deLocalContrastLayer()
 
 bool deLocalContrastLayer::updateMainImageSingleChannel(int channel)
 {
+/*
     if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
     {
         int s = getSourceImage().getChannelIndex(channel);
         mainLayerImage.disableChannel(channel, s);
         return true;
     }
+    */
 
     deValue r = getNumericValue("radius") * viewManager.getRealScale();;
     deValue a = 0.5;
@@ -51,7 +53,7 @@ bool deLocalContrastLayer::updateMainImageSingleChannel(int channel)
 
     deSize size = mainLayerImage.getChannelSize();
 
-    mainLayerImage.enableChannel(channel);
+//    mainLayerImage.enableChannel(channel);
     const deValue* source = getSourceImage().startRead(channel);
     deValue* destination = mainLayerImage.startWrite(channel);
     

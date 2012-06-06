@@ -65,12 +65,14 @@ bool deLevelsLayer::isChannelNeutral(int channel)
 
 bool deLevelsLayer::updateMainImageSingleChannel(int channel)
 {
+/*
     if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
     {
         int s = getSourceImage().getChannelIndex(channel);
         mainLayerImage.disableChannel(channel, s);
         return true;
     }
+    */
 
     dePropertyLevels* propertyLevels = getPropertyLevels();
     if (!propertyLevels)
@@ -82,7 +84,7 @@ bool deLevelsLayer::updateMainImageSingleChannel(int channel)
     const deLevels& levels = propertyLevels->getLevels(channel);
 
     const deValue* source = getSourceImage().startRead(channel);
-    mainLayerImage.enableChannel(channel);
+//    mainLayerImage.enableChannel(channel);
     deValue* target = mainLayerImage.startWrite(channel);
     int n = mainLayerImage.getChannelSize().getN();
 

@@ -25,11 +25,13 @@
 class deSwitchableLayer:public deBaseLayerWithSource
 {
     private:
+        virtual bool setChannelInMainImage(int channel);
 
     protected:
         void disableAll();
         void disableNotLuminance();
         void disableNotForSharpen();
+        virtual bool isChannelNeutral(int index) {return false;};
 
     public:
         deSwitchableLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);

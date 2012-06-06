@@ -58,12 +58,14 @@ deExposureLayer::~deExposureLayer()
 
 bool deExposureLayer::updateMainImageSingleChannel(int channel)
 {
+/*
     if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
     {
         int s = getSourceImage().getChannelIndex(channel);
         mainLayerImage.disableChannel(channel, s);
         return true;
     }
+    */
 
     deValue exposure = getNumericValue("exposure");
     deValue black = getNumericValue("black");
@@ -85,7 +87,7 @@ bool deExposureLayer::updateMainImageSingleChannel(int channel)
     deValue y4 = exposure + 1.0;
 
     const deValue* source = getSourceImage().startRead(channel);
-    mainLayerImage.enableChannel(channel);
+    //mainLayerImage.enableChannel(channel);
     deValue* target = mainLayerImage.startWrite(channel);
     int n = mainLayerImage.getChannelSize().getN();
 

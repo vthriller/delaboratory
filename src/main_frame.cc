@@ -381,12 +381,13 @@ void deMainFrame::onWarningEvent(wxCommandEvent& event)
 {
     int view = project.getViewManager().getView();    
     deLayerStack& stack = project.getLayerStack();
-    deBaseLayer* layer = stack.getLayer(view);
+    const deBaseLayer* layer = stack.startReadLayer(view);
     if (layer)
     {
         std::string warning = layer->getWarning();
         warningPanel->setWarning(warning);
     }
+    stack.finishReadLayer(view);
 }
 
 void deMainFrame::repaintMainFrame(bool calcHistogram)

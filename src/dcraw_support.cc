@@ -22,7 +22,6 @@
 #include <wx/process.h>
 #include "logger.h"
 #include "str.h"
-#include "channel.h"
 #include "size.h"
 #include "static_image.h"
 

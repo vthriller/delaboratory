@@ -609,9 +609,11 @@ void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
     int n = layerStack.getSize();
     for (i = 0; i < n; i++)
     {
-        deBaseLayer* layer = layerStack.getLayer(i);
+        const deBaseLayer* layer = layerStack.startReadLayer(i);
 
         layer->updateChannelUsage(channelUsage, i);
+
+        layerStack.finishReadLayer(i);
     }
 }
 

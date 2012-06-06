@@ -18,7 +18,6 @@
 
 #include "histogram.h"
 #include <iostream>
-#include "channel.h"
 #include "logger.h"
 
 deHistogram::deHistogram(int _size)
