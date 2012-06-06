@@ -22,7 +22,6 @@
 #include "size.h"
 #include <vector>
 #include <set>
-#include "channel.h"
 #include "mutex.h"
 #include "mutex_read_write.h"
 
@@ -35,7 +34,7 @@ class deChannelManager
         deSize channelSize;
         deMutex mutex;
 
-        std::vector<deChannel*> channels;
+        std::vector<deValue*> channels;
         std::vector<deMutexReadWrite*> mutexes;
         std::set<int> trashed;
 
@@ -46,7 +45,6 @@ class deChannelManager
         deChannelManager();
         virtual ~deChannelManager();
 
-        void destroyAllChannels();
 
         void setChannelSize(const deSize& size);
         deSize getChannelSizeFromChannelManager() const;
@@ -56,12 +54,6 @@ class deChannelManager
 
         void tryAllocateChannel(int index);
         void tryDeallocateChannel(int index);
-
-        deChannel* getChannel(int index);
-
-        int getNumberOfAllocatedChannels() const;
-
-        void setPrimary(int index);
 
         bool isImageEmpty() const;
 

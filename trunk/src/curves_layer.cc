@@ -48,24 +48,14 @@ deCurvesLayer::~deCurvesLayer()
 
 bool deCurvesLayer::updateMainImageSingleChannel(int i)
 {
-    const deImage& sourceImage = getSourceImage();
-
-    int s = sourceImage.getChannelIndex(i);
-
-    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
-    {
-        mainLayerImage.disableChannel(i, s);
-        return true;
-    }
-
     dePropertyCurves* p = getPropertyCurves();
     if (!p)
     {
         return false;
     }
-    const deBaseCurve* curve = p->getCurve(i);
 
-    mainLayerImage.enableChannel(i);
+    // render new image
+    const deBaseCurve* curve = p->getCurve(i);
     const deValue* source = getSourceImage().startRead(i);
     deValue* destination = mainLayerImage.startWrite(i);
     curve->process(source, destination, mainLayerImage.getChannelSize().getN());

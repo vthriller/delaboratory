@@ -54,8 +54,12 @@ void deLayerStack::clear()
 
 void deLayerStack::removeTopLayer()
 {
-    logInfo("layer stack remove top layer...");
     lock();
+    logInfo("layer stack remove top layer...");
+
+    int index = layers.size() - 1;
+
+    mutexes[index]->lockWrite();
 
     std::vector<deBaseLayer*>::iterator i;
     i = layers.end();    
@@ -63,21 +67,24 @@ void deLayerStack::removeTopLayer()
     deBaseLayer* layer = *i;
 
     layers.erase(i);
-    unlock();
 
-    layer->lockLayer();
     logInfo("layer stack before delete layer");
     delete layer;
     logInfo("layer stack after delete layer");
+
+    mutexes[index]->unlockWrite();
+
+    unlock();
 
 }
 
 void deLayerStack::addLayer(deBaseLayer* layer)
 {
-    logInfo("layer stack add layer");
     lock();
+    logInfo("layer stack add layer");
 
     layers.push_back(layer);
+    mutexes.push_back(new deMutexReadWrite(4));
 
     unlock();
 }
@@ -89,24 +96,40 @@ int deLayerStack::getSize() const
     int n = layers.size();
 
     unlock();
+
     return n;
 }
 
 deBaseLayer* deLayerStack::getLayer(int id) const
 {
-
     lock();
 
-    unsigned int i = id;
-    if ((i >= layers.size()) || (id < 0))
+    unsigned int index = id;
+    deBaseLayer* layer = NULL;
+
+    if ((index < layers.size()) || (id >= 0))
     {
-        unlock();
-        return 0;
+        layer = layers[index];
     }
-    deBaseLayer* layer = layers[i];
 
     unlock();
 
     return layer;
 }
 
+const deBaseLayer* deLayerStack::startReadLayer(int id) const
+{
+    lock();
+    mutexes[id]->lockRead();
+    deBaseLayer* layer = getLayer(id);
+    unlock();
+
+    return layer;
+}
+
+void deLayerStack::finishReadLayer(int id) const
+{
+    lock();
+    mutexes[id]->unlockRead();
+    unlock();
+}

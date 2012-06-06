@@ -25,6 +25,7 @@
 #include "gradient_panel.h"
 class deSampler;
 class deProject;
+class deImage;
 
 class deSamplerPanel:public wxPanel
 {
@@ -44,6 +45,8 @@ private:
     std::vector<deColorSpace> colorSpaces;
 
     void choose(wxCommandEvent &event);
+
+    void update(const deImage& image);
 
 public:
 	deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject& _project);

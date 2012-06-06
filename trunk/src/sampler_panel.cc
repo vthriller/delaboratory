@@ -123,15 +123,20 @@ void deSamplerPanel::update()
 
     deLayerStack& layerStack = project.getLayerStack();
 
-    deBaseLayer* layer = layerStack.getLayer(view);
+    const deBaseLayer* layer = layerStack.startReadLayer(view);
 
-    if (!layer)
+    if (layer)
     {
-        return;
-    }
+        const deImage& image = layer->getLayerImage();
 
-    const deImage& image = layer->getLayerImage();
+        update(image);
+    }        
 
+    layerStack.finishReadLayer(view);
+}    
+
+void deSamplerPanel::update(const deImage& image)
+{
     deSize channelSize = image.getChannelSize();
 
     deValue x = sampler.getX();

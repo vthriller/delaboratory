@@ -59,11 +59,13 @@ bool deEqualizerLayer::updateMainImageSingleChannel(int i)
 
     int s = sourceImage.getChannelIndex(i);
 
+/*
     if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
     {
         mainLayerImage.disableChannel(i, s);
         return true;
     }
+    */
 
     dePropertyCurves* p = getPropertyCurves();
     if (!p)
@@ -74,7 +76,7 @@ bool deEqualizerLayer::updateMainImageSingleChannel(int i)
 
     int channel = getPropertyChoice("channel")->getIndex();
 
-    mainLayerImage.enableChannel(i);
+//    mainLayerImage.enableChannel(i);
 
     const deValue* sourceEq = NULL;
     const deValue* source = getSourceImage().startRead(i);

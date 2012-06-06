@@ -74,14 +74,20 @@ void deViewManager::setNormal()
 
 deColorSpace deViewManager::getColorSpace() const
 {
+    deColorSpace colorSpace = deColorSpaceInvalid;
+
     deLayerStack& layerStack = project.getLayerStack();
-    deBaseLayer* layer = layerStack.getLayer(view);
-    if (!layer)
+
+    const deBaseLayer* layer = layerStack.startReadLayer(view);
+
+    if (layer)
     {
-        return deColorSpaceInvalid;
+        colorSpace = layer->getColorSpace();
     }
 
-    return layer->getColorSpace();
+    layerStack.finishReadLayer(view);
+
+    return colorSpace;
 }
 
 void deViewManager::setHistogramChannel(int channel)

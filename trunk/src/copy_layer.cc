@@ -56,16 +56,6 @@ bool deCopyLayer::updateMainImageNotThreadedWay()
     int n = image.getChannelSize().getN();
     int percentage = overflow * 10000 / n;
 
-    if (percentage == 0)
-    {
-        warning = "OK";
-    }
-    else 
-    {
-        deValue p = percentage / 100.0;
-        warning = "conversion OVERFLOW " + str(p) + "%";
-    }
-
     logInfo("conversion layer DONE");
 
     return true;

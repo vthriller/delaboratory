@@ -17,7 +17,6 @@
 */
 
 #include "mixer.h"
-#include "channel.h"
 #include "str.h"
 #include <sstream>
 #include <cassert>
@@ -63,7 +62,7 @@ void deMixer::setWeight(int c, deValue value)
     unlock();
 }
 
-void deMixer::process(const deImage& sourceImage, deChannel& destination, int n)
+void deMixer::process(const deImage& sourceImage, deValue* destination, int n)
 {
     if (size < 1)
     {
@@ -76,12 +75,14 @@ void deMixer::process(const deImage& sourceImage, deChannel& destination, int n)
 
     const deValue *p1 = sourceImage.startRead(0);
 
+    // FIXME clipping
+
     if (size == 1)
     {
         for (i = 0; i < n; i++)
         {
             deValue result = weights[0] * p1[i];
-            destination.setValueClip(i, result);
+            destination[i] = result;
         }
     }        
 
@@ -97,7 +98,7 @@ void deMixer::process(const deImage& sourceImage, deChannel& destination, int n)
                 deValue result = weights[0] * p1[i];
                 result += weights[1] * p2[i];
                 result += weights[2] * p3[i];
-                destination.setValueClip(i, result);
+                destination[i] = result;
             }
         }        
 
@@ -110,7 +111,7 @@ void deMixer::process(const deImage& sourceImage, deChannel& destination, int n)
                 result += weights[1] * p2[i];
                 result += weights[2] * p3[i];
                 result += weights[3] * p4[i];
-                destination.setValueClip(i, result);
+                destination[i] = result;
             }
             sourceImage.finishRead(3);
         }

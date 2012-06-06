@@ -22,6 +22,7 @@
 #include <vector>
 #include <map>
 #include "mutex.h"
+#include "mutex_read_write.h"
 
 class deBaseLayer;
 class deChannelManager;
@@ -32,6 +33,7 @@ class deLayerStack
     private:
         std::vector<deBaseLayer*> layers;
         mutable deMutex mutex;
+        std::vector<deMutexReadWrite*> mutexes;
 
         deLayerStack(const deLayerStack& );
         deLayerStack& operator = (const deLayerStack& );
@@ -49,7 +51,11 @@ class deLayerStack
         void addLayer(deBaseLayer* layer);
 
         int getSize() const;
+
         deBaseLayer* getLayer(int id) const;
+        
+        const deBaseLayer* startReadLayer(int id) const;
+        void finishReadLayer(int id) const;
 
 };
 

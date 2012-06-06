@@ -51,7 +51,7 @@ class deBaseLayerWithProperties:public deBaseLayer
         dePropertyBoolean* getPropertyBoolean(const std::string& _name);
         const dePropertyBoolean* getPropertyBoolean(const std::string& _name) const;
 
-        void getProperties(std::vector<std::string>& names);
+        void getProperties(std::vector<std::string>& names) const;
 
         deValue getNumericValue(const std::string& name) const;
 

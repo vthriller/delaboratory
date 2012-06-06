@@ -91,15 +91,17 @@ bool deSaturationLayer::updateMainImageSingleChannel(int channel)
         e = false;
     }
 
+/*
     if (!e)
     {
         int s = getSourceImage().getChannelIndex(channel);
         mainLayerImage.disableChannel(channel, s);
         return true;
     }
+    */
 
     const deValue* source = getSourceImage().startRead(channel);
-    mainLayerImage.enableChannel(channel);
+//    mainLayerImage.enableChannel(channel);
     deValue* target = mainLayerImage.startWrite(channel);
     int n = mainLayerImage.getChannelSize().getN();
 

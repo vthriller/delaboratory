@@ -62,16 +62,18 @@ bool deVignetteLayer::isChannelNeutral(int channel)
 
 bool deVignetteLayer::updateMainImageSingleChannel(int channel)
 {
+/*
     if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
     {
         int s = getSourceImage().getChannelIndex(channel);
         mainLayerImage.disableChannel(channel, s);
         return true;
     }
+    */
 
     deSize size = mainLayerImage.getChannelSize();
 
-    mainLayerImage.enableChannel(channel);
+//    mainLayerImage.enableChannel(channel);
     deValue* destination = mainLayerImage.startWrite(channel);
 
     deValue light = 1.0;

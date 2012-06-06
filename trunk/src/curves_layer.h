@@ -38,6 +38,7 @@ class deCurvesLayer:public deLayerWithBlending
 
         virtual bool isChannelNeutral(int index);
 
+//        virtual bool setChannelInMainImage(int i);
         virtual bool updateMainImageSingleChannel(int i);
 
         virtual std::string getActionName() {return "curves";};

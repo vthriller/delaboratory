@@ -31,6 +31,8 @@ class deConversionLayer:public deBaseLayerWithSource
 
         void addFilms();
 
+        std::string warning;
+
     public:
         deConversionLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
         virtual ~deConversionLayer();
@@ -40,6 +42,8 @@ class deConversionLayer:public deBaseLayerWithSource
         virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 
         virtual std::string getActionName() {return "conversion setup";};
+
+        virtual std::string getWarning() const {return warning;};
         
 
 };

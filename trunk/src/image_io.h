@@ -21,14 +21,10 @@
 
 #include <string>
 #include "size.h"
-#include "channel.h"
 #include "color_space.h"
 class deStaticImage;
 class deImage;
 class deChannelManager;
-
-void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size);
-void saveTIFF(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size);
 
 bool loadImage(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
 

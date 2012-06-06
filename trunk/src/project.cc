@@ -187,7 +187,7 @@ void deProject::resetLayerStack(deColorSpace colorSpace)
         layerProcessor.addLayerInLayerProcessor(layer);
     }        
 
-    channelManager.destroyAllChannels();
+    //channelManager.destroyAllChannels();
     layerProcessor.updateAllImages(true);
 
     updateLayerGrid();
@@ -220,8 +220,10 @@ deSize deProject::getSourceImageSize()
 
 deValue deProject::getSourceAspect() const
 {
-    deBaseLayer* layer = layerStack.getLayer(0);
-    deSourceImageLayer* source = dynamic_cast<deSourceImageLayer*>(layer);
+    const deBaseLayer* layer = layerStack.startReadLayer(0);
+    deValue aspect = -1;
+
+    const deSourceImageLayer* source = dynamic_cast<const deSourceImageLayer*>(layer);
     if (source)
     {
         deValue x1;
@@ -232,21 +234,17 @@ deValue deProject::getSourceAspect() const
         zoomManager.getZoom(x1, y1, x2, y2);
 
         deValue dx = x2 - x1;
-        if (dx <= 0) 
-        {
-            return -1;               
-        }
         deValue dy = y2 - y1;
-        if (dy <= 0) 
+        if ((dx > 0) && (dy > 0))
         {
-            return -1;               
-        }
-        deValue a = dy / dx;
+            deValue a = dy / dx;
 
-        return source->getAspect() / a;
+            aspect = source->getAspect() / a;
+        }            
     }
-    logError("can't get aspect because source image layer not exist");
-    return -1;
+
+    layerStack.finishReadLayer(0);
+    return aspect;
 }    
 
 deLayerStack& deProject::getLayerStack()
@@ -472,7 +470,7 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
     onImageNameUpdate();
     sourceImageFileName = fileName;
 
-    channelManager.destroyAllChannels();
+    //channelManager.destroyAllChannels();
     if (imageAreaPanel)
     {
         imageAreaPanel->updateSize(false);
@@ -501,13 +499,14 @@ deBaseLayer* deProject::createNewLayer(const std::string& type)
 
     deBaseLayer* layer = NULL;
 
-    deBaseLayer* vLayer = layerStack.getLayer(s);
+    const deBaseLayer* vLayer = layerStack.startReadLayer(s);
     if (vLayer)
     {
         deColorSpace colorSpace = vLayer->getColorSpace();
 
         layer = createLayer(type, s, colorSpace, layerStack, channelManager, viewManager, sourceImage);
     }
+    layerStack.finishReadLayer(s);
 
     if (!layer)
     {
