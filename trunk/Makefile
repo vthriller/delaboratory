@@ -62,12 +62,6 @@ else
 	${STRIP} ${APP}${EXE}
 endif    
 
-test_wx:
-	${CXX} test_wx.cc ${CXXFLAGS} ${LDFLAGS} -o test_wx
-
-test_no_wx:
-	${CXX} test_no_wx.cc -o test_no_wx
-
 %.o: src/%.cc
 	${CXX} -c ${CXXFLAGS} $<
 
