@@ -17,8 +17,10 @@
 */
 
 #include "str.h"
+#include "str_wx.h"
 #include <sstream>
 #include <wx/stdpaths.h>
+#include <wx/wx.h>
 
 std::string getBaseName(const std::string& s)
 {
@@ -122,15 +124,6 @@ std::string str(bool b)
 }
 
 
-std::string str(wxString& ws)
-{
-    char cstring[1024];
-    strncpy(cstring, (const char*)ws.mb_str(wxConvUTF8), 1023);
-
-    return cstring;
-}    
-
-
 std::string getTmp()
 {
     wxString temp;
@@ -168,10 +161,3 @@ std::string getUserConfigDir()
     return userConfigDir;
 }
 
-wxString str2wx(const std::string& s)
-{
-    const char* c = s.c_str();
-    wxString result(c, wxConvUTF8);
-
-    return result;
-}    

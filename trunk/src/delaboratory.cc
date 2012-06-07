@@ -20,6 +20,7 @@
 #include "wx/wx.h"
 #include "project.h"
 #include "str.h"
+#include "str_wx.h"
 #include "layer_processor.h"
 #include "logger.h"
 #include "channel_manager.h"

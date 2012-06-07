@@ -33,6 +33,7 @@
 #include "palette_frame.h"
 #include "project.h"
 #include "str.h"
+#include "str_wx.h"
 #include "file_dialogs.h"
 #include "delaboratory.h"
 #include "samplers_panel.h"

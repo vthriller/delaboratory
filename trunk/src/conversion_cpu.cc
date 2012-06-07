@@ -29,6 +29,8 @@
 
 #include "str.h"
 
+#include <cmath>
+
 static const deValue Xn  = 0.951;
 static const deValue Yn  = 1.0;
 static const deValue Zn  = 1.089;

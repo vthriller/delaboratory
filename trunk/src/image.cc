@@ -21,6 +21,7 @@
 #include "logger.h"
 #include "str.h"
 #include "color_space_utils.h"
+#include <cassert>
 
 deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelManager)
 :colorSpace(_colorSpace), channelManager(_channelManager)

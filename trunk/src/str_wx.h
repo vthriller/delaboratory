@@ -16,19 +16,18 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_STR_H
-#define _DE_STR_H
+#ifndef _DE_STR_WX_H
+#define _DE_STR_WX_H
 
 #include <string>
 #include "value.h"
+#include <wx/wx.h>
 
-/* returns str before ".", so for "abcde.jpg" returns "abcde" */
+/*
 std::string getBaseName(const std::string& s);
 
-/* returns str after ".", so for "abcde.jpg" returns "jpg" */
 std::string getExtension(const std::string& s);
 
-//std::string replaceExtension(const std::string& s, const std::string& ext);
 std::string removePathAndExtension(const std::string& fileName);
 
 std::string str(deValue n);
@@ -46,5 +45,10 @@ std::string getTmp();
 std::string insertIndex(const std::string& s, int index);
 
 std::string getUserConfigDir();
+
+*/
+
+wxString str2wx(const std::string& s);
+std::string str(wxString& ws);
 
 #endif

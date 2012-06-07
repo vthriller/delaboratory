@@ -19,7 +19,8 @@
 #include "project.h"
 #include "image_io.h"
 #include <cassert>
-#include <wx/wx.h>
+#include "str_wx.h"
+//#include <wx/wx.h>
 #include <iostream>
 #include "source_image_layer.h"
 #include "layer_grid_panel.h"
