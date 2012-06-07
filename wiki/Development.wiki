@@ -1,5 +1,11 @@
 #summary Development News
 
+-----
+*2012.06.08*
+
+New design
+
+[June2012Design]
 
 -----
 *2012.05.30*
