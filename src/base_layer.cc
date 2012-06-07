@@ -36,7 +36,6 @@ class deUpdateActionThread:public wxThread
             if (!result)
             {
                 logError("update action failed");
-                layer.setErrorOnUpdateFromThread();
             }
             semaphore.post();
             return NULL;
@@ -126,26 +125,19 @@ void deBaseLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layer
     mainLayerImage.updateChannelUsage(channelUsage, layerIndex);
 }
 
-void deBaseLayer::setErrorOnUpdateFromThread()
-{
-    errorOnUpdate = true;
-}
-
-bool deBaseLayer::updateMainImageAllChannels()
+void updateMainImageAllChannels(deBaseLayer& layer)
 {
     logInfo("update action all channels start");
 
-    int n = getColorSpaceSize(colorSpace);
+    int n = getColorSpaceSize(layer.getColorSpace());
     int i;
 
     deSemaphore semaphore(0, n);
 
-    errorOnUpdate = false;
-
     for (i = 0; i < n; i++)
     {
         logInfo("creating update action thread for channel " + str(i));
-        deUpdateActionThread* thread = new deUpdateActionThread(*this, i, semaphore);
+        deUpdateActionThread* thread = new deUpdateActionThread(layer, i, semaphore);
 
         if ( thread->Create() != wxTHREAD_NO_ERROR )
         {
@@ -163,15 +155,6 @@ bool deBaseLayer::updateMainImageAllChannels()
     }
 
     logInfo("update action all channels DONE");
-
-    if (errorOnUpdate)
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
 }
 
 void deBaseLayer::processSingleChannel(int channel)
@@ -197,7 +180,8 @@ bool deBaseLayer::updateImage()
     bool result = updateMainImageNotThreadedWay();
     if (!result)
     {
-        result = updateMainImageAllChannels();
+        updateMainImageAllChannels(*this);
+        result = true;
     }
 
     return result;

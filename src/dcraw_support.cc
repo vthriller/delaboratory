@@ -22,6 +22,7 @@
 #include <wx/process.h>
 #include "logger.h"
 #include "str.h"
+#include "str_wx.h"
 #include "size.h"
 #include "static_image.h"
 
