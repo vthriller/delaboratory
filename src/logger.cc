@@ -19,9 +19,25 @@
 #include "logger.h"
 #include "str.h"
 #include <sstream>
+#include <wx/wx.h>
 
 #define LOCK_THRESHOLD 100
 #define LOGGING 1
+
+class deLoggerHelp
+{
+    private:
+    public:
+        wxThreadIdType main_id;
+        wxStopWatch sw;
+        deLoggerHelp()
+        {
+        }
+        virtual ~deLoggerHelp()
+        {
+        }
+
+};
 
 deLogger& deLogger::getLogger()
 {
@@ -31,6 +47,7 @@ deLogger& deLogger::getLogger()
 
 deLogger::deLogger()
 {
+    help = new deLoggerHelp();
     f = NULL;
     started = false;
 }
@@ -44,6 +61,8 @@ deLogger::~deLogger()
         f->close();
         delete f;
     }
+
+    delete help;
 
     mutex.unlock();
 }
@@ -73,7 +92,7 @@ std::string deLogger::getThreadName()
 {
     if (!started)
     {
-        main_id = wxThread::GetCurrentId();
+        help->main_id = wxThread::GetCurrentId();
         started = true;
     }
 
@@ -81,7 +100,7 @@ std::string deLogger::getThreadName()
 
     std::string thr = "main";
 
-    if (main_id != c_id)
+    if (help->main_id != c_id)
     {
         std::ostringstream oss;
         oss.str("");
@@ -98,7 +117,7 @@ void deLogger::log(const std::string& message)
 
     if (f)
     {
-        int t = sw.Time();
+        int t = help->sw.Time();
             
         (*f) << t << ": [" << getThreadName() << "] " << message << std::endl;
     }
@@ -113,7 +132,7 @@ void deLogger::logInfo(const std::string& message)
 
 int deLogger::getTime() const
 {
-    int t = sw.Time();
+    int t = help->sw.Time();
     return t;
 }
 

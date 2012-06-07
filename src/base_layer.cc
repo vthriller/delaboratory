@@ -25,6 +25,7 @@
 #include "property_boolean.h"
 #include "property_choice.h"
 #include "preset.h"
+#include <wx/wx.h>
 
 class deUpdateActionThread:public wxThread
 {

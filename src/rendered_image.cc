@@ -19,6 +19,7 @@
 #include "rendered_image.h"
 #include "logger.h"
 #include "str.h"
+#include <wx/wx.h>
 #include <wx/rawbmp.h>
 #include "bitmap_wx.h"
 #include "canvas_wx.h"

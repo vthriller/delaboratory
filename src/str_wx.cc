@@ -16,40 +16,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_LOGGER_H
-#define _DE_LOGGER_H
+#include "str_wx.h"
 
-#include <string>
-#include <fstream>
-#include "mutex.h"
-
-class deLoggerHelp;
-
-class deLogger
+std::string str(wxString& ws)
 {
-    private:
-        deLoggerHelp* help;
-        std::ofstream* f;
-        deMutex mutex;
-        bool started;
+    char cstring[1024];
+    strncpy(cstring, (const char*)ws.mb_str(wxConvUTF8), 1023);
 
-        std::string getThreadName();
+    return cstring;
+}    
 
-        deLogger();
+wxString str2wx(const std::string& s)
+{
+    const char* c = s.c_str();
+    wxString result(c, wxConvUTF8);
 
-    public:
-        static deLogger& getLogger();
-        virtual ~deLogger();
-
-        void setFile(const std::string& fileName);
-
-        void log(const std::string& message);
-        void logInfo(const std::string& message);
-
-        int getTime() const;
-};
-
-void logInfo(const std::string& message);
-void logError(const std::string& message);
-
-#endif
+    return result;
+}    

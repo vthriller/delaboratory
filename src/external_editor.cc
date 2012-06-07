@@ -19,6 +19,7 @@
 #include "external_editor.h"
 #include <wx/wx.h>
 #include "str.h"
+#include "str_wx.h"
 
 #define WINDOWS_GIMP_EXE "gimp-2.8.exe"
 
