@@ -21,6 +21,7 @@
 #include <sstream>
 
 #define LOCK_THRESHOLD 100
+#define LOGGING 1
 
 deLogger& deLogger::getLogger()
 {
