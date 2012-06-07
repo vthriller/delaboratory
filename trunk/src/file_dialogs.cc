@@ -18,6 +18,7 @@
 
 #include "file_dialogs.h"
 #include "str.h"
+#include "str_wx.h"
 
 wxString getFileType(const std::string& t)
 {

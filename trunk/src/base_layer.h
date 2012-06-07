@@ -54,10 +54,8 @@ class deBaseLayer
     protected:
         deColorSpace colorSpace;
         deImage mainLayerImage;
-        bool errorOnUpdate;
 
         virtual bool updateBlendAllChannels() {return false;};
-        bool updateMainImageAllChannels();
         virtual bool updateMainImageNotThreadedWay() {return false;};
         virtual bool updateImage();
 
@@ -82,8 +80,6 @@ class deBaseLayer
         virtual const deImage& getLayerImage() const;
 
         virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
-
-        void setErrorOnUpdateFromThread();
 
         virtual std::string getWarning() const {return "OK";};
 
