@@ -17,43 +17,9 @@
 */
 
 #include "base_layer.h"
-#include "color_space_utils.h"
 #include "logger.h"
-#include "semaphore.h"
 #include "str.h"
-#include "property_numeric.h"
-#include "property_boolean.h"
-#include "property_choice.h"
-#include "preset.h"
-#include <wx/wx.h>
-
-class deUpdateActionThread:public wxThread
-{
-    private:
-        virtual void *Entry()
-        {
-            bool result = layer.processMainImageSingleChannel(channel);
-            if (!result)
-            {
-                logError("update action failed");
-            }
-            semaphore.post();
-            return NULL;
-        }
-        deBaseLayer& layer;
-        int channel;
-        deSemaphore& semaphore;
-    public:    
-        deUpdateActionThread(deBaseLayer& _layer, int _channel, deSemaphore& _semaphore)
-        :layer(_layer),
-         channel(_channel),
-         semaphore(_semaphore)
-        {
-        }
-        virtual ~deUpdateActionThread()
-        {
-        }
-};
+#include "update_main_layer_image.h"
 
 
 deBaseLayer::deBaseLayer(deColorSpace _colorSpace, deChannelManager& _channelManager)
@@ -123,38 +89,6 @@ const deImage& deBaseLayer::getLayerImage() const
 void deBaseLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
 {
     mainLayerImage.updateChannelUsage(channelUsage, layerIndex);
-}
-
-void updateMainImageAllChannels(deBaseLayer& layer)
-{
-    logInfo("update action all channels start");
-
-    int n = getColorSpaceSize(layer.getColorSpace());
-    int i;
-
-    deSemaphore semaphore(0, n);
-
-    for (i = 0; i < n; i++)
-    {
-        logInfo("creating update action thread for channel " + str(i));
-        deUpdateActionThread* thread = new deUpdateActionThread(layer, i, semaphore);
-
-        if ( thread->Create() != wxTHREAD_NO_ERROR )
-        {
-        }
-
-        if ( thread->Run() != wxTHREAD_NO_ERROR )
-        {
-        }
-    }
-
-    for (i = 0; i < n; i++)
-    {
-        logInfo("waiting for update action thread for channel " + str(i));
-        semaphore.wait();
-    }
-
-    logInfo("update action all channels DONE");
 }
 
 void deBaseLayer::processSingleChannel(int channel)
