@@ -1,0 +1,44 @@
+#summary June 2012 Design
+
+Split post processing into two parts:
+  * color correction - just like it works now
+  * other operations - only two layers, original and modified
+
+After finishing color correction - final image will be generated and user could perform other operation or start color correction again. Or export image.
+
+Scaled previews will work only in color correction module. Other operations will work in full size image. It means 1:1 preview only.
+
+For more advanced processing it would be nice to use multiple source images. So it would be possible for instance to save c2g output as new image and then reuse it as texture later.
+
+In the far future it will be also possible to implement painting operations - for true dodge/burn and maybe clone tool.
+
+Color Correction Module
+  * levels
+  * curves
+  * equalizer
+  * exposure
+  * saturation
+  * white balance
+  * fill
+  * tone
+  * mixer
+  * copy
+
+Light operations
+  * vignette
+  * gradient
+
+Blur operations
+  * local contrast
+  * auto dodge
+  * auto burn
+  * sharpen
+  * gaussian blur
+  * highlights
+  * shadows
+  * high pass
+
+Other operations
+  * c2g
+
+  
