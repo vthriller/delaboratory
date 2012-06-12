@@ -17,7 +17,6 @@
 */
 
 #include "renderer.h"
-#include <wx/wx.h>
 #include "project.h"
 #include "image.h"
 #include "base_layer.h"
@@ -27,8 +26,8 @@
 #include "logger.h"
 #include "channel_manager.h"
 #include "layer_stack.h"
-#include "canvas_wx.h"
 #include "conversion_processor.h"
+#include "canvas.h"
 
 void renderChannel(const deImage& image, int c, unsigned char* data, deChannelManager& channelManager, bool reversed)
 {

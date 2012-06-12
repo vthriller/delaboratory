@@ -19,7 +19,6 @@
 #include "layer_with_blending.h"
 #include "channel_manager.h"
 #include "blend_channel.h"
-#include <wx/thread.h>
 #include "color_space_utils.h"
 #include <iostream>
 #include "str.h"
@@ -27,30 +26,8 @@
 #include "property_boolean.h"
 #include "logger.h"
 #include "blend_color_luminosity.h"
+#include "update_blend.h"
 
-class deUpdateBlendThread:public wxThread
-{
-    private:
-        virtual void *Entry()
-        {
-            layer.updateBlend(channel);
-            semaphore.post();
-            return NULL;
-        }
-        deLayerWithBlending& layer;
-        int channel;
-        deSemaphore& semaphore;
-    public:    
-        deUpdateBlendThread(deLayerWithBlending& _layer, int _channel, deSemaphore& _semaphore)
-        :layer(_layer),
-         channel(_channel),
-         semaphore(_semaphore)
-        {
-        }
-        virtual ~deUpdateBlendThread()
-        {
-        }
-};
 
 
 deLayerWithBlending::deLayerWithBlending(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayerIndex, deLayerStack& _layerStack)
@@ -208,31 +185,7 @@ bool deLayerWithBlending::updateBlendAllChannels()
         return true;
     }
 
-    logInfo("update blend all channels START");
-
-    int n = getColorSpaceSize(colorSpace);
-    int i;
-
-    deSemaphore semaphore(0, n);
-
-    for (i = 0; i < n; i++)
-    {
-        deUpdateBlendThread* thread = new deUpdateBlendThread(*this, i, semaphore);
-
-        if ( thread->Create() != wxTHREAD_NO_ERROR )
-        {
-        }
-
-        if ( thread->Run() != wxTHREAD_NO_ERROR )
-        {
-        }
-    }
-
-    for (i = 0; i < n; i++)
-    {
-        semaphore.wait();
-    }
-    logInfo("update blend all channels DONE");
+    updateBlendOnThread(*this);
 
     return true;
 

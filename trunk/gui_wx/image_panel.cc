@@ -29,10 +29,6 @@
 #include "image_area_panel.h"
 #include "canvas_wx.h"
 
-BEGIN_EVENT_TABLE(deImagePanel, wxPanel)
-EVT_PAINT(deImagePanel::paintEvent)
-END_EVENT_TABLE()
-
 void deImagePanel::click(wxMouseEvent &event)
 {
     int ex = event.GetX();
@@ -145,6 +141,7 @@ deImagePanel::deImagePanel(deImageAreaPanel* _area, deProject& _project, deSampl
 {
     clicked = false;
 
+    Connect(wxEVT_PAINT, wxPaintEventHandler(deImagePanel::paintEvent));
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deImagePanel::click));
     Connect(wxEVT_LEFT_UP, wxMouseEventHandler(deImagePanel::release));
     Connect(wxEVT_MOTION, wxMouseEventHandler(deImagePanel::move));

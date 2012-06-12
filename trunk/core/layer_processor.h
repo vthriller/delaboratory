@@ -23,7 +23,7 @@ class deMainWindow;
 class deLayerStack;
 class deViewManager;
 class deChannelManager;
-class wxProgressDialog;
+class deProgressDialog;
 class deLayer;
 class deLogger;
 class deLayerFrameManager;
@@ -108,8 +108,7 @@ class deLayerProcessor
         void setViewManager(deViewManager* _viewManager);
 
         void updateAllImages(bool calcHistogram);
-        bool updateImagesSmart(int view, wxProgressDialog* progressDialog, const std::string& fileName, const std::string& type, bool saveAll);
-        void generateChannelUsage(std::map<int, int>& channelUsage);
+        bool updateImagesSmart(int view, deProgressDialog& progressDialog, const std::string& fileName, const std::string& type, bool saveAll);
 
         void markUpdateSingleChannel(int index, int channel);
         void markUpdateAllChannels(int index);

@@ -24,7 +24,6 @@
 #include "logger.h"
 #include "image.h"
 #include "size.h"
-//#include <libxml/parser.h>
 
 class deImagePanel;
 class deHistogramPanel;
@@ -41,7 +40,7 @@ class deStaticImage;
 class deRawModule;
 class deZoomManager;
 class deBaseLayer;
-class wxProgressDialog;
+class deProgressDialog;
 
 class deProject
 {
@@ -67,10 +66,7 @@ class deProject
 
         void onImageNameUpdate();
 
-/*
-        void loadLayers(xmlNodePtr root);
-        void loadLayer(xmlNodePtr root, int layerIndex);
-        */
+        bool processFullSizeImage(const std::string& fileName, const std::string& type, bool saveAll, deProgressDialog& progressDialog);
 
         void freeImage();
 
@@ -100,7 +96,7 @@ class deProject
 
         void onChangeView(int a);
 
-        bool exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog, bool saveAll, const std::string& dir);
+        bool exportFinalImage(const std::string& app, const std::string& type, const std::string& name, deProgressDialog& progressDialog, bool saveAll, const std::string& dir);
 
         void setViewModePanel(deViewModePanel* _viewModePanel);
         void setHistogramModePanel(deHistogramModePanel* _histogramModePanel);
