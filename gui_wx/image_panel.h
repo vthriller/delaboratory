@@ -60,8 +60,6 @@ public:
 	void paintEvent(wxPaintEvent & evt);
     void repaintImagePanel();
 
-	DECLARE_EVENT_TABLE()
-
 };
 
 #endif

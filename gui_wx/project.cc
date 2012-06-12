@@ -17,38 +17,41 @@
 */
 
 #include "project.h"
+#include "message_box.h"
 #include "image_io.h"
 #include <cassert>
-#include "str_wx.h"
-//#include <wx/wx.h>
 #include <iostream>
 #include "source_image_layer.h"
-#include "layer_grid_panel.h"
 #include "curves_layer.h"
 #include "conversion_layer.h"
-#include "image_panel.h"
 #include "str.h"
-#include "histogram_panel.h"
-#include "histogram_mode_panel.h"
-#include "view_mode_panel.h"
 #include <sstream>
 #include "layer_factory.h"
-#include "image_area_panel.h"
 #include <iostream>
-#include "main_frame.h"
 #include "layer_processor.h"
 #include "external_editor.h"
 #include "channel_manager.h"
 #include "layer_stack.h"
 #include "layer_frame_manager.h"
 #include "static_image.h"
-#include "raw_module.h"
 #include "zoom_manager.h"
 #include "color_space_utils.h"
 #include "operation_processor.h"
 #include "main_window.h"
 #include "conversion_processor.h"
 #include "test_image.h"
+
+///
+
+#include "raw_module.h"
+#include "main_frame.h"
+#include "image_area_panel.h"
+#include "layer_grid_panel.h"
+#include "image_panel.h"
+#include "histogram_panel.h"
+#include "histogram_mode_panel.h"
+#include "view_mode_panel.h"
+#include "str_wx.h"
 
 deProject::deProject(deLayerProcessor& _processor, deChannelManager& _channelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deMainWindow& _mainWindow)
 :layerProcessor(_processor),
@@ -148,7 +151,7 @@ void deProject::init(const std::string& fileName)
     {
         std::string s = "unable to open image: " + fileName;
         logError(s);
-        wxMessageBox(str2wx(s));
+        showMessageBox(s);
         return;
     }        
 }
@@ -161,7 +164,7 @@ void deProject::setTestImage(int s)
 {
     if (rawModule.isActive())
     {
-        wxMessageBox(_T("RAW module is already active"));
+        showMessageBox("RAW module is already active");
         return;
     }
 
@@ -285,13 +288,13 @@ deViewManager& deProject::getViewManager()
     return viewManager;
 }
 
-bool deProject::exportFinalImage(const std::string& app, const std::string& type, const std::string& name, wxProgressDialog* progressDialog, bool saveAll, const std::string& dir)
+bool deProject::exportFinalImage(const std::string& app, const std::string& type, const std::string& name, deProgressDialog& progressDialog, bool saveAll, const std::string& dir)
 {
     // name is taken from file dialog, it can be empty when we are exporting to external editor
     // but in this case we need correct imageFileName
     if ((name == "") && (imageFileName == ""))
     {
-        wxMessageBox( _T("exporting final image failed - no file name set"));
+        showMessageBox( "exporting final image failed - no file name set");
         return false;
     }
 
@@ -317,23 +320,12 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
         fileName = name;
     }
 
-    // remember original size of preview
-    deSize originalSize = channelManager.getChannelSizeFromChannelManager();
-
-    // calculate final image in full size
-    int view = viewManager.getView();
-
-    channelManager.setChannelSize(sourceImage.getStaticImageSize());
-
-    bool result = layerProcessor.updateImagesSmart(view, progressDialog, fileName, type, saveAll);
+    bool result = processFullSizeImage(fileName, type, saveAll, progressDialog);
 
     if (!result)
     {
-        wxMessageBox( _T("exporting final image failed - error during update images\n(probably out of memory)"));
+        showMessageBox( "exporting final image failed - error during update images\n(probably out of memory)");
     }
-
-    // bring back original size of preview
-    channelManager.setChannelSize(originalSize);
 
     if (result)
     {
@@ -349,6 +341,25 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
 
     return result;
 }
+
+bool deProject::processFullSizeImage(const std::string& fileName, const std::string& type, bool saveAll, deProgressDialog& progressDialog)
+{
+    // remember original size of preview
+    deSize originalSize = channelManager.getChannelSizeFromChannelManager();
+
+    // calculate final image in full size
+    int view = viewManager.getView();
+
+    channelManager.setChannelSize(sourceImage.getStaticImageSize());
+
+    bool result = layerProcessor.updateImagesSmart(view, progressDialog, fileName, type, saveAll);
+
+    // bring back original size of preview
+    channelManager.setChannelSize(originalSize);
+
+    return result;
+}
+
 
 void deProject::setViewModePanel(deViewModePanel* _viewModePanel)
 {
@@ -412,7 +423,7 @@ bool deProject::openImageRAW(const std::string& fileName)
         bool failure = false;
         while (!rawModule.updateRawLoading(failure))
         {
-            wxThread::Sleep(200);
+            sleep(200);
             if (failure)
             {
                 logError("failed RAW load " + fileName);

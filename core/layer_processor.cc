@@ -18,7 +18,7 @@
 
 #include "layer_processor.h"
 #include "main_window.h"
-#include "main_frame.h"
+#include "main_frame_events.h"
 #include "layer_frame_manager.h"
 #include "layer_stack.h"
 #include "view_manager.h"
@@ -26,12 +26,13 @@
 #include "base_layer.h"
 #include "channel_manager.h"
 #include "str.h"
-#include <wx/progdlg.h>
+#include "progress_dialog.h"
 #include <iostream>
 #include "logger.h"
 #include "renderer.h"
 #include "image_io.h"
 #include "layer_processor_threads.h"
+#include "flatten_layers.h"
 
 
 deLayerProcessor::deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deMainWindow& _mainWindow)
@@ -317,105 +318,17 @@ void deLayerProcessor::updateWarning()
     mainWindow.postEvent(DE_WARNING_EVENT, 0 );
 }
 
-bool deLayerProcessor::updateImagesSmart(int view, wxProgressDialog* progressDialog, const std::string& fileName, const std::string& type, bool saveAll)
+bool deLayerProcessor::updateImagesSmart(int view, deProgressDialog& progressDialog, const std::string& fileName, const std::string& type, bool saveAll)
 {
-    bool result = true;
-    logInfo("updateImagesSmart");
+    bool result;
 
     lock();
 
-    std::map<int, int> channelUsage;
-    generateChannelUsage(channelUsage);
-
-    unsigned int index;
-    int progress = 0;
-    for (index = 0; index <= (unsigned int)view; index++)
-    {
-        logInfo("updateImagesSmart index: " + str(index));
-        std::map<int, int>::iterator i;
-        int previous = index - 1;
-        if (previous >= 0)
-        {
-            for (i = channelUsage.begin(); i != channelUsage.end(); i++)
-            {
-                int c = i->first;
-                int l = i->second;
-                if (l == previous)
-                {
-                    logInfo("deallocate " + str(c));
-                    previewChannelManager.tryDeallocateChannel(c);
-                }
-            }
-        }
-
-        deBaseLayer* layer = layerStack.getLayer(index);
-
-        std::string label = str(index);
-
-        progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
-
-        logInfo("updateImagesSmart process index: " + str(index));
-        bool r = layer->processFull();
-        if (r)
-        {
-            if (saveAll)
-            {
-                const deImage& image = layer->getLayerImage();
-                const std::string f = insertIndex(fileName, index);
-                saveImage(f, image, type, previewChannelManager);
-            }                
-        }
-        else
-        {
-            result = false;
-            // stop loop
-            index = view + 1;
-        }
-
-        if (view > 0)
-        {
-            progress = 100 * index / view;
-        }
-        else
-        {
-            progress = 100;
-        }
-
-        progressDialog->Update(progress, wxString::FromAscii(label.c_str()));
-    }
-
-    progressDialog->Update(100, _T("finished"));
+    result = flattenLayers(view, progressDialog, fileName, type, saveAll, layerStack, previewChannelManager);
 
     unlock();
 
-    if ((result) && (!saveAll))
-    {
-        // take the final image
-        deBaseLayer* layer = layerStack.getLayer(view);
-        const deImage& image = layer->getLayerImage();
-
-        // save it
-        saveImage(fileName, image, type, previewChannelManager);
-    }
-
-    logInfo("updateImagesSmart DONE");
-
     return result;
-}
-
-void deLayerProcessor::generateChannelUsage(std::map<int, int>& channelUsage)
-{
-    channelUsage.clear();
-    int i;
-    int n = layerStack.getSize();
-    for (i = 0; i < n; i++)
-    {
-        const deBaseLayer* layer = layerStack.startReadLayer(i);
-
-        layer->updateChannelUsage(channelUsage, i);
-
-        layerStack.finishReadLayer(i);
-    }
 }
 
 void deLayerProcessor::markUpdateSingleChannel(int index, int channel)

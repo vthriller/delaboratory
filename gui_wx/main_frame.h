@@ -34,40 +34,7 @@ class deOperationProcessor;
 class deChannelManager;
 class deWarningPanel;
 #include "size.h"
-
-enum
-{
-    ID_Quit = 1,
-    ID_NewProject,
-    ID_TestImageSmall,
-    ID_TestImageBig,
-    ID_OpenImage,
-    ID_OpenRawImageProPhoto,
-    ID_HelpColorSpaces,
-    ID_HelpColorSpaces2,
-    ID_HelpColorSpaces3,
-    ID_HelpColorSpaces4,
-    ID_HelpColorSpaces5,
-    ID_LABColors1,
-    ID_LABColors2,
-    ID_LABColors5,
-    ID_ColorMatrix1,
-    ID_ColorMatrix2,
-    ID_ColorMatrix3,
-    ID_ColorMatrix4,
-    ID_ColorMatrix5,
-    ID_PaletteFrame,
-    ID_ExportGIMP,
-    ID_ExportTIFF,
-    ID_ExportJPG,
-    ID_ExportAll,
-    DE_REPAINT_EVENT,
-    DE_IMAGE_LOAD_EVENT,
-    DE_HISTOGRAM_EVENT,
-    DE_WARNING_EVENT,
-    DE_INFO_EVENT
-
-};
+#include "main_frame_events.h"
 
 class deMainFrame: public wxFrame
 {

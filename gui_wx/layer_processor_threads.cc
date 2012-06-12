@@ -196,6 +196,8 @@ class deHistogramWorkerThread:public wxThread
 
 void deLayerProcessorThreads::stopWorkerThread()
 {
+    logInfo("stop worker, render and histogram threads");
+
     workerSemaphore.post();
     workerThread->Delete();
 
@@ -205,10 +207,14 @@ void deLayerProcessorThreads::stopWorkerThread()
     histogramWorkerSemaphore.post();
     histogramWorkerThread->Delete();
 
+    logInfo("stopped worker, render and histogram threads");
+
 }
 
 void deLayerProcessorThreads::startWorkerThread()
 {
+    logInfo("start worker, render and histogram threads");
+
     workerThread = new deLayerProcessorWorkerThread(layerProcessor, workerSemaphore);
 
     if ( workerThread->Create() != wxTHREAD_NO_ERROR )
@@ -238,5 +244,7 @@ void deLayerProcessorThreads::startWorkerThread()
     if ( histogramWorkerThread->Run() != wxTHREAD_NO_ERROR )
     {
     }
+
+    logInfo("started worker, render and histogram threads");
 }
 
