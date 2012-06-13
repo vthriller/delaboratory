@@ -41,26 +41,14 @@ void deImageAreaPanel::updateSize(bool canSkip)
     logInfo("image area panel update size " + str(s.GetWidth()) + "x" + str(s.GetHeight()));
 
     const deSize ps(s.GetWidth(), s.GetHeight());
-    
-    deValue aspect = project.getSourceAspect();
 
-    if (aspect <= 0)
-    {
-        logInfo("image area panel update size skipped, aspect is 0");
-        return;
-    }
-
-    deSize fit = fitInside(ps, aspect);
-
-    project.getLayerProcessor().setPreviewSize(fit, canSkip);
+    deSize fit = project.onImageAreaChangeSize(ps, canSkip);
 
     logInfo("set image panel size " + str(fit.getW()) + "x" + str(fit.getH()));
-    imagePanel->SetSize(wxSize(fit.getW(), fit.getH()));
     imagePanel->SetMinSize(wxSize(fit.getW(), fit.getH()));
 
     Layout();
 }
-
 
 deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, deZoomPanel* zoomPanel)
 :wxPanel(parent), project(_project)
@@ -81,7 +69,6 @@ deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject& _project, deSamp
 deImageAreaPanel::~deImageAreaPanel()
 {
 }
-
 
 deImagePanel* deImageAreaPanel::getImagePanel()
 {

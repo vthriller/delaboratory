@@ -17,7 +17,6 @@
 */
 
 #include "curves_layer.h"
-//#include "project.h"
 #include <iostream>
 #include <cassert>
 

@@ -100,7 +100,7 @@ bool deToneLayer::updateMainImageNotThreadedWay()
         deValue light = getNumericValue(nl);
         deValue half = getNumericValue(nh);
 
-        mainLayerImage.enableChannel(channel);
+        //mainLayerImage.enableChannel(channel);
 
         deValue* destination = mainLayerImage.startWrite(channel);
 

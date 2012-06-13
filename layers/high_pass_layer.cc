@@ -82,10 +82,12 @@ bool deHighPassLayer::updateMainImageNotThreadedWay()
     deValue r = getNumericValue("radius") * viewManager.getRealScale();
 
     int i;
+    /*
     for (channel = 0; channel < nc; channel++)
     {
         mainLayerImage.enableChannel(channel);
     }
+    */
 
     // calc high pass
     for (channel = 0; channel < no; channel++)
@@ -124,12 +126,14 @@ bool deHighPassLayer::updateMainImageNotThreadedWay()
 
     for (channel = 0; channel < nc; channel++)
     {
+        /*
         if (!isChannelEnabled(channel))
         {
             int s = getSourceImage().getChannelIndex(channel);
             mainLayerImage.disableChannel(channel, s);
         }
         else
+        */
         {
             deValue* destination = mainLayerImage.startWrite(channel);
             int i;

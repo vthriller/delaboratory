@@ -52,6 +52,8 @@
 #include "histogram_mode_panel.h"
 #include "view_mode_panel.h"
 #include "str_wx.h"
+#include "window_wx.h"
+#include "generic_layer_frame.h"
 
 deProject::deProject(deLayerProcessor& _processor, deChannelManager& _channelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deMainWindow& _mainWindow)
 :layerProcessor(_processor),
@@ -290,6 +292,8 @@ deViewManager& deProject::getViewManager()
 
 bool deProject::exportFinalImage(const std::string& app, const std::string& type, const std::string& name, deProgressDialog& progressDialog, bool saveAll, const std::string& dir)
 {
+    logInfo("exportFinalImage...");
+
     // name is taken from file dialog, it can be empty when we are exporting to external editor
     // but in this case we need correct imageFileName
     if ((name == "") && (imageFileName == ""))
@@ -344,6 +348,8 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
 
 bool deProject::processFullSizeImage(const std::string& fileName, const std::string& type, bool saveAll, deProgressDialog& progressDialog)
 {
+    logInfo("processFullSizeImage...");
+
     // remember original size of preview
     deSize originalSize = channelManager.getChannelSizeFromChannelManager();
 
@@ -523,7 +529,11 @@ deBaseLayer* deProject::createNewLayer(const std::string& type)
     if (!layer)
     {
         deColorSpace colorSpace = colorSpaceFromString(type);
-        layer = createLayer("conversion", s, colorSpace, layerStack, channelManager, viewManager, sourceImage);
+
+        if (colorSpace != deColorSpaceInvalid)
+        {
+            layer = createLayer("conversion", s, colorSpace, layerStack, channelManager, viewManager, sourceImage);
+        }            
     }
 
     return layer;
@@ -573,3 +583,39 @@ void deProject::onRemoveTopLayer()
     updateLayerGrid();
 }        
 
+deSize deProject::onImageAreaChangeSize(const deSize& ps, bool canSkip)
+{
+    deValue aspect = getSourceAspect();
+
+    if (aspect <= 0)
+    {
+        logInfo("image area panel update size skipped, aspect is 0");
+        return deSize(0,0);
+    }
+
+    deSize fit = fitInside(ps, aspect);
+
+    layerProcessor.setPreviewSize(fit, canSkip);
+
+    return fit;
+}    
+
+
+void deProject::openLayerFrame(int index)
+{
+    int layerIndex = index;
+
+    deBaseLayer* layer = layerStack.getLayer(index);
+
+    if (!layerFrameManager.checkLayerFrame(index))
+    {
+        deWindowWX window(layerGridPanel);
+        const std::string name = layer->getType();
+
+        deFrame* frame = new deGenericLayerFrame(window, name, *layer, layerProcessor, layerFrameManager, layerIndex);
+        if (frame)
+        {
+            frame->show();
+        }
+    }        
+}            

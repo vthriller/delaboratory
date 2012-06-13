@@ -91,14 +91,16 @@ bool deC2GLayer::updateMainImageNotThreadedWay()
     int channel;
     for (channel = 0; channel < nc; channel++)
     {
+        /*
         if (!isChannelEnabled(channel))
         {
             int s = getSourceImage().getChannelIndex(channel);
             mainLayerImage.disableChannel(channel, s);
         }
         else
+        */
         {
-            mainLayerImage.enableChannel(channel);
+            //mainLayerImage.enableChannel(channel);
             deValue* destination = mainLayerImage.startWrite(channel);
             int i;
             for (i = 0; i < n; i++)

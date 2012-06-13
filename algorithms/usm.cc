@@ -235,7 +235,7 @@ bool shadowsHighlights(deValue r, int channel, const deImage& sourceImage, deIma
     int nc = getColorSpaceSize(sourceImage.getColorSpace());
     for (i = 0; i < nc; i++)
     {
-        mainLayerImage.enableChannel(i);
+        //mainLayerImage.enableChannel(i);
         deValue* d = mainLayerImage.startWrite(i);
         const deValue* s = sourceImage.startRead(i);
         int j;

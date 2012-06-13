@@ -154,7 +154,7 @@ void saveImage(const std::string& fileName, const deImage& image, const std::str
     else
     {
         deImage finalImage(deColorSpaceRGB, previewChannelManager);
-        finalImage.enableAllChannels();
+        //finalImage.enableAllChannels();
 
         deConversionProcessor p;
         p.convertImageNew(image, finalImage);

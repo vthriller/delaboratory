@@ -24,9 +24,6 @@
 
 class deSwitchableLayer:public deBaseLayerWithSource
 {
-    private:
-        virtual bool setChannelInMainImage(int channel);
-
     protected:
         void disableAll();
         void disableNotLuminance();
