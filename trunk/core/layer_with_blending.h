@@ -44,8 +44,6 @@ class deLayerWithBlending:public deSwitchableLayer
         deLayerWithBlending(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
         virtual ~deLayerWithBlending();
 
-        bool isBlendingEnabled() const;
-
         deBlendMode getBlendMode() const;
         deValue getOpacity() const;
 

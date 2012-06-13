@@ -121,6 +121,10 @@ class deProject
         deLayerFrameManager& getLayerFrameManager() {return layerFrameManager;};
         deValue getSourceAspect() const;
 
+        deSize onImageAreaChangeSize(const deSize& ps, bool canSkip);
+
+        void openLayerFrame(int index);
+
 };
 
 #endif

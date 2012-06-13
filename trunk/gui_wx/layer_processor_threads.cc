@@ -207,6 +207,8 @@ void deLayerProcessorThreads::stopWorkerThread()
     histogramWorkerSemaphore.post();
     histogramWorkerThread->Delete();
 
+    wxThread::Sleep(200);
+
     logInfo("stopped worker, render and histogram threads");
 
 }

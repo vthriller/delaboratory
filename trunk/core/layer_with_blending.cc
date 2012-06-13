@@ -29,7 +29,6 @@
 #include "update_blend.h"
 
 
-
 deLayerWithBlending::deLayerWithBlending(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayerIndex, deLayerStack& _layerStack)
 :deSwitchableLayer(_colorSpace, _channelManager, _sourceLayerIndex, _layerStack),
  imageBlendPass(_colorSpace, _channelManager)
@@ -67,27 +66,6 @@ void deLayerWithBlending::setOpacity(deValue _opacity)
     p->set(_opacity);
 }
 
-bool deLayerWithBlending::isBlendingEnabled() const
-{
-    bool inverted = getPropertyBoolean("invert")->get();
-    if (inverted)
-    {
-        return true;
-    }
-
-    if (getNumericValue("opacity") < 1.0)
-    {
-        return true;
-    }
-
-    if (getBlendMode() != deBlendNormal)
-    {
-        return true;
-    }
-
-    return false;
-}
-
 void deLayerWithBlending::setBlendMode(deBlendMode mode)
 {
     dePropertyChoice* blendMode = getPropertyChoice("blend mode");
@@ -99,35 +77,12 @@ void deLayerWithBlending::setBlendMode(deBlendMode mode)
 
 bool deLayerWithBlending::updateBlend(int i)
 {
-    if (!isBlendingEnabled())
-    {
-        return true;
-    }
-
-    if (isChannelNeutral(i))
-    {
-        if (getBlendMode() == deBlendNormal)
-        {
-            int s = getSourceImage().getChannelIndex(i);
-            imageBlendPass.disableChannel(i, s);
-            return true;
-        }
-    }
-
-    if (!isChannelEnabled(i))
-    {
-        int s = getSourceImage().getChannelIndex(i);
-        imageBlendPass.disableChannel(i, s);
-        return true;
-    }
-
     logInfo("update blend " + str(i) + " START");
 
     const deValue* source = getSourceImage().startRead(i);
 
     const deValue* overlay = mainLayerImage.startRead(i);
 
-    imageBlendPass.enableChannel(i);
     deValue* destination = imageBlendPass.startWrite(i);
 
     deValue* maskPixels = NULL;
@@ -135,6 +90,11 @@ bool deLayerWithBlending::updateBlend(int i)
     int channelSize = mainLayerImage.getChannelSize().getN();
 
     deValue o = getOpacity();
+    if (!isChannelEnabled(i))
+    {
+        o = 0.0;
+    }
+
     bool inverted = getPropertyBoolean("invert")->get();
 
     if (inverted)
@@ -158,12 +118,7 @@ bool deLayerWithBlending::updateBlend(int i)
 
 const deImage& deLayerWithBlending::getLayerImage() const
 {
-    if (isBlendingEnabled())
-    {
-        return imageBlendPass;
-    }
-
-    return mainLayerImage;
+    return imageBlendPass;
 }
 
 void deLayerWithBlending::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
@@ -172,10 +127,7 @@ void deLayerWithBlending::updateChannelUsage(std::map<int, int>& channelUsage, i
 
     mainLayerImage.updateChannelUsage(channelUsage, layerIndex);
 
-    if (isBlendingEnabled())
-    {
-        imageBlendPass.updateChannelUsage(channelUsage, layerIndex);
-    }
+    imageBlendPass.updateChannelUsage(channelUsage, layerIndex);
 }
 
 bool deLayerWithBlending::updateBlendAllChannels()
@@ -249,14 +201,6 @@ void deLayerWithBlending::blendSpecial()
     if (cs == 4)
     {
         overlay3 = mainLayerImage.startRead(3);
-    }        
-
-    imageBlendPass.enableChannel(0);
-    imageBlendPass.enableChannel(1);
-    imageBlendPass.enableChannel(2);
-    if (cs == 4)
-    {
-        imageBlendPass.enableChannel(3);
     }        
 
     deValue* destination0 = imageBlendPass.startWrite(0);

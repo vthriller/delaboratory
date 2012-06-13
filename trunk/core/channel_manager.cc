@@ -65,6 +65,7 @@ void deChannelManager::setChannelSize(const deSize& size)
         logInfo("destroy channel " + str(i));
         mutexes[i]->lockWrite();
         tryDeallocateChannel(i);
+        tryAllocateChannel(i);
         mutexes[i]->unlockWrite();
     }
 

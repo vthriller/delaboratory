@@ -95,6 +95,7 @@ else
 CXXFLAGS+=-Ofast ${OPTFLAGS} -DNDEBUG
 endif
 
+include .depend
 
 ${APP}: ${CORE_OBJECTS} ${LAYERS_OBJECTS} ${ALGORITHMS_OBJECTS} ${PROPERTIES_OBJECTS} ${OBJECTS}
 	${CXX} -o ${APP} ${CORE_OBJECTS} ${OBJECTS} ${LAYERS_OBJECTS} ${ALGORITHMS_OBJECTS} ${PROPERTIES_OBJECTS} ${LDFLAGS} 
@@ -118,10 +119,9 @@ obj/%.o: properties/%.cc
 obj/%.o: algorithms/%.cc
 	${CXX} -c ${CXXFLAGS} -o $@ $<
 
-depend: $(SOURCES) ${HEADERS}
-		$(CXX) $(CXXFLAGS_WX) ${INCLUDES}  -MM $^>>./.depend;
+depend: $(SOURCES) ${HEADERS} ${CORE_SOURCES} ${CORE_HEADERS}
+		$(CXX) $(CXXFLAGS_WX) ${INCLUDES} -MM $^ >>./.depend;
 
-include .depend
 
 install:
 	cp ${APP} /usr/local/bin

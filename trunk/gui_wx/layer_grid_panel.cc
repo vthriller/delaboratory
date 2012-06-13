@@ -34,11 +34,7 @@
 
 #include "layer_stack.h"
 
-#include "layer_frame_manager.h"
-
 #include "window_wx.h"
-
-#include "generic_layer_frame.h"
 
 void deLayerGridPanel::buildRows()
 {
@@ -162,27 +158,10 @@ void deLayerGridPanel::click(wxCommandEvent &event)
     std::vector<deLayerRow>::const_iterator i;
     for (i = layerRows.begin(); i != layerRows.end(); i++)
     {
-        deLayerFrameManager& frameManager = project.getLayerFrameManager();
-
         const deLayerRow& row = *i;
         if (row.action->GetId() == id)
         {
-            int layerIndex = row.index;
-
-            deBaseLayer* layer = layerStack.getLayer(row.index);
-
-            if (!project.getLayerFrameManager().checkLayerFrame(row.index))
-            {
-                deWindowWX window(this);
-                const std::string name = layer->getType();
-
-                deFrame* frame = new deGenericLayerFrame(window, name, *layer, layerProcessor, frameManager, layerIndex);
-                if (frame)
-                {
-                    frame->show();
-                }
-            }        
-
+            project.openLayerFrame(row.index);
         }
     }
 

@@ -27,7 +27,6 @@ deStaticImage::deStaticImage()
 :colorSpace(deColorSpaceInvalid),
  size(0,0)
 {
-    rotation = 0;
     lastRotate = -1;
 
     int n = 3;

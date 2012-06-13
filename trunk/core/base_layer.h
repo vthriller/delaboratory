@@ -48,7 +48,6 @@ class deBaseLayer
 
         deMutex mutex;
 
-        virtual bool setChannelInMainImage(int channel) {return true;};
         virtual bool updateMainImageSingleChannel(int channel) {return false;};
 
     protected:

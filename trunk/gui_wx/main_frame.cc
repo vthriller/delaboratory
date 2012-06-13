@@ -487,6 +487,8 @@ void deMainFrame::onExportTIFF(wxCommandEvent& event)
 
 bool deMainFrame::generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir)
 {
+    logInfo("generateFinalImage...");
+
     deProgressDialog dialog;
 //    wxProgressDialog* progressDialog = new wxProgressDialog(_T("generate final image"), _T("generate final image"), 100, this, wxPD_AUTO_HIDE | wxPD_ELAPSED_TIME);
 

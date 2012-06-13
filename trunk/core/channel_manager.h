@@ -45,7 +45,6 @@ class deChannelManager
         deChannelManager();
         virtual ~deChannelManager();
 
-
         void setChannelSize(const deSize& size);
         deSize getChannelSizeFromChannelManager() const;
 

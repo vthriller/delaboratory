@@ -79,7 +79,6 @@ void deLayerProcessor::stopWorkerThread()
     threads->stopWorkerThread();
 }
 
-
 void deLayerProcessor::startWorkerThread()
 {
     threads->startWorkerThread();

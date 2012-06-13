@@ -30,7 +30,6 @@ class deImage
 {
     private:
         const deColorSpace colorSpace;
-        int channelsVisible[MAX_COLOR_SPACE_SIZE];
         int channelsAllocated[MAX_COLOR_SPACE_SIZE];
         deChannelManager& channelManager;
         mutable deMutex mutex;
@@ -47,12 +46,6 @@ class deImage
 
         int getChannelIndex(int n) const;
 
-        void enableChannel(int n);
-        void disableChannel(int n, int c);
-
-        void disableAllChannels();
-        void enableAllChannels();
-
         void updateChannelUsage(std::map<int, int>& channelUsage, int index) const;
 
         const deValue* startRead(int channel) const;
@@ -62,8 +55,6 @@ class deImage
         void finishWrite(int channel);
 
         const deSize getChannelSize() const;
-
-        bool isReady() const;
 
 
 };

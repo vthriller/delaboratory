@@ -99,7 +99,7 @@ bool deConversionLayer::updateMainImageNotThreadedWay()
 {
     logInfo("conversion layer start");
 
-    mainLayerImage.enableAllChannels();
+    //mainLayerImage.enableAllChannels();
 
     deConversionProcessor p;
 

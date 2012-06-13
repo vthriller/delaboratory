@@ -63,10 +63,12 @@ bool deSourceImageLayer::updateMainImageNotThreadedWay()
     int channel;
     for (channel = 0; channel < 3; channel++)
     {
-        mainLayerImage.enableChannel(channel);
         deValue* destination = mainLayerImage.startWrite(channel);
 
-        sourceImage.copyToChannel(channel, destination, z_x1, z_y1, z_x2, z_y2, ds, mirrorX, mirrorY, rotate);
+        if (destination)
+        {
+            sourceImage.copyToChannel(channel, destination, z_x1, z_y1, z_x2, z_y2, ds, mirrorX, mirrorY, rotate);
+        }            
 
         mainLayerImage.finishWrite(channel);
     }

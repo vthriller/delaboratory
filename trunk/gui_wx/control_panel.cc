@@ -39,10 +39,32 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
     wxNotebook* notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("notebook"));
     mainSizer->Add(notebook, 1, wxEXPAND);
 
-    std::vector<std::string> actions;
-    getSupportedActions(actions);
+    {
+        wxPanel* basicPanel = new wxPanel(notebook);
+        notebook->AddPage(basicPanel, _T("basic"));
+
+        std::vector<std::string> operations;
+        getSupportedBasicOperations(operations);
+
+        wxSizer* gridSizer = new wxGridSizer(1);
+        basicPanel->SetSizer(gridSizer);
+
+        std::vector<std::string>::iterator j;
+        for (j = operations.begin(); j != operations.end(); j++)
+        {
+            std::string d = *j;
+            wxButton* b = new wxButton(basicPanel, wxID_ANY, wxString::FromAscii(d.c_str()));
+            gridSizer->Add(b);
+            actionButtons.push_back(b);
+            actionButtonsNames[b->GetId()] = *j;
+        }
+        
+    }
 
     {
+        std::vector<std::string> actions;
+        getSupportedActions(actions);
+
         wxPanel* actionsPanel = new wxPanel(notebook);
         notebook->AddPage(actionsPanel, _T("actions"));
 
@@ -115,7 +137,6 @@ void deControlPanel::click(wxCommandEvent &event)
         project.getLayerFrameManager().onDestroyLayer(index);
         operationProcessor.execute("remove");
     }
-
 
     std::map<int, deColorSpace>::iterator c = convertButtonsColorSpaces.find(id);
     if (c != convertButtonsColorSpaces.end())

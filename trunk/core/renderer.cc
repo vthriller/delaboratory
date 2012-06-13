@@ -107,37 +107,30 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
     {
         const deImage& layerImage = layer->getLayerImage();
 
-        if (!layerImage.isReady())
+        if (viewManager.isSingleChannel())
         {
-            logError("layer image not ready");
+            bool reversed = false;
+            deColorSpace colorSpace = layerImage.getColorSpace();
+            if (colorSpace == deColorSpaceCMYK)
+            {
+                reversed = true;
+            }
+            renderChannel(layerImage, viewManager.getChannel(), getCurrentImageData(), channelManager, reversed);
+            renderedImage.clearError();
         }
         else
         {
-            if (viewManager.isSingleChannel())
+            deConversionProcessor p;
+            if (!p.renderImageToRGBNew(layerImage, getCurrentImageData()))
             {
-                bool reversed = false;
-                deColorSpace colorSpace = layerImage.getColorSpace();
-                if (colorSpace == deColorSpaceCMYK)
-                {
-                    reversed = true;
-                }
-                renderChannel(layerImage, viewManager.getChannel(), getCurrentImageData(), channelManager, reversed);
-                renderedImage.clearError();
+                logError("render image FAILED");
+                renderedImage.setError();
             }
             else
             {
-                deConversionProcessor p;
-                if (!p.renderImageToRGBNew(layerImage, getCurrentImageData()))
-                {
-                    logError("render image FAILED");
-                    renderedImage.setError();
-                }
-                else
-                {
-                    renderedImage.clearError();
-                }
+                renderedImage.clearError();
             }
-        }            
+        }
     }        
     else
     {

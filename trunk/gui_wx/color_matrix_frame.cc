@@ -47,7 +47,7 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
     int n = channelSize.getN();
 
     deImage LABImage(deColorSpaceLAB, channelManager);
-    LABImage.enableAllChannels();
+    //LABImage.enableAllChannels();
 
     deConversionProcessor p;
     p.convertImageNew(originalImage, LABImage);

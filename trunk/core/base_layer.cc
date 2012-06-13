@@ -100,11 +100,7 @@ bool deBaseLayer::processMainImageSingleChannel(int channel)
 {
     bool result = true;
     logInfo("base layer process main image single channel");
-    if (setChannelInMainImage(channel))
-    {
-        logInfo("base layer process main image single channel after set");
-        result = updateMainImageSingleChannel(channel);
-    }
+    result = updateMainImageSingleChannel(channel);
     logInfo("base layer process main image single channel DONE");
     return result;
 }

@@ -38,7 +38,14 @@ void dePropertyBooleanUI::onCheck(bool c)
 {
     property.set(c);
 
-    layerProcessor.markUpdateAllChannels(layerIndex);
+    if (property.updateBlendOnly())
+    {
+        layerProcessor.markUpdateBlendAllChannels(layerIndex);
+    }
+    else
+    {
+        layerProcessor.markUpdateAllChannels(layerIndex);
+    }
 }
 
 void dePropertyBooleanUI::setFromProperty()

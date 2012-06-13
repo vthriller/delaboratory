@@ -30,6 +30,7 @@ deSwitchableLayer::deSwitchableLayer(deColorSpace _colorSpace, deChannelManager&
         std::string n = getChannelName(colorSpace, i);
         createPropertyBoolean(n);
         getPropertyBoolean(n)->setSizer("channels");
+        getPropertyBoolean(n)->setBlendOnly();
         enableChannel(i);
     }
 }
@@ -90,20 +91,5 @@ void deSwitchableLayer::disableChannel(int index)
 {
     std::string n = getChannelName(colorSpace, index);
     getPropertyBoolean(n)->set(false);
-}
-
-bool deSwitchableLayer::setChannelInMainImage(int i)
-{
-    // enable/disable channels
-    if ((isChannelNeutral(i)) || (!isChannelEnabled(i)))
-    {
-        const deImage& sourceImage = getSourceImage();
-        int s = sourceImage.getChannelIndex(i);
-        mainLayerImage.disableChannel(i, s);
-        return false;
-    }
-
-    mainLayerImage.enableChannel(i);
-    return true;
 }
 

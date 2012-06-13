@@ -23,6 +23,8 @@ class deLayerProcessor;
 class deBaseLayer;
 class deProject;
 #include <string>
+#include <vector>
+#include "color_space.h"
 
 class deOperationProcessor
 {
@@ -33,6 +35,9 @@ class deOperationProcessor
         void removeTopLayer();
         void addNewLayerOnTop(deBaseLayer* layer);
 
+        bool tryExecuteBasicOperation(const std::string& operation);
+        bool executeOperation(deColorSpace colorSpace, const std::string& operation);
+
     public:
         deOperationProcessor(deLayerProcessor& _layerProcessor, deProject& _project);
         virtual ~deOperationProcessor();
@@ -41,7 +46,8 @@ class deOperationProcessor
 
         void initProfile(const std::string& profile);
 
-
 };
+
+void getSupportedBasicOperations(std::vector<std::string>& actions);
 
 #endif

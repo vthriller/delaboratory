@@ -36,8 +36,6 @@ class deStaticImage
         std::string info;
         int lastRotate;
 
-        int rotation;
-
         const deValue* startReadStatic(int index);
         void finishReadStatic(int index);
 
