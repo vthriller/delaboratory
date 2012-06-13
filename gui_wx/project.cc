@@ -292,6 +292,8 @@ deViewManager& deProject::getViewManager()
 
 bool deProject::exportFinalImage(const std::string& app, const std::string& type, const std::string& name, deProgressDialog& progressDialog, bool saveAll, const std::string& dir)
 {
+    // FIXME without dynamic channel allocation all channels are allocated from start - so it will crash with out of memory
+
     logInfo("exportFinalImage...");
 
     // name is taken from file dialog, it can be empty when we are exporting to external editor
