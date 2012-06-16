@@ -83,6 +83,7 @@ void unsharpMask(const deValue* source, const deValue* mask, deValue* destinatio
 
 bool unsharpMask(const deValue* source, deValue* destination, deSize& size, deValue a, deValue r, deValue t, deBlurType type)
 {
+    logInfo("unsharp mask start");
     int n = size.getN();
 
     deValue* mask = NULL;
@@ -115,6 +116,8 @@ bool unsharpMask(const deValue* source, deValue* destination, deSize& size, deVa
     }
 
     delete [] mask;
+
+    logInfo("unsharp mask DONE");
 
     return true;
 }        
