@@ -29,8 +29,7 @@
 #include "conversion_processor.h"
 #include "tiff.h"
 
-/*
-void saveJPEG(const std::string& fileName, const deChannel& channelR, const deChannel& channelG, const deChannel& channelB, deSize size)
+void saveJPEG(const std::string& fileName, const deValue* channelR, const deValue* channelG, const deValue* channelB, deSize size)
 {
     wxImage* image;
     int w = size.getW();
@@ -47,9 +46,9 @@ void saveJPEG(const std::string& fileName, const deChannel& channelR, const deCh
         int x;
         for (x = 0; x < w; x++)
         {
-            deValue r = 255 * channelR.getValue(pos);
-            deValue g = 255 * channelG.getValue(pos);
-            deValue b = 255 * channelB.getValue(pos);
+            deValue r = 255 * channelR[pos];
+            deValue g = 255 * channelG[pos];
+            deValue b = 255 * channelB[pos];
             image->SetRGB(x, y, r, g, b); 
 
             pos++;
@@ -62,7 +61,6 @@ void saveJPEG(const std::string& fileName, const deChannel& channelR, const deCh
     image->SaveFile(s);
     delete image;
 }
-    */
 
 bool loadJPEG(const std::string& fileName, deStaticImage& image)
 {
@@ -141,14 +139,16 @@ bool saveImage(const std::string& fileName, const deImage& image, const std::str
             image.finishRead(1);
             image.finishRead(2);
         }            
-        if (type == "jpeg")
+        if (type == "jpg")
         {
-        /*
-            deChannel* r = previewChannelManager.getChannel(image.getChannelIndex(0));
-            deChannel* g = previewChannelManager.getChannel(image.getChannelIndex(1));
-            deChannel* b = previewChannelManager.getChannel(image.getChannelIndex(2));
-            saveJPEG(fileName, *r, *g, *b, image.getChannelSize());
-            */
+            const deValue* vr = image.startRead(0);
+            const deValue* vg = image.startRead(1);
+            const deValue* vb = image.startRead(2);
+            saveJPEG(fileName, vr, vg, vb, image.getChannelSize());
+            image.finishRead(0);
+            image.finishRead(1);
+            image.finishRead(2);
+            result = true;
         }            
     }
     else
@@ -159,11 +159,6 @@ bool saveImage(const std::string& fileName, const deImage& image, const std::str
         deConversionProcessor p;
         p.convertImageNew(image, finalImage);
 
-/*
-        deChannel* r = previewChannelManager.getChannel(finalImage.getChannelIndex(0));
-        deChannel* g = previewChannelManager.getChannel(finalImage.getChannelIndex(1));
-        deChannel* b = previewChannelManager.getChannel(finalImage.getChannelIndex(2));
-        */
         if (type == "tiff")
         {
             const deValue* vr = finalImage.startRead(0);
@@ -174,9 +169,16 @@ bool saveImage(const std::string& fileName, const deImage& image, const std::str
             finalImage.finishRead(1);
             finalImage.finishRead(2);
         }            
-        if (type == "jpeg")
+        if (type == "jpg")
         {
-            //saveJPEG(fileName, *r, *g, *b, image.getChannelSize());
+            const deValue* vr = finalImage.startRead(0);
+            const deValue* vg = finalImage.startRead(1);
+            const deValue* vb = finalImage.startRead(2);
+            saveJPEG(fileName, vr, vg, vb, image.getChannelSize());
+            finalImage.finishRead(0);
+            finalImage.finishRead(1);
+            finalImage.finishRead(2);
+            result = true;
         }            
     }
 
