@@ -92,11 +92,15 @@ int deConversionProcessor::convertImageNew(const deImage& sourceImage, deImage& 
     deColorSpace sourceColorSpace = sourceImage.getColorSpace();
     deColorSpace targetColorSpace = image.getColorSpace();
 
+
     if (sourceColorSpace == targetColorSpace)
     {
+        logInfo("skip conversion - colorspaces match");
         copyImage(sourceImage, image);
         return true;
     }
+
+    logInfo("convert image from " + getColorSpaceName(sourceColorSpace) + " to " + getColorSpaceName(targetColorSpace));
 
     deConversionCPU cpu(4);
     cpu.registers[CPU_REGISTER_OVERFLOW] = 0;
@@ -165,6 +169,9 @@ int deConversionProcessor::convertImageNew(const deImage& sourceImage, deImage& 
     deValue overflow = cpu.registers[CPU_REGISTER_OVERFLOW];
     int n = sourceImage.getChannelSize().getN();
     int percentage = overflow * 10000 / n;
+
+    logInfo("conversion DONE - overflow: " + str(percentage));
+
     return percentage;
 
 }
