@@ -31,7 +31,6 @@ class deImageAreaPanel:public wxPanel
 {
     private:
         void resize(wxSizeEvent &event);
-        void paint(wxPaintEvent& event);
         deProject& project;
 
         deImagePanel* imagePanel;

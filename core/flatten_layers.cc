@@ -81,7 +81,7 @@ bool flattenLayers(int view, deProgressDialog& progressDialog, const std::string
             {
                 const deImage& image = layer->getLayerImage();
                 const std::string f = insertIndex(fileName, index);
-                bool result = saveImage(f, image, type, previewChannelManager);
+                saveImage(f, image, type, previewChannelManager);
             }                
         }
         else

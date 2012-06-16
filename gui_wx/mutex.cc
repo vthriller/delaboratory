@@ -18,14 +18,15 @@
 
 #include "mutex.h"
 #include <wx/wx.h>
+#include "logger.h"
 
 class deMutexImpl
 {
     private:
         wxMutex mutex;
     public:
-        deMutexImpl()
-        :mutex(wxMUTEX_RECURSIVE)
+        deMutexImpl(wxMutexType flags)
+        :mutex(flags)
         {
         }
 
@@ -45,13 +46,25 @@ class deMutexImpl
 
 };
 
-deMutex::deMutex()
+deMutex::deMutex(bool recursive)
 {
-    impl = new deMutexImpl();
+    wxMutexType flags = wxMUTEX_DEFAULT;
+    if (recursive)
+    {
+        logInfo("create recursive mutex");
+        flags = wxMUTEX_RECURSIVE;
+    }        
+    else
+    {
+        logInfo("create normal mutex");
+    }
+
+    impl = new deMutexImpl(flags);
 }
 
 deMutex::~deMutex()
 {
+    logInfo("destroy mutex");
     delete impl;
 }
 

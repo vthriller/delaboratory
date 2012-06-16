@@ -63,6 +63,7 @@ class deLayerProcessor
         deRenderer renderer;
         deChannelManager& previewChannelManager;
         deMainWindow& mainWindow;
+        deMutex sizeMutex;
 
         bool closing;
 
@@ -90,6 +91,9 @@ class deLayerProcessor
 
         void lockHistogram();
         void unlockHistogram();
+
+        void lockSize();
+        void unlockSize();
 
         void lockPrepareImage();
         void unlockPrepareImage();

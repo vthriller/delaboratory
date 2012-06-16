@@ -28,7 +28,7 @@ class deMutex
         deMutex(const deMutex& m);
         deMutex& operator = (const deMutex& m);
     public:
-        deMutex();
+        deMutex(bool recursive = true);
         ~deMutex();
 
         void lock();
