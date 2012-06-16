@@ -68,6 +68,7 @@ bool deEllipse::isValid() const
 
 void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse, deValue light, deValue darkness, deValue spot)
 {
+    logInfo("vignette start");
     if (!destination)
     {
         logError("NULL channel in vignette");
@@ -143,6 +144,8 @@ void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse, deVal
             p++;
         }
     }
+
+    logInfo("vignette DONE");
 
 }
 
