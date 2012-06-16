@@ -153,6 +153,7 @@ bool saveImage(const std::string& fileName, const deImage& image, const std::str
     }
     else
     {
+        logInfo("image is not in sRGB, conversion is needed before save...");
         deImage finalImage(deColorSpaceRGB, previewChannelManager);
         finalImage.allocateChannels();
 
