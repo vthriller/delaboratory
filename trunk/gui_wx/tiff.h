@@ -25,6 +25,6 @@ class deStaticImage;
 #include "size.h"
 
 bool loadTIFF(const std::string& fileName, deStaticImage& image);
-void saveTIFF(const std::string& fileName, const deValue* channelR, const deValue* channelG, const deValue* channelB, deSize size);
+bool saveTIFF(const std::string& fileName, const deValue* channelR, const deValue* channelG, const deValue* channelB, deSize size);
 
 #endif

@@ -26,6 +26,7 @@
 class deProject;
 class deLayerProcessor;
 class deChannelManager;
+class deGUI;
 
 class deLayerGridPanel:public wxPanel
 {
@@ -60,7 +61,7 @@ class deLayerGridPanel:public wxPanel
         void click(wxCommandEvent &event);
     
     public:
-        deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deChannelManager& _channelManager);
+        deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deChannelManager& _channelManager, deGUI& gui);
         ~deLayerGridPanel();
 
         void buildRows();

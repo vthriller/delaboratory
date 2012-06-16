@@ -25,6 +25,7 @@ class deImagePanel;
 class deSamplerManager;
 class deZoomManager;
 class deZoomPanel;
+class deGUI;
 
 class deImageAreaPanel:public wxPanel
 {
@@ -36,7 +37,7 @@ class deImageAreaPanel:public wxPanel
         deImagePanel* imagePanel;
 
     public:
-        deImageAreaPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, deZoomPanel* zoomPanel);
+        deImageAreaPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, deZoomPanel* zoomPanel, deGUI& gui);
         virtual ~deImageAreaPanel();
         
         void updateSize(bool canSkip);

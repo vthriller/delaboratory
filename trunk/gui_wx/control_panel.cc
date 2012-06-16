@@ -46,7 +46,7 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
         std::vector<std::string> operations;
         getSupportedBasicOperations(operations);
 
-        wxSizer* gridSizer = new wxGridSizer(1);
+        wxSizer* gridSizer = new wxGridSizer(2);
         basicPanel->SetSizer(gridSizer);
 
         std::vector<std::string>::iterator j;

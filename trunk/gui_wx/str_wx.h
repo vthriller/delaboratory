@@ -23,8 +23,6 @@
 #include "value.h"
 #include <wx/wx.h>
 
-std::string getTmp();
-
 wxString str2wx(const std::string& s);
 std::string str(wxString& ws);
 

@@ -281,3 +281,9 @@ bool deLayerWithBlending::tryBlendSpecial()
     }
     return false;
 }
+
+void deLayerWithBlending::allocateChannels()
+{
+    deBaseLayer::allocateChannels();
+    imageBlendPass.allocateChannels();
+}

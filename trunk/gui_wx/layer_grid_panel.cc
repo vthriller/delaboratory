@@ -36,6 +36,8 @@
 
 #include "window_wx.h"
 
+#include "gui.h"
+
 void deLayerGridPanel::buildRows()
 {
     logInfo("build rows");
@@ -114,11 +116,11 @@ void deLayerGridPanel::clearRows()
     layerRows.clear();
 }
 
-deLayerGridPanel::deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deChannelManager& _channelManager)
+deLayerGridPanel::deLayerGridPanel(wxWindow* parent, deProject& _project, deLayerProcessor& _processor, deChannelManager& _channelManager, deGUI& gui)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(250, 400)), 
 project(_project), layerProcessor(_processor), channelManager(_channelManager)
 {
-    project.setLayerGridPanel(this);
+    gui.setLayerGridPanel(this);
 
     gridSizer = new wxFlexGridSizer(3);
     gridSizer->SetFlexibleDirection(wxHORIZONTAL);

@@ -80,8 +80,8 @@ EVT_MENU(ID_ExportTIFF, deMainFrame::onExportTIFF)
 EVT_MENU(ID_ExportAll, deMainFrame::onExportAll)
 END_EVENT_TABLE()
 
-deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcraw_version, deOperationProcessor& _operationProcessor, deChannelManager& channelManager)
-: wxFrame() , project(_project), layerProcessor(_layerProcessor), imageSize(0,0)
+deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcraw_version, deOperationProcessor& _operationProcessor, deChannelManager& channelManager, deGUI& _gui)
+: wxFrame() , project(_project), layerProcessor(_layerProcessor), imageSize(0,0), gui(_gui)
 {
     logInfo("main frame constructor");
 
@@ -106,7 +106,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxSizer* topSizer = new wxBoxSizer(wxHORIZONTAL);
     topPanel->SetSizer(topSizer);
 
-    wxPanel* viewModePanel = new deViewModePanel(topPanel, project);
+    wxPanel* viewModePanel = new deViewModePanel(topPanel, project, gui);
     topSizer->Add(viewModePanel);
 
     threadsPanel = new deThreadsPanel(topPanel);
@@ -121,7 +121,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxSizer* sizerI = new wxStaticBoxSizer(wxVERTICAL, this,  _T("image"));
     leftSizer->Add(sizerI, 1, wxEXPAND);
 
-    imageAreaPanel = new deImageAreaPanel(this, project, _samplerManager, _zoomManager, zoomPanel);
+    imageAreaPanel = new deImageAreaPanel(this, project, _samplerManager, _zoomManager, zoomPanel, gui);
     sizerI->Add(imageAreaPanel, 1, wxEXPAND);
 
     wxSizer* rightSizer = new wxBoxSizer(wxVERTICAL);
@@ -132,7 +132,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     histogramPanel = new deHistogramPanel(hPanel, &project, 260, 2);
     sizerH->Add(histogramPanel, 0, wxCENTER);
 
-    deHistogramModePanel* histogramModePanel = new deHistogramModePanel(hPanel, project, histogramPanel);
+    deHistogramModePanel* histogramModePanel = new deHistogramModePanel(hPanel, project, histogramPanel, gui);
     sizerH->Add(histogramModePanel, 0, wxLEFT);
 
     rightSizer->Add(hPanel, 0, wxEXPAND);
@@ -140,7 +140,7 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxNotebook* notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("notebook"));
     rightSizer->Add(notebook, 1, wxEXPAND);
 
-    layerGridPanel = new deLayerGridPanel(notebook, project, _layerProcessor, channelManager);
+    layerGridPanel = new deLayerGridPanel(notebook, project, _layerProcessor, channelManager, gui);
 
     notebook->AddPage(layerGridPanel, _T("layers"));
     samplersPanel = new deSamplersPanel(notebook, project, _samplerManager);
@@ -490,11 +490,8 @@ bool deMainFrame::generateFinalImage(const std::string& app, const std::string& 
     logInfo("generateFinalImage...");
 
     deProgressDialog dialog;
-//    wxProgressDialog* progressDialog = new wxProgressDialog(_T("generate final image"), _T("generate final image"), 100, this, wxPD_AUTO_HIDE | wxPD_ELAPSED_TIME);
 
     bool result = project.exportFinalImage(app, type, name, dialog, saveAll, dir);
-
-//    delete progressDialog;
 
     return result;
 }

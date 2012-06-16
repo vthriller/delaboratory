@@ -16,37 +16,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_FRAME_H
-#define _DE_FRAME_H
+#include "tmp.h"
+#include <wx/wx.h>
+#include "str_wx.h"
 
-#include <string>
-class deWindow;
-class dePanel;
-
-class deFrameImpl;
-
-class deFrame
+std::string getTmp()
 {
-    private:
-        deFrameImpl* impl;
+    wxString temp;
+    if (wxGetEnv(_T("TEMP"), &temp))
+    {
+        // on Windows $TEMP should be set
+        return str(temp);
+    }
+    else
+    {
+        return "/tmp";
+    }            
+}        
 
-    protected:
-        void addWidget(deWindow& window);
-        void addWidget(const std::string& _name, deWindow& window);
-        void addSizer(const std::string& _name);
-
-    public:
-        deFrame(deWindow& parent, const std::string& name);
-        virtual ~deFrame();
-
-        void show();
-
-        deWindow& getWindow();
-
-        void fit();
-
-        bool clearImpl();
-};
-
-
-#endif

@@ -45,7 +45,7 @@ class deChannelManager
         deChannelManager();
         virtual ~deChannelManager();
 
-        void setChannelSize(const deSize& size);
+        void setChannelSize(const deSize& size, bool reallocate);
         deSize getChannelSizeFromChannelManager() const;
 
         int reserveNewChannel();

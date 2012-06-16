@@ -108,7 +108,7 @@ class deLayerProcessor
         void setViewManager(deViewManager* _viewManager);
 
         void updateAllImages(bool calcHistogram);
-        bool updateImagesSmart(int view, deProgressDialog& progressDialog, const std::string& fileName, const std::string& type, bool saveAll);
+        bool updateImagesSmart(deProgressDialog& progressDialog, const std::string& fileName, const std::string& type, bool saveAll, const deSize& size);
 
         void markUpdateSingleChannel(int index, int channel);
         void markUpdateAllChannels(int index);

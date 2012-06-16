@@ -33,12 +33,11 @@ class deCurvesLayer:public deLayerWithBlending
         virtual std::string getType() const {return "curves";};
 
     public:
-        deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager);
+        deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager);
         virtual ~deCurvesLayer();
 
         virtual bool isChannelNeutral(int index);
 
-//        virtual bool setChannelInMainImage(int i);
         virtual bool updateMainImageSingleChannel(int i);
 
         virtual std::string getActionName() {return "curves";};

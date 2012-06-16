@@ -45,7 +45,7 @@ deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelMana
 deImage::~deImage()
 {
     logInfo("image destructor");
-    mutex.lock();
+//    mutex.lock();
     int i;
     int s = getColorSpaceSize(colorSpace);
     for (i = 0; i < s; i++)
@@ -54,7 +54,17 @@ deImage::~deImage()
         logInfo("destroying channel " + str(a));
         channelManager.freeChannel(a);
     }        
-    mutex.unlock();
+//    mutex.unlock();
+}
+
+void deImage::allocateChannels()
+{
+    int s = getColorSpaceSize(colorSpace);
+    int i;
+    for (i = 0; i < s; i++)
+    {
+        channelManager.tryAllocateChannel(channelsAllocated[i]);
+    }        
 }
 
 int deImage::getChannelIndex(int n) const
@@ -89,7 +99,7 @@ void deImage::updateChannelUsage(std::map<int, int>& channelUsage, int index) co
 const deValue* deImage::startRead(int channel) const
 {
     logInfo("image start read " + str(channel));
-    mutex.lock();
+//    mutex.lock();
 
     if (channel < 0)
     {
@@ -124,13 +134,13 @@ void deImage::finishRead(int channel) const
     int index = channelsAllocated[channel];
     channelManager.finishRead(index);
 
-    mutex.unlock();
+//    mutex.unlock();
 }
 
 deValue* deImage::startWrite(int channel) 
 {
     logInfo("image start write " + str(channel));
-    mutex.lock();
+//    mutex.lock();
 
     if (channel < 0)
     {
@@ -166,7 +176,7 @@ void deImage::finishWrite(int channel)
     int index = channelsAllocated[channel];
     channelManager.finishWrite(index);
 
-    mutex.unlock();
+//    mutex.unlock();
 }    
 
 const deSize deImage::getChannelSize() const

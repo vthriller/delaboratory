@@ -100,14 +100,6 @@ void deOperationProcessor::initProfile(const std::string& profile)
     }
 }
 
-void getSupportedBasicOperations(std::vector<std::string>& actions)
-{
-    actions.push_back("CMYK curves");
-    actions.push_back("LAB vignette");
-    actions.push_back("LAB local contrast");
-    actions.push_back("RGB curves");
-    actions.push_back("LAB curves");
-}
 
 bool deOperationProcessor::executeOperation(deColorSpace colorSpace, const std::string& operation)
 {
@@ -155,6 +147,11 @@ bool deOperationProcessor::tryExecuteBasicOperation(const std::string& operation
     {
         return executeOperation(deColorSpaceCMYK, "curves");
     }
+    
+    if (operation == "CMYK levels")
+    {
+        return executeOperation(deColorSpaceCMYK, "levels");
+    }
 
     if (operation == "LAB vignette")
     {
@@ -176,6 +173,27 @@ bool deOperationProcessor::tryExecuteBasicOperation(const std::string& operation
         return executeOperation(deColorSpaceLAB, "curves");
     }
 
+    if (operation == "BW curve")
+    {
+        return executeOperation(deColorSpaceBW, "curves");
+    }
+
+    if (operation == "RGB tone")
+    {
+        return executeOperation(deColorSpaceRGB, "tone");
+    }
+
     return false;
 }
 
+void getSupportedBasicOperations(std::vector<std::string>& actions)
+{
+    actions.push_back("CMYK curves");
+    actions.push_back("CMYK levels");
+    actions.push_back("LAB vignette");
+    actions.push_back("LAB local contrast");
+    actions.push_back("RGB curves");
+    actions.push_back("LAB curves");
+    actions.push_back("BW curve");
+    actions.push_back("RGB tone");
+}

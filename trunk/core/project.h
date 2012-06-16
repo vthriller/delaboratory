@@ -24,13 +24,10 @@
 #include "logger.h"
 #include "image.h"
 #include "size.h"
+#include "gui.h"
 
 class deImagePanel;
 class deHistogramPanel;
-class deLayerGridPanel;
-class deViewModePanel;
-class deHistogramModePanel;
-class deImageAreaPanel;
 class deMainWindow;
 class deLayerProcessor;
 class deLayerStack;
@@ -51,18 +48,15 @@ class deProject
         deLayerProcessor& layerProcessor;
         std::string imageFileName;
         std::string sourceImageFileName;
-        deViewModePanel* viewModePanel;
         deChannelManager& channelManager;
         deViewManager viewManager;
         deStaticImage& sourceImage;
         deLayerStack& layerStack;
         deLayerFrameManager& layerFrameManager;
-        deLayerGridPanel* layerGridPanel;
-        deHistogramModePanel* histogramModePanel;
-        deImageAreaPanel* imageAreaPanel;
         deRawModule& rawModule;
         deZoomManager& zoomManager;
         deMainWindow& mainWindow;
+        deGUI& gui;
 
         void onImageNameUpdate();
 
@@ -77,7 +71,7 @@ class deProject
         bool openImageRAW(const std::string& fileName);
 
     public:
-        deProject(deLayerProcessor& _processor, deChannelManager& _channelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deMainWindow& _mainWindow);
+        deProject(deLayerProcessor& _processor, deChannelManager& _channelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deMainWindow& _mainWindow, deGUI& _gui);
 
         virtual ~deProject();
         void onKey(int key);
@@ -98,16 +92,12 @@ class deProject
 
         bool exportFinalImage(const std::string& app, const std::string& type, const std::string& name, deProgressDialog& progressDialog, bool saveAll, const std::string& dir);
 
-        void setViewModePanel(deViewModePanel* _viewModePanel);
-        void setHistogramModePanel(deHistogramModePanel* _histogramModePanel);
-        void setLayerGridPanel(deLayerGridPanel* _Panel);
         void onChangeViewMode();
 
         bool openImage(const std::string& fileName, bool raw, deColorSpace colorSpace);
         void newProject();
         void setTestImage(int s);
 
-        void setImageAreaPanel(deImageAreaPanel* _imageAreaPanel);
 
         void setHistogramChannel(int channel);
 

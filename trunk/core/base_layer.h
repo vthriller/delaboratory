@@ -87,6 +87,8 @@ class deBaseLayer
 
         bool processMainImageSingleChannel(int channel);
 
+        virtual void allocateChannels();
+
 };
 
 #endif

@@ -219,21 +219,34 @@ void deConversionCPU::convertImage3x3(const deImage& sourceImage, deImage& image
     deValue* d1 = image.startWrite(1);
     deValue* d2 = image.startWrite(2);
 
-    int i;
-
-    for (i = 0; i < n; i++)
+    bool ok;
+    if (s0 && s1 && s2 && d0 && d1 && d2)
     {
-        input[0] = s0[i];
-        input[1] = s1[i];
-        input[2] = s2[i];
-
-        f1(*this);
-        f2(*this);
-
-        d0[i] = output[0];
-        d1[i] = output[1];
-        d2[i] = output[2];
+        ok = true;
     }
+    else
+    {
+        logError("NULL channel in convertImage 3x3");
+        ok = false;
+    }
+    if (ok)
+    {
+        int i;
+
+        for (i = 0; i < n; i++)
+        {
+            input[0] = s0[i];
+            input[1] = s1[i];
+            input[2] = s2[i];
+
+            f1(*this);
+            f2(*this);
+
+            d0[i] = output[0];
+            d1[i] = output[1];
+            d2[i] = output[2];
+        }
+    }        
 
     sourceImage.finishRead(0);
     sourceImage.finishRead(1);
@@ -256,21 +269,33 @@ void deConversionCPU::convertImage3x4(const deImage& sourceImage, deImage& image
     deValue* d2 = image.startWrite(2);
     deValue* d3 = image.startWrite(3);
 
-    int i;
-
-    for (i = 0; i < n; i++)
+    bool ok;
+    if (s0 && s1 && s2 && d0 && d1 && d2 && d3)
     {
-        input[0] = s0[i];
-        input[1] = s1[i];
-        input[2] = s2[i];
+        ok = true;
+    }
+    else
+    {
+        logError("NULL channel in convertImage 3x4");
+        ok = false;
+    }
+    if (ok)
+    {
+        int i;
+        for (i = 0; i < n; i++)
+        {
+            input[0] = s0[i];
+            input[1] = s1[i];
+            input[2] = s2[i];
 
-        f1(*this);
-        f2(*this);
+            f1(*this);
+            f2(*this);
 
-        d0[i] = output[0];
-        d1[i] = output[1];
-        d2[i] = output[2];
-        d3[i] = output[3];
+            d0[i] = output[0];
+            d1[i] = output[1];
+            d2[i] = output[2];
+            d3[i] = output[3];
+        }
     }
 
     sourceImage.finishRead(0);
@@ -292,18 +317,31 @@ void deConversionCPU::convertImage3x1(const deImage& sourceImage, deImage& image
 
     deValue* d0 = image.startWrite(0);
 
-    int i;
-
-    for (i = 0; i < n; i++)
+    bool ok;
+    if (s0 && s1 && s2 && d0)
     {
-        input[0] = s0[i];
-        input[1] = s1[i];
-        input[2] = s2[i];
+        ok = true;
+    }
+    else
+    {
+        logError("NULL channel in convertImage 3x1");
+        ok = false;
+    }
+    if (ok)
+    {
+        int i;
 
-        f1(*this);
-        f2(*this);
+        for (i = 0; i < n; i++)
+        {
+            input[0] = s0[i];
+            input[1] = s1[i];
+            input[2] = s2[i];
 
-        d0[i] = output[0];
+            f1(*this);
+            f2(*this);
+
+            d0[i] = output[0];
+        }
     }
 
     sourceImage.finishRead(0);
@@ -323,20 +361,34 @@ void deConversionCPU::convertImage4x1(const deImage& sourceImage, deImage& image
 
     deValue* d0 = image.startWrite(0);
 
-    int i;
-
-    for (i = 0; i < n; i++)
+    bool ok;
+    if (s0 && s1 && s2 && s3 && d0)
     {
-        input[0] = s0[i];
-        input[1] = s1[i];
-        input[2] = s2[i];
-        input[3] = s3[i];
-
-        f1(*this);
-        f2(*this);
-
-        d0[i] = output[0];
+        ok = true;
     }
+    else
+    {
+        logError("NULL channel in convertImage 4x1");
+        ok = false;
+    }
+
+    if (ok)
+    {
+        int i;
+
+        for (i = 0; i < n; i++)
+        {
+            input[0] = s0[i];
+            input[1] = s1[i];
+            input[2] = s2[i];
+            input[3] = s3[i];
+
+            f1(*this);
+            f2(*this);
+
+            d0[i] = output[0];
+        }
+    }        
 
     sourceImage.finishRead(0);
     sourceImage.finishRead(1);
@@ -358,22 +410,36 @@ void deConversionCPU::convertImage4x3(const deImage& sourceImage, deImage& image
     deValue* d1 = image.startWrite(1);
     deValue* d2 = image.startWrite(2);
 
-    int i;
-
-    for (i = 0; i < n; i++)
+    bool ok;
+    if (s0 && s1 && s2 && s3 && d0 && d1 && d2)
     {
-        input[0] = s0[i];
-        input[1] = s1[i];
-        input[2] = s2[i];
-        input[3] = s3[i];
-
-        f1(*this);
-        f2(*this);
-
-        d0[i] = output[0];
-        d1[i] = output[1];
-        d2[i] = output[2];
+        ok = true;
     }
+    else
+    {
+        logError("NULL channel in convertImage 4x3");
+        ok = false;
+    }
+    if (ok)
+    {
+        int i;
+
+        for (i = 0; i < n; i++)
+        {
+            input[0] = s0[i];
+            input[1] = s1[i];
+            input[2] = s2[i];
+            input[3] = s3[i];
+
+            f1(*this);
+            f2(*this);
+
+            d0[i] = output[0];
+            d1[i] = output[1];
+            d2[i] = output[2];
+        }
+    }
+
     sourceImage.finishRead(0);
     sourceImage.finishRead(1);
     sourceImage.finishRead(2);
@@ -393,19 +459,33 @@ void deConversionCPU::convertImage1x3(const deImage& sourceImage, deImage& image
     deValue* d1 = image.startWrite(1);
     deValue* d2 = image.startWrite(2);
 
-    int i;
-
-    for (i = 0; i < n; i++)
+    bool ok;
+    if (s0 && d0 && d1 && d2)
     {
-        input[0] = s0[i];
-
-        f1(*this);
-        f2(*this);
-
-        d0[i] = output[0];
-        d1[i] = output[1];
-        d2[i] = output[2];
+        ok = true;
     }
+    else
+    {
+        logError("NULL channel in convertImage 1x3");
+        ok = false;
+    }
+    if (ok)
+    {
+        int i;
+
+        for (i = 0; i < n; i++)
+        {
+            input[0] = s0[i];
+
+            f1(*this);
+            f2(*this);
+
+            d0[i] = output[0];
+            d1[i] = output[1];
+            d2[i] = output[2];
+        }
+    }
+
     sourceImage.finishRead(0);
     image.finishWrite(0);
     image.finishWrite(1);
@@ -423,20 +503,34 @@ void deConversionCPU::convertImage1x4(const deImage& sourceImage, deImage& image
     deValue* d2 = image.startWrite(2);
     deValue* d3 = image.startWrite(3);
 
-    int i;
-
-    for (i = 0; i < n; i++)
+    bool ok;
+    if (s0 && d0 && d1 && d2 && d3)
     {
-        input[0] = s0[i];
-
-        f1(*this);
-        f2(*this);
-
-        d0[i] = output[0];
-        d1[i] = output[1];
-        d2[i] = output[2];
-        d3[i] = output[3];
+        ok = true;
     }
+    else
+    {
+        logError("NULL channel in convertImage 1x4");
+        ok = false;
+    }
+    if (ok)
+    {
+        int i;
+
+        for (i = 0; i < n; i++)
+        {
+            input[0] = s0[i];
+
+            f1(*this);
+            f2(*this);
+
+            d0[i] = output[0];
+            d1[i] = output[1];
+            d2[i] = output[2];
+            d3[i] = output[3];
+        }
+    }
+
     sourceImage.finishRead(0);
     image.finishWrite(0);
     image.finishWrite(1);

@@ -266,14 +266,11 @@ bool deLayerProcessor::updateLayerImage()
     deLayerProcessType type = deLayerProcessInvalid;
     int channel = -1;
 
-    layerStack.lock();
-
     deBaseLayer* layer = layerStack.getLayer(i);
 
     if ((layer) && (ok))
     {
         layer->lockLayer();
-        layerStack.unlock();
 
         type = layerProcessType;
         channel = layerProcessChannel;
@@ -283,10 +280,6 @@ bool deLayerProcessor::updateLayerImage()
         lastValidLayer = i;
         firstLayerToUpdate = i + 1;
     }            
-    else
-    {
-        layerStack.unlock();
-    }
 
     unlockLayers();
 
@@ -317,14 +310,29 @@ void deLayerProcessor::updateWarning()
     mainWindow.postEvent(DE_WARNING_EVENT, 0 );
 }
 
-bool deLayerProcessor::updateImagesSmart(int view, deProgressDialog& progressDialog, const std::string& fileName, const std::string& type, bool saveAll)
+bool deLayerProcessor::updateImagesSmart(deProgressDialog& progressDialog, const std::string& fileName, const std::string& type, bool saveAll, const deSize& size)
 {
-    bool result;
-
     lock();
+    lockHistogram();
+    lockPrepareImage();
+    lockUpdateImage();
 
-    result = flattenLayers(view, progressDialog, fileName, type, saveAll, layerStack, previewChannelManager);
+    // remember original size of preview
+    deSize originalSize = previewChannelManager.getChannelSizeFromChannelManager();
 
+    // calculate final image in full size
+    int view = viewManager->getView();
+
+    previewChannelManager.setChannelSize(size, false);
+
+    bool result = flattenLayers(view, progressDialog, fileName, type, saveAll, layerStack, previewChannelManager);
+
+    // bring back original size of preview
+    previewChannelManager.setChannelSize(originalSize, true);
+
+    unlockUpdateImage();
+    unlockPrepareImage();
+    unlockHistogram();
     unlock();
 
     return result;
@@ -552,7 +560,7 @@ void deLayerProcessor::setPreviewSize(const deSize& size, bool canSkip)
     lockPrepareImage();
     lockUpdateImage();
 
-    previewChannelManager.setChannelSize(size);
+    previewChannelManager.setChannelSize(size, true);
 
     updateAllImages(false);
 

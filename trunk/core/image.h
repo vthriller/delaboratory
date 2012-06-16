@@ -56,6 +56,8 @@ class deImage
 
         const deSize getChannelSize() const;
 
+        void allocateChannels();
+
 
 };
 

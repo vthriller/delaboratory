@@ -107,7 +107,7 @@ deBaseLayer* deLayerStack::getLayer(int id) const
     unsigned int index = id;
     deBaseLayer* layer = NULL;
 
-    if ((index < layers.size()) || (id >= 0))
+    if ((index < layers.size()) && (id >= 0))
     {
         layer = layers[index];
     }

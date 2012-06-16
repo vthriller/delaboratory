@@ -49,7 +49,7 @@ deBaseLayer* createLayer(const std::string& type, int source, deColorSpace color
 {
     if (type == "curves")
     {
-        return new deCurvesLayer(colorSpace, source, _layerStack, _channelManager, _viewManager);
+        return new deCurvesLayer(colorSpace, source, _layerStack, _channelManager);
     }
 
     if (type == "equalizer")

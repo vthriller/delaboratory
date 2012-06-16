@@ -35,20 +35,6 @@ wxString str2wx(const std::string& s)
     return result;
 }    
 
-std::string getTmp()
-{
-    wxString temp;
-    if (wxGetEnv(_T("TEMP"), &temp))
-    {
-        // on Windows $TEMP should be set
-        return str(temp);
-    }
-    else
-    {
-        return "/tmp";
-    }            
-}        
-
 std::string getUserConfigDir()
 {
     wxStandardPathsBase& paths = wxStandardPaths::Get();

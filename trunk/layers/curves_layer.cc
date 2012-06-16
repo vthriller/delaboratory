@@ -29,7 +29,7 @@
 
 #include "preset.h"
 
-deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager, deViewManager& _viewManager)
+deCurvesLayer::deCurvesLayer(deColorSpace _colorSpace, int _sourceLayer, deLayerStack& _layerStack, deChannelManager& _channelManager)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
 {
     dePreset* reset = createPreset("reset");
@@ -53,15 +53,22 @@ bool deCurvesLayer::updateMainImageSingleChannel(int i)
         return false;
     }
 
+    bool result = false;
+
     // render new image
     const deBaseCurve* curve = p->getCurve(i);
     const deValue* source = getSourceImage().startRead(i);
     deValue* destination = mainLayerImage.startWrite(i);
-    curve->process(source, destination, mainLayerImage.getChannelSize().getN());
+    if ((source) && (destination))
+    {
+        curve->process(source, destination, mainLayerImage.getChannelSize().getN());
+        result = true;
+    }
+
     getSourceImage().finishRead(i);
     mainLayerImage.finishWrite(i);
 
-    return true;
+    return result;
 
 }
 

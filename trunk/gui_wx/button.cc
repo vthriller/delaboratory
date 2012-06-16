@@ -50,15 +50,7 @@ class deButtonImpl:public dePanelWX
 
 deButton::deButton(deWindow& window, const std::string& _name)
 {
-    deWindowWX* w = dynamic_cast<deWindowWX*>(&window);
-    if (w)
-    {
-        impl = new deButtonImpl(*this, window, _name);
-    }
-    else
-    {
-        impl = NULL;
-    }
+    impl = new deButtonImpl(*this, window, _name);
 }
 
 deButton::~deButton()

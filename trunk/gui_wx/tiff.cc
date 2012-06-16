@@ -132,16 +132,21 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image)
     return true;
 }
 
-void saveTIFF(const std::string& fileName, const deValue* channelR, const deValue* channelG, const deValue* channelB, deSize size)
+bool saveTIFF(const std::string& fileName, const deValue* channelR, const deValue* channelG, const deValue* channelB, deSize size)
 {
     int w = size.getW();
     int h = size.getH();
+
+    if ((!channelR) || (!channelG) || (!channelB))
+    {
+        return false;
+    }
 
     TIFF* tif = openTIFF(fileName, true);
 
     if (!tif)
     {
-        return;
+        return false;
     }
 
     TIFFSetField (tif, TIFFTAG_SOFTWARE, "delaboratory");
@@ -182,6 +187,8 @@ void saveTIFF(const std::string& fileName, const deValue* channelR, const deValu
     }
 
     TIFFClose(tif);
+
+    return true;
 
 }
 

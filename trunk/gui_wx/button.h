@@ -19,8 +19,8 @@
 #ifndef _DE_BUTTON_H
 #define _DE_BUTTON_H
 
-#include <wx/wx.h>
 #include "value.h"
+#include <string>
 class dePanel;
 class deWindow;
 class deLayerProcessor;
