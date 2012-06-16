@@ -24,6 +24,7 @@
 #include "histogram_panel.h"
 #include "layer_processor.h"
 #include "color_space_utils.h"
+#include "gui.h"
 
 void deHistogramModePanel::select(wxCommandEvent &event)
 {
@@ -41,10 +42,10 @@ void deHistogramModePanel::select(wxCommandEvent &event)
 
 }
 
-deHistogramModePanel::deHistogramModePanel(wxWindow* parent, deProject& _project, deHistogramPanel* _histogramPanel)
+deHistogramModePanel::deHistogramModePanel(wxWindow* parent, deProject& _project, deHistogramPanel* _histogramPanel, deGUI& gui)
 :wxPanel(parent), project(_project), histogramPanel(_histogramPanel)
 {
-    project.setHistogramModePanel(this);
+    gui.setHistogramModePanel(this);
 
     wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
     SetSizer(sizer);

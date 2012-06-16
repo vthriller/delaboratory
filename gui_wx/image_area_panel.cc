@@ -24,6 +24,7 @@
 #include "layer_processor.h"
 #include "zoom_panel.h"
 #include "str.h"
+#include "gui.h"
 
 void deImageAreaPanel::paint(wxPaintEvent& event)
 {
@@ -50,7 +51,7 @@ void deImageAreaPanel::updateSize(bool canSkip)
     Layout();
 }
 
-deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, deZoomPanel* zoomPanel)
+deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, deZoomPanel* zoomPanel, deGUI& gui)
 :wxPanel(parent), project(_project)
 {   
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -59,7 +60,7 @@ deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject& _project, deSamp
     imagePanel = new deImagePanel(this, project, _samplerManager, _zoomManager, zoomPanel);
     sizer->Add(imagePanel, 0, wxCENTER);
 
-    project.setImageAreaPanel(this);
+    gui.setImageAreaPanel(this);
 
     zoomPanel->setImageAreaPanel(this);
 

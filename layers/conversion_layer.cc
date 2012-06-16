@@ -103,11 +103,6 @@ bool deConversionLayer::updateMainImageNotThreadedWay()
 
     deConversionProcessor p;
 
-    dePropertyNumeric* sub = getPropertyNumeric("GCR substract");
-    if (sub)
-    {
-    }
-
     deConversionCPU cpu(4);
 
     cpu.registers[CPU_REGISTER_OVERFLOW] = 0;

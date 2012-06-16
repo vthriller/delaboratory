@@ -18,9 +18,26 @@
 
 #include "blend_channel.h"
 #include <iostream>
+#include "logger.h"
 
 void blendChannel(const deValue* sourcePixels, const deValue* overlayPixels, deValue* resultPixels, deValue* maskPixels, deBlendMode blendMode, deValue opacity, int channelSize)
 {
+    if (!sourcePixels)
+    {
+        logError("no source pixels in blend channel");
+        return;
+    }
+    if (!overlayPixels)
+    {
+        logError("no overlay pixels in blend channel");
+        return;
+    }
+    if (!resultPixels)
+    {
+        logError("no result pixels in blend channel");
+        return;
+    }
+
     int j;
     if (maskPixels)
     {

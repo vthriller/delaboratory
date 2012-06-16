@@ -30,7 +30,7 @@
 bool flattenLayers(int view, deProgressDialog& progressDialog, const std::string& fileName, const std::string& type, bool saveAll, deLayerStack& layerStack, deChannelManager& previewChannelManager)
 {
     bool result = true;
-    logInfo("updateImagesSmart");
+    logInfo("flattenLayers");
 
     std::map<int, int> channelUsage;
     int i;
@@ -48,7 +48,7 @@ bool flattenLayers(int view, deProgressDialog& progressDialog, const std::string
     int progress = 0;
     for (index = 0; index <= (unsigned int)view; index++)
     {
-        logInfo("updateImagesSmart index: " + str(index));
+        logInfo("flattenLayers index: " + str(index));
         std::map<int, int>::iterator i;
         int previous = index - 1;
         if (previous >= 0)
@@ -71,7 +71,9 @@ bool flattenLayers(int view, deProgressDialog& progressDialog, const std::string
 
         progressDialog.update(progress, label);
 
-        logInfo("updateImagesSmart process index: " + str(index));
+        layer->allocateChannels();
+
+        logInfo("flattenLayers process index: " + str(index));
         bool r = layer->processFull();
         if (r)
         {
@@ -79,11 +81,12 @@ bool flattenLayers(int view, deProgressDialog& progressDialog, const std::string
             {
                 const deImage& image = layer->getLayerImage();
                 const std::string f = insertIndex(fileName, index);
-                saveImage(f, image, type, previewChannelManager);
+                bool result = saveImage(f, image, type, previewChannelManager);
             }                
         }
         else
         {
+            logError("flattenLayers - error on layer " + str(index));
             result = false;
             // stop loop
             index = view + 1;
@@ -105,15 +108,16 @@ bool flattenLayers(int view, deProgressDialog& progressDialog, const std::string
 
     if ((result) && (!saveAll))
     {
+        logInfo("flattenLayers save final image");
         // take the final image
         deBaseLayer* layer = layerStack.getLayer(view);
         const deImage& image = layer->getLayerImage();
 
         // save it
-        saveImage(fileName, image, type, previewChannelManager);
+        result = saveImage(fileName, image, type, previewChannelManager);
     }
 
-    logInfo("updateImagesSmart DONE");
+    logInfo("flattenLayers DONE");
 
     return result;
 }

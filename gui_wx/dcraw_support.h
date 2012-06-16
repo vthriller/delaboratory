@@ -22,11 +22,12 @@
 #include <string>
 class deStaticImage;
 #include "color_space.h"
-#include <wx/wx.h>
 
 std::string getDcrawVersion();
 std::string getRawInfo(const std::string& f);
 bool isRawValid(const std::string& f);
+class wxProcess;
+class wxInputStream;
 
 class deRawLoader
 {

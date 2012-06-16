@@ -79,6 +79,12 @@ int deHistogram::getSize() const
 
 void deHistogram::calc(const deValue* pixels, int n)
 {
+    if (!pixels)
+    {
+        logError("NULL pixels in histogram calc");
+        return;
+    }
+
     static int counter = 0;
 
     int j;
@@ -103,8 +109,6 @@ bool deHistogram::render(unsigned char* data, int sizeW, int sizeH, unsigned cha
     {
         return false;
     }
-
-//    mm *= 0.1;
 
     unsigned char g3 = 230;
 

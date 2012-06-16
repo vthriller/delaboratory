@@ -30,6 +30,6 @@ bool loadImage(const std::string& fileName, deStaticImage& image, deColorSpace c
 
 bool loadPPM(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
 
-void saveImage(const std::string& fileName, const deImage& image, const std::string& type, deChannelManager& previewChannelManager);
+bool saveImage(const std::string& fileName, const deImage& image, const std::string& type, deChannelManager& previewChannelManager);
 
 #endif

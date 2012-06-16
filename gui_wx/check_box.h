@@ -19,7 +19,6 @@
 #ifndef _DE_CHECK_BOX_H
 #define _DE_CHECK_BOX_H
 
-#include <wx/wx.h>
 #include <string>
 #include "window.h"
 

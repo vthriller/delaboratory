@@ -24,6 +24,7 @@
 
 class deProject;
 class deHistogramPanel;
+class deGUI;
 
 class deHistogramModePanel:public wxPanel
 {
@@ -34,7 +35,7 @@ class deHistogramModePanel:public wxPanel
 
         void select(wxCommandEvent &event);
     public:
-        deHistogramModePanel(wxWindow* parent, deProject& _project, deHistogramPanel* _histogramPanel);
+        deHistogramModePanel(wxWindow* parent, deProject& _project, deHistogramPanel* _histogramPanel, deGUI& gui);
         virtual ~deHistogramModePanel();
 
         void updateNames();

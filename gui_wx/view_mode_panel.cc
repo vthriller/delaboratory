@@ -23,6 +23,7 @@
 #include <iostream>
 #include "logger.h"
 #include "color_space_utils.h"
+#include "gui.h"
 
 void deViewModePanel::select(wxCommandEvent &event)
 {
@@ -46,10 +47,10 @@ void deViewModePanel::select(wxCommandEvent &event)
 
 }
 
-deViewModePanel::deViewModePanel(wxWindow* parent, deProject& _project)
+deViewModePanel::deViewModePanel(wxWindow* parent, deProject& _project, deGUI& gui)
 :wxPanel(parent), project(_project)
 {
-    project.setViewModePanel(this);
+    gui.setViewModePanel(this);
 
     wxSizer* sizerS = new wxStaticBoxSizer(wxVERTICAL, this, _T("view"));
     SetSizer(sizerS);

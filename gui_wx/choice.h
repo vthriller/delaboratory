@@ -19,7 +19,6 @@
 #ifndef _DE_CHOICE_H
 #define _DE_CHOICE_H
 
-#include <wx/wx.h>
 #include <vector>
 #include <string>
 #include "window.h"

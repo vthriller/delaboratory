@@ -68,8 +68,15 @@ bool deEllipse::isValid() const
 
 void vignetteChannel(deValue* destination, deSize size, deEllipse ellipse, deValue light, deValue darkness, deValue spot)
 {
+    if (!destination)
+    {
+        logError("NULL channel in vignette");
+        return;
+    }
+
     if (!ellipse.isValid())
     {
+        logError("invalid ellipce in ignette");
         return;
     }
 

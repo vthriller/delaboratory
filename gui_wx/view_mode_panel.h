@@ -24,6 +24,7 @@
 #include <map>
 #include "color_space.h"
 class deProject;
+class deGUI;
 
 class deViewModePanel:public wxPanel
 {
@@ -33,7 +34,7 @@ class deViewModePanel:public wxPanel
 
         void select(wxCommandEvent &event);
     public:
-        deViewModePanel(wxWindow* parent, deProject& _project);
+        deViewModePanel(wxWindow* parent, deProject& _project, deGUI& gui);
         virtual ~deViewModePanel();
 
         void updateNames();

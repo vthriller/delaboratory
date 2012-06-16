@@ -31,6 +31,7 @@
 #include "zoom_manager.h"
 #include "operation_processor.h"
 #include "main_window.h"
+#include "gui.h"
 
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
@@ -79,7 +80,7 @@ class deLaboratory: public wxApp
         :wxApp(),
          sourceImage(),
          processor(previewChannelManager, layerStack, layerFrameManager, mainWindow),
-         project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage, rawModule, zoomManager, mainWindow),
+         project(processor, previewChannelManager, layerStack, layerFrameManager, sourceImage, rawModule, zoomManager, mainWindow, gui),
          operationProcessor(processor, project)
         {
             logInfo("deLaboratory constructor");
@@ -104,6 +105,7 @@ class deLaboratory: public wxApp
         deLayerProcessor processor;
         deRawModule rawModule;
         deZoomManager zoomManager;
+        deGUI gui;
         deProject project;
         deOperationProcessor operationProcessor;
 
@@ -157,7 +159,7 @@ bool deLaboratory::OnInit()
 	int width = 1200;
 	int height = 960;
 
-	mainWindow.init( width, height, project, processor, samplerManager, zoomManager, dcraw_version, operationProcessor, previewChannelManager);
+	mainWindow.init( width, height, project, processor, samplerManager, zoomManager, dcraw_version, operationProcessor, previewChannelManager, gui);
 
     logInfo("show main frame");
 

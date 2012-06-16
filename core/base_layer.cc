@@ -116,3 +116,8 @@ bool deBaseLayer::updateImage()
 
     return result;
 }
+
+void deBaseLayer::allocateChannels()
+{
+    mainLayerImage.allocateChannels();
+}

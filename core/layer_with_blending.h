@@ -52,6 +52,8 @@ class deLayerWithBlending:public deSwitchableLayer
 
         bool updateBlend(int i);
 
+        virtual void allocateChannels();
+
 
 
 };

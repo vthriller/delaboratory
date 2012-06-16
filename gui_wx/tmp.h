@@ -16,37 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_FRAME_H
-#define _DE_FRAME_H
+#ifndef _DE_TMP_H
+#define _DE_TMP_H
 
 #include <string>
-class deWindow;
-class dePanel;
 
-class deFrameImpl;
-
-class deFrame
-{
-    private:
-        deFrameImpl* impl;
-
-    protected:
-        void addWidget(deWindow& window);
-        void addWidget(const std::string& _name, deWindow& window);
-        void addSizer(const std::string& _name);
-
-    public:
-        deFrame(deWindow& parent, const std::string& name);
-        virtual ~deFrame();
-
-        void show();
-
-        deWindow& getWindow();
-
-        void fit();
-
-        bool clearImpl();
-};
-
+std::string getTmp();
 
 #endif

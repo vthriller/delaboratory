@@ -44,7 +44,7 @@ deChannelManager::~deChannelManager()
     logInfo("channel manager destructor DONE");
 }
 
-void deChannelManager::setChannelSize(const deSize& size)
+void deChannelManager::setChannelSize(const deSize& size, bool reallocate)
 {
     lock();
 
@@ -65,7 +65,10 @@ void deChannelManager::setChannelSize(const deSize& size)
         logInfo("destroy channel " + str(i));
         mutexes[i]->lockWrite();
         tryDeallocateChannel(i);
-        tryAllocateChannel(i);
+        if (reallocate)
+        {
+            tryAllocateChannel(i);
+        }
         mutexes[i]->unlockWrite();
     }
 
@@ -89,7 +92,7 @@ int deChannelManager::reserveNewChannel()
 {
     lock();
 
-    deValue* channel = new deValue [ channelSize.getN() ];
+    deValue* channel = NULL;
 
     int c = -1;
     if (trashed.size() > 0)
@@ -142,7 +145,7 @@ void deChannelManager::freeChannel(int index)
 
         if (channels[index])
         {
-            delete channels[index];
+            delete [] channels[index];
             channels[index] = NULL;
             trashed.insert(index);
             logInfo("destroyed channel " + str(index));
@@ -246,7 +249,7 @@ bool deChannelManager::isImageEmpty() const
 
 const deValue* deChannelManager::startRead(int index)
 {
-    lock();
+//    lock();
 
     logInfo("startRead " + str(index));
 
@@ -273,14 +276,14 @@ const deValue* deChannelManager::startRead(int index)
         p = channels[index];
     }        
 
-    unlock();
+//    unlock();
 
     return p;
 }
 
 void deChannelManager::finishRead(int index)
 {
-    lock();
+//    lock();
 
     logInfo("finishRead " + str(index));
 
@@ -303,12 +306,12 @@ void deChannelManager::finishRead(int index)
         mutexes[index]->unlockRead();
     }
 
-    unlock();
+//    unlock();
 }
 
 deValue* deChannelManager::startWrite(int index)
 {
-    lock();
+//    lock();
 
     logInfo("startWrite " + str(index));
 
@@ -337,14 +340,14 @@ deValue* deChannelManager::startWrite(int index)
         p = channels[index];
     }        
 
-    unlock();
+//    unlock();
 
     return p;
 }
 
 void deChannelManager::finishWrite(int index)
 {
-    lock();
+//    lock();
 
     logInfo("finishWrite " + str(index));
 
@@ -367,5 +370,5 @@ void deChannelManager::finishWrite(int index)
         mutexes[index]->unlockWrite();
     }        
 
-    unlock();
+//    unlock();
 }

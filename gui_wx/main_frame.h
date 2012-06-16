@@ -35,6 +35,7 @@ class deChannelManager;
 class deWarningPanel;
 #include "size.h"
 #include "main_frame_events.h"
+#include "gui.h"
 
 class deMainFrame: public wxFrame
 {
@@ -50,6 +51,7 @@ private:
     deHistogramPanel* histogramPanel;
     deThreadsPanel* threadsPanel;
     deWarningPanel* warningPanel;
+    deGUI& gui;
 
     std::string imageName;
 
@@ -102,7 +104,7 @@ private:
     bool generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir);
 
 public:
-	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcrawVersion, deOperationProcessor& _operationProcessor, deChannelManager& channelManager);
+	deMainFrame(const wxSize& size, deProject& _project, deLayerProcessor& _layerProcessor, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, const std::string& dcrawVersion, deOperationProcessor& _operationProcessor, deChannelManager& channelManager, deGUI& _gui);
 	~deMainFrame();
 
     void rebuild();

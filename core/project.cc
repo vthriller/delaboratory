@@ -40,35 +40,23 @@
 #include "main_window.h"
 #include "conversion_processor.h"
 #include "test_image.h"
-
-///
+#include "main_frame_events.h"
 
 #include "raw_module.h"
-#include "main_frame.h"
-#include "image_area_panel.h"
-#include "layer_grid_panel.h"
-#include "image_panel.h"
-#include "histogram_panel.h"
-#include "histogram_mode_panel.h"
-#include "view_mode_panel.h"
-#include "str_wx.h"
-#include "window_wx.h"
-#include "generic_layer_frame.h"
+#include "dcraw_support.h"
+#include "tmp.h"
 
-deProject::deProject(deLayerProcessor& _processor, deChannelManager& _channelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deMainWindow& _mainWindow)
+deProject::deProject(deLayerProcessor& _processor, deChannelManager& _channelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deMainWindow& _mainWindow, deGUI& _gui)
 :layerProcessor(_processor),
- viewModePanel(NULL),
  channelManager(_channelManager),
  viewManager(*this, _processor, _zoomManager),
  sourceImage(_sourceImage),
  layerStack(_layerStack),
  layerFrameManager(_layerFrameManager),
- layerGridPanel(NULL),
- histogramModePanel(NULL),
- imageAreaPanel(NULL),
  rawModule(_rawModule),
  zoomManager(_zoomManager),
- mainWindow(_mainWindow)
+ mainWindow(_mainWindow),
+ gui(_gui)
 {
     imageFileName = "";
     sourceImageFileName = "";
@@ -90,10 +78,7 @@ deProject::~deProject()
 
 void deProject::setHistogramChannel(int channel)
 {
-    if (histogramModePanel)
-    {
-        histogramModePanel->updateMode(channel);
-    }            
+    gui.updateHistogramMode(channel);
     layerProcessor.generateHistogram();
 }
 
@@ -119,6 +104,7 @@ void deProject::onKey(int key)
     {
         viewManager.setSingleChannel(3);
     }
+    /*
     if (key == WXK_F1)
     {
         setHistogramChannel(0);
@@ -135,6 +121,7 @@ void deProject::onKey(int key)
     {
         setHistogramChannel(3);
     }
+    */
 
     layerFrameManager.onKey(key);
 }
@@ -171,10 +158,7 @@ void deProject::setTestImage(int s)
     }
 
     generateTestImage(sourceImage, s);
-    if (imageAreaPanel)
-    {
-        imageAreaPanel->updateSize(false);
-    }        
+    gui.updateImageAreaSize();
     resetLayerStack(sourceImage.getColorSpace());
     imageFileName = "test";
 
@@ -190,10 +174,10 @@ void deProject::resetLayerStack(deColorSpace colorSpace)
 
     if (layer)
     {
+        layer->allocateChannels();
         layerProcessor.addLayerInLayerProcessor(layer);
     }        
 
-    //channelManager.destroyAllChannels();
     layerProcessor.updateAllImages(true);
 
     updateLayerGrid();
@@ -268,14 +252,8 @@ void deProject::onChangeView(int a)
     logInfo("change view from " + str(a) + " START");
     layerProcessor.onChangeView(a);
 
-    if (viewModePanel)
-    {
-        viewModePanel->updateNames();
-    }
-    if (histogramModePanel)
-    {
-        histogramModePanel->updateNames();
-    }
+    gui.updateViewModePanelNames();
+    gui.updateHistogramNames();
     mainWindow.rebuild();
     logInfo("change view from " + str(a) + " DONE");
 }
@@ -352,45 +330,15 @@ bool deProject::processFullSizeImage(const std::string& fileName, const std::str
 {
     logInfo("processFullSizeImage...");
 
-    // remember original size of preview
-    deSize originalSize = channelManager.getChannelSizeFromChannelManager();
-
-    // calculate final image in full size
-    int view = viewManager.getView();
-
-    channelManager.setChannelSize(sourceImage.getStaticImageSize());
-
-    bool result = layerProcessor.updateImagesSmart(view, progressDialog, fileName, type, saveAll);
-
-    // bring back original size of preview
-    channelManager.setChannelSize(originalSize);
+    bool result = layerProcessor.updateImagesSmart(progressDialog, fileName, type, saveAll, sourceImage.getStaticImageSize());
 
     return result;
 }
 
 
-void deProject::setViewModePanel(deViewModePanel* _viewModePanel)
-{
-    viewModePanel = _viewModePanel;
-}
-
-void deProject::setHistogramModePanel(deHistogramModePanel* _histogramModePanel)
-{
-    histogramModePanel = _histogramModePanel;
-}
-
-
-void deProject::setLayerGridPanel(deLayerGridPanel* _panel)
-{
-    layerGridPanel = _panel;
-}
-
 void deProject::onChangeViewMode()
 {
-    if (viewModePanel)
-    {
-        viewModePanel->updateMode();
-    }
+    gui.updateViewModePanelMode();
 }
 
 void deProject::newProject()
@@ -398,11 +346,6 @@ void deProject::newProject()
     resetLayerStack(deColorSpaceRGB);
     viewManager.setLastView();
     updateLayerGrid();
-}
-
-void deProject::setImageAreaPanel(deImageAreaPanel* _imageAreaPanel)
-{
-    imageAreaPanel = _imageAreaPanel;
 }
 
 bool deProject::openImageRAW(const std::string& fileName)
@@ -490,11 +433,7 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
     onImageNameUpdate();
     sourceImageFileName = fileName;
 
-    //channelManager.destroyAllChannels();
-    if (imageAreaPanel)
-    {
-        imageAreaPanel->updateSize(false);
-    }        
+    gui.updateImageAreaSize();
     layerProcessor.updateAllImages(true);
 
     deColorSpace newColorSpace = sourceImage.getColorSpace();
@@ -515,6 +454,8 @@ bool deProject::isSourceValid() const
 
 deBaseLayer* deProject::createNewLayer(const std::string& type)
 {
+    logInfo("createNewLayer " + type);
+
     int s = viewManager.getView();
 
     deBaseLayer* layer = NULL;
@@ -536,6 +477,12 @@ deBaseLayer* deProject::createNewLayer(const std::string& type)
         {
             layer = createLayer("conversion", s, colorSpace, layerStack, channelManager, viewManager, sourceImage);
         }            
+    }
+
+    if (layer)
+    {
+        logInfo("allocate channels in new layer " + type);
+        layer->allocateChannels();
     }
 
     return layer;
@@ -567,10 +514,7 @@ void deProject::onTimerUpdate()
 
 void deProject::updateLayerGrid()
 {
-    if (layerGridPanel)
-    {
-        layerGridPanel->update();
-    }        
+    gui.updateLayerGrid();
 }
 
 void deProject::onAddNewLayer()
@@ -605,19 +549,10 @@ deSize deProject::onImageAreaChangeSize(const deSize& ps, bool canSkip)
 
 void deProject::openLayerFrame(int index)
 {
-    int layerIndex = index;
-
     deBaseLayer* layer = layerStack.getLayer(index);
-
-    if (!layerFrameManager.checkLayerFrame(index))
+    if (layer)
     {
-        deWindowWX window(layerGridPanel);
-        const std::string name = layer->getType();
-
-        deFrame* frame = new deGenericLayerFrame(window, name, *layer, layerProcessor, layerFrameManager, layerIndex);
-        if (frame)
-        {
-            frame->show();
-        }
+        gui.openLayerFrame(*layer, layerProcessor, layerFrameManager, index);
     }        
+
 }            

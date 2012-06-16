@@ -125,18 +125,18 @@ bool loadJPEG(const std::string& fileName, deStaticImage& image)
     return true;
 }
 
-void saveImage(const std::string& fileName, const deImage& image, const std::string& type, deChannelManager& previewChannelManager)
+bool saveImage(const std::string& fileName, const deImage& image, const std::string& type, deChannelManager& previewChannelManager)
 {
+    bool result = false;
 
     if (image.getColorSpace() == deColorSpaceRGB)
     {
-
         if (type == "tiff")
         {
             const deValue* vr = image.startRead(0);
             const deValue* vg = image.startRead(1);
             const deValue* vb = image.startRead(2);
-            saveTIFF(fileName, vr, vg, vb, image.getChannelSize());
+            result = saveTIFF(fileName, vr, vg, vb, image.getChannelSize());
             image.finishRead(0);
             image.finishRead(1);
             image.finishRead(2);
@@ -154,7 +154,7 @@ void saveImage(const std::string& fileName, const deImage& image, const std::str
     else
     {
         deImage finalImage(deColorSpaceRGB, previewChannelManager);
-        //finalImage.enableAllChannels();
+        finalImage.allocateChannels();
 
         deConversionProcessor p;
         p.convertImageNew(image, finalImage);
@@ -169,7 +169,7 @@ void saveImage(const std::string& fileName, const deImage& image, const std::str
             const deValue* vr = finalImage.startRead(0);
             const deValue* vg = finalImage.startRead(1);
             const deValue* vb = finalImage.startRead(2);
-            saveTIFF(fileName, vr, vg, vb, image.getChannelSize());
+            result = saveTIFF(fileName, vr, vg, vb, image.getChannelSize());
             finalImage.finishRead(0);
             finalImage.finishRead(1);
             finalImage.finishRead(2);
@@ -179,6 +179,8 @@ void saveImage(const std::string& fileName, const deImage& image, const std::str
             //saveJPEG(fileName, *r, *g, *b, image.getChannelSize());
         }            
     }
+
+    return result;
 }
 
 bool loadImage(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
