@@ -202,7 +202,16 @@ void deChannelManager::tryAllocateChannel(int index)
         if (!channels[index])
         {
             logInfo("allocating channel " + str(index));
-            channels[index] = new deValue [channelSize.getN()];
+            deValue* c = new deValue [channelSize.getN()];
+            if (c)
+            {
+                logInfo("allocated channel " + str(index));
+            }
+            else
+            {
+                logError("unable to allocate channel " + str(index));
+            }
+            channels[index] = c;
         }            
     }        
 
