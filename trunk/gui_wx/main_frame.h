@@ -89,6 +89,7 @@ private:
     void onTimerEvent(wxTimerEvent& event);
     void onExportGIMP(wxCommandEvent& event);
     void onExportTIFF(wxCommandEvent& event);
+    void onExportJPG(wxCommandEvent& event);
     void onExportAll(wxCommandEvent& event);
 
 	void onCloseEvent(wxCloseEvent& event);

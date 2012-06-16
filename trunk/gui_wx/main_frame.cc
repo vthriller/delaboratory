@@ -77,6 +77,7 @@ EVT_MENU(DE_INFO_EVENT, deMainFrame::onInfoEvent)
 EVT_MENU(DE_WARNING_EVENT, deMainFrame::onWarningEvent)
 EVT_MENU(ID_ExportGIMP, deMainFrame::onExportGIMP)
 EVT_MENU(ID_ExportTIFF, deMainFrame::onExportTIFF)
+EVT_MENU(ID_ExportJPG, deMainFrame::onExportJPG)
 EVT_MENU(ID_ExportAll, deMainFrame::onExportAll)
 END_EVENT_TABLE()
 
@@ -484,6 +485,22 @@ void deMainFrame::onExportTIFF(wxCommandEvent& event)
         generateFinalImage("", "tiff", f, false, "");
     }            
 }    
+
+void deMainFrame::onExportJPG(wxCommandEvent& event)
+{
+    std::string f = getSaveFile(this, "export JPG", "jpg");
+
+    if (!f.empty())
+    {
+        if (f.rfind(".jpg") != f.size() - 4)
+        {
+            f += ".jpg";
+        }
+
+        generateFinalImage("", "jpg", f, false, "");
+    }            
+}    
+
 
 bool deMainFrame::generateFinalImage(const std::string& app, const std::string& type, const std::string& name, bool saveAll, const std::string& dir)
 {
