@@ -24,6 +24,8 @@
 #define LOCK_THRESHOLD 100
 #define LOGGING 1
 
+static bool loggerActive = false;
+
 class deLoggerHelp
 {
     private:
@@ -50,10 +52,14 @@ deLogger::deLogger()
     help = new deLoggerHelp();
     f = NULL;
     started = false;
+    loggerActive = true;
 }
 
 deLogger::~deLogger()
 {
+    logInfo("closing logger...");
+    loggerActive = false;
+
     mutex.lock();
 
     if (f)
@@ -139,7 +145,10 @@ int deLogger::getTime() const
 void logInfo(const std::string& message)
 {
 #ifdef LOGGING    
-    deLogger::getLogger().logInfo(message);
+    if (loggerActive)
+    {
+        deLogger::getLogger().logInfo(message);
+    }        
 #endif    
 }
 
@@ -151,7 +160,10 @@ void logError(const std::string& message)
     std::cout << m << std::endl;
     mutex.unlock();
 #ifdef LOGGING    
-    deLogger::getLogger().log(m);
+    if (loggerActive)
+    {
+        deLogger::getLogger().log(m);
+    }        
 #endif    
 }
 

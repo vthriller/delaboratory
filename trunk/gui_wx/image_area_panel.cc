@@ -26,12 +26,9 @@
 #include "str.h"
 #include "gui.h"
 
-void deImageAreaPanel::paint(wxPaintEvent& event)
-{
-}
-
 void deImageAreaPanel::resize(wxSizeEvent& event)
 {
+    logInfo("SIZE event in image area panel");
     updateSize(true);
     Refresh();
 }

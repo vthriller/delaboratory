@@ -41,7 +41,8 @@ layerStack(_layerStack),
 layerFrameManager(_layerFrameManager),
 renderer(_previewChannelManager),
 previewChannelManager(_previewChannelManager),
-mainWindow(_mainWindow)
+mainWindow(_mainWindow),
+sizeMutex(false)
 {
     logInfo("layer processor constructor");
     viewManager = NULL;
@@ -173,6 +174,19 @@ void deLayerProcessor::unlockHistogram()
 {
     logInfo("unlocking histogram mutex");
     histogramMutex.unlock();
+}
+
+void deLayerProcessor::lockSize()
+{
+    logInfo("locking size mutex...");
+    sizeMutex.lock();
+    logInfo("size mutex locked");
+}
+
+void deLayerProcessor::unlockSize()
+{
+    logInfo("unlocking size mutex");
+    sizeMutex.unlock();
 }
 
 void deLayerProcessor::lockUpdateImage()
@@ -312,6 +326,8 @@ void deLayerProcessor::updateWarning()
 
 bool deLayerProcessor::updateImagesSmart(deProgressDialog& progressDialog, const std::string& fileName, const std::string& type, bool saveAll, const deSize& size)
 {
+    lockSize();
+
     lock();
     lockHistogram();
     lockPrepareImage();
@@ -334,6 +350,8 @@ bool deLayerProcessor::updateImagesSmart(deProgressDialog& progressDialog, const
     unlockPrepareImage();
     unlockHistogram();
     unlock();
+
+    unlockSize();
 
     return result;
 }
@@ -537,6 +555,8 @@ void deLayerProcessor::forceUpdateSize()
 
 void deLayerProcessor::setPreviewSize(const deSize& size, bool canSkip)
 {
+    lockSize();
+
     deSize oldSize = previewChannelManager.getChannelSizeFromChannelManager();
     if ((oldSize == size) && (canSkip))
     {
@@ -568,6 +588,8 @@ void deLayerProcessor::setPreviewSize(const deSize& size, bool canSkip)
     unlockPrepareImage();
     unlockHistogram();
     logInfo("setPreviewSize DONE");
+
+    unlockSize();
 }
 
 void deLayerProcessor::onImageLoad()
