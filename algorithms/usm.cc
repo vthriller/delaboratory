@@ -101,6 +101,15 @@ bool unsharpMask(const deValue* source, deValue* destination, deSize& size, deVa
         return false;
     }
 
+    if (mask)
+    {
+        logInfo("mask allocated");
+    }
+    else
+    {
+        logError("unable to allocate mask");
+    }
+
     deValue b_t = 0.0;
 
     if (blurChannel(source, mask, size, r, r, type, b_t))
@@ -238,7 +247,6 @@ bool shadowsHighlights(deValue r, int channel, const deImage& sourceImage, deIma
     int nc = getColorSpaceSize(sourceImage.getColorSpace());
     for (i = 0; i < nc; i++)
     {
-        //mainLayerImage.enableChannel(i);
         deValue* d = mainLayerImage.startWrite(i);
         const deValue* s = sourceImage.startRead(i);
         int j;
