@@ -20,19 +20,35 @@
 #include "tiff.h"
 #include <tiffio.h>
 #include "static_image.h"
+#include <wx/wx.h>
+#include "logger.h"
 
 TIFF* openTIFF(const std::string fileName, bool write)
 {
-    TIFF* tif = NULL;
-
+    std::string mode = "";
     if (write)
     {
-        tif = TIFFOpen(fileName.c_str(), "w");
+        logInfo("opening TIFF " + fileName + " in write mode");
+        mode = "w";
     }
     else
     {
-        tif = TIFFOpen(fileName.c_str(), "r");
+        logInfo("opening TIFF " + fileName + " in read mode");
+        mode = "r";
     }
+
+    TIFF* tif = NULL;
+
+    const char* c = fileName.c_str();
+
+#ifdef _WIN32
+    wxString ws(c, wxConvUTF8);
+    const wchar_t* wc = ws.wc_str(wxConvUTF8);
+    tif = TIFFOpenW(wc, mode.c_str());
+#else
+    tif = TIFFOpen(c, mode.c_str());
+#endif    
+    logInfo("DONE opening TIFF");
 
     return tif;
 }    
