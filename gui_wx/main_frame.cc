@@ -247,6 +247,7 @@ void deMainFrame::onKey(int key)
 
 void deMainFrame::onQuit(wxCommandEvent& WXUNUSED(event))
 {
+    logInfo("main frame onQuit");
 	Close(TRUE);
 }
 
