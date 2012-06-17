@@ -561,6 +561,7 @@ void deLayerProcessor::setPreviewSize(const deSize& size, bool canSkip)
     if ((oldSize == size) && (canSkip))
     {
         logInfo("skip set preview size");
+        unlockSize();
         return;
     }
 
