@@ -146,7 +146,9 @@ void deHistogramPanel::generateHistogram()
 
 void deHistogramPanel::setChannel(int _channel)
 {
+    mutex.lock();
     channel = _channel;
+    mutex.unlock();
 }
 
 int deHistogramPanel::getChannel() const
