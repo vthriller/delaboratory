@@ -163,6 +163,11 @@ bool deOperationProcessor::tryExecuteBasicOperation(const std::string& operation
         return executeOperation(deColorSpaceLAB, "local_contrast");
     }
 
+    if (operation == "BW local contrast")
+    {
+        return executeOperation(deColorSpaceBW, "local_contrast");
+    }
+
     if (operation == "RGB curves")
     {
         return executeOperation(deColorSpaceRGB, "curves");
@@ -176,6 +181,11 @@ bool deOperationProcessor::tryExecuteBasicOperation(const std::string& operation
     if (operation == "BW curve")
     {
         return executeOperation(deColorSpaceBW, "curves");
+    }
+
+    if (operation == "BW vignette")
+    {
+        return executeOperation(deColorSpaceBW, "vignette");
     }
 
     if (operation == "RGB tone")
@@ -195,5 +205,7 @@ void getSupportedBasicOperations(std::vector<std::string>& actions)
     actions.push_back("RGB curves");
     actions.push_back("LAB curves");
     actions.push_back("BW curve");
+    actions.push_back("BW vignette");
+    actions.push_back("BW local contrast");
     actions.push_back("RGB tone");
 }
