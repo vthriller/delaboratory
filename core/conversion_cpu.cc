@@ -54,6 +54,7 @@ deConversionCPU::deConversionCPU(int size)
     registers[CPU_REGISTER_BW_MIXER_G] = 0.6;
     registers[CPU_REGISTER_BW_MIXER_B] = 0.1;
     registers[CPU_REGISTER_CONTRAST] = 1.0;
+    registers[CPU_REGISTER_PSEUDOGREY] = 0.0;
 }
 
 deConversionCPU::~deConversionCPU()
@@ -551,10 +552,72 @@ void rgb2cmy(deConversionCPU& cpu)
 
 void bw2rgb(deConversionCPU& cpu)
 {
+    deValue pg = cpu.registers[CPU_REGISTER_PSEUDOGREY];
+
     deValue bw = cpu.input[0];
-    cpu.output[0] = bw;
-    cpu.output[1] = bw;
-    cpu.output[2] = bw;
+
+    if (pg == 0)
+    {
+        cpu.output[0] = bw;
+        cpu.output[1] = bw;
+        cpu.output[2] = bw;
+    }
+    else
+    {
+        int bbw = (int) (255 * bw * 16);
+        int m = bbw % 16;
+
+        deValue r = 0;
+        deValue g = 0;
+        deValue b = 0;
+
+        if ((m >= 2) && (m <= 4))
+        {
+            b = 1;
+        }
+        if ((m >= 5) && (m <= 6))
+        {
+            r = 1;
+        }
+        if ((m >= 7) && (m <= 8))
+        {
+            r = 1;
+            b = 1;
+        }
+        if ((m >= 9) && (m <= 10))
+        {
+            g = 1;
+        }
+        if ((m >= 11) && (m <= 13))
+        {
+            g = 1;
+            b = 1;
+        }
+        if ((m >= 14) && (m <= 15))
+        {
+            g = 1;
+            r = 1;
+        }
+
+        r = bw + pg * r;
+        if (r > 1)
+        {
+            r = 1;
+        }
+        g = bw + pg * g;
+        if (g > 1)
+        {
+            g = 1;
+        }
+        b = bw + pg * b;
+        if (b > 1)
+        {
+            b = 1;
+        }
+        cpu.output[0] = r;
+        cpu.output[1] = g;
+        cpu.output[2] = b;
+    }
 }
 
 void rgb2bw(deConversionCPU& cpu)

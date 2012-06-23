@@ -17,8 +17,6 @@
 */
 
 #include "conversion_layer.h"
-//#include "project.h"
-//#include "layer_processor.h"
 #include "layer_stack.h"
 #include "conversion_processor.h"
 #include "str.h"
@@ -73,6 +71,12 @@ deConversionLayer::deConversionLayer(deColorSpace _colorSpace, deChannelManager&
     //    addFilms();
     }
 
+    if (scs == deColorSpaceBW)
+    {
+        createPropertyNumeric("pseudogrey", 0, 0.1);
+        reset->addNumericValue("pseudogrey", 0);
+    }
+
     applyPreset("reset");
 
 }
@@ -99,8 +103,6 @@ bool deConversionLayer::updateMainImageNotThreadedWay()
 {
     logInfo("conversion layer start");
 
-    //mainLayerImage.enableAllChannels();
-
     deConversionProcessor p;
 
     deConversionCPU cpu(4);
@@ -114,6 +116,7 @@ bool deConversionLayer::updateMainImageNotThreadedWay()
     cpu.registers[CPU_REGISTER_BW_MIXER_B] = getNumericValue("mixer blue");
     cpu.registers[CPU_REGISTER_CONTRAST] = getNumericValue("contrast");
     cpu.registers[CPU_REGISTER_SATURATION] = getNumericValue("saturation");
+    cpu.registers[CPU_REGISTER_PSEUDOGREY] = getNumericValue("pseudogrey");
 
     p.convertImage(getSourceImage(), mainLayerImage, cpu);
 

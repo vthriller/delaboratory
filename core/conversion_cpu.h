@@ -33,8 +33,9 @@ class deChannelManager;
 #define CPU_REGISTER_BW_MIXER_B 6
 #define CPU_REGISTER_CONTRAST 7
 #define CPU_REGISTER_SATURATION 8
+#define CPU_REGISTER_PSEUDOGREY 9
 
-#define CPU_REGISTERS 9
+#define CPU_REGISTERS 10
 
 class deConversionCPU
 {
