@@ -33,10 +33,6 @@ deToneLayer::deToneLayer(deColorSpace _colorSpace, deChannelManager& _channelMan
 
     createPropertyChoice("channel", getChannelNames(colorSpace));
 
-    createPropertyBoolean("dark");
-    createPropertyBoolean("half");
-    createPropertyBoolean("light");
-
     int n = getColorSpaceSize(colorSpace);
 
     int i;
@@ -44,7 +40,7 @@ deToneLayer::deToneLayer(deColorSpace _colorSpace, deChannelManager& _channelMan
     {
         std::string nd = "dark " + getChannelName(colorSpace, i);
         createPropertyNumeric(nd, 0, 1);
-        reset->addNumericValue(nd, 0.25);
+        reset->addNumericValue(nd, 0.0);
     }
 
     for (i = 0; i < n; i++)
@@ -58,10 +54,8 @@ deToneLayer::deToneLayer(deColorSpace _colorSpace, deChannelManager& _channelMan
     {
         std::string nl = "light " + getChannelName(colorSpace, i);
         createPropertyNumeric(nl, 0, 1);
-        reset->addNumericValue(nl, 0.75);
+        reset->addNumericValue(nl, 1.0);
     }
-
-    getPropertyBoolean("half")->set(true);
 
     applyPreset("reset");
 }
@@ -86,10 +80,6 @@ bool deToneLayer::updateMainImageNotThreadedWay()
         return false;
     }
 
-    bool useD = getPropertyBoolean("dark")->get();
-    bool useH = getPropertyBoolean("half")->get();
-    bool useL = getPropertyBoolean("light")->get();
-
     int channel;
     for (channel = 0; channel < nc; channel++)
     {
@@ -100,26 +90,13 @@ bool deToneLayer::updateMainImageNotThreadedWay()
         deValue light = getNumericValue(nl);
         deValue half = getNumericValue(nh);
 
-        //mainLayerImage.enableChannel(channel);
-
         deValue* destination = mainLayerImage.startWrite(channel);
 
         deBaseCurve curve;
 
-        curve.addPoint(0, 0);
-        if (useD)
-        {
-            curve.addPoint(0.25, dark);
-        }
-        if (useH)
-        {
-            curve.addPoint(0.5, half);
-        }
-        if (useL)
-        {
-            curve.addPoint(0.75, light);
-        }            
-        curve.addPoint(1, 1);
+        curve.addPoint(0, dark);
+        curve.addPoint(0.5, half);
+        curve.addPoint(1, light);
 
         curve.build();
 
