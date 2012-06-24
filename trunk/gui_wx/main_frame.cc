@@ -230,8 +230,8 @@ deMainFrame::~deMainFrame()
 {
     logInfo("main frame destructor");
     layerProcessor.stopWorkerThread();
-    layerProcessor.lock();
-    layerProcessor.unlock();
+    layerProcessor.lockLayerProcessor();
+    layerProcessor.unlockLayerProcessor();
 }
 
 void deMainFrame::rebuild()

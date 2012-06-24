@@ -154,7 +154,8 @@ deImagePanel::~deImagePanel()
 
 void deImagePanel::paintEvent(wxPaintEvent & evt)
 {
-    project.getLayerProcessor().lock();
+    logInfo("paint event start");
+    project.getLayerProcessor().lockLayerProcessor();
     int view = project.getLayerProcessor().getLastValidLayer();
     if (view >= 0)
     {
@@ -169,7 +170,8 @@ void deImagePanel::paintEvent(wxPaintEvent & evt)
     else
     {
     }
-    project.getLayerProcessor().unlock();
+    project.getLayerProcessor().unlockLayerProcessor();
+    logInfo("paint event DONE");
 }
 
 void deImagePanel::repaintImagePanel()

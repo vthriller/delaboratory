@@ -71,8 +71,8 @@ deProject::deProject(deLayerProcessor& _processor, deChannelManager& _channelMan
 deProject::~deProject()
 {
     logInfo("project destructor");
-    layerProcessor.lock();
-    layerProcessor.unlock();
+    layerProcessor.lockLayerProcessor();
+    layerProcessor.unlockLayerProcessor();
     layerStack.clear();
 }
 
