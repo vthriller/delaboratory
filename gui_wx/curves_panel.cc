@@ -384,13 +384,15 @@ void deCurvesPanel::paintEvent(wxPaintEvent & evt)
 
 void deCurvesPanel::changeChannel(int _channel)
 {
-    layerProcessor.lock();
+    logInfo("curves panel change channel start");
+    layerProcessor.lockLayerProcessor();
 
     channel = _channel;
     layerProcessor.setHistogramChannel(channel);
     paint();
 
-    layerProcessor.unlock();
+    layerProcessor.unlockLayerProcessor();
+    logInfo("curves panel change channel DONE");
 }
 
 void deCurvesPanel::onImageClick(deValue x, deValue y, const deValue* c, const deSize& size)

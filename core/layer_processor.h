@@ -121,8 +121,8 @@ class deLayerProcessor
 
         void onChangeView(int a);
 
-        void lock();
-        void unlock();
+        void lockLayerProcessor();
+        void unlockLayerProcessor();
 
         void startWorkerThread();
 

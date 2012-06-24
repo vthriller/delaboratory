@@ -61,11 +61,11 @@ sizeMutex(false)
 
 void deLayerProcessor::onDestroyAll()
 {
-    lock();
+    lockLayerProcessor();
 
     lastValidLayer = -1;
 
-    unlock();
+    unlockLayerProcessor();
 }
 
 deLayerProcessor::~deLayerProcessor()
@@ -328,7 +328,7 @@ bool deLayerProcessor::updateImagesSmart(deProgressDialog& progressDialog, const
 {
     lockSize();
 
-    lock();
+    lockLayerProcessor();
     lockHistogram();
     lockPrepareImage();
     lockUpdateImage();
@@ -349,7 +349,7 @@ bool deLayerProcessor::updateImagesSmart(deProgressDialog& progressDialog, const
     unlockUpdateImage();
     unlockPrepareImage();
     unlockHistogram();
-    unlock();
+    unlockLayerProcessor();
 
     unlockSize();
 
@@ -378,14 +378,14 @@ void deLayerProcessor::onChangeView(int a)
     updateWarning();
 }   
 
-void deLayerProcessor::lock()
+void deLayerProcessor::lockLayerProcessor()
 {
     logInfo("layer processor lock...");
     updateImagesMutex.lock();
     logInfo("layer processor locked");
 }
 
-void deLayerProcessor::unlock()
+void deLayerProcessor::unlockLayerProcessor()
 {
     logInfo("layer processor unlock");
     updateImagesMutex.unlock();
@@ -513,7 +513,7 @@ bool deLayerProcessor::prepareImage()
 
     bool result = false;
     lockPrepareImage();
-    lock();
+    lockLayerProcessor();
 
     if (!closing)
     {
@@ -523,7 +523,7 @@ bool deLayerProcessor::prepareImage()
         }
     }
 
-    unlock();
+    unlockLayerProcessor();
     unlockPrepareImage();
 
     sendInfoEvent(DE_RENDERING_END);

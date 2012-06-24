@@ -89,7 +89,7 @@ void deHistogramPanel::generateHistogram()
 
     int viewV = viewManager.getView();
 
-    project->getLayerProcessor().lock();
+    project->getLayerProcessor().lockLayerProcessor();
 
     int view = project->getLayerProcessor().getLastValidLayer();
     if (view > viewV)
@@ -98,7 +98,7 @@ void deHistogramPanel::generateHistogram()
     }
     const deBaseLayer* layer = layerStack.startReadLayer(view);
 
-    project->getLayerProcessor().unlock();
+    project->getLayerProcessor().unlockLayerProcessor();
 
     if (layer)
     {
@@ -113,7 +113,7 @@ void deHistogramPanel::generateHistogram()
             histogram.calc(values, n);
         }
         else
-        {
+       {
             if (!values)
             {
                 logError("can't generate histogram - NULL channel");
