@@ -386,12 +386,12 @@ void deCurvesPanel::changeChannel(int _channel)
 {
     logInfo("curves panel change channel start");
     layerProcessor.lockLayerProcessor();
-
     channel = _channel;
+    layerProcessor.unlockLayerProcessor();
+
     layerProcessor.setHistogramChannel(channel);
     paint();
 
-    layerProcessor.unlockLayerProcessor();
     logInfo("curves panel change channel DONE");
 }
 
