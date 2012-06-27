@@ -152,13 +152,14 @@ void logInfo(const std::string& message)
 #endif    
 }
 
+static deMutex logErrorMutex;
+
 void logError(const std::string& message)
 {
     const std::string m = "ERROR " + message;
-    static deMutex mutex;
-    mutex.lock();
+    logErrorMutex.lock();
     std::cout << m << std::endl;
-    mutex.unlock();
+    logErrorMutex.unlock();
 #ifdef LOGGING    
     if (loggerActive)
     {

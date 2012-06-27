@@ -28,6 +28,7 @@ class deLayer;
 class deLogger;
 class deLayerFrameManager;
 class deLayerProcessorThreads;
+class deGUI;
 #include <map>
 #include "size.h"
 #include "renderer.h"
@@ -63,7 +64,6 @@ class deLayerProcessor
         deRenderer renderer;
         deChannelManager& previewChannelManager;
         deMainWindow& mainWindow;
-        deMutex sizeMutex;
 
         bool closing;
 
@@ -92,9 +92,6 @@ class deLayerProcessor
         void lockHistogram();
         void unlockHistogram();
 
-        void lockSize();
-        void unlockSize();
-
         void lockPrepareImage();
         void unlockPrepareImage();
 
@@ -112,7 +109,7 @@ class deLayerProcessor
         void setViewManager(deViewManager* _viewManager);
 
         void updateAllImages(bool calcHistogram);
-        bool updateImagesSmart(deProgressDialog& progressDialog, const std::string& fileName, const std::string& type, bool saveAll, const deSize& size);
+        bool updateImagesSmart(deProgressDialog& progressDialog, const std::string& fileName, const std::string& type, bool saveAll, const deSize& size, deGUI& gui);
 
         void markUpdateSingleChannel(int index, int channel);
         void markUpdateAllChannels(int index);
