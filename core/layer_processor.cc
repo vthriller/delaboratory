@@ -33,7 +33,7 @@
 #include "image_io.h"
 #include "layer_processor_threads.h"
 #include "flatten_layers.h"
-
+#include "gui.h"
 
 deLayerProcessor::deLayerProcessor(deChannelManager& _previewChannelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deMainWindow& _mainWindow)
 :
@@ -41,8 +41,7 @@ layerStack(_layerStack),
 layerFrameManager(_layerFrameManager),
 renderer(_previewChannelManager),
 previewChannelManager(_previewChannelManager),
-mainWindow(_mainWindow),
-sizeMutex(false)
+mainWindow(_mainWindow)
 {
     logInfo("layer processor constructor");
     viewManager = NULL;
@@ -174,19 +173,6 @@ void deLayerProcessor::unlockHistogram()
 {
     logInfo("unlocking histogram mutex");
     histogramMutex.unlock();
-}
-
-void deLayerProcessor::lockSize()
-{
-    logInfo("locking size mutex...");
-    sizeMutex.lock();
-    logInfo("size mutex locked");
-}
-
-void deLayerProcessor::unlockSize()
-{
-    logInfo("unlocking size mutex");
-    sizeMutex.unlock();
 }
 
 void deLayerProcessor::lockUpdateImage()
@@ -324,9 +310,9 @@ void deLayerProcessor::updateWarning()
     mainWindow.postEvent(DE_WARNING_EVENT, 0 );
 }
 
-bool deLayerProcessor::updateImagesSmart(deProgressDialog& progressDialog, const std::string& fileName, const std::string& type, bool saveAll, const deSize& size)
+bool deLayerProcessor::updateImagesSmart(deProgressDialog& progressDialog, const std::string& fileName, const std::string& type, bool saveAll, const deSize& size, deGUI& gui)
 {
-    lockSize();
+    gui.lockSize();
 
     lockLayerProcessor();
     lockHistogram();
@@ -351,7 +337,7 @@ bool deLayerProcessor::updateImagesSmart(deProgressDialog& progressDialog, const
     unlockHistogram();
     unlockLayerProcessor();
 
-    unlockSize();
+    gui.unlockSize();
 
     return result;
 }
@@ -555,13 +541,10 @@ void deLayerProcessor::forceUpdateSize()
 
 void deLayerProcessor::setPreviewSize(const deSize& size, bool canSkip)
 {
-    lockSize();
-
     deSize oldSize = previewChannelManager.getChannelSizeFromChannelManager();
     if ((oldSize == size) && (canSkip))
     {
         logInfo("skip set preview size");
-        unlockSize();
         return;
     }
 
@@ -589,8 +572,6 @@ void deLayerProcessor::setPreviewSize(const deSize& size, bool canSkip)
     unlockPrepareImage();
     unlockHistogram();
     logInfo("setPreviewSize DONE");
-
-    unlockSize();
 }
 
 void deLayerProcessor::onImageLoad()

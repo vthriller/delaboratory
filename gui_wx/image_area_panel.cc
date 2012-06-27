@@ -35,6 +35,12 @@ void deImageAreaPanel::resize(wxSizeEvent& event)
 
 void deImageAreaPanel::updateSize(bool canSkip)
 {
+    if (sizeLocked)
+    {
+        logError("updateSize called when sizeLocked, skipped");
+        return;
+    }
+
     wxSize s = GetSize();
     logInfo("image area panel update size " + str(s.GetWidth()) + "x" + str(s.GetHeight()));
 
@@ -61,6 +67,8 @@ deImageAreaPanel::deImageAreaPanel(wxWindow* parent, deProject& _project, deSamp
 
     zoomPanel->setImageAreaPanel(this);
 
+    sizeLocked = false;
+
     Connect(wxEVT_SIZE, wxSizeEventHandler(deImageAreaPanel::resize));
 }
 
@@ -72,3 +80,20 @@ deImagePanel* deImageAreaPanel::getImagePanel()
 {
     return imagePanel;
 }
+
+void deImageAreaPanel::lockSize()
+{
+    logInfo("sizeLocked = true");
+    sizeMutex.lock();
+    sizeLocked = true;
+    sizeMutex.unlock();
+}
+
+void deImageAreaPanel::unlockSize()
+{
+    logInfo("sizeLocked = false");
+    sizeMutex.lock();
+    sizeLocked = false;
+    sizeMutex.unlock();
+}
+

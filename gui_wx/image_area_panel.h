@@ -26,6 +26,7 @@ class deSamplerManager;
 class deZoomManager;
 class deZoomPanel;
 class deGUI;
+#include "mutex.h"
 
 class deImageAreaPanel:public wxPanel
 {
@@ -35,11 +36,18 @@ class deImageAreaPanel:public wxPanel
 
         deImagePanel* imagePanel;
 
+        deMutex sizeMutex;
+
+        bool sizeLocked;
+
     public:
         deImageAreaPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager, deZoomManager& _zoomManager, deZoomPanel* zoomPanel, deGUI& gui);
         virtual ~deImageAreaPanel();
         
         void updateSize(bool canSkip);
+
+        void lockSize();
+        void unlockSize();
 
         deImagePanel* getImagePanel();
 

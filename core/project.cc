@@ -330,7 +330,7 @@ bool deProject::processFullSizeImage(const std::string& fileName, const std::str
 {
     logInfo("processFullSizeImage...");
 
-    bool result = layerProcessor.updateImagesSmart(progressDialog, fileName, type, saveAll, sourceImage.getStaticImageSize());
+    bool result = layerProcessor.updateImagesSmart(progressDialog, fileName, type, saveAll, sourceImage.getStaticImageSize(), gui);
 
     return result;
 }

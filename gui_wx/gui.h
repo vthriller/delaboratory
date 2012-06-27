@@ -59,6 +59,9 @@ class deGUI
         void setImageAreaPanel(deImageAreaPanel* _imageAreaPanel);
         void updateImageAreaSize();
 
+        void lockSize();
+        void unlockSize();
+
 
 };
 

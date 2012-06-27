@@ -121,3 +121,20 @@ void deGUI::updateImageAreaSize()
         imageAreaPanel->updateSize(false);
     }        
 }    
+
+void deGUI::lockSize()
+{
+    if (imageAreaPanel)
+    {
+        imageAreaPanel->lockSize();
+    }        
+}
+
+void deGUI::unlockSize()
+{
+    if (imageAreaPanel)
+    {
+        imageAreaPanel->unlockSize();
+    }        
+}
+
