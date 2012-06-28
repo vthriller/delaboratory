@@ -25,6 +25,7 @@
 #include "generic_layer_frame.h"
 #include "histogram_mode_panel.h"
 #include "image_area_panel.h"
+#include "logger.h"
 
 deGUI::deGUI()
 {
@@ -128,6 +129,10 @@ void deGUI::lockSize()
     {
         imageAreaPanel->lockSize();
     }        
+    else
+    {
+        logError("can't lockSize, no imageAreaPanel");
+    }
 }
 
 void deGUI::unlockSize()
@@ -135,6 +140,10 @@ void deGUI::unlockSize()
     if (imageAreaPanel)
     {
         imageAreaPanel->unlockSize();
-    }        
+    }
+    else
+    {
+        logError("can't unlockSize, no imageAreaPanel");
+    }
 }
 
