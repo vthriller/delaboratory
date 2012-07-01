@@ -78,16 +78,16 @@ void gradientChannel(deValue* destination, deSize size, deValue cx, deValue cy, 
 
             if (sinus > 0)
             {
-                rr = 1.0 - sin (sinus + rr * M_PI);
+                rr = 1.0 - sin (sinus * rr * M_PI);
             }
             else if (sinus < 0)
             {
-                rr = sin (sinus + rr * M_PI);
+                rr = sin (sinus * rr * M_PI);
             }
 
             if (rr < 0)
             {
-                rr = 0;
+                rr = -rr;
             }
             if (rr > 1)
             {
