@@ -47,6 +47,9 @@ deGradientLayer::deGradientLayer(deColorSpace _colorSpace, deChannelManager& _ch
     createPropertyNumeric("center_y", -1, 1);
     reset->addNumericValue("center_y", 0.0);
 
+    createPropertyNumeric("sinus", -1, 1);
+    reset->addNumericValue("sinus", 0.0);
+
     applyPreset("reset");
     disableNotLuminance();
 }
@@ -62,18 +65,8 @@ bool deGradientLayer::isChannelNeutral(int channel)
 
 bool deGradientLayer::updateMainImageSingleChannel(int channel)
 {
-/*
-    if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
-    {
-        int s = getSourceImage().getChannelIndex(channel);
-        mainLayerImage.disableChannel(channel, s);
-        return true;
-    }
-    */
-
     deSize size = mainLayerImage.getChannelSize();
 
-//    mainLayerImage.enableChannel(channel);
     deValue* destination = mainLayerImage.startWrite(channel);
 
     deValue x1;
@@ -89,7 +82,9 @@ bool deGradientLayer::updateMainImageSingleChannel(int channel)
     deValue cx = getNumericValue("center_x");
     deValue cy = getNumericValue("center_y");
 
-    gradientChannel(destination, size, cx, cy, r, a);
+    deValue sinus = getNumericValue("sinus");
+
+    gradientChannel(destination, size, cx, cy, r, a, sinus);
 
     mainLayerImage.finishWrite(channel);
 
