@@ -193,6 +193,23 @@ bool deOperationProcessor::tryExecuteBasicOperation(const std::string& operation
         return executeOperation(deColorSpaceRGB, "tone");
     }
 
+    if (operation == "BW gradient")
+    {
+        return executeOperation(deColorSpaceBW, "gradient");
+    }
+    if (operation == "RGB gradient")
+    {
+        return executeOperation(deColorSpaceRGB, "gradient");
+    }
+    if (operation == "CMYK gradient")
+    {
+        return executeOperation(deColorSpaceCMYK, "gradient");
+    }
+    if (operation == "LAB gradient")
+    {
+        return executeOperation(deColorSpaceLAB, "gradient");
+    }
+
     return false;
 }
 
@@ -208,4 +225,8 @@ void getSupportedBasicOperations(std::vector<std::string>& actions)
     actions.push_back("BW vignette");
     actions.push_back("BW local contrast");
     actions.push_back("RGB tone");
+    actions.push_back("LAB gradient");
+    actions.push_back("BW gradient");
+    actions.push_back("RGB gradient");
+    actions.push_back("CMYK gradient");
 }
