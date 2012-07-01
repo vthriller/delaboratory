@@ -22,7 +22,7 @@
 #include "value.h"
 #include "size.h"
 
-void gradientChannel(deValue* destination, deSize size, deValue cx, deValue cy, deValue r, deValue a);
+void gradientChannel(deValue* destination, deSize size, deValue cx, deValue cy, deValue r, deValue a, deValue sinus);
 
 
 #endif    

@@ -22,7 +22,7 @@
 #include "logger.h"
 #include "str.h"
 
-void gradientChannel(deValue* destination, deSize size, deValue cx, deValue cy, deValue r, deValue a)
+void gradientChannel(deValue* destination, deSize size, deValue cx, deValue cy, deValue r, deValue a, deValue sinus)
 {
     int w = size.getW();
     int h = size.getH();
@@ -76,6 +76,15 @@ void gradientChannel(deValue* destination, deSize size, deValue cx, deValue cy, 
 
             rr = 1.0 - rr;
 
+            if (sinus > 0)
+            {
+                rr = 1.0 - sin (sinus + rr * M_PI);
+            }
+            else if (sinus < 0)
+            {
+                rr = sin (sinus + rr * M_PI);
+            }
+
             if (rr < 0)
             {
                 rr = 0;
@@ -84,6 +93,8 @@ void gradientChannel(deValue* destination, deSize size, deValue cx, deValue cy, 
             {
                 rr = 1;
             }
+
+
             
             destination[p] = rr;
             p++;
