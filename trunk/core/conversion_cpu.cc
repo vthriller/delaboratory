@@ -552,7 +552,7 @@ void rgb2cmy(deConversionCPU& cpu)
 
 void bw2rgb(deConversionCPU& cpu)
 {
-    deValue pg = cpu.registers[CPU_REGISTER_PSEUDOGREY];
+    deValue pg = cpu.registers[CPU_REGISTER_PSEUDOGREY] / 255.0;
 
     deValue bw = cpu.input[0];
 

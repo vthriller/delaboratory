@@ -73,7 +73,7 @@ deConversionLayer::deConversionLayer(deColorSpace _colorSpace, deChannelManager&
 
     if (scs == deColorSpaceBW)
     {
-        createPropertyNumeric("pseudogrey", 0, 0.1);
+        createPropertyNumeric("pseudogrey", 0, 1.0);
         reset->addNumericValue("pseudogrey", 0);
     }
 
