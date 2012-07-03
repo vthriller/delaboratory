@@ -31,6 +31,9 @@ class deBaseLayerWithSource:public deBaseLayerWithProperties
         const deBaseLayer& getSourceLayer() const;
         const deBaseLayer& getOriginalLayer() const;
 
+    protected:
+        void copySourceChannel(int channel);
+
     public:
         deBaseLayerWithSource(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
         virtual ~deBaseLayerWithSource();
