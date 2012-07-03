@@ -53,12 +53,6 @@ bool deGaussianBlurSingleLayer::updateMainImageNotThreadedWay()
     const deValue* source = getSourceImage().startRead(channel);
 
     int i;
-    /*
-    for (i = 0; i < nc; i++)
-    {
-        mainLayerImage.enableChannel(i);
-    }
-    */
 
     deValue* destination = mainLayerImage.startWrite(0);
 

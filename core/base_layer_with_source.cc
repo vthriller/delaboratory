@@ -18,6 +18,9 @@
 
 #include "base_layer_with_source.h"
 #include "layer_stack.h"
+#include "copy_channel.h"
+#include "logger.h"
+#include "str.h"
 
 deBaseLayerWithSource::deBaseLayerWithSource(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayerIndex, deLayerStack& _layerStack)
 :deBaseLayerWithProperties(_colorSpace, _channelManager),
@@ -69,4 +72,14 @@ deColorSpace deBaseLayerWithSource::getSourceColorSpace() const
 int deBaseLayerWithSource::getLayerStackSize() const
 {
     return layerStack.getSize();
+}
+
+void deBaseLayerWithSource::copySourceChannel(int channel)
+{
+    logInfo("copy source channel " + str(channel));
+    const deValue* s = getSourceImage().startRead(channel);
+    deValue* d = mainLayerImage.startWrite(channel);
+    copyChannel(s, d, mainLayerImage.getChannelSize().getN());
+    mainLayerImage.finishWrite(channel);
+    getSourceImage().finishRead(channel);
 }

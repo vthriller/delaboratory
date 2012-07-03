@@ -38,6 +38,12 @@ deLocalContrastLayer::~deLocalContrastLayer()
 
 bool deLocalContrastLayer::updateMainImageSingleChannel(int channel)
 {
+    if (!isChannelEnabled(channel))
+    {
+        copySourceChannel(channel);
+        return true;
+    }
+
     deValue r = getNumericValue("radius") * viewManager.getRealScale();;
     deValue a = 0.5;
     deValue t = 0.0;
