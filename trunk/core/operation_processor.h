@@ -48,6 +48,7 @@ class deOperationProcessor
 
 };
 
-void getSupportedBasicOperations(std::vector<std::string>& actions);
+void getSupportedColorsOperations(std::vector<std::string>& actions);
+void getSupportedOtherOperations(std::vector<std::string>& actions);
 
 #endif

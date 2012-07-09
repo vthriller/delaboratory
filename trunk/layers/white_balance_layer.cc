@@ -34,14 +34,14 @@ deWhiteBalanceLayer::deWhiteBalanceLayer(deColorSpace _colorSpace, deChannelMana
     createPropertyNumeric("green / magenta", -1, 1);
     reset->addNumericValue("green / magenta", 0.0);
 
-    createPropertyNumeric("green / magenta finetune", -1, 1);
-    reset->addNumericValue("green / magenta finetune", 0.0);
+    createPropertyNumeric("g / m finetune", -1, 1);
+    reset->addNumericValue("g / m finetune", 0.0);
 
     createPropertyNumeric("blue / yellow", -1, 1);
     reset->addNumericValue("blue / yellow", 0.0);
 
-    createPropertyNumeric("blue / yellow finetune", -1, 1);
-    reset->addNumericValue("blue / yellow finetune", 0.0);
+    createPropertyNumeric("b / y finetune", -1, 1);
+    reset->addNumericValue("b / y finetune", 0.0);
 
     applyPreset("reset");
     if (colorSpace != deColorSpaceLAB)
@@ -65,12 +65,12 @@ bool deWhiteBalanceLayer::updateMainImageSingleChannel(int channel)
     if (channel == 1)
     {
         s = getNumericValue("green / magenta");
-        s2 = getNumericValue("green / magenta finetune");
+        s2 = getNumericValue("g / m finetune");
     }
     if (channel == 2)
     {
         s = getNumericValue("blue / yellow");
-        s2 = getNumericValue("blue / yellow finetune");
+        s2 = getNumericValue("b/ y finetune");
     }
 
     s = 0.5 * s + 0.1 * s2;
@@ -130,9 +130,9 @@ bool deWhiteBalanceLayer::onImageClick(deValue x, deValue y)
     b = -2 * b;
 
     getPropertyNumeric("green / magenta")->set(a);
-    getPropertyNumeric("green / magenta finetune")->set(0.0);
+    getPropertyNumeric("g / m finetune")->set(0.0);
     getPropertyNumeric("blue / yellow")->set(b);
-    getPropertyNumeric("blue / yellow finetune")->set(0.0);
+    getPropertyNumeric("b / y finetune")->set(0.0);
 
     return true;
 }
