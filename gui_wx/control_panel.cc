@@ -41,10 +41,30 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
 
     {
         wxPanel* basicPanel = new wxPanel(notebook);
-        notebook->AddPage(basicPanel, _T("basic"));
+        notebook->AddPage(basicPanel, _T("colors"));
 
         std::vector<std::string> operations;
-        getSupportedBasicOperations(operations);
+        getSupportedColorsOperations(operations);
+
+        wxSizer* gridSizer = new wxGridSizer(2);
+        basicPanel->SetSizer(gridSizer);
+
+        std::vector<std::string>::iterator j;
+        for (j = operations.begin(); j != operations.end(); j++)
+        {
+            std::string d = *j;
+            wxButton* b = new wxButton(basicPanel, wxID_ANY, wxString::FromAscii(d.c_str()));
+            gridSizer->Add(b);
+            actionButtons.push_back(b);
+            actionButtonsNames[b->GetId()] = *j;
+        }
+    }
+    {
+        wxPanel* basicPanel = new wxPanel(notebook);
+        notebook->AddPage(basicPanel, _T("other"));
+
+        std::vector<std::string> operations;
+        getSupportedOtherOperations(operations);
 
         wxSizer* gridSizer = new wxGridSizer(2);
         basicPanel->SetSizer(gridSizer);
@@ -66,7 +86,7 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
         getSupportedActions(actions);
 
         wxPanel* actionsPanel = new wxPanel(notebook);
-        notebook->AddPage(actionsPanel, _T("actions"));
+        notebook->AddPage(actionsPanel, _T("expert"));
 
         wxSizer* gridSizer = new wxGridSizer(3);
         actionsPanel->SetSizer(gridSizer);

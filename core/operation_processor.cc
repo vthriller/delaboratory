@@ -173,6 +173,11 @@ bool deOperationProcessor::tryExecuteBasicOperation(const std::string& operation
         return executeOperation(deColorSpaceRGB, "curves");
     }
 
+    if (operation == "RGB levels")
+    {
+        return executeOperation(deColorSpaceRGB, "levels");
+    }
+
     if (operation == "LAB curves")
     {
         return executeOperation(deColorSpaceLAB, "curves");
@@ -210,21 +215,37 @@ bool deOperationProcessor::tryExecuteBasicOperation(const std::string& operation
         return executeOperation(deColorSpaceLAB, "gradient");
     }
 
+    if (operation == "LAB wb")
+    {
+        return executeOperation(deColorSpaceLAB, "white_balance");
+    }
+
+    if (operation == "LAB saturation")
+    {
+        return executeOperation(deColorSpaceLAB, "saturation");
+    }
+
     return false;
 }
 
-void getSupportedBasicOperations(std::vector<std::string>& actions)
+void getSupportedColorsOperations(std::vector<std::string>& actions)
 {
     actions.push_back("CMYK curves");
     actions.push_back("CMYK levels");
-    actions.push_back("LAB vignette");
-    actions.push_back("LAB local contrast");
     actions.push_back("RGB curves");
+    actions.push_back("RGB levels");
+    actions.push_back("LAB wb");
+    actions.push_back("LAB saturation");
     actions.push_back("LAB curves");
     actions.push_back("BW curve");
+}
+
+void getSupportedOtherOperations(std::vector<std::string>& actions)
+{
+    actions.push_back("LAB vignette");
+    actions.push_back("LAB local contrast");
     actions.push_back("BW vignette");
     actions.push_back("BW local contrast");
-    actions.push_back("RGB tone");
     actions.push_back("LAB gradient");
     actions.push_back("BW gradient");
     actions.push_back("RGB gradient");
