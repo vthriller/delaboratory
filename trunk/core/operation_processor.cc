@@ -225,6 +225,16 @@ bool deOperationProcessor::tryExecuteBasicOperation(const std::string& operation
         return executeOperation(deColorSpaceLAB, "saturation");
     }
 
+    if (operation == "HSV equalizer")
+    {
+        return executeOperation(deColorSpaceHSV, "equalizer");
+    }
+
+    if (operation == "LCH equalizer")
+    {
+        return executeOperation(deColorSpaceLCH, "equalizer");
+    }
+
     return false;
 }
 
@@ -238,6 +248,8 @@ void getSupportedColorsOperations(std::vector<std::string>& actions)
     actions.push_back("LAB saturation");
     actions.push_back("LAB curves");
     actions.push_back("BW curve");
+    actions.push_back("HSV equalizer");
+    actions.push_back("LCH equalizer");
 }
 
 void getSupportedOtherOperations(std::vector<std::string>& actions)

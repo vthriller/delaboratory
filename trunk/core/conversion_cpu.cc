@@ -1553,6 +1553,35 @@ void rgb2hsv(deConversionCPU& cpu)
     cpu.output[2] = v;
 }
 
+void prophoto2hsv(deConversionCPU& cpu)
+{
+    prophoto2rgb(cpu);
+    cpu.switchIO();
+    rgb2hsv(cpu);
+}
+
+void lab2hsv(deConversionCPU& cpu)
+{
+    lab2rgb(cpu);
+    cpu.switchIO();
+    rgb2hsv(cpu);
+}
+
+void lch2hsv(deConversionCPU& cpu)
+{
+    lch2lab(cpu);
+    cpu.switchIO();
+    lab2hsv(cpu);
+}
+
+void bw2hsv(deConversionCPU& cpu)
+{
+    bw2rgb(cpu);
+    cpu.switchIO();
+    rgb2hsv(cpu);
+}
+
+
 void hsv2rgb(deConversionCPU& cpu)
 {
     deValue h = cpu.input[0];
@@ -1626,6 +1655,41 @@ void hsv2rgb(deConversionCPU& cpu)
     cpu.output[2] = b;
 }
 
+void hsv2cmyk(deConversionCPU& cpu)
+{
+    hsv2rgb(cpu);
+    cpu.switchIO();
+    rgb2cmyk(cpu);
+}
+
+void cmyk2hsv(deConversionCPU& cpu)
+{
+    cmyk2rgb(cpu);
+    cpu.switchIO();
+    rgb2hsv(cpu);
+}
+
+void hsv2lab(deConversionCPU& cpu)
+{
+    hsv2rgb(cpu);
+    cpu.switchIO();
+    rgb2lab(cpu);
+}
+
+void hsv2bw(deConversionCPU& cpu)
+{
+    hsv2rgb(cpu);
+    cpu.switchIO();
+    rgb2bw(cpu);
+}
+
+void hsv2lch(deConversionCPU& cpu)
+{
+    hsv2rgb(cpu);
+    cpu.switchIO();
+    rgb2lch(cpu);
+}
+
 
 deConversionCPU::deFunction getConversion(deColorSpace sourceColorSpace, deColorSpace targetColorSpace)
 {
@@ -1670,6 +1734,14 @@ deConversionCPU::deFunction getConversion(deColorSpace sourceColorSpace, deColor
     {
         return rgb2hsv;
     }
+    if ((sourceColorSpace == deColorSpaceCMYK) && (targetColorSpace == deColorSpaceHSV))
+    {
+        return cmyk2hsv;
+    }
+    if ((sourceColorSpace == deColorSpaceProPhoto) && (targetColorSpace == deColorSpaceHSV))
+    {
+        return prophoto2hsv;
+    }
     if ((sourceColorSpace == deColorSpaceHSL) && (targetColorSpace == deColorSpaceRGB))
     {
         return hsl2rgb;
@@ -1677,6 +1749,22 @@ deConversionCPU::deFunction getConversion(deColorSpace sourceColorSpace, deColor
     if ((sourceColorSpace == deColorSpaceHSV) && (targetColorSpace == deColorSpaceRGB))
     {
         return hsv2rgb;
+    }
+    if ((sourceColorSpace == deColorSpaceHSV) && (targetColorSpace == deColorSpaceLAB))
+    {
+        return hsv2lab;
+    }
+    if ((sourceColorSpace == deColorSpaceHSV) && (targetColorSpace == deColorSpaceCMYK))
+    {
+        return hsv2cmyk;
+    }
+    if ((sourceColorSpace == deColorSpaceHSV) && (targetColorSpace == deColorSpaceBW))
+    {
+        return hsv2bw;
+    }
+    if ((sourceColorSpace == deColorSpaceHSV) && (targetColorSpace == deColorSpaceLCH))
+    {
+        return hsv2lch;
     }
     if ((sourceColorSpace == deColorSpaceRGB) && (targetColorSpace == deColorSpaceLCH))
     {
@@ -1734,6 +1822,14 @@ deConversionCPU::deFunction getConversion(deColorSpace sourceColorSpace, deColor
     {
         return lch2bw;
     }
+    if ((sourceColorSpace == deColorSpaceLCH) && (targetColorSpace == deColorSpaceHSV))
+    {
+        return lch2hsv;
+    }
+    if ((sourceColorSpace == deColorSpaceLAB) && (targetColorSpace == deColorSpaceHSV))
+    {
+        return lab2hsv;
+    }
     if ((sourceColorSpace == deColorSpaceCMYK) && (targetColorSpace == deColorSpaceBW))
     {
         return cmyk2bw;
@@ -1761,6 +1857,10 @@ deConversionCPU::deFunction getConversion(deColorSpace sourceColorSpace, deColor
     if ((targetColorSpace == deColorSpaceCMYK) && (sourceColorSpace == deColorSpaceBW))
     {
         return bw2cmyk;
+    }
+    if ((targetColorSpace == deColorSpaceHSV) && (sourceColorSpace == deColorSpaceBW))
+    {
+        return bw2hsv;
     }
 
     logError("no conversion for " + getColorSpaceName(sourceColorSpace) + " -> " + getColorSpaceName(targetColorSpace));
