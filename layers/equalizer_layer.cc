@@ -38,6 +38,11 @@ deEqualizerLayer::deEqualizerLayer(deColorSpace _colorSpace, int _sourceLayer, d
     createPropertyChoice("channel", getChannelNames(colorSpace));
     getPropertyChoice("channel")->setOthers();
 
+    if (colorSpace == deColorSpaceLCH)
+    {
+        getPropertyChoice("channel")->setIndex(2);
+    }        
+
     int n = getColorSpaceSize(colorSpace);
     properties.push_back(new dePropertyCurves("curves", n));
 
