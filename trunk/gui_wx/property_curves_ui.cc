@@ -58,6 +58,8 @@ class dePropertyCurvesUIImpl:public dePanelWX
         deGradientPanel1* leftBar;
         deGradientPanel1* bottomBar;
 
+        wxStaticText* infoEntry;
+
         int channel;
 
     public:
@@ -71,13 +73,20 @@ class dePropertyCurvesUIImpl:public dePanelWX
 
             deColorSpace colorSpace = layer.getColorSpace();
 
+            wxSizer* sizer2 = new wxBoxSizer(wxHORIZONTAL);
+            sizer->Add(sizer2);
+
             {
                 channelSelector = new deCurvesChannelSelector(getWindow(), colorSpace, *this);
                 deWindowWX& w = dynamic_cast<deWindowWX&>(channelSelector->getWindow());
-                sizer->Add(w.getWindow());
-            }                
+                sizer2->Add(w.getWindow(), 0);
+            }         
 
-            curvesPanel = new deCurvesPanel(this, layerProcessor, layerIndex, property, colorSpace);
+            sizer2->AddSpacer(20);
+            infoEntry = new wxStaticText(this, wxID_ANY, _T("info"));
+            sizer2->Add(infoEntry, 0, wxRIGHT);
+
+            curvesPanel = new deCurvesPanel(this, layerProcessor, layerIndex, property, colorSpace, infoEntry);
 
             int barSize = 16;
 
