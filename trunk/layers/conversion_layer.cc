@@ -44,7 +44,7 @@ deConversionLayer::deConversionLayer(deColorSpace _colorSpace, deChannelManager&
             // use 90% contrast for ProPhoto -> RGB by default
             c = 0.9;
         }
-        createPropertyNumeric("contrast", 0, c);
+        createPropertyNumeric("contrast", 0, 1.0);
         reset->addNumericValue("contrast", c);
     }
 
