@@ -25,6 +25,8 @@
 #include "color_space_utils.h"
 #include "channel_manager.h"
 #include "property_curves.h"
+#include "str.h"
+#include "str_wx.h"
 
 wxColour getChannelwxColour(deColorSpace colorSpace, int channel)
 {
@@ -76,10 +78,10 @@ BEGIN_EVENT_TABLE(deCurvesPanel, wxPanel)
 EVT_PAINT(deCurvesPanel::paintEvent)
 END_EVENT_TABLE()
 
-deCurvesPanel::deCurvesPanel(wxWindow* parent, deLayerProcessor& _layerProcessor, int _layerIndex, dePropertyCurves& _property, deColorSpace _colorSpace)
+deCurvesPanel::deCurvesPanel(wxWindow* parent, deLayerProcessor& _layerProcessor, int _layerIndex, dePropertyCurves& _property, deColorSpace _colorSpace, wxStaticText* _infoEntry)
 :wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(CURVES_PANEL_SIZE_X, CURVES_PANEL_SIZE_Y)),
 sizeX(CURVES_PANEL_SIZE_X), sizeY(CURVES_PANEL_SIZE_Y), 
-layerProcessor(_layerProcessor), layerIndex(_layerIndex), property(_property), colorSpace(_colorSpace)
+layerProcessor(_layerProcessor), layerIndex(_layerIndex), property(_property), colorSpace(_colorSpace), infoEntry(_infoEntry)
 {
     SetFocus();
     Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deCurvesPanel::click));
@@ -254,6 +256,9 @@ void deCurvesPanel::click(wxMouseEvent &event)
     deValue x;
     deValue y;
     getPosition(event, x, y);
+
+    setInfo(x,y);
+
     int n = curve->findPoint(x, y);
 
     if (n >= 0)
@@ -354,6 +359,7 @@ void deCurvesPanel::move(wxMouseEvent &event)
         }
 
         curve->movePoint(selectedPoint, x, y);
+        setInfo(x,y);
         curve->build();
         update(false);
     }
@@ -422,4 +428,13 @@ void deCurvesPanel::setMarker(const deValue* c, int n)
 int deCurvesPanel::getClickPosition() const
 {
     return clickPosition;
+}
+
+void deCurvesPanel::setInfo(deValue x, deValue y)
+{
+    if (infoEntry)
+    {
+        std::string s = str(getPresentationValue(colorSpace, channel, x)) + " " + str(getPresentationValue(colorSpace, channel, y));
+        infoEntry->SetLabel(str2wx(s));
+    }
 }

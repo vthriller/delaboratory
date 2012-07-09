@@ -59,6 +59,7 @@ private:
     deValue grabY;
 
     void getPosition(wxMouseEvent &event, deValue& x, deValue &y);
+    void setInfo(deValue x, deValue y);
 
     deValue marker;
 
@@ -72,11 +73,13 @@ private:
 
     deColorSpace colorSpace;
 
+    wxStaticText* infoEntry;
+
     void drawLine(wxDC& dc, deValue x1, deValue y1, deValue x2, deValue y2);
     void drawLines(wxDC& dc);
 
 public:
-    deCurvesPanel(wxWindow* parent, deLayerProcessor& _layerProcessor, int _layerIndex, dePropertyCurves& _property, deColorSpace _colorSpace);
+    deCurvesPanel(wxWindow* parent, deLayerProcessor& _layerProcessor, int _layerIndex, dePropertyCurves& _property, deColorSpace _colorSpace, wxStaticText* _infoEntry);
     ~deCurvesPanel();
 
 	void paintEvent(wxPaintEvent & evt);
