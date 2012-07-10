@@ -158,7 +158,8 @@ bool saveImage(const std::string& fileName, const deImage& image, const std::str
         finalImage.allocateChannels();
 
         deConversionProcessor p;
-        p.convertImageNew(image, finalImage);
+        deConversionCPU cpu(4);
+        p.convertImage(image, finalImage, cpu);
 
         if (type == "tiff")
         {

@@ -170,7 +170,7 @@ bool deStaticImage::isEmpty() const
     return size.isEmpty();
 }
 
-void deStaticImage::copyToChannel(int channel, deValue* destination, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, deSize ds, bool mirrorX, bool mirrorY, int rotate)
+void deStaticImage::copyToChannel(int channel, deValue* destination, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, deSize ds, bool mirrorX, bool mirrorY, int rotate, deValue contrast)
 {
     lastRotate = rotate;
 
@@ -191,7 +191,7 @@ void deStaticImage::copyToChannel(int channel, deValue* destination, deValue z_x
     int ws = size.getW();
     int hs = size.getH();
 
-    scaleChannel(source, destination, z_x1, z_y1, z_x2, z_y2, w, h, mirrorX, mirrorY, rotate, ws, hs);
+    scaleChannel(source, destination, z_x1, z_y1, z_x2, z_y2, w, h, mirrorX, mirrorY, rotate, ws, hs, contrast);
 
     finishReadStatic(channel);
 }

@@ -198,6 +198,16 @@ bool deOperationProcessor::tryExecuteBasicOperation(const std::string& operation
         return executeOperation(deColorSpaceRGB, "tone");
     }
 
+    if (operation == "RGB shadows")
+    {
+        return executeOperation(deColorSpaceRGB, "recover_shadows");
+    }
+
+    if (operation == "RGB highlights")
+    {
+        return executeOperation(deColorSpaceRGB, "recover_highlights");
+    }
+
     if (operation == "BW gradient")
     {
         return executeOperation(deColorSpaceBW, "gradient");
@@ -254,6 +264,8 @@ void getSupportedColorsOperations(std::vector<std::string>& actions)
 
 void getSupportedOtherOperations(std::vector<std::string>& actions)
 {
+    actions.push_back("RGB shadows");
+    actions.push_back("RGB highlights");
     actions.push_back("LAB vignette");
     actions.push_back("LAB local contrast");
     actions.push_back("BW vignette");

@@ -31,9 +31,11 @@ private:
     deProject& project;
     std::list<deSamplerPanel*> panels;
     wxCheckBox* show;
+    wxButton* clearButton;
     deSamplerManager& samplerManager;
 
     void check(wxCommandEvent &event);
+    void click(wxCommandEvent &event);
 
 public:
 	deSamplersPanel(wxWindow* parent, deProject& _project, deSamplerManager& _samplerManager);

@@ -22,8 +22,8 @@
 #include <string>
 #include <wx/wx.h>
 
-std::string getSaveFile(wxWindow* parent, const std::string& info, const std::string& t);
-std::string getOpenFile(wxWindow* parent, const std::string& info, const std::string& t);
+std::string getSaveFile(wxWindow* parent, const std::string& info, const std::string& t, const std::string& dir);
+std::string getOpenFile(wxWindow* parent, const std::string& info, const std::string& t, const std::string& dir);
 std::string getDir(wxWindow* parent, const std::string& info);
 
 #endif

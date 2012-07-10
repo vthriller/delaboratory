@@ -59,6 +59,9 @@ private:
 
     deSize imageSize;
 
+    std::string openDirectory;
+    std::string saveDirectory;
+
     bool full;
 
 	void onTestImageSmall(wxCommandEvent& event);

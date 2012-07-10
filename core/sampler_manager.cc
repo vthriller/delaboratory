@@ -164,3 +164,12 @@ bool deSamplerManager::getMoving() const
 {
     return moving;
 }
+
+void deSamplerManager::clear()
+{
+    std::vector<deSampler>::iterator i;
+    for (i = samplers.begin(); i != samplers.end(); i++)
+    {
+        (*i).disable();
+    }
+}

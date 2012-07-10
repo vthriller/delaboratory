@@ -143,6 +143,19 @@ void deColorMatrix::buildZoomed(const deValue* channelH, const deValue* channelV
 
 void deColorMatrix::build(const deValue* channelH, const deValue* channelV, const deValue* channelA, int n)
 {
+    if (!channelH)
+    {
+        return;
+    }
+    if (!channelV)
+    {
+        return;
+    }
+    if (!channelA)
+    {
+        return;
+    }
+
     int i;
 
     for (i = 0; i < n; i++)

@@ -21,6 +21,6 @@
 
 #include "value.h"
 
-void scaleChannel(const deValue* src, deValue* dst, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, int w, int h, bool mirrorX, bool mirrorY, int rotate, int ws, int hs);
+void scaleChannel(const deValue* src, deValue* dst, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, int w, int h, bool mirrorX, bool mirrorY, int rotate, int ws, int hs, deValue contrast);
 
 #endif

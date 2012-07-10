@@ -87,95 +87,6 @@ deConversionProcessor::~deConversionProcessor()
 }
 
 
-int deConversionProcessor::convertImageNew(const deImage& sourceImage, deImage& image)
-{
-    deColorSpace sourceColorSpace = sourceImage.getColorSpace();
-    deColorSpace targetColorSpace = image.getColorSpace();
-
-
-    if (sourceColorSpace == targetColorSpace)
-    {
-        logInfo("skip conversion - colorspaces match");
-        copyImage(sourceImage, image);
-        return true;
-    }
-
-    logInfo("convert image from " + getColorSpaceName(sourceColorSpace) + " to " + getColorSpaceName(targetColorSpace));
-
-    deConversionCPU cpu(4);
-    cpu.registers[CPU_REGISTER_OVERFLOW] = 0;
-
-    int ss = getColorSpaceSize(sourceColorSpace);
-    int ds = getColorSpaceSize(targetColorSpace);
-
-    deConversionCPU::deFunction f1 = empty;
-    deConversionCPU::deFunction f2 = getConversion(sourceColorSpace, targetColorSpace);
-
-    if ((ss == 3) && (ds == 3))
-    {
-        if (f2)
-        {
-            cpu.convertImage3x3(sourceImage, image, f1, f2);
-        }            
-    }
-    else
-    if ((ss == 3) && (ds == 4))
-    {
-        if (f2)
-        {
-            cpu.convertImage3x4(sourceImage, image, f1, f2);
-        }            
-    }
-    else
-    if ((ss == 4) && (ds == 3))
-    {
-        if (f2)
-        {
-            cpu.convertImage4x3(sourceImage, image, f1, f2);
-        }            
-    }
-    else
-    if ((ss == 3) && (ds == 1))
-    {
-        if (f2)
-        {
-            cpu.convertImage3x1(sourceImage, image, f1, f2);
-        }            
-    }
-    else
-    if ((ss == 1) && (ds == 3))
-    {
-        if (f2)
-        {
-            cpu.convertImage1x3(sourceImage, image, f1, f2);
-        }            
-    }
-    if ((ss == 4) && (ds == 1))
-    {
-        if (f2)
-        {
-            cpu.convertImage4x1(sourceImage, image, f1, f2);
-        }            
-    }
-    else
-    if ((ss == 1) && (ds == 4))
-    {
-        if (f2)
-        {
-            cpu.convertImage1x4(sourceImage, image, f1, f2);
-        }            
-    }
-
-    deValue overflow = cpu.registers[CPU_REGISTER_OVERFLOW];
-    int n = sourceImage.getChannelSize().getN();
-    int percentage = overflow * 10000 / n;
-
-    logInfo("conversion DONE - overflow: " + str(percentage));
-
-    return percentage;
-
-}
-
 bool deConversionProcessor::convert(deColorSpace sourceColorSpace, deValue v1, deValue v2, deValue v3, deValue v4, deColorSpace targetColorSpace, deValue &r1, deValue& r2, deValue& r3, deValue& r4)
 {
     deConversionCPU cpu(4);
@@ -273,12 +184,17 @@ void deConversionProcessor::convertImage(const deImage& sourceImage, deImage& im
     }
 
     deConversionCPU::deFunction f2 = getConversion(sourceColorSpace, targetColorSpace);
+    if (!f2)
+    {
+        logError("conversion not found");
+    }        
 
     if ((ss == 3) && (ds == 3))
     {
         if (f2)
         {
             cpu.convertImage3x3(sourceImage, image, f1, f2);
+            return;
         }            
     }
     else
@@ -287,6 +203,7 @@ void deConversionProcessor::convertImage(const deImage& sourceImage, deImage& im
         if (f2)
         {
             cpu.convertImage3x4(sourceImage, image, f1, f2);
+            return;
         }            
     }
     else
@@ -295,6 +212,7 @@ void deConversionProcessor::convertImage(const deImage& sourceImage, deImage& im
         if (f2)
         {
             cpu.convertImage4x3(sourceImage, image, f1, f2);
+            return;
         }            
     }
     else
@@ -303,6 +221,7 @@ void deConversionProcessor::convertImage(const deImage& sourceImage, deImage& im
         if (f2)
         {
             cpu.convertImage3x1(sourceImage, image, f1, f2);
+            return;
         }            
     }
     else
@@ -311,6 +230,7 @@ void deConversionProcessor::convertImage(const deImage& sourceImage, deImage& im
         if (f2)
         {
             cpu.convertImage1x3(sourceImage, image, f1, f2);
+            return;
         }            
     }
     if ((ss == 4) && (ds == 1))
@@ -318,6 +238,7 @@ void deConversionProcessor::convertImage(const deImage& sourceImage, deImage& im
         if (f2)
         {
             cpu.convertImage4x1(sourceImage, image, f1, f2);
+            return;
         }            
     }
     else
@@ -326,7 +247,10 @@ void deConversionProcessor::convertImage(const deImage& sourceImage, deImage& im
         if (f2)
         {
             cpu.convertImage1x4(sourceImage, image, f1, f2);
+            return;
         }            
     }
+
+    logError("convert image FAILED");
 
 }

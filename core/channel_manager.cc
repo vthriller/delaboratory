@@ -266,8 +266,6 @@ bool deChannelManager::isImageEmpty() const
 
 const deValue* deChannelManager::startRead(int index)
 {
-//    lock();
-
     logInfo("startRead " + str(index));
 
     bool error = false;
@@ -293,15 +291,11 @@ const deValue* deChannelManager::startRead(int index)
         p = channels[index];
     }        
 
-//    unlock();
-
     return p;
 }
 
 void deChannelManager::finishRead(int index)
 {
-//    lock();
-
     logInfo("finishRead " + str(index));
 
     bool error = false;
@@ -322,14 +316,10 @@ void deChannelManager::finishRead(int index)
     {
         mutexes[index]->unlockRead();
     }
-
-//    unlock();
 }
 
 deValue* deChannelManager::startWrite(int index)
 {
-//    lock();
-
     logInfo("startWrite " + str(index));
 
     bool error = false;
@@ -357,15 +347,11 @@ deValue* deChannelManager::startWrite(int index)
         p = channels[index];
     }        
 
-//    unlock();
-
     return p;
 }
 
 void deChannelManager::finishWrite(int index)
 {
-//    lock();
-
     logInfo("finishWrite " + str(index));
 
     bool error = false;
@@ -386,6 +372,4 @@ void deChannelManager::finishWrite(int index)
     {
         mutexes[index]->unlockWrite();
     }        
-
-//    unlock();
 }

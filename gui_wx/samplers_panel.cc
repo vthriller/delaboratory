@@ -31,9 +31,15 @@ deSamplersPanel::deSamplersPanel(wxWindow* parent, deProject& _project, deSample
     wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
 
+    wxSizer* sizer2 = new wxBoxSizer(wxHORIZONTAL);
+    sizer->Add(sizer2);
+
     show = new wxCheckBox(this, wxID_ANY, _T("show samplers"));
     show->SetValue(0);
-    sizer->Add(show);
+    sizer2->Add(show);
+
+    clearButton = new wxButton(this, wxID_ANY, _T("clear"), wxDefaultPosition, wxSize(60,25));
+    sizer2->Add(clearButton);
 
     for (i = 0; i < n; i++)
     {
@@ -48,7 +54,7 @@ deSamplersPanel::deSamplersPanel(wxWindow* parent, deProject& _project, deSample
     }        
 
     Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(deSamplersPanel::check));
-
+    Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(deSamplersPanel::click));
 }
 
 deSamplersPanel::~deSamplersPanel()
@@ -68,5 +74,11 @@ void deSamplersPanel::check(wxCommandEvent &event)
 {
     bool checked = show->IsChecked();
     samplerManager.setMoving(checked);
+    project.getLayerProcessor().onGUIUpdate();
+}
+
+void deSamplersPanel::click(wxCommandEvent &event)
+{
+    samplerManager.clear();
     project.getLayerProcessor().onGUIUpdate();
 }
