@@ -19,7 +19,7 @@
 #include "scale_channel.h"
 #include "sample_pixel.h"
 
-void scaleChannel(const deValue* src, deValue* dst, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, int w, int h, bool mirrorX, bool mirrorY, int rotate, int ws, int hs)
+void scaleChannel(const deValue* src, deValue* dst, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, int w, int h, bool mirrorX, bool mirrorY, int rotate, int ws, int hs, deValue contrast)
 {
     int x1;
     int y1;
@@ -89,7 +89,8 @@ void scaleChannel(const deValue* src, deValue* dst, deValue z_x1, deValue z_y1, 
                 v = samplePixel(src, y1 + yy1, y1 + yy2, hs - 1 - xx2 - x1, hs - 1 - xx1 - x1, mirrorX, mirrorY, ws, hs);
             }   
 
-            dst[y * w + x] = v;
+            dst[y * w + x] = contrast * v + 0.5 - 0.5 * contrast;
+
         }
 
     }        

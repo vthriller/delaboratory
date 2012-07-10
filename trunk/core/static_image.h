@@ -63,7 +63,7 @@ class deStaticImage
 
         bool isEmpty() const;
 
-        void copyToChannel(int channel, deValue* destination, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, deSize destinationSize, bool mirrorX, bool mirrorY, int rotate);
+        void copyToChannel(int channel, deValue* destination, deValue z_x1, deValue z_y1, deValue z_x2, deValue z_y2, deSize destinationSize, bool mirrorX, bool mirrorY, int rotate, deValue contrast);
 
         deValue getAspect() const;
 };

@@ -268,14 +268,22 @@ void deMainFrame::onTestImageBig(wxCommandEvent& WXUNUSED(event))
 
 void deMainFrame::onOpenImage(wxCommandEvent& WXUNUSED(event))
 {
-    std::string fileName = getOpenFile(this, "load source image", "image");
-    project.openImage(fileName, false, deColorSpaceRGB);
+    std::string f = getOpenFile(this, "load source image", "image", openDirectory);
+    if (!f.empty())
+    {
+        openDirectory = getPath(f);
+        project.openImage(f, false, deColorSpaceRGB);
+    }        
 }
 
 void deMainFrame::onOpenRawImageProPhoto(wxCommandEvent& WXUNUSED(event))
 {
-    std::string fileName = getOpenFile(this, "load source image", "raw");
-    project.openImage(fileName, true, deColorSpaceProPhoto);
+    std::string f = getOpenFile(this, "load source image", "raw", openDirectory);
+    if (!f.empty())
+    {
+        openDirectory = getPath(f);
+        project.openImage(f, true, deColorSpaceProPhoto);
+    }        
 }
 
 void deMainFrame::onHelpColorSpaces(wxCommandEvent& event)
@@ -474,10 +482,12 @@ void deMainFrame::onExportAll(wxCommandEvent& event)
 
 void deMainFrame::onExportTIFF(wxCommandEvent& event)
 {
-    std::string f = getSaveFile(this, "export TIFF", "tiff");
+    std::string f = getSaveFile(this, "export TIFF", "tiff", saveDirectory);
 
     if (!f.empty())
     {
+        saveDirectory = getPath(f);
+
         if (f.rfind(".tiff") != f.size() - 5)
         {
             f += ".tiff";
@@ -489,10 +499,12 @@ void deMainFrame::onExportTIFF(wxCommandEvent& event)
 
 void deMainFrame::onExportJPG(wxCommandEvent& event)
 {
-    std::string f = getSaveFile(this, "export JPG", "jpg");
+    std::string f = getSaveFile(this, "export JPG", "jpg", saveDirectory);
 
     if (!f.empty())
     {
+        saveDirectory = getPath(f);
+
         if (f.rfind(".jpg") != f.size() - 4)
         {
             f += ".jpg";

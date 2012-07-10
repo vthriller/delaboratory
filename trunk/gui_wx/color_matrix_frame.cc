@@ -47,10 +47,11 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
     int n = channelSize.getN();
 
     deImage LABImage(deColorSpaceLAB, channelManager);
-    //LABImage.enableAllChannels();
+    LABImage.allocateChannels();
 
     deConversionProcessor p;
-    p.convertImageNew(originalImage, LABImage);
+    deConversionCPU cpu(4);
+    p.convertImage(originalImage, LABImage, cpu);
 
     int nn = width * height;
 
@@ -59,6 +60,11 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
     const deValue* valuesVertical = LABImage.startRead(channelVertical);
     const deValue* valuesHorizontal = LABImage.startRead(channelHorizontal);
     const deValue* valuesAverage = LABImage.startRead(channelAverage);
+
+    if ((!valuesVertical) || (!valuesHorizontal) || (!valuesAverage))
+    {
+        logError("LABImage broken in color matrix frame");
+    }
 
     int tilesW = width;
     int tilesH = height;

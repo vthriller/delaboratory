@@ -40,8 +40,6 @@ bool deCopyLayer::updateMainImageNotThreadedWay()
 {
     logInfo("conversion layer start");
 
-    //mainLayerImage.enableAllChannels();
-
     deConversionProcessor p;
 
     deConversionCPU cpu(4);

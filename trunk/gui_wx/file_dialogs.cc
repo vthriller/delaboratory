@@ -19,6 +19,7 @@
 #include "file_dialogs.h"
 #include "str.h"
 #include "str_wx.h"
+#include "logger.h"
 
 wxString getFileType(const std::string& t)
 {
@@ -47,11 +48,15 @@ wxString getFileType(const std::string& t)
 }
 
 
-std::string getSaveFile(wxWindow* parent, const std::string& info, const std::string& t)
+std::string getSaveFile(wxWindow* parent, const std::string& info, const std::string& t, const std::string& dir)
 {
+    logInfo("getSaveFile info: " + info + " t: " + t + " dir: " + dir);
+
     wxString type = getFileType(t);
 
-    wxFileDialog saveFileDialog(parent, wxString::FromAscii(info.c_str()), _T(""), _T(""), type, wxFD_SAVE);
+    wxString directory = str2wx(dir);
+
+    wxFileDialog saveFileDialog(parent, wxString::FromAscii(info.c_str()), directory, _T(""), type, wxFD_SAVE);
 
     if (saveFileDialog.ShowModal() == wxID_CANCEL)
     {
@@ -59,15 +64,23 @@ std::string getSaveFile(wxWindow* parent, const std::string& info, const std::st
     }
 
     wxString path = saveFileDialog.GetPath();
-    return str(path);
+
+    std::string result = str(path);
+
+    logInfo("getSaveFile result: " + result);
+
+    return result;
 }
 
-std::string getOpenFile(wxWindow* parent, const std::string& info, const std::string& t)
+std::string getOpenFile(wxWindow* parent, const std::string& info, const std::string& t, const std::string& dir)
 {
+    logInfo("getOpenFile info: " + info + " t: " + t + " dir: " + dir);
 
     wxString type = getFileType(t);
 
-    wxFileDialog openFileDialog(parent, wxString::FromAscii(info.c_str()), _T(""), _T(""), type, wxFD_OPEN);
+    wxString directory = str2wx(dir);
+
+    wxFileDialog openFileDialog(parent, wxString::FromAscii(info.c_str()), directory, _T(""), type, wxFD_OPEN);
 
     if (openFileDialog.ShowModal() == wxID_CANCEL)
     {
@@ -75,7 +88,12 @@ std::string getOpenFile(wxWindow* parent, const std::string& info, const std::st
     }
 
     wxString path = openFileDialog.GetPath();
-    return str(path);
+
+    std::string result = str(path);
+
+    logInfo("getOpenFile result: " + result);
+
+    return result;
 }
 
 std::string getDir(wxWindow* parent, const std::string& info)

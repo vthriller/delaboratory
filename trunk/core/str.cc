@@ -51,6 +51,16 @@ std::string removePathAndExtension(const std::string& fileName)
     return fileName.substr(posStart, posDot - posStart );
 }
 
+std::string getPath(const std::string& fileName)
+{
+#ifdef _WIN32
+    size_t posSlash = fileName.rfind("\\");
+#else
+    size_t posSlash = fileName.rfind("/");
+#endif    
+    return fileName.substr(0, posSlash );
+}
+
 std::string str(int n)
 {
     std::ostringstream oss;

@@ -192,7 +192,14 @@ void deBaseLayerWithProperties::getPresets(std::vector<std::string>& names)
     for (i = presets.begin(); i != presets.end(); i++)
     {
         dePreset* preset = *i;
-        names.push_back(preset->getName());
+        if (preset)
+        {
+            names.push_back(preset->getName());
+        }
+        else
+        {   
+            logError("NULL preset found");
+        }
     }
 }
 

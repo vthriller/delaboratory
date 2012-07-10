@@ -53,6 +53,8 @@ class deSamplerManager
         void setMoving(bool m);
 
         bool getMoving() const;
+
+        void clear();
 };
 
 #endif

@@ -25,6 +25,7 @@
 #include "str.h"
 #include "property_boolean.h"
 #include "property_choice.h"
+#include "property_numeric.h"
 
 deSourceImageLayer::deSourceImageLayer(deChannelManager& _previewChannelManager, deViewManager& _viewManager, deStaticImage& _sourceImage, deColorSpace _colorSpace)
 :deBaseLayerWithProperties(_colorSpace, _previewChannelManager) ,
@@ -40,6 +41,12 @@ sourceImage(_sourceImage)
     createPropertyBoolean("horizontal mirror");
     createPropertyBoolean("vertical mirror");
     getPropertyChoice("rotate")->setSize();
+
+    createPropertyNumeric("contrast", 0, 1.0);
+    if (colorSpace == deColorSpaceProPhoto)
+    {
+        getPropertyNumeric("contrast")->set(0.9);
+    }        
 }
 
 deSourceImageLayer::~deSourceImageLayer()
@@ -58,6 +65,7 @@ bool deSourceImageLayer::updateMainImageNotThreadedWay()
 
     bool mirrorX = getPropertyBoolean("horizontal mirror")->get();
     bool mirrorY = getPropertyBoolean("vertical mirror")->get();
+    deValue contrast = getNumericValue("contrast");
     int rotate = getInt(getPropertyChoice("rotate")->get());
 
     int channel;
@@ -67,7 +75,7 @@ bool deSourceImageLayer::updateMainImageNotThreadedWay()
 
         if (destination)
         {
-            sourceImage.copyToChannel(channel, destination, z_x1, z_y1, z_x2, z_y2, ds, mirrorX, mirrorY, rotate);
+            sourceImage.copyToChannel(channel, destination, z_x1, z_y1, z_x2, z_y2, ds, mirrorX, mirrorY, rotate, contrast);
         }            
 
         mainLayerImage.finishWrite(channel);
