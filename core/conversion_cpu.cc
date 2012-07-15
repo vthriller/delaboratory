@@ -54,6 +54,7 @@ deConversionCPU::deConversionCPU(int size)
     registers[CPU_REGISTER_BW_MIXER_G] = 0.6;
     registers[CPU_REGISTER_BW_MIXER_B] = 0.1;
     registers[CPU_REGISTER_CONTRAST] = 1.0;
+    registers[CPU_REGISTER_SATURATION] = 1.0;
     registers[CPU_REGISTER_PSEUDOGREY] = 0.0;
 }
 
