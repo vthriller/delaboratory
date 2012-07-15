@@ -178,6 +178,11 @@ bool dePropertyCurves::onKey(int key, int i, deValue p)
         }
     }
 
+    if (key == ' ')
+    {
+        v = p;
+    }
+
     if (v >= 0)
     {
         curves[i]->addPoint(p, v);
