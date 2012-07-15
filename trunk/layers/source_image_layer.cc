@@ -47,6 +47,10 @@ sourceImage(_sourceImage)
     {
         getPropertyNumeric("contrast")->set(0.9);
     }        
+    else
+    {
+        getPropertyNumeric("contrast")->set(1.0);
+    }
 }
 
 deSourceImageLayer::~deSourceImageLayer()
