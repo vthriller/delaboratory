@@ -288,13 +288,6 @@ void deCurvesPanel::update(bool finished)
 
 void deCurvesPanel::release(wxMouseEvent &event)
 {
-    deBaseCurve* curve = property.getCurve(channel);
-
-    if (!curve)
-    {
-        return;
-    }
-
     if (selectedPoint)
     {
         deValue x;
@@ -302,11 +295,7 @@ void deCurvesPanel::release(wxMouseEvent &event)
         getPosition(event, x, y);
         if ((x < -0.1) || (y < -0.1) || (x>1.1) || (y>1.1))
         {
-            curve->deletePoint(selectedPoint);
-            curve->build();
-            lastSelectedPoint = -1;
-            selectedPoint = -1;
-            update(true);
+            removeSelectedPoint();
             return;
         }
     }
@@ -315,6 +304,35 @@ void deCurvesPanel::release(wxMouseEvent &event)
 
     update(true);
 
+}
+
+bool deCurvesPanel::removeSelectedPoint()
+{
+    deBaseCurve* curve = property.getCurve(channel);
+
+    if (!curve)
+    {
+        logError("no curve in remove selected point");
+        return false;;
+    }
+
+    if (selectedPoint < 0)
+    {
+        selectedPoint = lastSelectedPoint;
+    }
+
+    if (selectedPoint >= 0)
+    {
+        curve->deletePoint(selectedPoint);
+        curve->build();
+        lastSelectedPoint = -1;
+        selectedPoint = -1;
+        update(true);
+
+        return true;
+    }
+
+    return false;
 }
 
 void deCurvesPanel::move(wxMouseEvent &event)

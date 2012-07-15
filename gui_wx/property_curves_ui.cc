@@ -187,6 +187,11 @@ class dePropertyCurvesUIImpl:public dePanelWX
 
         bool onKey(int key)
         {
+            if (key == 'X')
+            {
+                return curvesPanel->removeSelectedPoint();
+            }
+
             int p = curvesPanel->getClickPosition();
             if (p >= 0)
             {
