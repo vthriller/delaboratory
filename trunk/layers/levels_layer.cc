@@ -24,6 +24,7 @@
 #include "preset.h"
 #include "histogram.h"
 #include "logger.h"
+#include "str.h"
 
 deLevelsLayer::deLevelsLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack)
 :deLayerWithBlending(_colorSpace, _channelManager, _sourceLayer, _layerStack)
@@ -65,14 +66,7 @@ bool deLevelsLayer::isChannelNeutral(int channel)
 
 bool deLevelsLayer::updateMainImageSingleChannel(int channel)
 {
-/*
-    if ((isChannelNeutral(channel)) || (!isChannelEnabled(channel)))
-    {
-        int s = getSourceImage().getChannelIndex(channel);
-        mainLayerImage.disableChannel(channel, s);
-        return true;
-    }
-    */
+    logInfo("processing levels channel " + str(channel));
 
     dePropertyLevels* propertyLevels = getPropertyLevels();
     if (!propertyLevels)
@@ -80,11 +74,9 @@ bool deLevelsLayer::updateMainImageSingleChannel(int channel)
         return false;
     }
 
-
     const deLevels& levels = propertyLevels->getLevels(channel);
 
     const deValue* source = getSourceImage().startRead(channel);
-//    mainLayerImage.enableChannel(channel);
     deValue* target = mainLayerImage.startWrite(channel);
     int n = mainLayerImage.getChannelSize().getN();
 
@@ -98,6 +90,7 @@ bool deLevelsLayer::updateMainImageSingleChannel(int channel)
 
     curve.build();
 
+    logInfo("levels curve build min: " + str(levels.getMin()) + " middle: " + str(levels.getMiddle()) + " max: " + str(levels.getMax()));
     curve.process(source, target, n);
 
     getSourceImage().finishRead(channel);
@@ -152,9 +145,12 @@ void deLevelsLayer::executeOperation(const std::string& operation)
         levels.setMiddle(middle);
         levels.setMax(max);
 
+        logInfo("set levels min: " + str(min) + " middle: " + str(middle) + " max: " + str(max));
+
         if (!shouldUseAutoLevels(colorSpace, i))
         {
             disableChannel(i);
+            logInfo("levels - disabling channel " + str(i));
         }
     }
 
