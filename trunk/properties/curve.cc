@@ -162,13 +162,32 @@ int deBaseCurve::findPoint(deValue x, deValue y) const
 
 void deBaseCurve::deletePoint(int p)
 {
+    if (p < 0)
+    {
+        logError("negative p in curve delete point");
+        return;
+    }
+
     mutex.lock();
+
+    if (controlPoints.size() == 0)
+    {
+        logError("empty control points in curve delete point");
+        mutex.unlock();
+        return;
+    }
 
     deCurvePoints::iterator i = controlPoints.begin();
     while (p > 0)
     {
         i++;
         p--;
+        if (i == controlPoints.end())
+        {
+            logError("end of control points in curve delete point, p was " + str(p) + " size of control points was " + str(controlPoints.size()));
+            mutex.unlock();
+            return;
+        }
     }
 
     controlPoints.erase(i);

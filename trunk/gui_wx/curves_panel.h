@@ -94,6 +94,8 @@ public:
     void generateBackground(const deValue* c, int n);
     int getClickPosition() const;
 
+    bool removeSelectedPoint();
+
 	DECLARE_EVENT_TABLE()
 
 };
