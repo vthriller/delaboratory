@@ -184,7 +184,8 @@ void deBaseCurve::deletePoint(int p)
         p--;
         if (i == controlPoints.end())
         {
-            logError("end of control points in curve delete point, p was " + str(p) + " size of control points was " + str(controlPoints.size()));
+            int s = controlPoints.size();
+            logError("end of control points in curve delete point, p was " + str(p) + " size of control points was " + str(s));
             mutex.unlock();
             return;
         }
