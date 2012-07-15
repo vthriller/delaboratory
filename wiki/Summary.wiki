@@ -2,7 +2,7 @@
 
 Delaboratory is my personal hobby project. I started it in early 2011.
 
-The main inspiration was the book of Dan Margulis "Photoshop correction and separation" and my experiences with !RawTherapee, GIMP and G'MIC. 
+The main inspiration was the book of Dan Margulis "Photoshop The Classic Guide to Color Correction" and my experiences with !RawTherapee, GIMP and G'MIC. 
 
 Delaboratory is not in any way inspired by interface of Adobe products, it is rather a mixture of GIMP and !RawTherapee. In terms of philosophy of use, however, it is consistent with the techniques of Dan Margulis, which can not be reproduced with other free projects.
 
