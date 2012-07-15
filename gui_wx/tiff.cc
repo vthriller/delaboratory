@@ -77,15 +77,15 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image)
     TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &spp);
     TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric);
 
-    if (photometric != PHOTOMETRIC_RGB)
-    {
-    }
-
-
     deSize size(w, h);
     image.setSize(size);
 
     image.setColorSpace(deColorSpaceRGB);
+    if (photometric != PHOTOMETRIC_RGB)
+    {
+        logInfo("loading not RGB image, let's use LAB");
+        image.setColorSpace(deColorSpaceLAB);
+    }
 
     deValue* pixelsR = image.startWriteStatic(0);
     deValue* pixelsG = image.startWriteStatic(1);
@@ -96,6 +96,18 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image)
 
     int ssize = TIFFScanlineSize(tif);
     buf = _TIFFmalloc(ssize);
+
+    deValue d = -1;
+    if (bps == 16)
+    {
+        logInfo("bps 16");
+        d = (256 * 256) - 1;
+    }
+    else
+    {
+        logInfo("bps not 16");
+        d = 256 - 1;
+    }
 
     for (y = 0; y < h; y++)
     {
@@ -112,7 +124,6 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image)
                 uint16 u1 = bb[spp*x+0];
                 uint16 u2 = bb[spp*x+1];
                 uint16 u3 = bb[spp*x+2];
-                deValue d = (256 * 256) - 1;
                 r = u1 / d;
                 g = u2 / d;
                 b = u3 / d;
@@ -123,15 +134,35 @@ bool loadTIFF(const std::string& fileName, deStaticImage& image)
                 uint8 u1 = bb[spp*x+0];
                 uint8 u2 = bb[spp*x+1];
                 uint8 u3 = bb[spp*x+2];
-                deValue d = 256 - 1;
                 r = u1 / d;
                 g = u2 / d;
                 b = u3 / d;
             }
 
-            pixelsR[pos] = r;
-            pixelsG[pos] = g;
-            pixelsB[pos] = b;
+            if (photometric == PHOTOMETRIC_RGB)
+            {
+                pixelsR[pos] = r;
+                pixelsG[pos] = g;
+                pixelsB[pos] = b;
+            }
+            else
+            {
+                // LAB
+                pixelsR[pos] = r;
+                g += 0.5;
+                if (g > 1)
+                {
+                    g -= 1.0;
+                }
+                b += 0.5;
+                if (b > 1)
+                {
+                    b -= 1.0;
+                }
+                pixelsG[pos] = g;
+                pixelsB[pos] = b;
+
+            }
 
             pos++;
         }
