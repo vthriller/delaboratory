@@ -113,6 +113,9 @@ bool deConversionLayer::updateMainImageNotThreadedWay()
     cpu.registers[CPU_REGISTER_SATURATION] = getNumericValue("saturation");
     cpu.registers[CPU_REGISTER_PSEUDOGREY] = getNumericValue("pseudogrey");
 
+    logInfo("conversion layer contrast: " + str(cpu.registers[CPU_REGISTER_CONTRAST]));
+    logInfo("conversion layer saturation: " + str(cpu.registers[CPU_REGISTER_SATURATION]));
+
     p.convertImage(getSourceImage(), mainLayerImage, cpu);
 
     deValue overflow = cpu.registers[CPU_REGISTER_OVERFLOW];
