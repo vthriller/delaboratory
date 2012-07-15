@@ -199,24 +199,29 @@ void deBaseCurve::movePoint(int p, deValue x, deValue y)
 {
     if (p < 0)
     {
-        return;
-    }
-
-    if ((unsigned int)p >= controlPoints.size())
-    {
+        logError("negative p in curve move point");
         return;
     }
 
     if ((x < 0) || (x > 1))
     {
+        logError("bad x in curve move point");
         return;
     }
     if ((y < 0) || (y > 1))
     {
+        logError("bad y in curve move point");
         return;
     }
 
     mutex.lock();
+
+    if ((unsigned int)p >= controlPoints.size())
+    {
+        logError("too big p in curve move point");
+        mutex.unlock();
+        return;
+    }
 
     deCurvePoints::iterator i = controlPoints.begin();
     while (p > 0)
@@ -235,6 +240,7 @@ void deBaseCurve::movePoint(int p, deValue x, deValue y)
     {
         if (x == 0)
         {
+            logInfo("can't move point on curve to x=0");
             mutex.unlock();
             return;
         }
@@ -248,6 +254,7 @@ void deBaseCurve::movePoint(int p, deValue x, deValue y)
     {
         if (x == 1)
         {
+            logInfo("can't move point on curve to x=1");
             mutex.unlock();
             return;
         }
