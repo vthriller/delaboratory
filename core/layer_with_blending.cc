@@ -77,7 +77,9 @@ void deLayerWithBlending::setBlendMode(deBlendMode mode)
 
 bool deLayerWithBlending::updateBlend(int i)
 {
+#ifdef DEBUG_LOG
     logInfo("update blend " + str(i) + " START");
+#endif    
 
     const deValue* source = getSourceImage().startRead(i);
 
@@ -110,7 +112,9 @@ bool deLayerWithBlending::updateBlend(int i)
     mainLayerImage.finishRead(i);
     imageBlendPass.finishWrite(i);
 
+#ifdef DEBUG_LOG
     logInfo("update blend " + str(i) + " DONE");
+#endif    
 
     return true;
 
@@ -145,18 +149,24 @@ bool deLayerWithBlending::updateBlendAllChannels()
 
 void deLayerWithBlending::processSingleChannel(int channel)
 {
+#ifdef DEBUG_LOG
     logInfo("layer with blending processs single channel " + str(channel));
+#endif    
     deBaseLayer::processSingleChannel(channel);
     if (!tryBlendSpecial())
     {
         updateBlend(channel);
     }        
+#ifdef DEBUG_LOG
     logInfo("layer with blending processs single channel DONE");
+#endif    
 }    
 
 bool deLayerWithBlending::updateImage()
 {
+#ifdef DEBUG_LOG
     logInfo("layer with blending update image");
+#endif
 
     bool result = deBaseLayer::updateImage();
 
@@ -165,7 +175,9 @@ bool deLayerWithBlending::updateImage()
         result = updateBlendAllChannels();
     }
 
+#ifdef DEBUG_LOG
     logInfo("layer with blending update image DONE");
+#endif    
 
     return result;
 }
@@ -180,7 +192,9 @@ deBlendMode deLayerWithBlending::getBlendMode() const
 
 void deLayerWithBlending::blendSpecial()
 {
+#ifdef DEBUG_LOG
     logInfo("blend special START");
+#endif    
 
     deBlendMode mode = getBlendMode();
     int cs = getColorSpaceSize(colorSpace);
@@ -263,7 +277,9 @@ void deLayerWithBlending::blendSpecial()
         mainLayerImage.finishRead(3);
         imageBlendPass.finishWrite(3);
     }
+#ifdef DEBUG_LOG
     logInfo("blend special DONE");
+#endif    
 }
 
 bool deLayerWithBlending::tryBlendSpecial()

@@ -39,20 +39,28 @@ deColorSpace deBaseLayer::getColorSpace() const
 
 void deBaseLayer::lockLayer()
 {
+#ifdef DEBUG_LOG
     logInfo("base layer before lock");
+#endif    
     mutex.lock();
+#ifdef DEBUG_LOG
     logInfo("base layer locked");
+#endif    
 }
 
 void deBaseLayer::unlockLayer()
 {
     mutex.unlock();
+#ifdef DEBUG_LOG
     logInfo("base layer unlocked");
+#endif    
 }
 
 void deBaseLayer::processLayer(deLayerProcessType type, int channel)
 {
+#ifdef DEBUG_LOG
     logInfo("processLayer channel: " + str(channel));
+#endif    
     switch (type)
     {
         case deLayerProcessFull:
@@ -73,7 +81,9 @@ void deBaseLayer::processLayer(deLayerProcessType type, int channel)
         default:
             break;
     }
+#ifdef DEBUG_LOG
     logInfo("processLayer DONE");
+#endif    
 }
 
 bool deBaseLayer::processFull()
@@ -99,9 +109,13 @@ void deBaseLayer::processSingleChannel(int channel)
 bool deBaseLayer::processMainImageSingleChannel(int channel)
 {
     bool result = true;
+#ifdef DEBUG_LOG
     logInfo("base layer process main image single channel");
+#endif    
     result = updateMainImageSingleChannel(channel);
+#ifdef DEBUG_LOG
     logInfo("base layer process main image single channel DONE");
+#endif    
     return result;
 }
 

@@ -54,7 +54,9 @@ class deUpdateActionThread:public wxThread
 
 void updateMainImageAllChannels(deBaseLayer& layer)
 {
+#ifdef DEBUG_LOG
     logInfo("update action all channels start");
+#endif    
 
     int n = getColorSpaceSize(layer.getColorSpace());
     int i;
@@ -63,7 +65,9 @@ void updateMainImageAllChannels(deBaseLayer& layer)
 
     for (i = 0; i < n; i++)
     {
+#ifdef DEBUG_LOG
         logInfo("creating update action thread for channel " + str(i));
+#endif        
         deUpdateActionThread* thread = new deUpdateActionThread(layer, i, semaphore);
 
         if ( thread->Create() != wxTHREAD_NO_ERROR )
@@ -77,10 +81,14 @@ void updateMainImageAllChannels(deBaseLayer& layer)
 
     for (i = 0; i < n; i++)
     {
+#ifdef DEBUG_LOG
         logInfo("waiting for update action thread for channel " + str(i));
+#endif        
         semaphore.wait();
     }
 
+#ifdef DEBUG_LOG
     logInfo("update action all channels DONE");
+#endif    
 }
 

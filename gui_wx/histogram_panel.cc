@@ -80,7 +80,9 @@ void deHistogramPanel::generateHistogram()
 {
     mutex.lock();
 
+#ifdef DEBUG_LOG
     logInfo("generate histogram...");
+#endif    
 
     generated = false;
 
@@ -139,7 +141,9 @@ void deHistogramPanel::generateHistogram()
 
     layerStack.finishReadLayer(view);
 
+#ifdef DEBUG_LOG
     logInfo("generate histogram DONE");
+#endif    
 
     mutex.unlock();
 }
