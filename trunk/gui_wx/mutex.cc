@@ -51,12 +51,16 @@ deMutex::deMutex(bool recursive)
     wxMutexType flags = wxMUTEX_DEFAULT;
     if (recursive)
     {
+#ifdef DEBUG_LOG    
         logInfo("create recursive mutex");
+#endif        
         flags = wxMUTEX_RECURSIVE;
     }        
     else
     {
+#ifdef DEBUG_LOG    
         logInfo("create normal mutex");
+#endif        
     }
 
     impl = new deMutexImpl(flags);
@@ -64,7 +68,9 @@ deMutex::deMutex(bool recursive)
 
 deMutex::~deMutex()
 {
+#ifdef DEBUG_LOG    
     logInfo("destroy mutex");
+#endif        
     delete impl;
 }
 

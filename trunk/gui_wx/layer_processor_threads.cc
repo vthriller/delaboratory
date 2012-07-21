@@ -45,7 +45,9 @@ class deLayerProcessorWorkerThread:public wxThread
                     return;
                 }
 
+#ifdef DEBUG_LOG
                 logInfo("worker thread wait...");
+#endif                
                 semaphore.wait();
                 Sleep(10);
 
@@ -96,7 +98,9 @@ class deRenderWorkerThread:public wxThread
                     return;
                 }
 
+#ifdef DEBUG_LOG
                 logInfo("render thread wait...");
+#endif                
                 semaphore.wait();
                 Sleep(10);
 
@@ -151,7 +155,9 @@ class deHistogramWorkerThread:public wxThread
                     return;
                 }
 
+#ifdef DEBUG_LOG
                 logInfo("histogram thread wait...");
+#endif                
                 semaphore.wait();
                 Sleep(10);
 

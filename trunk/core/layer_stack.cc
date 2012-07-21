@@ -33,14 +33,20 @@ deLayerStack::~deLayerStack()
 
 void deLayerStack::lock() const
 {
+#ifdef DEBUG_LOG
     logInfo("layer stack lock...");
+#endif    
     mutex.lock();
+#ifdef DEBUG_LOG
     logInfo("layer stack locked");
+#endif    
 }
 
 void deLayerStack::unlock() const
 {
+#ifdef DEBUG_LOG
     logInfo("layer stack unlock");
+#endif    
     mutex.unlock();
 }
 
@@ -68,9 +74,13 @@ void deLayerStack::removeTopLayer()
 
     layers.erase(i);
 
+#ifdef DEBUG_LOG
     logInfo("layer stack before delete layer");
+#endif    
     delete layer;
+#ifdef DEBUG_LOG
     logInfo("layer stack after delete layer");
+#endif    
 
     mutexes[index]->unlockWrite();
 
@@ -119,7 +129,9 @@ deBaseLayer* deLayerStack::getLayer(int id) const
 
 const deBaseLayer* deLayerStack::startReadLayer(int id) const
 {
+#ifdef DEBUG_LOG
     logInfo("start read layer " + str(id));
+#endif    
     const deBaseLayer* layer = NULL;
     lock();
     if ((id >= 0) && (id < layers.size()))
@@ -128,14 +140,18 @@ const deBaseLayer* deLayerStack::startReadLayer(int id) const
         layer = getLayer(id);
     }        
     unlock();
+#ifdef DEBUG_LOG
     logInfo("start read layer DONE");
+#endif    
 
     return layer;
 }
 
 void deLayerStack::finishReadLayer(int id) const
 {
+#ifdef DEBUG_LOG
     logInfo("finish read layer " + str(id));
+#endif    
     lock();
     if ((id >= 0) && (id < layers.size()))
     {

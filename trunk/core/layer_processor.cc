@@ -43,7 +43,9 @@ renderer(_previewChannelManager),
 previewChannelManager(_previewChannelManager),
 mainWindow(_mainWindow)
 {
+#ifdef DEBUG_LOG
     logInfo("layer processor constructor");
+#endif    
     viewManager = NULL;
 
     firstLayerToUpdate = 0;
@@ -69,7 +71,9 @@ void deLayerProcessor::onDestroyAll()
 
 deLayerProcessor::~deLayerProcessor()
 {
+#ifdef DEBUG_LOG
     logInfo("layer processor destructor");
+#endif    
     delete threads;
 }
 
@@ -96,7 +100,9 @@ void deLayerProcessor::repaintImageInLayerProcessor()
         logInfo("skip repaintImage because closing");
         return;
     }
+#ifdef DEBUG_LOG
     logInfo("repaintImage");
+#endif    
 
     threads->renderPost();
     generateHistogram();
@@ -151,53 +157,77 @@ void deLayerProcessor::updateAllImages(bool calcHistogram)
 
 void deLayerProcessor::lockLayers() const
 {
+#ifdef DEBUG_LOG
     logInfo("locking layer process mutex...");
+#endif    
     layerProcessMutex.lock();
+#ifdef DEBUG_LOG
     logInfo("layer process mutex locked");
+#endif    
 }
 
 void deLayerProcessor::unlockLayers() const
 {
+#ifdef DEBUG_LOG
     logInfo("unlocking layer process mutex");
+#endif    
     layerProcessMutex.unlock();
 }
 
 void deLayerProcessor::lockHistogram()
 {
+#ifdef DEBUG_LOG
     logInfo("locking histogram mutex...");
+#endif    
     histogramMutex.lock();
+#ifdef DEBUG_LOG
     logInfo("histogram mutex locked");
+#endif    
 }
 
 void deLayerProcessor::unlockHistogram()
 {
+#ifdef DEBUG_LOG
     logInfo("unlocking histogram mutex");
+#endif    
     histogramMutex.unlock();
 }
 
 void deLayerProcessor::lockUpdateImage()
 {
+#ifdef DEBUG_LOG
     logInfo("locking update image mutex...");
+#endif    
     updateImageMutex.lock();
+#ifdef DEBUG_LOG
     logInfo("update image mutex locked");
+#endif    
 }
 
 void deLayerProcessor::unlockUpdateImage()
 {
+#ifdef DEBUG_LOG
     logInfo("unlocking update image mutex");
+#endif    
     updateImageMutex.unlock();
 }
 
 void deLayerProcessor::lockPrepareImage()
 {
+#ifdef DEBUG_LOG
     logInfo("locking prepare image mutex...");
+#endif    
     prepareImageMutex.lock();
+#ifdef DEBUG_LOG
     logInfo("prepare image mutex locked");
+#endif    
 }
 
 void deLayerProcessor::unlockPrepareImage()
 {
+#ifdef DEBUG_LOG
     logInfo("unlocking prepare image mutex");
+#endif    
     prepareImageMutex.unlock();
 }
 
@@ -248,7 +278,9 @@ void deLayerProcessor::updateImages(int a, int channel, bool action)
 
 bool deLayerProcessor::updateLayerImage()
 {
+#ifdef DEBUG_LOG
     logInfo("updateLayerImage");
+#endif    
     lockUpdateImage();
 
     lockLayers();
@@ -344,7 +376,9 @@ bool deLayerProcessor::updateImagesSmart(deProgressDialog& progressDialog, const
 
 void deLayerProcessor::markUpdateSingleChannel(int index, int channel)
 {
+#ifdef DEBUG_LOG
     logInfo("markUpdateSingleChannel " +str(index) + " " + str(channel));
+#endif    
     updateImages(index, channel, true);
 }
 
@@ -366,14 +400,20 @@ void deLayerProcessor::onChangeView(int a)
 
 void deLayerProcessor::lockLayerProcessor()
 {
+#ifdef DEBUG_LOG
     logInfo("layer processor lock...");
+#endif    
     updateImagesMutex.lock();
+#ifdef DEBUG_LOG
     logInfo("layer processor locked");
+#endif    
 }
 
 void deLayerProcessor::unlockLayerProcessor()
 {
+#ifdef DEBUG_LOG
     logInfo("layer processor unlock");
+#endif    
     updateImagesMutex.unlock();
 }
 
@@ -493,7 +533,9 @@ int deLayerProcessor::getLastLayerToUpdate()
 
 bool deLayerProcessor::prepareImage()
 {
+#ifdef DEBUG_LOG
     logInfo("prepare image start");
+#endif    
 
     sendInfoEvent(DE_RENDERING_START);
 
@@ -513,7 +555,9 @@ bool deLayerProcessor::prepareImage()
     unlockPrepareImage();
 
     sendInfoEvent(DE_RENDERING_END);
+#ifdef DEBUG_LOG
     logInfo("prepare image DONE");
+#endif    
 
     return result;
 }

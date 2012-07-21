@@ -25,12 +25,16 @@
 deChannelManager::deChannelManager()
 :channelSize(0,0)
 {
+#ifdef DEBUG_LOG
     logInfo("channel manager constructor");
+#endif    
 }
 
 deChannelManager::~deChannelManager()
 {
+#ifdef DEBUG_LOG
     logInfo("channel manager destructor");
+#endif    
     unsigned int i;
     for (i = 0; i < channels.size(); i++)
     {
@@ -41,7 +45,9 @@ deChannelManager::~deChannelManager()
 
         unlock();
     }
+#ifdef DEBUG_LOG
     logInfo("channel manager destructor DONE");
+#endif    
 }
 
 void deChannelManager::setChannelSize(const deSize& size, bool reallocate)
@@ -77,15 +83,21 @@ void deChannelManager::setChannelSize(const deSize& size, bool reallocate)
 
 void deChannelManager::lock()
 {
+#ifdef DEBUG_LOG
     logInfo("channel manager before lock");
+#endif    
     mutex.lock();
+#ifdef DEBUG_LOG
     logInfo("channel manager locked");
+#endif    
 }
 
 void deChannelManager::unlock()
 {
     mutex.unlock();
+#ifdef DEBUG_LOG
     logInfo("channel manager unlocked");
+#endif    
 }
 
 int deChannelManager::reserveNewChannel()
@@ -266,7 +278,9 @@ bool deChannelManager::isImageEmpty() const
 
 const deValue* deChannelManager::startRead(int index)
 {
+#ifdef DEBUG_LOG
     logInfo("startRead " + str(index));
+#endif    
 
     bool error = false;
 
@@ -296,7 +310,9 @@ const deValue* deChannelManager::startRead(int index)
 
 void deChannelManager::finishRead(int index)
 {
+#ifdef DEBUG_LOG
     logInfo("finishRead " + str(index));
+#endif    
 
     bool error = false;
 
@@ -320,7 +336,9 @@ void deChannelManager::finishRead(int index)
 
 deValue* deChannelManager::startWrite(int index)
 {
+#ifdef DEBUG_LOG
     logInfo("startWrite " + str(index));
+#endif    
 
     bool error = false;
 
@@ -342,7 +360,9 @@ deValue* deChannelManager::startWrite(int index)
     {
         mutexes[index]->lockWrite();
 
+#ifdef DEBUG_LOG
         logInfo("startWrite " + str(index) + " locked");
+#endif    
 
         p = channels[index];
     }        
@@ -352,7 +372,9 @@ deValue* deChannelManager::startWrite(int index)
 
 void deChannelManager::finishWrite(int index)
 {
+#ifdef DEBUG_LOG
     logInfo("finishWrite " + str(index));
+#endif    
 
     bool error = false;
 

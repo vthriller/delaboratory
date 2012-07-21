@@ -62,7 +62,9 @@ class deSliderImpl:public dePanelWX
 
         virtual ~deSliderImpl()
         {
+#ifdef DEBUG_LOG
             logInfo("~deSliderImpl");
+#endif            
         }
 
         void moveSlider(wxCommandEvent &event)
@@ -78,11 +80,8 @@ class deSliderImpl:public dePanelWX
         void updateValueFromSlider(bool finished)
         {
             deValue v = min + slider->GetValue() * ((max - min) / width);
-            logInfo("update value from slider " + str(v));
             setLabelValue(v);
-            logInfo("b update value from slider " + str(v));
             parent.onValueChange(v, finished);
-            logInfo("c update value from slider " + str(v));
         }
 
         void setLabelValue(deValue v)
@@ -124,7 +123,9 @@ class deSliderImpl:public dePanelWX
 
 deSlider::deSlider(deWindow& window, const std::string& _name, deValue _min, deValue _max, int _width, int widthn, int widthl)
 {
+#ifdef DEBUG_LOG
     logInfo("deSlider constructor");
+#endif    
     deWindowWX* w = dynamic_cast<deWindowWX*>(&window);
     if (w)
     {
@@ -138,7 +139,9 @@ deSlider::deSlider(deWindow& window, const std::string& _name, deValue _min, deV
 
 deSlider::~deSlider()
 {
+#ifdef DEBUG_LOG
     logInfo("deSlider destructor");
+#endif    
     if (impl)
     {
         delete impl;
