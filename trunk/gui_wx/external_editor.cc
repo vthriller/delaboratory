@@ -22,6 +22,7 @@
 #include "str_wx.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "logger.h"
 
 #define WINDOWS_GIMP_EXE "gimp-2.8.exe"
 
