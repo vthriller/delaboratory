@@ -96,7 +96,9 @@ void deConversionLayer::addFilms()
 
 bool deConversionLayer::updateMainImageNotThreadedWay()
 {
+#ifdef DEBUG_LOG
     logInfo("conversion layer start");
+#endif    
 
     deConversionProcessor p;
 
@@ -113,8 +115,10 @@ bool deConversionLayer::updateMainImageNotThreadedWay()
     cpu.registers[CPU_REGISTER_SATURATION] = getNumericValue("saturation");
     cpu.registers[CPU_REGISTER_PSEUDOGREY] = getNumericValue("pseudogrey");
 
+#ifdef DEBUG_LOG
     logInfo("conversion layer contrast: " + str(cpu.registers[CPU_REGISTER_CONTRAST]));
     logInfo("conversion layer saturation: " + str(cpu.registers[CPU_REGISTER_SATURATION]));
+#endif    
 
     p.convertImage(getSourceImage(), mainLayerImage, cpu);
 
@@ -132,7 +136,9 @@ bool deConversionLayer::updateMainImageNotThreadedWay()
         warning = "conversion OVERFLOW " + str(p) + "%";
     }
 
+#ifdef DEBUG_LOG
     logInfo("conversion layer DONE");
+#endif    
 
     return true;
 }
