@@ -1,0 +1,17 @@
+On Windows, the default graphics editor is gimp-2.8.exe. If you
+install Gimp from (www.partha.com), Delaboratory will automatically
+use this version when exporting to external editor for final pixel
+level editing.
+
+However, now one has the option to use their own favorite editor such
+as Photo.Net etc. One does this by setting an environment variable
+pointing to their editor. To do this set an environment variable
+called GR_EDITOR to the full path of the executable of the editor.  To
+set an environment variable in Windows, follow the instructions at
+http://support.microsoft.com/kb/310519 for Windows XP. On Windows 7
+Check for example http://www.itechtalk.com/thread3595.html.
+
+On the Mac, if you have the Gimp App provided by Partha, you will need
+to make sure that this App resides in the Application folder just like
+all other Mac application. In this scenario, when you click on "Send
+to External Editor", your image will open in Gimp.
