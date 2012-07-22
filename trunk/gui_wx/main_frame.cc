@@ -418,7 +418,9 @@ void deMainFrame::onWarningEvent(wxCommandEvent& event)
 
 void deMainFrame::repaintMainFrame(bool calcHistogram)
 {
+#ifdef DEBUG_LOG
     logInfo("repaint main frame");
+#endif    
     if (!project.isSourceValid())
     {
         return;
