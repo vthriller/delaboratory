@@ -36,6 +36,9 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
     mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
 
+    int bw = 120;
+    int bh = 32;
+
     wxNotebook* notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("notebook"));
     mainSizer->Add(notebook, 1, wxEXPAND);
 
@@ -53,7 +56,7 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
         for (j = operations.begin(); j != operations.end(); j++)
         {
             std::string d = *j;
-            wxButton* b = new wxButton(basicPanel, wxID_ANY, wxString::FromAscii(d.c_str()));
+            wxButton* b = new wxButton(basicPanel, wxID_ANY, wxString::FromAscii(d.c_str()), wxDefaultPosition, wxSize(bw,bh));
             gridSizer->Add(b);
             actionButtons.push_back(b);
             actionButtonsNames[b->GetId()] = *j;
@@ -73,7 +76,7 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
         for (j = operations.begin(); j != operations.end(); j++)
         {
             std::string d = *j;
-            wxButton* b = new wxButton(basicPanel, wxID_ANY, wxString::FromAscii(d.c_str()));
+            wxButton* b = new wxButton(basicPanel, wxID_ANY, wxString::FromAscii(d.c_str()), wxDefaultPosition, wxSize(bw,bh));
             gridSizer->Add(b);
             actionButtons.push_back(b);
             actionButtonsNames[b->GetId()] = *j;
@@ -95,7 +98,7 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
         for (j = actions.begin(); j != actions.end(); j++)
         {
             std::string actionDescription = getActionDescription(*j);
-            wxButton* b = new wxButton(actionsPanel, wxID_ANY, wxString::FromAscii(actionDescription.c_str()));
+            wxButton* b = new wxButton(actionsPanel, wxID_ANY, wxString::FromAscii(actionDescription.c_str()), wxDefaultPosition, wxSize(bw,bh));
             gridSizer->Add(b);
             actionButtons.push_back(b);
             actionButtonsNames[b->GetId()] = *j;
@@ -117,7 +120,7 @@ deControlPanel::deControlPanel(wxWindow* parent, deProject& _project, deLayerPro
         for (i = colorSpaces.begin(); i != colorSpaces.end(); i++)
         {
             std::string n = getColorSpaceName(*i);
-            wxButton* b = new wxButton(conversionsPanel, wxID_ANY, wxString::FromAscii(n.c_str()));
+            wxButton* b = new wxButton(conversionsPanel, wxID_ANY, wxString::FromAscii(n.c_str()), wxDefaultPosition, wxSize(bw,bh));
             gridSizer->Add(b);
             convertButtons.push_back(b);
             convertButtonsColorSpaces[b->GetId()] = *i;
