@@ -4,8 +4,13 @@ APP=delaboratory
 all: ${APP} 
 
 CXX=g++
+
+ifeq (${OS}, MACOSX)
+WXCONFIG=/Users/partha/local/wxw-2.9/bin/wx-config
+else
 WXCONFIG=wx-config
 #WXCONFIG=wx-config-2.9
+endif
 
 FILES = delaboratory main_frame image_io layer_grid_panel image_area_panel image_panel curves_panel frame slider histogram_panel control_panel gradient_panel view_mode_panel help_frame help_color_spaces_frame help_color_spaces_frame2 help_color_spaces_frame3 help_color_spaces_frame4 help_color_spaces_frame5 help_color_spaces_frame6 histogram_mode_panel file_dialogs external_editor choice property_choice_ui check_box property_boolean_ui samplers_panel sampler_panel layer_frame_manager rendered_image dcraw_support raw_module zoom_panel threads_panel color_matrix_frame mutex color_space_utils semaphore main_window canvas canvas_wx bitmap bitmap_wx window window_wx panel_wx property_numeric_ui button warning_panel property_levels_ui mutex_read_write property_mixer_ui palette_frame channel_selector property_curves_ui tiff logger str_wx update_main_layer_image layer_processor_threads progress_dialog message_box update_blend gui tmp
 
@@ -35,8 +40,10 @@ ifeq (${OS}, WINDOWS)
 
 LDFLAGS=`/opt/wxw/bin/wx-config --libs` `pkg-config --libs libxml-2.0` -L/opt/lib -ltiff
 CXXFLAGS_WX=`/opt/wxw/bin/wx-config --cxxflags` `pkg-config --cflags libxml-2.0` -I/opt/include
-OBJECTS += delab.o 
+# OBJECTS += delab.o 
+OBJECTS += ../delab.res 
 EXE=.exe
+
 else
 # settings for standard build
 

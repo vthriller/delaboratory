@@ -20,6 +20,8 @@
 #include <wx/wx.h>
 #include "str.h"
 #include "str_wx.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #define WINDOWS_GIMP_EXE "gimp-2.8.exe"
 
@@ -30,9 +32,20 @@ void executeExternalEditor(const std::string& fileName, const std::string& app)
 
     std::string executable;
 
-#ifdef _WIN32    
-    executable = WINDOWS_GIMP_EXE;
-#else    
+#ifdef _WIN32
+	char * editor = getenv( "GR_EDITOR" );
+	if( editor != NULL )
+	{
+        logInfo("using editor variable");
+		executable = editor;
+	} 
+    else
+	{
+        logInfo("editor variable not found, using GIMP");
+		executable = WINDOWS_GIMP_EXE;
+	}
+
+#else
     executable = app;
 #endif    
 

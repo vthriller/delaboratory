@@ -50,7 +50,12 @@
 #include "progress_dialog.h"
 
 BEGIN_EVENT_TABLE(deMainFrame, wxFrame)
-EVT_MENU(ID_Quit, deMainFrame::onQuit)
+#ifdef __WXOSX_MAC__
+    EVT_MENU(wxID_EXIT, deMainFrame::onQuit)
+#else
+    EVT_MENU(ID_Quit, deMainFrame::onQuit)
+#endif
+
 EVT_MENU(ID_NewProject, deMainFrame::onNewProject)
 EVT_MENU(ID_TestImageSmall, deMainFrame::onTestImageSmall)
 EVT_MENU(ID_TestImageBig, deMainFrame::onTestImageBig)
@@ -87,12 +92,16 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     logInfo("main frame constructor");
 
     imageName = "";
-
+	
 #ifdef __WXOSX_MAC__
-    Create((wxFrame *)NULL, wxID_ANY, _T("main frame"), wxDefaultPosition, wxSize(1440, 800), wxDEFAULT_FRAME_STYLE);
+    Create((wxFrame *)NULL, wxID_ANY, _T("main frame"));
 #else
     Create((wxFrame *)NULL, wxID_ANY, _T("main frame"), wxDefaultPosition, size, wxDEFAULT_FRAME_STYLE | wxMAXIMIZE);
 #endif    
+
+#ifdef _WIN32
+	SetIcon(wxICON(id));
+#endif
 
     updateTitle();
 
@@ -165,10 +174,15 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     menuFile->Append( ID_TestImageSmall, _("Generate test image (small)") );
     menuFile->Append( ID_TestImageBig, _("Generate test image (big, slow)") );
     menuFile->AppendSeparator();
+#ifdef __WXOSX_MAC__
+    menuFile->Append( wxID_EXIT, _("E&xit") );
+#else
     menuFile->Append( ID_Quit, _("E&xit") );
+#endif
+
 
     wxMenu *menuExport = new wxMenu;
-    menuExport->Append( ID_ExportGIMP, _("Send to GIMP") );
+    menuExport->Append( ID_ExportGIMP, _("Send to External Editor") );
     menuExport->Append( ID_ExportTIFF, _("Export 16-bit TIFF") );
     menuExport->Append( ID_ExportAll, _("Export all layers to 16-bit TIFFs") );
     menuExport->Append( ID_ExportJPG, _("Export JPG") );
@@ -404,9 +418,7 @@ void deMainFrame::onWarningEvent(wxCommandEvent& event)
 
 void deMainFrame::repaintMainFrame(bool calcHistogram)
 {
-#ifdef DEBUG_LOG
     logInfo("repaint main frame");
-#endif    
     if (!project.isSourceValid())
     {
         return;
@@ -473,7 +485,11 @@ void deMainFrame::forceUpdateSize()
 
 void deMainFrame::onExportGIMP(wxCommandEvent& event)
 {
+#ifdef __WXOSX_MAC__    
+    generateFinalImage("/Applications/Gimp.app/Contents/MacOS/Gimp", "tiff", "", false, "");
+#else
     generateFinalImage("gimp", "tiff", "", false, "");
+#endif
 }
 
 void deMainFrame::onExportAll(wxCommandEvent& event)
