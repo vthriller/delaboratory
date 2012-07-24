@@ -24,7 +24,7 @@
 #include <wx/wx.h>
 
 wxString str2wx(const std::string& s);
-std::string str(wxString& ws);
+std::string str(const wxString& ws);
 
 std::string getUserConfigDir();
 

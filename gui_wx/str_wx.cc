@@ -19,7 +19,7 @@
 #include "str_wx.h"
 #include <wx/stdpaths.h>
 
-std::string str(wxString& ws)
+std::string str(const wxString& ws)
 {
     char cstring[1024];
     strncpy(cstring, (const char*)ws.mb_str(wxConvUTF8), 1023);

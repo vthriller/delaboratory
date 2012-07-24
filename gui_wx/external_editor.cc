@@ -52,6 +52,8 @@ void executeExternalEditor(const std::string& fileName, const std::string& app)
 
 
     const wxString command = str2wx(executable) + _T(" ") + s;
+    std::string command_s = str(command);
+    logInfo("executing command: " + command_s);
     wxExecute(command);
 
 }
