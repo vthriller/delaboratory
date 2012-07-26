@@ -491,7 +491,11 @@ void deMainFrame::onExportGIMP(wxCommandEvent& event)
 void deMainFrame::onExportAll(wxCommandEvent& event)
 {
     std::string f = getDir(this, "export all images");
-    generateFinalImage("", "tiff", "", true, f);
+
+    if (!f.empty())
+    {
+        generateFinalImage("", "tiff", "", true, f);
+    }
 }    
 
 void deMainFrame::onExportTIFF(wxCommandEvent& event)
