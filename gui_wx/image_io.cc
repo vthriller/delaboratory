@@ -187,14 +187,9 @@ bool saveImage(const std::string& fileName, const deImage& image, const std::str
     return result;
 }
 
-bool loadImage(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace)
+bool loadImage(const std::string& fileName, deStaticImage& image)
 {
     wxLogNull noerrormessages;
-
-    if (colorSpace != deColorSpaceRGB)
-    {
-        return false;
-    }
 
     if (loadTIFF(fileName, image))
     {

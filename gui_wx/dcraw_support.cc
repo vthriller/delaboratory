@@ -118,12 +118,25 @@ std::string getRawInfo(const std::string& f)
     return result;
 }
 
-deRawLoader::deRawLoader(const std::string& f, deStaticImage& _image, deColorSpace _colorSpace, bool _half)
-:filename(f), image(_image), colorSpace(_colorSpace), half(_half)
+deRawLoader::deRawLoader(const std::string& f, deStaticImage& _image, bool _half, bool srgb, bool brighten)
+:filename(f), image(_image), half(_half)
 {
     logInfo("deRawLoader constructor");
 
-    std::string options = "-w -c -6 -o 4 -W";
+    std::string options = "-w -c -6";
+    if (!srgb)
+    {
+        options += " -o 4";
+        colorSpace = deColorSpaceProPhoto;
+    }        
+    else
+    {
+        colorSpace = deColorSpaceRGB;
+    }        
+    if (!brighten)
+    {
+        options += " -W";
+    }
     if (half)
     {
         options += " -h";
