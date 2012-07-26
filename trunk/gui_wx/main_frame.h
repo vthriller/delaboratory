@@ -83,7 +83,6 @@ private:
 	void onColorMatrix3(wxCommandEvent& event);
 	void onColorMatrix4(wxCommandEvent& event);
 	void onColorMatrix5(wxCommandEvent& event);
-	void onPaletteFrame(wxCommandEvent& event);
 	void onRepaintEvent(wxCommandEvent& event);
 	void onImageLoadEvent(wxCommandEvent& event);
 	void onInfoEvent(wxCommandEvent& event);

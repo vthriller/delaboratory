@@ -40,7 +40,6 @@ enum
     ID_ColorMatrix3,
     ID_ColorMatrix4,
     ID_ColorMatrix5,
-    ID_PaletteFrame,
     ID_ExportGIMP,
     ID_ExportTIFF,
     ID_ExportJPG,
