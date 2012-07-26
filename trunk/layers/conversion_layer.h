@@ -29,8 +29,6 @@ class deConversionLayer:public deBaseLayerWithSource
     private:
         virtual std::string getType() const {return "conversion";};
 
-        void addFilms();
-
         std::string warning;
 
     public:

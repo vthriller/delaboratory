@@ -18,7 +18,7 @@ LAYERS = curves_layer mixer_layer auto_dodge_layer auto_burn_layer recover_shado
 
 ALGORITHMS = blur usm c2g scale_channel sample_pixel blend_channel vignette gradient blur_type blend_mode blend_color_luminosity fill_channel radial_lut
 
-CORE = base_layer base_layer_with_properties base_layer_with_source channel_manager layer_stack conversion_cpu conversion_processor property color_space value image power size copy_channel histogram layer_factory operation_processor sampler_manager sampler preset static_image view_manager zoom_manager str switchable_layer color_matrix palette layer_processor flatten_layers layer_with_blending test_image skin_color_chart renderer generic_layer_frame layer_frame preset_button project films
+CORE = base_layer base_layer_with_properties base_layer_with_source channel_manager layer_stack conversion_cpu conversion_processor property color_space value image power size copy_channel histogram layer_factory operation_processor sampler_manager sampler preset static_image view_manager zoom_manager str switchable_layer color_matrix palette layer_processor flatten_layers layer_with_blending test_image skin_color_chart renderer generic_layer_frame layer_frame preset_button project 
 
 PROPERTIES = property_numeric property_mixer mixer property_curves curve curve_point curve_shape curve_function_bezier property_choice property_boolean property_levels
 

@@ -21,7 +21,6 @@
 #include "conversion_processor.h"
 #include "str.h"
 #include "preset.h"
-#include "films.h"
 #include "logger.h"
 
 deConversionLayer::deConversionLayer(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack)
@@ -63,7 +62,6 @@ deConversionLayer::deConversionLayer(deColorSpace _colorSpace, deChannelManager&
         createPropertyNumeric("mixer blue", -3, 3);
         reset->addNumericValue("mixer blue", 0.1);
 
-    //    addFilms();
     }
 
     if (scs == deColorSpaceBW)
@@ -78,20 +76,6 @@ deConversionLayer::deConversionLayer(deColorSpace _colorSpace, deChannelManager&
 
 deConversionLayer::~deConversionLayer()
 {
-}
-
-void deConversionLayer::addFilms()
-{
-    std::vector<deFilm> films;
-    getFilms(films);
-
-    std::vector<deFilm>::iterator i;
-    for (i = films.begin(); i != films.end(); i++)
-    {
-        //deFilm& f = *i;
-        //dePreset* p = createPreset(f.getName());
-
-    }
 }
 
 bool deConversionLayer::updateMainImageNotThreadedWay()
