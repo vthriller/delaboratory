@@ -44,7 +44,7 @@ class deRawModule
         void onInit();
 
         std::string getVersion() const;
-        bool loadRAW(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace, bool half);
+        bool loadRAW(const std::string& fileName, deStaticImage& image, bool half, bool srgb, bool brighten);
 
         bool updateRawLoading(bool& failure);
 

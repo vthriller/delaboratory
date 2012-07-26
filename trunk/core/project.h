@@ -68,7 +68,7 @@ class deProject
 
         void updateLayerGrid();
 
-        bool openImageRAW(const std::string& fileName);
+        bool openImageRAW(const std::string& fileName, bool srgb, bool brighten);
 
     public:
         deProject(deLayerProcessor& _processor, deChannelManager& _channelManager, deLayerStack& _layerStack, deLayerFrameManager& _layerFrameManager, deStaticImage& _sourceImage, deRawModule& _rawModule, deZoomManager& _zoomManager, deMainWindow& _mainWindow, deGUI& _gui);
@@ -94,7 +94,7 @@ class deProject
 
         void onChangeViewMode();
 
-        bool openImage(const std::string& fileName, bool raw, deColorSpace colorSpace);
+        bool openImage(const std::string& fileName, bool raw, bool srgb, bool brighten);
         void newProject();
         void setTestImage(int s);
 

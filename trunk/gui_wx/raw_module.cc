@@ -42,7 +42,7 @@ std::string deRawModule::getVersion() const
     return dcraw_version;
 }
 
-bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace, bool half)
+bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image, bool half, bool srgb, bool brighten)
 {
     if (loader)
     {
@@ -54,7 +54,7 @@ bool deRawModule::loadRAW(const std::string& fileName, deStaticImage& image, deC
 
     mutex.lock();
 
-    loader = new deRawLoader(fileName, image, colorSpace, half);
+    loader = new deRawLoader(fileName, image, half, srgb, brighten);
 
     status = loader->getStatus();
 

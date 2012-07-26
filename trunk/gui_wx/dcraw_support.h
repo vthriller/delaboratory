@@ -40,7 +40,7 @@ class deRawLoader
         bool half;
     public:        
         
-        deRawLoader(const std::string& f, deStaticImage& image, deColorSpace colorSpace, bool half);
+        deRawLoader(const std::string& f, deStaticImage& image, bool half, bool srgb, bool brighten);
         virtual ~deRawLoader();
 
         bool load(bool& failure);

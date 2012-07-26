@@ -26,7 +26,7 @@ class deStaticImage;
 class deImage;
 class deChannelManager;
 
-bool loadImage(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
+bool loadImage(const std::string& fileName, deStaticImage& image);
 
 bool loadPPM(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
 

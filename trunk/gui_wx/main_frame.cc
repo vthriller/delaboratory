@@ -60,6 +60,9 @@ EVT_MENU(ID_TestImageSmall, deMainFrame::onTestImageSmall)
 EVT_MENU(ID_TestImageBig, deMainFrame::onTestImageBig)
 EVT_MENU(ID_OpenImage, deMainFrame::onOpenImage)
 EVT_MENU(ID_OpenRawImageProPhoto, deMainFrame::onOpenRawImageProPhoto)
+EVT_MENU(ID_OpenRawImageRGB, deMainFrame::onOpenRawImageRGB)
+EVT_MENU(ID_OpenRawImageProPhotoAB, deMainFrame::onOpenRawImageProPhotoAB)
+EVT_MENU(ID_OpenRawImageRGBAB, deMainFrame::onOpenRawImageRGBAB)
 EVT_MENU(ID_HelpColorSpaces, deMainFrame::onHelpColorSpaces)
 EVT_MENU(ID_HelpColorSpaces2, deMainFrame::onHelpColorSpaces2)
 EVT_MENU(ID_HelpColorSpaces3, deMainFrame::onHelpColorSpaces3)
@@ -166,7 +169,10 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     wxMenu *menuFile = new wxMenu;
     menuFile->Append( ID_NewProject, _("New project") );
     menuFile->AppendSeparator();
-    menuFile->Append( ID_OpenRawImageProPhoto, _("Open RAW image as ProPhoto RGB") );
+    menuFile->Append( ID_OpenRawImageProPhoto, _("Open RAW image as ProPhoto RGB (default)") );
+    menuFile->Append( ID_OpenRawImageRGB, _("Open RAW image as sRGB") );
+    menuFile->Append( ID_OpenRawImageProPhotoAB, _("Open RAW image as ProPhoto RGB - auto brighten") );
+    menuFile->Append( ID_OpenRawImageRGBAB, _("Open RAW image as sRGB - auto brighten") );
     menuFile->Append( ID_OpenImage, _("Open TIFF/JPG image") );
     menuFile->AppendSeparator();
     menuFile->Append( ID_TestImageSmall, _("Generate test image (small)") );
@@ -283,7 +289,7 @@ void deMainFrame::onOpenImage(wxCommandEvent& WXUNUSED(event))
     if (!f.empty())
     {
         openDirectory = getPath(f);
-        project.openImage(f, false, deColorSpaceRGB);
+        project.openImage(f, false, false, false);
     }        
 }
 
@@ -293,7 +299,37 @@ void deMainFrame::onOpenRawImageProPhoto(wxCommandEvent& WXUNUSED(event))
     if (!f.empty())
     {
         openDirectory = getPath(f);
-        project.openImage(f, true, deColorSpaceProPhoto);
+        project.openImage(f, true, false, false);
+    }        
+}
+
+void deMainFrame::onOpenRawImageRGB(wxCommandEvent& WXUNUSED(event))
+{
+    std::string f = getOpenFile(this, "load source image", "raw", openDirectory);
+    if (!f.empty())
+    {
+        openDirectory = getPath(f);
+        project.openImage(f, true, true, false);
+    }        
+}
+
+void deMainFrame::onOpenRawImageProPhotoAB(wxCommandEvent& WXUNUSED(event))
+{
+    std::string f = getOpenFile(this, "load source image", "raw", openDirectory);
+    if (!f.empty())
+    {
+        openDirectory = getPath(f);
+        project.openImage(f, true, false, true);
+    }        
+}
+
+void deMainFrame::onOpenRawImageRGBAB(wxCommandEvent& WXUNUSED(event))
+{
+    std::string f = getOpenFile(this, "load source image", "raw", openDirectory);
+    if (!f.empty())
+    {
+        openDirectory = getPath(f);
+        project.openImage(f, true, true, true);
     }        
 }
 

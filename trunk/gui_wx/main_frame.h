@@ -68,6 +68,9 @@ private:
 	void onTestImageBig(wxCommandEvent& event);
 	void onOpenImage(wxCommandEvent& event);
 	void onOpenRawImageProPhoto(wxCommandEvent& event);
+	void onOpenRawImageRGB(wxCommandEvent& event);
+	void onOpenRawImageProPhotoAB(wxCommandEvent& event);
+	void onOpenRawImageRGBAB(wxCommandEvent& event);
 	void onQuit(wxCommandEvent& event);
 	void onNewProject(wxCommandEvent& event);
 	void onHelpColorSpaces(wxCommandEvent& event);

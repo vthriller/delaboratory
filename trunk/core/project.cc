@@ -130,10 +130,10 @@ void deProject::onKey(int key)
 void deProject::init(const std::string& fileName)
 {
     bool ok = false;
-    if (openImage(fileName, true, deColorSpaceProPhoto))
+    if (openImage(fileName, true, false, false))
     {
         ok = true;
-    } else if (openImage(fileName, false, deColorSpaceRGB))
+    } else if (openImage(fileName, false, false, false))
     {
         ok = true;
     }
@@ -349,7 +349,7 @@ void deProject::newProject()
     updateLayerGrid();
 }
 
-bool deProject::openImageRAW(const std::string& fileName)
+bool deProject::openImageRAW(const std::string& fileName, bool srgb, bool brighten)
 {
 
     bool valid = isRawValid(fileName);
@@ -371,7 +371,7 @@ bool deProject::openImageRAW(const std::string& fileName)
     */
 
     layerProcessor.sendInfoEvent(DE_DCRAW_START);
-    if (rawModule.loadRAW(fileName, sourceImage, deColorSpaceProPhoto, true))
+    if (rawModule.loadRAW(fileName, sourceImage, true, srgb, brighten))
     {
         logInfo("found RAW " + fileName);
         bool failure = false;
@@ -385,7 +385,7 @@ bool deProject::openImageRAW(const std::string& fileName)
                 return false;
             }
         }
-        bool result = rawModule.loadRAW(fileName, sourceImage, deColorSpaceProPhoto, false);
+        bool result = rawModule.loadRAW(fileName, sourceImage, false, srgb, brighten);
         if (!result)
         {
             return false;
@@ -404,7 +404,7 @@ bool deProject::openImageRAW(const std::string& fileName)
     return true;
 }
 
-bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace colorSpace)
+bool deProject::openImage(const std::string& fileName, bool raw, bool srgb, bool brighten)
 {
     freeImage();
 
@@ -414,7 +414,7 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
 
     if (raw)
     { 
-        if (!openImageRAW(fileName))
+        if (!openImageRAW(fileName, srgb, brighten))
         {
             return false;
         }
@@ -422,7 +422,7 @@ bool deProject::openImage(const std::string& fileName, bool raw, deColorSpace co
     else
     {
         logInfo("trying JPEG/TIFF image " + fileName);
-        if (!loadImage(fileName, sourceImage, colorSpace))
+        if (!loadImage(fileName, sourceImage))
         {
             logError("load JPEG/TIFF image failed: " + fileName);
             return false;
