@@ -30,7 +30,6 @@
 #include "help_color_spaces_frame5.h"
 #include "help_color_spaces_frame6.h"
 #include "color_matrix_frame.h"
-#include "palette_frame.h"
 #include "project.h"
 #include "str.h"
 #include "str_wx.h"
@@ -74,7 +73,6 @@ EVT_MENU(ID_ColorMatrix2, deMainFrame::onColorMatrix2)
 EVT_MENU(ID_ColorMatrix3, deMainFrame::onColorMatrix3)
 EVT_MENU(ID_ColorMatrix4, deMainFrame::onColorMatrix4)
 EVT_MENU(ID_ColorMatrix5, deMainFrame::onColorMatrix5)
-EVT_MENU(ID_PaletteFrame, deMainFrame::onPaletteFrame)
 EVT_MENU(DE_REPAINT_EVENT, deMainFrame::onRepaintEvent)
 EVT_MENU(DE_IMAGE_LOAD_EVENT, deMainFrame::onImageLoadEvent)
 EVT_MENU(DE_HISTOGRAM_EVENT, deMainFrame::onHistogramEvent)
@@ -203,7 +201,6 @@ deMainFrame::deMainFrame(const wxSize& size, deProject& _project, deLayerProcess
     menuPalette->Append( ID_ColorMatrix3, _("color tiles 20") );
     menuPalette->Append( ID_ColorMatrix4, _("color tiles 40") );
     menuPalette->Append( ID_ColorMatrix5, _("color tiles 80") );
-    menuPalette->Append( ID_PaletteFrame, _("palette frame") );
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, _("&File") );
@@ -379,13 +376,6 @@ void deMainFrame::onColorMatrix5(wxCommandEvent& event)
     wxFrame* help = new deColorMatrixFrame(this, project, 80, 80, 80, 80, 40, 40, 12, 0.1);
     help->Show();
 }
-
-void deMainFrame::onPaletteFrame(wxCommandEvent& event)
-{
-    wxFrame* help = new dePaletteFrame(this);
-    help->Show();
-}
-
 
 void deMainFrame::onRepaintEvent(wxCommandEvent& event)
 {
