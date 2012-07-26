@@ -533,6 +533,11 @@ int deLayerProcessor::getLastLayerToUpdate()
 
 bool deLayerProcessor::prepareImage()
 {
+    if (previewChannelManager.isImageEmpty())
+    {
+        return false;
+    }
+
 #ifdef DEBUG_LOG
     logInfo("prepare image start");
 #endif    

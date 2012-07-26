@@ -78,6 +78,7 @@ deProject::~deProject()
 
 void deProject::setHistogramChannel(int channel)
 {
+    logInfo("project set histogram channel " + str(channel));
     gui.updateHistogramMode(channel);
     layerProcessor.generateHistogram();
 }
@@ -350,7 +351,6 @@ void deProject::newProject()
 
 bool deProject::openImageRAW(const std::string& fileName)
 {
-    std::string info;
 
     bool valid = isRawValid(fileName);
     if (!valid)
@@ -359,6 +359,8 @@ bool deProject::openImageRAW(const std::string& fileName)
         return false;
     }
 
+/*
+    std::string info;
     info = getRawInfo(fileName);
 
     if (info.size() == 0)
@@ -366,6 +368,7 @@ bool deProject::openImageRAW(const std::string& fileName)
         logError("empty RAW info in " + fileName);
         return false;
     }
+    */
 
     layerProcessor.sendInfoEvent(DE_DCRAW_START);
     if (rawModule.loadRAW(fileName, sourceImage, deColorSpaceProPhoto, true))
@@ -397,8 +400,6 @@ bool deProject::openImageRAW(const std::string& fileName)
         layerProcessor.sendInfoEvent(DE_DCRAW_END);
         return false;
     }
-
-    sourceImage.setInfo(info);
 
     return true;
 }

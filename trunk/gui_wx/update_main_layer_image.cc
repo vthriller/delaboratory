@@ -32,7 +32,7 @@ class deUpdateActionThread:public wxThread
             bool result = layer.processMainImageSingleChannel(channel);
             if (!result)
             {
-                logError("update action failed");
+                logInfo("update action failed");
             }
             semaphore.post();
             return NULL;

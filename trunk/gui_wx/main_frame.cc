@@ -443,6 +443,10 @@ void deMainFrame::onCloseEvent(wxCloseEvent& event)
 
 void deMainFrame::generateHistogram()
 {
+    if (project.getSourceImageSize().getW() == 0)
+    {
+        return;
+    }
     if (histogramPanel)
     {
         histogramPanel->generateHistogram();
