@@ -115,7 +115,7 @@ void deHistogramPanel::generateHistogram()
             histogram.calc(values, n);
         }
         else
-       {
+        {
             if (!values)
             {
                 logError("can't generate histogram - NULL channel");

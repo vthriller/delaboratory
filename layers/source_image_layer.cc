@@ -60,6 +60,10 @@ deSourceImageLayer::~deSourceImageLayer()
 bool deSourceImageLayer::updateMainImageNotThreadedWay()
 {
     const deSize ds = mainLayerImage.getChannelSize();
+    if (ds.getW() == 0)
+    {
+        return false;
+    }
 
     deValue z_x1;
     deValue z_y1;

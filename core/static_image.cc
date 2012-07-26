@@ -94,11 +94,6 @@ void deStaticImage::unlock()
     mutex.unlock();
 }    
 
-void deStaticImage::setInfo(const std::string& s)
-{
-    info = s;
-}
-
 const deValue* deStaticImage::startReadStatic(int index)
 {
     int n = 3;

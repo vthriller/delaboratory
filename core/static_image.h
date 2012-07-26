@@ -33,7 +33,6 @@ class deStaticImage
         std::vector<deMutexReadWrite*> mutexes;
         deSize size;
         mutable deMutex mutex;
-        std::string info;
         int lastRotate;
 
         const deValue* startReadStatic(int index);

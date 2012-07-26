@@ -79,7 +79,7 @@ bool deRenderedImage::render(deCanvas& canvas)
 
     if (!internalData)
     {
-        logError("can't render - no internal data");
+        logInfo("can't render - no internal data");
         return false;
     }
 
