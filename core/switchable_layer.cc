@@ -78,18 +78,31 @@ void deSwitchableLayer::disableAll()
 bool deSwitchableLayer::isChannelEnabled(int index) const
 {
     std::string n = getChannelName(colorSpace, index);
-    return getPropertyBoolean(n)->get();
+    const dePropertyBoolean* p = getPropertyBoolean(n);
+    if (!p)
+    {
+        return false;
+    }
+    return p->get();
 }
 
 void deSwitchableLayer::enableChannel(int index)
 {
     std::string n = getChannelName(colorSpace, index);
-    getPropertyBoolean(n)->set(true);
+    dePropertyBoolean* p = getPropertyBoolean(n);
+    if (p)
+    {
+        p->set(true);
+    }        
 }
 
 void deSwitchableLayer::disableChannel(int index)
 {
     std::string n = getChannelName(colorSpace, index);
-    getPropertyBoolean(n)->set(false);
+    dePropertyBoolean* p = getPropertyBoolean(n);
+    if (p)
+    {
+        p->set(false);
+    }        
 }
 
