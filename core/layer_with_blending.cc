@@ -37,8 +37,11 @@ deLayerWithBlending::deLayerWithBlending(deColorSpace _colorSpace, deChannelMana
     createPropertyChoice("blend mode", getSupportedBlendModeNames(colorSpace));
 
     dePropertyChoice* blendMode = getPropertyChoice("blend mode");
-    blendMode->setSizer("blend");
-    blendMode->setBlendOnly();
+    if (blendMode)
+    {
+        blendMode->setSizer("blend");
+        blendMode->setBlendOnly();
+    }
 
     createPropertyBoolean("invert");
     getPropertyBoolean("invert")->setSizer("blend");
@@ -46,7 +49,10 @@ deLayerWithBlending::deLayerWithBlending(deColorSpace _colorSpace, deChannelMana
     setBlendMode(deBlendNormal);
 
     deProperty* p = getPropertyNumeric("opacity");
-    p->setBlendOnly();
+    if (p)
+    {
+        p->setBlendOnly();
+    }        
 
     setOpacity(1.0);
 }
@@ -63,7 +69,10 @@ deValue deLayerWithBlending::getOpacity() const
 void deLayerWithBlending::setOpacity(deValue _opacity)
 {
     dePropertyNumeric* p = getPropertyNumeric("opacity");
-    p->set(_opacity);
+    if (p)
+    {
+        p->set(_opacity);
+    }        
 }
 
 void deLayerWithBlending::setBlendMode(deBlendMode mode)
@@ -97,7 +106,12 @@ bool deLayerWithBlending::updateBlend(int i)
         o = 0.0;
     }
 
-    bool inverted = getPropertyBoolean("invert")->get();
+    dePropertyBoolean* pinv = getPropertyBoolean("invert");
+    bool inverted = false;
+    if (pinv)
+    {
+        inverted = pinv->get();
+    }        
 
     if (inverted)
     {
