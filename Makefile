@@ -40,8 +40,7 @@ ifeq (${OS}, WINDOWS)
 
 LDFLAGS=`/opt/wxw/bin/wx-config --libs` `pkg-config --libs libxml-2.0` -L/opt/lib -ltiff
 CXXFLAGS_WX=`/opt/wxw/bin/wx-config --cxxflags` `pkg-config --cflags libxml-2.0` -I/opt/include
-# OBJECTS += delab.o 
-OBJECTS += ../delab.res 
+OBJECTS += delab.o 
 EXE=.exe
 
 else
