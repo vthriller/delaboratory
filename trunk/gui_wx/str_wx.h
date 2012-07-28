@@ -26,6 +26,6 @@
 wxString str2wx(const std::string& s);
 std::string str(const wxString& ws);
 
-std::string getUserConfigDir();
+std::string getUserDataDir();
 
 #endif
