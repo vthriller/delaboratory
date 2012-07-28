@@ -35,18 +35,22 @@ wxString str2wx(const std::string& s)
     return result;
 }    
 
-std::string getUserConfigDir()
+std::string getUserDataDir()
 {
     wxStandardPathsBase& paths = wxStandardPaths::Get();
 
-    wxString ucd = paths.GetUserConfigDir();
-    std::string userConfigDir = str(ucd);
+    wxString ucd = paths.GetUserDataDir();
+    std::string userDataDir = str(ucd);
 #ifdef _WIN32
-    userConfigDir += "\\delaboratory";
+    userDataDir += "\\delaboratory";
 #else
-    userConfigDir += "/.delaboratory";
+#ifdef __WXOSX_MAC__
+    userDataDir += "/delaboratory";
+#else
+    userDataDir += "/.delaboratory";
+#endif
 #endif
 
-    return userConfigDir;
+    return userDataDir;
 }
 

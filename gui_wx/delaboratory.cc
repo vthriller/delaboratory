@@ -32,6 +32,7 @@
 #include "operation_processor.h"
 #include "main_window.h"
 #include "gui.h"
+#include "wx/stdpaths.h"
 
 const std::string LOG_FILE_NAME = "debug.log";
 const std::string LOG_LOCKS_FILE_NAME = "locks.log";
@@ -44,7 +45,8 @@ class deInitLogger
     public:
         deInitLogger()
         {
-            std::string ucd = getUserConfigDir();
+//            std::string ucd = getUserConfigDir();
+            std::string ucd = getUserDataDir();
             wxString ucd_wx = str2wx(ucd);
 
             if (wxDirExists(ucd_wx))
