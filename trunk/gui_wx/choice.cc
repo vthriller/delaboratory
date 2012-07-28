@@ -34,7 +34,7 @@ class deChoiceImpl:public dePanelWX
 
             if (_name.size() > 0)
             {
-                int widthn = 80;
+                int widthn = 100;
                 wxStaticText* label = new wxStaticText(this, wxID_ANY, wxString::FromAscii(_name.c_str()), wxDefaultPosition, wxSize(widthn, 30));
                 sizer->Add(label, 0, wxCENTER);
             }
