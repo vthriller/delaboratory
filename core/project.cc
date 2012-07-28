@@ -275,6 +275,8 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
 
     logInfo("exportFinalImage...");
 
+    zoomManager.fullZoomOut();
+
     // name is taken from file dialog, it can be empty when we are exporting to external editor
     // but in this case we need correct imageFileName
     if ((name == "") && (imageFileName == ""))
@@ -323,6 +325,8 @@ bool deProject::exportFinalImage(const std::string& app, const std::string& type
 
     // calculate image in preview size to continue editing
     layerProcessor.updateAllImages(true);
+
+    gui.updateImageAreaSize();
 
     return result;
 }
