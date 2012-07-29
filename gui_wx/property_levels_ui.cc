@@ -179,6 +179,8 @@ class deLevelsControl:public dePanelWX
 
             mode = deModeNothing;
 
+            bitmap.Create(_width, _height);
+
             Connect(wxEVT_PAINT, wxPaintEventHandler(deLevelsControl::paintEvent));
             Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(deLevelsControl::click));
             Connect(wxEVT_LEFT_UP, wxMouseEventHandler(deLevelsControl::release));
