@@ -100,7 +100,7 @@ std::string getDir(wxWindow* parent, const std::string& info)
 {
     wxDirDialog saveFileDialog(parent, wxString::FromAscii(info.c_str()));
 
-    if (saveFileDialog.ShowModal() == wxID_CANCEL)
+    if (saveFileDialog.ShowModal() != wxID_OK)
     {
         logInfo("getDir hit cancel");
         return "";
