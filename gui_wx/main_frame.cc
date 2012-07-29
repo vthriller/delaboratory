@@ -530,6 +530,7 @@ void deMainFrame::onExportAll(wxCommandEvent& event)
 
     if (!f.empty())
     {
+        logInfo("export all images to " + f);
         generateFinalImage("", "tiff", "", true, f);
     }
 }    
