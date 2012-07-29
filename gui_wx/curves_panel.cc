@@ -95,6 +95,8 @@ layerProcessor(_layerProcessor), layerIndex(_layerIndex), property(_property), c
     backgroundBitmap = NULL;
     clickPosition = -1;
 
+    bitmap.Create(CURVES_PANEL_SIZE_X, CURVES_PANEL_SIZE_Y);
+
 }
 
 deCurvesPanel::~deCurvesPanel()
