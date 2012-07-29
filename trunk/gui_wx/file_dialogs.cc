@@ -102,9 +102,14 @@ std::string getDir(wxWindow* parent, const std::string& info)
 
     if (saveFileDialog.ShowModal() == wxID_CANCEL)
     {
+        logInfo("getDir hit cancel");
         return "";
     }
 
     wxString path = saveFileDialog.GetPath();
-    return str(path);
+    std::string result = str(path);
+
+    logInfo("getDir result: " + result);
+    return result;
+
 }
