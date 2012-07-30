@@ -16,19 +16,7 @@
 || *F3* || histogram channel 3 ||
 || *F4* || histogram channel 4 ||
 
-== layers ==
-|| *B* || add blur layer ||
-|| *C* || add curves layer ||
-|| *M* || add mixer layer ||
-
 == curves editor ==
 
-|| *CTRL* || add control points on curves ||
+|| *SPACE* || add control points on curves ||
 || *X* || delete last selected curve point ||
-|| *A* || move last selected curve point up ||
-|| *Z* || move last selected curve point down ||
-|| *R* || realtime switch (not persistent) ||
-
-== other ==
-
-|| *S* || dump sampler color on console ||
