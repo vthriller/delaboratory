@@ -27,6 +27,4 @@ http://www.partha.com/images/screenshots/Delaboratory/Mac-Screenshot-04-s.jpg
 
 If you have installed the Mac OS X native Gimp version from www.partha.com, you can now send to Gimp. 
 
-http://www.partha.com/images/screenshots/Delaboratory/Mac-Screenshot-04-s.jpg
-
 To do this, make sure that you get Gimp from the above Website and simply unzip the app into the /Application folder. Now after you have done all the color corrections in Delaboratory, you can do pixel level editing in Gimp.
