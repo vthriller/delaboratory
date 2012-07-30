@@ -6,7 +6,7 @@ Delaboratory 0.8 for Windows comes in two flavors - 32-bit and 64-bit. We should
 
 = Details =
 
-You will notice that Delaboratory 0.8 now offers 4 methods to open a RAW file - ProPhoto RGB or sRGB, each with the option to auto-brighten the image.
+You will notice that Delaboratory 0.8 now offers 4 methods to open a RAW file - !ProPhoto RGB or sRGB, each with the option to auto-brighten the image.
 
 http://www.partha.com/images/screenshots/Delaboratory/screenshot-01-s.jpg
 
@@ -29,4 +29,3 @@ Of course, if this is all too complicated (and I don't blame you if you think so
 http://www.partha.com/images/screenshots/Delaboratory/screenshot-05-s.jpg
 
 If you have already installed Gimp from www.partha.com, then you don't need to do anything to "send to External Editor" from Delaboratory. For all other editors, including Gimp installation from Gimp.org, I am afraid you will have to set the environment variable to that applications main executable.
-
