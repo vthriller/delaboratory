@@ -7,7 +7,6 @@
 || *2* || view channel 2 ||
 || *3* || view channel 3 ||
 || *4* || view channel 4 ||
-|| *F* || "full" view (hide panels) ||
 
 == histogram ==
 
