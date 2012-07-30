@@ -2,7 +2,7 @@
 
 = Introduction =
 
-Delaboratory 0.8 for the Mac OS has been built and tested on a MacBook Pro running Snow Leopard OS 10.6.8. However, it should work on any later OS from Apple. It will not work on earlier Macs. This version is a pure 64-bit build. If you have enough memory, you should not have any trouble opening RAW images from some of the new cameras, such as the Nikon D800, which produces enormous image files (the 14-bit uncompressed lossless format NEF is 75MB).
+Delaboratory 0.8 for the Mac OS has been built and tested on a !MacBook Pro running Snow Leopard OS 10.6.8. However, it should work on any later OS from Apple. It will not work on earlier Macs. This version is a pure 64-bit build. If you have enough memory, you should not have any trouble opening RAW images from some of the new cameras, such as the Nikon D800, which produces enormous image files (the 14-bit uncompressed lossless format NEF is 75MB).
 
 
 = Details =
