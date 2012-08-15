@@ -62,7 +62,7 @@ void deMixer::setWeight(int c, deValue value)
     unlock();
 }
 
-void deMixer::process(const deImage& sourceImage, deValue* destination, int n)
+void deMixer::process(const deImageOld& sourceImage, deValue* destination, int n)
 {
     if (size < 1)
     {

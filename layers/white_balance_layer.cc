@@ -111,7 +111,7 @@ bool deWhiteBalanceLayer::onImageClick(deValue x, deValue y)
         return false;
     }
 
-    const deImage& source = getSourceImage();
+    const deImageOld& source = getSourceImage();
 
     const deSize size = source.getChannelSize();
 

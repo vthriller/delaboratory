@@ -45,7 +45,7 @@ bool deCopyLayer::updateMainImageNotThreadedWay()
     deConversionCPU cpu(4);
 
     int l = getPropertyChoice("layer")->getIndex();
-    const deImage& image = getOtherLayerImage(l);
+    const deImageOld& image = getOtherLayerImage(l);
     p.convertImage(image, mainLayerImage, cpu);
 
     logInfo("conversion layer DONE");
@@ -56,7 +56,7 @@ bool deCopyLayer::updateMainImageNotThreadedWay()
 void deCopyLayer::updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const
 {
     int l = getPropertyChoice("layer")->getIndex();
-    const deImage& image = getOtherLayerImage(l);
+    const deImageOld& image = getOtherLayerImage(l);
     image.updateChannelUsage(channelUsage, layerIndex);
 
     deLayerWithBlending::updateChannelUsage(channelUsage, layerIndex);

@@ -112,7 +112,7 @@ class dePropertyCurvesUIImpl:public dePanelWX
 
         void generate()
         {
-            const deImage& sourceImage = layer.getSourceImage();
+            const deImageOld& sourceImage = layer.getSourceImage();
 
             int chan = channel;
             int hc = property.getHorizontalChannel();
@@ -132,7 +132,7 @@ class dePropertyCurvesUIImpl:public dePanelWX
 
         void setMarker()
         {
-            const deImage& sourceImage = layer.getSourceImage();
+            const deImageOld& sourceImage = layer.getSourceImage();
 
             const deValue* c = sourceImage.startRead(channel);
             int n = sourceImage.getChannelSize().getN();
@@ -174,7 +174,7 @@ class dePropertyCurvesUIImpl:public dePanelWX
 
         bool onImageClick(deValue x, deValue y)
         {
-            const deImage& sourceImage = layer.getSourceImage();
+            const deImageOld& sourceImage = layer.getSourceImage();
 
             const deValue* c = sourceImage.startRead(channel);
 
@@ -195,7 +195,7 @@ class dePropertyCurvesUIImpl:public dePanelWX
             int p = curvesPanel->getClickPosition();
             if (p >= 0)
             {
-                const deImage& sourceImage = layer.getSourceImage();
+                const deImageOld& sourceImage = layer.getSourceImage();
                 if (p >= sourceImage.getChannelSize().getN())
                 {
                     logError("click position outside channel");

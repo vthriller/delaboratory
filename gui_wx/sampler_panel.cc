@@ -127,7 +127,7 @@ void deSamplerPanel::update()
 
     if (layer)
     {
-        const deImage& image = layer->getLayerImage();
+        const deImageOld& image = layer->getLayerImage();
 
         update(image);
     }        
@@ -135,7 +135,7 @@ void deSamplerPanel::update()
     layerStack.finishReadLayer(view);
 }    
 
-void deSamplerPanel::update(const deImage& image)
+void deSamplerPanel::update(const deImageOld& image)
 {
     deSize channelSize = image.getChannelSize();
 

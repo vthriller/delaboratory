@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DE_IMAGE_H
-#define _DE_IMAGE_H
+#ifndef _DE_IMAGE_OLD_H
+#define _DE_IMAGE_OLD_H
 
 #include "color_space.h"
 #include "value.h"
@@ -26,7 +26,7 @@ class deChannelManager;
 #include "size.h"
 #include "mutex.h"
 
-class deImage
+class deImageOld
 {
     private:
         const deColorSpace colorSpace;
@@ -34,13 +34,13 @@ class deImage
         deChannelManager& channelManager;
         mutable deMutex mutex;
 
-        deImage(const deImage& i);
-        deImage& operator = (const deImage& i);
+        deImageOld(const deImageOld& i);
+        deImageOld& operator = (const deImageOld& i);
 
     public:
-        deImage(const deColorSpace& _colorSpace, deChannelManager& _channelManager);
+        deImageOld(const deColorSpace& _colorSpace, deChannelManager& _channelManager);
 
-        virtual ~deImage();
+        virtual ~deImageOld();
 
         deColorSpace getColorSpace() const;
 

@@ -53,7 +53,7 @@ bool deMixerLayer::updateMainImageSingleChannel(int channel)
     }
     */
 
-    const deImage& sourceImage = getSourceImage();
+    const deImageOld& sourceImage = getSourceImage();
 
     //mainLayerImage.enableChannel(channel);
 

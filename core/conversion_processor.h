@@ -30,9 +30,9 @@ class deConversionProcessor
         deConversionProcessor();
         virtual ~deConversionProcessor();
 
-        void convertImage(const deImage& sourceImage, deImage& image, deConversionCPU& cpu);
+        void convertImage(const deImageOld& sourceImage, deImageOld& image, deConversionCPU& cpu);
 
-        bool renderImageToRGBNew(const deImage& image, unsigned char* data);
+        bool renderImageToRGBNew(const deImageOld& image, unsigned char* data);
         bool convert(deColorSpace sourceColorSpace, deValue v1, deValue v2, deValue v3, deValue v4, deColorSpace targetColorSpace, deValue &r1, deValue& r2, deValue& r3, deValue& r4);
 
 };

@@ -23,7 +23,7 @@
 #include "color_space_utils.h"
 #include <cassert>
 
-deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelManager)
+deImageOld::deImageOld(const deColorSpace& _colorSpace, deChannelManager& _channelManager)
 :colorSpace(_colorSpace), channelManager(_channelManager)
 {
     logInfo("image constructor");
@@ -42,7 +42,7 @@ deImage::deImage(const deColorSpace& _colorSpace, deChannelManager& _channelMana
     }        
 }
 
-deImage::~deImage()
+deImageOld::~deImageOld()
 {
     logInfo("image destructor");
     int i;
@@ -55,7 +55,7 @@ deImage::~deImage()
     }        
 }
 
-void deImage::allocateChannels()
+void deImageOld::allocateChannels()
 {
     int s = getColorSpaceSize(colorSpace);
     int i;
@@ -65,25 +65,25 @@ void deImage::allocateChannels()
     }        
 }
 
-int deImage::getChannelIndex(int n) const
+int deImageOld::getChannelIndex(int n) const
 {
     if (n < 0)
     {
-        logError("deImage::getChannelIndex n: " + str(n));
+        logError("deImageOld::getChannelIndex n: " + str(n));
     }
     else if (n >= MAX_COLOR_SPACE_SIZE)
     {
-        logError("deImage::getChannelIndex n: " + str(n));
+        logError("deImageOld::getChannelIndex n: " + str(n));
     }
     return channelsAllocated[n];
 }
 
-deColorSpace deImage::getColorSpace() const
+deColorSpace deImageOld::getColorSpace() const
 {
     return colorSpace;
 }
 
-void deImage::updateChannelUsage(std::map<int, int>& channelUsage, int index) const
+void deImageOld::updateChannelUsage(std::map<int, int>& channelUsage, int index) const
 {
     int i;
     int s = getColorSpaceSize(colorSpace);
@@ -94,7 +94,7 @@ void deImage::updateChannelUsage(std::map<int, int>& channelUsage, int index) co
     }        
 }
 
-const deValue* deImage::startRead(int channel) const
+const deValue* deImageOld::startRead(int channel) const
 {
 #ifdef DEBUG_LOG
     logInfo("image start read " + str(channel));
@@ -117,7 +117,7 @@ const deValue* deImage::startRead(int channel) const
     return values;
 }
 
-void deImage::finishRead(int channel) const
+void deImageOld::finishRead(int channel) const
 {
 #ifdef DEBUG_LOG
     logInfo("image finish read " + str(channel));
@@ -137,7 +137,7 @@ void deImage::finishRead(int channel) const
 
 }
 
-deValue* deImage::startWrite(int channel) 
+deValue* deImageOld::startWrite(int channel) 
 {
 #ifdef DEBUG_LOG
     logInfo("image start write " + str(channel));
@@ -161,7 +161,7 @@ deValue* deImage::startWrite(int channel)
     return values;
 }
 
-void deImage::finishWrite(int channel) 
+void deImageOld::finishWrite(int channel) 
 {
 #ifdef DEBUG_LOG
     logInfo("image finish write " + str(channel));
@@ -181,7 +181,7 @@ void deImage::finishWrite(int channel)
 
 }    
 
-const deSize deImage::getChannelSize() const
+const deSize deImageOld::getChannelSize() const
 {
     return channelManager.getChannelSizeFromChannelManager();
 }

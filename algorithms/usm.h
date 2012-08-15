@@ -22,10 +22,10 @@
 #include "value.h"
 #include "size.h"
 #include "blur.h"
-class deImage;
+class deImageOld;
 
 bool unsharpMask(const deValue* source, deValue* destination, deSize& size, deValue a, deValue r, deValue t, deBlurType type);
 bool autoDodgeBurn(const deValue* source, deValue* destination, deSize& size, deValue r1, deValue r2, deValue t, bool burn);
-bool shadowsHighlights(deValue r, int channel, const deImage& sourceImage, deImage& mainLayerImage, bool shadows);
+bool shadowsHighlights(deValue r, int channel, const deImageOld& sourceImage, deImageOld& mainLayerImage, bool shadows);
 
 #endif    

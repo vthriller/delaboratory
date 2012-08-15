@@ -354,7 +354,7 @@ class dePropertyLevelsUIImpl:public dePanelWX
 
         void generate()
         {
-            const deImage& sourceImage = layer.getSourceImage();
+            const deImageOld& sourceImage = layer.getSourceImage();
 
             const deValue* c = sourceImage.startRead(channel);
             int n = sourceImage.getChannelSize().getN();

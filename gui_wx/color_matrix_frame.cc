@@ -40,13 +40,13 @@ deColorMatrixFrame2::deColorMatrixFrame2(wxWindow *parent, deProject& project, i
 
     const deBaseLayer* layer = layerStack.startReadLayer(view);
 
-    const deImage& originalImage = layer->getLayerImage();
+    const deImageOld& originalImage = layer->getLayerImage();
 
     deChannelManager& channelManager = project.getPreviewChannelManager();
     deSize channelSize = originalImage.getChannelSize();
     int n = channelSize.getN();
 
-    deImage LABImage(deColorSpaceLAB, channelManager);
+    deImageOld LABImage(deColorSpaceLAB, channelManager);
     LABImage.allocateChannels();
 
     deConversionProcessor p;
@@ -218,7 +218,7 @@ deColorMatrixFrame::deColorMatrixFrame(wxWindow *parent, deProject& _project, in
 
     const deBaseLayer* layer = layerStack.startReadLayer(view);
 
-    const deImage& image = layer->getLayerImage();
+    const deImageOld& image = layer->getLayerImage();
     deColorSpace colorSpace = image.getColorSpace();
 
     deConversionProcessor cp;

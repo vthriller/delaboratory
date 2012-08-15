@@ -134,7 +134,7 @@ bool deLayerWithBlending::updateBlend(int i)
 
 }
 
-const deImage& deLayerWithBlending::getLayerImage() const
+const deImageOld& deLayerWithBlending::getLayerImage() const
 {
     return imageBlendPass;
 }
