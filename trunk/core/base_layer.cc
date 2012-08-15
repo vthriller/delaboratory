@@ -91,7 +91,7 @@ bool deBaseLayer::processFull()
     return updateImage();
 }
 
-const deImage& deBaseLayer::getLayerImage() const
+const deImageOld& deBaseLayer::getLayerImage() const
 {
     return mainLayerImage;
 }

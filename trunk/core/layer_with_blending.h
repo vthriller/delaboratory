@@ -26,9 +26,9 @@
 class deLayerWithBlending:public deSwitchableLayer
 {
     private:
-        deImage imageBlendPass;
+        deImageOld imageBlendPass;
 
-        virtual const deImage& getLayerImage() const;
+        virtual const deImageOld& getLayerImage() const;
         virtual bool updateBlendAllChannels();
 
         bool tryBlendSpecial();

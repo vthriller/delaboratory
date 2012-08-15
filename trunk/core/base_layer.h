@@ -52,7 +52,7 @@ class deBaseLayer
 
     protected:
         deColorSpace colorSpace;
-        deImage mainLayerImage;
+        deImageOld mainLayerImage;
 
         virtual bool updateBlendAllChannels() {return false;};
         virtual bool updateMainImageNotThreadedWay() {return false;};
@@ -76,7 +76,7 @@ class deBaseLayer
 
         virtual std::string getType() const = 0;
 
-        virtual const deImage& getLayerImage() const;
+        virtual const deImageOld& getLayerImage() const;
 
         virtual void updateChannelUsage(std::map<int, int>& channelUsage, int layerIndex) const;
 

@@ -29,7 +29,7 @@
 #include "conversion_processor.h"
 #include "canvas.h"
 
-void renderChannel(const deImage& image, int c, unsigned char* data, deChannelManager& channelManager, bool reversed)
+void renderChannel(const deImageOld& image, int c, unsigned char* data, deChannelManager& channelManager, bool reversed)
 {
     const deSize& s = image.getChannelSize();
 
@@ -105,7 +105,7 @@ bool deRenderer::prepareImage(const deViewManager& viewManager, deLayerProcessor
 
     if (layer)
     {
-        const deImage& layerImage = layer->getLayerImage();
+        const deImageOld& layerImage = layer->getLayerImage();
 
         if (viewManager.isSingleChannel())
         {

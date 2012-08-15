@@ -79,7 +79,7 @@ bool flattenLayers(int view, deProgressDialog& progressDialog, const std::string
         {
             if (saveAll)
             {
-                const deImage& image = layer->getLayerImage();
+                const deImageOld& image = layer->getLayerImage();
                 const std::string f = insertIndex(fileName, index);
                 saveImage(f, image, type, previewChannelManager);
             }                
@@ -111,7 +111,7 @@ bool flattenLayers(int view, deProgressDialog& progressDialog, const std::string
         logInfo("flattenLayers save final image");
         // take the final image
         deBaseLayer* layer = layerStack.getLayer(view);
-        const deImage& image = layer->getLayerImage();
+        const deImageOld& image = layer->getLayerImage();
 
         // save it
         result = saveImage(fileName, image, type, previewChannelManager);

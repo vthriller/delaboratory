@@ -23,13 +23,13 @@
 #include "size.h"
 #include "color_space.h"
 class deStaticImage;
-class deImage;
+class deImageOld;
 class deChannelManager;
 
 bool loadImage(const std::string& fileName, deStaticImage& image);
 
 bool loadPPM(const std::string& fileName, deStaticImage& image, deColorSpace colorSpace);
 
-bool saveImage(const std::string& fileName, const deImage& image, const std::string& type, deChannelManager& previewChannelManager);
+bool saveImage(const std::string& fileName, const deImageOld& image, const std::string& type, deChannelManager& previewChannelManager);
 
 #endif

@@ -22,7 +22,7 @@
 #include "value.h"
 #include "mutex.h"
 class deChannel;
-class deImage;
+class deImageOld;
 
 class deMixer
 {
@@ -45,7 +45,7 @@ class deMixer
         deValue getWeight(int c) const;
         void setWeight(int c, deValue value);
 
-        void process(const deImage& sourceImage, deValue* destination, int n);
+        void process(const deImageOld& sourceImage, deValue* destination, int n);
 
         bool isNeutral(int index) const;
     

@@ -219,7 +219,7 @@ bool autoDodgeBurn(const deValue* source, deValue* destination, deSize& size, de
     return true;
 }
 
-bool shadowsHighlights(deValue r, int channel, const deImage& sourceImage, deImage& mainLayerImage, bool shadows)
+bool shadowsHighlights(deValue r, int channel, const deImageOld& sourceImage, deImageOld& mainLayerImage, bool shadows)
 {
     deSize size = mainLayerImage.getChannelSize();
     int n = size.getN();

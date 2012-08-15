@@ -20,7 +20,7 @@
 #define _DE_CONVERSION_CPU_H
 
 #include "value.h"
-class deImage;
+class deImageOld;
 class deChannelManager;
 #include "color_space.h"
 
@@ -53,17 +53,17 @@ class deConversionCPU
         void switchIO();
         void incOverflow();
 
-        void convertImage3x3(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
-        void convertImage3x4(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
-        void convertImage4x3(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
-        void convertImage3x1(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
-        void convertImage1x3(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
-        void convertImage4x1(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
-        void convertImage1x4(const deImage& sourceImage, deImage& image, deFunction f1, deFunction f2);
+        void convertImage3x3(const deImageOld& sourceImage, deImageOld& image, deFunction f1, deFunction f2);
+        void convertImage3x4(const deImageOld& sourceImage, deImageOld& image, deFunction f1, deFunction f2);
+        void convertImage4x3(const deImageOld& sourceImage, deImageOld& image, deFunction f1, deFunction f2);
+        void convertImage3x1(const deImageOld& sourceImage, deImageOld& image, deFunction f1, deFunction f2);
+        void convertImage1x3(const deImageOld& sourceImage, deImageOld& image, deFunction f1, deFunction f2);
+        void convertImage4x1(const deImageOld& sourceImage, deImageOld& image, deFunction f1, deFunction f2);
+        void convertImage1x4(const deImageOld& sourceImage, deImageOld& image, deFunction f1, deFunction f2);
 
-        bool renderImage1(const deImage& image, deConversionCPU::deFunction f, unsigned char* data);
-        bool renderImage3(const deImage& image, deConversionCPU::deFunction f, unsigned char* data);
-        bool renderImage4(const deImage& image, deConversionCPU::deFunction f, unsigned char* data);
+        bool renderImage1(const deImageOld& image, deConversionCPU::deFunction f, unsigned char* data);
+        bool renderImage3(const deImageOld& image, deConversionCPU::deFunction f, unsigned char* data);
+        bool renderImage4(const deImageOld& image, deConversionCPU::deFunction f, unsigned char* data);
 
 };
 

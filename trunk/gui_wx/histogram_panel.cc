@@ -104,7 +104,7 @@ void deHistogramPanel::generateHistogram()
 
     if (layer)
     {
-        const deImage& image = layer->getLayerImage();
+        const deImageOld& image = layer->getLayerImage();
         int n = image.getChannelSize().getN();
 
         const deValue* values = image.startRead(channel);

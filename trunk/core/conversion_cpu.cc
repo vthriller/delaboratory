@@ -77,7 +77,7 @@ void deConversionCPU::incOverflow()
     registers[CPU_REGISTER_OVERFLOW] ++;
 }
 
-bool deConversionCPU::renderImage1(const deImage& image, deConversionCPU::deFunction f, unsigned char* data)
+bool deConversionCPU::renderImage1(const deImageOld& image, deConversionCPU::deFunction f, unsigned char* data)
 {
     int n = image.getChannelSize().getN();
 
@@ -114,7 +114,7 @@ bool deConversionCPU::renderImage1(const deImage& image, deConversionCPU::deFunc
     return true;
 }    
 
-bool deConversionCPU::renderImage3(const deImage& image, deConversionCPU::deFunction f, unsigned char* data)
+bool deConversionCPU::renderImage3(const deImageOld& image, deConversionCPU::deFunction f, unsigned char* data)
 {
     int n = image.getChannelSize().getN();
 
@@ -159,7 +159,7 @@ bool deConversionCPU::renderImage3(const deImage& image, deConversionCPU::deFunc
     return true;
 }    
 
-bool deConversionCPU::renderImage4(const deImage& image, deConversionCPU::deFunction f, unsigned char* data)
+bool deConversionCPU::renderImage4(const deImageOld& image, deConversionCPU::deFunction f, unsigned char* data)
 {
     int n = image.getChannelSize().getN();
 
@@ -209,7 +209,7 @@ bool deConversionCPU::renderImage4(const deImage& image, deConversionCPU::deFunc
     return true;
 }    
 
-void deConversionCPU::convertImage3x3(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+void deConversionCPU::convertImage3x3(const deImageOld& sourceImage, deImageOld& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 
@@ -258,7 +258,7 @@ void deConversionCPU::convertImage3x3(const deImage& sourceImage, deImage& image
     image.finishWrite(2);
 }
 
-void deConversionCPU::convertImage3x4(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+void deConversionCPU::convertImage3x4(const deImageOld& sourceImage, deImageOld& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 
@@ -309,7 +309,7 @@ void deConversionCPU::convertImage3x4(const deImage& sourceImage, deImage& image
     image.finishWrite(3);
 }
 
-void deConversionCPU::convertImage3x1(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+void deConversionCPU::convertImage3x1(const deImageOld& sourceImage, deImageOld& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 
@@ -352,7 +352,7 @@ void deConversionCPU::convertImage3x1(const deImage& sourceImage, deImage& image
     image.finishWrite(0);
 }
 
-void deConversionCPU::convertImage4x1(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+void deConversionCPU::convertImage4x1(const deImageOld& sourceImage, deImageOld& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 
@@ -399,7 +399,7 @@ void deConversionCPU::convertImage4x1(const deImage& sourceImage, deImage& image
     image.finishWrite(0);
 }
 
-void deConversionCPU::convertImage4x3(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+void deConversionCPU::convertImage4x3(const deImageOld& sourceImage, deImageOld& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 
@@ -451,7 +451,7 @@ void deConversionCPU::convertImage4x3(const deImage& sourceImage, deImage& image
     image.finishWrite(2);
 }
 
-void deConversionCPU::convertImage1x3(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+void deConversionCPU::convertImage1x3(const deImageOld& sourceImage, deImageOld& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 
@@ -494,7 +494,7 @@ void deConversionCPU::convertImage1x3(const deImage& sourceImage, deImage& image
     image.finishWrite(2);
 }
 
-void deConversionCPU::convertImage1x4(const deImage& sourceImage, deImage& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
+void deConversionCPU::convertImage1x4(const deImageOld& sourceImage, deImageOld& image, deConversionCPU::deFunction f1, deConversionCPU::deFunction f2)
 {
     int n = sourceImage.getChannelSize().getN();
 

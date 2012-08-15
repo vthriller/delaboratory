@@ -25,7 +25,7 @@
 #include "gradient_panel.h"
 class deSampler;
 class deProject;
-class deImage;
+class deImageOld;
 
 class deSamplerPanel:public wxPanel
 {
@@ -46,7 +46,7 @@ private:
 
     void choose(wxCommandEvent &event);
 
-    void update(const deImage& image);
+    void update(const deImageOld& image);
 
 public:
 	deSamplerPanel(wxWindow* parent, deSampler& _sampler, deProject& _project);

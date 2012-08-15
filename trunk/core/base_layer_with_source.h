@@ -38,9 +38,9 @@ class deBaseLayerWithSource:public deBaseLayerWithProperties
         deBaseLayerWithSource(deColorSpace _colorSpace, deChannelManager& _channelManager, int _sourceLayer, deLayerStack& _layerStack);
         virtual ~deBaseLayerWithSource();
 
-        const deImage& getOriginalImage() const;
-        const deImage& getSourceImage() const;
-        const deImage& getOtherLayerImage(int a) const;
+        const deImageOld& getOriginalImage() const;
+        const deImageOld& getSourceImage() const;
+        const deImageOld& getOtherLayerImage(int a) const;
         deColorSpace getSourceColorSpace() const;
         int getLayerStackSize() const;
 

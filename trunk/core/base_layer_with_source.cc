@@ -45,21 +45,21 @@ const deBaseLayer& deBaseLayerWithSource::getOriginalLayer() const
     return *layer;
 }    
 
-const deImage& deBaseLayerWithSource::getSourceImage() const
+const deImageOld& deBaseLayerWithSource::getSourceImage() const
 {
     return getSourceLayer().getLayerImage();
 }
 
-const deImage& deBaseLayerWithSource::getOriginalImage() const
+const deImageOld& deBaseLayerWithSource::getOriginalImage() const
 {
     return getOriginalLayer().getLayerImage();
 }
 
-const deImage& deBaseLayerWithSource::getOtherLayerImage(int a) const
+const deImageOld& deBaseLayerWithSource::getOtherLayerImage(int a) const
 {
     deBaseLayer* applied = layerStack.getLayer(a);
 
-    const deImage& appliedImage = applied->getLayerImage();
+    const deImageOld& appliedImage = applied->getLayerImage();
 
     return appliedImage;
 }    

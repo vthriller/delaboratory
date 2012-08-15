@@ -29,7 +29,7 @@
 
 #include "str.h"
 
-void copyImage(const deImage& sourceImage, deImage& image)
+void copyImage(const deImageOld& sourceImage, deImageOld& image)
 {
     int n = getColorSpaceSize(sourceImage.getColorSpace());
     int i;
@@ -112,7 +112,7 @@ bool deConversionProcessor::convert(deColorSpace sourceColorSpace, deValue v1, d
     return true;
 }
 
-bool deConversionProcessor::renderImageToRGBNew(const deImage& image, unsigned char* data)
+bool deConversionProcessor::renderImageToRGBNew(const deImageOld& image, unsigned char* data)
 {
     deColorSpace colorSpace = image.getColorSpace();
 
@@ -145,7 +145,7 @@ bool deConversionProcessor::renderImageToRGBNew(const deImage& image, unsigned c
 
 }
 
-void deConversionProcessor::convertImage(const deImage& sourceImage, deImage& image, deConversionCPU& cpu)
+void deConversionProcessor::convertImage(const deImageOld& sourceImage, deImageOld& image, deConversionCPU& cpu)
 {
     deColorSpace sourceColorSpace = sourceImage.getColorSpace();
     deColorSpace targetColorSpace = image.getColorSpace();
