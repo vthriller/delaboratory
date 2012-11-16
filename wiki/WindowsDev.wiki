@@ -1,0 +1,38 @@
+#summary Development in Windows
+
+= Introduction =
+
+This document is for developers only. It describes how to configure Windows as development platform and how to compile delaboratory.
+
+= Install MinGW =
+
+http://sourceforge.net/projects/mingw/files/
+
+Download mingw-get-inst-20120426.exe (662.7 kB) 
+
+C++ compiler
+MSYS Basic System
+MinGW Deveoper Toolkit
+
+after installation run msys in directory MinGW -> msys -> 1.0
+
+= libtiff =
+
+download http://download.osgeo.org/libtiff/tiff-4.0.3.tar.gz
+
+copy into home folder in msys
+
+tar zxvf tiff-4.0.3.tar.gz, cd, configure, make, make install
+
+
+
+
+
+= Compiling wxWidgets with MinGW =
+
+http://wiki.wxwidgets.org/Compiling_wxWidgets_with_MinGW
+
+
+
+
+
