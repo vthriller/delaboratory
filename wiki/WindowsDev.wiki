@@ -25,14 +25,14 @@ copy into home folder in msys
 tar zxvf tiff-4.0.3.tar.gz, cd, configure, make, make install
 
 
-
-
-
 = Compiling wxWidgets with MinGW =
 
 http://wiki.wxwidgets.org/Compiling_wxWidgets_with_MinGW
 
+download wxMSW-2.8.12-Setup.exe
 
+copy source to home folder in msys
 
+configure, make
 
 
