@@ -33,6 +33,8 @@ download wxMSW-2.8.12-Setup.exe
 
 copy source to home folder in msys
 
-configure, make
+cd build/msw
 
+mingw32-make -f makefile.gcc SHARED=1 UNICODE=1 BUILD=release clean
 
+mingw32-make -f makefile.gcc SHARED=1 UNICODE=1 BUILD=release
