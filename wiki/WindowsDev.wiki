@@ -31,10 +31,5 @@ http://wiki.wxwidgets.org/Compiling_wxWidgets_with_MinGW
 
 download wxMSW-2.8.12-Setup.exe
 
-copy source to home folder in msys
+mingw32-make SHELL=CMD.exe -f makefile.gcc BUILD=release UNICODE=1 SHARED=0 
 
-cd build/msw
-
-mingw32-make -f makefile.gcc SHARED=1 UNICODE=1 BUILD=release clean
-
-mingw32-make -f makefile.gcc SHARED=1 UNICODE=1 BUILD=release
