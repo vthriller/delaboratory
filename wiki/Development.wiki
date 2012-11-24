@@ -16,7 +16,7 @@ Anyway, that's what I know now:
 
 5) paiting with brush will be supported (thanks to point 3), it means both painting on mask and true dodge/burn (I hope I will be able to make also clone tool soon)
 
-6) there will be multiple executables, both GUI (editor, viewer) and console (think about ImageMagick and batch processing)
+6) there will be multiple executables, both GUI (editor, viewer) and console (think about !ImageMagick and batch processing)
 
 7) most code will be pure C++ without any dependences (thanks to point 6), only GUI stuff will depend on wxWidgets (or other lib in the future, gtk+ viewer is a good idea)
 
