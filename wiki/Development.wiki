@@ -7,15 +7,27 @@ I already started developing new version but nothing is on SVN yet, you can only
 Anyway, that's what I know now:
 
 1) project stays GPLv3
+
 2) delaboratory is developed in Linux and Windows at the same time
+
 3) whole image is now stored in memory (in previous versions scaled down images were processed, and full size was used only during final image generation), it means bigger memory usage and slower processing, it also means that layers will back into project later 
+
 4) fast zoom/move will be possible (thanks to point 3)
+
 5) paiting with brush will be supported (thanks to point 3), it means both painting on mask and true dodge/burn (I hope I will be able to make also clone tool soon)
+
 6) there will be multiple executables, both GUI (editor, viewer) and console (think about ImageMagick and batch processing)
+
 7) most code will be pure C++ without any dependences (thanks to point 6), only GUI stuff will depend on wxWidgets (or other lib in the future, gtk+ viewer is a good idea)
+
 8) loading RAW files is still performed by calling dcraw executable 
+
 9) image could be stored on disk in lossless DEI format, this is required by point 3 - we can't fit many images in memory, it's better to create library of images on disk
+
 10) multiple images could be blended or compared together (both in GUI and by console utility)
+
 11) calling G'MIC will be possible both in GUI and in console utility
+
 12) I will probably implement directory browsing (show miniature version of images so user could choose one) but I am against any file management support, I hate when application imports whole directory and creates some kind of database, it's always problematic
+
 13) I failed with wxWidgets 2.8 on Windows, so I use version 2.9.4
