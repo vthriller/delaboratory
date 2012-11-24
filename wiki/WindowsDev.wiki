@@ -27,9 +27,5 @@ tar zxvf tiff-4.0.3.tar.gz, cd, configure, make, make install
 
 = Compiling wxWidgets with MinGW =
 
-http://wiki.wxwidgets.org/Compiling_wxWidgets_with_MinGW
-
-download wxMSW-2.8.12-Setup.exe
-
-mingw32-make SHELL=CMD.exe -f makefile.gcc BUILD=release UNICODE=1 SHARED=0 
-
+wxWidgets 2.8 doesn't work/compile
+wxWidgets 2.9.4 compiles OK, remember to tell configure to use static
