@@ -16,10 +16,11 @@ DLLs required to run:
 2013-07-02  10:06         6 146 560 Qt5Widgets.dll
 }}}
 
-to compile built-in dcraw symbols from this library are required:
+
+In QT project file this library is required (to compile in dcraw):
 
 LIBS += -lws2_32
 
-(qt project file)
+
 
 static build requires recompilation of QT which is very complex (lots of deps)
