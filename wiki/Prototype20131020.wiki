@@ -11,10 +11,18 @@ I implemented only *two layers* (think "effects" or "filters") just to show an i
 
   * delaboratory now uses Qt
     * the main reason to use wxWidgets in the past was portability, however there were multiple problems with Windows version, mostly because I developed software under Linux, and Windows port was made only for releases
-    * the obvious choice for graphics editor was GTK+, because it's made for GIMP, and it contains lots of cool features, it's simple and it's fast, I was trying to use it, and it worked pretty good, however, I was using Linux again, when I wanted to use GTK+3 in Windows I realized it's not easy at all and if it's not easy for me, it won't be easy for anyone else
+    * the obvious choice for graphics editor was GTK+, because it's made for GIMP, and it contains lots of cool features, it's simple and it's fast, I was trying to use it, and it worked pretty good, however, I was using Linux again, when I wanted to use GTK+3 in Windows I realized it's not easy at all (one need to build multiple libraries from source) and if it's not easy for me, it won't be easy for users, and nobody will be able to compile delaboratory for Windows 
     * I use Linux on desktop since 1998, but I always avoided programming in Qt for two reasons: 1) applications using Qt are usually slow and bloated 2) Qt uses moc preprocessor and I always thought it's "dirty" 
     * in 2013 I decided to give Qt a chance, soon I realized that Qt is mature, stable, rich-featured and really portable
     * to use Qt in Windows, one need to download *single file*, which contains not just library but also compiler and IDE, the only problem is lack of static build, but I decided to skip this problem and just put dynamic libraries into binary archive (that's why Windows binaries will be so huge)
+
+  * dcraw is now compiled-in
+    * author of dcraw recommends using it as separate process, but everyone compiles it in, for all previous releases of delaboratory I tried to use it as separate process, but I no longer see benefits of this solution, I see just problems, so I put dcraw.c into source code just like everyone else
+
+  * project stays GPL
+    * delaboratory is a Free Software and I have no plans to change that
+
+ 
 
 
 
