@@ -23,7 +23,11 @@ I implemented only *two layers* (think "effects" or "filters") just to show an i
   * project stays GPL
     * *delaboratory is a Free Software* and I have no plans to change that
 
-  * in the older releases it was possible to save a layer stack then load it later, now it will be posssible to *store multiple snapshots for given image* and also build *library of presets* to use with all images, initial release (prototype) contains window with snapshots, try it
+  * in the older releases it was possible to save a layer stack then load it later, now it will be posssible to *store multiple snapshots* for given image and also build *library of presets* to use with all images, initial release (prototype) contains window with snapshots (bottom left), try it
+
+  * layer types are now in upper left window (prototype contains only two example layers), when you double click it - layer will be added to stack
+
+  * layer controls are now stored in the right panel (not in separate windows), however I am not really sure what to do with curves yet, so it may change later
 
 
 
