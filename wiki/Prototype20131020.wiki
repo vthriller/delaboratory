@@ -5,7 +5,9 @@
 This is an *early prototype* of new delaboratory. 
 
 It *lacks essential features* like curves, vignette or local contrast.
-I implemented only *two layers* (think "effects" or "filters") just to show an interface and make sure Windows version works.
+I implemented only *two layers* (think "effects" or "filters") just to show an interface.
+
+Primary reason to release this prototype is to make sure Windows version works and to show you that project is not dead :)
 
 Code is *not in SVN* yet, I am not going to put it there until core will be finished, my initial plan was to show only *Windows binary*, but I decided to give you also *source code* in zip.
 
