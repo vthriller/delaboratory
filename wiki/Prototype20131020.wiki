@@ -1,11 +1,13 @@
 #summary delaboratory prototype 2013.10.20
 
-= Introduction =
-
-prototype uses Qt
-
 
 http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_2013.10.jpg
 
-Windows binary and source code:
+= Description =
+
+= Download =
+
+*unfortunately google code does no longer supports and tells developers to upload files on google drive, which does not work well (strange user interface and no statistics), so if I won't find a better solution I would have to move the project to another website*
+
+Windows binary and source code (google drive):
 https://drive.google.com/folderview?id=0B-0o_299rntmNlhzZ21kdm8zczg&usp=sharing
