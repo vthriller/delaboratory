@@ -6,3 +6,9 @@ prototype uses Qt
 
 
 http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_2013.10.jpg
+
+Windows binary:
+https://docs.google.com/file/d/0B-0o_299rntmbENMVExVanpZczA/edit?usp=sharing
+
+source code:
+https://docs.google.com/file/d/0B-0o_299rntmVkFtS0xLUU9ua1E/edit?usp=sharing
