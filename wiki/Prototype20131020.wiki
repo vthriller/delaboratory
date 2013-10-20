@@ -15,23 +15,7 @@ Code is *not in SVN* yet, I am not going to put it there until core will be fini
 
 http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_2013.10.jpg
 
-= programming details =
-
-  * *delaboratory now uses Qt*
-    * the main reason to use wxWidgets in the past was portability, however there were multiple problems with Windows version, mostly because I developed software under Linux, and Windows port was made only for releases
-    * the obvious choice for graphics editor was GTK+, because it's made for GIMP, and it contains lots of cool features, it's simple and it's fast, I was trying to use it, and it worked pretty good, however, I was using Linux again, when I wanted to use GTK+3 in Windows I realized it's not easy at all (one need to build multiple libraries from source) and if it's not easy for me, it won't be easy for users, and nobody will be able to compile delaboratory for Windows 
-    * I use Linux on desktop since 1998, but I always avoided programming in Qt for two reasons: 1) applications using Qt are usually slow and bloated 2) Qt uses moc preprocessor and I always thought it's "dirty" 
-    * in 2013 I decided to give Qt a chance, soon I realized that Qt is mature, stable, rich-featured and really portable
-    * to develop with Qt in Windows, one need to download *single file*, which contains not just library but also compiler and IDE, the only problem is lack of static build, but I decided to skip this problem and just put dynamic libraries into binary archive (that's why Windows binaries will be so huge)
-    * of course you don't need to download Qt to use delaboratory, in Windows you will get Qt libraries in the binary release, in Linux Qt is provided by your distro
-
-  * *dcraw is now compiled-in*
-    * author of dcraw recommends using it as separate process, but everyone compiles it in, for all previous releases of delaboratory I tried to use it as separate process, but I no longer see benefits of this solution, I see just problems, so I put dcraw.c into source code just like everyone else
-
-  * project stays GPL
-    * *delaboratory is a Free Software* and I have no plans to change that
-
-= Features and user interface =
+= features and user interface =
 
   * in the older releases it was possible to save a layer stack then load it later, now it will be posssible to *store multiple snapshots* for given image and also build *library of presets* to use with all images, initial release (prototype) contains window with snapshots (bottom left), try it
 
@@ -45,11 +29,29 @@ http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_
     * it's possible to quickly move image with mouse
     * processing is slower (it will be fixed in the future, needs some tricks with threads - process visible rectangle first, then other rectangles later)
 
-  * masks and local changes are still open issues, the best solution I have seen is in Nik Software Suite (owned by Google), but I also like Lightroom way (BTW please notice that Lightroom 5 introduces off-centered vignette which was already available in delaboratory before ;) ).
+  * masks and local changes are still open issues, the best solution I have seen is in Nik Software Suite (now owned by Google), but I also like the Lightroom way
 
   * blending multiple images is not available in prototype, but I will implement it to support textures (film grain, painted vignettes, dust/scratches, etc)
 
   * G'MIC support is not ready yet, expect it in first real release of new delaboratory
+
+= programming details =
+
+  * *delaboratory now uses Qt*
+    * the main reason to use wxWidgets in the past was portability, however there were multiple problems with Windows version, mostly because I developed software under Linux, and Windows port was made only for releases
+    * the obvious choice for graphics editor was GTK+, because it's made for GIMP, and it contains lots of cool features, it's simple and it's fast, I was trying to use it, and it worked pretty good, however, I was using Linux again, when I wanted to use GTK+3 in Windows I realized it's not easy at all (one need to build multiple libraries from source) and if it's not easy for me, it won't be easy for users, and nobody will be able to compile delaboratory for Windows 
+    * I use Linux on desktop since 1998, but I always avoided programming in Qt for two reasons
+      * applications using Qt are usually slow and bloated 
+      * Qt uses moc preprocessor and I always thought it's "dirty" 
+    * in 2013 I decided to give Qt a chance, soon I realized that Qt is mature, stable, rich-featured, well documented and really portable
+    * to develop with Qt in Windows, one need to download *single file*, which contains not just library but also compiler and IDE, the only problem is lack of static build, but I decided to skip this problem and just put dynamic libraries into binary archive (that's why Windows binaries will be so huge)
+    * of course you don't need to download Qt to use delaboratory, in Windows you will get Qt libraries in the binary release, in Linux Qt is provided by your distro
+
+  * *dcraw is now compiled-in*
+    * author of dcraw recommends using it as separate process, but everyone compiles it in, for all previous releases of delaboratory I tried to use it as separate process, but I no longer see benefits of this solution, I see just problems, so I put dcraw.c into source code just like everyone else
+
+  * project stays GPL
+    * *delaboratory is a Free Software* and I have no plans to change that
 
 = Download =
 
@@ -57,3 +59,8 @@ http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_
 
 Windows binary and source code (google drive):
 https://drive.google.com/folderview?id=0B-0o_299rntmNlhzZ21kdm8zczg&usp=sharing
+
+Instruction for Windows:
+  * download huge binary from link above
+  * unpack it 
+  * run delaboratory application (there is no installer)
