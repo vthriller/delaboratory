@@ -1,4 +1,4 @@
-QT package (with development environment):
+Qt package (with development environment):
 
 http://download.qt-project.org/official_releases/qt/5.1/5.1.1/qt-windows-opensource-5.1.1-mingw48_opengl-x86-offline.exe
 
@@ -17,10 +17,8 @@ DLLs required to run:
 }}}
 
 
-In QT project file this library is required (to compile in dcraw):
+In Qt project file this library is required (to compile in dcraw):
 
 LIBS += -lws2_32
 
-
-
-static build requires recompilation of QT which is very complex (lots of deps)
+static build requires recompilation of Qt which is very complex (lots of deps)
