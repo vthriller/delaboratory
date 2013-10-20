@@ -5,6 +5,12 @@ http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_
 
 = Description =
 
+This is an *early prototype* of new delaboratory. 
+It *lacks essential features* like curves, vignette or local contrast.
+I implemented only *two layers* (think "effects" or "filters") just to show an interface.
+
+
+
 = Download =
 
 *unfortunately google code does no longer supports downloads and tells developers to upload files on google drive, which does not work well (strange user interface and no statistics), so if I won't find a better solution I would have to move the project to another website*
