@@ -5,4 +5,4 @@
 prototype uses Qt
 
 
-http://delaboratory.googlecode.com/svn/trunk/screenshots/prototype.jpg
+http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_2013.10.jpg
