@@ -1,13 +1,20 @@
 #summary delaboratory prototype 2013.10.20
 
+= Introduction =
+
+This is an *early prototype* of new delaboratory. 
+
+It *lacks essential features* like curves, vignette or local contrast.
+I implemented only *two layers* (think "effects" or "filters") just to show an interface and make sure Windows version works.
+
+Code is *not in SVN* yet, I am not going to put it there until core will be finished, my initial plan was to show only *Windows binary*, but I decided to give you also *source code* in zip.
+
+If you want to edit your photos with delaboratory - use stable version. This prototype is *not ready in any way for an end user*.
 
 http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_2013.10.jpg
 
 = Description =
 
-This is an *early prototype* of new delaboratory. 
-It *lacks essential features* like curves, vignette or local contrast.
-I implemented only *two layers* (think "effects" or "filters") just to show an interface.
 
   * delaboratory now uses Qt
     * the main reason to use wxWidgets in the past was portability, however there were multiple problems with Windows version, mostly because I developed software under Linux, and Windows port was made only for releases
@@ -29,13 +36,9 @@ I implemented only *two layers* (think "effects" or "filters") just to show an i
 
   * layer controls are now stored in the right panel (not in separate windows), however I am not really sure what to do with curves yet, so it may change later
 
-
-
-
-
-
-
- 
+  * delaboratory processes scaled-down previews, just like before, but now it always uses full images, not crops, this leads to two effects in zoomed view:
+    * it's possible to quickly move image with mouse
+    * processing is slower (it will be fixed in the future, needs some tricks with threads - process visible rectangle first, then other rectangles later)
 
 
 = Download =
