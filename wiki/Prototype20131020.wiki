@@ -15,10 +15,9 @@ If you want to edit your photos with delaboratory - use stable version. This pro
 
 http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_2013.10.jpg
 
-= Description =
+= programming details =
 
-
-  * delaboratory now uses Qt
+  * *delaboratory now uses Qt*
     * the main reason to use wxWidgets in the past was portability, however there were multiple problems with Windows version, mostly because I developed software under Linux, and Windows port was made only for releases
     * the obvious choice for graphics editor was GTK+, because it's made for GIMP, and it contains lots of cool features, it's simple and it's fast, I was trying to use it, and it worked pretty good, however, I was using Linux again, when I wanted to use GTK+3 in Windows I realized it's not easy at all (one need to build multiple libraries from source) and if it's not easy for me, it won't be easy for users, and nobody will be able to compile delaboratory for Windows 
     * I use Linux on desktop since 1998, but I always avoided programming in Qt for two reasons: 1) applications using Qt are usually slow and bloated 2) Qt uses moc preprocessor and I always thought it's "dirty" 
@@ -32,7 +31,11 @@ http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_
   * project stays GPL
     * *delaboratory is a Free Software* and I have no plans to change that
 
+= Features and user interface =
+
   * in the older releases it was possible to save a layer stack then load it later, now it will be posssible to *store multiple snapshots* for given image and also build *library of presets* to use with all images, initial release (prototype) contains window with snapshots (bottom left), try it
+
+  * I don't want to support mutiple image management (like Lightroom library), because it's a huge task and delaboratory should be simple editor (KISS!), however, what I really like is saved state of each edited photo, it leads to some kind of library of snapshots, currently you can notice that after quit and restart you will see same set of snapshots and same loaded image
 
   * layer types are now in upper left window (prototype contains only two example layers), when you double click it - layer will be added to stack
 
@@ -42,6 +45,11 @@ http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_
     * it's possible to quickly move image with mouse
     * processing is slower (it will be fixed in the future, needs some tricks with threads - process visible rectangle first, then other rectangles later)
 
+  * masks and local changes are still open issues, the best solution I have seen is in Nik Software Suite (owned by Google), but I also like Lightroom way (BTW please notice that Lightroom 5 introduces off-centered vignette which was already available in delaboratory before ;) ).
+
+  * blending multiple images is not available in prototype, but I will implement it to support textures (film grain, painted vignettes, dust/scratches, etc)
+
+  * G'MIC support is not ready yet, expect it in first real release of new delaboratory
 
 = Download =
 
