@@ -29,7 +29,7 @@ http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_
     * it's possible to quickly move image with mouse
     * processing is slower (it will be fixed in the future, needs some tricks with threads - process visible rectangle first, then other rectangles later)
 
-  * masks and local changes are still open issues, the best solution I have seen is in Nik Software Suite (now owned by Google), but I also like the Lightroom way
+  * masks and local modifications are still open issues, the best solution I have seen is in Nik Software Suite (now owned by Google), but I also like the Lightroom way
 
   * blending multiple images is not available in prototype, but I will implement it to support textures (film grain, painted vignettes, dust/scratches, etc)
 
