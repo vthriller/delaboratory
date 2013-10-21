@@ -35,6 +35,9 @@ http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_
 
   * G'MIC support is not ready yet, expect it in first real release of new delaboratory
 
+  * prototype opens RAW files via dcraw and 8-bit image files via Qt (16-bit TIFFs are not yet supported), export writes JPEG only, stable release will support reading/writing 16-bit TIFFs (just like each previous release)
+
+
 = programming details =
 
   * *delaboratory now uses Qt*
