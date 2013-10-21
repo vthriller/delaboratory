@@ -37,6 +37,7 @@ http://delaboratory.googlecode.com/svn/trunk/screenshots/delaboratory_prototype_
 
   * prototype opens RAW files via dcraw and 8-bit image files via Qt (16-bit TIFFs are not yet supported), export writes JPEG only, stable release will support reading/writing 16-bit TIFFs (just like each previous release)
 
+  * there is no limit of layers on stack, but currently each layer will make processing slower, older versions solved this problem by keeping all processed images in the memory, now I want to avoid it (D800 produces 36 megapixel photos and delaboratory stores them in 32-bit quality) - this is another open issue in the delaboratory core
 
 = programming details =
 
